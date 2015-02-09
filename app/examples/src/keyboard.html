@@ -1,0 +1,68 @@
+<!-- buildexamples:section header --><!-- /buildexamples -->
+<script>
+    var punditConfig = {
+    modules: {
+        "Keyboard": {
+            debug: true
+        }
+    }
+
+};
+
+    var keyboardDemoCtrl = function($scope, Keyboard) {
+        $scope.state = {
+            stInputVisible: false,
+            handlersRegistered: false
+        };
+
+        $scope.state.stInputVisible = false;
+
+        $scope.toogleSTInput = function(){
+            $scope.state.stInputVisible = !$scope.state.stInputVisible;
+        };
+
+        $scope.registerHandlers = function() {
+            Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                shiftKey: true,
+                keyCode: 84
+            }, function(event, eventKeyConfig){
+                eventKeyConfig.scope.toogleSTInput();
+                eventKeyConfig.scope.$apply();
+            });
+            $scope.state.handlersRegistered = true;
+        }
+
+        $scope.isSTInputVisible = function() {
+            return $scope.state.stInputVisible;
+        }
+    }
+    console.log(keyboardDemoCtrl);
+</script>
+<div data-ng-app="Pundit2" 
+     class="pnd-wrp">
+    <div ng-controller="keyboardDemoCtrl" 
+         class="container clearfix">
+        <div ng-show="state.handlersRegistered">
+        Press Shift+T to toggle input field
+        </div>
+        <div>
+            <input 
+                  class=""
+                  id="st-inputfield"
+                  type="text"
+                  ng-show="isSTInputVisible()"
+                    />
+        </div>
+        <div>
+            <button 
+                class="btn btn-xs btn-success" 
+                style="margin-left: 50px; margin-bottom: 30px;"
+                ng-disabled="state.handlersRegistered"
+                ng-click="registerHandlers()">
+                Register handlers
+            </button>
+        </div>
+    </div>
+</div>
+<!-- buildexamples:section footer --><!-- /buildexamples -->
