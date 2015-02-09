@@ -1,18 +1,18 @@
 <!-- buildexamples:section header --><!-- /buildexamples -->
 <script>
     var punditConfig = {
-    modules: {
-        "Keyboard": {
-            debug: true
+        modules: {
+            "Keyboard": {
+                debug: true
+            }
         }
-    }
-
-};
+    };
 
     var keyboardDemoCtrl = function($scope, Keyboard) {
         $scope.state = {
             stInputVisible: false,
-            handlersRegistered: false
+            handlersRegistered: false,
+            handlers: {}
         };
 
         $scope.state.stInputVisible = false;
@@ -22,7 +22,7 @@
         };
 
         $scope.registerHandlers = function() {
-            Keyboard.registerHandler('keyboardDemo', {
+            $scope.state.handlers['Shift+D'] = Keyboard.registerHandler('keyboardDemo', {
                 scope: $scope,
                 shiftKey: true,
                 keyCode: 84
@@ -33,18 +33,26 @@
             $scope.state.handlersRegistered = true;
         }
 
+        $scope.unregisterHandlers = function() {
+            for (var key in $scope.state.handlers) {
+                Keyboard.unregisterHandler($scope.state.handlers[key]);
+            }
+            $scope.state.handlersRegistered = false;
+        }
+
         $scope.isSTInputVisible = function() {
             return $scope.state.stInputVisible;
         }
     }
-    console.log(keyboardDemoCtrl);
+
 </script>
 <div data-ng-app="Pundit2" 
      class="pnd-wrp">
-    <div ng-controller="keyboardDemoCtrl" 
-         class="container clearfix">
+    <div 
+        ng-controller="keyboardDemoCtrl" 
+        class="container clearfix">
         <div ng-show="state.handlersRegistered">
-        Press Shift+T to toggle input field
+            Press Shift+T to toggle input field
         </div>
         <div>
             <input 
@@ -54,13 +62,18 @@
                   ng-show="isSTInputVisible()"
                     />
         </div>
-        <div>
+        <div style="margin-top: 150px; margin-bottom: 30px;">
             <button 
                 class="btn btn-xs btn-success" 
-                style="margin-left: 50px; margin-bottom: 30px;"
                 ng-disabled="state.handlersRegistered"
                 ng-click="registerHandlers()">
                 Register handlers
+            </button>
+            <button 
+                class="btn btn-xs btn-success" 
+                ng-disabled="!state.handlersRegistered"
+                ng-click="unregisterHandlers()">
+                Unregister handlers
             </button>
         </div>
     </div>
