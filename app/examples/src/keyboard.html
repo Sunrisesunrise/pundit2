@@ -12,6 +12,7 @@
         $scope.state = {
             stInputVisible: false,
             handlersRegistered: false,
+            hpHandlersRegistered: false,
             handlers: {}
         };
 
@@ -30,6 +31,23 @@
                 eventKeyConfig.scope.toogleSTInput();
                 eventKeyConfig.scope.$apply();
             });
+
+            $scope.state.handlers['Ctrl+H'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                ctrlKey: true,
+                keyCode: 72
+            }, function(event, eventKeyConfig){
+                console.log("ctrl h");
+            });
+
+            $scope.state.handlers['Meta+H'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                metaKey: true,
+                keyCode: 72
+            }, function(event, eventKeyConfig){
+                console.log("meta h");
+            });
+
             $scope.state.handlersRegistered = true;
         }
 
@@ -62,18 +80,19 @@
                   ng-show="isSTInputVisible()"
                     />
         </div>
+
         <div style="margin-top: 150px; margin-bottom: 30px;">
             <button 
                 class="btn btn-xs btn-success" 
                 ng-disabled="state.handlersRegistered"
                 ng-click="registerHandlers()">
-                Register handlers
+                Register default handlers
             </button>
             <button 
                 class="btn btn-xs btn-success" 
                 ng-disabled="!state.handlersRegistered"
                 ng-click="unregisterHandlers()">
-                Unregister handlers
+                Unregister default handlers
             </button>
         </div>
     </div>
