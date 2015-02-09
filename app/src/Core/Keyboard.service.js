@@ -125,6 +125,8 @@ angular.module('Pundit2.Core')
 
     // Base keydown event handlers.
     $document.on('keydown', function(evt) {
+        if ($(document.activeElement).prop('tagName').toLowerCase() == 'input' && $(document.activeElement).prop('type').toLowerCase() == 'text')
+            return;
         keyboard.log("keydown - " + debugKeyEvent(evt));
         var keyCode = evt.keyCode || evt.which;
         switch (keyCode) {
