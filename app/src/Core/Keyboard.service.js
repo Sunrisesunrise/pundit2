@@ -67,6 +67,7 @@ angular.module('Pundit2.Core')
             callbackParams: [],
             once: false,
             stopPropagation: false,
+            ignoreOnInput: true,
             altKey: false,
             ctrlKey: false,
             metaKey: false,
@@ -97,15 +98,30 @@ angular.module('Pundit2.Core')
         return eventKeyConfig;
     };
 
+    var isFocusOnInputTextField = function() {
+        if ($(document.activeElement).prop('tagName').toLowerCase() == 'input'
+            &&
+            $(document.activeElement).prop('type').toLowerCase() == 'text') {
+            return true;
+        }
+        return false;
+    }
+
     // Consumes event by calling all registered handlers callback.
     var consumeEvent = function(evt) {
+        // Get event key identifier.
         var keyIdentifier = getKeyIdentifier(evt);
         if (null !== keyIdentifier) {
+            // Semaphore for event.
             state.consuming[keyIdentifier] = true;
+            // Get handlers for current event.
             var handlers = state.keyHandlers[keyIdentifier];
             if (angular.isArray(handlers)) {
                 for (var i in handlers) {
                     var eventHandlerConfig = handlers[i];
+                    if (eventHandlerConfig.ignoreOnInput && isFocusOnInputTextField()) {
+                        continue;
+                    }
                     eventHandlerConfig.callback.apply(eventHandlerConfig.scope, [evt, eventHandlerConfig])
                     if (eventHandlerConfig.once) {
                         handlers[i] = null;
@@ -125,8 +141,6 @@ angular.module('Pundit2.Core')
 
     // Base keydown event handlers.
     $document.on('keydown', function(evt) {
-        if ($(document.activeElement).prop('tagName').toLowerCase() == 'input' && $(document.activeElement).prop('type').toLowerCase() == 'text')
-            return;
         keyboard.log("keydown - " + debugKeyEvent(evt));
         var keyCode = evt.keyCode || evt.which;
         switch (keyCode) {
@@ -163,6 +177,7 @@ angular.module('Pundit2.Core')
      *      - callbackParams: {array} additional parameters passed to callback function, default: []
      *      - once: {boolean} defines if event must be consumed only once, default: false
      *      - stopPropagation: {boolean} defines if event must block other event handlers, default: false
+     *      - ignoreOnInput: {boolean} ignore event when focus is on input text field
      *      - altKey: {boolean} event key combination, default false
      *      - ctrlKey: {boolean} event key combination, default false
      *      - metaKey: {boolean} event key combination, default false
@@ -227,6 +242,19 @@ angular.module('Pundit2.Core')
         if (!angular.isDefined(state.consuming[keyIdentifier])) {
             state.keyHandlers[keyIdentifier] = handlers.filter(function(elem) {return elem !== null});
         }
+    };
+
+    /**
+     * @ngdoc method
+     * @name Keyboard#unregisterAllHandlers
+     * @module Pundit2.Core
+     * @function
+     *
+     * @description
+     * Unregister all handlers.
+     */
+    keyboard.unregisterAllHandlers = function() {
+        state.keyHandlers = {};
     };
 
     return keyboard;
