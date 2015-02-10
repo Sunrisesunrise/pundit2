@@ -222,6 +222,14 @@ div.pnd-wrp li.hpkey{
 
         </div>
         <div style="margin-top: 300px; margin-bottom: 30px;">
+            <p>
+                <h3>How to test:</h3>
+                First of all click on "Register default handlers" to add listeners of keyboard short cuts. It will appear a list of enabled shortcuts with a small description.
+                <br />
+                Some shortcuts will work also on text fields, most them wont.
+                <br />
+                High priority handlers represents circustances when the same short cut is needed within a user interface section such as a popup or a confirm window; event configuration can decide whether execute only its handler or all other registered handlers for that short cut.
+            </p>
             <button 
                 class="btn btn-xs btn-success" 
                 ng-disabled="state.handlersRegistered"
