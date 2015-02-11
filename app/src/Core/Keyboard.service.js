@@ -78,7 +78,7 @@ angular.module('Pundit2.Core')
         });
 
         if (!angular.isDefined(eventKeyConfig.handlerID)) {
-            eventKeyConfig.handlerID = (new Date()).getTime();
+            eventKeyConfig.handlerID = Math.floor((new Date()).getTime() / 100 * (Math.random() * 100) + 1);
         }
 
         return eventKeyConfig;
@@ -130,27 +130,52 @@ angular.module('Pundit2.Core')
         return false;
     }
 
-    // Base keydown event handlers.
-    $document.on('keydown', function(evt) {
-        keyboard.log("keydown - " + keyboard.eventToString(evt));
-        var keyCode = evt.keyCode || evt.which;
-        switch (keyCode) {
-            case 16:
-            case 17:
-            case 18:
-            case 91:
-                // Ignore single key down for SHIFT, CTRL, META and ALT keys
-                break;
-            default:
-                var preventDefault = consumeEvent(evt);
-                if (preventDefault) {
-                    evt.stopPropagation();
-                    evt.stopImmediatePropagation();
-                    evt.preventDefault();
-                    return false;
-                }
-        }
-    });
+    /**
+     * @ngdoc method
+     * @name Keyboard#off
+     * @module Pundit2.Core
+     * @function
+     *
+     * @description
+     * Disable serivce.
+     */
+    keyboard.off = function() {
+        $document.off('keydown.keyboardService');
+    }
+
+    /**
+     * @ngdoc method
+     * @name Keyboard#off
+     * @module Pundit2.Core
+     * @function
+     *
+     * @description
+     * Enable serivce.
+     */
+    keyboard.on = function() {
+        // Base keydown event handlers.
+        $document.on('keydown.keyboardService', function(evt) {
+            keyboard.log("keydown - " + keyboard.eventToString(evt));
+            keyboard.log(evt);
+            var keyCode = evt.keyCode || evt.which;
+            switch (keyCode) {
+                case 16:
+                case 17:
+                case 18:
+                case 91:
+                    // Ignore single key down for SHIFT, CTRL, META and ALT keys
+                    break;
+                default:
+                    var preventDefault = consumeEvent(evt);
+                    if (preventDefault) {
+                        evt.stopPropagation();
+                        evt.stopImmediatePropagation();
+                        evt.preventDefault();
+                        return false;
+                    }
+            }
+        });
+    }
 
     /**
      * @ngdoc method
@@ -184,7 +209,7 @@ angular.module('Pundit2.Core')
         output += '[' + (evt.ctrlKey ? '(CTRL)' : ' ctrl ') + '] ';
         output += '[' + (evt.metaKey ? '(META)' : ' meta ') + '] ';
         output += '[' + (evt.shiftKey ? '(SHIFT)' : ' shift ') + '] ';
-        output += '[' + evt.keyCode + '] ';
+        output += '[' + evt.keyCode + ']';
         return output;
     };
 
@@ -286,6 +311,9 @@ angular.module('Pundit2.Core')
     keyboard.unregisterAllHandlers = function() {
         state.keyHandlers = {};
     };
+
+    // Enable Service.
+    keyboard.on();
 
     return keyboard;
 });
