@@ -29,20 +29,6 @@ angular.module('Pundit2.Core')
         consuming: {}
     };
 
-    // Debug function helper; return an output string with key code and status of modifier keys.
-    // Uppercase means modifier key is pressed.
-    // Exemple for Ctrl+Shift+D:
-    //      [ alt ] [(CTRL)] [ meta ] [(SHIFT)] [68]
-    var debugKeyEvent = function(evt) {
-        var output = "";
-        output += '[' + (evt.altKey ? '(ALT)' : ' alt ') + '] ';
-        output += '[' + (evt.ctrlKey ? '(CTRL)' : ' ctrl ') + '] ';
-        output += '[' + (evt.metaKey ? '(META)' : ' meta ') + '] ';
-        output += '[' + (evt.shiftKey ? '(SHIFT)' : ' shift ') + '] ';
-        output += '[' + evt.keyCode + '] ';
-        return output;
-    };
-
     // Get event identifier string; it will be a string composed by initial of modifier keys (uppercase if pressed) with keycode
     // Example for Ctrl+Shift+D:
     //      'aCmS68'
@@ -117,19 +103,24 @@ angular.module('Pundit2.Core')
             // Get handlers for current event.
             var handlers = state.keyHandlers[keyIdentifier];
             if (angular.isArray(handlers)) {
+                // Cycling handlers.
                 for (var i in handlers) {
                     var eventHandlerConfig = handlers[i];
                     if (eventHandlerConfig.ignoreOnInput && isFocusOnInputTextField()) {
                         continue;
                     }
+                    // Consuming handler.
                     eventHandlerConfig.callback.apply(eventHandlerConfig.scope, [evt, eventHandlerConfig])
+                    // Check if handler needs to bee removed automatically.
                     if (eventHandlerConfig.once) {
                         handlers[i] = null;
                     }
+                    // Check if no further handlers have to be evaluated.
                     if (eventHandlerConfig.stopPropagation) {
                         break;
                     }
                 }
+                // Update state handlers by removing null elements.
                 state.keyHandlers[keyIdentifier] = handlers.filter(function(elem) {return elem !== null});
                 delete state.consuming[keyIdentifier];
                 return true;
@@ -141,7 +132,7 @@ angular.module('Pundit2.Core')
 
     // Base keydown event handlers.
     $document.on('keydown', function(evt) {
-        keyboard.log("keydown - " + debugKeyEvent(evt));
+        keyboard.log("keydown - " + keyboard.eventToString(evt));
         var keyCode = evt.keyCode || evt.which;
         switch (keyCode) {
             case 16:
@@ -160,6 +151,42 @@ angular.module('Pundit2.Core')
                 }
         }
     });
+
+    /**
+     * @ngdoc method
+     * @name Keyboard#getState
+     * @module Pundit2.Core
+     * @function
+     *
+     * @description
+     * Get current state. It's only used during unit test to verify other methods.
+     *
+     * @return {object} internal state object.
+     */
+    keyboard.getState = function() {
+        return state;
+    };
+
+    /**
+     * @ngdoc method
+     * @name Keyboard#eventToString
+     * @module Pundit2.Core
+     * @function
+     *
+     * @description
+     * Convert event object to string.
+     *
+     * @return {string} output string, exemple for Ctrl+Shift+D: [ alt ] [(CTRL)] [ meta ] [(SHIFT)] [68]
+     */
+    keyboard.eventToString = function(evt) {
+        var output = "";
+        output += '[' + (evt.altKey ? '(ALT)' : ' alt ') + '] ';
+        output += '[' + (evt.ctrlKey ? '(CTRL)' : ' ctrl ') + '] ';
+        output += '[' + (evt.metaKey ? '(META)' : ' meta ') + '] ';
+        output += '[' + (evt.shiftKey ? '(SHIFT)' : ' shift ') + '] ';
+        output += '[' + evt.keyCode + '] ';
+        return output;
+    };
 
     /**
      * @ngdoc method
@@ -191,14 +218,17 @@ angular.module('Pundit2.Core')
     keyboard.registerHandler = function(module, eventKeyConfig, callback) {
         var normalizedEventKeyConfig = normalizeEventKeyConfig(eventKeyConfig);
         if (null === normalizedEventKeyConfig) {
-            return;
-        }
-        var keyIdentifier = getKeyIdentifier(eventKeyConfig);
-        if (null === keyIdentifier) {
-            return;
+            return null;
         }
 
+        if (typeof callback !== 'function') {
+            keyboard.err('Invalid callback given.');
+            return null;
+        }
+
+        var keyIdentifier = getKeyIdentifier(eventKeyConfig);
         var handlers = state.keyHandlers[keyIdentifier];
+
         if (typeof handlers === 'undefined') {
             state.keyHandlers[keyIdentifier] = handlers = [];
         }
