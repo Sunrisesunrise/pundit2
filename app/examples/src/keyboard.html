@@ -156,7 +156,7 @@ div.pnd-wrp li.hpkey{
     <div 
         ng-controller="keyboardDemoCtrl" 
         class="container clearfix">
-        <div ng-show="state.handlersRegistered" class="event-list" style="float:left;">
+        <div ng-show="state.handlersRegistered" class="event-list" style="float:left; width: 240px">
             <ul class="shortcuts-list">
                 <li>Press ESC to reset status<span class="desc">NOT Ignored in input filed</span></li>
                 <li>Press Shift+T to toggle input field<span class="desc">Ignored in input filed</span></li>
@@ -219,7 +219,6 @@ div.pnd-wrp li.hpkey{
                         Button 5
                     </button>
                 </li>
-
         </div>
         <div style="margin-top: 300px; margin-bottom: 30px;">
             <p>
@@ -230,6 +229,7 @@ div.pnd-wrp li.hpkey{
                 <br />
                 High priority handlers represents circustances when the same short cut is needed within a user interface section such as a popup or a confirm window; event configuration can decide whether execute only its handler or all other registered handlers for that short cut.
             </p>
+            <br />
             <button 
                 class="btn btn-xs btn-success" 
                 ng-disabled="state.handlersRegistered"
