@@ -37,7 +37,7 @@ describe("Item interaction", function() {
 
     });
 
-    iit("should correctly handle keydown events", function() {
+    it("should correctly handle keydown events", function() {
 
         var window = p.driver.manage().window;
 
