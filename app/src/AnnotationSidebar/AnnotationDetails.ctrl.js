@@ -72,6 +72,7 @@ angular.module('Pundit2.AnnotationSidebar')
             currentElement.addClass('pnd-annotation-details-delete-in-progress');
             AnnotationsCommunication.deleteAnnotation($scope.annotation.id).then(function() {
                 modalScope.notifyMessage = "Your annotation has been deleted successfully";
+                TripleComposer.reset();
             }, function() {
                 currentElement.removeClass('pnd-annotation-details-delete-in-progress');
                 modalScope.notifyMessage = 'Impossible to delete the annotation. Please reatry later.';
