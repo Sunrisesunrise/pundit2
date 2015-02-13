@@ -16,6 +16,19 @@ angular.module('Pundit2.ResourcePanel')
     $scope.isUseActive = false;
     $scope.contentTabs.activeTab = 0;
 
+    // Properties and method to customize template (Pundit/KorboEE)
+    $scope.showFilteredResults = true;
+    $scope.showHeader = true;
+    $scope.showVerticalTabFooterContent = true;
+    $scope.showContentMessage1 = false;
+    $scope.showContentMessage4 = false;
+    $scope.showContentMessage5 = true;
+    $scope.showContentMessage6 = true;
+    $scope.useCustomTemplate = false;
+    $scope.canShowPaneList = function(title) {
+        return title != 'My items' || (title == 'My items' && $scope.userLoggedIn);
+    }
+
     // build tabs by reading active selectors inside selectors manager
     if ($scope.type !== 'pr') {
         for (var j = 0; j < selectors.length; j++) {

@@ -4,7 +4,7 @@
    <!-- header -->
    <div 
         class="pnd-panel-tab-content-header pnd-panel-tab-content-header-border"
-        ng-if="moduleName == 'Pundit2'">
+        ng-if="showHeader">
 
        <!-- TODO: please remember that class "pnd-vertical-tab-header-content" was removed -->
         
@@ -25,49 +25,29 @@
     </div>
     <!-- // end header -->
 
-    <!-- Pundit2 list -->
-    <ul 
-        class="nav nav-tabs pnd-vertical-tabs" 
-        ng-if= "moduleName == 'Pundit2'">
-        <li 
-            ng-repeat="pane in contentTabs" 
-            ng-class="{active: $index == active}" 
-            ng-if="pane.title != 'My items' || (pane.title == 'My items' && userLoggedIn)">
-            <a 
-                data-toggle="tab" 
-                ng-click="setActive($index, $event)" 
+    <!-- List -->
+    <ul
+        class="nav nav-tabs pnd-vertical-tabs">
+        <li
+            ng-repeat="pane in contentTabs"
+            ng-class="{active: $index == active}"
+            ng-if="canShowPaneList(pane.title)">
+            <a
+                data-toggle="tab"
+                ng-click="setActive($index, $event)"
                 data-index="{{$index}}" >
-                <span 
-                    class="badge pull-right" 
-                    ng-show="moduleName == 'Pundit2' && !pane.isLoading && pane.isStarted">
+                <span
+                    class="badge pull-right"
+                    ng-show="showFilteredResults && !pane.isLoading && pane.isStarted">
                     {{tabItemsFiltered[$index].length}}
                 </span>
-                <span 
-                    class="pnd-icon pnd-icon-refresh pnd-icon-spin pull-right" 
-                    ng-show="pane.isLoading"></span>
-                {{pane.title}}
-            </a>
-        </li>
-    </ul>
-
-    <!-- KorboEE list -->
-    <ul 
-        class="nav nav-tabs pnd-vertical-tabs" 
-        ng-if = "moduleName == 'KorboEE'">
-        <li 
-            ng-repeat="pane in contentTabs" 
-            ng-class="{active: $index == active}">
-            <a 
-                data-toggle="tab" 
-                ng-click="setActive($index, $event)" 
-                data-index="{{$index}}" >
-                <span 
-                    class="badge pull-right" 
-                    ng-show="moduleName == 'KorboEE' && !pane.isLoading && pane.isStarted">
+                <span
+                    class="badge pull-right"
+                    ng-show="!showFilteredResults && !pane.isLoading && pane.isStarted">
                     {{pane.items.length}}
                 </span>
-                <span 
-                    class="pnd-icon pnd-icon-refresh pnd-icon-spin pull-right" 
+                <span
+                    class="pnd-icon pnd-icon-refresh pnd-icon-spin pull-right"
                     ng-show="pane.isLoading"></span>
                 {{pane.title}}
             </a>
@@ -82,7 +62,7 @@
                 ng-class="[$index == active ? 'active' : '']">
                 <div 
                     class="kee-server-messages" 
-                    ng-if="pane.module == 'KorboEE' && !contentTabs[$index].serverError">
+                    ng-if="showContentMessage1 && !contentTabs[$index].serverError">
                     <!-- messages 1 -->
                     <div 
                         ng-show="!contentTabs[$index].isLoading && contentTabs[$index].items.length === 0 && elemToSearch !== ''">
@@ -109,58 +89,59 @@
                 <!-- messages 4 -->
                 <div 
                     class="kee-server-messages" 
-                    ng-if="pane.module == 'KorboEE' && contentTabs[$index].serverError">
+                    ng-if="showContentMessage4 && contentTabs[$index].serverError">
                     <div ng-show="contentTabs[$index].serverError">
                         Server error
                     </div>
                 </div>
 
                 <!-- TODO: find a better way to show partial counting -->
-                <ul class="list-group" ng-init="$parent.tabItemsFiltered = $parent.tabItemsFiltered || []">
+                <ul class="list-group" ng-init="$parent.tabItemsFiltered = $parent.tabItemsFiltered || []; initTabItemsFiltered()">
+                    <!-- messages 5 -->
                     <li 
-                        ng-if="pane.module == 'Pundit2' && $parent.tabItemsFiltered[$index].length === 0 && label.length > 2 && !pane.isLoading">
+                        ng-if="showContentMessage5 && $parent.tabItemsFiltered[$index].length === 0 && label.length > 2 && !pane.isLoading">
                         PUNDIT: No results found
                     </li>
+                    <!-- messages 6 -->
                     <li 
-                        ng-if="pane.module == 'Pundit2' && label.length > 2 && pane.isLoading">
+                        ng-if="showContentMessage6 && label.length > 2 && pane.isLoading">
                         Loading ... 
                     </li>
                     <li 
                         class="list-group-item" 
-                        ng-repeat="mi in $parent.tabItemsFiltered[$index] = (contentTabs[$index].items | filter:{label: label})" 
-                        ng-if="moduleName == 'Pundit2'">
+                        ng-repeat="mi in $parent.tabItemsFiltered[$index] = (contentTabs[$index].items | filter:{label: label})"
+                        ng-if="showFilteredResults">
                         <item 
                             uri="{{mi.uri}}" 
                             is-selected="isSelected(mi)" 
                             ng-click="select(mi)"
                             ng-dblclick="save(mi)"
                             hide-options="true" 
-                            hide-sticky-button="true"
-                            ng-if="moduleName == 'Pundit2'"></item>
+                            hide-sticky-button="true"></item>
                     </li>
 
                     <!-- Korbo -->
                     <li 
                         class="list-group-item" 
                         ng-repeat="mi in contentTabs[$index].items | orderBy:getOrderProperty" 
-                        ng-if="moduleName == 'KorboEE'" 
-                        ng-mouseenter="getItem(mi);$event.stopPropagation()" 
+                        ng-if="!showFilteredResults"
+                        ng-mouseenter="getItem(mi);$event.stopPropagation()"
+                        ng-init="customTemplate = useCustomTemplate"
                         ng-mouseleave="onMouseLeave()">
                         <item 
-                            uri="{{mi.uri}}" 
-                            hide-options="true" 
+                            uri="{{mi.uri}}"
+                            is-selected="isSelected(mi)"
+                            hide-options="true"
                             hide-sticky-button="true" 
                             ng-click="select(mi)" 
-                            is-selected="isSelected(mi)" 
-                            use-in-korbo="true" 
-                            ng-if="moduleName == 'KorboEE'"></item>
+                            use-in-korbo="true"></item>
                     </li>
                 </ul>
             </div>
 
             <div 
                 class="pnd-vertical-tab-footer-content" 
-                ng-if=" moduleName == 'Pundit2'">
+                ng-if="showVerticalTabFooterContent">
                 <button 
                     class="pnd-resource-panel-use-button btn btn-xs btn-success pnd-btn-full" 
                     ng-class="{'disabled': !isUseActive}" 
