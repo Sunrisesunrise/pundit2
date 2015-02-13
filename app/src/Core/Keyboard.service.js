@@ -1,15 +1,4 @@
-/**
-Usage example:
-Keyboard.registerHandler('ContextualMenu', {
-    'autoUnregisterOnComplete': true,
-    'stopPropagation': false,
-    'keyCode': 27
-}, function(eventKey, eventKeyConfig) {
-    contextualMenu.hide();
-});
-
-Keycode reference - http://unixpapa.com/js/key.html
-*/
+/*global $:false */
 angular.module('Pundit2.Core')
 /**
  * @ngdoc service
@@ -19,7 +8,7 @@ angular.module('Pundit2.Core')
  *
  * Keyboard Service offers keyboard keys and short cut handlers.
  */
-.service('Keyboard', function($rootScope, $document, BaseComponent) {
+.service('Keyboard', function ($rootScope, $document, BaseComponent) {
     // Keyboard service instance.
     var keyboard = new BaseComponent('Keyboard');
 
@@ -32,7 +21,7 @@ angular.module('Pundit2.Core')
     // Get event identifier string; it will be a string composed by initial of modifier keys (uppercase if pressed) with keycode
     // Example for Ctrl+Shift+D:
     //      'aCmS68'
-    var getKeyIdentifier = function(eventKeyConfig) {
+    var getKeyIdentifier = function (eventKeyConfig) {
         var keyCode = eventKeyConfig.keyCode || eventKeyConfig.which;
         var result = "";
         result += (eventKeyConfig.altKey ? 'A' : 'a');
@@ -45,7 +34,7 @@ angular.module('Pundit2.Core')
     };
 
     // Normalize eventKeyConfig object, checks for and adds all missing properties; print an error message if mandatory properties are missing.
-    var normalizeEventKeyConfig = function(eventKeyConfig) {
+    var normalizeEventKeyConfig = function (eventKeyConfig) {
         var normalizedEventKeyConfig = {
             scope: undefined,
             module: null,
@@ -63,15 +52,15 @@ angular.module('Pundit2.Core')
         var errorMessage = 'Invalid eventKeyConfig object, please see object documentation.';
 
         if (typeof eventKeyConfig.keyCode === 'undefined') {
-          keyboard.err(errorMessage);
-          return null;
+            keyboard.err(errorMessage);
+            return null;
         }
 
         if (!angular.isArray(eventKeyConfig.callbackParams)) {
-          eventKeyConfig.callbackParams = normalizedEventKeyConfig.callbackParams;
+            eventKeyConfig.callbackParams = normalizedEventKeyConfig.callbackParams;
         }
 
-        angular.forEach(normalizedEventKeyConfig, function(value, key){
+        angular.forEach(normalizedEventKeyConfig, function (value, key) {
             if (!angular.isDefined(eventKeyConfig[key])) {
                 eventKeyConfig[key] = normalizedEventKeyConfig[key];
             }
@@ -84,17 +73,16 @@ angular.module('Pundit2.Core')
         return eventKeyConfig;
     };
 
-    var isFocusOnInputTextField = function() {
-        if ($(document.activeElement).prop('tagName').toLowerCase() == 'input'
-            &&
-            $(document.activeElement).prop('type').toLowerCase() == 'text') {
+    var isFocusOnInputTextField = function () {
+        if ($(document.activeElement).prop('tagName').toLowerCase() === 'input' &&
+        $(document.activeElement).prop('type').toLowerCase() === 'text') {
             return true;
         }
         return false;
-    }
+    };
 
     // Consumes event by calling all registered handlers callback.
-    var consumeEvent = function(evt) {
+    var consumeEvent = function (evt) {
         // Get event key identifier.
         var keyIdentifier = getKeyIdentifier(evt);
         if (null !== keyIdentifier) {
@@ -110,7 +98,10 @@ angular.module('Pundit2.Core')
                         continue;
                     }
                     // Consuming handler.
-                    eventHandlerConfig.callback.apply(eventHandlerConfig.scope, [evt, eventHandlerConfig])
+                    eventHandlerConfig.callback.apply(eventHandlerConfig.scope, [
+                        evt,
+                        eventHandlerConfig
+                    ]);
                     // Check if handler needs to bee removed automatically.
                     if (eventHandlerConfig.once) {
                         handlers[i] = null;
@@ -121,14 +112,16 @@ angular.module('Pundit2.Core')
                     }
                 }
                 // Update state handlers by removing null elements.
-                state.keyHandlers[keyIdentifier] = handlers.filter(function(elem) {return elem !== null});
+                state.keyHandlers[keyIdentifier] = handlers.filter(function (elem) {
+                    return elem !== null;
+                });
                 delete state.consuming[keyIdentifier];
                 return true;
             }
         }
         delete state.consuming[keyIdentifier];
         return false;
-    }
+    };
 
     /**
      * @ngdoc method
@@ -139,9 +132,9 @@ angular.module('Pundit2.Core')
      * @description
      * Disable serivce.
      */
-    keyboard.off = function() {
+    keyboard.off = function () {
         $document.off('keydown.keyboardService');
-    }
+    };
 
     /**
      * @ngdoc method
@@ -152,9 +145,9 @@ angular.module('Pundit2.Core')
      * @description
      * Enable serivce.
      */
-    keyboard.on = function() {
+    keyboard.on = function () {
         // Base keydown event handlers.
-        $document.on('keydown.keyboardService', function(evt) {
+        $document.on('keydown.keyboardService', function (evt) {
             keyboard.log("keydown - " + keyboard.eventToString(evt));
             keyboard.log(evt);
             var keyCode = evt.keyCode || evt.which;
@@ -175,7 +168,7 @@ angular.module('Pundit2.Core')
                     }
             }
         });
-    }
+    };
 
     /**
      * @ngdoc method
@@ -188,7 +181,7 @@ angular.module('Pundit2.Core')
      *
      * @return {object} internal state object.
      */
-    keyboard.getState = function() {
+    keyboard.getState = function () {
         return state;
     };
 
@@ -203,7 +196,7 @@ angular.module('Pundit2.Core')
      *
      * @return {string} output string, exemple for Ctrl+Shift+D: [ alt ] [(CTRL)] [ meta ] [(SHIFT)] [68]
      */
-    keyboard.eventToString = function(evt) {
+    keyboard.eventToString = function (evt) {
         var output = "";
         output += '[' + (evt.altKey ? '(ALT)' : ' alt ') + '] ';
         output += '[' + (evt.ctrlKey ? '(CTRL)' : ' ctrl ') + '] ';
@@ -236,11 +229,11 @@ angular.module('Pundit2.Core')
      *      - shiftKey: {boolean} event key combination, default false
      *      - keyCode: {number} key code (mandatory property)
      * @param {function} callback
-     * 
+     *
      * @return {object} eventKeyConfig normalized with all properties plus handlerID
      * @see `Keyboard.unregisterHandler`
      */
-    keyboard.registerHandler = function(module, eventKeyConfig, callback) {
+    keyboard.registerHandler = function (module, eventKeyConfig, callback) {
         var normalizedEventKeyConfig = normalizeEventKeyConfig(eventKeyConfig);
         if (null === normalizedEventKeyConfig) {
             return null;
@@ -276,7 +269,7 @@ angular.module('Pundit2.Core')
      *
      * @see `Keyboard.registerHandler`
      */
-    keyboard.unregisterHandler = function(eventKeyConfig) {
+    keyboard.unregisterHandler = function (eventKeyConfig) {
         var normalizedEventKeyConfig = normalizeEventKeyConfig(eventKeyConfig);
         if (null === normalizedEventKeyConfig) {
             return;
@@ -288,14 +281,16 @@ angular.module('Pundit2.Core')
         }
 
         for (var i in handlers) {
-            if (handlers[i].handlerID == eventKeyConfig.handlerID) {
+            if (handlers[i].handlerID === eventKeyConfig.handlerID) {
                 handlers[i] = null;
                 break;
             }
         }
 
         if (!angular.isDefined(state.consuming[keyIdentifier])) {
-            state.keyHandlers[keyIdentifier] = handlers.filter(function(elem) {return elem !== null});
+            state.keyHandlers[keyIdentifier] = handlers.filter(function (elem) {
+                return elem !== null;
+            });
         }
     };
 
@@ -308,7 +303,7 @@ angular.module('Pundit2.Core')
      * @description
      * Unregister all handlers.
      */
-    keyboard.unregisterAllHandlers = function() {
+    keyboard.unregisterAllHandlers = function () {
         state.keyHandlers = {};
     };
 
