@@ -13,11 +13,14 @@
             stInputVisible: false,
             handlersRegistered: false,
             hpHandlersRegistered: false,
+            hpNumericHandlersRegistered: false,
             button1Enabled: false,
             button2Enabled: false,
             button3Enabled: false,
             button4Enabled: false,
             button5Enabled: false,
+            button6Enabled: false,
+            button7Enabled: false,
             algGEnabled: true,
             handlers: {}
         };
@@ -26,11 +29,14 @@
             stInputVisible: false,
             handlersRegistered: false,
             hpHandlersRegistered: false,
+            hpNumericHandlersRegistered: false,
             button1Enabled: false,
             button2Enabled: false,
             button3Enabled: false,
             button4Enabled: false,
             button5Enabled: false,
+            button6Enabled: false,
+            button7Enabled: false,
             algGEnabled: true,
             handlers: {}
         };
@@ -124,6 +130,33 @@
             $scope.state.hpHandlersRegistered = true;
         }
 
+        $scope.registerHPNumericHandlers = function() {
+            var css = ['exec-first', 'exec-second'];
+            $scope.state.handlers['Ctrl+e 1'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                ctrlKey: true,
+                priority: 1,
+                keyCode: 69
+            }, function(event, eventKeyConfig){
+                eventKeyConfig.scope.state.button6Enabled = !eventKeyConfig.scope.state.button6Enabled;
+                $('#button6').addClass(css.shift());
+                eventKeyConfig.scope.$apply();
+            });
+
+            $scope.state.handlers['Ctrl+e 2'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                ctrlKey: true,
+                keyCode: 69,
+                stopPropagation: true
+            }, function(event, eventKeyConfig){
+                eventKeyConfig.scope.state.button7Enabled = !eventKeyConfig.scope.state.button7Enabled;
+                $('#button7').addClass(css.shift());
+                eventKeyConfig.scope.$apply();
+            });
+
+            $scope.state.hpNumericHandlersRegistered = true;
+        }
+
         $scope.unregisterHandlers = function() {
             for (var key in $scope.state.handlers) {
                 Keyboard.unregisterHandler($scope.state.handlers[key]);
@@ -150,6 +183,43 @@ div.pnd-wrp span.desc{
 div.pnd-wrp li.hpkey{
     color: chocolate;
 }
+div.pnd-wrp li.hpnkey{
+    color: crimson;
+}
+div.pnd-wrp div.test-board button.btn {
+    position: relative;
+    padding-right: 20px;
+}
+.exec-first::after {
+    content: '1';
+    color: white;
+    font-weight: bolder;
+    font-size: 9px;
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    background: black;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-bottom-left-radius: 3px;
+}
+.exec-second::after {
+    content: '2';
+    color: white;
+    font-weight: bolder;
+    font-size: 9px;
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    background: black;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-bottom-left-radius: 3px;
+}
 </style>
 <div data-ng-app="Pundit2" 
      class="pnd-wrp">
@@ -166,6 +236,7 @@ div.pnd-wrp li.hpkey{
                 <li>Press Ctrl+F to toggle button 2 <span class="desc">Ignored in input filed</span></li>
                 <li>Press Meta+F to toggle button 2 <span class="desc">NOT Ignored in input filed</span></li>
                 <li ng-show="state.algGEnabled" class="dkey">Press Alt+G to toggle button 3 <span class="desc">NOT Ignored in input filed and consumed only once</span></li>
+                <li ng-show="state.hpNumericHandlersRegistered" class="hpnkey">Press Ctrl+E to test numeric priority <span class="desc">Handler for button6 is added first but with higher priority than handler for button7</span></li>
             </ul>
         </div>
         <div class="test-board" style="float: left; margin-left: 50px; border: 1px solid green; padding: 10px;">
@@ -212,15 +283,31 @@ div.pnd-wrp li.hpkey{
                     </button>
                 </li>
                 <li>
-                    <button 
-                        id="button5"
-                        class="btn btn-warning" 
-                        ng-disabled="!state.button5Enabled">
+                    <button
+                            id="button5"
+                            class="btn btn-warning"
+                            ng-disabled="!state.button5Enabled">
                         Button 5
                     </button>
                 </li>
+                <li>
+                    <button
+                            id="button6"
+                            class="btn btn-danger"
+                            ng-disabled="!state.button6Enabled">
+                        Button 6
+                    </button>
+                </li>
+                <li>
+                    <button
+                            id="button7"
+                            class="btn btn-danger"
+                            ng-disabled="!state.button7Enabled">
+                        Button 7
+                    </button>
+                </li>
         </div>
-        <div style="margin-top: 350px; margin-bottom: 30px;">
+        <div style="margin-top: 380px; margin-bottom: 30px;">
             <p>
                 <h3>How to test:</h3>
                 First of all click on "Register default handlers" to add listeners of keyboard short cuts. It will appear a list of enabled shortcuts with a small description.
@@ -244,12 +331,19 @@ div.pnd-wrp li.hpkey{
                 ng-click="unregisterHandlers()">
                 Unregister default handlers
             </button>
-            <button 
-                id = "btn-register-hp"
-                class="btn btn-xs btn-warning"
-                ng-click="registerHPHandlers()"
-                ng-disabled="!state.handlersRegistered || state.hpHandlersRegistered">
+            <button
+                    id = "btn-register-hp"
+                    class="btn btn-xs btn-warning"
+                    ng-click="registerHPHandlers()"
+                    ng-disabled="!state.handlersRegistered || state.hpHandlersRegistered">
                 Register hight priority handlers
+            </button>
+            <button
+                    id = "btn-register-hpn"
+                    class="btn btn-xs btn-danger"
+                    ng-click="registerHPNumericHandlers()"
+                    ng-disabled="!state.handlersRegistered || !state.hpHandlersRegistered || state.hpNumericHandlersRegistered">
+                Register handlers with numeric priority
             </button>
         </div>
     </div>

@@ -121,6 +121,20 @@ describe("Item interaction", function() {
         p.findElement(protractor.By.id('button2')).then(function(element) {
             expect(element.isEnabled()).toBe(false);
         });
+
+        // Register numeric priority handlers
+        p.findElement(protractor.By.id('btn-register-hpn')).click();
+
+        // Ctrl+E
+        browser.driver.executeScript("var e = jQuery.Event('keydown'); e.which = 69; e.keyCode = 69; e.ctrlKey = true; $('.pnd-wrp').trigger(e);");
+        p.findElement(protractor.By.id('button6')).then(function(element) {
+            expect(element.isEnabled()).toBe(true);
+            expect(element.getAttribute('class')).toContain('exec-first');
+        });
+        p.findElement(protractor.By.id('button7')).then(function(element) {
+            expect(element.isEnabled()).toBe(true);
+            expect(element.getAttribute('class')).toContain('exec-second');
+        });
     });
 
 });

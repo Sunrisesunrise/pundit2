@@ -37,6 +37,7 @@ angular.module('Pundit2.Core')
     var normalizeEventKeyConfig = function (eventKeyConfig) {
         var normalizedEventKeyConfig = {
             scope: undefined,
+            priority: 0,
             module: null,
             keyCode: null,
             callbackParams: [],
@@ -69,6 +70,9 @@ angular.module('Pundit2.Core')
         if (!angular.isDefined(eventKeyConfig.handlerID)) {
             eventKeyConfig.handlerID = Math.floor((new Date()).getTime() / 100 * (Math.random() * 100) + 1);
         }
+
+        // Normalize priority.
+        eventKeyConfig.priority = eventKeyConfig.priority < 0 ? 0 : eventKeyConfig.priority;
 
         return eventKeyConfig;
     };
@@ -218,6 +222,7 @@ angular.module('Pundit2.Core')
      * @param {string} module name
      * @param {object} event Key configuration object, an object with the following properties:
      *      - scope: {object} scope, default : undefined
+     *      - priority: {number} execution priority, default : 0
      *      - module: {string} module name, default: null
      *      - callbackParams: {array} additional parameters passed to callback function, default: []
      *      - once: {boolean} defines if event must be consumed only once, default: false
@@ -253,7 +258,23 @@ angular.module('Pundit2.Core')
 
         normalizedEventKeyConfig.callback = callback;
         normalizedEventKeyConfig.module = module;
-        handlers.unshift(normalizedEventKeyConfig);
+
+        if (handlers.length == 0) {
+            handlers.push(normalizedEventKeyConfig);
+        }
+        else {
+            var added = false;
+            for (var i = 0; i < handlers.length; i++) {
+                if (normalizedEventKeyConfig.priority >= handlers[i].priority) {
+                    handlers.splice(i, 0, normalizedEventKeyConfig);
+                    added = true;
+                    break;
+                }
+            }
+            if (!added) {
+                handlers.push(normalizedEventKeyConfig);
+            }
+        }
 
         return normalizedEventKeyConfig;
     };
