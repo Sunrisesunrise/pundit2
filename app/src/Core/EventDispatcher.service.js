@@ -70,7 +70,7 @@ angular.module('Pundit2.Core')
                     events[name].splice(index, 1);
                     if (events[name].length === 0) {
                         delete events[name];
-                        return;
+                        return; // TODO: why?!
                     }
                 }
             }
