@@ -1,33 +1,37 @@
 angular.module('Pundit2.Breadcrumbs')
-.controller('BreadcrumbsCtrl', ['$scope', function($scope) {
+.controller('BreadcrumbsCtrl', function($scope, Breadcrumbs) {
     $scope.items = [];
+
+    if (typeof $scope.name === 'undefined') {
+        $scope.name = "breadcrumb-" + Math.floor((new Date()).getTime() / 100 * (Math.random() * 100) + 1);
+    }
+
     $scope.itemSelect = function(index, event) {
         event.preventDefault();
-        var item = $scope.items[index];
-        if (typeof item !== 'undefined' &&
-            item.hasOwnProperty('callback') &&
-            typeof item.callback === 'function') {
-            item.callback.call(null, index, item);
-            $scope.dropItemsFromIndex(index + 1);
-        }
+        Breadcrumbs.itemSelect($scope.name, index);
         return false;
     }
 
+    $scope.getItems = function() {
+        return Breadcrumbs.getItems($scope.name);
+    }
+
     $scope.appendItem = function(itemObject) {
-        $scope.items.push(itemObject);
+        Breadcrumbs.appendItem($scope.name, itemObject);
     }
 
     $scope.popItem = function() {
-        if ($scope.items.length > 0) {
-            $scope.items.pop();
-        }
+        Breadcrumbs.popItem($scope.name);
     }
 
     $scope.dropItemsFromIndex = function(index) {
-        if (index >= $scope.items.length) {
-            return;
-        }
-        index = index < 0 ? 0 : index;
-        $scope.items.splice(index, $scope.items.length - index);
+        Breadcrumbs.popItem($scope.name, index);
     }
-}]);
+
+    // Handle add and remove instance.
+    Breadcrumbs.add($scope.name);
+
+    $scope.$on('$destroy', function() {
+        Breadcrumbs.remove($scope.name);
+    })
+});

@@ -1,9 +1,9 @@
 <div class="pnd-breadcrumbs-container">
-    <div class="placeholder" ng-if="items.length == 0">
+    <div class="placeholder" ng-if="getItems().length == 0">
         {{emptyPlaceholder}}
     </div>
-    <ol class="breadcrumb" ng-if="items.length > 0">
-        <li ng-repeat="item in items">
+    <ol class="breadcrumb" ng-if="getItems().length > 0">
+        <li ng-repeat="item in getItems()">
             <span ng-if="$last">
                 {{item.label}}
             </span>

@@ -2,32 +2,65 @@ angular.module('Pundit2.Breadcrumbs')
 .service('Breadcrumbs', function(BaseComponent) {
     var breadcrumbs = new BaseComponent('Breadcrumbs');
 
-    breadcrumbs.get = function(id) {
-        var element = angular.element(document.querySelector(id));
-        if (element.length > 0) {
-            return element.isolateScope();
+    var state = {};
+
+    breadcrumbs.add = function(name, items) {
+        if (typeof items === 'undefined') {
+            items = [];
         }
-        return null;
+        if (typeof state[name] === 'undefined') {
+            state[name] = {
+                items: []
+            };
+        }
+
+        state[name].items = items;
     }
 
-    breadcrumbs.appendItem = function(id, itemObject) {
-        var elementScope = breadcrumbs.get(id);
-        if (elementScope) {
-            elementScope.appendItem(itemObject);
+    breadcrumbs.remove = function (name) {
+        if (typeof state[name] !== 'undefined') {
+            delete state[name];
         }
     }
 
-    breadcrumbs.popItem = function(id) {
-        var elementScope = breadcrumbs.get(id);
-        if (elementScope) {
-            elementScope.popItem();
+    breadcrumbs.itemSelect = function(name, index) {
+        if (typeof state[name] !== 'undefined') {
+            var item = state[name].items[index];
+            if (typeof item !== 'undefined' &&
+                item.hasOwnProperty('callback') &&
+                typeof item.callback === 'function') {
+                item.callback.call(null, index, item);
+                breadcrumbs.dropItemsFromIndex(name, index + 1);
+            }
         }
     }
 
-    breadcrumbs.dropItemsFromIndex = function(id, index) {
-        var elementScope = breadcrumbs.get(id);
-        if (elementScope) {
-            elementScope.dropItemsFromIndex(index);
+    breadcrumbs.getItems = function(name) {
+        if (typeof state[name] !== 'undefined') {
+            return state[name].items;
+        }
+        return [];
+    }
+
+    breadcrumbs.appendItem = function(name, itemObject) {
+        if (typeof state[name] !== 'undefined') {
+            state[name].items.push(itemObject);
+        }
+    }
+
+    breadcrumbs.popItem = function(name) {
+        if (typeof state[name] !== 'undefined') {
+            state[name].items.pop();
+        }
+    }
+
+    breadcrumbs.dropItemsFromIndex = function(name, index) {
+        if (typeof state[name] !== 'undefined') {
+            if (index >= state[name].items.length) {
+                return;
+            }
+            index = index < 0 ? 0 : index;
+            state[name].items.splice(index, state[name].items.length - index);
         }
     }
 

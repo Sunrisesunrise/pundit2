@@ -11,12 +11,12 @@
     };
 
     var BreadcrumbsDemoCtrl = function($scope, Breadcrumbs) {
-        var bcIDs = ['#first-breadcrumb', '#second-breadcrumb'];
+        var bcIDs = ['first-breadcrumb', 'second-breadcrumb'];
 
         $scope.appendItem = function(bcIndex) {
-            var bc = Breadcrumbs.get(bcIDs[bcIndex]);
-            bc.appendItem({
-                label: 'text item ' + bc.items.length,
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.appendItem(name, {
+                label: 'text item ' + Breadcrumbs.getItems(name).length,
                 callback: function(index, item) {
                     console.log("item seleted " + index);
                     console.log(item);
@@ -25,13 +25,19 @@
         };
 
         $scope.popItem = function(bcIndex) {
-            var bc = Breadcrumbs.get(bcIDs[bcIndex]);
-            bc.popItem();
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.popItem(name, bcIDs[bcIndex]);
         };
 
         $scope.empty = function(bcIndex) {
-            var bc = Breadcrumbs.get(bcIDs[bcIndex]);
-            bc.dropItemsFromIndex(0);
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.dropItemsFromIndex(name, 0);
+        };
+
+        $scope.remove = function(bcIndex) {
+            var name = bcIDs[bcIndex];
+            var elem = $($('breadcrumbs')[bcIndex]);
+            angular.element(elem).remove();
         };
     }
 
@@ -63,8 +69,8 @@ body .pnd-wrp div.action-panel {
 <div data-ng-app="Pundit2" class="pnd-wrp">
     <br><br><br>
 
-    <breadcrumbs id="first-breadcrumb" empty-placeholder="'Empty placeholder text 0'"></breadcrumbs>
-    <breadcrumbs id="second-breadcrumb" empty-placeholder="'Empty placeholder text 1'"></breadcrumbs>
+    <breadcrumbs name="'first-breadcrumb'" empty-placeholder="'Empty placeholder text 0'"></breadcrumbs>
+    <breadcrumbs name="'second-breadcrumb'" empty-placeholder="'Empty placeholder text 1'"></breadcrumbs>
 
     <br><br><br>
 
@@ -74,12 +80,14 @@ body .pnd-wrp div.action-panel {
             <button type="button" class="btn btn-success" ng-click="appendItem(0)">Append element</button>
             <button type="button" class="btn btn-success" ng-click="popItem(0)">Pop</button>
             <button type="button" class="btn btn-success" ng-click="empty(0)">Empty</button>
+            <button type="button" class="btn btn-danger" ng-click="remove(0)">Remove</button>
         </div>
         <div class="action-panel">
             Actions on second breadcrumb  <br />
             <button type="button" class="btn btn-success" ng-click="appendItem(1)">Append element</button>
             <button type="button" class="btn btn-success" ng-click="popItem(1)">Pop</button>
             <button type="button" class="btn btn-success" ng-click="empty(1)">Empty</button>
+            <button type="button" class="btn btn-danger" ng-click="remove(1)">Remove</button>
         </div>
     </div>
 </div>
