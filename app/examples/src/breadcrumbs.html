@@ -1,0 +1,86 @@
+<!-- buildexamples:section header --><!-- /buildexamples -->
+<script>
+
+    var punditConfig = {
+        modules: {
+            "Breadcrumbs": {
+                active: true,
+                debug: true
+            }
+        }
+    };
+
+    var BreadcrumbsDemoCtrl = function($scope, Breadcrumbs) {
+        var bcIDs = ['#first-breadcrumb', '#second-breadcrumb'];
+
+        $scope.appendItem = function(bcIndex) {
+            var bc = Breadcrumbs.get(bcIDs[bcIndex]);
+            bc.appendItem({
+                label: 'text item ' + bc.items.length,
+                callback: function(index, item) {
+                    console.log("item seleted " + index);
+                    console.log(item);
+                }
+            });
+        };
+
+        $scope.popItem = function(bcIndex) {
+            var bc = Breadcrumbs.get(bcIDs[bcIndex]);
+            bc.popItem();
+        };
+
+        $scope.empty = function(bcIndex) {
+            var bc = Breadcrumbs.get(bcIDs[bcIndex]);
+            bc.dropItemsFromIndex(0);
+        };
+    }
+
+</script>
+<style>
+body .pnd-wrp div.pnd-breadcrumbs-container {
+    margin: 0px 30px 30px 30px;
+}
+
+body .pnd-wrp div.action-panel {
+    padding: 30px;
+}
+
+.pnd-breadcrumbs-container .placeholder {
+    background-color: burlywood;
+    padding: 15px 4px 15px 15px;
+    color: white;
+    font-size: 16px;
+}
+.pnd-breadcrumbs-container li{
+    padding: 15px 5px 15px 15px;
+    background-color: lightyellow;
+    color: darksalmon;
+    font-size: 12px;
+}
+
+</style>
+
+<div data-ng-app="Pundit2" class="pnd-wrp">
+    <br><br><br>
+
+    <breadcrumbs id="first-breadcrumb" empty-placeholder="'Empty placeholder text 0'"></breadcrumbs>
+    <breadcrumbs id="second-breadcrumb" empty-placeholder="'Empty placeholder text 1'"></breadcrumbs>
+
+    <br><br><br>
+
+    <div ng-controller="BreadcrumbsDemoCtrl" >
+        <div class="action-panel">
+            Actions on first breadcrumb <br />
+            <button type="button" class="btn btn-success" ng-click="appendItem(0)">Append element</button>
+            <button type="button" class="btn btn-success" ng-click="popItem(0)">Pop</button>
+            <button type="button" class="btn btn-success" ng-click="empty(0)">Empty</button>
+        </div>
+        <div class="action-panel">
+            Actions on second breadcrumb  <br />
+            <button type="button" class="btn btn-success" ng-click="appendItem(1)">Append element</button>
+            <button type="button" class="btn btn-success" ng-click="popItem(1)">Pop</button>
+            <button type="button" class="btn btn-success" ng-click="empty(1)">Empty</button>
+        </div>
+    </div>
+</div>
+<!-- buildexamples:section footer --><!-- /buildexamples -->

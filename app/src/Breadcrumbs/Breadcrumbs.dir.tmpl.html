@@ -1,0 +1,18 @@
+<div class="pnd-breadcrumbs-container">
+    <div class="placeholder" ng-if="items.length == 0">
+        {{emptyPlaceholder}}
+    </div>
+    <ol class="breadcrumb" ng-if="items.length > 0">
+        <li ng-repeat="item in items">
+            <span ng-if="$last">
+                {{item.label}}
+            </span>
+            <span ng-if="!$last">
+                <a href="#"
+                   ng-click="itemSelect($index, $event)">
+                    {{item.label}}
+                </a>
+            </span>
+        </li>
+    </ol>
+</div>

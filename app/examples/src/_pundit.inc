@@ -54,7 +54,13 @@
     <script src="../src/Annotators/PageAnnotator.service.js"></script>
 
     <script src="../src/Annotators/ImgMenu.dir.js"></script>
-    
+
+
+    <script src="../src/Breadcrumbs/Breadcrumbs.js"></script>
+    <script src="../src/Breadcrumbs/Breadcrumbs.dir.js"></script>
+    <script src="../src/Breadcrumbs/Breadcrumbs.ctrl.js"></script>
+    <script src="../src/Breadcrumbs/Breadcrumbs.service.js"></script>
+
 
     <script src="../src/Communication/Communication.js"></script>
     <script src="../src/Communication/Notebook.factory.js"></script>
