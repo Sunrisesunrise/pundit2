@@ -6,6 +6,17 @@ angular.module('Pundit2.Breadcrumbs')
         $scope.name = "breadcrumb-" + Math.floor((new Date()).getTime() / 100 * (Math.random() * 100) + 1);
     }
 
+    $scope.showPlaceholder = function() {
+        var items = Breadcrumbs.getItems($scope.name);
+        if (items.length == 0) {
+            return true;
+        }
+        if (items[0].label.length == 0) {
+            return true;
+        }
+        return false;
+    }
+
     $scope.itemSelect = function(index, event) {
         event.preventDefault();
         Breadcrumbs.itemSelect($scope.name, index);

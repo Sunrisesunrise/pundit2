@@ -4,7 +4,8 @@ angular.module('Pundit2.Breadcrumbs')
         restrict: 'E',
         scope: {
             name: '=name',
-            emptyPlaceholder: '=emptyPlaceholder'
+            emptyPlaceholder: '=emptyPlaceholder',
+            firstItemPrefix: '=firstItemPrefix'
         },
         templateUrl: 'src/Breadcrumbs/Breadcrumbs.dir.tmpl.html',
         controller: 'BreadcrumbsCtrl',

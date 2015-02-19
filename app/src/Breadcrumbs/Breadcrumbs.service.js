@@ -4,6 +4,29 @@ angular.module('Pundit2.Breadcrumbs')
 
     var state = {};
 
+    var canChangeItemProperty = function(name, index) {
+        if (index < 0) { return false; }
+        if (typeof state[name] === 'undefined') { return false; }
+        if (index >= state[name].items.length) { return false; }
+        return true;
+    };
+
+    var setItemLabel = function(itemObject, label) {
+        if (typeof label === 'undefined') {
+            label = itemObject.label;
+        }
+        var newLabel = label;
+        if (typeof itemObject['charLimit'] === 'number') {
+            var charLimit = itemObject.charLimit;
+            charLimit = charLimit < 4 ? 4 : charLimit;
+            if (newLabel.length > charLimit) {
+                newLabel = newLabel.substr(0, charLimit - 2) + '...';
+            }
+        }
+        itemObject.originalLabel = label;
+        itemObject.label = newLabel;
+    };
+
     breadcrumbs.add = function(name, items) {
         if (typeof items === 'undefined') {
             items = [];
@@ -42,8 +65,17 @@ angular.module('Pundit2.Breadcrumbs')
         return [];
     }
 
+    breadcrumbs.getItem = function(name, index) {
+        index = index < 0 ? 0 : index;
+        if (typeof state[name] !== 'undefined' && index < state[name].items.length) {
+            return state[name].items[index];
+        }
+        return null;
+    }
+
     breadcrumbs.appendItem = function(name, itemObject) {
         if (typeof state[name] !== 'undefined') {
+            setItemLabel(itemObject, itemObject.label);
             state[name].items.push(itemObject);
         }
     }
@@ -52,6 +84,13 @@ angular.module('Pundit2.Breadcrumbs')
         if (typeof state[name] !== 'undefined') {
             state[name].items.pop();
         }
+    }
+
+    breadcrumbs.setItemLabel = function(name, index, label) {
+        if (!canChangeItemProperty(name, index)) {
+            return;
+        }
+        setItemLabel(state[name].items[index], label);
     }
 
     breadcrumbs.dropItemsFromIndex = function(name, index) {
