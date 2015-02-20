@@ -6,7 +6,7 @@
     <ol class="breadcrumb" ng-if="!isPlaceholderVisible()">
         <li ng-repeat="item in getItems()">
             <i ng-if="$index == 0">
-                {{firstItemPrefix}}
+                {{getFirstItemPrefix()}}
             </i>
             <span ng-if="$last">
                 {{item.label}}

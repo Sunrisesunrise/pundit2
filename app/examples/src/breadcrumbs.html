@@ -52,6 +52,11 @@
             Breadcrumbs.visible(name, !Breadcrumbs.visible(name));
         }
 
+        $scope.prefixLabel = function(bcIndex) {
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.setFirstItemPrefix(name, 'prefix changed');
+        }
+
     }
 
 </script>
@@ -83,8 +88,8 @@ body .pnd-wrp div.action-panel {
 <div data-ng-app="Pundit2" class="pnd-wrp">
     <br><br><br>
 
-    <breadcrumbs name="'first-breadcrumb'" empty-placeholder="'Empty placeholder text 0'" first-item-prefix="'Create:'"></breadcrumbs>
-    <breadcrumbs name="'second-breadcrumb'" empty-placeholder="'Empty placeholder text 1'" first-item-prefix=""></breadcrumbs>
+    <breadcrumbs bc-name="'first-breadcrumb'" empty-placeholder="'Empty placeholder text 0'" first-item-prefix="'Create:'"></breadcrumbs>
+    <breadcrumbs bc-name="'second-breadcrumb'" empty-placeholder="'Empty placeholder text 1'" first-item-prefix=""></breadcrumbs>
 
     <br><br><br>
 
@@ -97,6 +102,7 @@ body .pnd-wrp div.action-panel {
             <button id="action-button-bc0-visibility" type="button" class="btn btn-success" ng-click="toggleVisibility(0)">Toggle visibility</button>
             <button id="action-button-bc0-label0" type="button" class="btn btn-warning" ng-click="label(0, 0)">Change label for item 0</button>
             <button id="action-button-bc0-label1" type="button" class="btn btn-warning" ng-click="label(0, 1)">Change label for item 1</button>
+            <button id="action-button-bc0-prefixlabel1" type="button" class="btn btn-warning" ng-click="prefixLabel(0)">Change prefix label for item 1</button>
             <button id="action-button-bc0-remove" type="button" class="btn btn-danger" ng-click="remove(0)">Remove</button>
         </div>
         <div class="action-panel">
@@ -107,6 +113,7 @@ body .pnd-wrp div.action-panel {
             <button id="action-button-bc1-visibility" type="button" class="btn btn-success" ng-click="toggleVisibility(1)">Toggle visibility</button>
             <button id="action-button-bc1-label0" type="button" class="btn btn-warning" ng-click="label(1, 0)">Change label for item 0</button>
             <button id="action-button-bc1-label1" type="button" class="btn btn-warning" ng-click="label(1, 1)">Change label for item 1</button>
+            <button id="action-button-bc1-prefixlabel1" type="button" class="btn btn-warning" ng-click="prefixLabel(1)">Change prefix label for item 1</button>
             <button id="action-button-bc1-remove" type="button" class="btn btn-danger" ng-click="remove(1)">Remove</button>
         </div>
     </div>

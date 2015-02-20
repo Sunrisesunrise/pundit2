@@ -3,7 +3,7 @@ angular.module('Pundit2.Breadcrumbs')
     return {
         restrict: 'E',
         scope: {
-            name: '=name',
+            name: '=bcName',
             emptyPlaceholder: '=emptyPlaceholder',
             firstItemPrefix: '=firstItemPrefix'
         },

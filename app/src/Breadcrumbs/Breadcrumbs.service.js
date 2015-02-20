@@ -37,18 +37,21 @@ angular.module('Pundit2.Breadcrumbs')
         return false;
     }
 
-    breadcrumbs.add = function(name, items) {
-        if (typeof items === 'undefined') {
-            items = [];
+    breadcrumbs.add = function(name, conf) {
+        var bcConf = {
+            visible: true,
+            firstItemPrefix: '',
+            items: []
+        };
+
+        if (typeof conf !== 'undefined') {
+            for (var i in conf) {
+                bcConf[i] = conf[i];
+            }
         }
         if (typeof state[name] === 'undefined') {
-            state[name] = {
-                visible: true,
-                items: []
-            };
+            state[name] = bcConf;
         }
-
-        state[name].items = items;
     }
 
     breadcrumbs.remove = function (name) {
@@ -67,6 +70,13 @@ angular.module('Pundit2.Breadcrumbs')
                 breadcrumbs.dropItemsFromIndex(name, index + 1);
             }
         }
+    }
+
+    breadcrumbs.get = function(name) {
+        if (typeof state[name] !== 'undefined') {
+            return state[name];
+        }
+        return [];
     }
 
     breadcrumbs.getItems = function(name) {
@@ -102,6 +112,13 @@ angular.module('Pundit2.Breadcrumbs')
             return;
         }
         setItemLabel(state[name].items[index], label);
+    }
+
+    breadcrumbs.setFirstItemPrefix = function(name, label) {
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
+        state[name].firstItemPrefix = label;
     }
 
     breadcrumbs.dropItemsFromIndex = function(name, index) {

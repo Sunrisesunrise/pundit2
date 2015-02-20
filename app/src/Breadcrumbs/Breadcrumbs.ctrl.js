@@ -17,6 +17,10 @@ angular.module('Pundit2.Breadcrumbs')
         return false;
     }
 
+    $scope.getFirstItemPrefix = function() {
+        return Breadcrumbs.get($scope.name).firstItemPrefix;
+    }
+
     $scope.isVisible = function() {
         return Breadcrumbs.visible($scope.name);
     }
@@ -44,7 +48,9 @@ angular.module('Pundit2.Breadcrumbs')
     }
 
     // Handle add and remove instance.
-    Breadcrumbs.add($scope.name);
+    Breadcrumbs.add($scope.name, {
+        firstItemPrefix: $scope.firstItemPrefix
+    });
 
     $scope.$on('$destroy', function() {
         Breadcrumbs.remove($scope.name);
