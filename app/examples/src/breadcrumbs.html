@@ -57,6 +57,11 @@
             Breadcrumbs.setFirstItemPrefix(name, 'prefix changed');
         }
 
+        $scope.charLimit = function(bcIndex, charLimit) {
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.setItemCharLimit(name, 0, charLimit);
+        }
+
     }
 
 </script>
@@ -100,10 +105,14 @@ body .pnd-wrp div.action-panel {
             <button id="action-button-bc0-pop" type="button" class="btn btn-success" ng-click="popItem(0)">Pop</button>
             <button id="action-button-bc0-empty" type="button" class="btn btn-success" ng-click="empty(0)">Empty</button>
             <button id="action-button-bc0-visibility" type="button" class="btn btn-success" ng-click="toggleVisibility(0)">Toggle visibility</button>
+            <br />
             <button id="action-button-bc0-label0" type="button" class="btn btn-warning" ng-click="label(0, 0)">Change label for item 0</button>
             <button id="action-button-bc0-label1" type="button" class="btn btn-warning" ng-click="label(0, 1)">Change label for item 1</button>
             <button id="action-button-bc0-prefixlabel1" type="button" class="btn btn-warning" ng-click="prefixLabel(0)">Change prefix label for item 1</button>
             <button id="action-button-bc0-remove" type="button" class="btn btn-danger" ng-click="remove(0)">Remove</button>
+            <br />
+            <button id="action-button-bc0-label0-cl0" type="button" class="btn btn-warning" ng-click="charLimit(0, 20)">Set charlimit 20 for label item 0</button>
+            <button id="action-button-bc0-label0-cl1" type="button" class="btn btn-warning" ng-click="charLimit(0, 5)">Set charlimit 5 for label item 0</button>
         </div>
         <div class="action-panel">
             Actions on second breadcrumb  <br />

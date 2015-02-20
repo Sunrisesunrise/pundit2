@@ -13,14 +13,14 @@ angular.module('Pundit2.Breadcrumbs')
 
     var setItemLabel = function(itemObject, label) {
         if (typeof label === 'undefined') {
-            label = itemObject.label;
+            label = typeof itemObject.originalLabel !== 'undefined ' ? itemObject.originalLabel : itemObject.label;
         }
         var newLabel = label;
         if (typeof itemObject['charLimit'] === 'number') {
             var charLimit = itemObject.charLimit;
             charLimit = charLimit < 4 ? 4 : charLimit;
             if (newLabel.length > charLimit) {
-                newLabel = newLabel.substr(0, charLimit - 2) + '...';
+                newLabel = newLabel.substr(0, charLimit) + '...';
             }
         }
         itemObject.originalLabel = label;
@@ -112,6 +112,14 @@ angular.module('Pundit2.Breadcrumbs')
             return;
         }
         setItemLabel(state[name].items[index], label);
+    }
+
+    breadcrumbs.setItemCharLimit = function(name, index, charLimit) {
+        if (!canChangeItemProperty(name, index)) {
+            return;
+        }
+        state[name].items[index].charLimit = charLimit;
+        setItemLabel(state[name].items[index]);
     }
 
     breadcrumbs.setFirstItemPrefix = function(name, label) {
