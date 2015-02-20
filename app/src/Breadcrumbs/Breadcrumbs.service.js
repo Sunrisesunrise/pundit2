@@ -27,12 +27,23 @@ angular.module('Pundit2.Breadcrumbs')
         itemObject.label = newLabel;
     };
 
+    breadcrumbs.visible = function(name, value) {
+        if (typeof state[name] !== 'undefined') {
+            if (typeof value === 'boolean') {
+                state[name].visible = value;
+            }
+            return state[name].visible;
+        }
+        return false;
+    }
+
     breadcrumbs.add = function(name, items) {
         if (typeof items === 'undefined') {
             items = [];
         }
         if (typeof state[name] === 'undefined') {
             state[name] = {
+                visible: true,
                 items: []
             };
         }

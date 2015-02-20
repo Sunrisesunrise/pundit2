@@ -1,8 +1,9 @@
-<div class="pnd-breadcrumbs-container">
-    <div class="placeholder" ng-if="showPlaceholder()">
+<div class="pnd-breadcrumbs-container"
+     ng-show="isVisible()">
+    <div class="placeholder" ng-if="isPlaceholderVisible()">
         {{emptyPlaceholder}}
     </div>
-    <ol class="breadcrumb" ng-if="!showPlaceholder()">
+    <ol class="breadcrumb" ng-if="!isPlaceholderVisible()">
         <li ng-repeat="item in getItems()">
             <i ng-if="$index == 0">
                 {{firstItemPrefix}}

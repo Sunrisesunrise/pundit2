@@ -47,6 +47,11 @@
             Breadcrumbs.setItemLabel(name, itemIndex, currentLabel + "" + Math.floor(Math.random()*10));
         }
 
+        $scope.toggleVisibility = function(bcIndex) {
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.visible(name, !Breadcrumbs.visible(name));
+        }
+
     }
 
 </script>
@@ -89,6 +94,7 @@ body .pnd-wrp div.action-panel {
             <button id="action-button-bc0-append" type="button" class="btn btn-success" ng-click="appendItem(0)">Append element</button>
             <button id="action-button-bc0-pop" type="button" class="btn btn-success" ng-click="popItem(0)">Pop</button>
             <button id="action-button-bc0-empty" type="button" class="btn btn-success" ng-click="empty(0)">Empty</button>
+            <button id="action-button-bc0-visibility" type="button" class="btn btn-success" ng-click="toggleVisibility(0)">Toggle visibility</button>
             <button id="action-button-bc0-label0" type="button" class="btn btn-warning" ng-click="label(0, 0)">Change label for item 0</button>
             <button id="action-button-bc0-label1" type="button" class="btn btn-warning" ng-click="label(0, 1)">Change label for item 1</button>
             <button id="action-button-bc0-remove" type="button" class="btn btn-danger" ng-click="remove(0)">Remove</button>
@@ -98,6 +104,7 @@ body .pnd-wrp div.action-panel {
             <button id="action-button-bc1-append" type="button" class="btn btn-success" ng-click="appendItem(1)">Append element</button>
             <button id="action-button-bc1-pop" type="button" class="btn btn-success" ng-click="popItem(1)">Pop</button>
             <button id="action-button-bc1-empty" type="button" class="btn btn-success" ng-click="empty(1)">Empty</button>
+            <button id="action-button-bc1-visibility" type="button" class="btn btn-success" ng-click="toggleVisibility(1)">Toggle visibility</button>
             <button id="action-button-bc1-label0" type="button" class="btn btn-warning" ng-click="label(1, 0)">Change label for item 0</button>
             <button id="action-button-bc1-label1" type="button" class="btn btn-warning" ng-click="label(1, 1)">Change label for item 1</button>
             <button id="action-button-bc1-remove" type="button" class="btn btn-danger" ng-click="remove(1)">Remove</button>

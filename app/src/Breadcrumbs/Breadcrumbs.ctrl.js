@@ -6,7 +6,7 @@ angular.module('Pundit2.Breadcrumbs')
         $scope.name = "breadcrumb-" + Math.floor((new Date()).getTime() / 100 * (Math.random() * 100) + 1);
     }
 
-    $scope.showPlaceholder = function() {
+    $scope.isPlaceholderVisible = function() {
         var items = Breadcrumbs.getItems($scope.name);
         if (items.length == 0) {
             return true;
@@ -15,6 +15,10 @@ angular.module('Pundit2.Breadcrumbs')
             return true;
         }
         return false;
+    }
+
+    $scope.isVisible = function() {
+        return Breadcrumbs.visible($scope.name);
     }
 
     $scope.itemSelect = function(index, event) {
