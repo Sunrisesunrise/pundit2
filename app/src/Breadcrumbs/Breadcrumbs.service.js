@@ -3,6 +3,7 @@ angular.module('Pundit2.Breadcrumbs')
     var breadcrumbs = new BaseComponent('Breadcrumbs');
 
     var state = {};
+    var preAddedItems = {};
 
     var defaultItemObject = {
         originalLabel: '',
@@ -25,11 +26,9 @@ angular.module('Pundit2.Breadcrumbs')
             label = typeof itemObject.originalLabel !== 'undefined ' ? itemObject.originalLabel : itemObject.label;
         }
         var newLabel = label;
+        itemObject.originalLabel = label;
         if (label.length == 0 && typeof itemObject.placeholder !== 'undefined') {
             newLabel = label = itemObject.placeholder;
-        }
-        else {
-            itemObject.originalLabel = label;
         }
         // Set charLimit if needed and if it's set.
         var charLimit = (index + 1) >= state[name].items.length ? itemObject['charLimitAsLast'] : itemObject['charLimit'];
@@ -71,8 +70,15 @@ angular.module('Pundit2.Breadcrumbs')
                 bcConf[i] = conf[i];
             }
         }
+
+        if (typeof preAddedItems[name] !== 'undefined') {
+            bcConf.items = angular.copy(preAddedItems[name]);
+            delete preAddedItems[name];
+        }
+
         if (typeof state[name] === 'undefined') {
             state[name] = bcConf;
+            updateAllLabels(name);
         }
     }
 
@@ -86,8 +92,8 @@ angular.module('Pundit2.Breadcrumbs')
         if (typeof state[name] !== 'undefined') {
             var item = state[name].items[index];
             if (typeof item !== 'undefined' &&
-                item.hasOwnProperty('callback') &&
-                typeof item.callback === 'function') {
+            item.hasOwnProperty('callback') &&
+            typeof item.callback === 'function') {
                 item.callback.call(null, index, item);
                 breadcrumbs.dropItemsFromIndex(name, index + 1);
             }
@@ -117,12 +123,19 @@ angular.module('Pundit2.Breadcrumbs')
     }
 
     breadcrumbs.appendItem = function(name, itemObject) {
+        var extendedObject = angular.extend({}, defaultItemObject, itemObject);
+
         if (typeof state[name] !== 'undefined') {
-            var extendedObject = angular.extend({}, defaultItemObject, itemObject);
             setItemLabel(name, extendedObject, extendedObject.label, state[name].items.length);
             state[name].items.push(extendedObject);
-
             updateAllLabels(name);
+        }
+        else {
+            if (typeof preAddedItems[name] === 'undefined') {
+                preAddedItems[name] = [];
+            }
+
+            preAddedItems[name].push(extendedObject);
         }
     }
 
