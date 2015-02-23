@@ -11,13 +11,14 @@ angular.module('Pundit2.Breadcrumbs')
         return true;
     };
 
-    var setItemLabel = function(itemObject, label) {
+    var setItemLabel = function(name, itemObject, label, index) {
         if (typeof label === 'undefined') {
             label = typeof itemObject.originalLabel !== 'undefined ' ? itemObject.originalLabel : itemObject.label;
         }
         var newLabel = label;
-        if (typeof itemObject['charLimit'] === 'number') {
-            var charLimit = itemObject.charLimit;
+        // Set charLimit if needed and if it's set.
+        var charLimit = (index + 1) >= state[name].items.length ? itemObject['charLimitAsLast'] : itemObject['charLimit'];
+        if (typeof charLimit === 'number') {
             charLimit = charLimit < 4 ? 4 : charLimit;
             if (newLabel.length > charLimit) {
                 newLabel = newLabel.substr(0, charLimit) + '...';
@@ -26,6 +27,12 @@ angular.module('Pundit2.Breadcrumbs')
         itemObject.originalLabel = label;
         itemObject.label = newLabel;
     };
+
+    var updateAllLabels = function(name) {
+        for (var index in state[name].items) {
+            setItemLabel(name, state[name].items[index], undefined, index);
+        }
+    }
 
     breadcrumbs.visible = function(name, value) {
         if (typeof state[name] !== 'undefined') {
@@ -96,14 +103,17 @@ angular.module('Pundit2.Breadcrumbs')
 
     breadcrumbs.appendItem = function(name, itemObject) {
         if (typeof state[name] !== 'undefined') {
-            setItemLabel(itemObject, itemObject.label);
+            setItemLabel(name, itemObject, itemObject.label, state[name].items.length);
             state[name].items.push(itemObject);
+
+            updateAllLabels(name);
         }
     }
 
     breadcrumbs.popItem = function(name) {
         if (typeof state[name] !== 'undefined') {
             state[name].items.pop();
+            updateAllLabels(name);
         }
     }
 
@@ -111,7 +121,7 @@ angular.module('Pundit2.Breadcrumbs')
         if (!canChangeItemProperty(name, index)) {
             return;
         }
-        setItemLabel(state[name].items[index], label);
+        setItemLabel(name, state[name].items[index], label, index);
     }
 
     breadcrumbs.setItemCharLimit = function(name, index, charLimit) {
@@ -119,7 +129,15 @@ angular.module('Pundit2.Breadcrumbs')
             return;
         }
         state[name].items[index].charLimit = charLimit;
-        setItemLabel(state[name].items[index]);
+        setItemLabel(name, state[name].items[index], undefined, index);
+    }
+
+    breadcrumbs.setItemCharLimitAsLast = function(name, index, charLimit) {
+        if (!canChangeItemProperty(name, index)) {
+            return;
+        }
+        state[name].items[index].charLimitAsLast = charLimit;
+        setItemLabel(name, state[name].items[index], undefined, index);
     }
 
     breadcrumbs.setFirstItemPrefix = function(name, label) {
@@ -136,6 +154,7 @@ angular.module('Pundit2.Breadcrumbs')
             }
             index = index < 0 ? 0 : index;
             state[name].items.splice(index, state[name].items.length - index);
+            updateAllLabels(name);
         }
     }
 

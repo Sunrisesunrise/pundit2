@@ -21,7 +21,8 @@
                     console.log("item seleted " + index);
                     console.log(item);
                 },
-                charLimit: Breadcrumbs.getItems(name).length == 0 ? 20 : undefined
+                charLimit: Breadcrumbs.getItems(name).length == 0 ? 10 : undefined,
+                charLimitAsLast: Breadcrumbs.getItems(name).length == 0 ? 20 : undefined
             });
         };
 
