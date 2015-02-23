@@ -16,13 +16,14 @@
         $scope.appendItem = function(bcIndex) {
             var name = bcIDs[bcIndex];
             Breadcrumbs.appendItem(name, {
-                label: 'text item ' + Breadcrumbs.getItems(name).length,
+                label: Breadcrumbs.getItems(name).length == 1 ? "" : 'text item ' + Breadcrumbs.getItems(name).length,
                 callback: function(index, item) {
                     console.log("item seleted " + index);
                     console.log(item);
                 },
                 charLimit: Breadcrumbs.getItems(name).length == 0 ? 10 : undefined,
-                charLimitAsLast: Breadcrumbs.getItems(name).length == 0 ? 20 : undefined
+                charLimitAsLast: Breadcrumbs.getItems(name).length == 0 ? 20 : undefined,
+                placeholder: Breadcrumbs.getItems(name).length == 1 ? "Item placeholder text" : undefined
             });
         };
 
@@ -46,6 +47,11 @@
             var name = bcIDs[bcIndex];
             var currentLabel = Breadcrumbs.getItem(name, itemIndex).originalLabel;
             Breadcrumbs.setItemLabel(name, itemIndex, currentLabel + "" + Math.floor(Math.random()*10));
+        }
+
+        $scope.clearLabel = function(bcIndex, itemIndex) {
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.setItemLabel(name, itemIndex, "");
         }
 
         $scope.toggleVisibility = function(bcIndex) {
@@ -109,6 +115,7 @@ body .pnd-wrp div.action-panel {
             <br />
             <button id="action-button-bc0-label0" type="button" class="btn btn-warning" ng-click="label(0, 0)">Change label for item 0</button>
             <button id="action-button-bc0-label1" type="button" class="btn btn-warning" ng-click="label(0, 1)">Change label for item 1</button>
+            <button id="action-button-bc0-clearlabel1" type="button" class="btn btn-warning" ng-click="clearLabel(0, 1)">Clear label for item 1</button>
             <button id="action-button-bc0-prefixlabel1" type="button" class="btn btn-warning" ng-click="prefixLabel(0)">Change prefix label for item 1</button>
             <button id="action-button-bc0-remove" type="button" class="btn btn-danger" ng-click="remove(0)">Remove</button>
             <br />

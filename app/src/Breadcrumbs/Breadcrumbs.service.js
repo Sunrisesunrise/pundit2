@@ -4,6 +4,15 @@ angular.module('Pundit2.Breadcrumbs')
 
     var state = {};
 
+    var defaultItemObject = {
+        originalLabel: '',
+        label: '',
+        charLimit: undefined,
+        charLimitAsLast: undefined,
+        placeholder: undefined,
+        callback: undefined
+    };
+
     var canChangeItemProperty = function(name, index) {
         if (index < 0) { return false; }
         if (typeof state[name] === 'undefined') { return false; }
@@ -16,6 +25,12 @@ angular.module('Pundit2.Breadcrumbs')
             label = typeof itemObject.originalLabel !== 'undefined ' ? itemObject.originalLabel : itemObject.label;
         }
         var newLabel = label;
+        if (label.length == 0 && typeof itemObject.placeholder !== 'undefined') {
+            newLabel = label = itemObject.placeholder;
+        }
+        else {
+            itemObject.originalLabel = label;
+        }
         // Set charLimit if needed and if it's set.
         var charLimit = (index + 1) >= state[name].items.length ? itemObject['charLimitAsLast'] : itemObject['charLimit'];
         if (typeof charLimit === 'number') {
@@ -24,7 +39,7 @@ angular.module('Pundit2.Breadcrumbs')
                 newLabel = newLabel.substr(0, charLimit) + '...';
             }
         }
-        itemObject.originalLabel = label;
+
         itemObject.label = newLabel;
     };
 
@@ -103,8 +118,9 @@ angular.module('Pundit2.Breadcrumbs')
 
     breadcrumbs.appendItem = function(name, itemObject) {
         if (typeof state[name] !== 'undefined') {
-            setItemLabel(name, itemObject, itemObject.label, state[name].items.length);
-            state[name].items.push(itemObject);
+            var extendedObject = angular.extend({}, defaultItemObject, itemObject);
+            setItemLabel(name, extendedObject, extendedObject.label, state[name].items.length);
+            state[name].items.push(extendedObject);
 
             updateAllLabels(name);
         }
@@ -137,6 +153,14 @@ angular.module('Pundit2.Breadcrumbs')
             return;
         }
         state[name].items[index].charLimitAsLast = charLimit;
+        setItemLabel(name, state[name].items[index], undefined, index);
+    }
+
+    breadcrumbs.setItemPlaceholdert = function(name, index, placeholder) {
+        if (!canChangeItemProperty(name, index)) {
+            return;
+        }
+        state[name].items[index].placeholder = placeholder;
         setItemLabel(name, state[name].items[index], undefined, index);
     }
 
