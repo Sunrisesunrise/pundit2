@@ -3,8 +3,11 @@ angular.module('KorboEE')
 
         var api = APIService.get($scope.conf.globalObjectName);
         var korboComm = new KorboCommunicationFactory();
+
+        $scope.showHeaderTabs = korboConf.showHeaderTabs;
+        $scope.showBreadcrumbs = korboConf.showBreadcrumbs;
         $scope.editMode = false;
-        
+
         // set default language
         $scope.defaultLan = $scope.conf.languages[0];
         for (var j in $scope.conf.languages){

@@ -1,7 +1,21 @@
 <div class="pnd-korbo-languages-popover popover">
+    <div class="kee-popover-item" ng-disabled="true">
+        Update current language
+    </div>
+    <div class="kee-popover-item" ng-disabled="true">
+        Update all languages
+    </div>
     <div ng-repeat="lang in disactiveLanguages" class="kee-popover-item">
         <div ng-click="addLanguage(lang); $hide()" >
             <span class="pnd-icon pnd-icon-plus"></span> {{lang.name}} ({{lang.title}})
+        </div>
+    </div>
+    <div ng-repeat="lang in tabs">
+        <div class="kee-popover-item"
+             ng-if="tabs[$index].title !== conf.defaultLanguage.toUpperCase()"
+             ng-click="removeLanguage(tabs[$index]); $hide()">
+            <span class="pnd-icon pnd-icon-minus"></span>
+            {{lang.name}} ({{lang.title}})
         </div>
     </div>
 </div>

@@ -384,6 +384,16 @@ KORBODEFAULTCONF = {
 
     /**
      * @ngdoc property
+     * @name KORBODEFAULTCONF#defaultLanguage
+     *
+     * @description
+     * Default language value.
+     *
+     */
+    defaultLanguage: 'en',
+
+    /**
+     * @ngdoc property
      * @name KORBODEFAULTCONF#visualizeCopyButton
      *
      * @description
@@ -453,5 +463,80 @@ KORBODEFAULTCONF = {
      * Default value:
      * <pre> autoCompleteOptions: 'none' </pre>
      */
-    autoCompleteOptions: 'none' // search | new | all | none
+    autoCompleteOptions: 'none', // search | new | all | none
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#showHeaderTabs
+     *
+     * @description
+     * `boolean`
+     *
+     * Set to true to show header tabs
+     *
+     * Default value:
+     * <pre> showHeaderTabs: true </pre>
+     */
+    showHeaderTabs: true,
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#showHeaderTabs
+     *
+     * @description
+     * `boolean`
+     *
+     * Set to true to show breadcrumbs when edit or create new entity.
+     *
+     * Default value:
+     * <pre> showBreadcrumbs: true </pre>
+     */
+    showBreadcrumbs: true,
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#breadcrumbName
+     *
+     * @description
+     * `string`
+     *
+     * Name of breadcrumb.
+     *
+     * Default value:
+     * <pre> breadcrumbName: keebreadcrumb </pre>
+     */
+    breadcrumbName: 'keebreadcrumb',
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#contextMenuActiveItems
+     *
+     * @description
+     * `object`
+     *
+     * Defines which items are active and visible in contextual menu.
+     *
+     * Default value:
+     * <pre>
+     *   contextMenuActiveItems: {
+     *       'advancedOptions': false,
+     *       'editOriginalUrl': true,
+     *       'removeLanguages': true,
+     *       'tripleComposer': false,
+     *       'updateAllData': false,
+     *       'searchAndCopyFromLOD': false,
+     *       'korboHelp': false
+     *   }
+     * </pre>
+     */
+    contextMenuActiveItems: {
+        'advancedOptions': false,
+        'editOriginalUrl': true,
+        'searchOriginalUrl': true,
+        'removeLanguages': true,
+        'tripleComposer': false,
+        'updateAllData': false,
+        'searchAndCopyFromLOD': false,
+        'korboHelp': false
+    }
 };

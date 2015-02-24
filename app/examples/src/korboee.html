@@ -48,7 +48,7 @@
             {
                 name:'Italian',
                 value:'it',
-                state: false
+                state: true
             },
             {
                 name:'English',
@@ -63,7 +63,7 @@
             {
                 name:'Spanish',
                 value:'es',
-                state: false
+                state: true
             },
             {
                 name:'French',
@@ -72,7 +72,19 @@
             }
 
         ],
-        autoCompleteOptions: 'none'
+        defaultLanguage: 'en',
+        autoCompleteOptions: 'none',
+        contextMenuActiveItems: {
+            'advancedOptions': true,
+            'editOriginalUrl': false,
+            'searchOriginalUrl': false,
+            'removeLanguages': false,
+            'tripleComposer': true,
+            'updateAllData': true,
+            'searchAndCopyFromLOD': true,
+            'korboHelp': true
+        }
+
 
     };
 
@@ -126,6 +138,11 @@
 
 
 </script>
+<style>
+.kee-popover-item[disabled="disabled"]{
+    color: lightgray;
+}
+</style>
 <div data-ng-app="Pundit2" class="kee-wrp" ng-controller="KeeDemoCtrl">
     <br>
     <korbo-entity-editor conf-name="myConf"></korbo-entity-editor>

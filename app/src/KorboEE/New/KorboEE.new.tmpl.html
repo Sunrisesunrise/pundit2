@@ -6,17 +6,40 @@
                 <span class="pnd-icon pnd-icon-gear"></span>
             </button>
         </div>
+        <breadcrumbs ng-show="showBreadcrumbs" bc-name="'keebreadcrumb'" empty-placeholder="'Type entity title'"></breadcrumbs>
         <div class="kee-top-area-message" ng-class="{'kee-error' : topArea.status == 'error'}">
             {{topArea.message}}
         </div>
-    </div> 
+    </div>
     <!-- End top area -->
 
     <!-- New content -->
     <div class="kee-new-content" ng-hide="isSaving">
-    
-        <!-- Content on the right -->
-        <div class="kee-right-content" ng-hide="loadingStatus">
+
+        <!-- Inner pane: title, description and language management -->
+        <div class="kee-inner-pane"
+             ng-show="innerPanes.panes.simpleOptions.visible">
+            <div class="kee-new-languages">
+                <div kee-languages="tabs"></div>
+                <button
+                        class="btn btn-xs btn-link pull-left"
+                        ng-class="{true:'pnd-korboee-btn-not-active'}[disactiveLanguages.length < 1]"
+                        template="{{disactiveLanguagesPopoverTemplate}}"
+                        data-animation="am-flip-x"
+                        bs-popover
+                        ng-disabled="disactiveLanguages.length < 1">
+                    <span class="pnd-icon pnd-icon-plus"></span>
+                </button>
+            </div>
+            <div class="kee-inner-pane-footer">
+                <button class="btn btn-sm btn-info" ng-click="showAdvancedOptions()">Advanced options</button>
+            </div>
+        </div>
+        <!-- END - Inner pane: title, description and language management -->
+
+        <!-- Inner pane: advanced options -->
+        <div class="kee-inner-pane"
+             ng-show="innerPanes.panes.advancedOptions.visible">
 
             <!-- Original url-->
             <div class="kee-new-original-url">
@@ -24,11 +47,17 @@
 	                <label>Original URL</label>
 	                <div class="left-inner-icon">
                         <span class="pnd-icon pnd-icon-external-link" ng-click="openWindow(originalUrl);$event.stopPropagation();$event.preventDefault();"></span>
-                        <input 
+                        <span class="pnd-icon"
+                              style="width: 30px; height: 30px; left: 0px; background-color: darkgrey; color: white; font-size: 16px;"
+                              ng-class="{true:'pnd-icon-lock', false:'pnd-icon-unlock'}[originalUrlCheck]"
+                              ng-click="originalUrlCheck = !originalUrlCheck;">
+                        </span>
+                        <input
                             type="text" 
                             class="form-control" 
                             ng-model="originalUrl" 
                             ng-disabled="originalUrlCheck">
+                        <button class="btn btn-sm btn-info" ng-click="searchOriginalURL()">Search original URL</button>
 	                </div>
 	            </div>
             </div>
@@ -175,37 +204,42 @@
                         </li>
                     </ul>
                 </div>
-                <button 
-                    type="button" 
-                    class="btn btn-default btn-xs" 
-                    ng-click="activeAllTypes()">
-                        Select all types
-                </button>
-                <button 
-                    type="button" 
-                    class="btn btn-default btn-xs" 
-                    ng-click="disableAllTypes()">
-                        Deselect all types
-                </button>
-                <!-- End types list -->  
+                <!-- End types list -->
             </div>
             <!-- End Types -->
-        </div> 
-        <!-- End content on the right -->
-
-        <div class="kee-new-languages">
-            <div kee-languages="tabs"></div>
-            <button 
-                class="btn btn-xs btn-link pull-left" 
-                ng-class="{true:'pnd-korboee-btn-not-active'}[disactiveLanguages.length < 1]"
-                template="{{disactiveLanguagesPopoverTemplate}}" 
-                data-animation="am-flip-x" 
-                bs-popover 
-                ng-disabled="disactiveLanguages.length < 1">
-                    <span class="pnd-icon pnd-icon-plus"></span>
-            </button>
+            <div class="kee-inner-pane-footer">
+                <button class="btn btn-sm btn-info"
+                        ng-click="closeAdvancedOptions(true)">
+                    Close and confirm advanced options
+                </button>
+                <button class="btn btn-sm btn-info"
+                        ng-click="closeAdvancedOptions(false)">
+                    Close and discard changes
+                </button>
+                <button
+                        type="button"
+                        class="btn btn-default btn-xs"
+                        ng-click="activeAllTypes()">
+                    Select all types
+                </button>
+                <button
+                        type="button"
+                        class="btn btn-default btn-xs"
+                        ng-click="disableAllTypes()">
+                    Deselect all types
+                </button>
+            </div>
         </div>
-    </div> 
+        <!-- END - Inner pane: advanced options -->
+
+        <!-- Inner pane: search -->
+        <div class="kee-inner-pane"
+             ng-show="innerPanes.panes.search.visible">
+            <div ng-include="'src/KorboEE/Search/KorboEE.search.tmpl.html'"></div>
+        </div>
+        <!-- END - Inner pane: search -->
+
+    </div>
     <!-- End new content -->
 
     <div class="kee-new-saving" ng-show="isSaving">
