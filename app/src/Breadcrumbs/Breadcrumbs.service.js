@@ -169,7 +169,7 @@ angular.module('Pundit2.Breadcrumbs')
         setItemLabel(name, state[name].items[index], undefined, index);
     }
 
-    breadcrumbs.setItemPlaceholdert = function(name, index, placeholder) {
+    breadcrumbs.setItemPlaceholder = function(name, index, placeholder) {
         if (!canChangeItemProperty(name, index)) {
             return;
         }
