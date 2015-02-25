@@ -44,11 +44,37 @@ angular.module('KorboEE')
         ContextualMenu.wipeActionsByType('advancedMenu');
     });
 
+    var searchConf = {
+        discardSearch: function() {
+            Breadcrumbs.itemSelect($scope.conf.breadcrumbName, (Breadcrumbs.getItems($scope.conf.breadcrumbName).length - 2));
+        },
+        selectUrl: function(item) {
+            if (typeof item !== 'undefined' && typeof item.resource !== 'undefined') {
+                $scope.originalUrl = item.resource;
+                Breadcrumbs.itemSelect($scope.conf.breadcrumbName, (Breadcrumbs.getItems($scope.conf.breadcrumbName).length - 2));
+            }
+        },
+        copyFromLOD: function(item) {
+            console.log("COPY FROM LOD", item);
+        },
+        subTypeSearchURL: 'SearchURL',
+        subTypeSearchAndCopy: 'SearchAndCopy',
+        searchFieldLabelSearchURL: 'Search entity and select original URL:',
+        searchFieldLabelSearchAndCopy: 'Search entity and select original URL:',
+        subType: ''
+    };
+
     var setCurrentInnerPane = function(name) {
+        if (name == 'search') {
+            searchConf.subType = searchConf.subTypeSearchURL;
+            KorboCommunicationService.setSearchConf('inner', searchConf);
+        }
         for (var i in $scope.innerPanes.panes) {
             $scope.innerPanes.panes[i].visible = (i == name);
         }
+
         $scope.innerPanes.current = name;
+
 
         ContextualMenu.modifyDisabled('showAdvanceOptions', name === 'advancedOptions');
     }

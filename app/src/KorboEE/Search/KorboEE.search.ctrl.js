@@ -32,7 +32,7 @@ angular.module('KorboEE')
         // set default language
         $scope.defaultLan = $scope.conf.languages[0];
         for (var j in $scope.conf.languages){
-            if($scope.conf.languages[j].state === true) {
+            if($scope.conf.languages[j].value === $scope.conf.defaultLanguage) {
                 $scope.defaultLan = $scope.conf.languages[j];
                 break;
             } // end if

@@ -19,6 +19,7 @@ angular.module('KorboEE')
 
     // create a new scope for korbo modal
     var KeeModalScope = $rootScope.$new();
+    KeeModalScope.searchType = 'tab';
 
     // initializa korbo modal
     var KeeModal = $modal({
@@ -302,6 +303,13 @@ angular.module('KorboEE')
     korboCommunication.getEntityToCopy = function(){
         return entityToCopy;
     };
+
+    korboCommunication.setSearchConf = function(searchType, conf) {
+        if (typeof conf !== 'undefined') {
+            KeeModalScope.searchConf = conf;
+        }
+        KeeModalScope.searchType = searchType;
+    }
 
     return korboCommunication;
 });

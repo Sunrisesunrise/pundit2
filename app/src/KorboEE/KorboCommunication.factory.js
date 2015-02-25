@@ -75,7 +75,7 @@ angular.module('KorboEE')
         var promise = $q.defer();
         var currentLanguage = angular.copy(param.language);
         $http({
-            headers: { 'Accept-Language': param.language },
+            headers: { 'Accept-Language': param.language, 'Accept': 'application/json' },
             method: 'GET',
             url: param.endpoint + "/baskets/"+param.basketID+"/items/"+param.item.uri+"",
             cache: useCache,
