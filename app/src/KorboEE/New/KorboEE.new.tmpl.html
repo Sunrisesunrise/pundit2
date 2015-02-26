@@ -32,7 +32,9 @@
                 </button>
             </div>
             <div class="kee-inner-pane-footer">
-                <button class="btn btn-sm btn-info" ng-click="showAdvancedOptions()">Advanced options</button>
+                <button class="btn btn-sm btn-info"
+                        ng-show="!loadingStatus"
+                        ng-click="showAdvancedOptions()">Advanced options</button>
             </div>
         </div>
         <!-- END - Inner pane: title, description and language management -->

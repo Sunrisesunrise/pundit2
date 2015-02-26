@@ -55,12 +55,12 @@ angular.module('KorboEE')
                     break;
             }
             $scope.showInnerDiscardSearch.visibility = true;
-            $scope.searchFieldLabel = $scope.$parent.$parent['searchFieldLabel' + searchSubType] || 'Search entity';
+            $scope.searchFieldLabel = $scope.$parent.$parent.searchConf['searchFieldLabel' + searchSubType] || 'Search entity to use:';
         }
         else if (lastSearchType == 'inner' && currentSearchType == 'tab') {
             restoreLayoutConfig();
         }
-        console.log($scope.searchType());
+        lastSearchType = currentSearchType;
     });
 
     var searchLayoutConfig = undefined;
@@ -68,15 +68,6 @@ angular.module('KorboEE')
     var freezeSearchLayoutConfig = function() {
         searchLayoutConfig = {};
         searchLayoutConfig.searchFieldLabel = $scope.searchFieldLabel;
-        searchLayoutConfig.showClose = angular.copy($scope.showClose);
-        searchLayoutConfig.showUse = angular.copy($scope.showUse);
-        searchLayoutConfig.showUseAndCopy = angular.copy($scope.showUseAndCopy);
-        searchLayoutConfig.showCopyInEditor = angular.copy($scope.showCopyInEditor);
-        searchLayoutConfig.showMoreInfo = angular.copy($scope.showMoreInfo);
-        searchLayoutConfig.showSaveAndAdd = angular.copy($scope.showSaveAndAdd);
-        searchLayoutConfig.showInnerSelectURL = angular.copy($scope.showInnerSelectURL);
-        searchLayoutConfig.showInnerCopyFromLOD = angular.copy($scope.showInnerCopyFromLOD);
-        searchLayoutConfig.showInnerDiscardSearch = angular.copy($scope.showInnerDiscardSearch);
     };
 
     var restoreLayoutConfig = function() {
@@ -84,15 +75,6 @@ angular.module('KorboEE')
             return;
         }
         $scope.searchFieldLabel = searchLayoutConfig.searchFieldLabel;
-        $scope.showClose = angular.copy(searchLayoutConfig.showClose);
-        $scope.showUse = angular.copy(searchLayoutConfig.showUse);
-        $scope.showUseAndCopy = angular.copy(searchLayoutConfig.showUseAndCopy);
-        $scope.showCopyInEditor = angular.copy(searchLayoutConfig.showCopyInEditor);
-        $scope.showMoreInfo = angular.copy(searchLayoutConfig.showMoreInfo);
-        $scope.showSaveAndAdd = angular.copy(searchLayoutConfig.showSaveAndAdd);
-        $scope.showInnerSelectURL = angular.copy(searchLayoutConfig.showInnerSelectURL);
-        $scope.showInnerCopyFromLOD = angular.copy(searchLayoutConfig.showInnerCopyFromLOD);
-        $scope.showInnerDiscardSearch = angular.copy(searchLayoutConfig.showInnerDiscardSearch);
         searchLayoutConfig = undefined;
     };
 

@@ -56,18 +56,27 @@ angular.module('KorboEE')
         },
         copyFromLOD: function(item) {
             console.log("COPY FROM LOD", item);
+            $scope.tabs = [];
+            $scope.disactiveLanguages = [];
+
+            buildLanguagesModel(item.uri, item.providerFrom);
+            Breadcrumbs.itemSelect($scope.conf.breadcrumbName, 0);
         },
         subTypeSearchURL: 'SearchURL',
         subTypeSearchAndCopy: 'SearchAndCopy',
-        searchFieldLabelSearchURL: 'Search entity and select original URL:',
-        searchFieldLabelSearchAndCopy: 'Search entity and select original URL:',
+        searchFieldLabelSearchURL: 'Search entity URL:',
+        searchFieldLabelSearchAndCopy: 'Search entity to copy:',
         subType: ''
     };
 
     var setCurrentInnerPane = function(name) {
-        if (name == 'search') {
-            searchConf.subType = searchConf.subTypeSearchURL;
-            KorboCommunicationService.setSearchConf('inner', searchConf);
+        switch(name) {
+            case 'SearchURL':
+            case 'SearchAndCopy':
+                searchConf.subType = name;
+                KorboCommunicationService.setSearchConf('inner', searchConf);
+                name = 'search';
+                break;
         }
         for (var i in $scope.innerPanes.panes) {
             $scope.innerPanes.panes[i].visible = (i == name);
@@ -75,8 +84,8 @@ angular.module('KorboEE')
 
         $scope.innerPanes.current = name;
 
-
         ContextualMenu.modifyDisabled('showAdvanceOptions', name === 'advancedOptions');
+        ContextualMenu.modifyDisabled('searchAndCopy', name === 'search');
     }
 
     var initTypes = function () {
@@ -170,7 +179,7 @@ angular.module('KorboEE')
                 return $scope.editMode && $scope.conf.contextMenuActiveItems.searchOriginalUrl;
             },
             action: function () {
-                setCurrentInnerPane('search');
+                setCurrentInnerPane('SearchURL');
             }
         });
 
@@ -198,7 +207,15 @@ angular.module('KorboEE')
             },
             action: function () {
                 /*noop*/
-                setCurrentInnerPane('search');
+                Breadcrumbs.appendItem($scope.conf.breadcrumbName, {
+                    label: 'Search and copy from LOD',
+                    callback: function() {
+                        setCurrentInnerPane('SearchAndCopy');
+                        ContextualMenu.modifyDisabled('searchAndCopy', true);
+                    }
+                });
+                setCurrentInnerPane('SearchAndCopy');
+                ContextualMenu.modifyDisabled('searchAndCopy', true);
             }
         });
 
@@ -304,6 +321,9 @@ angular.module('KorboEE')
             if ($scope.conf.languages[i].state) {
                 $scope.tabs.push(lang);
                 pushCurrentLang(lang);
+                if ($scope.conf.languages[i] === $scope.conf.defaultLanguage) {
+                    Breadcrumbs.setItemLabel($scope.conf.breadcrumbName, 0, lang.label);
+                }
             }
             else {
                 $scope.disactiveLanguages.push(lang);
@@ -344,8 +364,8 @@ angular.module('KorboEE')
         Breadcrumbs.appendItem($scope.conf.breadcrumbName, {
             label: 'Advanced options',
             callback: function() {
-                console.log("click on advanced options");
                 setCurrentInnerPane('advancedOptions');
+                KorboCommunicationService.setSearchConf('tab');
                 backupAdvancedOptions();
             }
         });
@@ -365,10 +385,10 @@ angular.module('KorboEE')
         Breadcrumbs.appendItem($scope.conf.breadcrumbName, {
             label: 'Search original URL',
             callback: function() {
-                setCurrentInnerPane('search');
+                setCurrentInnerPane('SearchURL');
             }
         });
-        setCurrentInnerPane('search');
+        setCurrentInnerPane('SearchURL');
     }
 
     $scope.prevBasketID;
@@ -412,6 +432,9 @@ angular.module('KorboEE')
             for (var i in res.languages) {
                 $scope.tabs.push(res.languages[i]);
                 pushCurrentLang(res.languages[i]);
+                if (res.languages[i].title.toLowerCase() === $scope.conf.defaultLanguage) {
+                    Breadcrumbs.setItemLabel($scope.conf.breadcrumbName, 0, res.languages[i].label);
+                }
             }
 
             buildLanguageTabs();
