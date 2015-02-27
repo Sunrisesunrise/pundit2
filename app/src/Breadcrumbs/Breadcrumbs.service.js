@@ -131,15 +131,15 @@ angular.module('Pundit2.Breadcrumbs')
         }
 
         if (typeof state[name] !== 'undefined') {
-            if (extendedObject.unique) {
-                // Check if other item with same name already exists.
-                var idx = -1;
-                if (idx = breadcrumbs.indexOfItem(name, extendedObject) !== -1) {
-                    if (state[name].items[idx].unique || extendedObject.unique) {
-                        breadcrumbs.dropItemsFromIndex(name, idx + 1);
-                    }
+            // Check if other item with same name already exists.
+            var idx = breadcrumbs.indexOfItem(name, extendedObject);
+            if (idx !== -1) {
+                if (state[name].items[idx].unique || extendedObject.unique) {
+                    breadcrumbs.dropItemsFromIndex(name, idx + 1);
+                    return;
                 }
             }
+
             setItemLabel(name, extendedObject, extendedObject.label, state[name].items.length);
             state[name].items.push(extendedObject);
             updateAllLabels(name);
@@ -155,7 +155,7 @@ angular.module('Pundit2.Breadcrumbs')
 
     breadcrumbs.indexOfItem = function(name, item) {
         if (typeof state[name] !== 'undefined') {
-            for (var i in state[name].items) {
+            for (var i=0; i<state[name].items.length; i++) {
                 if (state[name].items[i].name == item.name) {
                     return i;
                 }
