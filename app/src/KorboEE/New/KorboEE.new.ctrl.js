@@ -366,6 +366,8 @@ angular.module('KorboEE')
 
     $scope.showAdvancedOptions = function() {
         Breadcrumbs.appendItem($scope.conf.breadcrumbName, {
+            name: 'advancedOption',
+            unique: true,
             label: 'Advanced options',
             callback: function() {
                 setCurrentInnerPane('advancedOptions');
