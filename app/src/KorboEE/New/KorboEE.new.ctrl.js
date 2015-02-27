@@ -374,6 +374,7 @@ angular.module('KorboEE')
             }
         });
         setCurrentInnerPane('advancedOptions');
+        KorboCommunicationService.setSearchConf('tab');
         backupAdvancedOptions();
     }
 
@@ -464,7 +465,19 @@ angular.module('KorboEE')
 
             angular.forEach($scope.conf.languages, function(lang) {
                 if (!tempLang.hasOwnProperty(lang.value.toLowerCase())) {
-                    $scope.disactiveLanguages.push(lang);
+                    var langObj = {
+                        'title': lang.value.toUpperCase(),
+                        'name': lang.name.toLowerCase(),
+                        'description': "",
+                        'label': "",
+                        'mandatory': true,
+                        'hasError': false,
+                        'tooltipMessageTitle': tooltipMessageTitle + lang.name.toLowerCase(),
+                        'tooltipMessageDescription': tooltipMessageDescription + lang.name.toLowerCase(),
+                        'tooltipMessageError': "message",
+                        'tooltipMessageErrorTab': "There are some errors in the " + lang.name.toLowerCase() + " languages fields"
+                    };
+                    $scope.disactiveLanguages.push(langObj);
                 }
             });
 
