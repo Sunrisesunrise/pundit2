@@ -235,8 +235,12 @@ angular.module('Pundit2.TripleComposer')
         Analytics.track('buttons', 'click', eventLabel);
     }
 
+    var contextualMenuInitialized = false;
     // Contextual Menu actions for my items and page items
     var initContextualMenu = function() {
+        if (contextualMenuInitialized) {
+            return;
+        }
         ContextualMenu.addAction({
             type: [
                 Config.modules.PageItemsContainer.cMenuType,
@@ -355,12 +359,17 @@ angular.module('Pundit2.TripleComposer')
             }
         });
 
+        contextualMenuInitialized = true;
     }; // initContextualMenu()
 
     // When all modules have been initialized, services are up, Config are setup etc..
     EventDispatcher.addListener('Client.boot', function() {
         initContextualMenu();
     });
+
+    tripleComposer.initContextualMenu = function() {
+        initContextualMenu();
+    }
 
     tripleComposer.getStatements = function() {
         return statements;
