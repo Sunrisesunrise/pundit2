@@ -23,11 +23,9 @@
                 <div kee-languages="tabs"></div>
                 <button
                         class="btn btn-xs btn-link pull-left"
-                        ng-class="{true:'pnd-korboee-btn-not-active'}[disactiveLanguages.length < 1]"
                         template="{{disactiveLanguagesPopoverTemplate}}"
                         data-animation="am-flip-x"
-                        bs-popover
-                        ng-disabled="disactiveLanguages.length < 1">
+                        bs-popover>
                     <span class="pnd-icon pnd-icon-plus"></span>
                 </button>
             </div>
@@ -241,6 +239,12 @@
         </div>
         <!-- END - Inner pane: search -->
 
+        <!-- Inner pane: tripleComposer -->
+        <div class="kee-inner-pane pnd-wrp"
+             ng-show="innerPanes.panes.tripleComposer.visible">
+            <triple-composer></triple-composer>
+        </div>
+        <!-- END Inner pane: tripleComposer -->
     </div>
     <!-- End new content -->
 

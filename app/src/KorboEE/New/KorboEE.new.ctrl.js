@@ -1,6 +1,6 @@
 angular.module('KorboEE')
 .controller('KeeNewCtrl', function ($scope, $rootScope, $dropdown, $modal, KorboCommunicationService, $q, KorboCommunicationFactory,
-                                    korboConf, $timeout, $http, TypesHelper, ItemsExchange, ContextualMenu, $window, Config, APIService, Breadcrumbs) {
+                                    korboConf, $timeout, $http, TypesHelper, ItemsExchange, ContextualMenu, $window, Config, APIService, Breadcrumbs, TripleComposer) {
 
     var copyCheck = false;
     var korboComm = new KorboCommunicationFactory();
@@ -19,6 +19,9 @@ angular.module('KorboEE')
                 visible: false
             },
             search: {
+                visible: false
+            },
+            tripleComposer: {
                 visible: false
             }
         }
@@ -58,9 +61,7 @@ angular.module('KorboEE')
             console.log("COPY FROM LOD", item);
             $scope.tabs = [];
             $scope.disactiveLanguages = [];
-
             buildLanguagesModel(item.uri, item.providerFrom);
-            Breadcrumbs.itemSelect($scope.conf.breadcrumbName, 0);
         },
         subTypeSearchURL: 'SearchURL',
         subTypeSearchAndCopy: 'SearchAndCopy',
@@ -76,6 +77,9 @@ angular.module('KorboEE')
                 searchConf.subType = name;
                 KorboCommunicationService.setSearchConf('inner', searchConf);
                 name = 'search';
+                break;
+            default:
+                KorboCommunicationService.setSearchConf('tab');
                 break;
         }
         for (var i in $scope.innerPanes.panes) {
@@ -134,7 +138,7 @@ angular.module('KorboEE')
             name: 'showAdvanceOptions',
             type: 'advancedMenu',
             label: 'Advanced options',
-            priority: 3,
+            priority: 10,
             showIf: function () {
                 return $scope.conf.contextMenuActiveItems.advancedOptions;
             },
@@ -147,12 +151,12 @@ angular.module('KorboEE')
             name: 'tripleComposer',
             type: 'advancedMenu',
             label: 'Triple composer',
-            priority: 3,
+            priority: 9,
             showIf: function () {
                 return $scope.conf.contextMenuActiveItems.tripleComposer;
             },
             action: function () {
-                /*noop*/
+                $scope.showTripleComposer();
             }
         });
 
@@ -187,7 +191,7 @@ angular.module('KorboEE')
             name: 'updateAllData',
             type: 'advancedMenu',
             label: 'Update all data',
-            priority: 3,
+            priority: 8,
             disable: true,
             showIf: function () {
                 return $scope.conf.contextMenuActiveItems.updateAllData;
@@ -201,7 +205,7 @@ angular.module('KorboEE')
             name: 'searchAndCopy',
             type: 'advancedMenu',
             label: 'Search and copy from LOD',
-            priority: 3,
+            priority: 7,
             showIf: function () {
                 return $scope.conf.contextMenuActiveItems.searchAndCopyFromLOD;
             },
@@ -223,7 +227,7 @@ angular.module('KorboEE')
             name: 'korboHelp',
             type: 'advancedMenu',
             label: 'Korbo help',
-            priority: 3,
+            priority: 6,
             showIf: function () {
                 return $scope.conf.contextMenuActiveItems.korboHelp;
             },
@@ -321,7 +325,7 @@ angular.module('KorboEE')
             if ($scope.conf.languages[i].state) {
                 $scope.tabs.push(lang);
                 pushCurrentLang(lang);
-                if ($scope.conf.languages[i] === $scope.conf.defaultLanguage) {
+                if ($scope.conf.languages[i].value.toLowerCase() === $scope.conf.defaultLanguage) {
                     Breadcrumbs.setItemLabel($scope.conf.breadcrumbName, 0, lang.label);
                 }
             }
@@ -391,6 +395,18 @@ angular.module('KorboEE')
         setCurrentInnerPane('SearchURL');
     }
 
+    $scope.showTripleComposer = function () {
+        TripleComposer.initContextualMenu();
+        Breadcrumbs.appendItem($scope.conf.breadcrumbName, {
+            label: 'Triple composer',
+            callback: function () {
+                setCurrentInnerPane('tripleComposer');
+            }
+        });
+        setCurrentInnerPane('tripleComposer');
+    }
+
+
     $scope.prevBasketID;
     var buildLanguagesModel = function (entityUri, provider) {
 
@@ -429,8 +445,15 @@ angular.module('KorboEE')
             buildTypesFromArray(res.types);
             buildTypesFromConfiguration();
 
+            res.languages.sort(function(a, b){
+                var a_val = a.title.toLowerCase();
+                var b_val = b.title.toLowerCase();
+                return a_val === $scope.conf.defaultLanguage ? -1 : b_val === $scope.conf.defaultLanguage ? 1 : 0;
+            });
+            var tempLang = {};
             for (var i in res.languages) {
                 $scope.tabs.push(res.languages[i]);
+                tempLang[res.languages[i].title.toLowerCase()] = true;
                 pushCurrentLang(res.languages[i]);
                 if (res.languages[i].title.toLowerCase() === $scope.conf.defaultLanguage) {
                     Breadcrumbs.setItemLabel($scope.conf.breadcrumbName, 0, res.languages[i].label);
@@ -438,6 +461,14 @@ angular.module('KorboEE')
             }
 
             buildLanguageTabs();
+
+            angular.forEach($scope.conf.languages, function(lang) {
+                if (!tempLang.hasOwnProperty(lang.value.toLowerCase())) {
+                    $scope.disactiveLanguages.push(lang);
+                }
+            });
+
+            Breadcrumbs.itemSelect($scope.conf.breadcrumbName, 0);
 
             $scope.topArea = {
                 'message': 'You are editing the entity...',
