@@ -1,0 +1,8 @@
+/* KorboEE popup - language popover disabled item */
+.kee-popover-item[disabled="disabled"]{
+  color: lightgray;
+}
+
+.kee-wrp .popover {
+  z-index: 999999999;
+}
