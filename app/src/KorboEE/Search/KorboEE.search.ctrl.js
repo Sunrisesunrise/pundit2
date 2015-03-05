@@ -142,7 +142,7 @@ angular.module('KorboEE')
                     $scope.contentTabs[index].isLoading = true;
                     $scope.contentTabs[index].isStarted = true;
                     // let start searching
-                    korboComm.search(param, $scope.contentTabs[index].itemsContainer).then(
+                    korboComm.search(param, $scope.contentTabs[index].itemsContainer, $scope.conf.useCredentialInHttpCalls).then(
                         // when search is finished without errors
                         function(){
                             // set loading status to false
@@ -207,7 +207,7 @@ angular.module('KorboEE')
             param.item = item;
 
             // call get HTTP
-            var promise = korboComm.getItem(param, true);
+            var promise = korboComm.getItem(param, true, $scope.conf.useCredentialInHttpCalls);
 
             // when promise is resolved
             promise.then(function(res){

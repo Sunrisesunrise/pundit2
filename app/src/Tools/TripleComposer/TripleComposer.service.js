@@ -216,6 +216,9 @@ angular.module('Pundit2.TripleComposer')
 
     var tripleComposer = new BaseComponent('TripleComposer', TRIPLECOMPOSERDEFAULTS);
 
+    var showHeader = true;
+    var showFooter = true;
+
     var nextId = 1;
     var statements = [{
         id: nextId
@@ -366,6 +369,20 @@ angular.module('Pundit2.TripleComposer')
     EventDispatcher.addListener('Client.boot', function() {
         initContextualMenu();
     });
+
+    tripleComposer.showHeader = function(newVal) {
+        if (typeof newVal === 'boolean') {
+            showHeader = newVal;
+        }
+        return showHeader;
+    }
+
+    tripleComposer.showFooter = function(newVal) {
+        if (typeof newVal === 'boolean') {
+            showFooter = newVal;
+        }
+        return showFooter;
+    }
 
     tripleComposer.initContextualMenu = function() {
         initContextualMenu();
@@ -706,10 +723,10 @@ angular.module('Pundit2.TripleComposer')
         tripleComposer.log('Error: impossible to add subject (all full)');
     };
 
-    tripleComposer.addToAllSubject = function(item) {
+    tripleComposer.addToAllSubject = function(item, fixed) {
         // template have always a free subject ?
         for (var i in statements) {
-            statements[i].scope.setSubject(item);
+            statements[i].scope.setSubject(item, fixed);
         }
         $rootScope.$$phase || $rootScope.$digest();
         tripleComposer.log('Add item: ' + item.uri + 'as subject of all triples');

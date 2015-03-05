@@ -7,6 +7,14 @@ angular.module('Pundit2.TripleComposer')
     // the function is called in the statement directive link function
     $scope.statements = TripleComposer.getStatements();
 
+    $scope.showHeader = function() {
+        return TripleComposer.showHeader();
+    }
+
+    $scope.showFooter = function() {
+        return TripleComposer.showFooter();
+    }
+
     $scope.saving = false;
     $scope.textMessage = TripleComposer.options.savingMsg;
 

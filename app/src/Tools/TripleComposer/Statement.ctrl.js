@@ -208,6 +208,9 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.onSubjectMouseOver = function() {
+        if (typeof triple.subject.uri === 'undefined' || triple.subject.uri.length == 0) {
+            return;
+        }
         Preview.showDashboardPreview(triple.subject);
     };
 
@@ -251,6 +254,9 @@ angular.module('Pundit2.TripleComposer')
             if ($scope.subjectFixed || $scope.subjectFound) {
                 Preview.setItemDashboardSticky(triple.subject);
             }
+            return;
+        }
+        else if ($scope.subjectFixed) {
             return;
         }
         ResourcePanel.showItemsForSubject(triple, $event.target).then($scope.setSubject);

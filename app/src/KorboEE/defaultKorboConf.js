@@ -394,6 +394,41 @@ KORBODEFAULTCONF = {
 
     /**
      * @ngdoc property
+     * @name KORBODEFAULTCONF#languagesSaveMethod
+     *
+     * @description
+     * `string`
+     *
+     * Determines how label and descriptions of item will be saved
+     *
+     * Allowed values:
+     *   - multipleCall: a call for each language
+     *   - singleCall: a call for all languages
+     *
+     * Default value:
+     * <pre>
+     *     languagesSaveMethod: 'multipleCall'
+     * </pre>
+     */
+    languagesSaveMethod: 'multipleCall',
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#useCredentialInHttpCalls
+     *
+     * @description
+     * `boolean`
+     *
+     * Determines whether to use credentials in each http call or not.
+     *
+     * <pre>
+     *     useCredentialInHttpCalls: false
+     * </pre>
+     */
+    useCredentialInHttpCalls: false,
+
+    /**
+     * @ngdoc property
      * @name KORBODEFAULTCONF#visualizeCopyButton
      *
      * @description
@@ -506,6 +541,35 @@ KORBODEFAULTCONF = {
      * <pre> breadcrumbName: keebreadcrumb </pre>
      */
     breadcrumbName: 'keebreadcrumb',
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#tripleComposerEnabled
+     *
+     * @description
+     * `boolean`
+     *
+     * Enable internal triple composer.
+     *
+     * Default value:
+     * <pre> tripleComposerEnabled: false </pre>
+     */
+    tripleComposerEnabled: false,
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#tripleComposerForCustomFields
+     *
+     * @description
+     * `boolean`
+     *
+     * Determines whether to use triple composer for classic annotation
+     * or for entity custom field.
+     *
+     * Default value:
+     * <pre> tripleComposerForCustomFields: false </pre>
+     */
+    tripleComposerForCustomFields: false,
 
     /**
      * @ngdoc property

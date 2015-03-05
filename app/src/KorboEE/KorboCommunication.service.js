@@ -1,7 +1,7 @@
 /*jshint camelcase: false*/
 
 angular.module('KorboEE')
-.service('KorboCommunicationService', function($q, $http, BaseComponent, ItemsExchange, Item, $rootScope, $modal, korboConf, KorboCommunicationFactory, APIService){
+.service('KorboCommunicationService', function($q, $http, BaseComponent, ItemsExchange, Item, $rootScope, $modal, korboConf, KorboCommunicationFactory, APIService, EventDispatcher){
 
     var korboCommunication = new BaseComponent("KorboCommunication");
 
@@ -20,6 +20,17 @@ angular.module('KorboEE')
     // create a new scope for korbo modal
     var KeeModalScope = $rootScope.$new();
     KeeModalScope.searchType = 'tab';
+
+    var tripleComposerStateChange = function(evt) {
+        if (!korboConf.getIsOpenModal()) {
+            return;
+        }
+        if (typeof korboCommunication.tripleComposerStateChangeCallback === 'function') {
+            korboCommunication.tripleComposerStateChangeCallback.call(undefined, evt);
+        }
+    }
+
+    EventDispatcher.addListener('TripleComposer.statementChange', tripleComposerStateChange);
 
     // initializa korbo modal
     var KeeModal = $modal({
@@ -49,6 +60,7 @@ angular.module('KorboEE')
         api.fireOnCancel();
         entityToCopy = null;
         entity = null;
+        //EventDispatcher.removeListener(['TripleComposer.statementChange', tripleComposerStateChange]);
     };
 
     var confirmModal = $modal({
@@ -151,14 +163,18 @@ angular.module('KorboEE')
     };
 
     // get a searching of a given label
-    korboCommunication.autocompleteSearch = function(val, endpoint, prov, limit, offset, lang, basketID) {
+    korboCommunication.autocompleteSearch = function(val, endpoint, prov, limit, offset, lang, basketID, useCredentialInHttpCalls) {
         isAutocompleteLoading = true;
+        if (typeof useCredentialInHttpCalls !== 'boolean') {
+            useCredentialInHttpCalls = false;
+        }
         // return an http Promise
         return $http({
             //headers: { 'Content-Type': 'application/json' },
             method: 'GET',
             url: endpoint + "/search/items",
             cache: false,
+            withCredentials: useCredentialInHttpCalls,
             params: {
                 q: val,
                 p: prov,
@@ -215,7 +231,7 @@ angular.module('KorboEE')
     };
 
     // param: itemUri, provider, endpoint, basketID, language
-    korboCommunication.buildLanguagesObject = function(param, langConf){
+    korboCommunication.buildLanguagesObject = function(param, langConf, useCredentialInHttpCalls){
         var promise = $q.defer();
         var settled = 0;
         var results = {};
@@ -227,7 +243,11 @@ angular.module('KorboEE')
 
         results.languages = [];
 
-        korboComm.getItem(param, false).then(function(res){
+        if (typeof useCredentialInHttpCalls !== 'boolean') {
+            useCredentialInHttpCalls = false;
+        }
+
+        korboComm.getItem(param, false, useCredentialInHttpCalls).then(function(res){
             results.imageUrl = res.depiction;
             results.originalUrl = res.resource;
 
@@ -239,7 +259,7 @@ angular.module('KorboEE')
                     (function(index){
                         var p;
                         param.language = res.available_languages[index];
-                        p = korboComm.getItem(param, false);
+                        p = korboComm.getItem(param, false, useCredentialInHttpCalls);
                         p.then(function(res){
                             var indexFind = langConf.map(function(e){ return angular.lowercase(e.value); }).indexOf(angular.lowercase(res.reqLanguage));
                             if(indexFind !== -1){
@@ -310,6 +330,8 @@ angular.module('KorboEE')
         }
         KeeModalScope.searchType = searchType;
     }
+
+    korboCommunication.tripleComposerStateChangeCallback = undefined;
 
     return korboCommunication;
 });

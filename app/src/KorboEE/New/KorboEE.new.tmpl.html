@@ -242,7 +242,31 @@
         <!-- Inner pane: tripleComposer -->
         <div class="kee-inner-pane pnd-wrp"
              ng-show="innerPanes.panes.tripleComposer.visible">
-            <triple-composer></triple-composer>
+            <!--Triple composer is visible only when at least one type is selected-->
+            <triple-composer ng-show="selectedTypes().length > 0"></triple-composer>
+            <div class="kee-inner-pane-footer"
+                 ng-show="selectedTypes().length > 0"
+                 ng-if="false">
+                <button class="btn btn-sm btn-info"
+                        ng-click="closeTripleComposer(true)">
+                    Close and confirm triple(s)
+                </button>
+                <button class="btn btn-sm btn-info"
+                        ng-click="closeTripleComposer(false)">
+                    Close and discard changes
+                </button>
+            </div>
+            <!--Otherwise a warning message is shown-->
+            <div ng-show="selectedTypes().length == 0">
+                <span>
+                    You can't use the triple composer when no entity types are selected.
+                    <br />
+                    Click on advanced options button to select one or more types.
+                </span>
+                <button class="btn btn-sm btn-info"
+                        ng-show="!loadingStatus"
+                        ng-click="showAdvancedOptions()">Advanced options</button>
+            </div>
         </div>
         <!-- END Inner pane: tripleComposer -->
     </div>

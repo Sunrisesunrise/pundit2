@@ -1,5 +1,6 @@
 <!-- HEADER -->
-<div class="pnd-panel-tab-content-header pnd-panel-tab-content-header-border">
+<div class="pnd-panel-tab-content-header pnd-panel-tab-content-header-border"
+     ng-show="showHeader()">
     {{headerMessage}}
 </div>
 
@@ -26,7 +27,8 @@
 </div>
 
 <!-- FOOTER -->
-<div class="pnd-panel-tab-content-footer">
+<div class="pnd-panel-tab-content-footer"
+     ng-show="showFooter()">
     <!-- TODO: use ng-disabled -->
     <button 
         class="pnd-triplecomposer-save btn btn-success btn-xs pnd-btn-full disabled" 

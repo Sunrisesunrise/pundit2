@@ -2,11 +2,19 @@
 
 
 <script>
+    var punditConfig = {
+        annotationServerBaseURL: 'http://geolat.netseven.it:8282/annotationserver/'
+    };
     var myConf = {
         //endpoint: "http://korbo2.local:80/v1",
         // endpoint: "http://korbo2.local/app_dev.php/v1",
-        endpoint: "http://dev.korbo2.org/app_dev.php/v1",
-        basketID: 1,
+
+        endpoint: "http://geolat.netseven.it:8282/annotationserver/api/korbo",
+        //endpoint: "http://172.20.0.79:8081/annotationserver/api/korbo",
+        annotationServerBaseUR: 'http://geolat.netseven.it:8282/annotationserver/api/korbo',
+        //annotationServerBaseUR: 'http://172.20.0.79:8081/annotationserver/api/korbo',
+
+        basketID: 97355,
         globalObjectName : 'KK',
         limitSearchResult: 11,
         useOnlyCallback: false,
@@ -83,37 +91,12 @@
             'updateAllData': true,
             'searchAndCopyFromLOD': true,
             'korboHelp': true
-        }
-    };
-
-    var myConf1 = {
-        //endpoint: "http://korbo2.local:80/v1",
-        endpoint: "http://dev.korbo2.org/v1",
-        labelMinLength: 5,
-        limitSearchResult: 3,
-        globalObjectName : 'FF',
-        useTafonyCompatibility: true,
-        onReady: function(){
-            console.log("widget is ready to use2");
         },
-
-        useAutoComplete: true,
-        autoCompleteMode: 'full',
-        autoCompleteOptions: 'all'
-    }
-
-    var myConf2 = {
-        //endpoint: "http://korbo2.local:80/v1",
-        endpoint: "http://dev.korbo2.org/v1",
-        limitSearchResult: 20,
-        labelMinLength: 6,
-        globalObjectName : 'GG',
-        useTafonyCompatibility: true,
-
-        useAutoComplete: true,
-        autoCompleteMode: 'simple',
-        autoCompleteOptions: 'all'
-    }
+        tripleComposerEnabled: true,
+        useCredentialInHttpCalls: true,
+        languagesSaveMethod: 'singleCall',
+        tripleComposerForCustomFields: true
+    };
 
     // INIT TRIPLECOMPOSER
     var predicate = {
@@ -128,31 +111,32 @@
 
     var pageItems = [
         {
-            uri: "item1",
+            uri: "http://item.com/item1",
             label: "item1Label",
             type: ["http://purl.org/pundit/ont/ao#fragment-text"]
         },
         {
-            uri: "item3",
+            uri: "http://item.com/item3",
             label: "label of page item 3",
             type: ["http://purl.org/pundit/ont/ao#fragment-text"]
         },
         {
-            uri: "item4",
+            uri: "http://item.com/item4",
             label: "label of page item 4(image)",
             type: ["http://xmlns.com/foaf/0.1/Image"]
         }
     ];
     var myItems = [
         {
-            uri: "item2",
+            uri: "http://item.com/item2",
             label: "label of my item 2",
             type: ["http://purl.org/pundit/ont/ao#fragment-text"]
         }
     ];
 
-    var KeeDemoCtrl = function($scope, KorboCommunicationService, $window, ItemsExchange, Item, $timeout, EventDispatcher, CLIENTDEFAULTS, PAGEITEMSCONTAINERDEFAULTS, MYITEMSDEFAULTS) {
+    var KeeDemoCtrl = function($scope, KorboCommunicationService, $window, ItemsExchange, Item, $timeout, EventDispatcher, CLIENTDEFAULTS, PAGEITEMSCONTAINERDEFAULTS, MYITEMSDEFAULTS, MyPundit) {
 
+        $scope.itemID = 666583;
         var name = $window['myConf'].globalObjectName;
         $scope.openSearch = function(){
             //$window.KK.callOpenSearch();
@@ -161,7 +145,7 @@
 
         $scope.edit = function(){
             //2606; 2607
-            $window[name].callEdit(2598);
+            $window[name].callEdit($scope.itemID);
             // $window[name].callEdit(3176);
         };
 
@@ -187,21 +171,26 @@
         $timeout(function() {
             EventDispatcher.sendEvent('Client.boot');
         }, 1000);
+
+        MyPundit.checkLoggedIn();
+
+        //KorboCommunicationService.
     };
 
 
 </script>
-<div data-ng-app="Pundit2" class="kee-wrp pnd-wrp" ng-controller="KeeDemoCtrl">
-    <br>
-    <korbo-entity-editor conf-name="myConf"></korbo-entity-editor>
-    <br>
-    <korbo-entity-editor conf-name="myConf1"></korbo-entity-editor>
-    <br>
-    <korbo-entity-editor conf-name="myConf2"></korbo-entity-editor>
-    <br>
-    <korbo-entity-editor></korbo-entity-editor>
-    <button class="btn btn-xs btn-success" style="margin-left: 50px; margin-bottom: 30px;" ng-click="openSearch()">Search</button>
-    <button class="btn btn-xs btn-success" style="margin-left: 50px; margin-bottom: 30px;" ng-click="edit()">Edit</button>
-    <button class="btn btn-xs btn-success" style="margin-left: 50px; margin-bottom: 30px;" ng-click="new()">New</button>
+<div data-ng-app="Pundit2" class="kee-wrp pnd-wrp" >
+    <div ng-controller="KeeDemoCtrl">
+        <br>
+        <korbo-entity-editor conf-name="myConf"></korbo-entity-editor>
+        <br>
+        <!--<button class="btn btn-xs btn-success" style="margin-left: 50px; margin-bottom: 30px;" ng-click="openSearch()">Search</button>-->
+        <!--<button class="btn btn-xs btn-success" style="margin-left: 50px; margin-bottom: 30px;" ng-click="edit()">Edit</button>-->
+        <button class="btn btn-xs btn-success" style="margin-left: 50px; margin-bottom: 30px;" ng-click="new()">New</button>
+        <br />
+        type item id to edit: <input type="text" ng-model="itemID"/>
+        <br />
+        <button class="btn btn-xs btn-success" style="margin-left: 50px; margin-bottom: 30px;" ng-click="edit()">Edit</button>
+    </div>
 </div>
 <!-- buildexamples:section footer --><!-- /buildexamples -->
