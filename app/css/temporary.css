@@ -6,3 +6,27 @@
 .kee-wrp .popover {
   z-index: 999999999;
 }
+
+/* KorboEE Modal dialog */
+.kee-wrp .modal-dialog {
+  width: 60%;
+}
+
+.kee-wrp .kee-inner-pane .kee-inner-sub-pane.pull-right,
+.kee-wrp .kee-inner-pane .kee-inner-sub-pane.pull-left {
+  width: 50%;
+  padding:  5px;
+}
+
+.kee-wrp .kee-inner-pane .kee-inner-sub-pane.pull-left {
+  border-right: 1px solid #808080;
+}
+
+.kee-new-content {
+  height: 550px;
+  overflow: scroll;
+}
+
+.kee-inner-pane-footer {
+  clear: both;
+}

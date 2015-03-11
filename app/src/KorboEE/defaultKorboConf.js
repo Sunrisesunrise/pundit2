@@ -602,5 +602,38 @@ KORBODEFAULTCONF = {
         'updateAllData': false,
         'searchAndCopyFromLOD': false,
         'korboHelp': false
-    }
+    },
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#typeThing
+     *
+     * @description
+     * `string`
+     *
+     * Defines uri of type "Thing".
+     *
+     * Default value:
+     * <pre>
+     *   typeThing: 'http://www.w3.org/2002/07/owl#Thing'
+     * </pre>
+     */
+    typeThing: 'http://www.w3.org/2002/07/owl#Thing',
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#typeLiteral
+     *
+     * @description
+     * `string`
+     *
+     * Defines uri of type "Literal".
+     *
+     * Default value:
+     * <pre>
+     *   typeThing: 'http://purl.org/pundit/literal'
+     * </pre>
+     */
+    typeLiteral: 'http://purl.org/pundit/literal'
+
 };

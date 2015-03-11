@@ -100,7 +100,22 @@ angular.module('Pundit2.Vocabularies')
      * Default value:
      * <pre> debug: false </pre>
      */
-    debug: false
+    debug: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#EuropeanaSelector.searchWithCredentials
+     *
+     * @description
+     * `boolean`
+     *
+     * Search with credentials
+     *
+     * Default value:
+     * <pre> searchWithCredentials: false </pre>
+     */
+    searchWithCredentials: false
 
 })
 
@@ -147,6 +162,7 @@ angular.module('Pundit2.Vocabularies')
             //headers: { 'Content-Type': 'application/json' },
             method: 'GET',
             url: self.config.url + "/search/items",
+            withCredentials: self.config.searchWithCredentials,
             cache: false,
             params: params
 

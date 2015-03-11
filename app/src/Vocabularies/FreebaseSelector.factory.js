@@ -222,7 +222,22 @@ angular.module('Pundit2.Vocabularies')
      * Default value:
      * <pre> debug: false </pre>
      */
-    debug: false
+    debug: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#FreebaseSelector.searchWithCredentials
+     *
+     * @description
+     * `boolean`
+     *
+     * Search with credentials
+     *
+     * Default value:
+     * <pre> searchWithCredentials: false </pre>
+     */
+    searchWithCredentials: false
 
 })
 
@@ -260,6 +275,7 @@ angular.module('Pundit2.Vocabularies')
         $http({
             method: 'GET',
             url: freebaseSelector.options.freebaseSearchURL,
+            withCredentials: freebaseSelector.options.searchWithCredentials,
             params: {
                 key: freebaseSelector.options.freebaseAPIKey,
                 query: term,

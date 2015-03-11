@@ -1,6 +1,7 @@
 angular.module('KorboEE')
 .controller('KeeNewCtrl', function ($scope, $rootScope, $dropdown, $modal, KorboCommunicationService, $q, KorboCommunicationFactory,
-                                    korboConf, $timeout, $http, TypesHelper, ItemsExchange, ContextualMenu, $window, Config, APIService, Breadcrumbs, TripleComposer, Item, ResourcePanel, AnnotationsCommunication) {
+                                    korboConf, $timeout, $http, TypesHelper, ItemsExchange, ContextualMenu, $window, MyPundit, EventDispatcher,
+                                    Config, APIService, Breadcrumbs, TripleComposer, Item, ResourcePanel, AnnotationsCommunication) {
 
     var copyCheck = false;
     var korboComm = new KorboCommunicationFactory();
@@ -27,6 +28,11 @@ angular.module('KorboEE')
         }
     }
 
+    $scope.changeInnerPane = function(innerPane) {
+        setCurrentInnerPane(innerPane);
+    }
+
+    $scope.entityTitle = 'Entity title';
     $scope.tabs = [];
     $scope.disactiveLanguages = [];
     $scope.disactiveLanguagesPopoverTemplate = 'src/KorboEE/New/KorboEE.languagesPopover.tmpl.html';
@@ -42,6 +48,9 @@ angular.module('KorboEE')
     };
     $scope.typeFilter = {'label': ""};
 
+    if ($scope.conf.tripleComposerEnabled) {
+        TripleComposer.reset();
+    }
 
     $window[$scope.conf.globalObjectName].onCancel(function () {
         ContextualMenu.wipeActionsByType('advancedMenu');
@@ -86,6 +95,8 @@ angular.module('KorboEE')
                 name = 'search';
                 break;
             case 'tripleComposer':
+                addEntityToAllSubjects();
+                TripleComposer.initContextualMenu();
                 TripleComposer.showHeader(false);
                 TripleComposer.showFooter(false);
                 KorboCommunicationService.tripleComposerStateChangeCallback = tripleComposerStateChangeCallback;
@@ -150,6 +161,8 @@ angular.module('KorboEE')
     };
 
     var buildContextualMenu = function () {
+        /* DEPRECATED */
+        /*
         ContextualMenu.addAction({
             name: 'showAdvanceOptions',
             type: 'advancedMenu',
@@ -162,8 +175,11 @@ angular.module('KorboEE')
                 $scope.showAdvancedOptions();
             }
         });
+        */
 
-        ContextualMenu.addAction({
+        /* DEPRECATED */
+        /*
+         ContextualMenu.addAction({
             name: 'tripleComposer',
             type: 'advancedMenu',
             label: 'Triple composer',
@@ -175,6 +191,7 @@ angular.module('KorboEE')
                 $scope.showTripleComposer();
             }
         });
+        */
 
         ContextualMenu.addAction({
             name: 'editURL',
@@ -217,7 +234,9 @@ angular.module('KorboEE')
             }
         });
 
-        ContextualMenu.addAction({
+        /* DEPRECATED */
+
+         ContextualMenu.addAction({
             name: 'searchAndCopy',
             type: 'advancedMenu',
             label: 'Search and copy from LOD',
@@ -226,7 +245,6 @@ angular.module('KorboEE')
                 return $scope.conf.contextMenuActiveItems.searchAndCopyFromLOD;
             },
             action: function () {
-                /*noop*/
                 Breadcrumbs.appendItem($scope.conf.breadcrumbName, {
                     label: 'Search and copy from LOD',
                     name: 'search',
@@ -244,6 +262,7 @@ angular.module('KorboEE')
                 Breadcrumbs.setItemLabel($scope.conf.breadcrumbName, Breadcrumbs.getItems($scope.conf.breadcrumbName).length - 1, 'Search and copy from LOD');
             }
         });
+
 
         ContextualMenu.addAction({
             name: 'korboHelp',
@@ -480,7 +499,112 @@ angular.module('KorboEE')
         Breadcrumbs.itemSelect($scope.conf.breadcrumbName, Breadcrumbs.getItems($scope.conf.breadcrumbName).length - 2);
     }
 
-    $scope.searchOriginalURL = function() {
+    $scope.searchOnResourcePanel = function($event, searchType) {
+        var triple = {
+            subject: null,
+            predicate: null,
+            object: null
+        };
+        ResourcePanel.showItemsForSubject(triple, $event.target).then(function(item, fixed) {
+            if (typeof item !== 'undefined' && typeof item.uri !== 'undefined') {
+                switch(searchType) {
+                    case 'original-url':
+                        $scope.originalUrl = item.uri;
+                        Breadcrumbs.itemSelect($scope.conf.breadcrumbName, (Breadcrumbs.getItems($scope.conf.breadcrumbName).length - 2));
+                        break;
+                    case 'copy-from-lod':
+                        MyPundit.checkLoggedIn().then(function (isLoggedIn) {
+                            if (isLoggedIn) {
+                                $scope.tabs = [];
+                                $scope.disactiveLanguages = [];
+                                /*
+                                var uri = item.uri;
+                                uri = uri.split('/');
+                                uri = uri[uri.length - 1];
+                                item.location = item.uri;
+                                item.uri = uri;
+                                */
+                                if (typeof item.providerFrom === 'string' && item.providerFrom === 'korbo') {
+                                    // Reload item from korbo to get custom fields also.
+                                    buildLanguagesModel(item.id, item.providerFrom, {
+                                        originalUrl: item.uri,
+                                        imageUrl: item.image
+                                    });
+
+                                }
+                                else {
+                                    // Rebuild interface from search result item.
+                                    var storedItem = ItemsExchange.getItemByUri(item.uri);
+                                    if (typeof storedItem !== 'undefined') {
+                                        $scope.tabs = [];
+                                        $scope.disactiveLanguages = [];
+
+                                        $scope.imageUrl = storedItem.image || '';
+                                        $scope.originalUrl = storedItem.uri || '';
+                                        initTypes();
+                                        buildTypesFromArray(storedItem.type);
+                                        buildTypesFromConfiguration();
+
+                                        var language = storedItem.language || $scope.conf.defaultLanguage;
+
+                                        var tempLang = {};
+                                        tempLang[language.toLowerCase()] = true;
+
+                                        var langObj = {
+                                            'title': language.toUpperCase(),
+                                            'name': language.toLowerCase(),
+                                            'description': storedItem.description,
+                                            'label': storedItem.label,
+                                            'mandatory': true,
+                                            'hasError': false,
+                                            'tooltipMessageTitle': tooltipMessageTitle + language.toLowerCase(),
+                                            'tooltipMessageDescription': tooltipMessageDescription + language.toLowerCase(),
+                                            'tooltipMessageError': "message",
+                                            'tooltipMessageErrorTab': "There are some errors in the " + language.toLowerCase() + " languages fields"
+                                        };
+                                        $scope.tabs.push(langObj);
+                                        pushCurrentLang(langObj);
+
+                                        angular.forEach($scope.conf.languages, function(lang) {
+                                            if (!tempLang.hasOwnProperty(lang.value.toLowerCase())) {
+                                                var langObj = {
+                                                    'title': lang.value.toUpperCase(),
+                                                    'name': lang.name.toLowerCase(),
+                                                    'description': "",
+                                                    'label': "",
+                                                    'mandatory': true,
+                                                    'hasError': false,
+                                                    'tooltipMessageTitle': tooltipMessageTitle + lang.name.toLowerCase(),
+                                                    'tooltipMessageDescription': tooltipMessageDescription + lang.name.toLowerCase(),
+                                                    'tooltipMessageError': "message",
+                                                    'tooltipMessageErrorTab': "There are some errors in the " + lang.name.toLowerCase() + " languages fields"
+                                                };
+                                                $scope.disactiveLanguages.push(langObj);
+                                            }
+                                        });
+
+                                        $scope.topArea = {
+                                            'message': 'You are editing the entity...',
+                                            'status': 'info'
+                                        };
+                                        $scope.loadingStatus = false;
+                                    }
+                                }
+                            }
+                            else {
+                                EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
+                            }
+                        });
+                        break;
+                }
+            }
+        });
+    }
+
+    /* DEPRECATED */
+    /*
+    $scope.searchOriginalURL = function($event) {
+
         Breadcrumbs.appendItem($scope.conf.breadcrumbName, {
             label: 'Search original URL',
             name: 'search',
@@ -494,13 +618,12 @@ angular.module('KorboEE')
         setCurrentInnerPane('SearchURL');
         // Override breadcrumb label in case of "search" already exists.
         Breadcrumbs.setItemLabel($scope.conf.breadcrumbName, Breadcrumbs.getItems($scope.conf.breadcrumbName).length - 1, 'Search original URL');
+
     }
-
-
-
+     */
 
     $scope.prevBasketID;
-    var buildLanguagesModel = function (entityUri, provider) {
+    var buildLanguagesModel = function (entityUri, provider, overrideProperties) {
 
         $scope.topArea = {
             'message': 'Loading entity...',
@@ -517,10 +640,16 @@ angular.module('KorboEE')
             provider: provider,
             endpoint: $scope.conf.endpoint,
             basketID: currentBasketID,
-            language: $scope.defaultLan.value
+            language: $scope.conf.defaultLanguage
         };
         var langConf = $scope.conf.languages;
+
+        initTypes();
+        buildTypesFromConfiguration();
+
         KorboCommunicationService.buildLanguagesObject(param, langConf, $scope.conf.useCredentialInHttpCalls).then(function (res) {
+            var loadedItem = res.loadedItem;
+            delete res.loadedItem;
 
             if (typeof(res.basketId) !== 'undefined' && res.basketId !== null) {
                 $scope.prevBasketID = res.basketId;
@@ -533,6 +662,16 @@ angular.module('KorboEE')
             //basketIDforEdit = res.basketId;
             $scope.imageUrl = res.imageUrl;
             $scope.originalUrl = res.originalUrl;
+
+            if (typeof overrideProperties !== 'undefined') {
+                if (typeof overrideProperties.imageUrl !== 'undefined') {
+                    $scope.imageUrl = overrideProperties.imageUrl;
+                }
+                if (typeof overrideProperties.originalUrl !== 'undefined') {
+                    $scope.originalUrl = overrideProperties.originalUrl;
+                }
+            }
+
             initTypes();
             buildTypesFromArray(res.types);
             buildTypesFromConfiguration();
@@ -571,6 +710,48 @@ angular.module('KorboEE')
                     $scope.disactiveLanguages.push(langObj);
                 }
             });
+
+            if ($scope.conf.tripleComposerEnabled &&
+                $scope.conf.tripleComposerForCustomFields &&
+                typeof loadedItem.custom_fields !== 'undefined') {
+                TripleComposer.reset();
+                var triples = [];
+                for (var keyPredicate in loadedItem.custom_fields) {
+                    //if (loadedItem.hasOwnProperty(keyPredicate) && fixedProperties.indexOf(keyPredicate) === -1) {
+                        var predicate = ItemsExchange.getItemByUri(keyPredicate);
+                        if (typeof predicate === 'undefined') {
+                            continue;
+                        }
+                        for (var objectIndex in loadedItem.custom_fields[keyPredicate]) {
+                            if (triples.length > 1) {
+                                TripleComposer.addStatement();
+                            }
+                            var statementObject = {
+                                uri: loadedItem.custom_fields[keyPredicate][objectIndex].type === 'uri' ? loadedItem.custom_fields[keyPredicate][objectIndex].value : $scope.conf.typeLiteral,
+                                type: loadedItem.custom_fields[keyPredicate][objectIndex].uri_types,
+                                label: loadedItem.custom_fields[keyPredicate][objectIndex].uri_label
+                            }
+                            var itemObject = new Item(statementObject.uri, statementObject);
+
+                            // Add statement items.
+                            //TripleComposer.addToPredicate(predicate);
+                            //TripleComposer.addToObject(itemObject);
+
+                            // Increment counter.
+                            triples.push({
+                                predicate: predicate,
+                                itemObject: itemObject
+                            });
+                        }
+                    //}
+                }
+                $timeout(function() {
+                    for (var i in triples) {
+                        TripleComposer.addToPredicate(triples[i].predicate);
+                        TripleComposer.addToObject(triples[i].itemObject);
+                    }
+                }, 100);
+            }
 
             Breadcrumbs.itemSelect($scope.conf.breadcrumbName, 0);
 
@@ -617,7 +798,6 @@ angular.module('KorboEE')
         return allLangAreOk;
     };
 
-
     // set default language
     $scope.defaultLan = $scope.conf.languages[0];
     for (var j in $scope.conf.languages) {
@@ -644,7 +824,6 @@ angular.module('KorboEE')
     var tooltipMessageDescription = "Insert description of the entity in ";
     var errorMandatory = "The Title field is mandatory and must be filled";
     var errorLabelTooShort = " The Title must be contain at least " + $scope.conf.labelMinLength + " characters";
-
 
     $scope.typesHasError = false;
     $scope.typesErrorMessage = "You must select at least one type";
@@ -695,6 +874,18 @@ angular.module('KorboEE')
 
     var updateBreadcrumbFirstItem = function() {
         Breadcrumbs.setItemLabel($scope.conf.breadcrumbName, 0, $scope.tabs[0].label);
+
+        var newLabel = $scope.tabs[0].label;
+        var charLimit = 25;
+        if (typeof charLimit === 'number') {
+            charLimit = charLimit < 4 ? 4 : charLimit;
+            if (newLabel.length > charLimit) {
+                newLabel = newLabel.substr(0, charLimit) + '...';
+            }
+        }
+
+        newLabel = newLabel.length == 0 ? 'Entity title' : newLabel;
+        $scope.entityTitle = newLabel;
     }
 
     $scope.updateTitleField = function (index) {
@@ -715,6 +906,31 @@ angular.module('KorboEE')
         updateBreadcrumbFirstItem();
     };
 
+    var addTripleObjectInfo = function () {
+        var triplesData = TripleComposer.buildGraph();
+        var statements = TripleComposer.getStatements();
+        var objects = {};
+        for (var i in statements) {
+            var triple = statements[i].scope.get();
+            objects[triple.object.uri] = triple.object;
+        }
+
+        for (var subjectURI in triplesData) {
+            for (var predicateURI in triplesData[subjectURI]) {
+                for (var i in triplesData[subjectURI][predicateURI]) {
+                    if (triplesData[subjectURI][predicateURI][i].type === 'uri') {
+                        var objectData = objects[triplesData[subjectURI][predicateURI][i].value];
+                        if (typeof objectData !== 'undefined') {
+                            triplesData[subjectURI][predicateURI][i].uri_lang = $scope.conf.defaultLanguage;
+                            triplesData[subjectURI][predicateURI][i].uri_label = objectData.label;
+                            triplesData[subjectURI][predicateURI][i].uri_types = angular.copy(objectData.type);
+                        }
+                    }
+                }
+            }
+        }
+        return triplesData;
+    }
 
     $scope.save = function () {
         $scope.saveClicked = true;
@@ -801,8 +1017,8 @@ angular.module('KorboEE')
                         );
                     }
                     else {
-                        triplesData = TripleComposer.buildGraph();
-                        httpTriplesPromise = korboComm.addItemCustomFields($scope.conf.endpoint, basketID, triplesData, $scope.conf.useCredentialInHttpCalls);
+                        triplesData = addTripleObjectInfo();
+                        httpTriplesPromise = korboComm.addItemCustomFields($scope.conf.endpoint, $scope.conf.defaultLanguage,basketID, triplesData, $scope.conf.useCredentialInHttpCalls);
                     }
 
                     httpTriplesPromise.then(innerLanguageSave,
@@ -986,6 +1202,7 @@ angular.module('KorboEE')
             $scope.typeFilter.label = '';
         }, 1000);
     };
+
     $scope.typesMouseEnter = function () {
         $timeout.cancel(delay);
     };
@@ -1000,6 +1217,7 @@ angular.module('KorboEE')
             $scope.types[t].checked = true;
         }
     };
+
     $scope.disableAllTypes = function () {
         for (var t in $scope.types) {
             $scope.types[t].checked = false;

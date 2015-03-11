@@ -147,13 +147,13 @@ angular.module('KorboEE')
     };
 
     // save an entity
-    KorboCommFactory.prototype.addItemCustomFields = function(baseURL, basketID, triplesData, useCredentialInHttpCalls) {
+    KorboCommFactory.prototype.addItemCustomFields = function(baseURL, language, basketID, triplesData, useCredentialInHttpCalls) {
         var promise = $q.defer();
         if (typeof useCredentialInHttpCalls !== 'boolean') {
             useCredentialInHttpCalls = false;
         }
         $http({
-            headers: {'Access-Control-Expose-Headers': "Location"},
+            headers: {'Access-Control-Expose-Headers': "Location", 'Content-Language': language},
             method: 'POST',
             async: false,
             url: baseURL + "/baskets/" + basketID + "/items/add",

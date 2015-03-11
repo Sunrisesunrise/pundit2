@@ -148,13 +148,37 @@ angular.module('Pundit2.ResourcePanel')
             if (caller !== 'pr' && caller !== '') {
                 $timeout.cancel(searchTimer);
                 searchTimer = $timeout(function() {
-                    ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
+                    if (Config.annotationServerCallsNeedLoggedUser) {
+                        MyPundit.checkLoggedIn().then(function (isLoggedIn) {
+                            if (isLoggedIn) {
+                                ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
+                            }
+                            else {
+                                EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
+                            }
+                        });
+                    }
+                    else {
+                        ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
+                    }
                 }, ResourcePanel.options.vocabSearchTimer);
             }
         } else {
             $timeout.cancel(searchTimer);
             // TODO: add specific method in ResourcePanel to reset search
-            ResourcePanel.updateVocabSearch('', $scope.triple, caller);
+            if (Config.annotationServerCallsNeedLoggedUser) {
+                MyPundit.checkLoggedIn().then(function (isLoggedIn) {
+                    if (isLoggedIn) {
+                        ResourcePanel.updateVocabSearch('', $scope.triple, caller);
+                    }
+                    else {
+                        EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
+                    }
+                });
+            }
+            else {
+                ResourcePanel.updateVocabSearch('', $scope.triple, caller);
+            }
         }
     };
 

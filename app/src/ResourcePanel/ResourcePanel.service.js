@@ -285,6 +285,10 @@ angular.module('Pundit2.ResourcePanel')
             state.popoverOptions.scope.save = function(elem) {
                 hide();
                 Preview.hideDashboardPreview();
+                var activeTab = state.popoverOptions.scope.contentTabs.activeTab;
+                if (typeof elem.providerFrom === 'undefined' && typeof state.popoverOptions.scope.contentTabs[activeTab].itemsContainer !== 'undefined') {
+                    elem.providerFrom = state.popoverOptions.scope.contentTabs[activeTab].itemsContainer;
+                }
                 state.resourcePromise.resolve(elem);
 
                 var eventLabel = 'resourcePanel--';

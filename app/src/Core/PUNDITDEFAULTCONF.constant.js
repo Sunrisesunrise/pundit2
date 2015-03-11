@@ -92,6 +92,22 @@ angular.module('Pundit2.Core')
     /**
      * @module punditConfig
      * @ngdoc object
+     * @name annotationServerCallsNeedLoggedUser
+     * @description
+     * `boolean`
+     *
+     * Determines whether all calls to annotation server need logged user.
+     *
+     * Default:
+     * <pre>
+     * annotationServerCallsNeedLoggedUser: false
+     * </pre>
+     */
+    annotationServerCallsNeedLoggedUser: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc object
      * @name askBaseURL
      *
      * @description

@@ -2,19 +2,17 @@
 
 
 <script>
-    var punditConfig = {
-        annotationServerBaseURL: 'http://geolat.netseven.it:8282/annotationserver/'
-    };
-    var myConf = {
+    var korboEEConfig = {
         //endpoint: "http://korbo2.local:80/v1",
         // endpoint: "http://korbo2.local/app_dev.php/v1",
 
-        endpoint: "http://geolat.netseven.it:8282/annotationserver/api/korbo",
-        //endpoint: "http://172.20.0.79:8081/annotationserver/api/korbo",
-        annotationServerBaseUR: 'http://geolat.netseven.it:8282/annotationserver/api/korbo',
-        //annotationServerBaseUR: 'http://172.20.0.79:8081/annotationserver/api/korbo',
+        //endpoint: "http://geolat.netseven.it:8282/annotationserver/api/korbo",
+        endpoint: "http://172.20.0.79:8081/annotationserver/api/korbo",
+        //annotationServerBaseURL: 'http://geolat.netseven.it:8282/annotationserver/api/korbo',
+        annotationServerBaseURL: 'http://172.20.0.79:8081/annotationserver/api/korbo',
 
-        basketID: 97355,
+        //basketID: 616969,
+        basketID: 948781 , //Susanna.
         globalObjectName : 'KK',
         limitSearchResult: 11,
         useOnlyCallback: false,
@@ -51,6 +49,7 @@
         visualizeCopyButton: ['dandeliondbpedia','freebase'],
         copyToKorboBeforeUse: true,
         visualizeEditButton: false,
+        showHeaderTabs: false,
 
         languages: [
             {
@@ -99,15 +98,45 @@
     };
 
     // INIT TRIPLECOMPOSER
-    var predicate = {
-        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "is translation of",
-        "description": "The selected text fragment is the translation of another text fragment",
-        "domain": ["http://purl.org/pundit/ont/ao#fragment-text", "http://place.uri"],
-        "range": ["http://purl.org/pundit/ont/ao#fragment-text"],
-        "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/pundit/ont/oa#isTranslationOf"
-    };
+    var predicates = [
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "is translation of",
+            "description": "The selected text fragment is the translation of another text fragment",
+            "domain": ["http://purl.org/pundit/ont/ao#fragment-text", "http://place.uri", "http://scientist.uri"],
+            "range": [],
+            "vocabulary": "Basic Relation",
+            "uri": "http://purl.org/pundit/ont/oa#isTranslationOf"
+        },
+        {
+            type:["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            label:"period of dates starts at",
+            description:"The selected text fragment corresponds to the specified date period which starts at the specified Date",
+            domain:["http://purl.org/pundit/ont/ao#fragment-text", "http://place.uri", "http://scientist.uri"],
+            range:[],
+            vocabulary:"Basic Relation",
+            uri:"http://purl.org/pundit/ont/oa#periodStartDate"
+        },
+        {
+            type: ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            label: "talks about",
+            description: "The selected text fragment talks about some other text, Entity, Person or any other kind of concept",
+            domain: ["http://purl.org/pundit/ont/ao#fragment-text", "http://place.uri", "http://scientist.uri"],
+            range: ["http://purl.org/pundit/ont/ao#fragment-text"],
+            vocabulary: "Basic Relation",
+            uri: "http://purl.org/pundit/ont/oa#talksAbout"
+        },
+        {
+            type: ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            label: "generic predicate",
+            description: "The selected text fragment is some how related to",
+            domain: [],
+            range: [],
+            vocabulary: "Basic Relation",
+            uri: "http://purl.org/pundit/ont/oa#genericProperty"
+        }
+    ];
+
 
     var pageItems = [
         {
@@ -134,10 +163,13 @@
         }
     ];
 
-    var KeeDemoCtrl = function($scope, KorboCommunicationService, $window, ItemsExchange, Item, $timeout, EventDispatcher, CLIENTDEFAULTS, PAGEITEMSCONTAINERDEFAULTS, MYITEMSDEFAULTS, MyPundit) {
+    var KeeDemoCtrl = function($scope, KorboCommunicationService, $window, ItemsExchange,
+                               Item, $timeout, EventDispatcher, CLIENTDEFAULTS, PAGEITEMSCONTAINERDEFAULTS,
+                               MYITEMSDEFAULTS, MyPundit,ResourcePanel,  SelectorsManager, Korbo2Selector, FreebaseSelector, DbpediaSelector) {
 
-        $scope.itemID = 666583;
-        var name = $window['myConf'].globalObjectName;
+
+        $scope.itemID = 729495;
+        var name = $window['korboEEConfig'].globalObjectName;
         $scope.openSearch = function(){
             //$window.KK.callOpenSearch();
             $window[name].callOpenSearch();
@@ -153,9 +185,11 @@
             $window[name].callOpenNew();
         }
 
-        var item = new Item(predicate.uri, predicate);
+        for (var i in predicates) {
+            var item = new Item(predicates[i].uri, predicates[i]);
+            ItemsExchange.addItemToContainer(item, CLIENTDEFAULTS.relationsContainer);
+        }
 
-        ItemsExchange.addItemToContainer(item, CLIENTDEFAULTS.relationsContainer);
         var loadMockedItems = function(){
             var j, item;
             for (j in pageItems) {
@@ -174,7 +208,83 @@
 
         MyPundit.checkLoggedIn();
 
-        //KorboCommunicationService.
+        var addKorboEESelector = function() {
+            var instances = [
+                {
+                    container: 'korbo',
+                    // instance label tab title and search provider
+                    label: 'Korbo',
+                    // enable or disable the instance
+                    active: true,
+                    basketID: korboEEConfig.basketID,
+                    url: korboEEConfig.endpoint,
+                    language: korboEEConfig.defaultLanguage
+                },
+                {
+                    container: 'freebase',
+                    // instance label tab title and search provider
+                    label: 'Freebase',
+                    // enable or disable the instance
+                    active: true,
+                    basketID: korboEEConfig.basketID,
+                    url: korboEEConfig.endpoint,
+                    language: korboEEConfig.defaultLanguage,
+                    rebuildURI: {
+                        baseURI: 'http://www.freebase.com',
+                        replaceIDParts: ['__', '/']
+                    }
+                }/*,
+                {
+                    container: 'dandeliondbpedia',
+                    // instance label tab title and search provider
+                    label: 'DBPedia',
+                    // enable or disable the instance
+                    active: true,
+                    basketID: korboEEConfig.basketID,
+                    url: korboEEConfig.endpoint,
+                    language: korboEEConfig.defaultLanguage
+                }*/
+            ];
+
+            for (var i in instances) {
+                var config = instances[i];
+                var keeSelector = new Korbo2Selector(config);
+                keeSelector.push(config);
+                delete keeSelector;
+            }
+        };
+
+        EventDispatcher.addListener('MyPundit.userNeedToLogin', function() {
+            ResourcePanel.hide();
+            MyPundit.login();
+        });
+
+
+        addKorboEESelector();
+        SelectorsManager.init();
+
+
+    };
+
+    var punditConfig = {
+        annotationServerBaseURL: 'http://geolat.netseven.it:8282/annotationserver/',
+        annotationServerCallsNeedLoggedUser: true,
+        lodLive: {
+            active: true
+        },
+        modules: {
+            SelectorsManager: {
+                active: true
+            },
+            "Korbo2Selector": {
+                active: true,
+                searchWithCredentials: true,
+                instances: []
+            },
+            "DbpediaSelector": {
+                active: true
+            }
+        }
     };
 
 
@@ -182,7 +292,7 @@
 <div data-ng-app="Pundit2" class="kee-wrp pnd-wrp" >
     <div ng-controller="KeeDemoCtrl">
         <br>
-        <korbo-entity-editor conf-name="myConf"></korbo-entity-editor>
+        <korbo-entity-editor conf-name="korboEEConfig"></korbo-entity-editor>
         <br>
         <!--<button class="btn btn-xs btn-success" style="margin-left: 50px; margin-bottom: 30px;" ng-click="openSearch()">Search</button>-->
         <!--<button class="btn btn-xs btn-success" style="margin-left: 50px; margin-bottom: 30px;" ng-click="edit()">Edit</button>-->

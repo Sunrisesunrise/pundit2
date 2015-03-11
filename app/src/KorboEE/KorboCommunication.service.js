@@ -1,11 +1,15 @@
 /*jshint camelcase: false*/
 
 angular.module('KorboEE')
-.service('KorboCommunicationService', function($q, $http, BaseComponent, ItemsExchange, Item, $rootScope, $modal, korboConf, KorboCommunicationFactory, APIService, EventDispatcher){
+.service('KorboCommunicationService', function($q, $http, BaseComponent, ItemsExchange, Item, $rootScope, $modal, korboConf, KorboCommunicationFactory, APIService, EventDispatcher, MyPundit){
 
     var korboCommunication = new BaseComponent("KorboCommunication");
 
     var isAutocompleteLoading = false;
+
+    korboCommunication.checkUserLoggedIn = function() {
+        return MyPundit.checkLoggedIn();
+    }
 
     // set autocomplete loading status
     korboCommunication.setAutocompleteLoading = function(val){
@@ -76,7 +80,6 @@ angular.module('KorboEE')
         confirmModal.$promise.then(confirmModal.show);
 
     };
-
 
     // open korbo modal on New tab
     // if an entity is defined, the form in New tab will be fill with entity passed values
@@ -240,6 +243,7 @@ angular.module('KorboEE')
 
         var tooltipMessageTitle = "Insert title of the entity in ";
         var tooltipMessageDescription = "Insert description of the entity in ";
+        var loadedItem = null;
 
         results.languages = [];
 
@@ -253,7 +257,7 @@ angular.module('KorboEE')
 
             results.types = res.type;
             results.basketId = res.basket_id;
-
+            results.loadedItem = res;
             if(res.available_languages.length >= 0){
                 for(var i = 0; i < res.available_languages.length; i++){
                     (function(index){
