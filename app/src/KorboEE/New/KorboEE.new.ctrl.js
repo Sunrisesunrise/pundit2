@@ -520,7 +520,7 @@ angular.module('KorboEE')
                         TripleComposer.addToPredicate(triples[i].predicate);
                         TripleComposer.addToObject(triples[i].itemObject);
                     }
-                }, 100);
+                }, 200);
             }
 
             //Breadcrumbs.itemSelect($scope.conf.breadcrumbName, 0);
@@ -697,8 +697,8 @@ angular.module('KorboEE')
                                 var lang = angular.lowercase($scope.tabs[index].title);
                                 var entityToEdit = {
                                     "id": id,
-                                    "label": $scope.tabs[index].label,
-                                    "abstract": $scope.tabs[index].description
+                                    "label": typeof $scope.tabs[index].label === 'undefined' ? '' : $scope.tabs[index].label,
+                                    "abstract": typeof $scope.tabs[index].description === 'undefined' ? '' : $scope.tabs[index].description
                                 };
                                 var langPromise = korboComm.save(entityToEdit, lang, $scope.conf.endpoint, basketID, $scope.conf.useCredentialInHttpCalls);
                                 allPromises.push(langPromise);
@@ -710,8 +710,8 @@ angular.module('KorboEE')
                         for (var i = 0; i < $scope.tabs.length; i++) {
                             var lang = angular.lowercase($scope.tabs[i].title);
                             var langData = {
-                                "label": $scope.tabs[i].label,
-                                "abstract": $scope.tabs[i].description,
+                                "label": typeof $scope.tabs[i].label === 'undefined' ? '' : $scope.tabs[i].label,
+                                "abstract": typeof $scope.tabs[i].description === 'undefined' ? '' : $scope.tabs[i].description,
                                 "language": lang
                             };
                             languagesData.push(langData);
