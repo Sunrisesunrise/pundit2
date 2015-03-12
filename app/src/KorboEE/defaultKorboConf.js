@@ -35,6 +35,34 @@ KORBODEFAULTCONF = {
 
     /**
      * @ngdoc property
+     * @name KORBODEFAULTCONF#resourceProxy
+     *
+     * @description
+     * `string`
+     *
+     * URL used to load 3rd party resources.
+     *
+     * Default value:
+     * <pre> resourceProxy: undefined </pre>
+     */
+    resourceProxy: undefined,
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#korboHelpURL
+     *
+     * @description
+     * `string`
+     *
+     * Korbo Help URL.
+     *
+     * Default value:
+     * <pre> korboHelpURL: undefined </pre>
+     */
+    korboHelpURL: undefined,
+
+    /**
+     * @ngdoc property
      * @name KORBODEFAULTCONF#basketID
      *
      * @description

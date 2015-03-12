@@ -252,8 +252,8 @@ angular.module('KorboEE')
         }
 
         korboComm.getItem(param, false, useCredentialInHttpCalls).then(function(res){
-            results.imageUrl = res.depiction;
-            results.originalUrl = res.resource;
+            results.imageUrl = typeof res.depiction === 'undefined' || res.depiction == null ? '' :  res.depiction;
+            results.originalUrl = typeof res.resource === 'undefined' || res.resource == null ? '' :  res.resource;
 
             results.types = res.type;
             results.basketId = res.basket_id;

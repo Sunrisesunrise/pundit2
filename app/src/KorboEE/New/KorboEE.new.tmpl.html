@@ -256,18 +256,6 @@
              ng-show="innerPanes.panes.tripleComposer.visible">
             <!--Triple composer is visible only when at least one type is selected-->
             <triple-composer ng-show="selectedTypes().length > 0"></triple-composer>
-            <div class="kee-inner-pane-footer"
-                 ng-show="selectedTypes().length > 0"
-                 ng-if="false">
-                <button class="btn btn-sm btn-info"
-                        ng-click="closeTripleComposer(true)">
-                    Close and confirm triple(s)
-                </button>
-                <button class="btn btn-sm btn-info"
-                        ng-click="closeTripleComposer(false)">
-                    Close and discard changes
-                </button>
-            </div>
             <!--Otherwise a warning message is shown-->
             <div ng-show="selectedTypes().length == 0">
                 <span>
@@ -277,7 +265,7 @@
                 </span>
                 <button class="btn btn-sm btn-info"
                         ng-show="!loadingStatus"
-                        ng-click="showAdvancedOptions()">Advanced options</button>
+                        ng-click="changeInnerPane('advancedOptions')">Advanced options</button>
             </div>
         </div>
         <!-- END Inner pane: tripleComposer -->

@@ -1,5 +1,5 @@
 angular.module('KorboEE')
-.controller('KeeModalCtrl', function ($scope, $modal, KorboCommunicationService, APIService, korboConf, KorboCommunicationFactory, $window) {
+.controller('KeeModalCtrl', function ($scope, $modal, KorboCommunicationService, APIService, korboConf, KorboCommunicationFactory, $window, ResourcePanel) {
 
     var api = APIService.get($scope.conf.globalObjectName);
     var korboComm = new KorboCommunicationFactory();
@@ -163,6 +163,7 @@ angular.module('KorboEE')
 
     // close modal
     $scope.closeKeeModal = function () {
+        ResourcePanel.hide();
         KorboCommunicationService.showConfirmModal($scope.conf.globalObjectName);
         //KorboCommunicationService.closeModal();
     };
