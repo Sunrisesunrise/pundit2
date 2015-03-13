@@ -49,7 +49,7 @@
         <div class="kee-inner-pane"
              ng-show="innerPanes.panes.advancedOptions.visible">
 
-            <div class="kee-inner-sub-pane pull-right">
+            <div class="kee-inner-sub-pane kee-inner-sub-pane-right pull-right">
                 <!-- Image url -->
                 <div class="kee-new-image-url">
                     <!-- Form group -->
@@ -109,7 +109,6 @@
                         <div class="left-inner-icon">
                             <span class="pnd-icon pnd-icon-external-link" ng-click="openWindow(originalUrl);$event.stopPropagation();$event.preventDefault();"></span>
                             <span class="pnd-icon"
-                                  style="width: 30px; height: 30px; left: 0px; background-color: darkgrey; color: white; font-size: 16px;"
                                   ng-class="{true:'pnd-icon-lock', false:'pnd-icon-unlock'}[originalUrlCheck]"
                                   ng-click="originalUrlCheck = !originalUrlCheck;">
                             </span>
@@ -118,19 +117,19 @@
                                 class="form-control"
                                 ng-model="originalUrl"
                                 ng-disabled="originalUrlCheck">
-                            <button class="btn btn-sm btn-default"
-                                    ng-disabled="originalUrlCheck"
-                                    ng-click="searchOnResourcePanel($event, 'original-url')">
-                                Search original URL
-                            </button>
                         </div>
                     </div>
+                    <button class="btn btn-info btn-xs pnd-btn-full"
+                            ng-disabled="originalUrlCheck"
+                            ng-click="searchOnResourcePanel($event, 'original-url')">
+                        Search original URL
+                    </button>
                 </div>
                 <!-- End original url -->
                 <!-- Search and copy from LOD-->
                 <div class="kee-new-search-and-copy"
                      ng-show="conf.fromLODTools">
-                    <button class="btn btn-sm btn-default"
+                    <button class="btn btn-info btn-xs pnd-btn-full"
                             ng-click="searchOnResourcePanel($event, 'copy-from-lod')">
                         Search and copy from LOD
                     </button>
@@ -139,7 +138,7 @@
             </div>
 
             <!-- Types -->
-            <div class="kee-inner-sub-pane pull-left">
+            <div class="kee-inner-sub-pane kee-inner-sub-pane-left pull-left">
                 <div
                     class="kee-new-types"
                     ng-mouseleave="typesMouseLeave()"
@@ -228,17 +227,15 @@
                     <!-- End types list -->
                 </div>
                 <!-- End Types -->
-            </div>
-            <div class="kee-inner-pane-footer">
                 <button
                         type="button"
-                        class="btn btn-default btn-xs"
+                        class="btn btn-info btn-xs pnd-btn-half"
                         ng-click="activeAllTypes()">
                     Select all types
                 </button>
                 <button
                         type="button"
-                        class="btn btn-default btn-xs"
+                        class="btn btn-info btn-xs pnd-btn-half"
                         ng-click="disableAllTypes()">
                     Deselect all types
                 </button>
@@ -260,14 +257,17 @@
             <triple-composer ng-show="selectedTypes().length > 0"></triple-composer>
             <!--Otherwise a warning message is shown-->
             <div ng-show="selectedTypes().length == 0">
-                <span>
-                    You can't use the triple composer when no entity types are selected.
+                <p class="kee-infotext">
+                    You can't add custom fields if no entity types are specified.
                     <br />
-                    Click on advanced options button to select one or more types.
-                </span>
-                <button class="btn btn-sm btn-info"
-                        ng-show="!loadingStatus"
-                        ng-click="changeInnerPane('advancedOptions')">Advanced options</button>
+                    Please go to the <a ng-click="changeInnerPane('advancedOptions')">advanced options</a> and select one or more types.
+                    <br /><br />
+                    <!-- TODO See if we can remove the button below -->
+                    <button class="btn btn-sm btn-info"
+                            ng-show="!loadingStatus"
+                            ng-click="changeInnerPane('advancedOptions')">Advanced options</button>
+                </p>
+
             </div>
         </div>
         <!-- END Inner pane: tripleComposer -->
@@ -282,21 +282,21 @@
     <div class="kee-footer">
         <button 
             type="button" 
-            class="btn btn-xs btn-success" 
+            class="btn btn-xs btn-success pnd-btn-full"
             ng-click="save()">
                 <span ng-if="!editMode">Save and add</span>
                 <span ng-if="editMode">Save</span>
         </button>
         <button 
             type="button" 
-            class="btn btn-xs btn-info" 
+            class="btn btn-xs btn-info pnd-btn-full"
             ng-click="closeKeeModal()">
                 Close
         </button>
         <button 
             ng-hide="editMode" 
             type="button" 
-            class="btn btn-xs btn-info" 
+            class="btn btn-xs btn-info pnd-btn-full"
             ng-click="clearForm()">
                 Clear
         </button>
