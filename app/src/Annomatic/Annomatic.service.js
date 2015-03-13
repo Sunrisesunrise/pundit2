@@ -907,6 +907,7 @@ angular.module('Pundit2.Annomatic')
      *
      */
     annomatic.stop = function() {
+        annomatic.closeAll();
         annomatic.hardReset();
         // ItemsExchange.wipeContainer(annomatic.options.container);
         state.isRunning = false;
