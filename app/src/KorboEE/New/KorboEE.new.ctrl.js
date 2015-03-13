@@ -817,6 +817,76 @@ angular.module('KorboEE')
             object: null
         };
         ResourcePanel.showItemsForSubject(triple, $event.target).then(function(item, fixed) {
+            var innerCopyFromLOD = function() {
+                $scope.tabs = [];
+                $scope.disactiveLanguages = [];
+                if (typeof item.providerFrom === 'string' && item.providerFrom === 'korbo') {
+                    // Reload item from korbo to get custom fields also.
+                    buildLanguagesModel(item.id, item.providerFrom, {
+                        originalUrl: item.uri,
+                        imageUrl: item.image
+                    });
+
+                }
+                else {
+                    // Rebuild interface from search result item.
+                    var storedItem = ItemsExchange.getItemByUri(item.uri);
+                    if (typeof storedItem !== 'undefined') {
+                        $scope.tabs = [];
+                        $scope.disactiveLanguages = [];
+
+                        $scope.imageUrl = storedItem.image || '';
+                        $scope.originalUrl = storedItem.uri || '';
+                        initTypes();
+                        buildTypesFromArray(storedItem.type);
+                        buildTypesFromConfiguration();
+
+                        var language = storedItem.language || $scope.conf.defaultLanguage;
+
+                        var tempLang = {};
+                        tempLang[language.toLowerCase()] = true;
+
+                        var langObj = {
+                            'title': language.toUpperCase(),
+                            'name': language.toLowerCase(),
+                            'description': storedItem.description,
+                            'label': storedItem.label,
+                            'mandatory': true,
+                            'hasError': false,
+                            'tooltipMessageTitle': tooltipMessageTitle + language.toLowerCase(),
+                            'tooltipMessageDescription': tooltipMessageDescription + language.toLowerCase(),
+                            'tooltipMessageError': "message",
+                            'tooltipMessageErrorTab': "There are some errors in the " + language.toLowerCase() + " languages fields"
+                        };
+                        $scope.tabs.push(langObj);
+                        pushCurrentLang(langObj);
+
+                        angular.forEach($scope.conf.languages, function(lang) {
+                            if (!tempLang.hasOwnProperty(lang.value.toLowerCase())) {
+                                var langObj = {
+                                    'title': lang.value.toUpperCase(),
+                                    'name': lang.name.toLowerCase(),
+                                    'description': "",
+                                    'label': "",
+                                    'mandatory': true,
+                                    'hasError': false,
+                                    'tooltipMessageTitle': tooltipMessageTitle + lang.name.toLowerCase(),
+                                    'tooltipMessageDescription': tooltipMessageDescription + lang.name.toLowerCase(),
+                                    'tooltipMessageError': "message",
+                                    'tooltipMessageErrorTab': "There are some errors in the " + lang.name.toLowerCase() + " languages fields"
+                                };
+                                $scope.disactiveLanguages.push(langObj);
+                            }
+                        });
+
+                        $scope.topArea = {
+                            'message': 'You are editing the entity...',
+                            'status': 'info'
+                        };
+                        $scope.loadingStatus = false;
+                    }
+                }
+            }
             if (typeof item !== 'undefined' && typeof item.uri !== 'undefined') {
                 switch(searchType) {
                     case 'original-url':
@@ -824,81 +894,19 @@ angular.module('KorboEE')
                         //Breadcrumbs.itemSelect($scope.conf.breadcrumbName, (Breadcrumbs.getItems($scope.conf.breadcrumbName).length - 2));
                         break;
                     case 'copy-from-lod':
-                        MyPundit.checkLoggedIn().then(function (isLoggedIn) {
-                            if (isLoggedIn) {
-                                $scope.tabs = [];
-                                $scope.disactiveLanguages = [];
-                                if (typeof item.providerFrom === 'string' && item.providerFrom === 'korbo') {
-                                    // Reload item from korbo to get custom fields also.
-                                    buildLanguagesModel(item.id, item.providerFrom, {
-                                        originalUrl: item.uri,
-                                        imageUrl: item.image
-                                    });
-
+                        if (Config.annotationServerCallsNeedLoggedUser) {
+                            MyPundit.checkLoggedIn().then(function (isLoggedIn) {
+                                if (isLoggedIn) {
+                                    innerCopyFromLOD();
                                 }
                                 else {
-                                    // Rebuild interface from search result item.
-                                    var storedItem = ItemsExchange.getItemByUri(item.uri);
-                                    if (typeof storedItem !== 'undefined') {
-                                        $scope.tabs = [];
-                                        $scope.disactiveLanguages = [];
-
-                                        $scope.imageUrl = storedItem.image || '';
-                                        $scope.originalUrl = storedItem.uri || '';
-                                        initTypes();
-                                        buildTypesFromArray(storedItem.type);
-                                        buildTypesFromConfiguration();
-
-                                        var language = storedItem.language || $scope.conf.defaultLanguage;
-
-                                        var tempLang = {};
-                                        tempLang[language.toLowerCase()] = true;
-
-                                        var langObj = {
-                                            'title': language.toUpperCase(),
-                                            'name': language.toLowerCase(),
-                                            'description': storedItem.description,
-                                            'label': storedItem.label,
-                                            'mandatory': true,
-                                            'hasError': false,
-                                            'tooltipMessageTitle': tooltipMessageTitle + language.toLowerCase(),
-                                            'tooltipMessageDescription': tooltipMessageDescription + language.toLowerCase(),
-                                            'tooltipMessageError': "message",
-                                            'tooltipMessageErrorTab': "There are some errors in the " + language.toLowerCase() + " languages fields"
-                                        };
-                                        $scope.tabs.push(langObj);
-                                        pushCurrentLang(langObj);
-
-                                        angular.forEach($scope.conf.languages, function(lang) {
-                                            if (!tempLang.hasOwnProperty(lang.value.toLowerCase())) {
-                                                var langObj = {
-                                                    'title': lang.value.toUpperCase(),
-                                                    'name': lang.name.toLowerCase(),
-                                                    'description': "",
-                                                    'label': "",
-                                                    'mandatory': true,
-                                                    'hasError': false,
-                                                    'tooltipMessageTitle': tooltipMessageTitle + lang.name.toLowerCase(),
-                                                    'tooltipMessageDescription': tooltipMessageDescription + lang.name.toLowerCase(),
-                                                    'tooltipMessageError': "message",
-                                                    'tooltipMessageErrorTab': "There are some errors in the " + lang.name.toLowerCase() + " languages fields"
-                                                };
-                                                $scope.disactiveLanguages.push(langObj);
-                                            }
-                                        });
-
-                                        $scope.topArea = {
-                                            'message': 'You are editing the entity...',
-                                            'status': 'info'
-                                        };
-                                        $scope.loadingStatus = false;
-                                    }
+                                    EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
                                 }
-                            }
-                            else {
-                                EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
-                            }
-                        });
+                            });
+                        }
+                        else {
+                            innerCopyFromLOD();
+                        }
                         break;
                 }
             }

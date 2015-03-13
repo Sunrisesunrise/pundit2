@@ -15,7 +15,7 @@
                 <li ng-class="{'active': innerPanes.current == 'advancedOptions'}">
                     <a href="#" id="nav-btn-advanced-options" ng-click="changeInnerPane('advancedOptions')">Advanced fields</a>
                 </li>
-                <li ng-class="{'active': innerPanes.current == 'tripleComposer'}">
+                <li ng-class="{'active': innerPanes.current == 'tripleComposer'}" ng-if="conf.tripleComposerEnabled">
                     <a href="#" id="nav-btn-triplecomposer" ng-click="changeInnerPane('tripleComposer')">Custom fields</a>
                 </li>
             </ul>
@@ -102,7 +102,8 @@
                 </div>
                 <!-- End image url -->
                 <!-- Original url-->
-                <div class="kee-new-original-url">
+                <div class="kee-new-original-url"
+                     ng-show="conf.fromLODTools">
                     <div class="form-group">
                         <label>Original URL</label>
                         <div class="left-inner-icon">
@@ -127,7 +128,8 @@
                 </div>
                 <!-- End original url -->
                 <!-- Search and copy from LOD-->
-                <div class="kee-new-search-and-copy">
+                <div class="kee-new-search-and-copy"
+                     ng-show="conf.fromLODTools">
                     <button class="btn btn-sm btn-default"
                             ng-click="searchOnResourcePanel($event, 'copy-from-lod')">
                         Search and copy from LOD

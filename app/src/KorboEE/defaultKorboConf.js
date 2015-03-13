@@ -622,15 +622,28 @@ KORBODEFAULTCONF = {
      * </pre>
      */
     contextMenuActiveItems: {
-        'advancedOptions': false,
         'editOriginalUrl': true,
-        'searchOriginalUrl': true,
         'removeLanguages': true,
-        'tripleComposer': false,
         'updateAllData': false,
-        'searchAndCopyFromLOD': false,
         'korboHelp': false
     },
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#fromLODTools
+     *
+     * @description
+     * `boolean`
+     *
+     * If true, the panel "Advanced options" will show Original URL textfield and
+     * buttons to copy from LOD.
+     *
+     * Default value:
+     * <pre>
+     *   fromLODTools: false
+     * </pre>
+     */
+    fromLODTools: false,
 
     /**
      * @ngdoc property
