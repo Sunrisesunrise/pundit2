@@ -3,15 +3,6 @@
   color: lightgray;
 }
 
-.kee-wrp .popover {
-  z-index: 999999999;
-}
-
-/* KorboEE Modal dialog */
-.kee-wrp .modal-dialog {
-  width: 60%;
-}
-
 .kee-wrp .kee-inner-pane .kee-inner-sub-pane.pull-right,
 .kee-wrp .kee-inner-pane .kee-inner-sub-pane.pull-left {
   width: 50%;
