@@ -6,6 +6,16 @@ angular.module('Pundit2.Annomatic')
     // annotation
     $scope.num = parseInt($scope.content, 10);
     $scope.ann = Annomatic.ann;
+    $scope.isMultiEntites = false;
+    $scope.currentEntity = 0;
+
+    if (typeof(Annomatic.ann.byNum[$scope.num]) !== 'undefined') {
+        if (typeof(Annomatic.ann.byNum[$scope.num].entities) !== 'undefined') {
+            $scope.entities = Annomatic.ann.byNum[$scope.num].entities;
+            $scope.isMultiEntites = true;
+            $scope.multiLength = $scope.entities.length;
+        }
+    }
 
     // Automatically open the details on popover open?
     $scope.showDetails = true;
@@ -25,7 +35,11 @@ angular.module('Pundit2.Annomatic')
         $scope.$hide();
 
         if ($scope.ann.savedByNum.indexOf($scope.num) === -1) {
-            Annomatic.save($scope.num);
+            if ($scope.isMultiEntites) {
+                Annomatic.save($scope.num, $scope.currentEntity);
+            } else {
+                Annomatic.save($scope.num);
+            }
         } else {
             Annomatic.setState($scope.num, 'accepted');
         }
@@ -88,7 +102,14 @@ angular.module('Pundit2.Annomatic')
                 }
             }
         }
+    };
 
+    $scope.changeEntity = function() {
+        if ($scope.currentEntity < $scope.multiLength -1) {
+            $scope.currentEntity++;
+        } else {
+            $scope.currentEntity = 0;
+        }
     };
 
 });

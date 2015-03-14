@@ -17,8 +17,16 @@
     </h4>
 
     <div class="popover-content">
-        <div ng-show="showDetails" class="pnd-preview pnd-annomatic-popover-details clearfix">
-            <item-preview uri="{{ann.byNum[num].uri}}" sticking="false"></item-preview>
+        <div ng-if="isMultiEntites" class="pnd-annomatic-popover-multi-entities text-center">
+            <div ng-show="showDetails" class="pnd-preview pnd-annomatic-popover-details clearfix">
+                <item-preview uri="{{ann.byNum[num].entities[currentEntity].uri}}" sticking="false"></item-preview>
+            </div>
+            <button ng-if="multiLength > 0" ng-click="changeEntity()">Next entity</button>
+        </div>
+        <div ng-if="!isMultiEntites">
+            <div ng-show="showDetails" class="pnd-preview pnd-annomatic-popover-details clearfix">
+                <item-preview uri="{{ann.byNum[num].uri}}" sticking="false"></item-preview>
+            </div>
         </div>
 
         <div class="btn-group pnd-annomatic-btn-group">
