@@ -1047,13 +1047,18 @@ angular.module('Pundit2.Annomatic')
      * @param {number} number of the annotation to be saved
      *
      */
-    annomatic.save = function(num) {
+    annomatic.save = function(num, entNum) {
         var uri = annomatic.ann.numToUriMap[num];
         var ann = annomatic.ann.byUri[uri];
+        var objUri = ann.uri;
 
-        var items = buildRDFItems(uri, annomatic.options.property, ann.uri);
-        var graph = buildGraph(uri, annomatic.options.property, ann.uri);
-        var targets = buildTargets(uri, annomatic.options.property, ann.uri);
+        if (typeof(entNum) !== 'undefined') {
+            objUri = ann.entities[entNum].uri;
+        }
+
+        var items = buildRDFItems(uri, annomatic.options.property, objUri);
+        var graph = buildGraph(uri, annomatic.options.property, objUri);
+        var targets = buildTargets(uri, annomatic.options.property, objUri);
 
         AnnotationsCommunication.saveAnnotation(graph, items, targets, undefined, true).then(function(annId) {
             annomatic.ann.savedById.push(annId);
@@ -1088,6 +1093,36 @@ angular.module('Pundit2.Annomatic')
     };
 
 
+    // TODO: remove it
+    var NERMock = {
+        "timestamp": "1234455",
+        "time": "234",
+        "annotations": [{
+            "uri": "http://purl.org/gramscisource/dictionary/entry/Risorgimento",
+            "endOffset": "38",
+            "endXpath": "/html[1]/body[1]/div[@about='http://89.31.77.216/quaderno/2/nota/2']/div[1]/text[1]/p[1]/emph[1]/text()[1]",
+            "label": "Risorgimento",
+            "spot": "Risorgimento",
+            "startOffset": "26",
+            "startXpath": "/html[1]/body[1]/div[@about='http://89.31.77.216/quaderno/2/nota/2']/div[1]/text[1]/p[1]/emph[1]/text()[1]",
+            "entities": [
+                {
+                    "label": "Risorgimento mento",
+                    "uri": "http://purl.org/my­sample­uri",
+                    "types": ["type­city", "type­ capital "],
+                    "abstract": "Risorgimento is the blabla...",
+                    "depiction": "Thumbnail URL"
+                }, {
+                    "label": "Risorgimento non mento",
+                    "uri": "http://purl.org/my­sample­uri­2",
+                    "types": ["type­city", "type­ region "],
+                    "abstract": "Risorgimento is a bloblo",
+                    "depiction": "Thumbnail URL"
+                }
+            ]
+        }]
+    };
+
     /**
      * @ngdoc method
      * @name Annomatic#getGramsciAnnotations
@@ -1102,7 +1137,7 @@ angular.module('Pundit2.Annomatic')
      * @return {Promise} promise will be resolved when the data is returned from gramsci service
      *
      */
-    annomatic.getGrasciAnnotations = function(node) {
+    annomatic.getNERAnnotations = function(node) {
         var promise = $q.defer();
 
         if (typeof(node) === 'undefined') {
@@ -1119,7 +1154,13 @@ angular.module('Pundit2.Annomatic')
                 html_fragment: content
             },
             function(data) {
-                consolidateGramsciSpots(data);
+                
+                // TODO: temp if
+                if (annomatic.options.source === 'gramsci') {
+                    consolidateGramsciSpots(data);
+                } else {
+                    consolidateGramsciSpots(NERMock);
+                }
                 promise.resolve();
             },
             function(msg) {
@@ -1147,8 +1188,8 @@ angular.module('Pundit2.Annomatic')
     annomatic.getAnnotations = function(node) {
         if (annomatic.options.source === 'DataTXT') {
             return annomatic.getDataTXTAnnotations(node);
-        } else if (annomatic.options.source === 'gramsci') {
-            return annomatic.getGrasciAnnotations(node);
+        } else if (annomatic.options.source === 'gramsci' || annomatic.options.source === 'NER') {
+            return annomatic.getNERAnnotations(node);
         }
     };
 
@@ -1178,7 +1219,7 @@ angular.module('Pundit2.Annomatic')
             values.type = angular.copy(ann.types);
         }
         if (typeof(ann.abstract) === "undefined") {
-            values.description = ann.label + " imported from Gramsci Dictionary";
+            values.description = ann.label + " imported from NER Dictionary";
         } else {
             values.description = ann.abstract;
         }
@@ -1231,8 +1272,15 @@ angular.module('Pundit2.Annomatic')
                         frUri: item.uri
                     });
 
-                    // create item from resource 
-                    ItemsExchange.addItemToContainer(createItemFromGramsciAnnotation(ann), annomatic.options.container);
+                    if (typeof(ann.entities) === 'undefined') {
+                        // create item from resource 
+                        ItemsExchange.addItemToContainer(createItemFromGramsciAnnotation(ann), annomatic.options.container);    
+                    } else {
+                        for (var ent in ann.entities) {
+                            ItemsExchange.addItemToContainer(createItemFromGramsciAnnotation(ann.entities[ent]), annomatic.options.container);
+                        }
+                    }
+                    
                 }
 
             }
