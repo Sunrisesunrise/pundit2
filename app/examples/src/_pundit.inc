@@ -76,7 +76,6 @@
     <script src="../src/Annomatic/AnnomaticPanel.ctrl.js"></script>
     <script src="../src/Annomatic/Annomatic.service.js"></script>
     <script src="../src/Annomatic/NameEntityRecognitionResource.service.js"></script>
-    <script src="../src/Annomatic/GramsciResource.service.js"></script>
     <script src="../src/Annomatic/DataTXTResource.service.js"></script>
     <script src="../src/Annomatic/DBPediaSpotlightResource.service.js"></script>
     <script src="../src/Annomatic/AnnomaticPopover.ctrl.js"></script>

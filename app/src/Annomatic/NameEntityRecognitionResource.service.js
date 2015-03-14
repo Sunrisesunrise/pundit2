@@ -2,9 +2,8 @@ angular.module('Pundit2.Annomatic')
 
 .service('NameEntityRecognitionResource', function($resource, Config) {
 
-    // TODO: find a better way to set a dynamic url in $resource
+    // TODO: find a better way (!) to set a dynamic url in $resource
     var baseURL = Config.modules.Annomatic.sourceURL;
-    console.log(baseURL);
 
     return $resource(baseURL, {}, {
         getAnnotations: {

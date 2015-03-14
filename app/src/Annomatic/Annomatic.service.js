@@ -65,7 +65,7 @@ angular.module('Pundit2.Annomatic')
      * @description
      * `string`
      *
-     * Propety used to set the resource URL. NB: you must set this value in the conf if you use NER
+     * Propety used to set the NER resource URL. At the moment you can't set DataTXT. NB: you must set this value in the conf if you use NER
      *
      * Default value:
      * <pre> sourceURL: 'http://localhost/ner' </pre>
@@ -129,7 +129,7 @@ angular.module('Pundit2.Annomatic')
  */
 .service('Annomatic', function(ANNOMATICDEFAULTS, BaseComponent, EventDispatcher, NameSpace,
     DataTXTResource, XpointersHelper, ItemsExchange, TextFragmentHandler, ImageHandler, TypesHelper, 
-    Toolbar,DBPediaSpotlightResource, Item, GramsciResource, AnnotationsCommunication, NameEntityRecognitionResource,
+    Toolbar,DBPediaSpotlightResource, Item, AnnotationsCommunication, NameEntityRecognitionResource,
     $rootScope, $timeout, $document, $window, $q, Consolidation, ContextualMenu) {
 
     var annomatic = new BaseComponent('Annomatic', ANNOMATICDEFAULTS);
@@ -1114,7 +1114,7 @@ angular.module('Pundit2.Annomatic')
         var about = element.attr('about');
         var content = element.parent().html();
 
-        GramsciResource.getAnnotations({
+        NameEntityRecognitionResource.getAnnotations({
                 doc_id: about,
                 html_fragment: content
             },
