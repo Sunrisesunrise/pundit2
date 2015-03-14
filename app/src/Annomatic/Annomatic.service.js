@@ -50,12 +50,27 @@ angular.module('Pundit2.Annomatic')
      * @description
      * `string`
      *
-     * Set the service called by Annomatic to get annotation suggested: 'DataTXT' or 'gramsci'
+     * Set the service called by Annomatic to get annotation suggested: 'DataTXT' or 'gramsci' or 'NER'
      *
      * Default value:
      * <pre> source: 'gramsci' </pre>
      */
     source: 'DataTXT',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Annomatic.sourceURL
+     *
+     * @description
+     * `string`
+     *
+     * Propety used to set the resource URL. NB: you must set this value in the conf if you use NER
+     *
+     * Default value:
+     * <pre> sourceURL: 'http://localhost/ner' </pre>
+     */
+    sourceURL: 'http://localhost/ner',
 
     /**
      * @module punditConfig
@@ -112,9 +127,9 @@ angular.module('Pundit2.Annomatic')
  *
  * For the configuration of this module, see {@link #!/api/punditConfig/object/modules#Annomatic here}
  */
-.service('Annomatic', function(ANNOMATICDEFAULTS, BaseComponent, EventDispatcher, NameSpace, DataTXTResource, XpointersHelper,
-    ItemsExchange, TextFragmentHandler, ImageHandler, TypesHelper, Toolbar,
-    DBPediaSpotlightResource, Item, GramsciResource, AnnotationsCommunication,
+.service('Annomatic', function(ANNOMATICDEFAULTS, BaseComponent, EventDispatcher, NameSpace,
+    DataTXTResource, XpointersHelper, ItemsExchange, TextFragmentHandler, ImageHandler, TypesHelper, 
+    Toolbar,DBPediaSpotlightResource, Item, GramsciResource, AnnotationsCommunication, NameEntityRecognitionResource,
     $rootScope, $timeout, $document, $window, $q, Consolidation, ContextualMenu) {
 
     var annomatic = new BaseComponent('Annomatic', ANNOMATICDEFAULTS);
