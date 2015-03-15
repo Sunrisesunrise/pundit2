@@ -852,8 +852,9 @@ angular.module('Pundit2.Annomatic')
 
     annomatic.log('Component up and running');
 
-    // NEW ANNOMATIC SERVICE BASED ON GRAMSCI
 
+
+    // TODO: new code to be integrated
 
     /**
      * @ngdoc method
@@ -1125,16 +1126,16 @@ angular.module('Pundit2.Annomatic')
 
     /**
      * @ngdoc method
-     * @name Annomatic#getGramsciAnnotations
+     * @name Annomatic#getNERAnnotations
      * @module Pundit2.Annomatic
      * @function
      *
      * @description
-     * Given an HTML node, will query gramsci service for annotations on the contents of that node
+     * Given an HTML node, will query NER service for annotations on the contents of that node
      * solving the promise when done.
      *
      * @param {DOMElement} current node to be processed
-     * @return {Promise} promise will be resolved when the data is returned from gramsci service
+     * @return {Promise} promise will be resolved when the data is returned from NER service
      *
      */
     annomatic.getNERAnnotations = function(node) {
@@ -1157,9 +1158,9 @@ angular.module('Pundit2.Annomatic')
                 
                 // TODO: temp if
                 if (annomatic.options.source === 'gramsci') {
-                    consolidateGramsciSpots(data);
+                    consolidateNERSpots(data);
                 } else {
-                    consolidateGramsciSpots(NERMock);
+                    consolidateNERSpots(NERMock);
                 }
                 promise.resolve();
             },
@@ -1197,12 +1198,7 @@ angular.module('Pundit2.Annomatic')
         isRunning: false
     };
 
-    // get the html content to be sent to gramsci
-    var getGramsciHtml = function() {
-        return angular.element('.pundit-content').html();
-    };
-
-    var createItemFromGramsciAnnotation = function(ann) {
+    var createItemFromNERAnnotation = function(ann) {
         var values = {};
 
         values.uri = ann.uri;
@@ -1228,15 +1224,14 @@ angular.module('Pundit2.Annomatic')
     };
 
 
-    // consolidate all gramsci spots (wrap text inside span and add popover toggle icon)
-    var consolidateGramsciSpots = function(data) {
+    // consolidate all spots (wrap text inside span and add popover toggle icon)
+    var consolidateNERSpots = function(data) {
 
-        // var annotations = getGramsciAnnotations();
         var annotations = data.annotations;
         var validAnnotations = [];
         var i;
 
-        // cycle on all annotations received from gramsci
+        // cycle on all annotations received from NER service
         for (i = 0; i < annotations.length; i++) {
 
             var ann = annotations[i];
@@ -1274,10 +1269,10 @@ angular.module('Pundit2.Annomatic')
 
                     if (typeof(ann.entities) === 'undefined') {
                         // create item from resource 
-                        ItemsExchange.addItemToContainer(createItemFromGramsciAnnotation(ann), annomatic.options.container);    
+                        ItemsExchange.addItemToContainer(createItemFromNERAnnotation(ann), annomatic.options.container);    
                     } else {
                         for (var ent in ann.entities) {
-                            ItemsExchange.addItemToContainer(createItemFromGramsciAnnotation(ann.entities[ent]), annomatic.options.container);
+                            ItemsExchange.addItemToContainer(createItemFromNERAnnotation(ann.entities[ent]), annomatic.options.container);
                         }
                     }
                     
