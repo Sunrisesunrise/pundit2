@@ -1,6 +1,6 @@
 angular.module('Pundit2.Annomatic')
 
-.controller('AnnomaticPopoverCtrl', function($rootScope, $scope, Annomatic, EventDispatcher) {
+.controller('AnnomaticPopoverCtrl', function($rootScope, $scope, Annomatic, EventDispatcher, MyPundit) {
 
     // Using popover's content variable to pass the number of the 
     // annotation
@@ -32,17 +32,23 @@ angular.module('Pundit2.Annomatic')
     };
 
     $scope.setOk = function(event) {
-        $scope.$hide();
+        MyPundit.login().then(function(logged) {
+            if (logged) {
+                $scope.$hide();
 
-        if ($scope.ann.savedByNum.indexOf($scope.num) === -1) {
-            if ($scope.isMultiEntites) {
-                Annomatic.save($scope.num, $scope.currentEntity);
-            } else {
-                Annomatic.save($scope.num);
+                if ($scope.ann.savedByNum.indexOf($scope.num) === -1) {
+                    if ($scope.isMultiEntites) {
+                        Annomatic.save($scope.num, $scope.currentEntity);
+                    } else {
+                        Annomatic.save($scope.num);
+                    }
+                } else {
+                    Annomatic.setState($scope.num, 'accepted');
+                }
+
             }
-        } else {
-            Annomatic.setState($scope.num, 'accepted');
-        }
+        });
+        
         event.stopPropagation();
         event.preventDefault();
     };
