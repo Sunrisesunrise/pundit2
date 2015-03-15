@@ -128,8 +128,8 @@ angular.module('Pundit2.Annomatic')
  * For the configuration of this module, see {@link #!/api/punditConfig/object/modules#Annomatic here}
  */
 .service('Annomatic', function(ANNOMATICDEFAULTS, BaseComponent, EventDispatcher, NameSpace,
-    DataTXTResource, XpointersHelper, ItemsExchange, TextFragmentHandler, ImageHandler, TypesHelper, 
-    Toolbar,DBPediaSpotlightResource, Item, AnnotationsCommunication, NameEntityRecognitionResource,
+    DataTXTResource, XpointersHelper, ItemsExchange, TextFragmentHandler, ImageHandler, TypesHelper,
+    Toolbar, DBPediaSpotlightResource, Item, AnnotationsCommunication, NameEntityRecognitionResource,
     $rootScope, $timeout, $document, $window, $q, Consolidation, ContextualMenu) {
 
     var annomatic = new BaseComponent('Annomatic', ANNOMATICDEFAULTS);
@@ -1053,7 +1053,7 @@ angular.module('Pundit2.Annomatic')
         var ann = annomatic.ann.byUri[uri];
         var objUri = ann.uri;
 
-        if (typeof(entNum) !== 'undefined') {
+        if (typeof(entNum) !== 'undefined')  {
             objUri = ann.entities[entNum].uri;
         }
 
@@ -1106,21 +1106,19 @@ angular.module('Pundit2.Annomatic')
             "spot": "Risorgimento",
             "startOffset": "26",
             "startXpath": "/html[1]/body[1]/div[@about='http://89.31.77.216/quaderno/2/nota/2']/div[1]/text[1]/p[1]/emph[1]/text()[1]",
-            "entities": [
-                {
-                    "label": "Risorgimento mento",
-                    "uri": "http://purl.org/my­sample­uri",
-                    "types": ["type­city", "type­ capital "],
-                    "abstract": "Risorgimento is the blabla...",
-                    "depiction": "Thumbnail URL"
-                }, {
-                    "label": "Risorgimento non mento",
-                    "uri": "http://purl.org/my­sample­uri­2",
-                    "types": ["type­city", "type­ region "],
-                    "abstract": "Risorgimento is a bloblo",
-                    "depiction": "Thumbnail URL"
-                }
-            ]
+            "entities": [{
+                "label": "Risorgimento mento",
+                "uri": "http://purl.org/my­sample­uri",
+                "types": ["type­city", "type­ capital "],
+                "abstract": "Risorgimento is the blabla...",
+                "depiction": "Thumbnail URL"
+            }, {
+                "label": "Risorgimento non mento",
+                "uri": "http://purl.org/my­sample­uri­2",
+                "types": ["type­city", "type­ region "],
+                "abstract": "Risorgimento is a bloblo",
+                "depiction": "Thumbnail URL"
+            }]
         }]
     };
 
@@ -1155,7 +1153,7 @@ angular.module('Pundit2.Annomatic')
                 html_fragment: content
             },
             function(data) {
-                
+
                 // TODO: temp if
                 if (annomatic.options.source === 'gramsci') {
                     consolidateNERSpots(data);
@@ -1269,13 +1267,13 @@ angular.module('Pundit2.Annomatic')
 
                     if (typeof(ann.entities) === 'undefined') {
                         // create item from resource 
-                        ItemsExchange.addItemToContainer(createItemFromNERAnnotation(ann), annomatic.options.container);    
+                        ItemsExchange.addItemToContainer(createItemFromNERAnnotation(ann), annomatic.options.container);
                     } else {
                         for (var ent in ann.entities) {
                             ItemsExchange.addItemToContainer(createItemFromNERAnnotation(ann.entities[ent]), annomatic.options.container);
                         }
                     }
-                    
+
                 }
 
             }

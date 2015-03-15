@@ -105,7 +105,7 @@ angular.module('Pundit2.Annomatic')
     };
 
     $scope.changeEntity = function() {
-        if ($scope.currentEntity < $scope.multiLength -1) {
+        if ($scope.currentEntity < $scope.multiLength - 1) {
             $scope.currentEntity++;
         } else {
             $scope.currentEntity = 0;
