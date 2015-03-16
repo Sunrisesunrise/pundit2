@@ -12,7 +12,7 @@
         //annotationServerBaseURL: 'http://geolat.netseven.it:8282/annotationserver/api/korbo',
         //annotationServerBaseURL: 'http://172.20.0.79:8081/annotationserver/api/korbo',
 
-        basketID: 757375,
+        basketID: 'f304cffe',
         //basketID: 948781 , //Susanna.
         globalObjectName : 'KK',
         limitSearchResult: 11,
@@ -245,6 +245,17 @@
                     basketID: korboEEConfig.basketID,
                     url: korboEEConfig.endpoint,
                     language: korboEEConfig.defaultLanguage
+                },
+                {
+                    container: 'pelagios',
+                    // instance label tab title and search provider
+                    label: 'Pelagios',
+                    // enable or disable the instance
+                    active: true,
+                    basketID: korboEEConfig.basketID,
+                    url: korboEEConfig.endpoint,
+                    language: korboEEConfig.defaultLanguage,
+                    resultsLimit: 50
                 }
             ];
 
