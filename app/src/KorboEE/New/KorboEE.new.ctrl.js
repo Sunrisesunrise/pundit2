@@ -736,6 +736,18 @@ angular.module('KorboEE')
                         // fire save callback
                         api.fireOnSave(obj);
 
+                        if (typeof resourcePanelLastPromise !== 'undefined') {
+                            var itemFotTC = new Item(res, {
+                                label : $scope.tabs[0].label,
+                                type : newTypes,
+                                image : $scope.imageUrl,
+                                description : $scope.tabs[0].label,
+                                language : $scope.conf.defaultLanguage,
+                                uri : res
+                            });
+                            resourcePanelLastPromise(itemFotTC);
+                        }
+
 
                         $timeout(function () {
                             ContextualMenu.wipeActionsByType('advancedMenu');
@@ -816,7 +828,12 @@ angular.module('KorboEE')
             predicate: null,
             object: null
         };
-        ResourcePanel.showItemsForSubject(triple, $event.target).then(function(item, fixed) {
+        var resourcePanelFooterButtonsOverride = {
+            showCopyInEditorButton: false,
+            showUseAndCopy: false,
+            showNewButton: false
+        };
+        ResourcePanel.showItemsForSubject(triple, $event.target, undefined, resourcePanelFooterButtonsOverride).then(function(item, fixed) {
             var innerCopyFromLOD = function() {
                 $scope.tabs = [];
                 $scope.disactiveLanguages = [];
@@ -1142,6 +1159,9 @@ angular.module('KorboEE')
     $window[$scope.conf.globalObjectName].onCancel(function () {
         ContextualMenu.wipeActionsByType('advancedMenu');
     });
+
+    var resourcePanelLastPromise = ResourcePanel.lastPromiseThen;
+    ResourcePanel.hide();
 
     // Init actions.
     if ($scope.conf.tripleComposerEnabled) {

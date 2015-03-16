@@ -559,6 +559,10 @@ angular.module('Pundit2.ResourcePanel')
         }
     };
 
+    resourcePanel.lastPromiseThen = undefined;
+
+    resourcePanel.overrideFooterExtraButtons = undefined;
+
     resourcePanel.updateVocabSearch = function(label, triple, caller) {
         var selectors = SelectorsManager.getActiveSelectors();
         searchOnVocab(label, selectors, triple, caller);
@@ -597,6 +601,7 @@ angular.module('Pundit2.ResourcePanel')
      */
     resourcePanel.hide = function() {
         hide();
+        resourcePanel.lastPromise = undefined;
     };
 
     /**
@@ -704,10 +709,13 @@ angular.module('Pundit2.ResourcePanel')
      * @param {Object} triple object (for details content of this object, see {@link #!/api/Pundit2.ResourcePanel/service/ResourcePanel here})
      * @param {DOMElement} target DOM Element where to append the popover
      * @param {string} label label used to search subject in the vocabularies and filter shown Page Items and My Items
+     * @param {overrideFooterExtraButtons} override footer extra buttons config (default: undefined)
      * @return {Promise} return a promise that will be resolved when a subject is selected
      *
      */
-    resourcePanel.showItemsForSubject = function(triple, target, label) {
+    resourcePanel.showItemsForSubject = function(triple, target, label, overrideFooterExtraButtons) {
+
+        resourcePanel.overrideFooterExtraButtons = overrideFooterExtraButtons;
 
         if (typeof(target) === 'undefined') {
             target = state.popover.clickTarget;
@@ -792,7 +800,6 @@ angular.module('Pundit2.ResourcePanel')
         }
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;
-
     };
 
     /**
@@ -813,10 +820,13 @@ angular.module('Pundit2.ResourcePanel')
      * @param {Object} triple object (for details content of this object, see {@link #!/api/Pundit2.ResourcePanel/service/ResourcePanel here})
      * @param {DOMElement} target DOM Element where to append the popover
      * @param {string} label label used to search subject in the vocabularies and filter shown Page Items and My Items
+     * @param {overrideFooterExtraButtons} override footer extra buttons config (default: undefined)
      * @return {Promise} return a promise that will be resolved when a subject is selected
      *
      */
-    resourcePanel.showItemsForObject = function(triple, target, label) {
+    resourcePanel.showItemsForObject = function(triple, target, label, overrideFooterExtraButtons) {
+
+        resourcePanel.overrideFooterExtraButtons = overrideFooterExtraButtons;
 
         if (typeof(target) === 'undefined') {
             target = state.popover.clickTarget;
