@@ -82,21 +82,28 @@ angular.module('Pundit2.ResourcePanel')
 
     $scope.showUseAndCopyButton = function() {
         var currTab = $scope.contentTabs[$scope.contentTabs.activeTab].title;
+        var res = false;
         //if(Config.korbo.active && (currTab !== 'KorboBasket' && currTab !== 'Page Items' && currTab !== 'My Items')){
         if (Config.korbo.active && currTab === 'Freebase') {
-            return true;
-        } else {
-            return false;
+            res = true;
         }
+        if (typeof ResourcePanel.overrideFooterExtraButtons !== 'undefined' &&
+        typeof ResourcePanel.overrideFooterExtraButtons.showUseAndCopy !== 'undefined' ) {
+            res &= ResourcePanel.overrideFooterExtraButtons.showUseAndCopy;
+        }
+        return res;
     };
 
     $scope.showNewButton = function() {
-
+        var res = false;
         if (typeof(Config.korbo) !== 'undefined' && Config.korbo.active && $scope.type !== 'pr') {
-            return true;
-        } else {
-            return false;
+            res = true;
         }
+        if (typeof ResourcePanel.overrideFooterExtraButtons !== 'undefined' &&
+            typeof ResourcePanel.overrideFooterExtraButtons.showNewButton !== 'undefined' ) {
+            res &= ResourcePanel.overrideFooterExtraButtons.showNewButton;
+        }
+        return res;
     };
 
     $scope.createNew = function() {
@@ -112,11 +119,15 @@ angular.module('Pundit2.ResourcePanel')
     $scope.showCopyInEditorButton = function() {
         var currTab = $scope.contentTabs[$scope.contentTabs.activeTab].title;
         //if(Config.korbo.active && (currTab !== 'KorboBasket' && currTab !== 'Page Items' && currTab !== 'My Items')){
+        var res = false;
         if (Config.korbo.active && currTab === 'Freebase') {
-            return true;
-        } else {
-            return false;
+            res = true;
         }
+        if (typeof ResourcePanel.overrideFooterExtraButtons !== 'undefined' &&
+            typeof ResourcePanel.overrideFooterExtraButtons.showCopyInEditorButton !== 'undefined' ) {
+            res &= ResourcePanel.overrideFooterExtraButtons.showCopyInEditorButton;
+        }
+        return res;
     };
 
     $scope.copyInEditor = function() {
