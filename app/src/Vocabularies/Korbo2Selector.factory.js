@@ -145,10 +145,14 @@ angular.module('Pundit2.Vocabularies')
             container = self.config.container + term.split(' ').join('$');
         // TODO se basketID è null non aggiungerlo tra i parametri, altrimenti passarlo nell'oggetto params
         var provider = self.config.container;
+        var resultsLimit = korbo2Selector.options.limit;
+        if (typeof self.config.resultsLimit === 'number' && self.config.resultsLimit > 0) {
+            resultsLimit = self.config.resultsLimit;
+        }
         var params = {
             q: term,
             p: provider,
-            limit: korbo2Selector.options.limit,
+            limit: resultsLimit,
             offset: 0,
             lang: self.config.language
         };
