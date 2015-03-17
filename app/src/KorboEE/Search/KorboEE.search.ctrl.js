@@ -99,6 +99,9 @@ angular.module('KorboEE')
 
         // when select a provider tab, update buttons visibility
         $scope.$watch('contentTabs.activeTab', function(tab){
+            if (typeof $scope.contentTabs[tab] === 'undefined') {
+                return;
+            }
             $scope.currentProv.p = $scope.contentTabs[tab].provider;
             if($scope.itemSelected === null){
                 if($scope.contentTabs[tab].provider !== 'korbo' && typeof($scope.conf.copyToKorboBeforeUse) !== 'undefined' && $scope.conf.copyToKorboBeforeUse){
