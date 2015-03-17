@@ -7,76 +7,134 @@
     var PHP__ANNOTATION_SERVER__PHP = "http://geolat.netseven.it:8282/annotationserver/";
     var PHP__ENDPOINT__PHP = "http://geolat.netseven.it:8282/annotationserver/api/korbo";
     var PHP__RESOURCEPROXY__PHP = "http://geolat.netseven.it:8282/annotationserver/api/services/proxy";
-    var PHP__BASKET_ID__PHP = 757375;
+    var PHP__BASKET_ID__PHP = 'f304cffe';
     var PHP__TYPES__PHP = [
-        {label: 'Place', state: false, URI: 'http://place.uri'},
-        {label: 'Scientist', state: false, URI: 'http://scientist.uri'},
-        {label: 'Writer', state: false, URI: 'http://writer.uri'},
-        {label: 'Type1', state: false, URI: 'http://type1.uri'},
-        {label: 'Type2', state: false, URI: 'http://type2.uri'},
-        {label: 'Type3', state: false, URI: 'http://type3.uri'},
-        {label: 'Type4', state: false, URI: 'http://type4.uri'},
-        {label: 'Type5', state: false, URI: 'http://type5.uri'},
-        {label: 'Type6', state: false, URI: 'http://type6.uri'},
-        {label: 'Type7', state: false, URI: 'http://type7.uri'},
-        {label: 'Type8', state: false, URI: 'http://type8.uri'},
-        {label: 'Type9', state: false, URI: 'http://type9.uri'},
-        {label: 'Type10', state: false, URI: 'http://type10.uri'},
-        {label: 'Type11', state: false, URI: 'http://type11.uri'},
-        {label: 'Type12', state: false, URI: 'http://type12.uri'},
-        {label: 'Type13', state: false, URI: 'http://type13.uri'},
-        {label: 'Type14', state: false, URI: 'http://type14.uri'}
+        {label: 'Feature', state: false, URI: 'http://geovocab.org/spatial#Feature'},
+        {label: 'Place', state: false, URI: 'http://pleiades.stoa.org/places/vocab#Place'},
+        {label: 'Settlement', state: false, URI: 'http://pleiades.stoa.org/vocabularies/place-types/settlement'},
+        {label: 'Country', state: false, URI: 'http://dbpedia.org/ontology/Country'},
+        {label: 'HistoricPlace', state: false, URI: 'http://dbpedia.org/ontology/HistoricPlace'},
+        {label: 'Island', state: false, URI: 'http://dbpedia.org/ontology/Island'},
+        {label: 'Lake', state: false, URI: 'http://dbpedia.org/ontology/Lake'},
+        {label: 'Monument', state: false, URI: 'http://dbpedia.org/ontology/Monument'},
+        {label: 'Mountain', state: false, URI: 'http://dbpedia.org/ontology/Mountain'},
+        {label: 'Road', state: false, URI: 'http://dbpedia.org/ontology/Road'},
+        {label: 'Bridge', state: false, URI: 'http://linkedgeodata.org/ontology/Bridge'},
+        {label: 'Canal', state: false, URI: 'http://linkedgeodata.org/ontology/Canal'}
     ];
+
     var PHP__KORBO_HELP_URL__PHP = undefined;
     var PHP__PREDICATES__PHP = [
         {
             "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-            "label": "is translation of",
-            "description": "The selected text fragment is the translation of another text fragment",
+            "label": "population",
+            "description": "population",
             "domain": [
-                "http://purl.org/pundit/ont/ao#fragment-text",
-                "http://place.uri",
-                "http://scientist.uri"
+                //"http://purl.org/pundit/ont/ao#fragment-text",
             ],
             "range": [],
-            "vocabulary": "Basic Relation",
-            "uri": "http://purl.org/pundit/ont/oa#isTranslationOf"
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://www.geonames.org/ontology#population"
         },
         {
-            type: ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-            label: "period of dates starts at",
-            description: "The selected text fragment corresponds to the specified date period which starts at the specified Date",
-            domain: [
-                "http://purl.org/pundit/ont/ao#fragment-text",
-                "http://place.uri",
-                "http://scientist.uri"
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "official name",
+            "description": "officialName",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
             ],
-            range: [],
-            vocabulary: "Basic Relation",
-            uri: "http://purl.org/pundit/ont/oa#periodStartDate"
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://www.geonames.org/ontology#officialName"
         },
         {
-            type: ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-            label: "talks about",
-            description: "The selected text fragment talks about some other text, Entity, Person or any other kind of concept",
-            domain: [
-                "http://purl.org/pundit/ont/ao#fragment-text",
-                "http://place.uri",
-                "http://scientist.uri"
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "postal code",
+            "description": "postalCode",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
             ],
-            range: ["http://purl.org/pundit/ont/ao#fragment-text"],
-            vocabulary: "Basic Relation",
-            uri: "http://purl.org/pundit/ont/oa#talksAbout"
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://www.geonames.org/ontology#postalCode"
         },
         {
-            type: ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-            label: "generic predicate",
-            description: "The selected text fragment is some how related to",
-            domain: [],
-            range: [],
-            vocabulary: "Basic Relation",
-            uri: "http://purl.org/pundit/ont/oa#genericProperty"
-        }
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "parent country",
+            "description": "parentCountry",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://www.geonames.org/ontology#parentCountry"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "latitude",
+            "description": "latitude",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://www.w3.org/2003/01/geo/wgs84_pos#lat"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "longitude",
+            "description": "longitude",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://www.w3.org/2003/01/geo/wgs84_pos#long"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "bibliographic citation",
+            "description": "bibliographicCitation",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://purl.org/dc/terms/bibliographicCitation"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "cites",
+            "description": "cites",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://purl.org/spar/cito/cites"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "name romanized",
+            "description": "nameRomanized",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://pleiades.stoa.org/places/vocab#nameRomanized"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "identifies place",
+            "description": "identifiesPlace",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://pleiades.stoa.org/places/vocab#identifiesPlace"
+        },
     ];
 </script>
 
@@ -93,13 +151,13 @@
         useOnlyCallback: false,
         useTafonyCompatibility: true,
         labelMinLength: 4,
-        providers: {
-            freebase: true,
-            dandeliondbpedia: true
-        },
+        //providers: {
+        //    freebase: true,
+        //    dandeliondbpedia: true
+        //},
         buttonLabel: "Search",
-        visualizeUseButton: ['dandeliondbpedia', 'freebase', 'korbo'],
-        visualizeCopyButton: ['dandeliondbpedia', 'freebase'],
+        //visualizeUseButton: ['dandeliondbpedia', 'freebase', 'korbo'],
+        //visualizeCopyButton: ['dandeliondbpedia', 'freebase'],
         copyToKorboBeforeUse: true,
         visualizeEditButton: false,
         showHeaderTabs: false,
@@ -115,39 +173,26 @@
                 value: 'it',
                 state: false
             },
-
             {
-                name: 'German',
-                value: 'de',
-                state: false
-            },
-            {
-                name: 'Spanish',
-                value: 'es',
-                state: false
-            },
-            {
-                name: 'French',
-                value: 'fr',
-                state: false
+                name: 'Latin',
+                value: 'la',
+                state: true
             }
         ],
         defaultLanguage: 'en',
         autoCompleteOptions: 'none',
         contextMenuActiveItems: {
-            'advancedOptions': true,
             'editOriginalUrl': false,
             'searchOriginalUrl': false,
             'removeLanguages': false,
-            'tripleComposer': true,
             'updateAllData': true,
-            'searchAndCopyFromLOD': true,
             'korboHelp': true
         },
         tripleComposerEnabled: true,
         useCredentialInHttpCalls: true,
         languagesSaveMethod: 'singleCall',
-        tripleComposerForCustomFields: true
+        tripleComposerForCustomFields: true,
+        fromLODTools: true
     };
 
     // INIT TRIPLECOMPOSER
@@ -162,6 +207,10 @@
         $scope.edit = function (korboItemID) {
             $window[name].callEdit(korboItemID);
         };
+
+        $scope.new = function () {
+            $window[name].callOpenNew();
+        }
 
         for (var i in predicates) {
             var item = new Item(predicates[i].uri, predicates[i]);
@@ -189,12 +238,23 @@
                 {
                     container: 'dandeliondbpedia',
                     // instance label tab title and search provider
-                    label: 'DBPedia(K)',
+                    label: 'DBPedia',
                     // enable or disable the instance
                     active: true,
                     basketID: korboEEConfig.basketID,
                     url: korboEEConfig.endpoint,
                     language: korboEEConfig.defaultLanguage
+                },
+                {
+                    container: 'pelagios',
+                    // instance label tab title and search provider
+                    label: 'Pelagios',
+                    // enable or disable the instance
+                    active: true,
+                    basketID: korboEEConfig.basketID,
+                    url: korboEEConfig.endpoint,
+                    language: korboEEConfig.defaultLanguage,
+                    resultsLimit: 50
                 }
             ];
 
@@ -236,14 +296,21 @@
 
 
 </script>
-<div data-ng-app="Pundit2" class="kee-wrp pnd-wrp">
+<div data-ng-app="Pundit2" >
     <div ng-controller="KeeDemoCtrl">
         <korbo-entity-editor conf-name="korboEEConfig"
                              ng-show="false"></korbo-entity-editor>
-        <!--Da ripetere in ogni riga della tabella-->
+        <!-- fuffa -->
+        <br/>
+        <button class="btn btn-xs btn-success"
+                ng-click="new()">NEW
+        </button>
+        <br/>
+        <!-- altra fuffa -->
+
         <table class="table table-bordered table-striped sonata-ba-list">
 
-
+            <!-- etc -->
             <thead>
             <tr class="sonata-ba-list-field-header">
 
@@ -255,7 +322,7 @@
 
                 <th class="sonata-ba-list-field-header-text sonata-ba-list-field-header-order-asc">
                     <a href="#"
-                       onclick="setSortFieldAndRefresh('kitem_label_txt');">label</a>
+                       onclick="setSortFieldAndRefresh('kitem_sort_label_s');">label</a>
                 </th>
 
 
@@ -266,19 +333,18 @@
 
                 <th class="sonata-ba-list-field-header-text sonata-ba-list-field-header-order-asc">
                     <a href="#"
-                       onclick="setSortFieldAndRefresh('kitem_abstract_txt');">abstract</a>
+                       onclick="setSortFieldAndRefresh('kitem_sort_abstract_t');">abstract</a>
                 </th>
 
 
                 <th class="sonata-ba-list-field-header-text sonata-ba-list-field-header-order-asc">
                     <a href="#"
-                       onclick="setSortFieldAndRefresh('kitem_type_ss');">type</a>
-                </th>
-                <th class="sonata-ba-list-field-header-text sonata-ba-list-field-header-order-asc">
-                    <a href="#"
-                       onclick="function(){return false;}">actions</a>
+                       onclick="setSortFieldAndRefresh('kitem_sort_type_s');">type</a>
                 </th>
 
+                <th class="sonata-ba-list-field-header-text">
+                    Actions
+                </th>
             </tr>
             </thead>
 
@@ -286,106 +352,588 @@
             <tbody>
             <tr>
                 <td>
-                    854403
+                    30a4831c
                 </td>
                 <td>
-                    Rorchsarc<br>
+                    AMMIANI MARCELLINI HISTORIAE LIBER XIV<br>
                 </td>
                 <td>
-                    http://dev.korbo2.org/v1/items/854403
+                    http://dev.korbo2.org/v1/items/30a4831c
                 </td>
                 <td>
                 </td>
                 <td>
-                    http://www.w3.org/2004/02/skos/core#Concept<br>
-                    http://type1.uri<br>
-                    http://writer.uri<br>
-                    http://scientist.uri<br>
-                    http://xmlns.com/foaf/0.1/Meteo<br>
+                    http://purl.org/dc/dcmitype/Text<br>
                 </td>
+
                 <td>
-                    <button class="btn btn-xs btn-success"
-                            ng-click="edit(854403)">Edit
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('30a4831c')">Edit
                     </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XIV.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
                 </td>
             </tr>
             <tr>
                 <td>
-                    656433
+                    6c664186
                 </td>
                 <td>
-                    Rorchsarc<br>
-                    Rorchsarc<br>
+                    MARCELLINI HISTORIAE LIBER XV<br>
                 </td>
                 <td>
-                    http://dev.korbo2.org/v1/items/656433
+                    http://dev.korbo2.org/v1/items/6c664186
                 </td>
                 <td>
                 </td>
                 <td>
-                    http://www.w3.org/2004/02/skos/core#Concept<br>
-                    http://type1.uri<br>
-                    http://writer.uri<br>
-                    http://scientist.uri<br>
-                    http://xmlns.com/foaf/0.1/Meteo<br>
+                    http://purl.org/dc/dcmitype/Text<br>
                 </td>
+
                 <td>
-                    <button class="btn btn-xs btn-success"
-                            ng-click="edit(656433)">Edit
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('6c664186')">Edit
                     </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XV.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
                 </td>
             </tr>
             <tr>
                 <td>
-                    403175
+                    1fbf1813
                 </td>
                 <td>
-                    Dante (TV series)<br>
+                    MARCELLINI HISTORIAE LIBER XVI<br>
                 </td>
                 <td>
-                    http://dev.korbo2.org/v1/items/403175
+                    http://dev.korbo2.org/v1/items/1fbf1813
                 </td>
                 <td>
-                    Dante is a short-lived NBC adventure/drama television series
-                    starring Howard Duff as Willie Dante, a former gambler who
-                    operates Dante's Inferno, a San Francisco, California,
-                    nightclub. Alan Mowbray co-starred as Stewart Styles, the
-                    Maitre d'; Tom D'Andrea as Biff, Dante's, and Mort Mills as
-                    police Lieutenant Bob Malone.<br>
                 </td>
                 <td>
-                    http://dbpedia.org/ontology/Work<br>
-                    http://dbpedia.org/ontology/TelevisionShow<br>
-                    http://www.w3.org/2004/02/skos/core#Concept<br>
+                    http://purl.org/dc/dcmitype/Text<br>
                 </td>
+
                 <td>
-                    <button class="btn btn-xs btn-success"
-                            ng-click="edit(403175)">Edit
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('1fbf1813')">Edit
                     </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XVI.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
                 </td>
             </tr>
             <tr>
                 <td>
-                    714912
+                    be184e37
                 </td>
                 <td>
-                    Test 003<br>
+                    MARCELLINI HISTORIAE LIBER XVII<br>
                 </td>
                 <td>
-                    http://dev.korbo2.org/v1/items/714912
+                    http://dev.korbo2.org/v1/items/be184e37
                 </td>
                 <td>
-                    desc test 003<br>
                 </td>
                 <td>
-                    http://place.uri<br>
-                    http://www.w3.org/2004/02/skos/core#Concept<br>
-                    http://scientist.uri<br>
+                    http://purl.org/dc/dcmitype/Text<br>
                 </td>
+
                 <td>
-                    <button class="btn btn-xs btn-success"
-                            ng-click="edit(714912)">Edit
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('be184e37')">Edit
                     </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XVII.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    9e9b835b
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER XVIII<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/9e9b835b
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('9e9b835b')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XVIII.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    af6470c3
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER XIX<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/af6470c3
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('af6470c3')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XIX.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    3321f825
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER XX<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/3321f825
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('3321f825')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XX.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    2fb99e76
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER VICESIMVS ET VNVS<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/2fb99e76
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('2fb99e76')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XXI.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    5bf4eb12
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER XXII<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/5bf4eb12
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('5bf4eb12')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XXII.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    5775ed32
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER XXIII<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/5775ed32
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('5775ed32')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XXIII.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    7da2b450
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER XXIV<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/7da2b450
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('7da2b450')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XXIV.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    b16fee5f
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER XXV<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/b16fee5f
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('b16fee5f')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XXV.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    59680a3f
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER XXVI<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/59680a3f
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('59680a3f')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XXVI.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    cca70a31
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER XXVII<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/cca70a31
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('cca70a31')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XXVII.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    73f57da5
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER XXVIII<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/73f57da5
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('73f57da5')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XXVIII.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    12b0a26f
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER XXIX<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/12b0a26f
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('12b0a26f')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XXIX.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    08e1d6dc
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER XXX<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/08e1d6dc
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('08e1d6dc')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XXX.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    5c0f1691
+                </td>
+                <td>
+                    MARCELLINI HISTORIAE LIBER XXXI<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/5c0f1691
+                </td>
+                <td>
+                </td>
+                <td>
+                    http://purl.org/dc/dcmitype/Text<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('5c0f1691')">Edit
+                    </button>
+
+                    <a target="_blank"
+                       href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/e7b89b01_XXXI.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat.js">
+                        <button class="btn btn-xs btn-primary">
+                            Feed
+                        </button>
+                    </a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    e7b89b01
+                </td>
+                <td>
+                    Rerum gestarum libri qui supersunt<br>
+                </td>
+                <td>
+                    http://dev.korbo2.org/v1/items/e7b89b01
+                </td>
+                <td>
+                    Ammiani Marcellini Rerum gestarum libri qui supersunt /
+                    edidit Wolfgang Seyfarth; adiuvantibus Liselotte Jacob-Karau
+                    et Ilse Ulmann. Lipsiae, in aedibus Teubneri, 1999<br>
+                </td>
+                <td>
+                    http://www.europeana.eu/schemas/edm/PhysicalThing<br>
+                </td>
+
+                <td>
+
+                    <button class="btn btn-xs btn-primary"
+                            ng-click="edit('e7b89b01')">Edit
+                    </button>
+
+
                 </td>
             </tr>
 
@@ -399,38 +947,18 @@
 
                         <div class="pull-right">
 
-
                             1 / 1
                             &nbsp;-&nbsp;
 
-                            4 results
+                            19 results
                             &nbsp;-&nbsp;
                             Per page
-                            <div class="select2-container form-control small"
-                                 id="s2id_perPageSelect" title="Per page"
-                                 style="width: auto;"><a
-                                    href="javascript:void(0)"
-                                    class="select2-choice"
-                                    tabindex="-1">   <span
-                                    class="select2-chosen"
-                                    id="select2-chosen-1">
-                                                    20
-                                                </span><abbr
-                                    class="select2-search-choice-close"></abbr>
-                                <span class="select2-arrow" role="presentation"><b
-                                        role="presentation"></b></span></a><label
-                                    for="s2id_autogen1"
-                                    class="select2-offscreen"></label><input
-                                    class="select2-focusser select2-offscreen"
-                                    type="text" aria-haspopup="true"
-                                    role="button"
-                                    aria-labelledby="select2-chosen-1"
-                                    id="s2id_autogen1" tabindex="-1"></div>
                             <select id="perPageSelect"
-                                    class="form-control  small select2-offscreen"
+                                    class="form-control per-page small "
                                     style="width: auto" tabindex="-1"
                                     title="Per page">
-                                <option value="20">
+
+                                <option selected="selected" value="20">
                                     20
                                 </option>
                                 <option value="50">
