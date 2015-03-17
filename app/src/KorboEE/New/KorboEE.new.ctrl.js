@@ -359,6 +359,20 @@ angular.module('KorboEE')
         }
     };
 
+    var updateEntityTitlePreview = function() {
+        var newLabel = $scope.tabs[0].label;
+        var charLimit = 25;
+        if (typeof charLimit === 'number') {
+            charLimit = charLimit < 4 ? 4 : charLimit;
+            if (newLabel.length > charLimit) {
+                newLabel = newLabel.substr(0, charLimit) + '...';
+            }
+        }
+
+        newLabel = newLabel.length == 0 ? 'Entity title' : newLabel;
+        $scope.entityTitle = newLabel;
+    }
+
     // Add given or current entity to all statement subjects.
     var addEntityToAllSubjects = function(entity) {
         var label = $scope.tabs[0].label;
@@ -450,6 +464,7 @@ angular.module('KorboEE')
                 pushCurrentLang(res.languages[i]);
                 if (res.languages[i].title.toLowerCase() === $scope.conf.defaultLanguage) {
                     //Breadcrumbs.setItemLabel($scope.conf.breadcrumbName, 0, res.languages[i].label);
+                    updateEntityTitlePreview();
                 }
             }
 
@@ -984,6 +999,7 @@ angular.module('KorboEE')
         }
         /* DEPRECATED */
         //updateBreadcrumbFirstItem();
+        updateEntityTitlePreview();
     };
 
     $scope.save = function() {
@@ -1350,7 +1366,7 @@ angular.module('KorboEE')
 
     /* DEPRECATED */
     /*
-    var updateBreadcrumbFirstItem = function() {
+    var updateEntityTitlePreview = function() {
         //Breadcrumbs.setItemLabel($scope.conf.breadcrumbName, 0, $scope.tabs[0].label);
 
         var newLabel = $scope.tabs[0].label;
