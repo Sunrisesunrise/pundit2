@@ -764,6 +764,7 @@ angular.module('KorboEE')
                         }
 
 
+
                         $timeout(function () {
                             ContextualMenu.wipeActionsByType('advancedMenu');
                             KorboCommunicationService.closeModal();
@@ -771,6 +772,7 @@ angular.module('KorboEE')
                             api.fireOnCancel();
                             // set modal as close in configuration
                             korboConf.setIsOpenModal(false);
+                            EventDispatcher.sendEvent('KorboEE.entitySaved', id);
                         }, 1000);
                     },
                     function () {
@@ -1101,6 +1103,17 @@ angular.module('KorboEE')
     $scope.showDropdown = function ($event) {
         var resource = {name: 'resourceName'};
         ContextualMenu.show($event.pageX, $event.pageY, resource, 'advancedMenu');
+        /*
+        var app = angular.element('[data-ng-app="Pundit2"]');
+        var appBox = app[0].getBoundingClientRect();
+        var element = event.target;
+        var de = document.documentElement;
+        var box = element.getBoundingClientRect();
+        var deltaX = box.left + window.pageXOffset - de.clientLeft - appBox.left;
+        var deltaY = $event.originalEvent.clientY - Math.abs($event.originalEvent.layerY);
+
+        ContextualMenu.show(deltaX, deltaY, resource, 'advancedMenu');
+        */
         $event.stopPropagation();
     };
 
