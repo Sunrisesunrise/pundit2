@@ -70,7 +70,6 @@ angular.module('Pundit2.ContextualMenu')
     };
 
     var init = function(options, placement) {
-        options.container = 'body';
         options.scope.content = state.content;
         if (typeof(placement) !== 'undefined') {
             options.placement = placement;
