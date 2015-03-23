@@ -450,36 +450,50 @@
     </div>
 </div>
 <section class="content">
+
     <div id="facetsSelectors" class="cols-xs-2 col-md-2">
         <ul class="slim-nav nav ">
             <li class="open"><a href="#" class="title facet-types"><div class="slim-facet-title-icon slim-icon-base"><i class="fa fa-cog"></i></div> Types</a>
                 <ul class="slim-base-list slim-facet-list slim-box-search-facet">
 
                     <li>
-                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://www.w3.org/2004/02/skos/core#Concept');return false;"> Concept (19)</a>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://www.w3.org/2004/02/skos/core#Concept');return false;"> Concept (5)</a>
                     </li>
                     <li>
-                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://purl.org/dc/dcmitype/Text');return false;"> Text (18)</a>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/Place');return false;"> Place (3)</a>
                     </li>
                     <li>
-                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://www.europeana.eu/schemas/edm/PhysicalThing');return false;"> PhysicalThing (1)</a>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/PopulatedPlace');return false;"> PopulatedPlace (3)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/Settlement');return false;"> Settlement (3)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/Agent');return false;"> Agent (1)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/Artist');return false;"> Artist (1)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/City');return false;"> City (1)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/MusicalArtist');return false;"> MusicalArtist (1)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/Person');return false;"> Person (1)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://geovocab.org/spatial#Feature');return false;"> Feature (1)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://pleiades.stoa.org/places/vocab#Place');return false;"> Place (1)</a>
                     </li>
 
                 </ul>
             </li>
         </ul>
         <br>
-
-        <ul class="slim-nav nav">
-            <li class="open"><a href="#" class="title facet-books"><div class="slim-facet-title-icon slim-icon-bibliographies"><i class="fa fa-book"></i></div> Books</a>
-                <ul class="slim-base-list slim-facet-list slim-box-search-facet">
-                    <li>
-                        <a href="#" onclick="addFacetAndRefresh('kitem_ispartof_s', 'http://dev.korbo2.org/v1/items/2aca4adc');return false;"> Rerum gestarum libri qui supersunt (18)</a>
-                    </li>
-
-                </ul>
-            </li>
-        </ul>
 
 
     </div>
@@ -489,11 +503,11 @@
             <div class="box-body table-responsive no-padding">
 
 
-
                 <table class="table table-bordered table-striped sonata-ba-list">
 
 
                     <thead>
+
                     <tr class="sonata-ba-list-field-header">
 
 
@@ -513,6 +527,11 @@
 
 
                         <th class="sonata-ba-list-field-header-text sonata-ba-list-field-header-order-asc">
+                            <a href="#" onclick="setSortFieldAndRefresh('kitem_webresource_s');">resource</a>
+                        </th>
+
+
+                        <th class="sonata-ba-list-field-header-text sonata-ba-list-field-header-order-asc">
                             <a href="#" onclick="setSortFieldAndRefresh('kitem_sort_type_s');">type</a>
                         </th>
 
@@ -520,293 +539,159 @@
                             Actions
                         </th>
                     </tr>
+
                     </thead>
 
 
                     <tbody>
                     <tr>
                         <td>
-                            2aca4adc
+                            876a54d2
                         </td>
                         <td>
-                            Rerum gestarum libri qui supersunt
+                            Prova
                         </td>
                         <td>
-                            Ammiani Marcellini Rerum gestarum libri qui supersunt / edidit Wolfgang Seyfarth; adiuvantibus Liselotte Jacob-Karau et Ilse Ulmann. Lipsiae, in aedibus Teubneri, 1999
+                            asdads
                         </td>
                         <td>
-
-                            <span class="korbo_type" title="http://www.europeana.eu/schemas/edm/PhysicalThing">PhysicalThing</span>
+                        </td>
+                        <td>
+                            <span class="korbo_type" title="http://pleiades.stoa.org/places/vocab#Place">Place</span>
                             <br>
-
+                            <span class="korbo_type" title="http://geovocab.org/spatial#Feature">Feature</span>
+                            <br>
                             <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
                             <br>
                         </td>
 
                         <td>
-                            <button class="btn btn-xs btn-primary" onclick="geolat_korboee_edit('2aca4adc')">Edit
+                            <button class="btn btn-xs btn-primary" onclick="geolat_korboee_edit('876a54d2')">Edit
                             </button>
 
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            d464a33b
+                            cf39c909
                         </td>
                         <td>
-                            MARCELLINI HISTORIAE LIBER XXII
+                            Venice
                         </td>
                         <td>
+                            Venice (; alternative obsolete form: Vinegia; Venetian: Venexia;;) is a city in northeastern Italy sited on a group of 118 small islands separated by canals and linked by bridges. It is located in the marshy Venetian Lagoon which stretches along the shoreline, between the mouths of the Po and the Piave Rivers. Venice is renowned for the beauty of its setting, its architecture and its artworks. The city in its entirety is listed as a World Heritage Site, along with its lagoon.
                         </td>
                         <td>
-
-                            <span class="korbo_type" title="http://purl.org/dc/dcmitype/Text">Text</span>
+                            <a title="http://en.wikipedia.org/wiki/Venice" class="btn btn-xs btn-primary" href="http://en.wikipedia.org/wiki/Venice" target="_blank">Visit</a>
+                        </td>
+                        <td>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Place">Place</span>
                             <br>
-
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/PopulatedPlace">PopulatedPlace</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Settlement">Settlement</span>
+                            <br>
                             <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
                             <br>
                         </td>
 
                         <td>
-                            <button class="btn btn-xs btn-primary" onclick="geolat_korboee_edit('d464a33b')">Edit
+                            <button class="btn btn-xs btn-primary" onclick="geolat_korboee_edit('cf39c909')">Edit
                             </button>
-                            <a target="_blank" href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/d464a33b.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat-demo.js&amp;pndurl=http:%2F%2Fdev.thepund.it%2Fdownload%2Fclient%2Fgeolat%2Fbuild">
-                                <button class="btn btn-xs btn-primary">
-                                    Annotate
-                                </button>
-                            </a>
 
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            6f1e4ca6
+                            7307f1b2
                         </td>
                         <td>
-                            MARCELLINI HISTORIAE LIBER VICESIMVS ET VNVS
+                            Genoa
                         </td>
                         <td>
+                            Genoa (;; Genoese and Ligurian Zena; Latin and, archaically, English Genua) is the capital of Liguria and the sixth largest city in Italy with a population of 604,848 within its administrative limits on a land area of. The urban zone of Genoa extends beyond the administrative city limits with a population of 718,896. The urban area of Genoa has a population of 800,709. Over 1.5 million people live in the metropolitan area. Genoa is one of Europe's largest cities on the Mediterranean Sea and the largest seaport in Italy.
                         </td>
                         <td>
-
-                            <span class="korbo_type" title="http://purl.org/dc/dcmitype/Text">Text</span>
+                            <a title="http://en.wikipedia.org/wiki/Genoa" class="btn btn-xs btn-primary" href="http://en.wikipedia.org/wiki/Genoa" target="_blank">Visit</a>
+                        </td>
+                        <td>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Place">Place</span>
                             <br>
-
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/PopulatedPlace">PopulatedPlace</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Settlement">Settlement</span>
+                            <br>
                             <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
                             <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/City">City</span>
+                            <br>
                         </td>
 
                         <td>
-                            <button class="btn btn-xs btn-primary" ng-click="edit('6f1e4ca6')">Edit
+                            <button class="btn btn-xs btn-primary" onclick="geolat_korboee_edit('7307f1b2')">Edit
                             </button>
-                            <a target="_blank" href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/6f1e4ca6.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat-demo.js&amp;pndurl=http:%2F%2Fdev.thepund.it%2Fdownload%2Fclient%2Fgeolat%2Fbuild">
-                                <button class="btn btn-xs btn-primary">
-                                    Annotate
-                                </button>
-                            </a>
 
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            1b3dcb2a
+                            8f623a95
                         </td>
                         <td>
-                            MARCELLINI HISTORIAE LIBER XX
+                            Billy Milano
                         </td>
                         <td>
+                            Billy Milano is a Bronx-born heavy metal musician now based in Austin, Texas. He was the singer, guitarist, and bassist of crossover thrash band M.O.D., and the singer of its predecessor, Stormtroopers of Death. He is currently the singer of United Forces, which also features his Stormtroopers of Death bandmate Dan Lilker.
                         </td>
                         <td>
-
-                            <span class="korbo_type" title="http://purl.org/dc/dcmitype/Text">Text</span>
+                            <a title="http://en.wikipedia.org/wiki/Billy_Milano" class="btn btn-xs btn-primary" href="http://en.wikipedia.org/wiki/Billy_Milano" target="_blank">Visit</a>
+                        </td>
+                        <td>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Person">Person</span>
                             <br>
-
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/MusicalArtist">MusicalArtist</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Artist">Artist</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Agent">Agent</span>
+                            <br>
                             <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
                             <br>
                         </td>
 
                         <td>
-                            <button class="btn btn-xs btn-primary" ng-click="edit('1b3dcb2a')">Edit
+                            <button class="btn btn-xs btn-primary" onclick="geolat_korboee_edit('8f623a95')">Edit
                             </button>
-                            <a target="_blank" href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/1b3dcb2a.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat-demo.js&amp;pndurl=http:%2F%2Fdev.thepund.it%2Fdownload%2Fclient%2Fgeolat%2Fbuild">
-                                <button class="btn btn-xs btn-primary">
-                                    Annotate
-                                </button>
-                            </a>
 
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            fcffda2d
+                            92d720e2
                         </td>
                         <td>
-                            AMMIANI MARCELLINI HISTORIAE LIBER XIV
+                            Turin
                         </td>
                         <td>
+                            Turin (, pronounced; Piedmontese: Turin, pronounced;) is a city and an important business and cultural centre in northern Italy, capital of the Piedmont region, located mainly on the left bank of the Po River, in front of Susa Valley and surrounded by the western Alpine arch. The population of the city proper is 911,823 (December 2012) while the population of the urban area is estimated by Eurostat to be 1.7 million inhabitants. The Turin metropolitan area is estimated by the OECD to have a population of 2.2 million.
                         </td>
                         <td>
-
-                            <span class="korbo_type" title="http://purl.org/dc/dcmitype/Text">Text</span>
+                            <a title="http://en.wikipedia.org/wiki/Turin" class="btn btn-xs btn-primary" href="http://en.wikipedia.org/wiki/Turin" target="_blank">Visit</a>
+                        </td>
+                        <td>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Place">Place</span>
                             <br>
-
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/PopulatedPlace">PopulatedPlace</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Settlement">Settlement</span>
+                            <br>
                             <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
                             <br>
                         </td>
 
                         <td>
-                            <button class="btn btn-xs btn-primary" ng-click="edit('fcffda2d')">Edit
+                            <button class="btn btn-xs btn-primary" onclick="geolat_korboee_edit('92d720e2')">Edit
                             </button>
-                            <a target="_blank" href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/fcffda2d.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat-demo.js&amp;pndurl=http:%2F%2Fdev.thepund.it%2Fdownload%2Fclient%2Fgeolat%2Fbuild">
-                                <button class="btn btn-xs btn-primary">
-                                    Annotate
-                                </button>
-                            </a>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            6c26cbf7
-                        </td>
-                        <td>
-                            MARCELLINI HISTORIAE LIBER XVII
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-
-                            <span class="korbo_type" title="http://purl.org/dc/dcmitype/Text">Text</span>
-                            <br>
-
-                            <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
-                            <br>
-                        </td>
-
-                        <td>
-                            <button class="btn btn-xs btn-primary" ng-click="edit('6c26cbf7')">Edit
-                            </button>
-                            <a target="_blank" href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/6c26cbf7.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat-demo.js&amp;pndurl=http:%2F%2Fdev.thepund.it%2Fdownload%2Fclient%2Fgeolat%2Fbuild">
-                                <button class="btn btn-xs btn-primary">
-                                    Annotate
-                                </button>
-                            </a>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            ea73a4ed
-                        </td>
-                        <td>
-                            MARCELLINI HISTORIAE LIBER XVIII
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-
-                            <span class="korbo_type" title="http://purl.org/dc/dcmitype/Text">Text</span>
-                            <br>
-
-                            <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
-                            <br>
-                        </td>
-
-                        <td>
-                            <button class="btn btn-xs btn-primary" ng-click="edit('ea73a4ed')">Edit
-                            </button>
-                            <a target="_blank" href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/ea73a4ed.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat-demo.js&amp;pndurl=http:%2F%2Fdev.thepund.it%2Fdownload%2Fclient%2Fgeolat%2Fbuild">
-                                <button class="btn btn-xs btn-primary">
-                                    Annotate
-                                </button>
-                            </a>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            f498d598
-                        </td>
-                        <td>
-                            MARCELLINI HISTORIAE LIBER XVI
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-
-                            <span class="korbo_type" title="http://purl.org/dc/dcmitype/Text">Text</span>
-                            <br>
-
-                            <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
-                            <br>
-                        </td>
-
-                        <td>
-                            <button class="btn btn-xs btn-primary" ng-click="edit('f498d598')">Edit
-                            </button>
-                            <a target="_blank" href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/f498d598.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat-demo.js&amp;pndurl=http:%2F%2Fdev.thepund.it%2Fdownload%2Fclient%2Fgeolat%2Fbuild">
-                                <button class="btn btn-xs btn-primary">
-                                    Annotate
-                                </button>
-                            </a>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            42ff3acf
-                        </td>
-                        <td>
-                            MARCELLINI HISTORIAE LIBER XV
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-
-                            <span class="korbo_type" title="http://purl.org/dc/dcmitype/Text">Text</span>
-                            <br>
-
-                            <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
-                            <br>
-                        </td>
-
-                        <td>
-                            <button class="btn btn-xs btn-primary" ng-click="edit('42ff3acf')">Edit
-                            </button>
-                            <a target="_blank" href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/42ff3acf.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat-demo.js&amp;pndurl=http:%2F%2Fdev.thepund.it%2Fdownload%2Fclient%2Fgeolat%2Fbuild">
-                                <button class="btn btn-xs btn-primary">
-                                    Annotate
-                                </button>
-                            </a>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            ebadfe91
-                        </td>
-                        <td>
-                            MARCELLINI HISTORIAE LIBER XIX
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-
-                            <span class="korbo_type" title="http://purl.org/dc/dcmitype/Text">Text</span>
-                            <br>
-
-                            <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
-                            <br>
-                        </td>
-
-                        <td>
-                            <button class="btn btn-xs btn-primary" ng-click="edit('ebadfe91')">Edit
-                            </button>
-                            <a target="_blank" href="http://feed.thepund.it/?b=http://geolat.netseven.it/uploads/docs/ebadfe91.html&amp;conf=http:%2F%2Fconf.thepund.it%2FV2%2Fclients%2Fgeolat%2Fgeolat-demo.js&amp;pndurl=http:%2F%2Fdev.thepund.it%2Fdownload%2Fclient%2Fgeolat%2Fbuild">
-                                <button class="btn btn-xs btn-primary">
-                                    Annotate
-                                </button>
-                            </a>
 
                         </td>
                     </tr>
@@ -821,16 +706,16 @@
                             <div class="form-inline">
 
                                 <div class="pull-left">
-                                    <button class="btn btn-xs btn-success" ng-click="new()">Create New Item
+                                    <button class="btn btn-xs btn-success" onclick="geolat_korboee_new()">Create New Item
                                     </button>
                                 </div>
 
                                 <div class="pull-right">
 
-                                    1 / 2
+                                    1 / 1
                                     &nbsp;-&nbsp;
 
-                                    19 results
+                                    5 results
                                     &nbsp;-&nbsp;
                                     Per page
                                     <select id="perPageSelect" class="form-control per-page small " style="width: auto" tabindex="-1" title="Per page">
@@ -854,41 +739,9 @@
                         </th>
                     </tr>
 
-                    <tr>
-                        <td colspan="8">
-
-                            <div class="text-center">
-                                <ul class="pagination">
-
-
-
-
-
-
-
-
-                                    <li class="active">
-                                        <a href="#" onclick="setPageAndRefresh('1');">1</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" onclick="setPageAndRefresh('2');">2</a>
-                                    </li>
-
-
-                                    <li>
-                                        <a href="#" onclick="setPageAndRefresh('2')" title="Next">›</a>
-                                    </li>
-
-                                </ul>
-
-                            </div>
-                        </td>
-
-                    </tr>
-
-
                     </tfoot>
                 </table>
+
 
 
             </div>
