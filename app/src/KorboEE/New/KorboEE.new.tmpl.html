@@ -254,7 +254,7 @@
         <div class="kee-inner-pane pnd-wrp"
              ng-show="innerPanes.panes.tripleComposer.visible">
             <!--Triple composer is visible only when at least one type is selected-->
-            <triple-composer ng-show="selectedTypes().length > 0"></triple-composer>
+            <triple-composer tc-name="korboeetriplecomposer" ng-show="selectedTypes().length > 0"></triple-composer>
             <!--Otherwise a warning message is shown-->
             <div ng-show="selectedTypes().length == 0">
                 <p class="kee-infotext">

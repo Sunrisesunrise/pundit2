@@ -54,14 +54,14 @@ angular.module('KorboEE')
             case 'tripleComposer':
                 addEntityToAllSubjects();
                 TripleComposer.initContextualMenu();
-                TripleComposer.showHeader(false);
-                TripleComposer.showFooter(false);
+                TripleComposer.showHeader(false, 'korboeetriplecomposer');
+                TripleComposer.showFooter(false, 'korboeetriplecomposer');
                 KorboCommunicationService.tripleComposerStateChangeCallback = tripleComposerStateChangeCallback;
                 break;
             default:
                 // Restore triplecomposer header and footer.
-                TripleComposer.showHeader(true);
-                TripleComposer.showFooter(true);
+                TripleComposer.showHeader(true, 'korboeetriplecomposer');
+                TripleComposer.showFooter(true, 'korboeetriplecomposer');
                 //KorboCommunicationService.setSearchConf('tab');
                 break;
         }

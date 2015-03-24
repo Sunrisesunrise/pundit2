@@ -3,16 +3,22 @@ angular.module('Pundit2.TripleComposer')
 .controller('TripleComposerCtrl', function($rootScope, $scope, $http, $q, $timeout, NameSpace, EventDispatcher,
     MyPundit, Toolbar, TripleComposer, AnnotationsCommunication, AnnotationsExchange, TemplatesExchange, Analytics) {
 
+    if (typeof $scope.name === 'undefined') {
+        $scope.name = "triplecomposer-" + Math.floor((new Date()).getTime() / 100 * (Math.random() * 100) + 1);
+    }
+
+    TripleComposer.initInstance($scope.name);
+
     // statements objects are extend by this.addStatementScope()
     // the function is called in the statement directive link function
-    $scope.statements = TripleComposer.getStatements();
+    $scope.statements = TripleComposer.getStatements($scope.name);
 
     $scope.showHeader = function() {
-        return TripleComposer.showHeader();
+        return TripleComposer.showHeader(undefined, $scope.name);
     }
 
     $scope.showFooter = function() {
-        return TripleComposer.showFooter();
+        return TripleComposer.showFooter(undefined, $scope.name);
     }
 
     $scope.saving = false;
@@ -22,7 +28,7 @@ angular.module('Pundit2.TripleComposer')
 
     $scope.editMode = false;
     $scope.$watch(function() {
-        return TripleComposer.isEditMode();
+        return TripleComposer.isEditMode($scope.name);
     }, function(editMode) {
         if (editMode) {
             $scope.headerMessage = "Edit and update your annotation";
@@ -64,47 +70,51 @@ angular.module('Pundit2.TripleComposer')
 
     this.removeStatement = function(id) {
         id = parseInt(id, 10);
-        TripleComposer.removeStatement(id);
-        if (TripleComposer.isAnnotationComplete()) {
+        TripleComposer.removeStatement(id, $scope.name);
+        if (TripleComposer.isAnnotationComplete($scope.name)) {
             angular.element('.pnd-triplecomposer-save').removeClass('disabled');
         }
     };
 
     this.addStatementScope = function(id, scope) {
         id = parseInt(id, 10);
-        TripleComposer.addStatementScope(id, scope);
+        TripleComposer.addStatementScope(id, scope, $scope.name);
     };
 
     this.duplicateStatement = function(id) {
         id = parseInt(id, 10);
-        TripleComposer.duplicateStatement(id);
+        TripleComposer.duplicateStatement(id, $scope.name);
     };
 
     this.isAnnotationComplete = function() {
-        if (TripleComposer.isAnnotationComplete()) {
+        if (TripleComposer.isAnnotationComplete($scope.name)) {
             angular.element('.pnd-triplecomposer-save').removeClass('disabled');
         }
     };
 
     this.isTripleErasable = function() {
-        TripleComposer.isTripleErasable();
+        TripleComposer.isTripleErasable($scope.name);
     };
 
+    this.getName = function() {
+        return $scope.name;
+    }
+
     $scope.isAnnotationErasable = function() {
-        return !TripleComposer.isTripleEmpty();
+        return !TripleComposer.isTripleEmpty($scope.name);
     };
 
     $scope.onClickAddStatement = function() {
         angular.element('.pnd-triplecomposer-save').addClass('disabled');
-        TripleComposer.addStatement();
+        TripleComposer.addStatement($scope.name);
     };
 
     $scope.cancel = function() {
         if ($scope.editMode) {
             angular.element('.pnd-triplecomposer-save').addClass('disabled');
-            TripleComposer.reset();
-            TripleComposer.setEditMode(false);
-            TripleComposer.updateVisibility();
+            TripleComposer.reset($scope.name);
+            TripleComposer.setEditMode(false, $scope.name);
+            TripleComposer.updateVisibility($scope.name);
         }
 
         EventDispatcher.sendEvent('Pundit.changeSelection');
@@ -113,10 +123,10 @@ angular.module('Pundit2.TripleComposer')
     $scope.resetComposer = function() {
         angular.element('.pnd-triplecomposer-save').addClass('disabled');
         if ($scope.templateMode) {
-            TripleComposer.wipeNotFixedItems();
+            TripleComposer.wipeNotFixedItems($scope.name);
             return;
         }
-        TripleComposer.reset();
+        TripleComposer.reset($scope.name);
         EventDispatcher.sendEvent('Pundit.changeSelection');
 
         var eventLabel = getHierarchyString();
@@ -125,7 +135,7 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.editAnnotation = function() {
-        var annID = TripleComposer.getEditAnnID();
+        var annID = TripleComposer.getEditAnnID($scope.name);
 
         if (typeof(annID) !== 'undefined') {
 
@@ -134,9 +144,9 @@ angular.module('Pundit2.TripleComposer')
 
             AnnotationsCommunication.editAnnotation(
                 annID,
-                TripleComposer.buildGraph(),
-                TripleComposer.buildItems(),
-                TripleComposer.buildTargets()
+                TripleComposer.buildGraph($scope.name),
+                TripleComposer.buildItems($scope.name),
+                TripleComposer.buildTargets($scope.name)
             ).then(function() {
                 stopSavingProcess(
                     savePromise,
@@ -194,10 +204,10 @@ angular.module('Pundit2.TripleComposer')
         }
 
         $timeout(function() {
-            TripleComposer.setEditMode(false);
+            TripleComposer.setEditMode(false, $scope.name);
             angular.element('.pnd-triplecomposer-cancel').removeClass('disabled');
             $scope.saving = false;
-            TripleComposer.updateVisibility();
+            TripleComposer.updateVisibility($scope.name);
         }, time);
     };
 
@@ -232,11 +242,11 @@ angular.module('Pundit2.TripleComposer')
         }
 
         if ($scope.templateMode) {
-            TripleComposer.wipeNotFixedItems();
+            TripleComposer.wipeNotFixedItems($scope.name);
             return;
         }
 
-        TripleComposer.reset();
+        TripleComposer.reset($scope.name);
     };
 
     $scope.saveAnnotation = function() {
@@ -266,15 +276,15 @@ angular.module('Pundit2.TripleComposer')
                 var httpPromise;
                 if ($scope.templateMode) {
                     httpPromise = AnnotationsCommunication.saveAnnotation(
-                        TripleComposer.buildGraph(),
-                        TripleComposer.buildItems(),
-                        TripleComposer.buildTargets(),
+                        TripleComposer.buildGraph($scope.name),
+                        TripleComposer.buildItems($scope.name),
+                        TripleComposer.buildTargets($scope.name),
                         TemplatesExchange.getCurrent().id);
                 } else {
                     httpPromise = AnnotationsCommunication.saveAnnotation(
-                        TripleComposer.buildGraph(),
-                        TripleComposer.buildItems(),
-                        TripleComposer.buildTargets());
+                        TripleComposer.buildGraph($scope.name),
+                        TripleComposer.buildItems($scope.name),
+                        TripleComposer.buildTargets($scope.name));
                 }
 
                 httpPromise.then(function() {
@@ -288,7 +298,7 @@ angular.module('Pundit2.TripleComposer')
                     promise.resolve();
                 }, function() {
                     // rejected
-                    TripleComposer.closeAfterOpOff();
+                    TripleComposer.closeAfterOpOff($scope.name);
                     stopSavingProcess(
                         savePromise,
                         TripleComposer.options.notificationErrorMsg,
@@ -336,7 +346,8 @@ angular.module('Pundit2.TripleComposer')
                 TripleComposer.openTripleComposer();
             });
         }
-
     });
+
+
 
 });
