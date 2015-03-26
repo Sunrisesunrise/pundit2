@@ -220,19 +220,9 @@ angular.module('Pundit2.TripleComposer')
     var firstInstanceName = undefined; // it will be default triplecomposer.
 
 
-
-
-    var nextId = 1;
     var statements = [{
-        id: nextId
+        id: 1
     }];
-
-    var editMode = false,
-        editAnnID;
-
-    var closeAfterOp = false;
-
-
 
     var statementChangeStatus = function() {
         EventDispatcher.sendEvent('TripleComposer.statementChange');
@@ -385,13 +375,13 @@ angular.module('Pundit2.TripleComposer')
         state[name] = {
             nextId: 1,
             statements: [{
-                id: nextId
+                id: 1
             }],
             editMode: false,
             editAnnID: undefined,
             closeAfterOp:false,
-            showHeader: false,
-            showFooter: false
+            showHeader: true,
+            showFooter: true
         };
     };
 
@@ -432,7 +422,7 @@ angular.module('Pundit2.TripleComposer')
 
     tripleComposer.isEditMode = function(name) {
         name = fixName(name);
-        return state[name].editMode;
+        return typeof state[name] !== 'undefined' ? state[name].editMode : false;
         //return editMode;
     };
 
@@ -446,15 +436,17 @@ angular.module('Pundit2.TripleComposer')
         state[name].closeAfterOp = false;
     };
 
-    tripleComposer.updateVisibility = function() {
-        if (closeAfterOp && Dashboard.isDashboardVisible()) {
+    tripleComposer.updateVisibility = function(name) {
+        name = fixName(name);
+        if (state[name].closeAfterOp && Dashboard.isDashboardVisible()) {
             Dashboard.toggle();
         }
-        closeAfterOp = false;
+        state[name].closeAfterOp = false;
     };
 
-    tripleComposer.getEditAnnID = function() {
-        return editAnnID;
+    tripleComposer.getEditAnnID = function(name) {
+        name = fixName(name);
+        return state[name].editAnnID;
     };
 
     tripleComposer.setEditMode = function(bool, name) {
@@ -505,6 +497,9 @@ angular.module('Pundit2.TripleComposer')
 
     tripleComposer.reset = function(name) {
         name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
         state[name].nextId = 1;
         state[name].statements.splice(0, state[name].statements.length);
         state[name].statements.push({
@@ -547,11 +542,13 @@ angular.module('Pundit2.TripleComposer')
             state[name].statements[index].scope = scope;
         }
 
+        /*
         if (statements.length > 1) {
             ContextualMenu.modifyDisabled('removeTriple', false);
         }
+        */
 
-        tripleComposer.log('statement extended with scope', statements[index]);
+        tripleComposer.log('statement extended with scope', state[name].statements[index]);
     };
 
     // duplicate a statement and add it to the statements array
@@ -824,10 +821,16 @@ angular.module('Pundit2.TripleComposer')
                 ContextualMenu.modifyDisabled('removeTriple', true);
             }
         }
+        else {
+            ContextualMenu.modifyDisabled('removeTriple', false);
+        }
     };
 
     tripleComposer.showCurrentTemplate = function(name) {
         name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
         tripleComposer.reset(name);
         var i, tmpl = TemplatesExchange.getCurrent();
 
@@ -877,7 +880,7 @@ angular.module('Pundit2.TripleComposer')
         name = fixName(name);
         // wipe all statements
         tripleComposer.reset(name);
-        editAnnID = annID;
+        state[name].editAnnID = annID;
 
         var ann = AnnotationsExchange.getAnnotationById(annID),
             i;
@@ -902,7 +905,7 @@ angular.module('Pundit2.TripleComposer')
         }
 
         var removeWatcher = $rootScope.$watch(function() {
-            return statements[l - 1].scope;
+            return state[name].statements[l - 1].scope;
         }, function(newScope) {
             if (typeof(newScope) !== 'undefined') {
                 tripleComposer.log('Now the last statement is populated with relative scope');

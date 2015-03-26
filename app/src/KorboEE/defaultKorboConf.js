@@ -601,6 +601,20 @@ KORBODEFAULTCONF = {
 
     /**
      * @ngdoc property
+     * @name KORBODEFAULTCONF#tripleComposerName
+     *
+     * @description
+     * `string`
+     *
+     * The triple composer instance name.
+     *
+     * Default value:
+     * <pre> tripleComposerName: 'korboeetriplecomposer' </pre>
+     */
+    tripleComposerName: 'korboeetriplecomposer',
+
+    /**
+     * @ngdoc property
      * @name KORBODEFAULTCONF#contextMenuActiveItems
      *
      * @description

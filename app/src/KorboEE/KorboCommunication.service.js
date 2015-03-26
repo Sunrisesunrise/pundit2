@@ -64,7 +64,6 @@ angular.module('KorboEE')
         api.fireOnCancel();
         entityToCopy = null;
         entity = null;
-        //EventDispatcher.removeListener(['TripleComposer.statementChange', tripleComposerStateChange]);
     };
 
     var confirmModal = $modal({

@@ -3,6 +3,9 @@ angular.module('KorboEE')
                                     korboConf, $timeout, $http, TypesHelper, ItemsExchange, ContextualMenu, $window, MyPundit, EventDispatcher,
                                     Config, APIService, TripleComposer, Item, ResourcePanel, AnnotationsCommunication) {
 
+    $scope.tripleComposerName = korboConf.tripleComposerName;
+
+
     var copyCheck = false,
         korboComm = new KorboCommunicationFactory(),
         delay,
@@ -54,14 +57,12 @@ angular.module('KorboEE')
             case 'tripleComposer':
                 addEntityToAllSubjects();
                 TripleComposer.initContextualMenu();
-                TripleComposer.showHeader(false, 'korboeetriplecomposer');
-                TripleComposer.showFooter(false, 'korboeetriplecomposer');
+                TripleComposer.showHeader(false, korboConf.tripleComposerName);
+                TripleComposer.showFooter(false, korboConf.tripleComposerName);
                 KorboCommunicationService.tripleComposerStateChangeCallback = tripleComposerStateChangeCallback;
                 break;
             default:
                 // Restore triplecomposer header and footer.
-                TripleComposer.showHeader(true, 'korboeetriplecomposer');
-                TripleComposer.showFooter(true, 'korboeetriplecomposer');
                 //KorboCommunicationService.setSearchConf('tab');
                 break;
         }
@@ -396,7 +397,7 @@ angular.module('KorboEE')
             entity.uri = 'temporary-uri';
         }
         var item = new Item(entity.uri, entity);
-        TripleComposer.addToAllSubject(item, true);
+        TripleComposer.addToAllSubject(item, true, korboConf.tripleComposerName);
     }
 
     var buildLanguagesModel = function (entityUri, provider, overrideProperties) {
@@ -491,7 +492,7 @@ angular.module('KorboEE')
             if ($scope.conf.tripleComposerEnabled &&
             $scope.conf.tripleComposerForCustomFields &&
             typeof loadedItem.custom_fields !== 'undefined') {
-                TripleComposer.reset();
+                TripleComposer.reset(korboConf.tripleComposerName);
                 var triples = [];
                 for (var keyPredicate in loadedItem.custom_fields) {
                     var predicate = ItemsExchange.getItemByUri(keyPredicate);
@@ -500,7 +501,7 @@ angular.module('KorboEE')
                     }
                     for (var objectIndex in loadedItem.custom_fields[keyPredicate]) {
                         if (triples.length >= 1) {
-                            TripleComposer.addStatement();
+                            TripleComposer.addStatement(korboConf.tripleComposerName);
                         }
                         var statementObject = loadedItem.custom_fields[keyPredicate][objectIndex].value,
                             itemObject = statementObject;
@@ -532,8 +533,8 @@ angular.module('KorboEE')
                 }
                 $timeout(function() {
                     for (var i in triples) {
-                        TripleComposer.addToPredicate(triples[i].predicate);
-                        TripleComposer.addToObject(triples[i].itemObject);
+                        TripleComposer.addToPredicate(triples[i].predicate, korboConf.tripleComposerName);
+                        TripleComposer.addToObject(triples[i].itemObject, korboConf.tripleComposerName);
                     }
                 }, 200);
             }
@@ -584,8 +585,8 @@ angular.module('KorboEE')
 
     // Add other info to triple built graph.
     var addTripleObjectInfo = function () {
-        var triplesData = TripleComposer.buildGraph();
-        var statements = TripleComposer.getStatements();
+        var triplesData = TripleComposer.buildGraph(korboConf.tripleComposerName);
+        var statements = TripleComposer.getStatements(korboConf.tripleComposerName);
         var objects = {};
         for (var i in statements) {
             var triple = statements[i].scope.get();
@@ -669,7 +670,7 @@ angular.module('KorboEE')
                 var allPromises = [];
 
                 // Checks if annotation needs to be saved first.
-                var annotationNeedsToBeSaved =  $scope.conf.tripleComposerEnabled && TripleComposer.isAnnotationComplete();
+                var annotationNeedsToBeSaved =  $scope.conf.tripleComposerEnabled && TripleComposer.isAnnotationComplete(korboConf.tripleComposerName);
 
                 if (annotationNeedsToBeSaved) {
                     // Using triple composer for create annotations.
@@ -685,9 +686,9 @@ angular.module('KorboEE')
                     var httpTriplesPromise = undefined;
                     if (!$scope.conf.tripleComposerForCustomFields) {
                         httpTriplesPromise = AnnotationsCommunication.saveAnnotation(
-                        TripleComposer.buildGraph(),
-                        TripleComposer.buildItems(),
-                        TripleComposer.buildTargets()
+                        TripleComposer.buildGraph(korboConf.tripleComposerName),
+                        TripleComposer.buildItems(korboConf.tripleComposerName),
+                        TripleComposer.buildTargets(korboConf.tripleComposerName)
                         );
                     }
                     else {
@@ -1194,7 +1195,7 @@ angular.module('KorboEE')
 
     // Init actions.
     if ($scope.conf.tripleComposerEnabled) {
-        TripleComposer.reset();
+        TripleComposer.reset(korboConf.tripleComposerName);
     }
 
     buildContextualMenu();
