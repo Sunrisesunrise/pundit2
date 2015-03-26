@@ -35,6 +35,34 @@ KORBODEFAULTCONF = {
 
     /**
      * @ngdoc property
+     * @name KORBODEFAULTCONF#resourceProxy
+     *
+     * @description
+     * `string`
+     *
+     * URL used to load 3rd party resources.
+     *
+     * Default value:
+     * <pre> resourceProxy: undefined </pre>
+     */
+    resourceProxy: undefined,
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#korboHelpURL
+     *
+     * @description
+     * `string`
+     *
+     * Korbo Help URL.
+     *
+     * Default value:
+     * <pre> korboHelpURL: undefined </pre>
+     */
+    korboHelpURL: undefined,
+
+    /**
+     * @ngdoc property
      * @name KORBODEFAULTCONF#basketID
      *
      * @description
@@ -384,6 +412,51 @@ KORBODEFAULTCONF = {
 
     /**
      * @ngdoc property
+     * @name KORBODEFAULTCONF#defaultLanguage
+     *
+     * @description
+     * Default language value.
+     *
+     */
+    defaultLanguage: 'en',
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#languagesSaveMethod
+     *
+     * @description
+     * `string`
+     *
+     * Determines how label and descriptions of item will be saved
+     *
+     * Allowed values:
+     *   - multipleCall: a call for each language
+     *   - singleCall: a call for all languages
+     *
+     * Default value:
+     * <pre>
+     *     languagesSaveMethod: 'multipleCall'
+     * </pre>
+     */
+    languagesSaveMethod: 'multipleCall',
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#useCredentialInHttpCalls
+     *
+     * @description
+     * `boolean`
+     *
+     * Determines whether to use credentials in each http call or not.
+     *
+     * <pre>
+     *     useCredentialInHttpCalls: false
+     * </pre>
+     */
+    useCredentialInHttpCalls: false,
+
+    /**
+     * @ngdoc property
      * @name KORBODEFAULTCONF#visualizeCopyButton
      *
      * @description
@@ -453,5 +526,169 @@ KORBODEFAULTCONF = {
      * Default value:
      * <pre> autoCompleteOptions: 'none' </pre>
      */
-    autoCompleteOptions: 'none' // search | new | all | none
+    autoCompleteOptions: 'none', // search | new | all | none
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#showHeaderTabs
+     *
+     * @description
+     * `boolean`
+     *
+     * Set to true to show header tabs
+     *
+     * Default value:
+     * <pre> showHeaderTabs: true </pre>
+     */
+    showHeaderTabs: true,
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#showHeaderTabs
+     *
+     * @description
+     * `boolean`
+     *
+     * Set to true to show breadcrumbs when edit or create new entity.
+     *
+     * Default value:
+     * <pre> showBreadcrumbs: true </pre>
+     */
+    showBreadcrumbs: true,
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#breadcrumbName
+     *
+     * @description
+     * `string`
+     *
+     * Name of breadcrumb.
+     *
+     * Default value:
+     * <pre> breadcrumbName: keebreadcrumb </pre>
+     */
+    breadcrumbName: 'keebreadcrumb',
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#tripleComposerEnabled
+     *
+     * @description
+     * `boolean`
+     *
+     * Enable internal triple composer.
+     *
+     * Default value:
+     * <pre> tripleComposerEnabled: false </pre>
+     */
+    tripleComposerEnabled: false,
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#tripleComposerForCustomFields
+     *
+     * @description
+     * `boolean`
+     *
+     * Determines whether to use triple composer for classic annotation
+     * or for entity custom field.
+     *
+     * Default value:
+     * <pre> tripleComposerForCustomFields: false </pre>
+     */
+    tripleComposerForCustomFields: false,
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#tripleComposerName
+     *
+     * @description
+     * `string`
+     *
+     * The triple composer instance name.
+     *
+     * Default value:
+     * <pre> tripleComposerName: 'korboeetriplecomposer' </pre>
+     */
+    tripleComposerName: 'korboeetriplecomposer',
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#contextMenuActiveItems
+     *
+     * @description
+     * `object`
+     *
+     * Defines which items are active and visible in contextual menu.
+     *
+     * Default value:
+     * <pre>
+     *   contextMenuActiveItems: {
+     *       'advancedOptions': false,
+     *       'editOriginalUrl': true,
+     *       'removeLanguages': true,
+     *       'tripleComposer': false,
+     *       'updateAllData': false,
+     *       'searchAndCopyFromLOD': false,
+     *       'korboHelp': false
+     *   }
+     * </pre>
+     */
+    contextMenuActiveItems: {
+        'editOriginalUrl': true,
+        'removeLanguages': true,
+        'updateAllData': false,
+        'korboHelp': false
+    },
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#fromLODTools
+     *
+     * @description
+     * `boolean`
+     *
+     * If true, the panel "Advanced options" will show Original URL textfield and
+     * buttons to copy from LOD.
+     *
+     * Default value:
+     * <pre>
+     *   fromLODTools: false
+     * </pre>
+     */
+    fromLODTools: false,
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#typeThing
+     *
+     * @description
+     * `string`
+     *
+     * Defines uri of type "Thing".
+     *
+     * Default value:
+     * <pre>
+     *   typeThing: 'http://www.w3.org/2002/07/owl#Thing'
+     * </pre>
+     */
+    typeThing: 'http://www.w3.org/2002/07/owl#Thing',
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#typeLiteral
+     *
+     * @description
+     * `string`
+     *
+     * Defines uri of type "Literal".
+     *
+     * Default value:
+     * <pre>
+     *   typeThing: 'http://purl.org/pundit/literal'
+     * </pre>
+     */
+    typeLiteral: 'http://purl.org/pundit/literal'
+
 };

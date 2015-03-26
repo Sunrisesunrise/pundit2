@@ -16,11 +16,11 @@ describe("Breadcrumbs interaction", function () {
     it('should correctly append items on different breadcrumbs', function () {
         appendItems(5);
 
-        p.findElements(protractor.By.css('breadcrumbs[name*="first-breadcrumb"] li')).then(function (elements) {
+        p.findElements(protractor.By.css('breadcrumbs[bc-name*="first-breadcrumb"] li')).then(function (elements) {
             expect(elements.length).toBe(5);
         });
 
-        p.findElements(protractor.By.css('breadcrumbs[name*="second-breadcrumb"] li')).then(function (elements) {
+        p.findElements(protractor.By.css('breadcrumbs[bc-name*="second-breadcrumb"] li')).then(function (elements) {
             expect(elements.length).toBe(5);
         });
     });
@@ -30,13 +30,13 @@ describe("Breadcrumbs interaction", function () {
 
         p.findElement(protractor.By.id('action-button-bc0-pop')).click();
         p.findElement(protractor.By.id('action-button-bc0-pop')).click();
-        p.findElements(protractor.By.css('breadcrumbs[name*="first-breadcrumb"] li')).then(function (elements) {
+        p.findElements(protractor.By.css('breadcrumbs[bc-name*="first-breadcrumb"] li')).then(function (elements) {
             expect(elements.length).toBe(3);
         });
 
         p.findElement(protractor.By.id('action-button-bc1-pop')).click();
         p.findElement(protractor.By.id('action-button-bc1-pop')).click();
-        p.findElements(protractor.By.css('breadcrumbs[name*="second-breadcrumb"] li')).then(function (elements) {
+        p.findElements(protractor.By.css('breadcrumbs[bc-name*="second-breadcrumb"] li')).then(function (elements) {
             expect(elements.length).toBe(3);
         });
     });
@@ -45,12 +45,12 @@ describe("Breadcrumbs interaction", function () {
         appendItems(5);
 
         p.findElement(protractor.By.id('action-button-bc0-empty')).click();
-        p.findElements(protractor.By.css('breadcrumbs[name*="first-breadcrumb"] li')).then(function (elements) {
+        p.findElements(protractor.By.css('breadcrumbs[bc-name*="first-breadcrumb"] li')).then(function (elements) {
             expect(elements.length).toBe(0);
         });
 
         p.findElement(protractor.By.id('action-button-bc1-empty')).click();
-        p.findElements(protractor.By.css('breadcrumbs[name*="second-breadcrumb"] li')).then(function (elements) {
+        p.findElements(protractor.By.css('breadcrumbs[bc-name*="second-breadcrumb"] li')).then(function (elements) {
             expect(elements.length).toBe(0);
         });
     });

@@ -1,10 +1,13 @@
 angular.module('Pundit2.TripleComposer')
 
-.directive('tripleComposer', function() {
+.directive('tripleComposer', function(EventDispatcher) {
     return {
         restrict: 'E',
-        scope: {},
+        scope: {
+            name: '=tcName'
+        },
         templateUrl: "src/Tools/TripleComposer/TripleComposer.dir.tmpl.html",
         controller: "TripleComposerCtrl"
+
     };
 });

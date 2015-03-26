@@ -82,21 +82,28 @@ angular.module('Pundit2.ResourcePanel')
 
     $scope.showUseAndCopyButton = function() {
         var currTab = $scope.contentTabs[$scope.contentTabs.activeTab].title;
+        var res = false;
         //if(Config.korbo.active && (currTab !== 'KorboBasket' && currTab !== 'Page Items' && currTab !== 'My Items')){
         if (Config.korbo.active && currTab === 'Freebase') {
-            return true;
-        } else {
-            return false;
+            res = true;
         }
+        if (typeof ResourcePanel.overrideFooterExtraButtons !== 'undefined' &&
+        typeof ResourcePanel.overrideFooterExtraButtons.showUseAndCopy !== 'undefined' ) {
+            res &= ResourcePanel.overrideFooterExtraButtons.showUseAndCopy;
+        }
+        return res;
     };
 
     $scope.showNewButton = function() {
-
+        var res = false;
         if (typeof(Config.korbo) !== 'undefined' && Config.korbo.active && $scope.type !== 'pr') {
-            return true;
-        } else {
-            return false;
+            res = true;
         }
+        if (typeof ResourcePanel.overrideFooterExtraButtons !== 'undefined' &&
+            typeof ResourcePanel.overrideFooterExtraButtons.showNewButton !== 'undefined' ) {
+            res &= ResourcePanel.overrideFooterExtraButtons.showNewButton;
+        }
+        return res;
     };
 
     $scope.createNew = function() {
@@ -112,11 +119,15 @@ angular.module('Pundit2.ResourcePanel')
     $scope.showCopyInEditorButton = function() {
         var currTab = $scope.contentTabs[$scope.contentTabs.activeTab].title;
         //if(Config.korbo.active && (currTab !== 'KorboBasket' && currTab !== 'Page Items' && currTab !== 'My Items')){
+        var res = false;
         if (Config.korbo.active && currTab === 'Freebase') {
-            return true;
-        } else {
-            return false;
+            res = true;
         }
+        if (typeof ResourcePanel.overrideFooterExtraButtons !== 'undefined' &&
+            typeof ResourcePanel.overrideFooterExtraButtons.showCopyInEditorButton !== 'undefined' ) {
+            res &= ResourcePanel.overrideFooterExtraButtons.showCopyInEditorButton;
+        }
+        return res;
     };
 
     $scope.copyInEditor = function() {
@@ -148,13 +159,37 @@ angular.module('Pundit2.ResourcePanel')
             if (caller !== 'pr' && caller !== '') {
                 $timeout.cancel(searchTimer);
                 searchTimer = $timeout(function() {
-                    ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
+                    if (Config.annotationServerCallsNeedLoggedUser) {
+                        MyPundit.checkLoggedIn().then(function (isLoggedIn) {
+                            if (isLoggedIn) {
+                                ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
+                            }
+                            else {
+                                EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
+                            }
+                        });
+                    }
+                    else {
+                        ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
+                    }
                 }, ResourcePanel.options.vocabSearchTimer);
             }
         } else {
             $timeout.cancel(searchTimer);
             // TODO: add specific method in ResourcePanel to reset search
-            ResourcePanel.updateVocabSearch('', $scope.triple, caller);
+            if (Config.annotationServerCallsNeedLoggedUser) {
+                MyPundit.checkLoggedIn().then(function (isLoggedIn) {
+                    if (isLoggedIn) {
+                        ResourcePanel.updateVocabSearch('', $scope.triple, caller);
+                    }
+                    else {
+                        EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
+                    }
+                });
+            }
+            else {
+                ResourcePanel.updateVocabSearch('', $scope.triple, caller);
+            }
         }
     };
 

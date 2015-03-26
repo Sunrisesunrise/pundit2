@@ -275,6 +275,7 @@ angular.module('Pundit2.Core')
                             $interval.cancel(stopTime);
                             $timeout.cancel(loginPollTimer);
                             Analytics.track('main-events', 'user--login');
+                            loginpopup.close();
                         }
                     },
                     function() {

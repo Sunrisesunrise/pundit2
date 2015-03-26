@@ -217,6 +217,7 @@ describe("AnnotationSidebar interaction", function() {
 
 
     beforeEach(function(){
+        p.driver.manage().window().setSize(1200, 960);
         p.addMockModule('httpBackendMock', myHttpMock);
         p.get('/app/examples/client-TEST.html');
     });
