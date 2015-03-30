@@ -406,4 +406,34 @@ describe("The toolbar module", function() {
         });
     });
 
+    it('should correctly activate/deactivate filtered mode', function(){
+
+        p.get('/app/examples/toolbar.html');
+
+        // by default siderbar is collapsed
+        p.findElements(protractor.By.css('annotation-sidebar > .pnd-annotation-sidebar-collapsed')).then(function(d){
+            expect(d.length).toBe(1);
+        });
+
+        // open sidebar
+        p.findElement(protractor.By.css('.pnd-toolbar-annotations-button')).click();
+        p.findElements(protractor.By.css('annotation-sidebar > .pnd-annotation-sidebar-expanded')).then(function(d){
+            expect(d.length).toBe(1);
+        });
+
+        p.findElement(protractor.By.css('.pnd-annotation-sidebar-btn-show-filter')).click();
+        p.findElement(protractor.By.css('.pnd-annotation-sidebar-filter-broken')).click();
+
+        p.findElements(protractor.By.css('.pnd-toolbar-annotations-button .pnd-filter-active')).then(function(d){
+            expect(d.length).toBe(1);
+        });
+
+        p.findElement(protractor.By.css('.pnd-annotation-sidebar-filter-broken')).click();
+
+        p.findElements(protractor.By.css('.pnd-toolbar-annotations-button .pnd-filter-active')).then(function(d){
+            expect(d.length).toBe(0);
+        });
+
+    });
+
 });

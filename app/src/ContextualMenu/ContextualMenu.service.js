@@ -10,7 +10,11 @@ angular.module('Pundit2.ContextualMenu')
 
     overflowContentClass: 'pnd-tab-content',
 
-    debug: false
+    debug: false,
+
+    offsetX: 0,
+
+    offsetY: 0
 })
 
 /**
@@ -66,7 +70,6 @@ angular.module('Pundit2.ContextualMenu')
     };
 
     var init = function(options, placement) {
-
         options.scope.content = state.content;
         if (typeof(placement) !== 'undefined') {
             options.placement = placement;
@@ -204,6 +207,9 @@ angular.module('Pundit2.ContextualMenu')
      * @param {String} type
      */
     contextualMenu.show = function(x, y, resource, type) {
+
+        x += contextualMenu.options.offsetX;
+        y += contextualMenu.options.offsetY;
 
         // show only one menu
         if (state.menu !== null) {

@@ -69,7 +69,37 @@ angular.module('Pundit2.ResourcePanel')
      * Default value:
      * <pre> inputIconClear: 'pnd-icon-times' </pre>
      */
-    inputIconClear: 'pnd-icon-times'
+    inputIconClear: 'pnd-icon-times',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ResourcePanel.pageItemsEnabled
+     *
+     * @description
+     * `boolean`
+     *
+     * Shows "Page items" selector
+     *
+     * Default value:
+     * <pre> pageItemsEnabled: true </pre>
+     */
+    pageItemsEnabled: true,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ResourcePanel.myItemsEnabled
+     *
+     * @description
+     * `boolean`
+     *
+     * Shows "My items" selector
+     *
+     * Default value:
+     * <pre> myItemsEnabled: true </pre>
+     */
+    myItemsEnabled: true
 
 })
 
@@ -285,6 +315,10 @@ angular.module('Pundit2.ResourcePanel')
             state.popoverOptions.scope.save = function(elem) {
                 hide();
                 Preview.hideDashboardPreview();
+                var activeTab = state.popoverOptions.scope.contentTabs.activeTab;
+                if (typeof elem.providerFrom === 'undefined' && typeof state.popoverOptions.scope.contentTabs[activeTab].itemsContainer !== 'undefined') {
+                    elem.providerFrom = state.popoverOptions.scope.contentTabs[activeTab].itemsContainer;
+                }
                 state.resourcePromise.resolve(elem);
 
                 var eventLabel = 'resourcePanel--';
@@ -438,23 +472,27 @@ angular.module('Pundit2.ResourcePanel')
         content.triple = triple;
 
         if (type === 'sub' || type === 'obj') {
-            var pageItemsForTabs = {
-                title: 'Page items',
-                items: pageItems,
-                module: 'Pundit2',
-                isStarted: true
-            };
-            contentTabs.push(pageItemsForTabs);
-            content.pageItems = pageItems;
+            if (resourcePanel.options.pageItemsEnabled) {
+                var pageItemsForTabs = {
+                    title: 'Page items',
+                    items: pageItems,
+                    module: 'Pundit2',
+                    isStarted: true
+                };
+                contentTabs.push(pageItemsForTabs);
+                content.pageItems = pageItems;
+            }
 
-            var myItemsForTabs = {
-                title: 'My items',
-                items: myItems,
-                module: 'Pundit2',
-                isStarted: true
-            };
-            contentTabs.push(myItemsForTabs);
-            content.myItems = myItems;
+            if (resourcePanel.options.myItemsEnabled) {
+                var myItemsForTabs = {
+                    title: 'My items',
+                    items: myItems,
+                    module: 'Pundit2',
+                    isStarted: true
+                };
+                contentTabs.push(myItemsForTabs);
+                content.myItems = myItems;
+            }
 
             content.properties = null;
         }
@@ -555,6 +593,10 @@ angular.module('Pundit2.ResourcePanel')
         }
     };
 
+    resourcePanel.lastPromiseThen = undefined;
+
+    resourcePanel.overrideFooterExtraButtons = undefined;
+
     resourcePanel.updateVocabSearch = function(label, triple, caller) {
         var selectors = SelectorsManager.getActiveSelectors();
         searchOnVocab(label, selectors, triple, caller);
@@ -593,6 +635,7 @@ angular.module('Pundit2.ResourcePanel')
      */
     resourcePanel.hide = function() {
         hide();
+        resourcePanel.lastPromise = undefined;
     };
 
     /**
@@ -700,10 +743,13 @@ angular.module('Pundit2.ResourcePanel')
      * @param {Object} triple object (for details content of this object, see {@link #!/api/Pundit2.ResourcePanel/service/ResourcePanel here})
      * @param {DOMElement} target DOM Element where to append the popover
      * @param {string} label label used to search subject in the vocabularies and filter shown Page Items and My Items
+     * @param {overrideFooterExtraButtons} override footer extra buttons config (default: undefined)
      * @return {Promise} return a promise that will be resolved when a subject is selected
      *
      */
-    resourcePanel.showItemsForSubject = function(triple, target, label) {
+    resourcePanel.showItemsForSubject = function(triple, target, label, overrideFooterExtraButtons) {
+
+        resourcePanel.overrideFooterExtraButtons = overrideFooterExtraButtons;
 
         if (typeof(target) === 'undefined') {
             target = state.popover.clickTarget;
@@ -788,7 +834,6 @@ angular.module('Pundit2.ResourcePanel')
         }
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;
-
     };
 
     /**
@@ -809,10 +854,13 @@ angular.module('Pundit2.ResourcePanel')
      * @param {Object} triple object (for details content of this object, see {@link #!/api/Pundit2.ResourcePanel/service/ResourcePanel here})
      * @param {DOMElement} target DOM Element where to append the popover
      * @param {string} label label used to search subject in the vocabularies and filter shown Page Items and My Items
+     * @param {overrideFooterExtraButtons} override footer extra buttons config (default: undefined)
      * @return {Promise} return a promise that will be resolved when a subject is selected
      *
      */
-    resourcePanel.showItemsForObject = function(triple, target, label) {
+    resourcePanel.showItemsForObject = function(triple, target, label, overrideFooterExtraButtons) {
+
+        resourcePanel.overrideFooterExtraButtons = overrideFooterExtraButtons;
 
         if (typeof(target) === 'undefined') {
             target = state.popover.clickTarget;

@@ -198,7 +198,7 @@ angular.module('KorboEE')
         if(viewValue.length >= $scope.conf.labelMinLength){
             $scope.isSearching = true;
 
-            $scope.results = KorboCommunicationService.autocompleteSearch(viewValue, $scope.conf.endpoint, 'korbo', $scope.conf.limitSearchResult, 0, $scope.defaultLan.value, $scope.conf.basketID);
+            $scope.results = KorboCommunicationService.autocompleteSearch(viewValue, $scope.conf.endpoint, 'korbo', $scope.conf.limitSearchResult, 0, $scope.conf.defaultLanguage, $scope.conf.basketID, $scope.conf.useCredentialInHttpCalls);
             $scope.results.then(function(res){
                 if(typeof(res[0]) !== 'undefined' && res[0].errorServer){
                     $scope.serverNotRunning = true;

@@ -34,11 +34,13 @@ angular.module('Pundit2.TripleComposer')
     // the triple simply is skipped and not included
     $scope.isMandatory = true;
 
-    if (TripleComposer.getStatements().length < 2) {
+    /*
+    if (TripleComposer.getStatements($scope.tripleComposerCtrl.name).length < 2) {
         ContextualMenu.modifyDisabled('removeTriple', true);
     } else {
         ContextualMenu.modifyDisabled('removeTriple', false);
     }
+    */
 
     // reference to the items used inside this statement
     var triple = {
@@ -208,6 +210,9 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.onSubjectMouseOver = function() {
+        if (typeof triple.subject.uri === 'undefined' || triple.subject.uri.length == 0) {
+            return;
+        }
         Preview.showDashboardPreview(triple.subject);
     };
 
@@ -253,7 +258,11 @@ angular.module('Pundit2.TripleComposer')
             }
             return;
         }
+        else if ($scope.subjectFixed) {
+            return;
+        }
         ResourcePanel.showItemsForSubject(triple, $event.target).then($scope.setSubject);
+        ResourcePanel.lastPromiseThen = $scope.setSubject;
 
         if ($scope.subjectFound) {
             EventDispatcher.sendEvent('Pundit.changeSelection');
@@ -343,6 +352,7 @@ angular.module('Pundit2.TripleComposer')
 
         if (triple.object === null || (!$scope.objectLiteral && !$scope.objectDate)) {
             ResourcePanel.showItemsForObject(triple, $event.target).then($scope.setObject);
+            ResourcePanel.lastPromiseThen = $scope.setObject;
         } else {
             if ($scope.objectLiteral) {
                 $scope.onClickObjectLiteral($event);
@@ -392,8 +402,10 @@ angular.module('Pundit2.TripleComposer')
 
     $scope.showDropdown = function(event) {
         var resource = {
-            id: $scope.id
+            id: $scope.id,
+            tripleComposerName: $scope.tripleComposerCtrl.getName()
         };
+        TripleComposer.isTripleErasable($scope.tripleComposerCtrl.getName());
         ResourcePanel.hide();
         ContextualMenu.show(event.pageX, event.pageY, resource, TripleComposer.options.cMenuType);
         event.stopPropagation();

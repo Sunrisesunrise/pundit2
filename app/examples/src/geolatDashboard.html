@@ -1,0 +1,752 @@
+<!-- buildexamples:section header --><!-- /buildexamples -->
+
+
+<script>
+    // TUTTO QUESTO BLOCCO <SCRIPT> PUOI RIMUOVERLO QUANDO HAI INSERITO LA ROBA DA PHP
+
+    var PHP__ANNOTATION_SERVER__PHP = "http://geolat.netseven.it:8282/annotationserver/";
+    var PHP__ENDPOINT__PHP = "http://geolat.netseven.it:8282/annotationserver/api/korbo";
+    var PHP__RESOURCEPROXY__PHP = "http://geolat.netseven.it:8282/annotationserver/api/services/proxy";
+    var PHP__BASKET_ID__PHP = 'b0c1f077';
+    var PHP__TYPES__PHP = [
+        {
+            label: 'Feature',
+            state: false,
+            URI: 'http://geovocab.org/spatial#Feature'
+        },
+        {
+            label: 'Place',
+            state: false,
+            URI: 'http://pleiades.stoa.org/places/vocab#Place'
+        },
+        {
+            label: 'Settlement',
+            state: false,
+            URI: 'http://pleiades.stoa.org/vocabularies/place-types/settlement'
+        },
+        {
+            label: 'Country',
+            state: false,
+            URI: 'http://dbpedia.org/ontology/Country'
+        },
+        {
+            label: 'HistoricPlace',
+            state: false,
+            URI: 'http://dbpedia.org/ontology/HistoricPlace'
+        },
+        {
+            label: 'Island',
+            state: false,
+            URI: 'http://dbpedia.org/ontology/Island'
+        },
+        {
+            label: 'Lake',
+            state: false,
+            URI: 'http://dbpedia.org/ontology/Lake'
+        },
+        {
+            label: 'Monument',
+            state: false,
+            URI: 'http://dbpedia.org/ontology/Monument'
+        },
+        {
+            label: 'Mountain',
+            state: false,
+            URI: 'http://dbpedia.org/ontology/Mountain'
+        },
+        {
+            label: 'Road',
+            state: false,
+            URI: 'http://dbpedia.org/ontology/Road'
+        },
+        {
+            label: 'Bridge',
+            state: false,
+            URI: 'http://linkedgeodata.org/ontology/Bridge'
+        },
+        {
+            label: 'Canal',
+            state: false,
+            URI: 'http://linkedgeodata.org/ontology/Canal'
+        }
+    ];
+
+    var PHP__KORBO_HELP_URL__PHP = undefined;
+    var PHP__PREDICATES__PHP = [
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "population",
+            "description": "population",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://www.geonames.org/ontology#population"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "is part of",
+            "description": "is part of",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://purl.org/dc/terms/isPartOf"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "has annotatable version at",
+            "description": "has annotatable version at",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://onto.dm2e.eu/schemas/dm2e/hasAnnotatableVersionAt"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "has format",
+            "description": "has format",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://purl.org/dc/terms/hasFormat"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "official name",
+            "description": "officialName",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://www.geonames.org/ontology#officialName"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "postal code",
+            "description": "postalCode",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://www.geonames.org/ontology#postalCode"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "parent country",
+            "description": "parentCountry",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://www.geonames.org/ontology#parentCountry"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "latitude",
+            "description": "latitude",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://www.w3.org/2003/01/geo/wgs84_pos#lat"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "longitude",
+            "description": "longitude",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://www.w3.org/2003/01/geo/wgs84_pos#long"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "bibliographic citation",
+            "description": "bibliographicCitation",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://purl.org/dc/terms/bibliographicCitation"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "cites",
+            "description": "cites",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://purl.org/spar/cito/cites"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "name romanized",
+            "description": "nameRomanized",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://pleiades.stoa.org/places/vocab#nameRomanized"
+        },
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "identifies place",
+            "description": "identifiesPlace",
+            "domain": [
+                //"http://purl.org/pundit/ont/ao#fragment-text",
+            ],
+            "range": [],
+            "vocabulary": "Geolat vocabulary",
+            "uri": "http://pleiades.stoa.org/places/vocab#identifiesPlace"
+        },
+    ];
+</script>
+
+<script>
+    var korboEEConfig = {
+        endpoint: PHP__ENDPOINT__PHP,
+        resourceProxy: PHP__RESOURCEPROXY__PHP,
+        basketID: PHP__BASKET_ID__PHP,
+        type: PHP__TYPES__PHP,
+        korboHelpURL: PHP__KORBO_HELP_URL__PHP,
+
+        globalObjectName: 'KK',
+        limitSearchResult: 11,
+        useOnlyCallback: false,
+        useTafonyCompatibility: true,
+        labelMinLength: 4,
+        //providers: {
+        //    freebase: true,
+        //    dandeliondbpedia: true
+        //},
+        buttonLabel: "Search",
+        //visualizeUseButton: ['dandeliondbpedia', 'freebase', 'korbo'],
+        //visualizeCopyButton: ['dandeliondbpedia', 'freebase'],
+        copyToKorboBeforeUse: true,
+        visualizeEditButton: false,
+        showHeaderTabs: false,
+
+        languages: [
+            {
+                name: 'English',
+                value: 'en',
+                state: true
+            },
+            {
+                name: 'Italian',
+                value: 'it',
+                state: false
+            },
+            {
+                name: 'Latin',
+                value: 'la',
+                state: true
+            }
+        ],
+        defaultLanguage: 'en',
+        autoCompleteOptions: 'none',
+        contextMenuActiveItems: {
+            'editOriginalUrl': false,
+            'searchOriginalUrl': false,
+            'removeLanguages': false,
+            'updateAllData': true,
+            'korboHelp': true
+        },
+        tripleComposerEnabled: true,
+        useCredentialInHttpCalls: true,
+        languagesSaveMethod: 'singleCall',
+        tripleComposerForCustomFields: true,
+        fromLODTools: true
+    };
+
+    // INIT TRIPLECOMPOSER
+    var predicates = PHP__PREDICATES__PHP;
+
+    var KeeDemoCtrl = function ($scope, KorboCommunicationService, $window, ItemsExchange,
+                                Item, $timeout, EventDispatcher, CLIENTDEFAULTS, PAGEITEMSCONTAINERDEFAULTS,
+                                MYITEMSDEFAULTS, MyPundit, ResourcePanel, SelectorsManager, Korbo2Selector, FreebaseSelector, DbpediaSelector) {
+
+        var name = $window['korboEEConfig'].globalObjectName;
+
+        $scope.edit = function (korboItemID) {
+            if (typeof korboItemID === 'undefined') {
+                korboItemID = window.korboee_current_edit_item_id;
+            }
+            $window[name].callEdit(korboItemID);
+        };
+
+        $scope.new = function () {
+            $window[name].callOpenNew();
+        }
+
+        for (var i in predicates) {
+            var item = new Item(predicates[i].uri, predicates[i]);
+            ItemsExchange.addItemToContainer(item, CLIENTDEFAULTS.relationsContainer);
+        }
+
+        $timeout(function () {
+            EventDispatcher.sendEvent('Client.boot');
+        }, 1000);
+
+        MyPundit.checkLoggedIn();
+
+        var addKorboEESelector = function () {
+            var instances = [
+
+                {
+                    container: 'dandeliondbpedia',
+                    // instance label tab title and search provider
+                    label: 'DBPedia',
+                    // enable or disable the instance
+                    active: true,
+                    basketID: korboEEConfig.basketID,
+                    url: korboEEConfig.endpoint,
+                    language: korboEEConfig.defaultLanguage
+                },
+                {
+                    container: 'pelagios',
+                    // instance label tab title and search provider
+                    label: 'Pelagios',
+                    // enable or disable the instance
+                    active: true,
+                    basketID: korboEEConfig.basketID,
+                    url: korboEEConfig.endpoint,
+                    language: korboEEConfig.defaultLanguage,
+                    resultsLimit: 50
+                }
+            ];
+
+            for (var i in instances) {
+                var config = instances[i];
+                var keeSelector = new Korbo2Selector(config);
+                keeSelector.push(config);
+                delete keeSelector;
+            }
+        };
+
+        EventDispatcher.addListener('MyPundit.userNeedToLogin', function () {
+            ResourcePanel.hide();
+            MyPundit.login();
+        });
+
+        EventDispatcher.addListener('KorboEE.entitySaved', function (event) {
+            var id = evetn.args;
+            window.location.href = document.URL;
+        });
+
+        //addKorboEESelector();
+        SelectorsManager.init();
+
+    };
+
+    var punditConfig = {
+        annotationServerBaseURL: PHP__ANNOTATION_SERVER__PHP,
+        annotationServerCallsNeedLoggedUser: true,
+        lodLive: {
+            active: true
+        },
+        modules: {
+            ContextualMenu: {
+                offsetX: -290,
+                offsetY: -145
+            },
+            SelectorsManager: {
+                active: true
+            },
+            "Korbo2Selector": {
+                active: true,
+                searchWithCredentials: true,
+                instances: [
+                    {
+                        // where items is stored inside itemsExchange service
+                        container: 'korbo',
+                        // instance label tab title
+                        label: 'Volumes',
+                        // enable or disable the instance
+                        active: true,
+                        basketID: 'cdb421a3',
+                        url: "http://geolat.netseven.it:8282/annotationserver/api/korbo",
+                        language: 'en'
+                    },
+                    {
+                        container: 'korbo',
+                        // instance label tab title and search provider
+                        label: 'Resources',
+                        // enable or disable the instance
+                        active: true,
+                        basketID: 'b0c1f077',
+                        url: korboEEConfig.endpoint,
+                        language: korboEEConfig.defaultLanguage
+                    },
+                    {
+                        container: 'dandeliondbpedia',
+                        // instance label tab title and search provider
+                        label: 'DBPedia',
+                        // enable or disable the instance
+                        active: true,
+                        basketID: korboEEConfig.basketID,
+                        url: korboEEConfig.endpoint,
+                        language: korboEEConfig.defaultLanguage
+                    },
+                    {
+                        container: 'pelagios',
+                        // instance label tab title and search provider
+                        label: 'Pelagios',
+                        // enable or disable the instance
+                        active: true,
+                        basketID: korboEEConfig.basketID,
+                        url: korboEEConfig.endpoint,
+                        language: korboEEConfig.defaultLanguage,
+                        resultsLimit: 100
+                    }
+                ]
+            }
+        }
+    };
+
+    function geolat_korboee_edit(korboItemID) {
+        window.korboee_current_edit_item_id = korboItemID;
+        $('#korboee_hidden_edit').trigger('click');
+    }
+    function geolat_korboee_new() {
+        $('#korboee_hidden_new').trigger('click');
+    }
+</script>
+<style>
+    .dropdown-menu {
+        z-index: 99999999999999;
+    }
+</style>
+<!-- fuffa -->
+<br/>
+<button class="btn btn-xs btn-success"
+        ng-click="new()">NEW
+</button>
+<br/>
+<!-- altra fuffa -->
+<div data-ng-app=Pundit2 class="kee-wrp pnd-wrp">
+    <korbo-entity-editor conf-name=korboEEConfig
+                     ng-show=false></korbo-entity-editor>
+    <div ng-controller=KeeDemoCtrl>
+        <button id="korboee_hidden_edit" ng-click="edit()" ng-show="false"></button>
+        <button id="korboee_hidden_new" ng-click="new()" ng-show="false"></button>
+    </div>
+</div>
+<section class="content">
+
+    <div id="facetsSelectors" class="cols-xs-2 col-md-2">
+        <ul class="slim-nav nav ">
+            <li class="open"><a href="#" class="title facet-types"><div class="slim-facet-title-icon slim-icon-base"><i class="fa fa-cog"></i></div> Types</a>
+                <ul class="slim-base-list slim-facet-list slim-box-search-facet">
+
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://www.w3.org/2004/02/skos/core#Concept');return false;"> Concept (5)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/Place');return false;"> Place (3)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/PopulatedPlace');return false;"> PopulatedPlace (3)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/Settlement');return false;"> Settlement (3)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/Agent');return false;"> Agent (1)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/Artist');return false;"> Artist (1)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/City');return false;"> City (1)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/MusicalArtist');return false;"> MusicalArtist (1)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://dbpedia.org/ontology/Person');return false;"> Person (1)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://geovocab.org/spatial#Feature');return false;"> Feature (1)</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="addFacetAndRefresh('kitem_type_ss', 'http://pleiades.stoa.org/places/vocab#Place');return false;"> Place (1)</a>
+                    </li>
+
+                </ul>
+            </li>
+        </ul>
+        <br>
+
+
+    </div>
+
+    <div class="col-xs-10 col-md-10">
+        <div class="box box-primary">
+            <div class="box-body table-responsive no-padding">
+
+
+                <table class="table table-bordered table-striped sonata-ba-list">
+
+
+                    <thead>
+
+                    <tr class="sonata-ba-list-field-header">
+
+
+                        <th class="sonata-ba-list-field-header-text sonata-ba-list-field-header-order-asc">
+                            <a href="#" onclick="setSortFieldAndRefresh('kitem_id_s');">id</a>
+                        </th>
+
+
+                        <th class="sonata-ba-list-field-header-text sonata-ba-list-field-header-order-asc">
+                            <a href="#" onclick="setSortFieldAndRefresh('kitem_sort_label_s');">label</a>
+                        </th>
+
+
+                        <th class="sonata-ba-list-field-header-text sonata-ba-list-field-header-order-asc">
+                            <a href="#" onclick="setSortFieldAndRefresh('kitem_sort_abstract_t');">abstract</a>
+                        </th>
+
+
+                        <th class="sonata-ba-list-field-header-text sonata-ba-list-field-header-order-asc">
+                            <a href="#" onclick="setSortFieldAndRefresh('kitem_webresource_s');">resource</a>
+                        </th>
+
+
+                        <th class="sonata-ba-list-field-header-text sonata-ba-list-field-header-order-asc">
+                            <a href="#" onclick="setSortFieldAndRefresh('kitem_sort_type_s');">type</a>
+                        </th>
+
+                        <th class="sonata-ba-list-field-header-text">
+                            Actions
+                        </th>
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+                    <tr>
+                        <td>
+                            876a54d2
+                        </td>
+                        <td>
+                            Prova
+                        </td>
+                        <td>
+                            asdads
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <span class="korbo_type" title="http://pleiades.stoa.org/places/vocab#Place">Place</span>
+                            <br>
+                            <span class="korbo_type" title="http://geovocab.org/spatial#Feature">Feature</span>
+                            <br>
+                            <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
+                            <br>
+                        </td>
+
+                        <td>
+                            <button class="btn btn-xs btn-primary" onclick="geolat_korboee_edit('876a54d2')">Edit
+                            </button>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            cf39c909
+                        </td>
+                        <td>
+                            Venice
+                        </td>
+                        <td>
+                            Venice (; alternative obsolete form: Vinegia; Venetian: Venexia;;) is a city in northeastern Italy sited on a group of 118 small islands separated by canals and linked by bridges. It is located in the marshy Venetian Lagoon which stretches along the shoreline, between the mouths of the Po and the Piave Rivers. Venice is renowned for the beauty of its setting, its architecture and its artworks. The city in its entirety is listed as a World Heritage Site, along with its lagoon.
+                        </td>
+                        <td>
+                            <a title="http://en.wikipedia.org/wiki/Venice" class="btn btn-xs btn-primary" href="http://en.wikipedia.org/wiki/Venice" target="_blank">Visit</a>
+                        </td>
+                        <td>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Place">Place</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/PopulatedPlace">PopulatedPlace</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Settlement">Settlement</span>
+                            <br>
+                            <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
+                            <br>
+                        </td>
+
+                        <td>
+                            <button class="btn btn-xs btn-primary" onclick="geolat_korboee_edit('cf39c909')">Edit
+                            </button>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            7307f1b2
+                        </td>
+                        <td>
+                            Genoa
+                        </td>
+                        <td>
+                            Genoa (;; Genoese and Ligurian Zena; Latin and, archaically, English Genua) is the capital of Liguria and the sixth largest city in Italy with a population of 604,848 within its administrative limits on a land area of. The urban zone of Genoa extends beyond the administrative city limits with a population of 718,896. The urban area of Genoa has a population of 800,709. Over 1.5 million people live in the metropolitan area. Genoa is one of Europe's largest cities on the Mediterranean Sea and the largest seaport in Italy.
+                        </td>
+                        <td>
+                            <a title="http://en.wikipedia.org/wiki/Genoa" class="btn btn-xs btn-primary" href="http://en.wikipedia.org/wiki/Genoa" target="_blank">Visit</a>
+                        </td>
+                        <td>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Place">Place</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/PopulatedPlace">PopulatedPlace</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Settlement">Settlement</span>
+                            <br>
+                            <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/City">City</span>
+                            <br>
+                        </td>
+
+                        <td>
+                            <button class="btn btn-xs btn-primary" onclick="geolat_korboee_edit('7307f1b2')">Edit
+                            </button>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            8f623a95
+                        </td>
+                        <td>
+                            Billy Milano
+                        </td>
+                        <td>
+                            Billy Milano is a Bronx-born heavy metal musician now based in Austin, Texas. He was the singer, guitarist, and bassist of crossover thrash band M.O.D., and the singer of its predecessor, Stormtroopers of Death. He is currently the singer of United Forces, which also features his Stormtroopers of Death bandmate Dan Lilker.
+                        </td>
+                        <td>
+                            <a title="http://en.wikipedia.org/wiki/Billy_Milano" class="btn btn-xs btn-primary" href="http://en.wikipedia.org/wiki/Billy_Milano" target="_blank">Visit</a>
+                        </td>
+                        <td>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Person">Person</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/MusicalArtist">MusicalArtist</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Artist">Artist</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Agent">Agent</span>
+                            <br>
+                            <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
+                            <br>
+                        </td>
+
+                        <td>
+                            <button class="btn btn-xs btn-primary" onclick="geolat_korboee_edit('8f623a95')">Edit
+                            </button>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            92d720e2
+                        </td>
+                        <td>
+                            Turin
+                        </td>
+                        <td>
+                            Turin (, pronounced; Piedmontese: Turin, pronounced;) is a city and an important business and cultural centre in northern Italy, capital of the Piedmont region, located mainly on the left bank of the Po River, in front of Susa Valley and surrounded by the western Alpine arch. The population of the city proper is 911,823 (December 2012) while the population of the urban area is estimated by Eurostat to be 1.7 million inhabitants. The Turin metropolitan area is estimated by the OECD to have a population of 2.2 million.
+                        </td>
+                        <td>
+                            <a title="http://en.wikipedia.org/wiki/Turin" class="btn btn-xs btn-primary" href="http://en.wikipedia.org/wiki/Turin" target="_blank">Visit</a>
+                        </td>
+                        <td>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Place">Place</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/PopulatedPlace">PopulatedPlace</span>
+                            <br>
+                            <span class="korbo_type" title="http://dbpedia.org/ontology/Settlement">Settlement</span>
+                            <br>
+                            <span class="korbo_type" title="http://www.w3.org/2004/02/skos/core#Concept">Concept</span>
+                            <br>
+                        </td>
+
+                        <td>
+                            <button class="btn btn-xs btn-primary" onclick="geolat_korboee_edit('92d720e2')">Edit
+                            </button>
+
+                        </td>
+                    </tr>
+
+                    </tbody>
+
+
+                    <tfoot>
+                    <tr>
+
+                        <th colspan="8">
+                            <div class="form-inline">
+
+                                <div class="pull-left">
+                                    <button class="btn btn-xs btn-success" onclick="geolat_korboee_new()">Create New Item
+                                    </button>
+                                </div>
+
+                                <div class="pull-right">
+
+                                    1 / 1
+                                    &nbsp;-&nbsp;
+
+                                    5 results
+                                    &nbsp;-&nbsp;
+                                    Per page
+                                    <select id="perPageSelect" class="form-control per-page small " style="width: auto" tabindex="-1" title="Per page">
+
+                                        <option selected="selected" value="10">
+                                            10
+                                        </option>
+                                        <option value="20">
+                                            20
+                                        </option>
+                                        <option value="50">
+                                            50
+                                        </option>
+                                        <option value="100">
+                                            100
+                                        </option>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+
+                    </tfoot>
+                </table>
+
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- buildexamples:section footer --><!-- /buildexamples -->

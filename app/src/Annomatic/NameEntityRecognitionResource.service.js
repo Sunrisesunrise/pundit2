@@ -1,8 +1,9 @@
 angular.module('Pundit2.Annomatic')
 
-.service('GramsciResource', function($resource) {
+.service('NameEntityRecognitionResource', function($resource, Config) {
 
-    var baseURL = "http://metasound.dibet.univpm.it:8080/DOMAnnotationService/api/annotator/v1/gramsci-dictionary";
+    // TODO: find a better way (!) to set a dynamic url in $resource
+    var baseURL = Config.modules.Annomatic.sourceURL;
 
     return $resource(baseURL, {}, {
         getAnnotations: {

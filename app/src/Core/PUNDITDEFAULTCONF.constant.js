@@ -87,6 +87,23 @@ angular.module('Pundit2.Core')
      * </pre>
      */
     annotationServerBaseURL: 'http://demo-cloud.as.thepund.it:8080/annotationserver/',
+    //annotationServerBaseURL: 'http://geolat.netseven.it:8282/annotationserver/',
+
+    /**
+     * @module punditConfig
+     * @ngdoc object
+     * @name annotationServerCallsNeedLoggedUser
+     * @description
+     * `boolean`
+     *
+     * Determines whether all calls to annotation server need logged user.
+     *
+     * Default:
+     * <pre>
+     * annotationServerCallsNeedLoggedUser: false
+     * </pre>
+     */
+    annotationServerCallsNeedLoggedUser: false,
 
     /**
      * @module punditConfig
@@ -385,7 +402,9 @@ angular.module('Pundit2.Core')
         },
 
         Annomatic: {
-            active: false
+            active: false,
+            // TODO: update this value in exsterlan gramsci configurations and remove it from here
+            sourceURL: 'http://metasound.dibet.univpm.it:8080/DOMAnnotationService/api/annotator/v1/gramsci-dictionary'
         },
 
         Dashboard: {

@@ -40,6 +40,8 @@ angular.module('Pundit2.Client')
      */
     debug: false,
 
+    addDefaultKorbooEESelector: true,
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -628,7 +630,9 @@ angular.module('Pundit2.Client')
             addKorbo(dir);
         }
 
-        addKorboEESelector();
+        if (client.options.addDefaultKorbooEESelector) {
+            addKorboEESelector();
+        }
         SelectorsManager.init();
 
         addComponents();

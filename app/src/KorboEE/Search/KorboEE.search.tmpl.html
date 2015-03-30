@@ -2,7 +2,7 @@
     <!-- Search -->
     <div class="kee-search">
             <label>
-                Search entity to use:
+                {{searchFieldLabel}}
             </label>
             <div class="left-inner-icon">
     	        <span 
@@ -35,7 +35,8 @@
     <!-- Footer -->
     <div class="kee-footer">
         <button 
-            ng-hide="editMode" 
+            ng-hide="searchType != 'tab' || editMode || !showClose.visibility"
+            ng-class="{'disabled': showClose.disabled}"
             type="button" 
             class="btn btn-xs btn-success" 
             ng-click="closeKeeModal()">
@@ -44,7 +45,7 @@
         <button 
             type="button" 
             class="btn btn-xs btn-success" 
-            ng-show="!editMode && showMoreInfo.visibility" 
+            ng-show="searchType() == 'tab' && !editMode && showMoreInfo.visibility"
             ng-class="{'disabled': showMoreInfo.disabled}" 
             ng-click="moreInfo()">
                 More Info
@@ -52,7 +53,7 @@
         <button 
             type="button" 
             class="btn btn-xs btn-success" 
-            ng-show="!editMode && showCopyInEditor.visibility" 
+            ng-show="searchType() == 'tab' && !editMode && showCopyInEditor.visibility"
             ng-class="{'disabled': showCopyInEditor.disabled}" 
             ng-click="copyInEditor()">
                 Copy in editor
@@ -60,33 +61,48 @@
         <button 
             type="button" 
             class="btn btn-xs btn-success" 
-            ng-show="!editMode && showUse.visibility" 
+            ng-show="searchType() == 'tab' && !editMode && showUse.visibility"
             ng-class="{'disabled': showUse.disabled}" 
             ng-click="use()">
                 Use
         </button>
         <button 
             type="button" 
-            class="btn btn-xs btn-success" 
-            ng-show="!editMode && showUseAndCopy.visibility" 
+            class="btn btn-xs btn-success"
+            ng-show="searchType() == 'tab' && !editMode && showUseAndCopy.visibility"
             ng-class="{'disabled': showUseAndCopy.disabled}" 
             ng-click="copyAndUse()">
                 Copy and Use
         </button>
-
-        <button 
-            ng-show="editMode" 
+        <button
+            ng-show="searchType() == 'tab' && editMode"
             type="button" class="btn btn-xs btn-success" 
             ng-click="korboModalTabs.activeTab = 1">
                 Back
         </button>
         <button 
-            ng-show="editMode" 
+            ng-show="searchType() == 'tab' && editMode"
             type="button" 
             class="btn btn-xs btn-success"
             ng-disabled="!itemSelected"
             ng-click="copyInEditor(); elemToSearch = ''">
                 Select URL
+        </button>
+        <button
+            type="button"
+            class="btn btn-sm btn-default"
+            ng-show="searchType() == 'inner' && showInnerSelectURL.visibility"
+            ng-class="{'disabled': showInnerSelectURL.disabled || !itemSelected}"
+            ng-click="innerSelectURL()">
+                Select URL
+        </button>
+        <button
+            type="button"
+            class="btn btn-sm btn-default"
+            ng-show="searchType() == 'inner' && showInnerCopyFromLOD.visibility"
+            ng-class="{'disabled': showInnerCopyFromLOD.disabled || !itemSelected}"
+            ng-click="innerCopyFromLOD()">
+                Copy from LOD
         </button>
     </div>
     <!-- // End footer -->

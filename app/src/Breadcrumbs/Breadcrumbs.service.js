@@ -6,6 +6,8 @@ angular.module('Pundit2.Breadcrumbs')
     var preAddedItems = {};
 
     var defaultItemObject = {
+        name: '',
+        unique: false,
         originalLabel: '',
         label: '',
         charLimit: undefined,
@@ -124,8 +126,20 @@ angular.module('Pundit2.Breadcrumbs')
 
     breadcrumbs.appendItem = function(name, itemObject) {
         var extendedObject = angular.extend({}, defaultItemObject, itemObject);
+        if (typeof extendedObject.name === 'undefined' || extendedObject.name.length == 0) {
+            extendedObject.name = extendedObject.label;
+        }
 
         if (typeof state[name] !== 'undefined') {
+            // Check if other item with same name already exists.
+            var idx = breadcrumbs.indexOfItem(name, extendedObject);
+            if (idx !== -1) {
+                if (state[name].items[idx].unique || extendedObject.unique) {
+                    breadcrumbs.dropItemsFromIndex(name, idx + 1);
+                    return;
+                }
+            }
+
             setItemLabel(name, extendedObject, extendedObject.label, state[name].items.length);
             state[name].items.push(extendedObject);
             updateAllLabels(name);
@@ -137,6 +151,17 @@ angular.module('Pundit2.Breadcrumbs')
 
             preAddedItems[name].push(extendedObject);
         }
+    }
+
+    breadcrumbs.indexOfItem = function(name, item) {
+        if (typeof state[name] !== 'undefined') {
+            for (var i=0; i<state[name].items.length; i++) {
+                if (state[name].items[i].name == item.name) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     breadcrumbs.popItem = function(name) {

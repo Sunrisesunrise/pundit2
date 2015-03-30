@@ -21,7 +21,7 @@
 
                 <div 
                     class="pnd-row-button-subject pnd-statement-found"
-                    ng-class="{'pnd-statement-icon-one': !templateMode}"
+                    ng-class="{'pnd-statement-icon-one': !templateMode && !subjectFixed}"
                     ng-if="subjectFound">
                     <span 
                         class="pnd-statement-label" 
@@ -35,7 +35,7 @@
                         <button
                                 type="button"
                                 class="btn btn-xs btn-link"
-                                ng-if="!templateMode"
+                                ng-if="!templateMode && !subjectFixed"
                                 title="delete"
                                 ng-click="wipeSubject()">
                             <span class="pnd-icon pnd-icon-trash-o"></span>

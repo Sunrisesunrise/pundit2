@@ -140,6 +140,7 @@ describe("Client interaction when user is logged in", function() {
     var p = protractor.getInstance();
 
     beforeEach(function(){
+        p.driver.manage().window().setSize(1700, 960);
         p.addMockModule('httpBackendMock', httpMock);
         p.get('/app/examples/client-TEST.html');
     });
@@ -372,10 +373,10 @@ describe("Client interaction when user is logged in", function() {
             expect(tabs.length).toBe(2);
         });
         // check popover vertical tabs showed items number
-        p.findElements(protractor.By.css(".pnd-resource-panel-popover .pnd-vertical-tabs li a span")).then(function(spans) {
-            expect(spans.length).toBe(4);
+        p.findElements(protractor.By.css(".pnd-resource-panel-popover .pnd-vertical-tabs li a span:not(.ng-hide)")).then(function(spans) {
+            expect(spans.length).toBe(2);
             expect(spans[0].getText()).toEqual(pageItemsNumber.toString());
-            expect(spans[2].getText()).toEqual("0");
+            expect(spans[1].getText()).toEqual("0");
         });
     });
 
@@ -396,8 +397,8 @@ describe("Client interaction when user is logged in", function() {
             expect(tabs.length).toBe(1);
         });
         // check popover vertical tabs showed items number
-        p.findElements(protractor.By.css(".pnd-resource-panel-popover .pnd-vertical-tabs li a span")).then(function(spans) {
-            expect(spans.length).toBe(2);
+        p.findElements(protractor.By.css(".pnd-resource-panel-popover .pnd-vertical-tabs li a span:not(.ng-hide)")).then(function(spans) {
+            expect(spans.length).toBeGreaterThan(0);
             expect(spans[0].getText()).toEqual("15");
         });
     });
@@ -482,7 +483,7 @@ describe("Client interaction when user is logged in", function() {
 
     it("should correctly show notebook composer by edit notebook voice in ctx menu", function(){
 
-        p.driver.manage().window().setSize(1600, 960);
+        p.driver.manage().window().setSize(1700, 960);
 
         // open dashboard
         p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
@@ -521,7 +522,7 @@ describe("Client interaction when user is logged in", function() {
 
     it("should correctly show notebook composer by click on create new notebook", function(){
         
-        p.driver.manage().window().setSize(1600, 960);
+        p.driver.manage().window().setSize(1700, 960);
 
         // open dashboard
         p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();

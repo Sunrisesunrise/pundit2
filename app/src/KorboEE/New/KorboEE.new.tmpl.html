@@ -6,206 +6,272 @@
                 <span class="pnd-icon pnd-icon-gear"></span>
             </button>
         </div>
+        <!--<breadcrumbs ng-show="showBreadcrumbs" bc-name="'keebreadcrumb'" empty-placeholder="'Type entity title'"></breadcrumbs>-->
+        <div>
+            <ul class="nav nav-tabs">
+                <li ng-class="{'active': innerPanes.current == 'simpleOptions'}">
+                    <a href="#" id="nav-btn-entity" ng-click="changeInnerPane('simpleOptions')">{{entityTitle}}</a>
+                </li>
+                <li ng-class="{'active': innerPanes.current == 'advancedOptions'}">
+                    <a href="#" id="nav-btn-advanced-options" ng-click="changeInnerPane('advancedOptions')">Advanced fields</a>
+                </li>
+                <li ng-class="{'active': innerPanes.current == 'tripleComposer'}" ng-if="conf.tripleComposerEnabled">
+                    <a href="#" id="nav-btn-triplecomposer" ng-click="changeInnerPane('tripleComposer')">Custom fields</a>
+                </li>
+            </ul>
+        </div>
         <div class="kee-top-area-message" ng-class="{'kee-error' : topArea.status == 'error'}">
             {{topArea.message}}
         </div>
-    </div> 
+    </div>
     <!-- End top area -->
 
     <!-- New content -->
     <div class="kee-new-content" ng-hide="isSaving">
-    
-        <!-- Content on the right -->
-        <div class="kee-right-content" ng-hide="loadingStatus">
 
-            <!-- Original url-->
-            <div class="kee-new-original-url">
-	            <div class="form-group">
-	                <label>Original URL</label>
-	                <div class="left-inner-icon">
-                        <span class="pnd-icon pnd-icon-external-link" ng-click="openWindow(originalUrl);$event.stopPropagation();$event.preventDefault();"></span>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            ng-model="originalUrl" 
-                            ng-disabled="originalUrlCheck">
-	                </div>
-	            </div>
+        <!-- Inner pane: title, description and language management -->
+        <div class="kee-inner-pane"
+             ng-show="innerPanes.panes.simpleOptions.visible">
+            <div class="kee-new-languages">
+                <div kee-languages="tabs"></div>
+                <button
+                        class="btn btn-xs btn-link pull-left"
+                        template="{{disactiveLanguagesPopoverTemplate}}"
+                        data-animation="am-flip-x"
+                        bs-popover>
+                    <span class="pnd-icon pnd-icon-plus"></span>
+                </button>
             </div>
-            <!-- End original url -->
+        </div>
+        <!-- END - Inner pane: title, description and language management -->
 
-            <!-- Image url -->
-            <div class="kee-new-image-url">
+        <!-- Inner pane: advanced options -->
+        <div class="kee-inner-pane"
+             ng-show="innerPanes.panes.advancedOptions.visible">
 
-                <!-- Form group -->
-	            <div class="form-group">
-
-	            	<!-- Preview -->
-	                <div class="kee-preview-image">
-                    	<img ng-show="showImg" ng-src="{{previewImage}}"/>
-                    </div>
-	                <!-- End preview -->
-
-	                <span 
-                        ng-show="errorImage" 
-                        class="kee-message-error-image">
-                            Impossible to load image
-                    </span>
-                    <span 
-                        ng-show="loadingImage" 
-                        class="kee-message-loading-image">
-                            Loading image...
-                    </span>
-	                <label>
-                        Image URL
-	                    <span 
-                            ng-show="!imageUrlHasError" 
-                            class="pnd-icon pnd-icon-info-circle" 
-                            data-title="{{imageUrlTooltipeMessage}}" 
-                            bs-tooltip>
+            <div class="kee-inner-sub-pane kee-inner-sub-pane-right pull-right">
+                <!-- Image url -->
+                <div class="kee-new-image-url">
+                    <!-- Form group -->
+                    <div class="form-group">
+                        <!-- Preview -->
+                        <div class="kee-preview-image">
+                            <img ng-show="showImg" ng-src="{{previewImage}}"/>
+                        </div>
+                        <!-- End preview -->
+                        <span
+                                ng-show="errorImage"
+                                class="kee-message-error-image">
+                                Impossible to load image
                         </span>
-	                    <span 
-                            ng-show="imageUrlHasError" 
-                            class="kee-error pnd-icon pnd-icon-info-circle" 
-                            data-title="{{imageUrlErrorMessage}}" 
-                            bs-tooltip>
+                        <span
+                                ng-show="loadingImage"
+                                class="kee-message-loading-image">
+                                Loading image...
                         </span>
-	                </label>
-	                <input 
-                        ng-hide="showImg" 
-                        type="text" 
-                        ng-model="imageUrl" 
-                        ng-change="checkUrl()" 
-                        class="form-control">
-	                <a 
-                        ng-show="showImg" 
-                        ng-click="removeImage()" 
-                        class="kee-message-remove-image">
+                        <label>
+                            Image URL
+                            <span
+                                    ng-show="!imageUrlHasError"
+                                    class="pnd-icon pnd-icon-info-circle"
+                                    data-title="{{imageUrlTooltipeMessage}}"
+                                    bs-tooltip>
+                            </span>
+                            <span
+                                    ng-show="imageUrlHasError"
+                                    class="kee-error pnd-icon pnd-icon-info-circle"
+                                    data-title="{{imageUrlErrorMessage}}"
+                                    bs-tooltip>
+                            </span>
+                        </label>
+                        <input
+                                ng-hide="showImg"
+                                type="text"
+                                ng-model="imageUrl"
+                                ng-change="checkUrl()"
+                                class="form-control">
+                        <a
+                                ng-show="showImg"
+                                ng-click="removeImage()"
+                                class="kee-message-remove-image">
                             Remove image
-                    </a>
-	                <label ng-class="{'kee-error' : imageUrlHasError}" />
-	            </div>
-                <!-- End form group -->
+                        </a>
+                        <label ng-class="{'kee-error' : imageUrlHasError}" />
+                    </div>
+                    <!-- End form group -->
+                </div>
+                <!-- End image url -->
+                <!-- Original url-->
+                <div class="kee-new-original-url"
+                     ng-show="conf.fromLODTools">
+                    <div class="form-group">
+                        <label>Original URL</label>
+                        <div class="left-inner-icon">
+                            <span class="pnd-icon pnd-icon-external-link" ng-click="openWindow(originalUrl);$event.stopPropagation();$event.preventDefault();"></span>
+                            <span class="pnd-icon"
+                                  ng-class="{true:'pnd-icon-lock', false:'pnd-icon-unlock'}[originalUrlCheck]"
+                                  ng-click="originalUrlCheck = !originalUrlCheck;">
+                            </span>
+                            <input
+                                type="text"
+                                class="form-control"
+                                ng-model="originalUrl"
+                                ng-disabled="originalUrlCheck">
+                        </div>
+                    </div>
+                    <button class="btn btn-info btn-xs pnd-btn-full"
+                            ng-disabled="originalUrlCheck"
+                            ng-click="searchOnResourcePanel($event, 'original-url')">
+                        Search original URL
+                    </button>
+                </div>
+                <!-- End original url -->
+                <!-- Search and copy from LOD-->
+                <div class="kee-new-search-and-copy"
+                     ng-show="conf.fromLODTools">
+                    <button class="btn btn-info btn-xs pnd-btn-full"
+                            ng-click="searchOnResourcePanel($event, 'copy-from-lod')">
+                        Search and copy from LOD
+                    </button>
+                </div>
+                <!-- End original url -->
             </div>
-            <!-- End image url -->
 
             <!-- Types -->
-            <div 
-                class="kee-new-types" 
-                ng-mouseleave="typesMouseLeave()" 
-                ng-mouseenter="typesMouseEnter()">
-            
-                <!-- Form group -->
-	            <div class="form-group">
-    	            <button 
-                        type="button" 
-                        class="btn btn-xs btn-link pull-right" 
-                        ng-show="!activeFilter" 
-                        ng-click="activeFilter = !activeFilter">
-                            <span class="pnd-icon pnd-icon-filter"></span>
-                    </button>
-	                <label ng-class="{'kee-error' : typesHasError}">                    
-	                    Types
-                        <span class="kee-error"> * </span>
-	                    <span 
-                            ng-show="!typesHasError" 
-                            class="pnd-icon pnd-icon-info-circle" 
-                            data-title="{{typesTooltipeMessage}}" 
-                            bs-tooltip>
-                        </span>
-	                    <span 
-                            ng-show="typesHasError" 
-                            class="pnd-icon pnd-icon-info-circle kee-error" 
-                            data-title="{{typesErrorMessage}}" 
-                            bs-tooltip>
-                        </span>
-	                </label>
+            <div class="kee-inner-sub-pane kee-inner-sub-pane-left pull-left">
+                <div
+                    class="kee-new-types"
+                    ng-mouseleave="typesMouseLeave()"
+                    ng-mouseenter="typesMouseEnter()">
 
-                    <div 
-                        class="left-inner-icon pull-right" 
-                        ng-show="activeFilter">
-                        <span 
-                            ng-show="typeFilter.label == ''" 
-                            class="pnd-icon pnd-icon-filter" 
+                    <!-- Form group -->
+                    <div class="form-group">
+                        <button
+                            type="button"
+                            class="btn btn-xs btn-link pull-right"
+                            ng-show="!activeFilter"
                             ng-click="activeFilter = !activeFilter">
-                        </span>
-                        <span 
-                            ng-show="!typeFilter.label == ''" 
-                            class="pnd-icon pnd-icon-times" 
-                            ng-click="typeFilter.label=''">
-                        </span>
-                        <input 
-                            ng-show="activeFilter" 
-                            type="text" 
-                            placeholder="filter types..." 
-                            ng-model="typeFilter.label"  
-                            class="form-control">
+                                <span class="pnd-icon pnd-icon-filter"></span>
+                        </button>
+                        <label ng-class="{'kee-error' : typesHasError}">
+                            Types
+                            <span class="kee-error"> * </span>
+                            <span
+                                ng-show="!typesHasError"
+                                class="pnd-icon pnd-icon-info-circle"
+                                data-title="{{typesTooltipeMessage}}"
+                                bs-tooltip>
+                            </span>
+                            <span
+                                ng-show="typesHasError"
+                                class="pnd-icon pnd-icon-info-circle kee-error"
+                                data-title="{{typesErrorMessage}}"
+                                bs-tooltip>
+                            </span>
+                        </label>
+
+                        <div
+                            class="left-inner-icon pull-right"
+                            ng-show="activeFilter">
+                            <span
+                                ng-show="typeFilter.label == ''"
+                                class="pnd-icon pnd-icon-filter"
+                                ng-click="activeFilter = !activeFilter">
+                            </span>
+                            <span
+                                ng-show="!typeFilter.label == ''"
+                                class="pnd-icon pnd-icon-times"
+                                ng-click="typeFilter.label=''">
+                            </span>
+                            <input
+                                ng-show="activeFilter"
+                                type="text"
+                                placeholder="filter types..."
+                                ng-model="typeFilter.label"
+                                class="form-control">
+                        </div>
                     </div>
-	            </div>
-                <!-- End form group -->
+                    <!-- End form group -->
 
-                <!-- Types list -->
-                <div class="kee-list-types">
-                    <ul class="list-group">
-                        <li 
-                            ng-repeat="item in types | filter:typeFilter" 
-                            class="list-group-item">
-                            	<div 
-                                    class="pnd-item" 
-                                    ng-class="{'pnd-sticky-item': item.checked}" 
-                                    ng-click="item.checked = !item.checked; updateTypes()">
-                                        <div class="pnd-item-buttons">
-                                            <span 
-                                                class="pnd-icon pnd-icon-check ng-scope"
-                                                ng-show="item.checked">
+                    <!-- Types list -->
+                    <div class="kee-list-types">
+                        <ul class="list-group">
+                            <li
+                                ng-repeat="item in types | filter:typeFilter"
+                                class="list-group-item">
+                                    <div
+                                        class="pnd-item"
+                                        ng-class="{'pnd-sticky-item': item.checked}"
+                                        ng-click="item.checked = !item.checked; updateTypes()">
+                                            <div class="pnd-item-buttons">
+                                                <span
+                                                    class="pnd-icon pnd-icon-check ng-scope"
+                                                    ng-show="item.checked">
+                                                </span>
+                                            </div>
+
+                                            <div class="pnd-item-text">
+                                                <span class="pnd-item-label">
+                                                    {{item.label}}
+                                                </span>
+                                            </div>
+
+                                            <span
+                                                class="pnd-icon pnd-icon-external-link pull-right"
+                                                ng-click="openWindow(item.URI);$event.stopPropagation();$event.preventDefault();">
                                             </span>
-                                        </div>
-
-                                        <div class="pnd-item-text">
-                                            <span class="pnd-item-label">
-                                                {{item.label}}
-                                            </span>
-                                        </div>
-
-                                        <span 
-                                            class="pnd-icon pnd-icon-external-link pull-right" 
-                                            ng-click="openWindow(item.URI);$event.stopPropagation();$event.preventDefault();">
-                                        </span>
-                                </div>
-                        </li>
-                    </ul>
+                                    </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- End types list -->
                 </div>
-                <button 
-                    type="button" 
-                    class="btn btn-default btn-xs" 
-                    ng-click="activeAllTypes()">
-                        Select all types
+                <!-- End Types -->
+                <button
+                        type="button"
+                        class="btn btn-info btn-xs pnd-btn-half"
+                        ng-click="activeAllTypes()">
+                    Select all types
                 </button>
-                <button 
-                    type="button" 
-                    class="btn btn-default btn-xs" 
-                    ng-click="disableAllTypes()">
-                        Deselect all types
+                <button
+                        type="button"
+                        class="btn btn-info btn-xs pnd-btn-half"
+                        ng-click="disableAllTypes()">
+                    Deselect all types
                 </button>
-                <!-- End types list -->  
             </div>
-            <!-- End Types -->
-        </div> 
-        <!-- End content on the right -->
-
-        <div class="kee-new-languages">
-            <div kee-languages="tabs"></div>
-            <button 
-                class="btn btn-xs btn-link pull-left" 
-                ng-class="{true:'pnd-korboee-btn-not-active'}[disactiveLanguages.length < 1]"
-                template="{{disactiveLanguagesPopoverTemplate}}" 
-                data-animation="am-flip-x" 
-                bs-popover 
-                ng-disabled="disactiveLanguages.length < 1">
-                    <span class="pnd-icon pnd-icon-plus"></span>
-            </button>
         </div>
-    </div> 
+        <!-- END - Inner pane: advanced options -->
+
+        <!-- Inner pane: search -->
+        <div class="kee-inner-pane"
+             ng-show="innerPanes.panes.search.visible">
+            <div ng-include="'src/KorboEE/Search/KorboEE.search.tmpl.html'"></div>
+        </div>
+        <!-- END - Inner pane: search -->
+
+        <!-- Inner pane: tripleComposer -->
+        <div class="kee-inner-pane pnd-wrp"
+             ng-show="innerPanes.panes.tripleComposer.visible">
+            <!--Triple composer is visible only when at least one type is selected-->
+            <triple-composer tc-name="'korboeetriplecomposer'" ng-show="selectedTypes().length > 0"></triple-composer>
+            <!--Otherwise a warning message is shown-->
+            <div ng-show="selectedTypes().length == 0">
+                <p class="kee-infotext">
+                    You can't add custom fields if no entity types are specified.
+                    <br />
+                    Please go to the <a ng-click="changeInnerPane('advancedOptions')">advanced options</a> and select one or more types.
+                    <br /><br />
+                    <!-- TODO See if we can remove the button below -->
+                    <button class="btn btn-sm btn-info"
+                            ng-show="!loadingStatus"
+                            ng-click="changeInnerPane('advancedOptions')">Advanced options</button>
+                </p>
+
+            </div>
+        </div>
+        <!-- END Inner pane: tripleComposer -->
+    </div>
     <!-- End new content -->
 
     <div class="kee-new-saving" ng-show="isSaving">
@@ -216,21 +282,21 @@
     <div class="kee-footer">
         <button 
             type="button" 
-            class="btn btn-xs btn-success" 
+            class="btn btn-xs btn-success pnd-btn-full"
             ng-click="save()">
                 <span ng-if="!editMode">Save and add</span>
                 <span ng-if="editMode">Save</span>
         </button>
         <button 
             type="button" 
-            class="btn btn-xs btn-info" 
+            class="btn btn-xs btn-info pnd-btn-full"
             ng-click="closeKeeModal()">
                 Close
         </button>
         <button 
             ng-hide="editMode" 
             type="button" 
-            class="btn btn-xs btn-info" 
+            class="btn btn-xs btn-info pnd-btn-full"
             ng-click="clearForm()">
                 Clear
         </button>
