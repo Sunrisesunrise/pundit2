@@ -22,6 +22,7 @@
 
     <script src="../src/Core/Core.js"></script>
     <script src="../src/Core/Keyboard.service.js"></script>
+    <script src="../src/Core/Login.popover.ctrl.js"></script>
     <script src="../src/Core/Utils.service.js"></script>
     <script src="../src/Core/BaseComponent.service.js"></script>
     <script src="../src/Core/EventDispatcher.service.js"></script>

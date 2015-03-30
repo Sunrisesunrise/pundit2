@@ -1,3 +1,6 @@
+function GLOBAL_PUNDIT_IFRAME_LOADED() {
+    alert("LOADED");
+}
 angular.module('Pundit2.Core')
 
 .constant('MYPUNDITDEFAULTS', {
@@ -61,7 +64,7 @@ angular.module('Pundit2.Core')
  *
  */
 .service('MyPundit', function(MYPUNDITDEFAULTS, $http, $q, $timeout, $modal, $window, $interval,
-    BaseComponent, EventDispatcher, NameSpace, Analytics) {
+    BaseComponent, EventDispatcher, NameSpace, Analytics, $popover, $rootScope) {
 
     var myPundit = new BaseComponent('MyPundit', MYPUNDITDEFAULTS);
 
@@ -382,6 +385,139 @@ angular.module('Pundit2.Core')
         loginPromise.resolve(false);
         $timeout.cancel(loginPollTimer);
     };
+
+    var popoverState = {
+        autoCloseWait: 5,
+        autoCloseIntervall: null,
+        anchor: undefined,
+        loginSrc: 'http://dev.thepund.it/connect/index.php',
+        options: {
+            template: 'src/Core/Templates/login.popover.tmpl.html',
+            container: "[data-ng-app='Pundit2']"
+        },
+        renderIFrame: function() {
+            angular.element(".pnd-login-popover-container .iframe-container iframe").remove();
+            angular.element(".pnd-login-popover-container .iframe-container")
+                .append('<iframe src="' + popoverState.loginSrc + '"></iframe>');
+            popoverState.popover.$scope.isLoading = true;
+            popoverState.popover.$scope.loginSuccess = false;
+            popoverState.popover.$scope.loginSomeError = false;
+        },
+        loginSuccess: function() {
+            popoverState.popover.$scope.autoCloseIn = popoverState.autoCloseWait;
+            popoverState.popover.$scope.loginSuccess = true;
+            popoverState.autoCloseIntervall = $interval(function(){
+                var sec = popoverState.popover.$scope.autoCloseIn;
+                sec --;
+                if (sec < 1) {
+                    $interval.cancel(popoverState.autoCloseIntervall);
+                    myPundit.closeLoginPopover();
+                }
+                else {
+                    popoverState.popover.$scope.autoCloseIn = sec;
+                }
+            }, 1000);
+        },
+        popover: null
+    };
+
+    var popoverLoginPostMessageHandler = function(params) {
+        console.log(params);
+        if (typeof params.data !== 'undefined') {
+            if(params.data === 'loginPageLoaded') {
+                popoverState.popover.$scope.isLoading = false;
+                popoverState.popover.$scope.$digest();
+            }
+            else if(params.data === 'userLoggedIn') {
+                myPundit.checkLoggedIn().then(function(status){
+                    if (status) {
+                        popoverState.loginSuccess();
+                    }
+                    else {
+                        popoverState.popover.$scope.loginSomeError = true;
+                        popoverState.popover.$scope.$digest();
+                    }
+                }, function() {
+                    //popoverState.popover.$scope.loginSomeError = true;
+                    //popoverState.popover.$scope.$digest();
+                    popoverState.loginSuccess();
+                });
+            }
+        }
+    };
+
+    if (window.addEventListener) {
+        window.addEventListener("message", popoverLoginPostMessageHandler, false);
+    }
+    else {
+        if (window.attachEvent) {
+            window.attachEvent("onmessage", popoverLoginPostMessageHandler, false);
+        }
+    }
+
+    myPundit.popoverLogin = function(event) {
+        if (popoverState.popover != null) {
+            return;
+        }
+        var target = event.originalEvent.target;
+        // get target top and left position
+        var left = target.getBoundingClientRect().left;
+        var top = target.getBoundingClientRect().top;
+        // get target width and height, including padding
+        var h = angular.element(target).outerHeight();
+        var w = angular.element(target).outerWidth();
+
+        if (typeof(popoverState.anchor) === 'undefined') {
+            // create div anchor (the element bound with angular strap menu reference)
+            angular.element("[data-ng-app='Pundit2']")
+            .prepend("<div class='pnd-popover-anchor' style='position: absolute; left: -500px; top: -500px;'><div>");
+
+            popoverState.anchor = angular.element('.pnd-popover-anchor');
+        }
+
+        popoverState.anchor.css({
+            left: left + (w / 2),
+            top: 270
+        });
+
+        //popoverState.popover = $popover(angular.element(target), popoverState.options);
+        popoverState.popover = $popover(popoverState.anchor, popoverState.options);
+        popoverState.popover.$scope.isLoading = true;
+        popoverState.popover.$scope.loginSuccess = false;
+        popoverState.popover.$scope.loginSomeError = false;
+        popoverState.popover.$scope.loadedContent = function() {
+            alert("Content loaded");
+        };
+
+        popoverState.popover.$scope.closePopover = function () {
+            myPundit.closeLoginPopover();
+        };
+
+        popoverState.popover.$scope.loginRetry = function () {
+            popoverState.renderIFrame();
+        };
+
+        popoverState.popover.$promise.then(function() {
+            popoverState.popover.show();
+            popoverState.renderIFrame();
+        });
+    }
+
+    myPundit.getLoginPopoverSrc = function() {
+        return popoverState.loginSrc;
+    }
+
+    myPundit.closeLoginPopover = function() {
+        if (popoverState.popover === null) {
+            return;
+        }
+
+        popoverState.popover.hide();
+        popoverState.popover.destroy();
+        popoverState.popover = null;
+
+    }
+
 
     return myPundit;
 });

@@ -1,0 +1,28 @@
+<div class="popover pnd-login-popover-container pnd-ignore" tabindex="-1" >
+    <div class="iframe-container">
+    </div>
+    <div class="popover-login-pane popover-loading"
+            ng-show="isLoading">
+        <span class="pnd-icon pnd-icon-refresh pnd-icon-spin"></span>
+    </div>
+    <div class="popover-login-pane popover-login-error"
+         ng-show="loginSomeError">
+        Some error occurred
+        <br />
+        Click <a href="#" ng-click="loginRetry()">here</a> to retry.
+    </div>
+    <div class="popover-login-pane popover-login-success"
+         ng-show="loginSuccess">
+        Login completed!
+        <br />
+        (autoclose in {{autoCloseIn}})
+        <br />
+        <br />
+        <button class="btn btn-default" ng-click="closePopover()">Close</button>
+    </div>
+    <div class="popover-footer pnd-login-popover-footer">
+        <button type="button" class="btn btn-default pnd-login-popover-close" ng-click="closePopover()">Close</button>
+    </div> <!-- end modal-footer -->
+</div> <!-- end popover -->
+
+
