@@ -229,7 +229,7 @@ angular.module('Pundit2.TripleComposer')
     };
 
     var trackContextualEvent = function(eventString) {
-        var eventLabel = "tripleComposer--contextualMenu--" + eventString;
+        var eventLabel = "contextualMenu--" + eventString;
         Analytics.track('buttons', 'click', eventLabel);
     }
 
