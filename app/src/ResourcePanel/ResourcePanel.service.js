@@ -69,7 +69,37 @@ angular.module('Pundit2.ResourcePanel')
      * Default value:
      * <pre> inputIconClear: 'pnd-icon-times' </pre>
      */
-    inputIconClear: 'pnd-icon-times'
+    inputIconClear: 'pnd-icon-times',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ResourcePanel.pageItemsEnabled
+     *
+     * @description
+     * `boolean`
+     *
+     * Shows "Page items" selector
+     *
+     * Default value:
+     * <pre> pageItemsEnabled: true </pre>
+     */
+    pageItemsEnabled: true,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ResourcePanel.myItemsEnabled
+     *
+     * @description
+     * `boolean`
+     *
+     * Shows "My items" selector
+     *
+     * Default value:
+     * <pre> myItemsEnabled: true </pre>
+     */
+    myItemsEnabled: true
 
 })
 
@@ -442,23 +472,27 @@ angular.module('Pundit2.ResourcePanel')
         content.triple = triple;
 
         if (type === 'sub' || type === 'obj') {
-            var pageItemsForTabs = {
-                title: 'Page items',
-                items: pageItems,
-                module: 'Pundit2',
-                isStarted: true
-            };
-            contentTabs.push(pageItemsForTabs);
-            content.pageItems = pageItems;
+            if (resourcePanel.options.pageItemsEnabled) {
+                var pageItemsForTabs = {
+                    title: 'Page items',
+                    items: pageItems,
+                    module: 'Pundit2',
+                    isStarted: true
+                };
+                contentTabs.push(pageItemsForTabs);
+                content.pageItems = pageItems;
+            }
 
-            var myItemsForTabs = {
-                title: 'My items',
-                items: myItems,
-                module: 'Pundit2',
-                isStarted: true
-            };
-            contentTabs.push(myItemsForTabs);
-            content.myItems = myItems;
+            if (resourcePanel.options.myItemsEnabled) {
+                var myItemsForTabs = {
+                    title: 'My items',
+                    items: myItems,
+                    module: 'Pundit2',
+                    isStarted: true
+                };
+                contentTabs.push(myItemsForTabs);
+                content.myItems = myItems;
+            }
 
             content.properties = null;
         }
