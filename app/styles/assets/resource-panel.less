@@ -2,7 +2,7 @@
  * RESOURCE PANEL
  *
  * Includes styles for the resource panel but also
- * literal and calandar popovers
+ * literal and calendar popovers
  */
 
 
@@ -11,10 +11,13 @@
 \* ------------------------------------ */
 .pnd-resource-panel-popover {
     position: fixed !important;
-    max-width: 400px !important;
-    width: 400px;
+    max-width: @resource-panel-width !important;
+    width: @resource-panel-width;
     z-index: @zindex-pnd-resource-panel;
 
+    /*
+    // Probably not used anymore
+    // Delete if there are no problems
     .pnd-item-buttons {
 
         .pnd-icon-check {
@@ -22,37 +25,52 @@
         }
     }
 
-    .list-group-item {
-        overflow: hidden;
-    }
-
     .pnd-resource-panel-popover-content {
         overflow-y: scroll;
     }
+    */
 
     .pnd-vertical-tabs {
-        height: 200px;
+        height: @resource-panel-height;
     }
+    
+    .pnd-vertical-tab-content {
+        margin: 0;
+        padding: 0;
 
-    .pnd-vertical-tab-list-content {
-        height: 200px;
-        overflow-y: auto;
-    }
-
-    .pnd-vertical-tab-footer-content {
-        display: block;
-        border-top: 1px solid @gray-light;
-        background-color: #fff;
-        height: 30px;
-        position: absolute;
-        bottom: 0;
-        right: 0px;
-        left: 0;
-
-        .btn {
-            float: left;
-            border-right: 1px solid #fff;
+        // Container for list of results
+        .pnd-vertical-tab-list-content {
+            height: @resource-panel-height;
+            margin-bottom: 30px;
+            padding: 0;
+            overflow-y: auto;
         }
+
+        // Scrolling list of items
+        .list-group-item {
+            overflow: hidden;
+        }
+    }
+}
+
+
+/* ------------------------------------ *\
+   #RESOURCE-PANEL-FOOTER
+\* ------------------------------------ */
+
+.pnd-vertical-tab-footer-content {
+    display: block;
+    border-top: 1px solid @gray-light;
+    background-color: #fff;
+    height: 30px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    .btn {
+        float: left;
+        border-right: 1px solid #fff;
     }
 }
 
