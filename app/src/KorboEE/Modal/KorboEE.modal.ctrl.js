@@ -164,8 +164,12 @@ angular.module('KorboEE')
     // close modal
     $scope.closeKeeModal = function () {
         ResourcePanel.hide();
-        KorboCommunicationService.showConfirmModal($scope.conf.globalObjectName);
-        //KorboCommunicationService.closeModal();
+        if ($scope.conf.confirmModalOnClose) {
+            KorboCommunicationService.showConfirmModal($scope.conf.globalObjectName);
+        }
+        else {
+            KorboCommunicationService.closeModal();
+        }
     };
 
     $scope.copyAndUse = function () {
