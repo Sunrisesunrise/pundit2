@@ -1,6 +1,15 @@
+/**
+ * ANGULAR STRAP
+ *
+ * Styles depending on angular strap
+ *
+ * TODO: Actually all declaration should be move in other files and this on deleted
+ *
+ */
+
 .modal-backdrop.am-fade {
     opacity: .5;
-    // transition: opacity 1.25s linear;
+
     &.ng-enter {
         opacity: 0;
         &.ng-enter-active {
@@ -17,7 +26,6 @@
 
 // TODO: We must find a way to add the wrapper around the modal backdrop or this style could affect modals outside Pundit
 // Modal backdrop cant be injected into a .pnd-wrp :(
-// Modal background
 body .modal-backdrop {
     position: fixed;
     top: 0;
@@ -27,6 +35,7 @@ body .modal-backdrop {
     z-index: @zindex-pnd-modal-background; // This is a bad patch
     background-color: @modal-backdrop-bg;
     // Fade for backdrop
+
     &.fade {
         .opacity(0);
     }

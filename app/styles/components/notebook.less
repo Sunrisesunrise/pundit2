@@ -1,0 +1,52 @@
+/**
+ * NOTEBOOK COMPOSER
+ *
+ * Styles for the notebook composer
+ */
+
+.pnd-notebook-composer-container {
+    margin: 10px 18px 10px 10px;
+
+    .pnd-icon {
+        font-size: 14px;
+        width: 18px;
+        display: inline-block;
+        text-align: center;
+        vertical-align: text-top;
+    }
+
+    input[type="text"] {
+        margin: 10px 0 20px 0;
+        width: 100%;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+        margin: 0;
+        margin-left: -18px !important;
+        padding: 0;
+    }
+
+    .radio + .radio,
+    .checkbox + .checkbox {
+        margin-top: 0;
+    }
+
+    .radio {
+        display: inline-block;
+    }
+
+    .checkbox {
+        margin: 5px 0 5px 0;
+    }
+
+    .radio,
+    .checkbox {
+        margin-right: 3px;
+
+        &.pnd-notebook-composer-element-active {
+            color: @brand-success;
+        }
+
+    }
+}

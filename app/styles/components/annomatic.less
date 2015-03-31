@@ -1,34 +1,39 @@
+/**
+ * ANNOMATIC
+ *
+ * Style for annomatic entity extraction tool
+ */
+
 annomatic-panel.fixed > header {
     position: fixed;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
 }
 
-.pnd-annomatic-container{
-    .pnd-annomatic-content{
+.pnd-annomatic-container {
+    .pnd-annomatic-content {
 
-        .pnd-btn-annomatic{
+        .pnd-btn-annomatic {
             text-align: center;
-            
-            button{
+
+            button {
                 width: 100%;
-                &.pnd-button-suggestion{
+                &.pnd-button-suggestion {
                     background-color: #fff;
                 }
             }
 
-            ul{
+            ul {
                 text-align: center;
                 margin-top: -1px;
                 width: 100%;
             }
         }
 
-        .pnd-annomatic-info, .pnd-annomatic-count{
+        .pnd-annomatic-info, .pnd-annomatic-count {
             padding: 10px;
             color: #fff;
         }
-
     }
 }
 
@@ -56,7 +61,6 @@ annomatic-panel.fixed > header {
             padding: 0.2em 0.3em;
         }
     }
-
 }
 
 .pnd-text-fragment-icon.ann-hidden {
@@ -67,7 +71,7 @@ annomatic-panel.fixed > header {
     width: 290px;
     img {
         max-width: 100px;
-        border:  1px solid #555;
+        border: 1px solid #555;
         padding: 2px;
         margin: 2px;
         float: left;
@@ -79,34 +83,34 @@ annomatic-panel.fixed > header {
 }
 
 .pnd-icon-tag {
-	font-size: 12px;
-	margin-left: 0.5em;
-	cursor: context-menu;
-	color: @brand-warning;
-	vertical-align: baseline;
-	text-decoration: none;
+    font-size: 12px;
+    margin-left: 0.5em;
+    cursor: context-menu;
+    color: @brand-warning;
+    vertical-align: baseline;
+    text-decoration: none;
 
     &:hover {
         color: darken(@brand-warning, 12%);
         text-decoration: none;
-    }	
+    }
 }
 
-.pnd-annomatic-popover{
-    position: absolute; 
+.pnd-annomatic-popover {
+    position: absolute;
     margin-top: 10px;
 
-    .pnd-annomatic-popover-details{
-        max-height: 200px; 
-        overflow-y: scrool; 
+    .pnd-annomatic-popover-details {
+        max-height: 200px;
+        overflow-y: scrool;
         overflow-x: hidden;
     }
 
-    .pnd-annomatic-btn-group{
+    .pnd-annomatic-btn-group {
         left: 82px;
     }
 
-    .pnd-annomatic-popover-multi-entities{
+    .pnd-annomatic-popover-multi-entities {
         padding: 8px;
     }
 }
