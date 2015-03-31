@@ -1,4 +1,4 @@
-describe("AnnotationSidebar interaction", function() {
+ddescribe("AnnotationSidebar interaction", function() {
 
     // Constant
     // TODO: read from service
@@ -134,6 +134,537 @@ describe("AnnotationSidebar interaction", function() {
                     }
                 };
 
+                var annResponse3 = {
+                    "metadata": {
+                        "http://purl.org/pundit/demo-cloud-server/annotation/annid125": {
+                            "http://purl.org/pundit/ont/ao#isIncludedIn": [
+                                {
+                                    "value": "http://purl.org/pundit/demo-cloud-server/notebook/1a04bf22",
+                                    "type": "uri"
+                                }
+                            ],
+                            "http://www.openannotation.org/ns/hasBody": [
+                                {
+                                    "value": "http://purl.org/pundit/demo-cloud-server/graph/annotationGraph-2c77eec3",
+                                    "type": "uri"
+                                }
+                            ],
+                            "http://purl.org/dc/terms/creator": [
+                                {
+                                    "value": "http://purl.org/pundit/demo-cloud-server/user/4ac21247",
+                                    "type": "uri"
+                                }
+                            ],
+                            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+                                {
+                                    "value": "http://www.openannotation.org/ns/Annotation",
+                                    "type": "uri"
+                                }
+                            ],
+                            "http://purl.org/pundit/ont/ao#items": [
+                                {
+                                    "value": "http://purl.org/pundit/demo-cloud-server/graph/itemsGraph-2c77eec3",
+                                    "type": "uri"
+                                }
+                            ],
+                            "http://www.openannotation.org/ns/hasTarget": [
+                                {
+                                    "value": "http://fake-url.it/release_bot/build/examples/dante-1.html#xpointer(start-point(string-range(//DIV[@about='http://fake-url.it/release_bot/build/examples/dante-1.html']/DIV[1]/P[2]/B[1]/text()[1],'',14))/range-to(string-range(//DIV[@about='http://fake-url.it/release_bot/build/examples/dante-1.html']/DIV[1]/P[2]/B[1]/text()[1],'',18)))",
+                                    "type": "uri"
+                                }
+                            ],
+                            "http://purl.org/dc/terms/created": [
+                                {
+                                    "value": "2015-02-27T05:02:01",
+                                    "type": "literal",
+                                    "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+                                }
+                            ],
+                            "http://purl.org/pundit/ont/ao#id": [
+                                {
+                                    "value": "2c77eec3",
+                                    "type": "literal"
+                                }
+                            ],
+                            "http://purl.org/pundit/ont/ao#hasTemplate": [
+                                {
+                                    "value": "http://conf.thepund.it/V2/templates/tagFixedMarx",
+                                    "type": "uri"
+                                }
+                            ],
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Annotation 2015-02-27T05:02:01",
+                                    "type": "literal",
+                                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                                }
+                            ],
+                            "http://purl.org/dc/elements/1.1/creator": [
+                                {
+                                    "value": "Giulio Andreini",
+                                    "type": "literal"
+                                }
+                            ],
+                            "http://purl.org/pundit/ont/ao#hasPageContext": [
+                                {
+                                    "value": "http://demo-cloud.as.thepund.it/pundit2/build/client.html",
+                                    "type": "uri"
+                                }
+                            ]
+                        }
+                    },
+                    "graph": {
+                        "http://fake-url.it/release_bot/build/examples/dante-1.html#xpointer(start-point(string-range(//DIV[@about='http://fake-url.it/release_bot/build/examples/dante-1.html']/DIV[1]/P[2]/B[1]/text()[1],'',14))/range-to(string-range(//DIV[@about='http://fake-url.it/release_bot/build/examples/dante-1.html']/DIV[1]/P[2]/B[1]/text()[1],'',18)))": {
+                            "http://purl.org/pundit/ont/oa#talksAbout": [
+                                {
+                                    "value": "http://www.freebase.com/m/048cl",
+                                    "type": "uri"
+                                }
+                            ]
+                        }
+                    },
+                    "items": {
+                        "http://www.freebase.com/schema/base/activism/topic": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Topic",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/organization/organization_founder": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Organization founder",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/influence/influence_node": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Influence Node",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/base/tagit/concept": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Concept",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/m/048cl": {
+                            "http://purl.org/dc/elements/1.1/description": [
+                                {
+                                    "value": "Karl Marx was a German philosopher, economist, sociologist, and revolutionary socialist. Marx's work in economics laid the basis for much of the current understanding of labour and its relation to capital, and subsequent economic thought. He is one of the founders of sociology and social science. He published numerous books during his lifetime, the most notable being The Communist Manifesto and Das Kapital.\nBorn into a wealthy middle-class family in Trier in the Prussian Rhineland, Marx studied at the University of Bonn and the University of Berlin where he became interested in the philosophical ideas of the Young Hegelians. After his studies he wrote for a radical newspaper in Cologne and began to work out the theory of the materialist conception of history. He moved to Paris in 1843, where he began writing for other radical newspapers and met Friedrich Engels, who would become his lifelong friend and collaborator. In 1849 he was exiled and moved to London together with his wife and children, where he continued writing and formulating his theories about social and economic activity.",
+                                    "type": "literal"
+                                }
+                            ],
+                            "http://xmlns.com/foaf/0.1/depiction": [
+                                {
+                                    "value": "https://usercontent.googleapis.com/freebase/v1/image/m/048cl",
+                                    "type": "uri"
+                                }
+                            ],
+                            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+                                {
+                                    "value": "http://www.freebase.com/schema/common/topic",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/influence/influence_node",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/book/book_subject",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/people/person",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/book/author",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/people/deceased_person",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/user/alust/default_domain/processed_with_review_queue",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/schemastaging/context_name",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/ihistory/topic",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/ihistory/person",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/kwebbase/kwtopic",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/greatbooksofthewesternworld/topic",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/ontologies/ontology_instance",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/symbols/name_source",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/user/alexander/philosophy/topic",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/user/alexander/philosophy/philosopher",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/film/film_subject",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/tagit/concept",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/organization/organization_founder",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/tv/tv_subject",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/greatbooksofthewesternworld/author",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/litcentral/topic",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/film/actor",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/atheism/topic",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/user/agroschim/default_domain/significant_follower",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/activism/activist",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/activism/topic",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/atheism/atheist",
+                                    "type": "uri"
+                                },
+                                {
+                                    "value": "http://www.freebase.com/schema/base/litcentral/named_person",
+                                    "type": "uri"
+                                }
+                            ],
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Karl Marx",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://purl.org/pundit/ont/ao#fragment-text": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Text fragment",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/base/litcentral/named_person": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Named person",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://purl.org/pundit/ont/oa#talksAbout": {
+                            "http://purl.org/dc/elements/1.1/description": [
+                                {
+                                    "value": "The selected text fragment talks about some other text, Entity, Person or any other kind of concept",
+                                    "type": "literal"
+                                }
+                            ],
+                            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+                                {
+                                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+                                    "type": "uri"
+                                }
+                            ],
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "talks about",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/base/schemastaging/context_name": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Context name",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/symbols/name_source": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Name source",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://fake-url.it/release_bot/build/examples/dante-1.html#xpointer(start-point(string-range(//DIV[@about='http://fake-url.it/release_bot/build/examples/dante-1.html']/DIV[1]/P[2]/B[1]/text()[1],'',14))/range-to(string-range(//DIV[@about='http://fake-url.it/release_bot/build/examples/dante-1.html']/DIV[1]/P[2]/B[1]/text()[1],'',18)))": {
+                            "http://purl.org/dc/elements/1.1/description": [
+                                {
+                                    "value": "Alig",
+                                    "type": "literal"
+                                }
+                            ],
+                            "http://purl.org/dc/terms/isPartOf": [
+                                {
+                                    "value": "http://fake-url.it/release_bot/build/examples/dante-1.html",
+                                    "type": "uri"
+                                }
+                            ],
+                            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+                                {
+                                    "value": "http://purl.org/pundit/ont/ao#fragment-text",
+                                    "type": "uri"
+                                }
+                            ],
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Alig",
+                                    "type": "literal"
+                                }
+                            ],
+                            "http://purl.org/pundit/ont/ao#hasPageContext": [
+                                {
+                                    "value": "http://demo-cloud.as.thepund.it/pundit2/build/client.html",
+                                    "type": "uri"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/user/alexander/philosophy/philosopher": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Philosopher",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/base/litcentral/topic": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Topic",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/user/alust/default_domain/processed_with_review_queue": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Processed with Review Queue",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Property",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/people/person": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Person",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/film/actor": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Film actor",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/base/greatbooksofthewesternworld/topic": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Topic",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/tv/tv_subject": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "TV subject",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/base/atheism/atheist": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Atheist",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/base/activism/activist": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Activist",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/base/ontologies/ontology_instance": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Ontology Instance",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/book/author": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Author",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/base/ihistory/topic": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Topic",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/base/kwebbase/kwtopic": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "KWTopic",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/user/alexander/philosophy/topic": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Topic",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/base/greatbooksofthewesternworld/author": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Author",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/base/atheism/topic": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Topic",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/people/deceased_person": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Deceased Person",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/base/ihistory/person": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "person",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/film/film_subject": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Film subject",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/book/book_subject": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Literature Subject",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/user/agroschim/default_domain/significant_follower": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Founder/significant follower",
+                                    "type": "literal"
+                                }
+                            ]
+                        },
+                        "http://www.freebase.com/schema/common/topic": {
+                            "http://www.w3.org/2000/01/rdf-schema#label": [
+                                {
+                                    "value": "Topic",
+                                    "type": "literal"
+                                }
+                            ]
+                        }
+                    }
+                };
+
                 var userLoggedIn = {
                     loginStatus: 1,
                     id: "userid123",
@@ -151,6 +682,10 @@ describe("AnnotationSidebar interaction", function() {
                         // annotation medatada here if necessary
                     },
                     "http://sever.url/annotation/annid124": {
+                        // annotation medatada here if necessary
+                    }
+                    ,
+                    "http://sever.url/annotation/annid125": {
                         // annotation medatada here if necessary
                     }
                 };
@@ -204,6 +739,7 @@ describe("AnnotationSidebar interaction", function() {
                 $httpBackend.whenGET(new RegExp("http://test.config.url/api/annotations/metadata/search")).respond(annMedatadaSearch);
                 $httpBackend.whenGET(new RegExp("http://test.config.url/api/annotations/annid123")).respond(annResponse);
                 $httpBackend.whenGET(new RegExp("http://test.config.url/api/annotations/annid124")).respond(annResponse2);
+                $httpBackend.whenGET(new RegExp("http://test.config.url/api/annotations/annid125")).respond(annResponse3);
                 // get notebooks metadata
                 $httpBackend.whenGET(NameSpace.get('asNBMeta', {id: "ntid123"})).respond(notebookMedatada);
                 // get current notebook
@@ -236,7 +772,6 @@ describe("AnnotationSidebar interaction", function() {
         container.getSize().then(function(size){
             expect(size.width).toBe(sidebarExpandedWidth);
         });
-
     });
 
     it('should toggle the filers list', function() {
@@ -480,6 +1015,22 @@ describe("AnnotationSidebar interaction", function() {
 
 
         });
+
+    });
+
+    it('should be present More info in annotation object info', function() {
+        p.findElements(protractor.By.css('.pnd-annotation-sidebar-container')).then(function(elements) {
+            expect(elements.length).toBe(1);
+        });
+        p.findElement(protractor.By.css('.pnd-toolbar-annotations-button')).click();
+        p.findElement(protractor.By.css('annotation-details[id="annid125"] .pnd-item-title')).click();
+        p.findElement(protractor.By.css('annotation-details[id="annid125"] .pnd-annotation-details-object .pnd-annotation-item-header-text')).click();
+
+        p.findElements(protractor.By.css('annotation-details[id="annid125"] .pnd-annotation-details-object .pnd-sub-info .pnd-preview-bottom-links a')).then(function(elements) {
+            expect(elements.length).toBe(1);
+        });
+
+        browser.pause();
 
     });
 
