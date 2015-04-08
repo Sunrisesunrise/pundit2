@@ -1,4 +1,4 @@
-ddescribe("AnnotationSidebar interaction", function() {
+describe("AnnotationSidebar interaction", function() {
 
     // Constant
     // TODO: read from service
@@ -974,7 +974,7 @@ ddescribe("AnnotationSidebar interaction", function() {
 
     it('should apply correctly the filters', function() {
         p.findElements(protractor.By.css('.pnd-annotation-details-wrap')).then(function(elements) {
-            expect(elements.length).toBe(2);
+            expect(elements.length).toBe(3);
         });
 
         p.findElement(protractor.By.css('.pnd-toolbar-annotations-button')).click();
@@ -990,7 +990,7 @@ ddescribe("AnnotationSidebar interaction", function() {
         p.findElement(protractor.By.css('.pnd-annotation-sidebar-btn-remove-filters')).click();
 
         p.findElements(protractor.By.css('.pnd-annotation-details-wrap')).then(function(elements) {
-            expect(elements.length).toBe(2);
+            expect(elements.length).toBe(3);
         });
     });
 
@@ -1002,14 +1002,14 @@ ddescribe("AnnotationSidebar interaction", function() {
             elements[4].click();
 
             elements[4].findElements(protractor.By.css('.pnd-annotation-sidebar-filter-element-label')).then(function(ftr) {
-                expect(ftr.length).toBe(3);
+                expect(ftr.length).toBe(5);
                 ftr[2].click();
             });
 
             elements[3].click();
 
             elements[3].findElements(protractor.By.css('.pnd-annotation-sidebar-filter-element-label')).then(function(ftr) {
-                expect(ftr.length).toBe(2);
+                expect(ftr.length).toBe(3);
                 expect(ftr[1].getText()).toBe('cites (0)');
             });
 
@@ -1029,9 +1029,6 @@ ddescribe("AnnotationSidebar interaction", function() {
         p.findElements(protractor.By.css('annotation-details[id="annid125"] .pnd-annotation-details-object .pnd-sub-info .pnd-preview-bottom-links a')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
-
-        browser.pause();
-
     });
 
 });

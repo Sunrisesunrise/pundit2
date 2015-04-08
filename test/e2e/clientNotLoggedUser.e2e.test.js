@@ -124,7 +124,7 @@ describe("Client interaction when user is not logged in", function() {
         });
         // check popover vertical tabs showed items number
         p.findElements(protractor.By.css(".pnd-resource-panel-popover .pnd-vertical-tabs li:not(.ng-hide) a span")).then(function(spans) {
-            expect(spans.length).toBe(2);
+            expect(spans.length).toBe(3);
             expect(spans[0].getText()).toEqual("1");
         });
     });
