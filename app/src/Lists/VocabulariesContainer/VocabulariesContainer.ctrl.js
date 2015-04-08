@@ -157,7 +157,9 @@ angular.module('Pundit2.VocabulariesContainer')
 
     $scope.search = {
         icon: SelectorsManager.options.inputIconSearch,
-        term: ''
+        term: '',
+        orderLabel: 'Order vocabularies',
+        additionalClass: 'vocab-items-btn-order'
     };
     var promise;
     $scope.$watch(function() {
@@ -212,6 +214,9 @@ angular.module('Pundit2.VocabulariesContainer')
     $scope.$watch(function() {
         return ItemsExchange.getItemsByContainer(actualContainer);
     }, function(newItems) {
+        if (orderBtn.length === 0) {
+            orderBtn = angular.element('.vocab-items-btn-order');
+        }
         // update all items array and display new items
         $scope.displayedItems = newItems;
         if ($scope.displayedItems.length === 0) {

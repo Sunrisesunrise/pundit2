@@ -167,6 +167,12 @@
                     ng-click="createNew()">
                     Create new
                 </button>
+                <button
+                    class="pnd-resource-panel-use-button btn btn-xs btn-info pnd-btn-full"
+                    ng-show="showUseFullPageButton()"
+                    ng-click="useFullPage()">
+                    Use full page
+                </button>
                 <button 
                     class="pnd-resource-panel-use-button btn btn-xs btn-info pnd-btn-full" 
                     ng-click="cancel()">

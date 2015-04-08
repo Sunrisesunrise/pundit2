@@ -12,6 +12,15 @@
                 placeholder="search notebooks" 
                 class="form-control">
         </div>
+        <button
+                type="button"
+                class="btn btn-xs btn-link pnd-btn-full pnd-btn-full pnd-icon-panel-options {{search.additionalClass}}"
+                template="{{dropdownTemplate}}"
+                bs-dropdown="dropdownOrdering"
+                title="{{search.orderLabel}}">
+            <span
+                    class="pnd-icon pnd-icon-caret-down"></span>
+        </button>
     </div> 
     <!-- end pnd-panel-tab-content-header -->
 
@@ -38,6 +47,13 @@
 
     <!-- FOOTER -->
     <div class="pnd-panel-tab-content-footer">
+        <button
+                class="btn btn-xs btn-success pnd-btn-full"
+                title="Create new notebook"
+                ng-click="createNewNotebook()">
+            Create new notebook
+        </button>
+        <!--
         <button 
             type="button" 
             class="btn btn-xs btn-link pnd-btn-full my-notebooks-btn-order pnd-btn-lists" 
@@ -47,15 +63,16 @@
             title="Order my notebooks">
             <span class="pnd-icon pnd-icon-sort-amount-asc"></span>
         </button>
-        <button 
-            type="button" 
+        <button
+            type="button"
             class="btn btn-xs btn-link pnd-btn-full my-notebooks-btn-new pnd-btn-lists"
-            placement="top-left" 
+            placement="top-left"
             title="Create new notebook"
             ng-click="createNewNotebook()">
             <span class="pnd-icon pnd-icon-file-o"></span>
         </button>
-    </div> 
+        -->
+    </div>
     <!-- end pnd-panel-tab-content-footer -->
 
 </div>

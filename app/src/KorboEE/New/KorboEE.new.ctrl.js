@@ -849,7 +849,8 @@ angular.module('KorboEE')
         var resourcePanelFooterButtonsOverride = {
             showCopyInEditorButton: false,
             showUseAndCopy: false,
-            showNewButton: false
+            showNewButton: false,
+            showUseFullPageButton: false
         };
         ResourcePanel.showItemsForSubject(triple, $event.target, undefined, resourcePanelFooterButtonsOverride).then(function(item, fixed) {
             var innerCopyFromLOD = function() {

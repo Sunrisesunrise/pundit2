@@ -51,7 +51,7 @@ angular.module('Pundit2.PredicatesContainer')
 
     // sort button dropdown content
     $scope.dropdownOrdering = [{
-        text: 'Label Asc',
+        text: 'Order by label Asc',
         click: function() {
             order = 'label';
             $scope.reverse = false;
@@ -63,7 +63,7 @@ angular.module('Pundit2.PredicatesContainer')
         },
         isActive: order === 'label' && $scope.reverse === false
     }, {
-        text: 'Label Desc',
+        text: 'Order by label Desc',
         click: function() {
             order = 'label';
             $scope.reverse = true;
@@ -143,7 +143,8 @@ angular.module('Pundit2.PredicatesContainer')
     // the match function ignore multiple spaces
     $scope.search = {
         icon: inputIconSearch,
-        term: ''
+        term: '',
+        orderLabel: 'Order predicates'
     };
     $scope.$watch(function() {
         return $scope.search.term;

@@ -12,6 +12,15 @@
                 placeholder="search property" 
                 class="form-control">
         </div>
+        <button
+                type="button"
+                class="btn btn-xs btn-link pnd-btn-full predicates-items-btn-order pnd-btn-full pnd-icon-panel-options {{search.additionalClass}}"
+                template="{{dropdownTemplate}}"
+                bs-dropdown="dropdownOrdering"
+                title="{{search.orderLabel}}">
+            <span
+                    class="pnd-icon pnd-icon-caret-down"></span>
+        </button>
     </div> 
     <!-- end pnd-panel-tab-content-header -->
 
@@ -53,6 +62,7 @@
             Set predicate
         </button>
 
+        <!--
         <button 
             type="button" 
             class="btn btn-xs btn-link pnd-btn-full predicates-items-btn-order pnd-btn-lists" 
@@ -62,6 +72,7 @@
             title="Order predicates">
             <span class="pnd-icon pnd-icon-sort-amount-asc"></span>
         </button>
+        -->
     </div> 
     <!-- end pnd-panel-tab-content-footer -->
 
