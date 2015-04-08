@@ -48,7 +48,9 @@ angular.module('Pundit2.Core')
      * Default value:
      * <pre> loginModalCloseTimer: 300000 </pre>
      */
-    loginModalCloseTimer: 300000 // 5 minutes
+    loginModalCloseTimer: 300000, // 5 minutes
+
+    popoverLoginURL: 'http://dev.thepund.it/connect/index.php'
 })
 
 /**
@@ -390,7 +392,7 @@ angular.module('Pundit2.Core')
         autoCloseWait: 5,
         autoCloseIntervall: null,
         anchor: undefined,
-        loginSrc: 'http://dev.thepund.it/connect/index.php',
+        loginSrc: myPundit.options.popoverLoginURL,//'http://dev.thepund.it/connect/index.php',
         options: {
             template: 'src/Core/Templates/login.popover.tmpl.html',
             container: "[data-ng-app='Pundit2']"
@@ -435,12 +437,12 @@ angular.module('Pundit2.Core')
                     }
                     else {
                         popoverState.popover.$scope.loginSomeError = true;
-                        popoverState.popover.$scope.$digest();
+                        //popoverState.popover.$scope.$digest();
                     }
                 }, function() {
-                    //popoverState.popover.$scope.loginSomeError = true;
+                    popoverState.popover.$scope.loginSomeError = true;
                     //popoverState.popover.$scope.$digest();
-                    popoverState.loginSuccess();
+                    //popoverState.loginSuccess();
                 });
             }
         }
