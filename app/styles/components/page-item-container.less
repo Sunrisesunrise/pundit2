@@ -15,6 +15,19 @@
     padding: 0 0 0 10px;
     margin: 10px 0 10px 0;
 
+    font-weight: bold;
+    font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    /*
+    .pnd-icon {
+        font-size: 14px;
+        color: @gray;
+    }
+    */
+
     &.pnd-panel-tab-content-header-no-border {
         min-height: 35px;
         margin-bottom: 0;
@@ -25,32 +38,48 @@
         margin-bottom: 0;
     }
 
-    .left-inner-icon {
+    // Div containing the INPUT for searching inside the panel list
+    .pnd-panel-tab-search {
         position: relative;
-        padding-right: 10px;
+        display: inline-block;
+        width: 100%;
+        padding-right: 30px;
+
+        input {
+            padding-right: 20px;
+            font-weight: normal;
+        }
+
+        .pnd-icon {
+            position: absolute;
+            color: @gray-light;
+            right: 30px; // 12px;
+            top: 0;
+            padding: 7px;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+
+            font-size: 14px;
+            color: @gray;
+        }
+
+        // .pnd-icon-times is configured in *ItemsContainer.service.js defaults with
+        // inputIconClear: 'pnd-icon-times'
+        .pnd-icon.pnd-icon-times:hover {
+            color: @brand-success;
+            cursor: pointer;
+        }
     }
 
-    .left-inner-icon input {
-        padding-right: 20px;
-        font-weight: normal;
-    }
-
-    .left-inner-icon .pnd-icon {
+    // Icon to activate the dropdown with ordering and page add to myitems
+    .pnd-panel-tab-icon {
         position: absolute;
-        color: @gray-light;
-        right: 12px;
-        top: 0;
-        padding: 7px;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-
-    // .pnd-icon-times is configured in *ItemsContainer.service.js defaults with
-    // inputIconClear: 'pnd-icon-times'
-    .left-inner-icon .pnd-icon.pnd-icon-times:hover {
-        color: @brand-success;
-        cursor: pointer;
+        // Not very elegant solution. The top positioning
+        // cannot be relative to .pnd-panel-tab-content-header since there are some overflow
+        // problems if we assign position: relative to that element
+        top: 40px;
+        right: 8px;
     }
 }
 

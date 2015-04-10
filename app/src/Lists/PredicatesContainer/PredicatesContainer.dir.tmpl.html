@@ -2,7 +2,7 @@
 
     <!-- HEADER -->
     <div class="pnd-panel-tab-content-header pnd-panel-tab-content-header-border">
-        <div class="left-inner-icon">
+        <div class="left-inner-icon pnd-panel-tab-search">
             <span 
                 class="pnd-icon {{search.icon}}" 
                 ng-click="search.term = ''"></span>
@@ -14,7 +14,7 @@
         </div>
         <button
                 type="button"
-                class="btn btn-xs btn-link pnd-btn-full predicates-items-btn-order pnd-btn-full pnd-icon-panel-options {{search.additionalClass}}"
+                class="btn btn-xs btn-link pnd-btn-full predicates-items-btn-order pnd-btn-full pnd-panel-tab-icon {{search.additionalClass}}"
                 template="{{dropdownTemplate}}"
                 bs-dropdown="dropdownOrdering"
                 title="{{search.orderLabel}}">

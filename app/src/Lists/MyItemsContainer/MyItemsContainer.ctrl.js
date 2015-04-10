@@ -168,7 +168,7 @@ angular.module('Pundit2.MyItemsContainer')
     },{
             "divider": true
     }, {
-        text: 'Add web page to basket',
+        text: 'Add web page to My items',
         click: function() {
             console.log(arguments);
             var item = PageHandler.createItemFromPage();
