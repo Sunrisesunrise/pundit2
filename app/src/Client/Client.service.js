@@ -303,7 +303,8 @@ angular.module('Pundit2.Client')
         "range": [
             "http://purl.org/pundit/ont/ao#fragment-text",
             "http://purl.org/pundit/ont/ao#fragment-image",
-            "http://xmlns.com/foaf/0.1/Image"
+            "http://xmlns.com/foaf/0.1/Image",
+            "http://schema.org/WebPage"
         ],
         "vocabulary": "Basic Relation",
         "uri": "http://purl.org/pundit/vocab#similarTo"
