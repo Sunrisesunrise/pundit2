@@ -718,7 +718,7 @@ angular.module('Pundit2.Client')
             } // end if
         }
         var config = {
-            container: 'kee-korbo2',
+            container: 'korbo',
             // instance label tab title
             label: 'Korbo',
             // enable or disable the instance
