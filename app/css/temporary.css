@@ -1,6 +1,6 @@
 .pnd-wrp .pnd-login-popover-container {
   border: 1px solid #808080;
-  position: absolute;
+  position: fixed;
   overflow: hidden;
 }
 
