@@ -396,7 +396,10 @@ angular.module('Pundit2.Core')
         options: {
             template: 'src/Core/Templates/login.popover.tmpl.html',
             container: "[data-ng-app='Pundit2']",
-            placement: "bottom-left"
+            placement: "bottom-left",
+            // target: '.pnd-toolbar-login-button',
+            // container: '.pnd-wrp',
+            trigger: 'manual'
         },
         renderIFrame: function() {
             angular.element(".pnd-login-popover-container .iframe-container iframe").remove();
@@ -458,26 +461,26 @@ angular.module('Pundit2.Core')
         }
     }
 
-    myPundit.popoverLogin = function(event) {
+    // TODO This is not really a popoverLogin but more a popover toggler
+    myPundit.popoverLogin = function (event) {
 
-        console.log("popoverState.popover" + popoverState.popover);
-
+        // If there's already a Login popover I close and destroy it
         if (popoverState.popover != null) {
+            popoverState.popover.hide();
+            popoverState.popover.destroy(); // TODO Doesn't remove the code?????
+            popoverState.popover = null;
             return;
         }
 
-        console.log("AAA");
+        // popoverState.anchor = angular.element('.pnd-toolbar-login-button');
+        // popoverState.popover = $popover(angular.element(".pnd-toolbar-toggle-button"), popoverState.options);
+        popoverState.popover = $popover(angular.element(".pnd-toolbar-login-button"), popoverState.options);
 
-        var target = event.originalEvent.target;
-
-        popoverState.anchor = angular.element('.pnd-toolbar-login-button');
-        popoverState.popover = $popover(angular.element(target), popoverState.options);
-
-        //popoverState.popover = $popover(popoverState.anchor, popoverState.options);
         popoverState.popover.$scope.isLoading = true;
         popoverState.popover.$scope.loginSuccess = false;
         popoverState.popover.$scope.loginSomeError = false;
-        popoverState.popover.$scope.loadedContent = function() {
+
+        popoverState.popover.$scope.loadedContent = function () {
             alert("Content loaded");
         };
 
@@ -489,10 +492,11 @@ angular.module('Pundit2.Core')
             popoverState.renderIFrame();
         };
 
-        popoverState.popover.$promise.then(function() {
+        popoverState.popover.$promise.then(function () {
             popoverState.popover.show();
             popoverState.renderIFrame();
         });
+
     }
 
     myPundit.getLoginPopoverSrc = function() {
@@ -509,7 +513,6 @@ angular.module('Pundit2.Core')
         popoverState.popover = null;
 
     }
-
 
     return myPundit;
 });
