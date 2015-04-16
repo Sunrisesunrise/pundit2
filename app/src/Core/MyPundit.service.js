@@ -395,7 +395,8 @@ angular.module('Pundit2.Core')
         loginSrc: myPundit.options.popoverLoginURL,//'http://dev.thepund.it/connect/index.php',
         options: {
             template: 'src/Core/Templates/login.popover.tmpl.html',
-            container: "[data-ng-app='Pundit2']"
+            container: "[data-ng-app='Pundit2']",
+            placement: "bottom-left"
         },
         renderIFrame: function() {
             angular.element(".pnd-login-popover-container .iframe-container iframe").remove();
@@ -458,32 +459,21 @@ angular.module('Pundit2.Core')
     }
 
     myPundit.popoverLogin = function(event) {
+
+        console.log("popoverState.popover" + popoverState.popover);
+
         if (popoverState.popover != null) {
             return;
         }
+
+        console.log("AAA");
+
         var target = event.originalEvent.target;
-        // get target top and left position
-        var left = target.getBoundingClientRect().left;
-        var top = target.getBoundingClientRect().top;
-        // get target width and height, including padding
-        var h = angular.element(target).outerHeight();
-        var w = angular.element(target).outerWidth();
 
-        if (typeof(popoverState.anchor) === 'undefined') {
-            // create div anchor (the element bound with angular strap menu reference)
-            angular.element("[data-ng-app='Pundit2']")
-            .prepend("<div class='pnd-popover-anchor' style='position: absolute; left: -500px; top: -500px;'><div>");
+        popoverState.anchor = angular.element('.pnd-toolbar-login-button');
+        popoverState.popover = $popover(angular.element(target), popoverState.options);
 
-            popoverState.anchor = angular.element('.pnd-popover-anchor');
-        }
-
-        popoverState.anchor.css({
-            left: left + (w / 2),
-            top: 270
-        });
-
-        //popoverState.popover = $popover(angular.element(target), popoverState.options);
-        popoverState.popover = $popover(popoverState.anchor, popoverState.options);
+        //popoverState.popover = $popover(popoverState.anchor, popoverState.options);
         popoverState.popover.$scope.isLoading = true;
         popoverState.popover.$scope.loginSuccess = false;
         popoverState.popover.$scope.loginSomeError = false;

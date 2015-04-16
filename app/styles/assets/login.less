@@ -1,0 +1,91 @@
+/**
+ * LOGIN
+ *
+ * Style for login popover
+ * The popover includes an iframe
+ * Style here not affects contents of the iframe
+ */
+
+
+/* ------------------------------------ *\
+   #MAIN-STYLE
+\* ------------------------------------ */
+
+.pnd-login-popover-container {
+    position: fixed;
+    border: 1px solid #979797; // TODO Create variable
+    background: #FFFFFF; // TODO Create variable
+    width: 300px; // TODO Create variable
+    height: 500px; // TODO Create variable
+    margin-top: 11px;
+
+    &>.arrow {
+        position: absolute;
+        display: block;
+        width: 0;
+        height: 0;
+
+        top: -11px;
+        left: 24px;
+        margin-left: -11px;
+
+        border-color: transparent;
+        border-bottom-color: #979797; // TODO Create variable
+        border-style: solid;
+        border-width: 11px;
+        border-top-width: 0;
+
+        &:after {
+            top: 1px;
+            margin-left: -10px;
+            content: " ";
+            border-top-width: 0;
+            border-bottom-color: #FFFFFF;
+        }
+    }
+}
+
+.pnd-login-popover-container .popover-login-pane  {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: white;
+    opacity: 0.9;
+}
+
+.pnd-login-popover-container .popover-login-pane  span.pnd-icon-refresh {
+    top: 50%;
+    position: absolute;
+    left: 50%;
+    margin-left: -16px;
+    margin-top: -16px;
+    font-size: 32px;
+    color: green;
+}
+
+.pnd-login-popover-container .popover-login-pane.popover-login-error {
+    padding: 100px 30px 0px 30px;
+    font-weight: bold;
+    color: red;
+    text-align: center;
+    bottom: 40px;
+}
+
+.pnd-login-popover-container .popover-login-pane.popover-login-success {
+    padding: 100px 30px 0px 30px;
+    font-weight: bold;
+    color: #0000ff;
+    text-align: center;
+}
+
+.pnd-login-popover-container .iframe-container {
+    width: 300px;
+    height: 400px;
+
+    iframe {
+        width: 300px;
+        height: 400px;
+    }
+}
