@@ -392,7 +392,7 @@ angular.module('Pundit2.Core')
         autoCloseWait: 5,
         autoCloseIntervall: null,
         anchor: undefined,
-        loginSrc: myPundit.options.popoverLoginURL,//'http://dev.thepund.it/connect/index.php',
+        loginSrc: loginServer,//myPundit.options.popoverLoginURL,//'http://dev.thepund.it/connect/index.php',
         options: {
             template: 'src/Core/Templates/login.popover.tmpl.html',
             container: "[data-ng-app='Pundit2']",
@@ -404,8 +404,9 @@ angular.module('Pundit2.Core')
         renderIFrame: function() {
             angular.element(".pnd-login-popover-container .iframe-container iframe").remove();
             angular.element(".pnd-login-popover-container .iframe-container")
-                .append('<iframe src="' + popoverState.loginSrc + '"></iframe>');
+                .append('<iframe src="' + loginServer + '"></iframe>');
             popoverState.popover.$scope.isLoading = true;
+            popoverState.popover.$scope.postLoginPreCheck = false;
             popoverState.popover.$scope.loginSuccess = false;
             popoverState.popover.$scope.loginSomeError = false;
         },
@@ -434,8 +435,15 @@ angular.module('Pundit2.Core')
                 popoverState.popover.$scope.isLoading = false;
                 popoverState.popover.$scope.$digest();
             }
+            else if(params.data === 'loginCheck') {
+                popoverState.popover.$scope.isLoading = true;
+                popoverState.popover.$scope.postLoginPreCheck = true;
+                popoverState.popover.$scope.$digest();
+            }
             else if(params.data === 'userLoggedIn') {
+                popoverState.popover.$scope.postLoginPreCheck = true;
                 myPundit.checkLoggedIn().then(function(status){
+                    popoverState.popover.$scope.isLoading = false;
                     if (status) {
                         popoverState.loginSuccess();
                     }
@@ -444,6 +452,7 @@ angular.module('Pundit2.Core')
                         //popoverState.popover.$scope.$digest();
                     }
                 }, function() {
+                    popoverState.popover.$scope.isLoading = false;
                     popoverState.popover.$scope.loginSomeError = true;
                     //popoverState.popover.$scope.$digest();
                     //popoverState.loginSuccess();
