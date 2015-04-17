@@ -8,16 +8,10 @@
 
 
 /* ------------------------------------ *\
-   #MAIN-STYLE
+   #ARROW
 \* ------------------------------------ */
 
 .pnd-login-popover-container {
-    position: fixed;
-    border: 1px solid #979797; // TODO Create variable
-    background: #FFFFFF; // TODO Create variable
-    width: 300px; // TODO Create variable
-    height: 500px; // TODO Create variable
-    margin-top: 11px;
 
     &>.arrow {
         position: absolute;
@@ -45,47 +39,104 @@
     }
 }
 
-.pnd-login-popover-container .popover-login-pane  {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    background-color: white;
-    opacity: 0.9;
-}
 
-.pnd-login-popover-container .popover-login-pane  span.pnd-icon-refresh {
-    top: 50%;
-    position: absolute;
-    left: 50%;
-    margin-left: -16px;
-    margin-top: -16px;
-    font-size: 32px;
-    color: green;
-}
+/* ------------------------------------ *\
+   #POPOVER
+\* ------------------------------------ */
 
-.pnd-login-popover-container .popover-login-pane.popover-login-error {
-    padding: 100px 30px 0px 30px;
-    font-weight: bold;
-    color: red;
-    text-align: center;
-    bottom: 40px;
-}
+.pnd-login-popover-container {
+    position: fixed;
+    border: 1px solid #979797; // TODO Create variable
+    background: #FFFFFF; // TODO Create variable
+    width: 350px; // TODO Create variable
+    min-width: 350px; // TODO Create variable
+    height: 500px; // TODO Create variable
+    margin-top: 11px;
 
-.pnd-login-popover-container .popover-login-pane.popover-login-success {
-    padding: 100px 30px 0px 30px;
-    font-weight: bold;
-    color: #0000ff;
-    text-align: center;
-}
+    .popover-login-pane {
+        position: absolute;
+        box-sizing: border-box;
+        display: table;
+        top: 0;
+        padding: 20px;
+        background-color: white;
+        width: 100%; // TODO Create variable
+        min-width: 100%; // TODO Create variable
+        height: 500px - 2px; // TODO Create variable
 
-.pnd-login-popover-container .iframe-container {
-    width: 300px;
-    height: 400px;
+        .popover-login-pane-content {
+            bottom: 1px solid red;
+            display: table-cell;
+            text-align: center;
+            vertical-align: middle;
 
-    iframe {
-        width: 300px;
-        height: 400px;
+            h1 {
+                margin-bottom: 7px;
+                color: #333333;
+                font-weight: bold;
+                font-size: 20px;
+                line-height: 25px;
+            }
+
+            p {
+                margin-bottom: 7px;
+                font-size: 14px;
+                line-height: 18px;
+            }
+
+            small {
+                font-size: 14px;
+                color: #9B9B9B; // TODO Create variable
+                line-height: 18px;
+            }
+
+            .pnd-icon {
+                margin-bottom: 10px;
+                display: inline-block;
+                color: #9B9B9B; // TODO Create variable
+                font-size: 30px;
+
+                &.pnd-icon-spin {
+                    top: auto;
+                    margin-left: -15px;
+                    margin-top: 30px;
+                }
+            }
+        }
+
+        &.popover-login-error {
+            h1 {
+                color: @brand-danger;
+            }
+
+            .pnd-icon {
+                color: @brand-danger;
+            }
+        }
+
+        &.popover-login-success {
+            .pnd-icon {
+                color: @brand-success;
+            }
+        }
+    }
+
+
+
+    .popover-login-pane  span.pnd-icon-refresh {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -16px;
+        margin-top: -16px;
+        font-size: 32px;
+        color: green;
+    }
+
+    .iframe-container {
+        iframe {
+            width: 100%;
+            height: 498px;
+        }
     }
 }
