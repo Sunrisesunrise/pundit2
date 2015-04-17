@@ -48,9 +48,9 @@
     position: fixed;
     border: 1px solid #979797; // TODO Create variable
     background: #FFFFFF; // TODO Create variable
-    width: 350px; // TODO Create variable
-    min-width: 350px; // TODO Create variable
-    height: 500px; // TODO Create variable
+    width: 320px; // TODO Create variable
+    min-width: 320px; // TODO Create variable
+    height: 560px; // TODO Create variable
     margin-top: 11px;
 
     .popover-login-pane {
@@ -62,7 +62,7 @@
         background-color: white;
         width: 100%; // TODO Create variable
         min-width: 100%; // TODO Create variable
-        height: 500px - 2px; // TODO Create variable
+        height: 560px - 2px; // TODO Create variable
 
         .popover-login-pane-content {
             bottom: 1px solid red;
@@ -71,7 +71,8 @@
             vertical-align: middle;
 
             h1 {
-                margin-bottom: 7px;
+                margin-bottom: 10px;
+                display: block;
                 color: #333333;
                 font-weight: bold;
                 font-size: 20px;
@@ -79,28 +80,35 @@
             }
 
             p {
-                margin-bottom: 7px;
+                display: block;
+                margin-bottom: 10px;
                 font-size: 14px;
                 line-height: 18px;
             }
 
             small {
+                display: block;
+                margin-bottom: 10px;
                 font-size: 14px;
                 color: #9B9B9B; // TODO Create variable
                 line-height: 18px;
             }
 
             .pnd-icon {
+                display: block;
+                position: relative;
                 margin-bottom: 10px;
-                display: inline-block;
                 color: #9B9B9B; // TODO Create variable
                 font-size: 30px;
+                margin: 0;
+                top: 0;
+                left: 0;
 
-                &.pnd-icon-spin {
+                /*&.pnd-icon-spin {
                     top: auto;
                     margin-left: -15px;
                     margin-top: 30px;
-                }
+                }*/
             }
         }
 
@@ -121,8 +129,6 @@
         }
     }
 
-
-
     .popover-login-pane  span.pnd-icon-refresh {
         position: absolute;
         top: 50%;
@@ -136,7 +142,7 @@
     .iframe-container {
         iframe {
             width: 100%;
-            height: 498px;
+            height: 560px - 2px; // TODO Create variable
         }
     }
 }
