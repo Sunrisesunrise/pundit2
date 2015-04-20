@@ -96,6 +96,11 @@ angular.module('Pundit2.MyItemsContainer')
         $scope.canAddItemAsObject = false;
     };
 
+    var isCurrentPageInMyItems = function() {
+        var item = PageHandler.createItemFromPage();
+        return ItemsExchange.isItemInContainer(item, MyItems.options.container);
+    }
+
 
     // set as active a label in contextual menu
     var setLabelActive = function(index) {
@@ -107,7 +112,7 @@ angular.module('Pundit2.MyItemsContainer')
 
     // sort button dropdown content
     $scope.dropdownOrdering = [{
-        text: 'Label asc',
+        text: 'Order by label asc',
         click: function() {
             order = 'label';
             $scope.reverse = false;
@@ -119,7 +124,7 @@ angular.module('Pundit2.MyItemsContainer')
         },
         isActive: order === 'label' && $scope.reverse === false
     }, {
-        text: 'Label desc',
+        text: 'Order by label desc',
         click: function() {
             order = 'label';
             $scope.reverse = true;
@@ -131,7 +136,7 @@ angular.module('Pundit2.MyItemsContainer')
         },
         isActive: order === 'label' && $scope.reverse === true
     }, {
-        text: 'Type asc',
+        text: 'Order by type asc',
         click: function() {
             if ($scope.dropdownOrdering[2].disable) {
                 return;
@@ -146,7 +151,7 @@ angular.module('Pundit2.MyItemsContainer')
         },
         isActive: order === 'type' && $scope.reverse === false
     }, {
-        text: 'Type desc',
+        text: 'Order by type desc',
         click: function() {
             if ($scope.dropdownOrdering[3].disable) {
                 return;
@@ -160,7 +165,28 @@ angular.module('Pundit2.MyItemsContainer')
             Analytics.track('buttons', 'click', eventLabel);
         },
         isActive: order === 'type' && $scope.reverse === true
-    }];
+    },{
+            "divider": true
+    }, {
+        text: 'Add web page to My items',
+        click: function() {
+            console.log(arguments);
+            var item = PageHandler.createItemFromPage();
+            if (MyPundit.isUserLogged() && !isCurrentPageInMyItems()) {
+                $scope.onClickAddPageToMyItems();
+                $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = true;
+            }
+        },
+        isActive: false,
+        disable: isCurrentPageInMyItems()
+    }
+    ];
+
+    $scope.$watch(function() {
+        return ItemsExchange.getItemsByContainer(MyItems.options.container);
+    }, function(newItems) {
+        $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = isCurrentPageInMyItems();
+    }, true);
 
     // getter function used to build hierarchystring.
     // hierarchystring is used for tracking events with analytics.
@@ -271,7 +297,9 @@ angular.module('Pundit2.MyItemsContainer')
     // The match function ignore multiple space
     $scope.search = {
         icon: MyItemsContainer.options.inputIconSearch,
-        term: ''
+        term: '',
+        orderLabel: 'Order my items'
+
     };
     $scope.$watch(function() {
         return $scope.search.term;

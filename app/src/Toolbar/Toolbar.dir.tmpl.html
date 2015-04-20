@@ -59,7 +59,16 @@
             </ul> <!-- pnd-navbar-left -->
 
             <ul class="nav navbar-nav navbar-right pnd-toolbar-navbar-right">
-                
+
+                <!-- Annotate page button -->
+                <li class="pnd-toolbar-annotate-page-button"
+                    ng-click="annotateWebPage()"
+                    ng-class="{'pnd-not-clickable':!canUsePageAsSubject()}">
+                    <a href="javascript:void(0)">
+                        <span>Annotate web page</span>
+                    </a>
+                </li>
+
                 <!-- Template mode button -->
                 <li class="pnd-toolbar-template-mode-button" ng-class="{'pnd-not-clickable':isAnnomaticRunning}" ng-show="useTemplates" ng-click="toggleTemplateMode()">
                     <a href="javascript:void(0)">

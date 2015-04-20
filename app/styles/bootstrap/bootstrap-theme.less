@@ -1,21 +1,21 @@
 /**
  * BOOTSTRAP THEME
  *
- * This style is used **only** to override styles for Bootstrap
- * and it's **common** for all applications (Pundit Client, Korbo EE...).
+ * This style is used **ONLY** to override styles for Bootstrap
+ * and it's **COMMON** for all applications (Pundit Client, Korbo EE...).
  * Please don't add here generic styles for the application other than
  * styling for basic Bootstrap elements.
  *
  * If you need more Bootstrap customization not common for an application
- * please use a specific theme file (like korboee-bootstrap-theme or pundit-bootstrap-theme.*
+ * please use a specific theme file (like korboee-bootstrap-theme or pundit-bootstrap-theme).
  *
  */
 
 // TODO: Since this is just to override Bootstrap please remove all PND declarations
 
-//
-// Buttons
-// --------------------------------------------------
+/* ------------------------------------ *\
+   #BUTTONS
+\* ------------------------------------ */
 
 // Common styles
 .btn-default,
@@ -38,17 +38,13 @@
 
     .pnd-icon {
         font-size: 14px;
-        // transition-property: color;
-        // transition-duration: @animation-fast-duration;
     }
 }
 
 // Mixin for generating new styles
 .btn-styles(@btn-color: #555) {
-    //#gradient > .vertical(@start-color: @btn-color; @end-color: darken(@btn-color, 12%));
     .reset-filter(); // Disable gradients for IE9 because filter bleeds through rounded corners
     background-repeat: repeat-x;
-    //border-color: darken(@btn-color, 14%);
     outline: 0 !important;
     box-shadow: none;
 
@@ -68,7 +64,6 @@
     }
 }
 
-// Common styles
 .btn {
     outline: 0 !important;
     box-shadow: none;
@@ -86,7 +81,6 @@
         outline: 0;
         box-shadow: none;
     }
-
 }
 
 // Apply the mixin to the buttons
@@ -117,11 +111,11 @@
 }
 
 
-// Link buttons
-// -------------------------
+/* ------------------------------------ *\
+   #LINK-BUTTONS
+\* ------------------------------------ */
 
 // Make a button look and behave like a link
-
 .btn-link {
     color: @gray;
     font-weight: normal;
@@ -139,13 +133,12 @@
         text-decoration: none;
         background-color: transparent;
     }
-
 }
 
 
-//
-// Icons
-// --------------------------------------------------
+/* ------------------------------------ *\
+   #ICONS
+\* ------------------------------------ */
 
 .pnd-icon-spin {
     -webkit-animation: spin 2s infinite linear;
@@ -211,20 +204,9 @@
 }
 
 
-//
-// Images
-// --------------------------------------------------
-
-.thumbnail,
-.img-thumbnail {
-    //.box-shadow(0 1px 2px rgba(0,0,0,.075));
-}
-
-
-//
-// Dropdowns
-// --------------------------------------------------
-
+/* ------------------------------------ *\
+   #DROPDOWNS
+\* ------------------------------------ */
 .dropdown-menu {
     .box-shadow(0 2px 2px rgba(0, 0, 0, .1));
     padding: 0;
@@ -263,7 +245,7 @@
 }
 
 .dropdown-menu .divider {
-    margin: 0px;
+    margin: 0;
 }
 
 .dropdown-menu .dropdown-header {
@@ -274,22 +256,13 @@
 }
 
 
-//
-// Navbar
-// --------------------------------------------------
+/* ------------------------------------ *\
+   #NAVBAR
+\* ------------------------------------ */
 
 // Default navbar
 .navbar-default {
-    //#gradient > .vertical(@start-color: lighten(@navbar-default-bg, 10%); @end-color: @navbar-default-bg);
     .reset-filter(); // Remove gradient in IE<10 to fix bug where dropdowns don't get triggered
-    //border-radius: @navbar-border-radius;
-    //@shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 5px rgba(0,0,0,.075);
-    //.box-shadow(@shadow);
-
-    .navbar-nav > .active > a {
-        //#gradient > .vertical(@start-color: darken(@navbar-default-bg, 5%); @end-color: darken(@navbar-default-bg, 2%));
-        //.box-shadow(inset 0 3px 9px rgba(0,0,0,.075));
-    }
 }
 
 .navbar-brand,
@@ -300,13 +273,6 @@
 
 // Inverted navbar
 .navbar-inverse {
-    //#gradient > .vertical(@start-color: lighten(@navbar-inverse-bg, 10%); @end-color: @navbar-inverse-bg);
-    //.reset-filter(); // Remove gradient in IE<10 to fix bug where dropdowns don't get triggered
-
-    .navbar-nav > .active > a {
-        //#gradient > .vertical(@start-color: @navbar-inverse-bg; @end-color: lighten(@navbar-inverse-bg, 2.5%));
-        //.box-shadow(inset 0 3px 9px rgba(0,0,0,.25));
-    }
 
     .navbar-brand {
         background-color: #51b848;
@@ -320,7 +286,7 @@
     }
 
     .navbar-nav > li > a {
-        text-shadow: 0 0px 0 rgba(0, 0, 0, .25);
+        text-shadow: 0 0 0 rgba(0, 0, 0, .25);
         border-right: 1px @gray solid;
     }
 }
@@ -345,18 +311,17 @@
     background-color: #ffffff;
 }
 
-//
-// Tabs
-// --------------------------------------------------
+
+/* ------------------------------------ *\
+   #TABS
+\* ------------------------------------ */
 
 // Give the tabs something to sit on
 .nav-tabs {
-    // margin: 0 7px 10px 0;
     margin: 0 0 10px 0;
     background-color: @gray-light;
 
     // Show tabs button
-
     .show-tabs {
 
         &.active a {
@@ -372,14 +337,13 @@
             .pnd-icon {
                 font-size: 12px;
                 line-height: normal;
-                padding: 0px;
+                padding: 0;
             }
 
             &:hover {
                 background-color: darken(@gray-light, 14%);
                 color: #fff;
             }
-
         }
     }
 
@@ -388,9 +352,9 @@
         // Actual tabs (as links)
         > a {
             color: @nav-tabs-active-link-hover-color;
-            margin-right: 0px;
+            margin-right: 0;
             line-height: @line-height-base;
-            border: 0px solid transparent;
+            border: 0 solid transparent;
             border-radius: @border-radius-base @border-radius-base 0 0;
             background-color: @gray-light;
 
@@ -399,7 +363,6 @@
                 background-color: @gray-lighter;
                 cursor: pointer;
             }
-
         }
 
         // Active state, and its :hover to override normal :hover
@@ -409,23 +372,22 @@
             &:focus {
                 color: @nav-tabs-active-link-hover-color;
                 background-color: @nav-tabs-active-link-hover-bg;
-                border: 0px;
+                border: 0;
                 border-bottom-color: transparent;
                 cursor: pointer;
             }
         }
-
     }
 }
 
 .pnd-dashboard-panel-last .nav-tabs {
-    margin-right: 0px;
+    margin-right: 0;
 }
 
 
-//
-// Alerts
-// --------------------------------------------------
+/* ------------------------------------ *\
+   #ALERTS
+\* ------------------------------------ */
 
 // Common styles
 .alert {
@@ -458,9 +420,9 @@
 }
 
 
-//
-// Progress bars
-// --------------------------------------------------
+/* ------------------------------------ *\
+   #PROGRESS-BARS
+\* ------------------------------------ */
 
 // Give the progress background some depth
 .progress {
@@ -494,25 +456,24 @@
 }
 
 
-//
-// List groups
-// --------------------------------------------------
+/* ------------------------------------ *\
+   #LIST-GROUPS
+\* ------------------------------------ */
 
 .list-group {
     border-radius: @border-radius-base;
     -webkit-box-shadow: 0;
     box-shadow: 0;
-    margin: 0px;
+    margin: 0;
 
     .list-group-item {
-        padding: 0px;
-        border: 0px;
-        margin-bottom: 0px;
+        padding: 0;
+        border: 0;
+        margin-bottom: 0;
 
         &:first-child {
-            border-top: 0px;
+            border-top: 0;
         }
-
     }
 
     .list-group-item.active,
@@ -521,22 +482,16 @@
         text-shadow: 0 -1px 0 darken(@list-group-active-bg, 10%);
     }
 
-    /* .list-group-item:hover {
-      background-color: @gray-lighter;
-      }
-    */
-
     .list-group-item-inverse {
         background-color: #e5e5e5;
         border: 1px solid #ffffff;
     }
-
 }
 
 
-//
-// Panels
-// --------------------------------------------------
+/* ------------------------------------ *\
+   #PANELS
+\* ------------------------------------ */
 
 // Common styles
 .panel {
@@ -574,20 +529,18 @@
 }
 
 
-//
-// Wells
-// --------------------------------------------------
+/* ------------------------------------ *\
+   #WELLS
+\* ------------------------------------ */
 
 .well {
-    //#gradient > .vertical(@start-color: darken(@well-bg, 5%); @end-color: @well-bg);
     border-color: darken(@well-bg, 10%);
-    //@shadow: inset 0 1px 3px rgba(0,0,0,.05), 0 1px 0 rgba(255,255,255,.1);
-    //.box-shadow(@shadow);
 }
 
-//
-// INPUT & Outline
-// --------------------------------------------------
+
+/* ------------------------------------ *\
+   #FORMS
+\* ------------------------------------ */
 
 textarea.form-control {
     height: auto;
@@ -600,11 +553,9 @@ textarea.form-control {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    // width: 100% !important; // This was in KorboEE
 
     &:focus {
         outline: 0;
-        // border-color: @gray-light !important;
         box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none;
@@ -637,9 +588,9 @@ input {
 }
 
 
-//
-// DATEPICKER
-// --------------------------------------------------
+/* ------------------------------------ *\
+   #DATEPICKER
+\* ------------------------------------ */
 
 .datepicker {
     padding: 3px;
@@ -652,7 +603,6 @@ input {
         &:focus {
             text-shadow: none;
         }
-
     }
 
     .btn-primary {
@@ -662,15 +612,14 @@ input {
         &:focus {
             background-color: darken(@brand-success, 12%);
             border-color: #fff;
-            //box-shadow: none;
         }
     }
 }
 
 
-//
-// POPOVER
-// --------------------------------------------------
+/* ------------------------------------ *\
+   #POPOVER
+\* ------------------------------------ */
 
 .popover {
     padding: 0;
@@ -718,9 +667,10 @@ input {
     }
 }
 
-//
-// MODAL
-// --------------------------------------------------
+
+/* ------------------------------------ *\
+   #MODAL
+\* ------------------------------------ */
 
 .pnd-mandatory-field {
     color: @brand-danger;

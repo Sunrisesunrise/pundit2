@@ -2,7 +2,7 @@ angular.module('Pundit2.ResourcePanel')
 
 .controller('ResourcePanelCtrl', function($rootScope, $scope, $timeout, $filter, $window,
     Client, Config, ItemsExchange, MyItems, MyPundit, PageItemsContainer, Preview,
-    ResourcePanel, SelectorsManager, KorboCommunicationService, EventDispatcher, Analytics) {
+    ResourcePanel, SelectorsManager, KorboCommunicationService, EventDispatcher, Analytics, PageHandler, TripleComposer) {
 
     var actualContainer;
     var selectors = SelectorsManager.getActiveSelectors();
@@ -129,6 +129,35 @@ angular.module('Pundit2.ResourcePanel')
         }
         return res;
     };
+
+    $scope.showUseFullPageButton = function() {
+        var res = true;
+
+        var item = PageHandler.createItemFromPage();
+        switch ($scope.type) {
+            case 'sub':
+                res = TripleComposer.canAddItemAsSubject(item);
+                break;
+            case 'pr':
+                return false;
+            case 'obj':
+                res = TripleComposer.canAddItemAsObject(item);
+                break;
+        }
+
+        if (typeof ResourcePanel.overrideFooterExtraButtons !== 'undefined' &&
+        typeof ResourcePanel.overrideFooterExtraButtons.showUseFullPageButton !== 'undefined' ) {
+            res &= ResourcePanel.overrideFooterExtraButtons.showUseFullPageButton;
+        }
+
+        return res;
+    }
+
+    $scope.useFullPage = function() {
+        var item = PageHandler.createItemFromPage();
+        $scope.select(item);
+        $scope.save(item);
+    }
 
     $scope.copyInEditor = function() {
         var obj = {};

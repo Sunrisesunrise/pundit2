@@ -9,7 +9,7 @@
        <!-- TODO: please remember that class "pnd-vertical-tab-header-content" was removed -->
         
         <!-- Search Input div -->
-        <div class="left-inner-icon">
+        <div class="left-inner-icon pnd-panel-tab-search">
             <span 
                 class="pnd-icon {{subjectIcon}}" 
                 ng-click="clearSearch()"></span>
@@ -166,6 +166,12 @@
                     class="pnd-resource-panel-new-button btn btn-xs btn-info pnd-btn-full" ng-show="showNewButton()" 
                     ng-click="createNew()">
                     Create new
+                </button>
+                <button
+                    class="pnd-resource-panel-use-button btn btn-xs btn-info pnd-btn-full"
+                    ng-show="showUseFullPageButton()"
+                    ng-click="useFullPage()">
+                    Use web page
                 </button>
                 <button 
                     class="pnd-resource-panel-use-button btn btn-xs btn-info pnd-btn-full" 

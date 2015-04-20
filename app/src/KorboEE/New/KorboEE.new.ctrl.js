@@ -642,7 +642,7 @@ angular.module('KorboEE')
             obj.label = $scope.tabs[0].label;
             obj.type = newTypes;
             obj.image = $scope.imageUrl;
-            obj.description = $scope.tabs[0].label;
+            obj.description = $scope.tabs[0].description;
             obj.language = $scope.conf.defaultLanguage;
 
             var basketID;
@@ -678,7 +678,7 @@ angular.module('KorboEE')
                     entityForTripleComposer.label = $scope.tabs[0].label;
                     entityForTripleComposer.type = newTypes;
                     entityForTripleComposer.image = $scope.imageUrl;
-                    entityForTripleComposer.description = $scope.tabs[0].label;
+                    entityForTripleComposer.description = $scope.tabs[0].description;
                     entityForTripleComposer.language = $scope.conf.defaultLanguage;
                     entityForTripleComposer.uri = res;
                     addEntityToAllSubjects(entityForTripleComposer);
@@ -757,7 +757,7 @@ angular.module('KorboEE')
                                 label : $scope.tabs[0].label,
                                 type : newTypes,
                                 image : $scope.imageUrl,
-                                description : $scope.tabs[0].label,
+                                description : $scope.tabs[0].description,
                                 language : $scope.conf.defaultLanguage,
                                 uri : res
                             });
@@ -849,7 +849,8 @@ angular.module('KorboEE')
         var resourcePanelFooterButtonsOverride = {
             showCopyInEditorButton: false,
             showUseAndCopy: false,
-            showNewButton: false
+            showNewButton: false,
+            showUseFullPageButton: false
         };
         ResourcePanel.showItemsForSubject(triple, $event.target, undefined, resourcePanelFooterButtonsOverride).then(function(item, fixed) {
             var innerCopyFromLOD = function() {

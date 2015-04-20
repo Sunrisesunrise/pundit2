@@ -85,7 +85,7 @@ angular.module('Pundit2.PageItemsContainer')
 
     // sort button dropdown content
     $scope.dropdownOrdering = [{
-        text: 'Label asc',
+        text: 'Order by label asc',
         click: function() {
             order = 'label';
             $scope.reverse = false;
@@ -97,7 +97,7 @@ angular.module('Pundit2.PageItemsContainer')
         },
         isActive: order === 'label' && $scope.reverse === false
     }, {
-        text: 'Label desc',
+        text: 'Order by label desc',
         click: function() {
             order = 'label';
             $scope.reverse = true;
@@ -109,7 +109,7 @@ angular.module('Pundit2.PageItemsContainer')
         },
         isActive: order === 'label' && $scope.reverse === true
     }, {
-        text: 'Type asc',
+        text: 'Order by type asc',
         click: function() {
             if ($scope.dropdownOrdering[2].disable) {
                 return;
@@ -124,7 +124,7 @@ angular.module('Pundit2.PageItemsContainer')
         },
         isActive: order === 'type' && $scope.reverse === false
     }, {
-        text: 'Type desc',
+        text: 'Order by type desc',
         click: function() {
             if ($scope.dropdownOrdering[3].disable) {
                 return;
@@ -227,7 +227,8 @@ angular.module('Pundit2.PageItemsContainer')
     // the match function ignore multiple spaces
     $scope.search = {
         icon: PageItemsContainer.options.inputIconSearch,
-        term: ''
+        term: '',
+        orderLabel: 'Order page items'
     };
     $scope.$watch(function() {
         return $scope.search.term;

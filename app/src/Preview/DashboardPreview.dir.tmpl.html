@@ -46,6 +46,13 @@
             ng-class="{disabled: !isStickyItem()}">
             More info
         </button>
+        <button
+                class="btn btn-info btn-xs pnd-btn-full pnd-dashboard-preview-more-info-button"
+                ng-if="itemDashboardPreview.isWebPage()"
+                ng-click="openUrl(itemDashboardPreview.uri)"
+                ng-class="{disabled: !isStickyItem()}">
+            Go to page
+        </button>
         <button 
             class="btn btn-info btn-xs pnd-btn-full pnd-dashboard-preview-more-info-button" 
             ng-if="isNotebook()" 

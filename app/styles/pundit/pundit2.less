@@ -16,7 +16,7 @@
 // outside of the .pnd-wrp import
 @import "@{bspath}variables.less";
 @import "@{bspath}mixins.less";
-@import "../assets/bootstrap-variables";
+@import "../bootstrap/bootstrap-variables";
 
 // Wrap every bs rule under one of our nodes
 .pnd-wrp {
@@ -46,8 +46,7 @@
 
 // Customizing the default Bootstrap theme
 .pnd-wrp {
-    @import "../assets/bootstrap-theme";
-    @import "pundit-bootstrap-theme";
+    @import "../bootstrap/bootstrap-theme";
 }
 
 
@@ -87,7 +86,7 @@
 // ------------------------------------
 
 // Common variables
-@import "../assets/variables.less";
+@import "../global/variables.less";
 // Pundit variables
 @import "pundit-variables.less";
 
@@ -97,11 +96,11 @@
 // ------------------------------------
 
 // Special declarations that need to be outside the pnd-wrp wrapper
-@import "../assets/not-wrap.less";
+@import "../global/not-wrap.less";
 
 // Glyphicons: angular strap uses it.
 // Rewrite what we need using our pundit-font
-@import "../assets/glyphicon-fix.less";
+@import "../global/glyphicon-fix.less";
 
 // utilities.less: NOT importing it prefixed, or clearfix() mixin (and others) will get extend()-ed
 // by too much stuff elsewhere and we end up with **double prefixes**
@@ -109,7 +108,7 @@
 @import "@{bspath}utilities.less";
 
 // General angular strap custom overrides
-@import "../assets/angularstrap.less";
+@import "../global/angularstrap.less";
 
 
 // ------------------------------------
@@ -117,26 +116,26 @@
 // ------------------------------------
 
 // TODO: Why are these two outside of the pnd-wrp wrapper?
-@import "../assets/annomatic.less";
-@import "../assets/consolidation.less";
+@import "../components/annomatic";
+@import "../global/consolidation.less";
 
 // Components
 .pnd-wrp {
-    @import "../assets/normalize.less";
-    @import "../assets/annotation-sidebar.less";
-    @import "../assets/login.less";
-    @import "../assets/dashboard.less";
-    @import "../assets/toolbar.less";
-    @import "../assets/contextual-menu.less";
-    @import "../assets/preview.less";
-    @import "../assets/page-item-container.less";
-    @import "../assets/item.less";
-    @import "../assets/triple-composer.less";
-    @import "../assets/resource-panel.less";
-    @import "../assets/notebook.less";
-    @import "../assets/vertical-tabs.less";
-    @import "../assets/buttons.less";
-    @import "../assets/modal.less";
-    @import "../assets/imageFragmentAnnotator.less";
-    @import "../assets/simplified-client.less";
+    @import "../global/normalize.less";
+    @import "../components/annotation-sidebar";
+    @import "../components/login.less";
+    @import "../components/dashboard";
+    @import "../components/toolbar";
+    @import "../components/contextual-menu";
+    @import "../components/preview";
+    @import "../components/page-item-container";
+    @import "../components/item.less";
+    @import "../components/triple-composer";
+    @import "../components/resource-panel";
+    @import "../components/notebook";
+    @import "../components/vertical-tabs";
+    @import "../components/buttons";
+    @import "../components/modal";
+    @import "../components/imageFragmentAnnotator";
+    @import "../global/simplified-client.less";
 }

@@ -457,6 +457,21 @@ KORBODEFAULTCONF = {
 
     /**
      * @ngdoc property
+     * @name KORBODEFAULTCONF#confirmModalOnClose
+     *
+     * @description
+     * `boolean`
+     *
+     * Shows confirm modal on close.
+     *
+     * <pre>
+     *     confirmModalOnClose: true
+     * </pre>
+     */
+    confirmModalOnClose: true,
+
+    /**
+     * @ngdoc property
      * @name KORBODEFAULTCONF#visualizeCopyButton
      *
      * @description

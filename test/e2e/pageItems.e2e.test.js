@@ -20,7 +20,7 @@ describe("Page Items interaction", function() {
         });
         // check if exist action button
         p.findElements(protractor.By.css('.pnd-panel-tab-content-footer button')).then(function(btn) {
-            expect(btn.length).toBe(4);
+            expect(btn.length).toBe(3);
         });
         // check if exist items
         p.findElements(protractor.By.css('.pnd-tab-content .active item')).then(function(items) {

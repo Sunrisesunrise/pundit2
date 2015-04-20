@@ -16,7 +16,7 @@
 // outside of the .kee-wrp import
 @import "@{bspath}variables.less";
 @import "@{bspath}mixins.less";
-@import "../assets/bootstrap-variables";
+@import "../bootstrap/bootstrap-variables";
 
 // Wrap every bs rule under one of our nodes
 .kee-wrp {
@@ -46,8 +46,7 @@
 
 // Customizing the default Bootstrap theme
 .kee-wrp {
-    @import "../assets/bootstrap-theme";
-    @import "korboee-bootstrap-theme";
+    @import "../bootstrap/bootstrap-theme";
 }
 
 
@@ -85,7 +84,7 @@
 // ------------------------------------
 
 // Common variables
-@import "../assets/variables.less";
+@import "../global/variables.less";
 // Korbo variables
 @import "korboee-variables.less";
 
@@ -115,12 +114,12 @@
 // ------------------------------------
 
 .kee-wrp {
-    @import "../assets/page-item-container.less";
-    @import "../assets/item.less";
-    @import "../assets/preview.less";
-    @import "../assets/vertical-tabs.less";
-    @import "../assets/modal.less";
-    @import "../assets/resource-panel.less";
-    @import "../assets/buttons.less";
+    @import "../components/page-item-container";
+    @import "../components/item";
+    @import "../components/preview";
+    @import "../components/vertical-tabs";
+    @import "../components/modal";
+    @import "../components/resource-panel";
+    @import "../components/buttons";
     @import "korboee-styles.less";
 }

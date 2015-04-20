@@ -229,7 +229,7 @@ angular.module('Pundit2.TripleComposer')
     };
 
     var trackContextualEvent = function(eventString) {
-        var eventLabel = "tripleComposer--contextualMenu--" + eventString;
+        var eventLabel = "contextualMenu--" + eventString;
         Analytics.track('buttons', 'click', eventLabel);
     }
 
@@ -584,7 +584,13 @@ angular.module('Pundit2.TripleComposer')
         name = fixName(name);
         // search first empty subject
         var index = -1;
+        if (typeof state === 'undefined' || typeof state[name] === 'undefined') {
+            return false;
+        }
         state[name].statements.some(function(s, i) {
+            if (typeof s.scope === 'undefined') {
+                return false;
+            }
             if (!s.scope.subjectFound) {
                 index = i;
                 return true;

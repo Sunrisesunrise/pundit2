@@ -273,7 +273,8 @@ angular.module('Pundit2.Client')
         "domain": [
             "http://purl.org/pundit/ont/ao#fragment-image",
             "http://purl.org/pundit/ont/ao#fragment-text",
-            "http://xmlns.com/foaf/0.1/Image"
+            "http://xmlns.com/foaf/0.1/Image",
+            "http://schema.org/WebPage"
         ],
         "range": ["http://www.w3.org/2000/01/rdf-schema#Literal"],
         "vocabulary": "Basic Relation",
@@ -296,12 +297,14 @@ angular.module('Pundit2.Client')
         "domain": [
             "http://purl.org/pundit/ont/ao#fragment-text",
             "http://purl.org/pundit/ont/ao#fragment-image",
-            "http://xmlns.com/foaf/0.1/Image"
+            "http://xmlns.com/foaf/0.1/Image",
+            "http://schema.org/WebPage"
         ],
         "range": [
             "http://purl.org/pundit/ont/ao#fragment-text",
             "http://purl.org/pundit/ont/ao#fragment-image",
-            "http://xmlns.com/foaf/0.1/Image"
+            "http://xmlns.com/foaf/0.1/Image",
+            "http://schema.org/WebPage"
         ],
         "vocabulary": "Basic Relation",
         "uri": "http://purl.org/pundit/vocab#similarTo"
@@ -312,7 +315,8 @@ angular.module('Pundit2.Client')
         "domain": [
             "http://purl.org/pundit/ont/ao#fragment-text",
             "http://purl.org/pundit/ont/ao#fragment-image",
-            "http://xmlns.com/foaf/0.1/Image"
+            "http://xmlns.com/foaf/0.1/Image",
+            "http://schema.org/WebPage"
         ],
         "range": [
             "http://www.freebase.com/schema/people/person",
@@ -354,7 +358,10 @@ angular.module('Pundit2.Client')
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
         "label": "talks about",
         "description": "The selected text fragment talks about some other text, Entity, Person or any other kind of concept",
-        "domain": ["http://purl.org/pundit/ont/ao#fragment-text"],
+        "domain": [
+            "http://purl.org/pundit/ont/ao#fragment-text",
+            "http://schema.org/WebPage"
+        ],
         "range": [],
         "vocabulary": "Basic Relation",
         "uri": "http://purl.org/pundit/ont/oa#talksAbout"
@@ -362,7 +369,10 @@ angular.module('Pundit2.Client')
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
         "label": "is related to",
         "description": "The selected text fragment is someway related to another text, Entity, Person or any other kind of concept",
-        "domain": ["http://purl.org/pundit/ont/ao#fragment-text"],
+        "domain": [
+            "http://purl.org/pundit/ont/ao#fragment-text",
+            "http://schema.org/WebPage"
+        ],
         "range": [],
         "vocabulary": "Basic Relation",
         "uri": "http://purl.org/pundit/ont/oa#isRelatedTo"
@@ -708,7 +718,7 @@ angular.module('Pundit2.Client')
             } // end if
         }
         var config = {
-            container: 'kee-korbo2',
+            container: 'korbo',
             // instance label tab title
             label: 'Korbo',
             // enable or disable the instance
