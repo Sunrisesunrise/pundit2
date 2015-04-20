@@ -321,16 +321,18 @@ angular.module('Pundit2.TripleComposer')
 
     }; // end save function
 
-    EventDispatcher.addListener('ResourcePanel.toggle', function(e) {
+    var evtHandlers = [];
+
+    evtHandlers.push(EventDispatcher.addListener('ResourcePanel.toggle', function(e) {
         var isResourcePanelOpend = e.args;
         if (isResourcePanelOpend) {
             angular.element('.pnd-triplecomposer-statements-container').addClass('pnd-triplecomposer-statement-not-scroll');
         } else {
             angular.element('.pnd-triplecomposer-statements-container').removeClass('pnd-triplecomposer-statement-not-scroll');
         }
-    });
+    }));
 
-    EventDispatcher.addListener('Annotators.saveAnnotation', function() {
+    evtHandlers.push(EventDispatcher.addListener('Annotators.saveAnnotation', function() {
         var uncomplete = $scope.statements.some(function(el) {
             var t = el.scope.get();
             if (t.subject === null || t.predicate === null || t.object === null) {
@@ -346,8 +348,19 @@ angular.module('Pundit2.TripleComposer')
                 TripleComposer.openTripleComposer();
             });
         }
-    });
+    }));
 
+    evtHandlers.push(EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
+        if (!e.args) {
+            TripleComposer.reset($scope.name);
+        }
+    }));
+
+    $scope.removeEventListeners = function() {
+        for (var i in evtHandlers) {
+            EventDispatcher.removeListener(evtHandlers[i]);
+        }
+    };
 
 
 });

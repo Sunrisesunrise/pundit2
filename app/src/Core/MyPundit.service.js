@@ -1,3 +1,6 @@
+function GLOBAL_PUNDIT_IFRAME_LOADED() {
+    alert("LOADED");
+}
 angular.module('Pundit2.Core')
 
 .constant('MYPUNDITDEFAULTS', {
@@ -45,7 +48,9 @@ angular.module('Pundit2.Core')
      * Default value:
      * <pre> loginModalCloseTimer: 300000 </pre>
      */
-    loginModalCloseTimer: 300000 // 5 minutes
+    loginModalCloseTimer: 300000, // 5 minutes
+
+    popoverLoginURL: 'http://dev.thepund.it/connect/index.php'
 })
 
 /**
@@ -61,7 +66,7 @@ angular.module('Pundit2.Core')
  *
  */
 .service('MyPundit', function(MYPUNDITDEFAULTS, $http, $q, $timeout, $modal, $window, $interval,
-    BaseComponent, EventDispatcher, NameSpace, Analytics) {
+    BaseComponent, EventDispatcher, NameSpace, Analytics, $popover, $rootScope) {
 
     var myPundit = new BaseComponent('MyPundit', MYPUNDITDEFAULTS);
 
@@ -382,6 +387,141 @@ angular.module('Pundit2.Core')
         loginPromise.resolve(false);
         $timeout.cancel(loginPollTimer);
     };
+
+    var popoverState = {
+        autoCloseWait: 2,
+        autoCloseIntervall: null,
+        anchor: undefined,
+        loginSrc: loginServer,//myPundit.options.popoverLoginURL,//'http://dev.thepund.it/connect/index.php',
+        options: {
+            template: 'src/Core/Templates/login.popover.tmpl.html',
+            container: "[data-ng-app='Pundit2']",
+            placement: "bottom-left",
+            // target: '.pnd-toolbar-login-button',
+            // container: '.pnd-wrp',
+            trigger: 'manual'
+        },
+        renderIFrame: function() {
+            angular.element(".pnd-login-popover-container .iframe-container iframe").remove();
+            angular.element(".pnd-login-popover-container .iframe-container")
+                .append('<iframe src="' + loginServer + '"></iframe>');
+            popoverState.popover.$scope.isLoading = true;
+            popoverState.popover.$scope.postLoginPreCheck = false;
+            popoverState.popover.$scope.loginSuccess = false;
+            popoverState.popover.$scope.loginSomeError = false;
+        },
+        loginSuccess: function() {
+            popoverState.popover.$scope.autoCloseIn = popoverState.autoCloseWait;
+            popoverState.popover.$scope.loginSuccess = true;
+            popoverState.autoCloseIntervall = $interval(function(){
+                var sec = popoverState.popover.$scope.autoCloseIn;
+                sec --;
+                if (sec < 1) {
+                    $interval.cancel(popoverState.autoCloseIntervall);
+                    myPundit.closeLoginPopover();
+                }
+                else {
+                    popoverState.popover.$scope.autoCloseIn = sec;
+                }
+            }, 1000);
+        },
+        popover: null
+    };
+
+    var popoverLoginPostMessageHandler = function(params) {
+        console.log(params);
+        if (typeof params.data !== 'undefined') {
+            if(params.data === 'loginPageLoaded') {
+                popoverState.popover.$scope.isLoading = false;
+                popoverState.popover.$scope.$digest();
+            }
+            else if(params.data === 'loginCheck') {
+                popoverState.popover.$scope.isLoading = true;
+                popoverState.popover.$scope.postLoginPreCheck = true;
+                popoverState.popover.$scope.$digest();
+            }
+            else if(params.data === 'userLoggedIn') {
+                popoverState.popover.$scope.postLoginPreCheck = true;
+                myPundit.checkLoggedIn().then(function(status){
+                    popoverState.popover.$scope.isLoading = false;
+                    if (status) {
+                        popoverState.loginSuccess();
+                    }
+                    else {
+                        popoverState.popover.$scope.loginSomeError = true;
+                        //popoverState.popover.$scope.$digest();
+                    }
+                }, function() {
+                    popoverState.popover.$scope.isLoading = false;
+                    popoverState.popover.$scope.loginSomeError = true;
+                    //popoverState.popover.$scope.$digest();
+                    //popoverState.loginSuccess();
+                });
+            }
+        }
+    };
+
+    if (window.addEventListener) {
+        window.addEventListener("message", popoverLoginPostMessageHandler, false);
+    }
+    else {
+        if (window.attachEvent) {
+            window.attachEvent("onmessage", popoverLoginPostMessageHandler, false);
+        }
+    }
+
+    // TODO This is not really a popoverLogin but more a popover toggler
+    myPundit.popoverLogin = function (event) {
+
+        // If there's already a Login popover I close and destroy it
+        if (popoverState.popover != null) {
+            popoverState.popover.hide();
+            popoverState.popover.destroy(); // TODO Doesn't remove the code?????
+            popoverState.popover = null;
+            return;
+        }
+
+        // popoverState.anchor = angular.element('.pnd-toolbar-login-button');
+        // popoverState.popover = $popover(angular.element(".pnd-toolbar-toggle-button"), popoverState.options);
+        popoverState.popover = $popover(angular.element(".pnd-toolbar-login-button"), popoverState.options);
+
+        popoverState.popover.$scope.isLoading = true;
+        popoverState.popover.$scope.loginSuccess = false;
+        popoverState.popover.$scope.loginSomeError = false;
+
+        popoverState.popover.$scope.loadedContent = function () {
+            alert("Content loaded");
+        };
+
+        popoverState.popover.$scope.closePopover = function () {
+            myPundit.closeLoginPopover();
+        };
+
+        popoverState.popover.$scope.loginRetry = function () {
+            popoverState.renderIFrame();
+        };
+
+        popoverState.popover.$promise.then(function () {
+            popoverState.popover.show();
+            popoverState.renderIFrame();
+        });
+
+    }
+
+    myPundit.getLoginPopoverSrc = function() {
+        return popoverState.loginSrc;
+    }
+
+    myPundit.closeLoginPopover = function() {
+        if (popoverState.popover === null) {
+            return;
+        }
+
+        popoverState.popover.hide();
+        popoverState.popover.destroy();
+        popoverState.popover = null;
+
+    }
 
     return myPundit;
 });

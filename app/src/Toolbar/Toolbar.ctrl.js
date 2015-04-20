@@ -61,11 +61,16 @@ angular.module('Pundit2.Toolbar')
         $scope.login('toolbar--myNotebooks--login');
     };
 
-    $scope.loginButtonClick = function() {
-        $scope.login('toolbar--login');
+    $scope.loginButtonClick = function($event) {
+        $scope.login('toolbar--login', $event);
     };
 
-    $scope.login = function(trackingLoginName) {
+    $scope.login = function(trackingLoginName, event) {
+        ResourcePanel.hide();
+        MyPundit.popoverLogin(event);
+        return;
+
+
         ResourcePanel.hide();
         MyPundit.login();
         if (trackingLoginName === undefined) {
