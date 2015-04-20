@@ -389,7 +389,7 @@ angular.module('Pundit2.Core')
     };
 
     var popoverState = {
-        autoCloseWait: 5,
+        autoCloseWait: 2,
         autoCloseIntervall: null,
         anchor: undefined,
         loginSrc: loginServer,//myPundit.options.popoverLoginURL,//'http://dev.thepund.it/connect/index.php',
