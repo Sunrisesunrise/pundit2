@@ -121,6 +121,7 @@
                     </div>
                     <button class="btn btn-info btn-xs pnd-btn-full"
                             ng-disabled="originalUrlCheck"
+                            ng-show="conf.LODToolSearchURL"
                             ng-click="searchOnResourcePanel($event, 'original-url')">
                         Search original URL
                     </button>
@@ -128,7 +129,7 @@
                 <!-- End original url -->
                 <!-- Search and copy from LOD-->
                 <div class="kee-new-search-and-copy"
-                     ng-show="conf.fromLODTools">
+                     ng-show="conf.fromLODTools && conf.LODToolSearchAndCopy">
                     <button class="btn btn-info btn-xs pnd-btn-full"
                             ng-click="searchOnResourcePanel($event, 'copy-from-lod')">
                         Search and copy from LOD

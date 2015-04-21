@@ -676,6 +676,40 @@ KORBODEFAULTCONF = {
 
     /**
      * @ngdoc property
+     * @name KORBODEFAULTCONF#LODToolSearchURL
+     *
+     * @description
+     * `boolean`
+     *
+     * Shows LOD Tool Search URL button.
+     * Note: enable fromLODTools first.
+     *
+     * Default value:
+     * <pre>
+     *   LODToolSearchURL: false
+     * </pre>
+     */
+    LODToolSearchURL: true,
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#LODToolSearchAndCopy
+     *
+     * @description
+     * `boolean`
+     *
+     * Shows LOD Tool Search And Copy button.
+     * Note: enable fromLODTools first.
+     *
+     * Default value:
+     * <pre>
+     *   LODToolSearchAndCopy: false
+     * </pre>
+     */
+    LODToolSearchAndCopy: true,
+
+    /**
+     * @ngdoc property
      * @name KORBODEFAULTCONF#typeThing
      *
      * @description
