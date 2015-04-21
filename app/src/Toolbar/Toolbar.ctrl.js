@@ -68,6 +68,7 @@ angular.module('Pundit2.Toolbar')
     $scope.login = function(trackingLoginName, event) {
         ResourcePanel.hide();
         MyPundit.popoverLogin(event);
+        Analytics.track('buttons', 'click', trackingLoginName);
         return;
 
 
@@ -76,7 +77,7 @@ angular.module('Pundit2.Toolbar')
         if (trackingLoginName === undefined) {
             trackingLoginName = 'toolbar--otherLogin';
         }
-        Analytics.track('buttons', 'click', trackingLoginName);
+
     };
 
     var logout = function() {
