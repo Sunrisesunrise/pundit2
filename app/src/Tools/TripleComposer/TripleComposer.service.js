@@ -713,6 +713,49 @@ angular.module('Pundit2.TripleComposer')
         return rangeFound;
     };
 
+    tripleComposer.canUseItemInTripleAs = function(item, triple, useAs) {
+        if (typeof item === 'undefined' || typeof item.type === 'undefined') {
+            return false;
+        }
+        if (typeof triple === 'undefined') {
+            return false;
+        }
+        if (typeof triple.predicate === 'undefined' || triple.predicate == null) {
+            return true;
+        }
+
+        var res = false;
+
+        switch (useAs) {
+            case 'sub':
+                if (triple.predicate.domain.length == 0) {
+                    res = true;
+                    break;
+                }
+                item.type.some(function(type) {
+                    if (triple.predicate.domain.indexOf(type) > -1) {
+                        res = true;
+                        return res;
+                    }
+                });
+                break;
+            case 'obj':
+                if (triple.predicate.range.length == 0) {
+                    res = true;
+                    break;
+                }
+                item.type.some(function(type) {
+                    if (triple.predicate.range.indexOf(type) > -1) {
+                        res = true;
+                        return res;
+                    }
+                });
+                break;
+        }
+
+        return res;
+    }
+
     tripleComposer.openTripleComposer = function() {
         if (!Dashboard.isDashboardVisible()) {
             Dashboard.toggle();

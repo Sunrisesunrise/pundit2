@@ -1,0 +1,17 @@
+.pnd-wrp .kee-wrp .kee-error-more-info {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(0,0,0,0.3);
+}
+
+.pnd-wrp .kee-wrp .kee-error-more-info .kee-error-more-info-content{
+  background-color: #fff;
+  margin: 20%;
+  padding: 5%;
+  -webkit-box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.60);
+  -moz-box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.60);
+  box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.60);
+}

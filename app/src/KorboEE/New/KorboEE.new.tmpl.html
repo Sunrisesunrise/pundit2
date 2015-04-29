@@ -22,6 +22,9 @@
         </div>
         <div class="kee-top-area-message" ng-class="{'kee-error' : topArea.status == 'error'}">
             {{topArea.message}}
+            <a href="#" ng-click="toggleErrorDetailsClick()" ng-show="errorMoreInfoLink">
+                details.
+            </a>
         </div>
     </div>
     <!-- End top area -->
@@ -279,6 +282,28 @@
         Saving...
     </div>
 
+    <div class="kee-error-more-info" ng-show="errorMoreInfo">
+        <div class="kee-error-more-info-content">
+            You are creating an entity to be used as <em>{{typesErrorDetails.entityUsedAs}}</em>
+            with a predicate having <em>{{typesErrorDetails.predicateProperty}}</em> not compatible with entity types you've selected.
+            <br />
+            Please select at least one of following types: <br />
+            <ul class="list-group">
+                <li ng-repeat="type in typesErrorDetails.predicateTypes" title="{{type.uri}}">
+                    {{type.name}}
+            </ul>
+
+            <div class="kee-error-more-info-content-footer">
+                <button
+                        type="button"
+                        class="btn btn-xs btn-info pnd-btn-full"
+                        ng-click="toggleErrorDetailsClick()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <div class="kee-footer">
         <button 
@@ -301,7 +326,6 @@
             ng-click="clearForm()">
                 Clear
         </button>
-
     </div> 
     <!-- End Footer -->
 </div>
