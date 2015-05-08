@@ -22,6 +22,9 @@
         </div>
         <div class="kee-top-area-message" ng-class="{'kee-error' : topArea.status == 'error'}">
             {{topArea.message}}
+            <a href="#" ng-click="toggleErrorDetailsClick()" ng-show="errorMoreInfoLink">
+                details.
+            </a>
         </div>
     </div>
     <!-- End top area -->
@@ -279,6 +282,42 @@
         Saving...
     </div>
 
+    <div class="kee-error-more-info small-modal-wrapper" ng-show="errorMoreInfo">
+        <div class="kee-error-more-info-content small-modal">
+
+            <!-- Modal contents -->
+            <div class="small-modal-content">
+                <p>
+                    The entity you are creating is <strong>not compatible with the Predicate</strong> you are using in your annotation.
+                </p>
+                <!--
+                    You are creating an entity to be used as <strong><em>{{typesErrorDetails.entityUsedAs}}</em></strong>
+                    with a predicate having <em>{{typesErrorDetails.predicateProperty}}</em> not compatible with entity types you've selected.
+                -->
+                <p>
+                    Please select at least one of following types:
+                </p>
+                <ul class="list-group">
+                    <li ng-repeat="type in typesErrorDetails.predicateTypes" title="{{type.uri}}">
+                        {{type.name}}
+                </ul>
+            </div>
+            <!-- END // Modal contents -->
+
+            <!-- Modal footer containing buttons -->
+            <div class="kee-error-more-info-content-footer small-modal-footer">
+                <button
+                        type="button"
+                        class="btn btn-xs btn-info pnd-btn-full"
+                        ng-click="toggleErrorDetailsClick()">
+                    Close
+                </button>
+            </div>
+            <!-- END // Modal footer containing buttons -->
+
+        </div>
+    </div>
+
     <!-- Footer -->
     <div class="kee-footer">
         <button 
@@ -301,7 +340,6 @@
             ng-click="clearForm()">
                 Clear
         </button>
-
     </div> 
     <!-- End Footer -->
 </div>

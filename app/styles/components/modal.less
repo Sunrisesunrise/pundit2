@@ -4,10 +4,61 @@
  * Style for modal windows used in Pundit, KorboEE, ...
  */
 
-
 /* ------------------------------------ *\
    #MODAL
 \* ------------------------------------ */
 .modal {
     z-index: @zindex-pnd-modal;
+}
+
+/* ------------------------------------ *\
+   #SMALL-MODAL
+\* ------------------------------------ */
+/* This is a smaller modal that is currently displayed inside Korbo EE but
+that might be used also in other contexts */
+.small-modal-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+
+    .small-modal {
+        position: relative;
+        background-color: #fff;
+        margin: 20%;
+        -webkit-box-shadow: 0 0 7px rgba(0, 0, 0, .3);
+        -moz-box-shadow: 0 0 7px rgba(0, 0, 0, .3);
+        box-shadow: 0 0 7px rgba(0, 0, 0, .3);
+
+        /* Contents */
+        .small-modal-content {
+            padding: 30px 30px 60px 30px;
+
+            p {
+                font-size: 14px;
+            }
+
+            ul {
+                list-style: inside;
+
+                li {
+                    font-size: 14px;
+                }
+            }
+        }
+
+        /* Footer */
+        .small-modal-footer {
+            display: block;
+            position: absolute;
+            height: 30px;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            border-top: 1px solid #999999;
+            background-color: #fff;
+        }
+    }
 }

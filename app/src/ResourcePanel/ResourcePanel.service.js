@@ -594,6 +594,15 @@ angular.module('Pundit2.ResourcePanel')
     };
 
     resourcePanel.lastPromiseThen = undefined;
+    /**
+     * Last promise info object.
+     * It should contain following properties:
+     *   method: mandatory function to call
+     *   checkFunction: mandatory function called to know if method can be called
+     *   data: optional data object for evaluation purpose.
+     * @type {object}
+     */
+    resourcePanel.lastPromiseData = undefined;
 
     resourcePanel.overrideFooterExtraButtons = undefined;
 

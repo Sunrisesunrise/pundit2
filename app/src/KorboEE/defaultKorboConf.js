@@ -468,7 +468,7 @@ KORBODEFAULTCONF = {
      *     confirmModalOnClose: true
      * </pre>
      */
-    confirmModalOnClose: true,
+    confirmModalOnClose: false,
 
     /**
      * @ngdoc property

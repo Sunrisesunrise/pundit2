@@ -262,7 +262,16 @@ angular.module('Pundit2.TripleComposer')
             return;
         }
         ResourcePanel.showItemsForSubject(triple, $event.target).then($scope.setSubject);
+
+        // Deprecating.
         ResourcePanel.lastPromiseThen = $scope.setSubject;
+        ResourcePanel.lastPromiseData = {
+            method: $scope.setSubject,
+            data: {
+                triple: triple,
+                type: 'sub'
+            }
+        }
 
         if ($scope.subjectFound) {
             EventDispatcher.sendEvent('Pundit.changeSelection');
@@ -352,7 +361,15 @@ angular.module('Pundit2.TripleComposer')
 
         if (triple.object === null || (!$scope.objectLiteral && !$scope.objectDate)) {
             ResourcePanel.showItemsForObject(triple, $event.target).then($scope.setObject);
+            // Deprecating.
             ResourcePanel.lastPromiseThen = $scope.setObject;
+            ResourcePanel.lastPromiseData = {
+                method: $scope.setObject,
+                data: {
+                    triple: triple,
+                    type: 'obj'
+                }
+            }
         } else {
             if ($scope.objectLiteral) {
                 $scope.onClickObjectLiteral($event);

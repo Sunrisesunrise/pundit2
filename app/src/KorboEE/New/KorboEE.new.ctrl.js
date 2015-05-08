@@ -610,6 +610,66 @@ angular.module('KorboEE')
         return triplesData;
     }
 
+    var buildTypesErrorDetailsMessage = function(item, data) {
+        $scope.typesErrorDetails = {
+            entityUsedAs: 'Object',
+            predicateProperty: 'Range',
+            predicateTypes: []
+        };
+        var predicateProp = 'range';
+        if (data.type == 'sub') {
+            $scope.typesErrorDetails.entityUsedAs = 'Subject';
+            $scope.typesErrorDetails.predicateProperty = 'Domain';
+            predicateProp = 'domain';
+        }
+        for (var i in data.triple.predicate[predicateProp]) {
+            $scope.typesErrorDetails.predicateTypes.push(
+            {
+                uri: data.triple.predicate[predicateProp][i],
+                name: TypesHelper.getLabel(data.triple.predicate[predicateProp][i])
+            }
+            );
+        }
+    }
+
+    var canSaveCheck = function() {
+        $scope.errorMoreInfo = false;
+        $scope.errorMoreInfoMessage = '';
+        $scope.errorMoreInfoLink = false;
+        var res = true;
+        if (typeof resourcePanelLastPromiseData !== 'undefined' &&
+        typeof resourcePanelLastPromiseData.data !== 'undefined' &&
+        typeof resourcePanelLastPromiseData.data.triple !== 'undefined' &&
+        typeof resourcePanelLastPromiseData.data.type !== 'undefined'
+        ) {
+            // Get checked types.
+            var newTypes = [];
+            for (var i = 0; i < $scope.types.length; i++) {
+                if ($scope.types[i].checked) {
+                    newTypes.push($scope.types[i].URI);
+                }
+            }
+            var itemFotTC = new Item(res, {
+                label : $scope.tabs[0].label,
+                type : newTypes,
+                image : $scope.imageUrl,
+                description : $scope.tabs[0].description,
+                language : $scope.conf.defaultLanguage,
+                uri : 'http://tempfake.uri'
+            });
+            res = TripleComposer.canUseItemInTripleAs(itemFotTC, resourcePanelLastPromiseData.data.triple, resourcePanelLastPromiseData.data.type);
+            if (!res) {
+                $scope.errorMoreInfoLink = true;
+                $scope.changeInnerPane('advancedOptions');
+                $scope.typesHasError = true;
+                $scope.topArea.message = 'Incompatible entity types,';
+                $scope.topArea.status = "error";
+                $scope.errorMoreInfoMessage = buildTypesErrorDetailsMessage(itemFotTC, resourcePanelLastPromiseData.data);
+            }
+        }
+        return res;
+    }
+
     var doSave = function () {
         var checkLang = checkLanguages();
         $scope.updateTypes();
@@ -752,6 +812,8 @@ angular.module('KorboEE')
                         // fire save callback
                         api.fireOnSave(obj);
 
+                        /*
+                        // Deprecating.
                         if (typeof resourcePanelLastPromise !== 'undefined') {
                             var itemFotTC = new Item(res, {
                                 label : $scope.tabs[0].label,
@@ -763,8 +825,7 @@ angular.module('KorboEE')
                             });
                             resourcePanelLastPromise(itemFotTC);
                         }
-
-
+                        */
 
                         $timeout(function () {
                             ContextualMenu.wipeActionsByType('advancedMenu');
@@ -775,6 +836,9 @@ angular.module('KorboEE')
                             korboConf.setIsOpenModal(false);
                             EventDispatcher.sendEvent('KorboEE.entitySaved', id);
                         }, 1000);
+
+
+
                     },
                     function () {
                         $scope.topArea.message = "Entity saving error!";
@@ -1006,7 +1070,23 @@ angular.module('KorboEE')
         updateEntityTitlePreview();
     };
 
+    $scope.toggleErrorDetailsClick = function() {
+        $scope.errorMoreInfo = !$scope.errorMoreInfo;
+    };
+
+    $scope.errorMoreInfo = false;
+    $scope.errorMoreInfoMessage = '';
+    $scope.errorMoreInfoLink = false;
+    $scope.typesErrorDetails = {
+        entityUsedAs: '',
+        predicateProperty: '',
+        predicateTypes: []
+    };
+
     $scope.save = function() {
+        if (!canSaveCheck()) {
+            return;
+        }
         $scope.saveClicked = true;
         if (Config.annotationServerCallsNeedLoggedUser) {
             MyPundit.checkLoggedIn().then(function (isLoggedIn) {
@@ -1191,7 +1271,10 @@ angular.module('KorboEE')
         ContextualMenu.wipeActionsByType('advancedMenu');
     });
 
+    // Deprecating.
     var resourcePanelLastPromise = ResourcePanel.lastPromiseThen;
+    // replacing resourcePanelLastPromise.
+    var resourcePanelLastPromiseData = ResourcePanel.lastPromiseData;
     ResourcePanel.hide();
 
     // Init actions.
