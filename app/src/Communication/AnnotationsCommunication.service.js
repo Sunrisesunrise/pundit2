@@ -1,12 +1,13 @@
 angular.module('Pundit2.Communication')
 
 .constant('ANNOTATIONSCOMMUNICATIONDEFAULTS', {
-    preventDownload: false
+    preventDownload: false,
+    loadMultipleAnnotations: false
 })
 
 .service('AnnotationsCommunication', function(BaseComponent, EventDispatcher, NameSpace, Consolidation, MyPundit,
-    AnnotationsExchange, Annotation, NotebookExchange, Notebook, ItemsExchange, Config, XpointersHelper,
-    $http, $q, $rootScope, ANNOTATIONSCOMMUNICATIONDEFAULTS) {
+                                              AnnotationsExchange, Annotation, NotebookExchange, Notebook, ItemsExchange, Config, XpointersHelper,
+                                              $http, $q, $rootScope, ANNOTATIONSCOMMUNICATIONDEFAULTS) {
 
     var annotationsCommunication = new BaseComponent("AnnotationsCommunication", ANNOTATIONSCOMMUNICATIONDEFAULTS);
 
@@ -20,7 +21,7 @@ angular.module('Pundit2.Communication')
     // add notebooks to notebooksExchange
     // than consilidate all items
     annotationsCommunication.getAnnotations = function() {
-
+        var t0 = Date.now();
         var promise = $q.defer();
 
         if (annotationsCommunication.options.preventDownload) {
@@ -31,13 +32,12 @@ angular.module('Pundit2.Communication')
         setLoading(true);
 
         var uris = Consolidation.getAvailableTargets(),
-            annPromise = AnnotationsExchange.searchByUri(uris);
+        annPromise = AnnotationsExchange.searchByUri(uris);
 
         annotationsCommunication.log('Getting annotations for available targets', uris);
 
         annPromise.then(function(ids) {
             annotationsCommunication.log('Found ' + ids.length + ' annotations on the current page.');
-
             if (ids.length === 0) {
                 // TODO: use wipe (not consolidateAll) and specific event in other component (like sidebar)
                 Consolidation.consolidateAll();
@@ -45,37 +45,82 @@ angular.module('Pundit2.Communication')
                 return;
             }
 
-            var annPromises = [],
+            if (!annotationsCommunication.options.loadMultipleAnnotations) {
+                annotationsCommunication.log("Loading annotations one by one");
+                var annPromises = [],
                 settled = 0;
-            for (var i = 0; i < ids.length; i++) {
+                for (var i = 0; i < ids.length; i++) {
+                    var a = new Annotation(ids[i]);
+                    a.then(function(ann) {
+                        // The annotation got loaded, it is already available
+                        // in the AnnotationsExchange
+                        var notebookID = ann.isIncludedIn;
+                        if (typeof(NotebookExchange.getNotebookById(notebookID)) === 'undefined') {
+                            // if the notebook is not loaded download it and add to notebooksExchange
+                            new Notebook(notebookID);
+                        }
+                    }, function(error) {
+                        annotationsCommunication.log("Could not retrieve annotation: " + error);
+                        // TODO: can we try again? Let the user try again with an error on
+                        // the toolbar?
+                    }).finally().then(function() {
+                        settled++;
+                        annotationsCommunication.log('Received annotation ' + settled + '/' + annPromises.length);
 
-                var a = new Annotation(ids[i]);
-                a.then(function(ann) {
-                    // The annotation got loaded, it is already available
-                    // in the AnnotationsExchange
-                    var notebookID = ann.isIncludedIn;
-                    if (typeof(NotebookExchange.getNotebookById(notebookID)) === 'undefined') {
-                        // if the notebook is not loaded download it and add to notebooksExchange
-                        new Notebook(notebookID);
-                    }
-                }, function(error) {
-                    annotationsCommunication.log("Could not retrieve annotation: " + error);
-                    // TODO: can we try again? Let the user try again with an error on
-                    // the toolbar?
-                }).finally().then(function() {
-                    settled++;
-                    annotationsCommunication.log('Received annotation ' + settled + '/' + annPromises.length);
+                        if (settled === annPromises.length) {
+                            annotationsCommunication.log('All promises settled, consolidating');
+                            Consolidation.consolidateAll();
+                            setLoading(false);
+                            promise.resolve(settled);
+                            console.log((Date.now() - t0) / 1000);
+                        }
+                    });
+                    annPromises.push(a);
+                }
+            } // if (!annotationsCommunication.options.loadMultipleAnnotations)
+            else {
+                // Load all annotations with one call.
+                annotationsCommunication.log("Loading all annotations with one call");
+                settled = 0;
+                var postData = ids.join(';');
+                $http({
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'text/plain'
+                    },
+                    method: 'POST',
+                    url: NameSpace.get('asAnnMult'),
+                    withCredentials: true,
+                    data: postData
+                }).success(function(data) {
+                    var num = Object.keys(data).length;
+                    for (var annId in data) {
+                        var a = new Annotation(annId, false, data[annId]);
+                        a.then(function(ann) {
+                            var notebookID = ann.isIncludedIn;
+                            if (typeof(NotebookExchange.getNotebookById(notebookID)) === 'undefined') {
+                                // if the notebook is not loaded download it and add to notebooksExchange
+                                new Notebook(notebookID);
+                            }
+                        }, function(error) {
+                            annotationsCommunication.log("Could not retrieve annotation: " + error);
+                        }).finally().then(function() {
+                            settled++;
+                            annotationsCommunication.log('Created annotation ' + settled + ' [id:' + annId + ']');
 
-                    if (settled === annPromises.length) {
-                        annotationsCommunication.log('All promises settled, consolidating');
-                        Consolidation.consolidateAll();
-                        setLoading(false);
-                        promise.resolve(settled);
+                            if (settled === num) {
+                                annotationsCommunication.log('All annotations created, consolidating');
+                                Consolidation.consolidateAll();
+                                setLoading(false);
+                                promise.resolve(settled);
+                                console.log((Date.now() - t0) / 1000);
+                            }
+                        });
                     }
+                }).error(function(data, statusCode) {
+                    setLoading(false);
                 });
-                annPromises.push(a);
             }
-
         }, function(msg) {
             annotationsCommunication.err("Could not search for annotations, error from the server: " + msg);
             EventDispatcher.sendEvent('Pundit.error', 'Could not search for annotations, error from the server!');
@@ -250,7 +295,7 @@ angular.module('Pundit2.Communication')
     annotationsCommunication.editAnnotation = function(annID, graph, items, targets) {
 
         var completed = 0,
-            promise = $q.defer();
+        promise = $q.defer();
 
         if (MyPundit.isUserLogged()) {
 
