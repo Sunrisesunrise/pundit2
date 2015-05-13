@@ -130,6 +130,11 @@
     <script src="../src/Lists/GeneralItemsContainer/GeneralItemsContainer.ctrl.js"></script>
     <script src="../src/Lists/GeneralItemsContainer/GeneralItemsContainer.service.js"></script>
 
+    <script src="../src/Lists/NotebooksPredicatesContainer/NotebooksPredicatesContainer.js"></script>
+    <script src="../src/Lists/NotebooksPredicatesContainer/NotebooksPredicatesContainer.dir.js"></script>
+    <script src="../src/Lists/NotebooksPredicatesContainer/NotebooksPredicatesContainer.ctrl.js"></script>
+    <script src="../src/Lists/NotebooksPredicatesContainer/NotebooksPredicatesContainer.service.js"></script>
+
     <script src="../src/Lists/MyItemsContainer/MyItemsContainer.js"></script>
     <script src="../src/Lists/MyItemsContainer/MyItemsContainer.dir.js"></script>
     <script src="../src/Lists/MyItemsContainer/MyItemsContainer.ctrl.js"></script>
