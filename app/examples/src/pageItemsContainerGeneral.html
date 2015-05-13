@@ -1,0 +1,37 @@
+<!-- buildexamples:section header --><!-- /buildexamples -->
+
+<script>
+
+    var PageItemsContainerDemoCtrl = function($scope, Item, ItemsExchange, PAGEITEMSCONTAINERDEFAULTS) {
+    
+        var items = [
+            {
+                uri: "textFragmentUri",
+                label: "textFragmentLabel",
+                type: ["http://purl.org/pundit/ont/ao#fragment-text"]
+            },
+            {
+                uri: "imageFragmentUri",
+                label: "imageFragmentLabel",
+                type: ["http://purl.org/pundit/ont/ao#fragment-image"]
+            }
+        ];
+
+        var loadMockedItems = function(){
+            for (var j in items) {
+                var item = new Item(items[j].uri, items[j]);
+                ItemsExchange.addItemToContainer(item, PAGEITEMSCONTAINERDEFAULTS.container);
+            }
+        }();
+        
+    };    
+
+</script>
+
+<div data-ng-app="Pundit2" class="pnd-wrp">
+    <div ng-controller="PageItemsContainerDemoCtrl">
+        <general-items-container type="pageItems"></general-items-container>
+    </div>
+</div>
+
+<!-- buildexamples:section footer --><!-- /buildexamples -->

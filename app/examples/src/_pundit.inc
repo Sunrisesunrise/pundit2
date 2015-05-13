@@ -125,11 +125,17 @@
     <script src="../src/Item/ItemNotebook.dir.js"></script>
     <script src="../src/Item/ItemNotebook.ctrl.js"></script>
 
+    <script src="../src/Lists/GeneralItemsContainer/GeneralItemsContainer.js"></script>
+    <script src="../src/Lists/GeneralItemsContainer/GeneralItemsContainer.dir.js"></script>
+    <script src="../src/Lists/GeneralItemsContainer/GeneralItemsContainer.ctrl.js"></script>
+    <script src="../src/Lists/GeneralItemsContainer/GeneralItemsContainer.service.js"></script>
+
     <script src="../src/Lists/MyItemsContainer/MyItemsContainer.js"></script>
     <script src="../src/Lists/MyItemsContainer/MyItemsContainer.dir.js"></script>
     <script src="../src/Lists/MyItemsContainer/MyItemsContainer.ctrl.js"></script>
     <script src="../src/Lists/MyItemsContainer/MyItemsContainer.service.js"></script>
-    <script src="../src/Lists/MyItemsContainer/MyItems.service.js"></script>    
+    <script src="../src/Lists/MyItemsContainer/MyItems.service.js"></script>
+
 
     <script src="../src/Lists/VocabulariesContainer/VocabulariesContainer.js"></script>
     <script src="../src/Lists/VocabulariesContainer/VocabulariesContainer.dir.js"></script>

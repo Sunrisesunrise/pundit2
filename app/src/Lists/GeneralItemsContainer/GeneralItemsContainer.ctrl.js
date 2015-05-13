@@ -1,0 +1,582 @@
+angular.module('Pundit2.GeneralItemsContainer')
+
+.controller('GeneralItemsContainerCtrl', function($scope, $rootScope, $modal, $timeout, $element,$injector, $q,
+    GeneralItemsContainer, ItemsExchange, MyItems, MyPundit, Preview, TypesHelper, PageHandler,
+    TripleComposer, EventDispatcher, Status, Analytics) {
+
+
+    var ContainerManager = GeneralItemsContainer.getManager($scope.type);
+
+    // read by <item> directive (in Lists/itemList.tmpl.html)
+    // specifie how contextual menu type show on item
+    $scope.itemMenuType = ContainerManager.options.cMenuType;
+
+    // This is the centralized template to dropdown
+    $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
+
+    $scope.itemSelected = null;
+    $scope.isUseActive = false;
+
+    $scope.canAddItemAsSubject = false;
+    $scope.canAddItemAsObject = false;
+
+    //TODO: probably dead code. the elements having class .my-items-btn-delete and .my-items-btn-order are commented. Commented.
+    /*
+    var deleteBtn = angular.element($element).find('.my-items-btn-delete'),
+        orderBtn = angular.element($element).find('.my-items-btn-order');
+    */
+
+    // showed when the items list is empty
+    $scope.message = GeneralItemsContainer.getMessage($scope.type);
+
+    $scope.isUserLogged = false;
+
+    // items property used to compare
+    // legal value are: 'type' and 'label'
+    var order = ContainerManager.options.order;
+
+    // how order items, true is ascending, false is descending
+    $scope.reverse = ContainerManager.options.reverse;
+
+    // tabs used to filter items list by type
+    $scope.tabs = GeneralItemsContainer.getTabs($scope.type);
+
+
+    // index of the active tab (the tab that currently shows its content)
+    $scope.tabs.activeTab = ContainerManager.options.initialActiveTab;
+
+
+    //action button configuration
+    $scope.actionButton = GeneralItemsContainer.getActionButton($scope.type);
+
+    var resetContainer = function() {
+        $scope.itemSelected = null;
+        $scope.isUseActive = false;
+        $scope.canAddItemAsSubject = false;
+        $scope.canAddItemAsObject = false;
+    };
+
+    // set as active a label in contextual menu
+    var setLabelActive = function(index) {
+        for (var i in $scope.dropdownOrdering) {
+            $scope.dropdownOrdering[i].isActive = false;
+        }
+        $scope.dropdownOrdering[index].isActive = true;
+    };
+
+    // sort button dropdown content
+    $scope.dropdownOrdering = [{
+        text: 'Order by label asc',
+        click: function() {
+            order = 'label';
+            $scope.reverse = false;
+            setLabelActive(0);
+
+            var eventLabel = getHierarchyString();
+            eventLabel += "--sort--labelAsc";
+            Analytics.track('buttons', 'click', eventLabel);
+        },
+        isActive: order === 'label' && $scope.reverse === false
+    }, {
+        text: 'Order by label desc',
+        click: function() {
+            order = 'label';
+            $scope.reverse = true;
+            setLabelActive(1);
+
+            var eventLabel = getHierarchyString();
+            eventLabel += "--sort--labelDesc";
+            Analytics.track('buttons', 'click', eventLabel);
+        },
+        isActive: order === 'label' && $scope.reverse === true
+    }, {
+        text: 'Order by type asc',
+        click: function() {
+            //TODO: condition not in vocabularies
+            if (!GeneralItemsContainer.isVocabulariesType($scope.type) && $scope.dropdownOrdering[2].disable) {
+                return;
+            }
+            order = 'type';
+            $scope.reverse = false;
+            setLabelActive(2);
+
+            var eventLabel = getHierarchyString();
+            eventLabel += "--sort--typeAsc";
+            Analytics.track('buttons', 'click', eventLabel);
+        },
+        isActive: order === 'type' && $scope.reverse === false
+    }, {
+        text: 'Order by type desc',
+        click: function() {
+            //TODO: condition not in vocabularies
+            if (!GeneralItemsContainer.isVocabulariesType($scope.type) && $scope.dropdownOrdering[3].disable) {
+                return;
+            }
+            order = 'type';
+            $scope.reverse = true;
+            setLabelActive(3);
+
+            var eventLabel = getHierarchyString();
+            eventLabel += "--sort--typeDesc";
+            Analytics.track('buttons', 'click', eventLabel);
+        },
+        isActive: order === 'type' && $scope.reverse === true
+    }
+    ];
+
+
+    // getter function used to build hierarchystring.
+    // hierarchystring is used for tracking events with analytics.
+    var getHierarchyString = function() {
+        // Temporary solution to find hierarchystring.
+        var eventLabel = "";
+        var myScope = $scope;
+        do {
+            if (typeof(myScope) === 'undefined' || myScope === null) {
+                break;
+            }
+            if (myScope.hasOwnProperty('pane')) {
+                if (myScope.pane.hasOwnProperty('hierarchystring')) {
+                    eventLabel = myScope.pane.hierarchystring;
+                }
+                break;
+            }
+            myScope = myScope.$parent;
+        }
+        while (typeof(myScope) !== 'undefined' && myScope !== null);
+
+        eventLabel += "--" + $scope.tabs[$scope.tabs.activeTab].title;
+        return eventLabel;
+    }
+
+    var removeSpace = function(str) {
+        return str.replace(/ /g, '');
+    };
+
+    // getter function used inside template to order items 
+    // returns the items property value used to order
+    $scope.getOrderProperty = function(item) {
+
+        if (order === 'label') {
+            return removeSpace(item.label);
+        } else if (order === 'type') {
+            return removeSpace(TypesHelper.getLabel(item.type[0]));
+        }
+
+    };
+
+    //TODO only in myItems. Probabibly dead code. Commented.
+    // delete all my Items
+   /*
+    $scope.onClickDeleteAllMyItems = function() {
+        openConfirmModal();
+    };
+    */
+
+
+
+    //TODO: only in myitems. Probably dead code. Commented.
+    // confirm modal
+    /*
+    var modalScope = $rootScope.$new();
+
+    modalScope.titleMessage = "Delete all my items";
+
+    // confirm btn click
+    modalScope.confirm = function() {
+        if (MyPundit.isUserLogged()) {
+            MyItems.deleteAllItems().then(function() {
+                modalScope.notifyMessage = "Success, my items correctly deleted.";
+            }, function() {
+                modalScope.notifyMessage = "Error impossible to delete my items, please retry.";
+            });
+        }
+        $timeout(function() {
+            confirmModal.hide();
+        }, 1000);
+    };
+
+    // cancel btn click
+    modalScope.cancel = function() {
+        confirmModal.hide();
+    };
+
+    var confirmModal = $modal({
+        container: "[data-ng-app='Pundit2']",
+        template: 'src/Core/Templates/confirm.modal.tmpl.html',
+        show: false,
+        backdrop: 'static',
+        scope: modalScope
+    });
+
+    // open modal
+    var openConfirmModal = function() {
+        // promise is needed to open modal when template is ready
+        modalScope.notifyMessage = "Are you sure you want to delete all my items? After you can no longer recover.";
+        confirmModal.$promise.then(confirmModal.show);
+    };
+   */
+
+    $scope.isSelected = function(item) {
+        if ($scope.itemSelected !== null && $scope.itemSelected.uri === item.uri) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    $scope.select = function(item) {
+        Preview.setItemDashboardSticky(item);
+        EventDispatcher.sendEvent('Pundit.changeSelection');
+
+        $scope.isUseActive = true;
+        $scope.itemSelected = item;
+
+        $scope.canAddItemAsSubject = TripleComposer.canAddItemAsSubject(item);
+        $scope.canAddItemAsObject = TripleComposer.canAddItemAsObject(item);
+    };
+
+    //TODO: only on my items
+    var onClickRemove = function() {
+        if ($scope.itemSelected === null) {
+            return;
+        }
+
+        if (Status.getUserStatus() && ItemsExchange.isItemInContainer($scope.itemSelected, MyItems.options.container)) {
+            MyItems.deleteItemAndConsolidate($scope.itemSelected);
+        }
+
+        var eventLabel = getHierarchyString();
+        eventLabel += "--remove";
+        Analytics.track('buttons', 'click', eventLabel);
+
+        resetContainer();
+    }
+
+    //TODO: only on page items and vocabularies
+    var onClickAdd = function() {
+        if ($scope.itemSelected === null) {
+            return;
+        }
+
+        if (Status.getUserStatus() && !ItemsExchange.isItemInContainer($scope.itemSelected, MyItems.options.container)) {
+            MyItems.addItemAndConsolidate($scope.itemSelected);
+
+            var eventLabel = getHierarchyString();
+            eventLabel += "--addToMyItems";
+            Analytics.track('buttons', 'click', eventLabel);
+        }
+
+        resetContainer();
+    }
+
+    $scope.onClickAction = function(){
+        if(GeneralItemsContainer.isMyItemsType($scope.type)) {
+            onClickRemove();
+        }else{
+            onClickAdd();
+        }
+    }
+
+    $scope.onClickUseSubject = function() {
+        if ($scope.itemSelected === null) {
+            return;
+        }
+
+        if (Status.getTemplateModeStatus()) {
+            TripleComposer.addToAllSubject($scope.itemSelected);
+        } else {
+            TripleComposer.addToSubject($scope.itemSelected);
+        }
+
+        var eventLabel = getHierarchyString();
+        eventLabel += "--setSubject";
+        Analytics.track('buttons', 'click', eventLabel);
+
+        resetContainer();
+    }
+
+    $scope.onClickUseObject = function() {
+        if ($scope.itemSelected === null) {
+            return;
+        }
+
+        TripleComposer.addToObject($scope.itemSelected);
+
+        var eventLabel = getHierarchyString();
+        eventLabel += "--setObject";
+        Analytics.track('buttons', 'click', eventLabel);
+
+        resetContainer();
+    }
+
+    EventDispatcher.addListener('Pundit.changeSelection', function() {
+        resetContainer();
+    });
+
+
+
+    //TODO: only on myitems
+    if(GeneralItemsContainer.isMyItemsType($scope.type)) {
+
+        var isCurrentPageInMyItems = function() {
+            var item = PageHandler.createItemFromPage();
+            return ItemsExchange.isItemInContainer(item, MyItems.options.container);
+        }
+
+        //TODO: dropdown items contained only in myItems
+        $scope.dropdownOrdering.push(
+            {
+                "divider": true
+            }
+        );
+        $scope.dropdownOrdering.push(
+            {
+                text: 'Add web page to My items',
+                click: function() {
+                    console.log(arguments);
+                    var item = PageHandler.createItemFromPage();
+                    if (MyPundit.isUserLogged() && !isCurrentPageInMyItems()) {
+                        $scope.onClickAddPageToMyItems();
+                        $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = true;
+                    }
+                },
+                isActive: false,
+                disable: isCurrentPageInMyItems()
+            }
+        );
+
+
+        $scope.$watch(function () {
+            return MyPundit.isUserLogged();
+        }, function (logged) {
+            if (logged) {
+                $scope.isUserLogged = true;
+                $scope.message.text = "No my items found.";
+            } else {
+                $scope.isUserLogged = false;
+                $scope.message.text = "Please login to see your items.";
+            }
+        });
+
+        //TODO: only in MyItems
+        $scope.$watch(function() {
+            return ItemsExchange.getItemsByContainer(MyItems.options.container);
+        }, function(newItems) {
+            $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = isCurrentPageInMyItems();
+        }, true);
+
+
+
+        //TODO: only on my items
+        // add page to my items
+        $scope.onClickAddPageToMyItems = function() {
+            if (!MyPundit.isUserLogged()) {
+                ContainerManager.err('User not logged');
+            } else {
+                var item = PageHandler.createItemFromPage();
+                MyItems.addItem(item);
+
+                var eventLabel = getHierarchyString();
+                eventLabel += "--addPageToMyItems";
+                Analytics.track('buttons', 'click', eventLabel);
+            }
+        };
+    }
+
+    //TODO: only on page items
+    if(GeneralItemsContainer.isPageItemsType($scope.type)) {
+        EventDispatcher.addListener('MyPundit.isUserLogged', function (e) {
+            $scope.isUserLogged = e.args;
+        });
+    }
+
+
+    $scope.search = GeneralItemsContainer.getSearch($scope.type);
+
+
+    //TODO: if in vocabularies
+    if(GeneralItemsContainer.isVocabulariesType($scope.type)){
+        var promise;
+        $scope.$watch(function() {
+            return $scope.search.term;
+        }, function(str) {
+
+            // this happens when the user deletes last char in the <input>
+            if (typeof(str) === 'undefined' || str === '') {
+                str = '';
+                $scope.search.icon = ContainerManager.options.inputIconSearch;
+                $timeout.cancel(promise);
+                return;
+            } else {
+                $scope.search.icon = ContainerManager.options.inputIconClear;
+            }
+
+            // need to query vocab then update showed items
+            $timeout.cancel(promise);
+            promise = $timeout(function() {
+                querySelectors();
+            }, 500);
+
+        });
+
+        $scope.displayedItems = [];
+        var updateMessage = function() {
+            if ($scope.displayedItems.length === 0 && $scope.search.term !== '' && typeof($scope.search.term) !== 'undefined') {
+                $scope.message.text = "No item found to: " + $scope.search.term;
+            }
+        };
+        // this promise is resolved when we make a new search
+        // and we no longer need the items related to previous research
+        var queryPromise = null,
+            actualContainer;
+        // make a new research
+        var querySelectors = function() {
+            if (queryPromise !== null) {
+                queryPromise.resolve();
+            }
+            queryPromise = $q.defer();
+            ContainerManager.getItems($scope.search.term, queryPromise.promise).then(
+                function() {
+                    updateMessage();
+                },
+                function() {
+                    updateMessage();
+                });
+            actualContainer = $scope.tabs[$scope.tabs.activeTab].itemsContainer + $scope.search.term.split(' ').join('$');
+        };
+
+        $scope.$watch(function() {
+            return ItemsExchange.getItemsByContainer(actualContainer);
+        }, function(newItems) {
+            //TODO: Probaby dead code. Commented.
+            /*
+            if (orderBtn.length === 0) {
+                orderBtn = angular.element('.vocab-items-btn-order');
+            }
+            */
+            // update all items array and display new items
+            $scope.displayedItems = newItems;
+            if ($scope.displayedItems.length === 0) {
+                $scope.message.flag = true;
+                //TODO: Probaby dead code. Commented.
+                //orderBtn.addClass('disabled');
+            } else {
+                $scope.message.flag = false;
+                //TODO: Probaby dead code. Commented.
+                //orderBtn.removeClass('disabled');
+            }
+        }, true);
+
+        $scope.$watch(function() {
+            return $scope.tabs.activeTab;
+        }, function(newActive, oldActive) {
+            if (newActive !== oldActive) {
+                actualContainer = $scope.tabs[$scope.tabs.activeTab].itemsContainer + $scope.search.term.split(' ').join('$');
+                updateMessage();
+            }
+        });
+
+    }
+    //TODO: if not in vocabularies
+    else{
+        $scope.$watch(function() {
+            return $scope.search.term;
+        }, function(str) {
+
+            // All items are shown
+            if (typeof($scope.displayedItems) === 'undefined') {
+                return;
+            }
+
+            // this happens when the user deletes last char in the <input>
+            if (typeof(str) === 'undefined' || str === '') {
+                str = '';
+                $scope.search.icon = ContainerManager.options.inputIconSearch;
+            } else {
+                $scope.search.icon = ContainerManager.options.inputIconClear;
+            }
+
+            filterItems(str);
+
+        });
+
+        // watch only my items
+        $scope.$watch(function() {
+            return ItemsExchange.getItemsByContainer(ContainerManager.options.container);
+        }, function(newItems) {
+            // update all items array and display new items
+            $scope.displayedItems = ContainerManager.buildItemsArray($scope.tabs.activeTab, $scope.tabs, newItems);
+        }, true);
+
+        // watch showed items length
+        $scope.$watch(function() {
+            return $scope.displayedItems.length;
+        }, function(len) {
+            // show empty lists messagge
+            if (len === 0) {
+                $scope.message.flag = true;
+                // TODO Use ng-disable in all MyItems tmpl
+                //TODO: Probably dead code. Commented.
+                /*
+                 deleteBtn.addClass('disabled');
+                 orderBtn.addClass('disabled');
+                 */
+            } else {
+                $scope.message.flag = false;
+                //TODO: Probably dead code. Commented.
+                /*
+                 deleteBtn.removeClass('disabled');
+                 orderBtn.removeClass('disabled');
+                 */
+            }
+
+        });
+        // every time that change active tab show new items array
+        $scope.$watch(function() {
+            return $scope.tabs.activeTab;
+        }, function(activeTab) {
+            $scope.displayedItems = ContainerManager.getItemsArrays()[activeTab];
+            // disable sort by type dropdown link
+            // enable only in All Items tab
+            if ($scope.tabs[activeTab].title !== $scope.tabs[0].title && $scope.tabs[activeTab].title !== $scope.tabs[3].title) {
+                $scope.dropdownOrdering[2].disable = true;
+                $scope.dropdownOrdering[3].disable = true;
+            } else {
+                $scope.dropdownOrdering[2].disable = false;
+                $scope.dropdownOrdering[3].disable = false;
+            }
+
+            if (typeof($scope.displayedItems) !== 'undefined' && typeof($scope.search.term) !== 'undefined') {
+                filterItems($scope.search.term);
+            }
+
+        });
+
+        // Filter items which are shown
+        // go to lowerCase and replace multiple space with single space,
+        // to make the regexp work properly
+        var filterItems = function(str) {
+            str = str.toLowerCase().replace(/\s+/g, ' ');
+            var strParts = str.split(' '),
+                reg = new RegExp(strParts.join('.*'));
+
+            $scope.displayedItems = ContainerManager.getItemsArrays()[$scope.tabs.activeTab].filter(function(items) {
+                return items.label.toLowerCase().match(reg) !== null;
+            });
+
+            // update text messagge
+            if (str === '') {
+                if (MyPundit.isUserLogged()) {
+                    $scope.message.text = "No my items found.";
+                } else {
+                    $scope.message.text = "Please login to see your items.";
+                }
+            } else {
+                $scope.message.text = "No item found to: " + str;
+            }
+        };
+    }
+
+
+});

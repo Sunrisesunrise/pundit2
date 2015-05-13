@@ -138,6 +138,21 @@ angular.module('Pundit2.MyItemsContainer')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#MyItems.container
+     *
+     * @description
+     * `string`
+     *
+     * Name of the container used to store the my items in the itemsExchange.
+     *
+     * Default value:
+     * <pre> container: 'myItems' </pre>
+     */
+    container: 'myItems',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#MyIyemsContainer.inputIconSearch
      *
      * @description

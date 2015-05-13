@@ -1,0 +1,40 @@
+<!-- buildexamples:section header --><!-- /buildexamples -->
+
+<script>
+
+    var punditConfig = {
+        //debugAllModules: true,
+        modules: {
+            "MyItemsContainer": {debug: true},
+            "MyItems": {debug: true}
+        }
+    };
+
+    var MyItemsDemoCtrl = function($scope, MyItems, MyPundit) {
+        MyPundit.checkLoggedIn();
+        $scope.login = function() {
+            MyPundit.login().then(function(value) {
+               console.log("Is logged in is "+value);
+            }, function() {
+               console.log("Error: "+value);
+            });
+        };
+
+        $scope.getMyItems = function() {
+            MyItems.getAllItems();
+        };
+
+    };
+
+</script>
+
+<div data-ng-app="Pundit2" class="pnd-wrp">
+    <div ng-controller="MyItemsDemoCtrl">
+        <general-items-container type="myItems"></general-items-container>
+
+        <button type="button" class="btn btn-success pnd-test-login" ng-click="login()">Login</button>
+        <button type="button" class="btn btn-info pnd-test-get-my-items" ng-click="getMyItems()">Get MyItems</button>
+    </div>
+</div>
+
+<!-- buildexamples:section footer --><!-- /buildexamples -->
