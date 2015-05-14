@@ -23,6 +23,8 @@ describe('Toolbar service', function() {
         TripleComposer = $injector.get('TripleComposer');
         $rootScope = _$rootScope_;
         $compile = _$compile_;
+
+        TripleComposer.initInstance('defaultTripleComposer');
     }));
 
     afterEach(function(){

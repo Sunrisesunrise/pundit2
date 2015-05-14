@@ -19,6 +19,7 @@ module.exports = function(config) {
             'app/src/AnnotationSidebar/AnnotationSidebar.js',
             'app/src/Annomatic/Annomatic.js',
             'app/src/Dashboard/Dashboard.js',
+            'app/src/Breadcrumbs/Breadcrumbs.js',
             'app/src/ContextualMenu/ContextualMenu.js',
             'app/src/Lists/PageItemsContainer/PageItemsContainer.js',
             'app/src/Lists/PredicatesContainer/PredicatesContainer.js',

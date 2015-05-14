@@ -72,6 +72,7 @@ angular.module('Pundit2.Core')
 
     var isUserLogged = false;
     var loginServer,
+        editProfile,
         loginStatus,
         userData = {};
 
@@ -169,6 +170,7 @@ angular.module('Pundit2.Core')
 
         }).success(function(data) {
             loginServer = data.loginServer;
+            editProfile = data.editProfile;
             // user is not logged in
             if (data.loginStatus === 0) {
                 isUserLogged = false;
@@ -401,10 +403,19 @@ angular.module('Pundit2.Core')
             // container: '.pnd-wrp',
             trigger: 'manual'
         },
-        renderIFrame: function() {
+        renderIFrame: function(where) {
+            var iframeSrc = '';
+            switch (where) {
+                case 'login':
+                    iframeSrc = loginServer;
+                    break;
+                case 'editProfile':
+                    iframeSrc = editProfile;
+                    break;
+            }
             angular.element(".pnd-login-popover-container .iframe-container iframe").remove();
             angular.element(".pnd-login-popover-container .iframe-container")
-                .append('<iframe src="' + loginServer + '"></iframe>');
+                .append('<iframe src="' + iframeSrc + '"></iframe>');
             popoverState.popover.$scope.isLoading = true;
             popoverState.popover.$scope.postLoginPreCheck = false;
             popoverState.popover.$scope.loginSuccess = false;
@@ -471,7 +482,7 @@ angular.module('Pundit2.Core')
     }
 
     // TODO This is not really a popoverLogin but more a popover toggler
-    myPundit.popoverLogin = function (event) {
+    myPundit.popoverLogin = function (event, where) {
 
         // If there's already a Login popover I close and destroy it
         if (popoverState.popover != null) {
@@ -483,7 +494,12 @@ angular.module('Pundit2.Core')
 
         // popoverState.anchor = angular.element('.pnd-toolbar-login-button');
         // popoverState.popover = $popover(angular.element(".pnd-toolbar-toggle-button"), popoverState.options);
-        popoverState.popover = $popover(angular.element(".pnd-toolbar-login-button"), popoverState.options);
+        if (where === 'login') {
+            popoverState.popover = $popover(angular.element(".pnd-toolbar-login-button"), popoverState.options);
+        }
+        else if (where === 'editProfile') {
+            popoverState.popover = $popover(angular.element(".pnd-toolbar-user-button"), popoverState.options);
+        }
 
         popoverState.popover.$scope.isLoading = true;
         popoverState.popover.$scope.loginSuccess = false;
@@ -503,9 +519,8 @@ angular.module('Pundit2.Core')
 
         popoverState.popover.$promise.then(function () {
             popoverState.popover.show();
-            popoverState.renderIFrame();
+            popoverState.renderIFrame(where);
         });
-
     }
 
     myPundit.getLoginPopoverSrc = function() {
@@ -521,6 +536,10 @@ angular.module('Pundit2.Core')
         popoverState.popover.destroy();
         popoverState.popover = null;
 
+    }
+
+    myPundit.editProfile = function() {
+        myPundit.popoverLogin(event, 'editProfile');
     }
 
     return myPundit;

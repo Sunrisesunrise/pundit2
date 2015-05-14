@@ -416,6 +416,9 @@ angular.module('Pundit2.TripleComposer')
 
     tripleComposer.getStatements = function(name) {
         name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return [];
+        }
         return state[name].statements;
         //return statements;
     };
@@ -679,6 +682,9 @@ angular.module('Pundit2.TripleComposer')
         name = fixName(name);
         // search first empty subject
         var index = -1;
+        if (typeof state[name] === 'undefined') {
+            return false;
+        }
         state[name].statements.some(function(s, i) {
             if (!s.scope.objectFound) {
                 index = i;
