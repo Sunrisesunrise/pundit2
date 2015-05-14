@@ -3,7 +3,12 @@
 <script>
 
 var punditConfig = {
-    templates: ['http://template-test-url.com/t1']
+    templates: ['http://template-test-url.com/t1'],
+    modules: {
+        'Toolbar': {
+            askThePundit: true
+        }
+    }
 };
 
 var ToolbarDemoCtrl = function($scope, Toolbar, MyPundit, NotebookCommunication, TemplatesSelector) {

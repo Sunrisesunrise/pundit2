@@ -41,7 +41,7 @@ angular.module('Pundit2.Toolbar')
      * Default value:
      * <pre> askThePundit: true </pre>
      */
-    askThePundit: true,
+    askThePundit: false,
     /**
      * @module punditConfig
      * @ngdoc property
