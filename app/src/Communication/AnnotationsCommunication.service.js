@@ -2,7 +2,8 @@ angular.module('Pundit2.Communication')
 
 .constant('ANNOTATIONSCOMMUNICATIONDEFAULTS', {
     preventDownload: false,
-    loadMultipleAnnotations: false
+    loadMultipleAnnotations: false,
+    loadMultipleAnnotationsRequireCredentials: false
 })
 
 .service('AnnotationsCommunication', function(BaseComponent, EventDispatcher, NameSpace, Consolidation, MyPundit,
@@ -83,16 +84,21 @@ angular.module('Pundit2.Communication')
                 annotationsCommunication.log("Loading all annotations with one call");
                 settled = 0;
                 var postData = ids.join(';');
-                $http({
+                var httpObject = {
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'text/plain'
                     },
                     method: 'POST',
-                    url: NameSpace.get('asAnnMult'),
-                    withCredentials: true,
+                    url: NameSpace.get('asOpenAnnMult'),
+                    withCredentials: false,
                     data: postData
-                }).success(function(data) {
+                };
+                if (annotationsCommunication.options.loadMultipleAnnotationsRequireCredentials) {
+                    httpObject.withCredentials = true;
+                    url: NameSpace.get('asAnnMult');
+                }
+                $http(httpObject).success(function(data) {
                     var num = Object.keys(data).length;
                     for (var annId in data) {
                         var a = new Annotation(annId, false, data[annId]);
