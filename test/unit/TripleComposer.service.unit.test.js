@@ -34,6 +34,8 @@ describe('TripleComposer service', function() {
         NameSpace = _NameSpace_;
         $rootScope = _$rootScope_;
         $compile = _$compile_;
+
+        TripleComposer.initInstance('defaultTripleComposer');
     }));
 
     afterEach(function(){
@@ -41,7 +43,7 @@ describe('TripleComposer service', function() {
     });
 
     var compileDirective = function(){
-        var elem = $compile('<triple-composer></triple-composer>')($rootScope);
+        var elem = $compile('<triple-composer tc-name="\'defaultTripleComposer\'"></triple-composer>')($rootScope);
         angular.element('body').append(elem);
         $rootScope.$digest();
         return elem;
@@ -265,7 +267,7 @@ describe('TripleComposer service', function() {
     it('should correctly compile statement directive', function(){
         compileDirective();
         var s = TripleComposer.getStatements();
-        
+
         var scope = s[0].scope;
         expect(scope).toBeDefined();
         expect(typeof(scope)).toEqual('object');
