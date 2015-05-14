@@ -4,6 +4,12 @@ angular.module('Pundit2.GeneralItemsContainer')
     GeneralItemsContainer, ItemsExchange, MyItems, MyPundit, NotebookComposer, Preview, TypesHelper, PageHandler,
     TripleComposer, EventDispatcher, Status, Analytics) {
 
+    $scope.isMyItems = GeneralItemsContainer.isMyItemsType($scope.type);
+    $scope.isMyPageItems = GeneralItemsContainer.isPageItemsType($scope.type);
+    $scope.isVocabularies = GeneralItemsContainer.isVocabulariesType($scope.type);
+    $scope.isMyNotebooks = GeneralItemsContainer.isMyNotebooksType($scope.type);
+    $scope.isPredicates = GeneralItemsContainer.isPredicatesType($scope.type);
+
 
     var ContainerManager = GeneralItemsContainer.getManager($scope.type);
 
@@ -21,11 +27,8 @@ angular.module('Pundit2.GeneralItemsContainer')
     $scope.canAddItemAsObject = false;
     $scope.canBeUseAsPredicate = false;
 
-    //TODO: probably dead code. the elements having class .my-items-btn-delete and .my-items-btn-order are commented. Commented.
-    /*
-    var deleteBtn = angular.element($element).find('.my-items-btn-delete'),
-        orderBtn = angular.element($element).find('.my-items-btn-order');
-    */
+
+        var orderBtn = angular.element($element).find(GeneralItemsContainer.getOrderButtonClass($scope.type));
 
     // showed when the items list is empty
     $scope.message = GeneralItemsContainer.getMessage($scope.type);
@@ -39,12 +42,10 @@ angular.module('Pundit2.GeneralItemsContainer')
     // how order items, true is ascending, false is descending
     $scope.reverse = ContainerManager.options.reverse;
 
-    // tabs used to filter items list by type
-    $scope.tabs = GeneralItemsContainer.getTabs($scope.type);
+    if(!($scope.isMyNotebooks || $scope.isPredicates)) {
+        // tabs used to filter items list by type
+        $scope.tabs = GeneralItemsContainer.getTabs($scope.type);
 
-
-    // index of the active tab (the tab that currently shows its content)
-    $scope.tabs.activeTab = ContainerManager.options.initialActiveTab;
        // index of the active tab (the tab that currently shows its content)
         $scope.tabs.activeTab = ContainerManager.options.initialActiveTab;
     }
@@ -56,8 +57,7 @@ angular.module('Pundit2.GeneralItemsContainer')
     var resetContainer = function() {
         $scope.itemSelected = null;
         $scope.isUseActive = false;
-        $scope.canAddItemAsSubject = false;
-        $scope.canAddItemAsObject = false;
+        if(!GeneralItemsContainer.isPredicatesType($scope.type)) {
             $scope.canAddItemAsSubject = false;
             $scope.canAddItemAsObject = false;
         }else {
@@ -98,34 +98,45 @@ angular.module('Pundit2.GeneralItemsContainer')
             Analytics.track('buttons', 'click', eventLabel);
         },
         isActive: order === 'label' && $scope.reverse === true
-            //TODO: condition not in vocabularies
-            if (!GeneralItemsContainer.isVocabulariesType($scope.type) && $scope.dropdownOrdering[2].disable) {
-                return;
-            }
-            order = 'type';
-            $scope.reverse = false;
-            setLabelActive(2);
-
-            var eventLabel = getHierarchyString();
-            eventLabel += "--sort--typeAsc";
-        click: function() {
-            //TODO: condition not in vocabularies
-            if (!GeneralItemsContainer.isVocabulariesType($scope.type) && $scope.dropdownOrdering[3].disable) {
-                return;
-            }
-            order = 'type';
-            $scope.reverse = true;
-            setLabelActive(3);
-
-            var eventLabel = getHierarchyString();
-            eventLabel += "--sort--typeDesc";
-            Analytics.track('buttons', 'click', eventLabel);
-        },
-            text: 'Order by type desc',
-                Analytics.track('buttons', 'click', eventLabel);
-            },
     }
     ];
+
+    if(!$scope.isMyNotebooks && !$scope.isPredicates){
+        $scope.dropdownOrdering.push({
+            text: 'Order by type asc',
+                click: function() {
+                //TODO: condition not in vocabularies
+                if (!GeneralItemsContainer.isVocabulariesType($scope.type) && $scope.dropdownOrdering[2].disable) {
+                    return;
+                }
+                order = 'type';
+                $scope.reverse = false;
+                setLabelActive(2);
+
+                var eventLabel = getHierarchyString();
+                eventLabel += "--sort--typeAsc";
+                Analytics.track('buttons', 'click', eventLabel);
+            },
+            isActive: order === 'type' && $scope.reverse === false
+        });
+        $scope.dropdownOrdering.push({
+            text: 'Order by type desc',
+                click: function() {
+                //TODO: condition not in vocabularies
+                if (!GeneralItemsContainer.isVocabulariesType($scope.type) && $scope.dropdownOrdering[3].disable) {
+                    return;
+                }
+                order = 'type';
+                $scope.reverse = true;
+                setLabelActive(3);
+
+                var eventLabel = getHierarchyString();
+                eventLabel += "--sort--typeDesc";
+                Analytics.track('buttons', 'click', eventLabel);
+            },
+            isActive: order === 'type' && $scope.reverse === true
+        });
+    }
 
 
     // getter function used to build hierarchystring.
@@ -148,7 +159,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         }
         while (typeof(myScope) !== 'undefined' && myScope !== null);
 
-        eventLabel += "--" + $scope.tabs[$scope.tabs.activeTab].title;
+        if ($scope.hasOwnProperty('tabs')) {
             eventLabel += "--" + $scope.tabs[$scope.tabs.activeTab].title;
         }
 
@@ -223,98 +234,132 @@ angular.module('Pundit2.GeneralItemsContainer')
     };
    */
 
-    $scope.isSelected = function(item) {
-    };
+    if(!$scope.isMyNotebooks) {
+        $scope.isSelected = function (item) {
+            if ($scope.itemSelected !== null && $scope.itemSelected.uri === item.uri) {
+                return true;
+            } else {
+                return false;
+            }
+        };
 
-    $scope.select = function(item) {
-        Preview.setItemDashboardSticky(item);
-        EventDispatcher.sendEvent('Pundit.changeSelection');
+        $scope.select = function (item) {
+            Preview.setItemDashboardSticky(item);
+            EventDispatcher.sendEvent('Pundit.changeSelection');
 
-        $scope.isUseActive = true;
-        $scope.itemSelected = item;
+            $scope.isUseActive = true;
+            $scope.itemSelected = item;
 
-        $scope.canAddItemAsSubject = TripleComposer.canAddItemAsSubject(item);
-        $scope.canAddItemAsObject = TripleComposer.canAddItemAsObject(item);
-    };
+            if (!GeneralItemsContainer.isPredicatesType($scope.type)) {
+                $scope.canAddItemAsSubject = TripleComposer.canAddItemAsSubject(item);
+                $scope.canAddItemAsObject = TripleComposer.canAddItemAsObject(item);
+            } else {
+                $scope.canBeUseAsPredicate = TripleComposer.canBeUseAsPredicate(item);
+            }
+        };
 
-    //TODO: only on my items
-    var onClickRemove = function() {
-        if ($scope.itemSelected === null) {
-            return;
-        }
+        //TODO: only on my items
+        var onClickRemove = function () {
+            if ($scope.itemSelected === null) {
+                return;
+            }
 
-        if (Status.getUserStatus() && ItemsExchange.isItemInContainer($scope.itemSelected, MyItems.options.container)) {
-            MyItems.deleteItemAndConsolidate($scope.itemSelected);
-        }
-
-        var eventLabel = getHierarchyString();
-        eventLabel += "--remove";
-        Analytics.track('buttons', 'click', eventLabel);
-
-        resetContainer();
-    }
-
-    //TODO: only on page items and vocabularies
-    var onClickAdd = function() {
-        if ($scope.itemSelected === null) {
-            return;
-        }
-
-        if (Status.getUserStatus() && !ItemsExchange.isItemInContainer($scope.itemSelected, MyItems.options.container)) {
-            MyItems.addItemAndConsolidate($scope.itemSelected);
+            if (Status.getUserStatus() && ItemsExchange.isItemInContainer($scope.itemSelected, MyItems.options.container)) {
+                MyItems.deleteItemAndConsolidate($scope.itemSelected);
+            }
 
             var eventLabel = getHierarchyString();
-            eventLabel += "--addToMyItems";
+            eventLabel += "--remove";
             Analytics.track('buttons', 'click', eventLabel);
+
+            resetContainer();
         }
 
-        resetContainer();
+        //TODO: only on page items and vocabularies
+        var onClickAdd = function () {
+            if ($scope.itemSelected === null) {
+                return;
+            }
+
+            if (Status.getUserStatus() && !ItemsExchange.isItemInContainer($scope.itemSelected, MyItems.options.container)) {
+                MyItems.addItemAndConsolidate($scope.itemSelected);
+
+                var eventLabel = getHierarchyString();
+                eventLabel += "--addToMyItems";
+                Analytics.track('buttons', 'click', eventLabel);
+            }
+
+            resetContainer();
+        }
+
+        $scope.onClickAction = function () {
+            if (GeneralItemsContainer.isMyItemsType($scope.type)) {
+                onClickRemove();
+            } else {
+                onClickAdd();
+            }
+        }
+
+        $scope.onClickUseSubject = function () {
+            if ($scope.itemSelected === null) {
+                return;
+            }
+
+            if (Status.getTemplateModeStatus()) {
+                TripleComposer.addToAllSubject($scope.itemSelected);
+            } else {
+                TripleComposer.addToSubject($scope.itemSelected);
+            }
+
+            var eventLabel = getHierarchyString();
+            eventLabel += "--setSubject";
+            Analytics.track('buttons', 'click', eventLabel);
+
+            resetContainer();
+        }
+
+        $scope.onClickUseObject = function () {
+            if ($scope.itemSelected === null) {
+                return;
+            }
+
+            TripleComposer.addToObject($scope.itemSelected);
+
+            var eventLabel = getHierarchyString();
+            eventLabel += "--setObject";
+            Analytics.track('buttons', 'click', eventLabel);
+
+            resetContainer();
+        }
+
+        $scope.onClickUsePredicate = function() {
+            if ($scope.itemSelected === null) {
+                return;
+            }
+
+            TripleComposer.addToPredicate($scope.itemSelected);
+
+            var eventLabel = getHierarchyString();
+            eventLabel += "--setPredicate";
+            Analytics.track('buttons', 'click', eventLabel);
+
+            resetContainer();
+        }
+
+        EventDispatcher.addListener('Pundit.changeSelection', function () {
+            resetContainer();
+        });
+    } else{
+        $scope.createNewNotebook = function () {
+            //EventDispatcher.sendEvent('Dashboard.showTab', NotebookComposer.options.clientDashboardTabTitle);
+            EventDispatcher.sendEvent('MyNotebooksContainer.createNewNotebook', NotebookComposer.options.clientDashboardTabTitle);
+            NotebookComposer.setNotebookToEdit(null);
+
+            var eventLabel = getHierarchyString();
+            eventLabel += "--newNotebook";
+            Analytics.track('buttons', 'click', eventLabel);
+        };
     }
-
-    $scope.onClickAction = function(){
-        if(GeneralItemsContainer.isMyItemsType($scope.type)) {
-            onClickRemove();
-        }else{
-            onClickAdd();
-        }
-    }
-
-    $scope.onClickUseSubject = function() {
-        if ($scope.itemSelected === null) {
-            return;
-        }
-
-        if (Status.getTemplateModeStatus()) {
-            TripleComposer.addToAllSubject($scope.itemSelected);
-        } else {
-            TripleComposer.addToSubject($scope.itemSelected);
-        }
-
-        var eventLabel = getHierarchyString();
-        eventLabel += "--setSubject";
-        Analytics.track('buttons', 'click', eventLabel);
-
-        resetContainer();
-    }
-
-    $scope.onClickUseObject = function() {
-        if ($scope.itemSelected === null) {
-            return;
-        }
-
-        TripleComposer.addToObject($scope.itemSelected);
-
-        var eventLabel = getHierarchyString();
-        eventLabel += "--setObject";
-        Analytics.track('buttons', 'click', eventLabel);
-
-        resetContainer();
-    }
-
-    EventDispatcher.addListener('Pundit.changeSelection', function() {
-        resetContainer();
-    });
-
 
 
     //TODO: only on myitems
@@ -481,6 +526,10 @@ angular.module('Pundit2.GeneralItemsContainer')
     }
     //TODO: if not in vocabularies
     else{
+        var allItems = [];
+        if($scope.isMyNotebooks || $scope.isPredicates){
+            $scope.displayedItems = [];
+        }
         $scope.$watch(function() {
             return $scope.search.term;
         }, function(str) {
@@ -503,12 +552,22 @@ angular.module('Pundit2.GeneralItemsContainer')
         });
 
         // watch only my items
-        $scope.$watch(function() {
-            return ItemsExchange.getItemsByContainer(ContainerManager.options.container);
-        }, function(newItems) {
-            // update all items array and display new items
-            $scope.displayedItems = ContainerManager.buildItemsArray($scope.tabs.activeTab, $scope.tabs, newItems);
-        }, true);
+        if(!($scope.isMyNotebooks || $scope.isPredicates)){
+            $scope.$watch(function() {
+                return ItemsExchange.getItemsByContainer(ContainerManager.options.container);
+            }, function(newItems) {
+                // update all items array and display new items
+                $scope.displayedItems = ContainerManager.buildItemsArray($scope.tabs.activeTab, $scope.tabs, newItems);
+            }, true);
+        }else{
+            $scope.$watch(function() {
+                return GeneralItemsContainer.itemsUpdateWatchFunction($scope.type);
+            }, function(newItems) {
+                // update all items array and display new items
+                    allItems = newItems;
+                    filterItems($scope.search.term);
+            }, true);
+        }
 
         // watch showed items length
         $scope.$watch(function() {
@@ -517,67 +576,73 @@ angular.module('Pundit2.GeneralItemsContainer')
             // show empty lists messagge
             if (len === 0) {
                 $scope.message.flag = true;
-                // TODO Use ng-disable in all MyItems tmpl
-                //TODO: Probably dead code. Commented.
-                /*
-                 deleteBtn.addClass('disabled');
-                 orderBtn.addClass('disabled');
-                 */
+                if(orderBtn) {
+                    orderBtn.addClass('disabled');
+                }
             } else {
                 $scope.message.flag = false;
-                //TODO: Probably dead code. Commented.
-                /*
-                 deleteBtn.removeClass('disabled');
-                 orderBtn.removeClass('disabled');
-                 */
+                if(orderBtn) {
+                    orderBtn.removeClass('disabled');
+                }
             }
 
         });
-        // every time that change active tab show new items array
-        $scope.$watch(function() {
-            return $scope.tabs.activeTab;
-        }, function(activeTab) {
-            $scope.displayedItems = ContainerManager.getItemsArrays()[activeTab];
-            // disable sort by type dropdown link
-            // enable only in All Items tab
-            if ($scope.tabs[activeTab].title !== $scope.tabs[0].title && $scope.tabs[activeTab].title !== $scope.tabs[3].title) {
-                $scope.dropdownOrdering[2].disable = true;
-                $scope.dropdownOrdering[3].disable = true;
-            } else {
-                $scope.dropdownOrdering[2].disable = false;
-                $scope.dropdownOrdering[3].disable = false;
-            }
 
-            if (typeof($scope.displayedItems) !== 'undefined' && typeof($scope.search.term) !== 'undefined') {
-                filterItems($scope.search.term);
-            }
+        if(!($scope.isMyNotebooks || $scope.isPredicates)) {
+            // every time that change active tab show new items array
+            $scope.$watch(function () {
+                return $scope.tabs.activeTab;
+            }, function (activeTab) {
+                $scope.displayedItems = ContainerManager.getItemsArrays()[activeTab];
+                // disable sort by type dropdown link
+                // enable only in All Items tab
+                if ($scope.tabs[activeTab].title !== $scope.tabs[0].title && $scope.tabs[activeTab].title !== $scope.tabs[3].title) {
+                    $scope.dropdownOrdering[2].disable = true;
+                    $scope.dropdownOrdering[3].disable = true;
+                } else {
+                    $scope.dropdownOrdering[2].disable = false;
+                    $scope.dropdownOrdering[3].disable = false;
+                }
 
-        });
+                if (typeof($scope.displayedItems) !== 'undefined' && typeof($scope.search.term) !== 'undefined') {
+                    filterItems($scope.search.term);
+                }
+
+            });
+        }
 
         // Filter items which are shown
         // go to lowerCase and replace multiple space with single space,
         // to make the regexp work properly
         var filterItems = function(str) {
+
             str = str.toLowerCase().replace(/\s+/g, ' ');
             var strParts = str.split(' '),
                 reg = new RegExp(strParts.join('.*'));
 
-            $scope.displayedItems = ContainerManager.getItemsArrays()[$scope.tabs.activeTab].filter(function(items) {
-                return items.label.toLowerCase().match(reg) !== null;
-            });
+
+
+            if(GeneralItemsContainer.isMyNotebooksType($scope.type)) {
+                $scope.displayedItems = allItems.filter(function (ns) {
+                    return ns.label.toLowerCase().match(reg) !== null;
+                });
+            }else if(GeneralItemsContainer.isPredicatesType($scope.type)) {
+                $scope.displayedItems = allItems.filter(function (ns) {
+                    if (typeof(ns.mergedLabel) === 'undefined') {
+                        return ns.label.toLowerCase().match(reg) !== null;
+                    } else {
+                        return ns.mergedLabel.toLowerCase().match(reg) !== null;
+                    }
+                });
+            } else {
+                $scope.displayedItems = ContainerManager.getItemsArrays()[$scope.tabs.activeTab].filter(function(items) {
+                    return items.label.toLowerCase().match(reg) !== null;
+                });
+            }
 
             // update text messagge
-            if (str === '') {
-                if (MyPundit.isUserLogged()) {
-                    $scope.message.text = "No my items found.";
-                } else {
-                    $scope.message.text = "Please login to see your items.";
-                }
-            } else {
-                $scope.message.text = "No item found to: " + str;
-            }
+            $scope.message.text = GeneralItemsContainer.getMessageText($scope.type, str);
+
         };
     }
-
-
 });
