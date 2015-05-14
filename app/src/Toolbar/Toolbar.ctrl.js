@@ -67,7 +67,7 @@ angular.module('Pundit2.Toolbar')
 
     $scope.login = function(trackingLoginName, event) {
         ResourcePanel.hide();
-        MyPundit.popoverLogin(event);
+        MyPundit.popoverLogin(event, 'login');
         Analytics.track('buttons', 'click', trackingLoginName);
         return;
 
@@ -84,6 +84,12 @@ angular.module('Pundit2.Toolbar')
         ResourcePanel.hide();
         MyPundit.logout();
         Analytics.track('buttons', 'click', 'toolbar--logout');
+    };
+
+    var editYourProfile = function() {
+        ResourcePanel.hide();
+        MyPundit.editProfile();
+        Analytics.track('buttons', 'click', 'toolbar--editProfile');
     };
 
     var lodliveOpen = function() {
@@ -313,17 +319,29 @@ angular.module('Pundit2.Toolbar')
 
     if (lodLive) {
         $scope.userLoggedInDropdown = [{
-            text: 'Open your graph',
-            click: lodliveOpen
-        }, {
-            text: 'Log out',
-            click: logout
-        }];
+                text: 'Open your graph',
+                click: lodliveOpen
+            },
+            {
+                text: 'Edit your profile',
+                click: editYourProfile
+            },
+            {
+                text: 'Log out',
+                click: logout
+            }
+        ];
     } else {
-        $scope.userLoggedInDropdown = [{
-            text: 'Log out',
-            click: logout
-        }];
+        $scope.userLoggedInDropdown = [
+            {
+                text: 'Edit your profile',
+                click: editYourProfile
+            },
+            {
+                text: 'Log out',
+                click: logout
+            }
+        ];
     }
 
 
