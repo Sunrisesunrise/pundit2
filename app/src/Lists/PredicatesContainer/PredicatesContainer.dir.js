@@ -7,6 +7,6 @@ angular.module('Pundit2.PredicatesContainer')
 
         },
         templateUrl: "src/Lists/PredicatesContainer/PredicatesContainer.dir.tmpl.html",
-        controller: "PredicatesContainerCtrl"
+        controller: "GeneralItemsContainerCtrl"
     };
 });

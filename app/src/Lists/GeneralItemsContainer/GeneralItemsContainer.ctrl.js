@@ -1,7 +1,7 @@
 angular.module('Pundit2.GeneralItemsContainer')
 
 .controller('GeneralItemsContainerCtrl', function($scope, $rootScope, $modal, $timeout, $element,$injector, $q,
-    GeneralItemsContainer, ItemsExchange, MyItems, MyPundit, Preview, TypesHelper, PageHandler,
+    GeneralItemsContainer, ItemsExchange, MyItems, MyPundit, NotebookComposer, Preview, TypesHelper, PageHandler,
     TripleComposer, EventDispatcher, Status, Analytics) {
 
 
@@ -19,6 +19,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     $scope.canAddItemAsSubject = false;
     $scope.canAddItemAsObject = false;
+    $scope.canBeUseAsPredicate = false;
 
     //TODO: probably dead code. the elements having class .my-items-btn-delete and .my-items-btn-order are commented. Commented.
     /*
@@ -44,6 +45,9 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     // index of the active tab (the tab that currently shows its content)
     $scope.tabs.activeTab = ContainerManager.options.initialActiveTab;
+       // index of the active tab (the tab that currently shows its content)
+        $scope.tabs.activeTab = ContainerManager.options.initialActiveTab;
+    }
 
 
     //action button configuration
@@ -54,6 +58,11 @@ angular.module('Pundit2.GeneralItemsContainer')
         $scope.isUseActive = false;
         $scope.canAddItemAsSubject = false;
         $scope.canAddItemAsObject = false;
+            $scope.canAddItemAsSubject = false;
+            $scope.canAddItemAsObject = false;
+        }else {
+            $scope.canBeUseAsPredicate = false;
+        }
     };
 
     // set as active a label in contextual menu
@@ -89,9 +98,6 @@ angular.module('Pundit2.GeneralItemsContainer')
             Analytics.track('buttons', 'click', eventLabel);
         },
         isActive: order === 'label' && $scope.reverse === true
-    }, {
-        text: 'Order by type asc',
-        click: function() {
             //TODO: condition not in vocabularies
             if (!GeneralItemsContainer.isVocabulariesType($scope.type) && $scope.dropdownOrdering[2].disable) {
                 return;
@@ -102,11 +108,6 @@ angular.module('Pundit2.GeneralItemsContainer')
 
             var eventLabel = getHierarchyString();
             eventLabel += "--sort--typeAsc";
-            Analytics.track('buttons', 'click', eventLabel);
-        },
-        isActive: order === 'type' && $scope.reverse === false
-    }, {
-        text: 'Order by type desc',
         click: function() {
             //TODO: condition not in vocabularies
             if (!GeneralItemsContainer.isVocabulariesType($scope.type) && $scope.dropdownOrdering[3].disable) {
@@ -120,7 +121,9 @@ angular.module('Pundit2.GeneralItemsContainer')
             eventLabel += "--sort--typeDesc";
             Analytics.track('buttons', 'click', eventLabel);
         },
-        isActive: order === 'type' && $scope.reverse === true
+            text: 'Order by type desc',
+                Analytics.track('buttons', 'click', eventLabel);
+            },
     }
     ];
 
@@ -146,6 +149,9 @@ angular.module('Pundit2.GeneralItemsContainer')
         while (typeof(myScope) !== 'undefined' && myScope !== null);
 
         eventLabel += "--" + $scope.tabs[$scope.tabs.activeTab].title;
+            eventLabel += "--" + $scope.tabs[$scope.tabs.activeTab].title;
+        }
+
         return eventLabel;
     }
 
@@ -218,11 +224,6 @@ angular.module('Pundit2.GeneralItemsContainer')
    */
 
     $scope.isSelected = function(item) {
-        if ($scope.itemSelected !== null && $scope.itemSelected.uri === item.uri) {
-            return true;
-        } else {
-            return false;
-        }
     };
 
     $scope.select = function(item) {
