@@ -189,6 +189,8 @@ angular.module('Pundit2.GeneralItemsContainer')
         var text = '';
         var action = '';
         var requireLoggedUser = true;
+        var btnClass = 'pnd-triplecomposer-cancel btn btn-info btn-xs pnd-btn-full';
+
         if(isMyItemsType(type)){
             title = 'Remove from my items';
             text = 'Remove';
@@ -202,12 +204,23 @@ angular.module('Pundit2.GeneralItemsContainer')
             text = 'Add to myItems';
             action = 'add';
             requireLoggedUser = false;
+        }else if(isMyNotebooksType(type)){
+            title = 'Create new notebook';
+            text = 'Create new notebook';
+            requireLoggedUser = false;
+            btnClass = 'btn btn-xs btn-success pnd-btn-full';
+        }else if(isPredicatesType(type)){
+            title = 'Use as predicate';
+            text = 'Set predicate';
+            requireLoggedUser = false;
+            btnClass = 'pnd-triplecomposer-cancel btn btn-predicate btn-xs pnd-btn-full';
         }
 
         var actionButton = {
             title: title,
             text: text,
             action: action,
+            btnClass: btnClass,
             requireLoggedUser: requireLoggedUser
         }
 

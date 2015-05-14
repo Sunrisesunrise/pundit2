@@ -57,7 +57,7 @@ angular.module('Pundit2.GeneralItemsContainer')
     var resetContainer = function() {
         $scope.itemSelected = null;
         $scope.isUseActive = false;
-        if(!GeneralItemsContainer.isPredicatesType($scope.type)) {
+        if(!$scope.isPredicates) {
             $scope.canAddItemAsSubject = false;
             $scope.canAddItemAsObject = false;
         }else {
@@ -106,7 +106,7 @@ angular.module('Pundit2.GeneralItemsContainer')
             text: 'Order by type asc',
                 click: function() {
                 //TODO: condition not in vocabularies
-                if (!GeneralItemsContainer.isVocabulariesType($scope.type) && $scope.dropdownOrdering[2].disable) {
+                if (!$scope.isVocabularies && $scope.dropdownOrdering[2].disable) {
                     return;
                 }
                 order = 'type';
@@ -123,7 +123,7 @@ angular.module('Pundit2.GeneralItemsContainer')
             text: 'Order by type desc',
                 click: function() {
                 //TODO: condition not in vocabularies
-                if (!GeneralItemsContainer.isVocabulariesType($scope.type) && $scope.dropdownOrdering[3].disable) {
+                if (!$scope.isVocabularies && $scope.dropdownOrdering[3].disable) {
                     return;
                 }
                 order = 'type';
@@ -182,6 +182,76 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     };
 
+
+
+    var onClickRemove = function () {
+        if ($scope.itemSelected === null) {
+            return;
+        }
+
+        if (Status.getUserStatus() && ItemsExchange.isItemInContainer($scope.itemSelected, MyItems.options.container)) {
+            MyItems.deleteItemAndConsolidate($scope.itemSelected);
+        }
+
+        var eventLabel = getHierarchyString();
+        eventLabel += "--remove";
+        Analytics.track('buttons', 'click', eventLabel);
+
+        resetContainer();
+    }
+
+    var onClickAdd = function () {
+        if ($scope.itemSelected === null) {
+            return;
+        }
+
+        if (Status.getUserStatus() && !ItemsExchange.isItemInContainer($scope.itemSelected, MyItems.options.container)) {
+            MyItems.addItemAndConsolidate($scope.itemSelected);
+
+            var eventLabel = getHierarchyString();
+            eventLabel += "--addToMyItems";
+            Analytics.track('buttons', 'click', eventLabel);
+        }
+
+        resetContainer();
+    }
+
+    var createNewNotebook = function () {
+        //EventDispatcher.sendEvent('Dashboard.showTab', NotebookComposer.options.clientDashboardTabTitle);
+        EventDispatcher.sendEvent('MyNotebooksContainer.createNewNotebook', NotebookComposer.options.clientDashboardTabTitle);
+        NotebookComposer.setNotebookToEdit(null);
+
+        var eventLabel = getHierarchyString();
+        eventLabel += "--newNotebook";
+        Analytics.track('buttons', 'click', eventLabel);
+    };
+
+    var  onClickUsePredicate = function() {
+        if ($scope.itemSelected === null) {
+            return;
+        }
+
+        TripleComposer.addToPredicate($scope.itemSelected);
+
+        var eventLabel = getHierarchyString();
+        eventLabel += "--setPredicate";
+        Analytics.track('buttons', 'click', eventLabel);
+
+        resetContainer();
+    }
+
+    $scope.onClickAction = function () {
+        if($scope.isMyNotebooks){
+            createNewNotebook();
+        }else if($scope.isPredicates){
+            onClickUsePredicate();
+        }else if ($scope.isMyItems) {
+            onClickRemove();
+        } else {
+            onClickAdd();
+        }
+    }
+
     //TODO only in myItems. Probabibly dead code. Commented.
     // delete all my Items
    /*
@@ -190,9 +260,6 @@ angular.module('Pundit2.GeneralItemsContainer')
     };
     */
 
-
-
-    //TODO: only in myitems. Probably dead code. Commented.
     // confirm modal
     /*
     var modalScope = $rootScope.$new();
@@ -250,55 +317,13 @@ angular.module('Pundit2.GeneralItemsContainer')
             $scope.isUseActive = true;
             $scope.itemSelected = item;
 
-            if (!GeneralItemsContainer.isPredicatesType($scope.type)) {
+            if (!$scope.isPredicates) {
                 $scope.canAddItemAsSubject = TripleComposer.canAddItemAsSubject(item);
                 $scope.canAddItemAsObject = TripleComposer.canAddItemAsObject(item);
             } else {
                 $scope.canBeUseAsPredicate = TripleComposer.canBeUseAsPredicate(item);
             }
         };
-
-        //TODO: only on my items
-        var onClickRemove = function () {
-            if ($scope.itemSelected === null) {
-                return;
-            }
-
-            if (Status.getUserStatus() && ItemsExchange.isItemInContainer($scope.itemSelected, MyItems.options.container)) {
-                MyItems.deleteItemAndConsolidate($scope.itemSelected);
-            }
-
-            var eventLabel = getHierarchyString();
-            eventLabel += "--remove";
-            Analytics.track('buttons', 'click', eventLabel);
-
-            resetContainer();
-        }
-
-        //TODO: only on page items and vocabularies
-        var onClickAdd = function () {
-            if ($scope.itemSelected === null) {
-                return;
-            }
-
-            if (Status.getUserStatus() && !ItemsExchange.isItemInContainer($scope.itemSelected, MyItems.options.container)) {
-                MyItems.addItemAndConsolidate($scope.itemSelected);
-
-                var eventLabel = getHierarchyString();
-                eventLabel += "--addToMyItems";
-                Analytics.track('buttons', 'click', eventLabel);
-            }
-
-            resetContainer();
-        }
-
-        $scope.onClickAction = function () {
-            if (GeneralItemsContainer.isMyItemsType($scope.type)) {
-                onClickRemove();
-            } else {
-                onClickAdd();
-            }
-        }
 
         $scope.onClickUseSubject = function () {
             if ($scope.itemSelected === null) {
@@ -332,45 +357,20 @@ angular.module('Pundit2.GeneralItemsContainer')
             resetContainer();
         }
 
-        $scope.onClickUsePredicate = function() {
-            if ($scope.itemSelected === null) {
-                return;
-            }
-
-            TripleComposer.addToPredicate($scope.itemSelected);
-
-            var eventLabel = getHierarchyString();
-            eventLabel += "--setPredicate";
-            Analytics.track('buttons', 'click', eventLabel);
-
-            resetContainer();
-        }
-
         EventDispatcher.addListener('Pundit.changeSelection', function () {
             resetContainer();
         });
-    } else{
-        $scope.createNewNotebook = function () {
-            //EventDispatcher.sendEvent('Dashboard.showTab', NotebookComposer.options.clientDashboardTabTitle);
-            EventDispatcher.sendEvent('MyNotebooksContainer.createNewNotebook', NotebookComposer.options.clientDashboardTabTitle);
-            NotebookComposer.setNotebookToEdit(null);
-
-            var eventLabel = getHierarchyString();
-            eventLabel += "--newNotebook";
-            Analytics.track('buttons', 'click', eventLabel);
-        };
     }
 
 
     //TODO: only on myitems
-    if(GeneralItemsContainer.isMyItemsType($scope.type)) {
+    if($scope.isMyItems) {
 
         var isCurrentPageInMyItems = function() {
             var item = PageHandler.createItemFromPage();
             return ItemsExchange.isItemInContainer(item, MyItems.options.container);
         }
 
-        //TODO: dropdown items contained only in myItems
         $scope.dropdownOrdering.push(
             {
                 "divider": true
@@ -405,7 +405,6 @@ angular.module('Pundit2.GeneralItemsContainer')
             }
         });
 
-        //TODO: only in MyItems
         $scope.$watch(function() {
             return ItemsExchange.getItemsByContainer(MyItems.options.container);
         }, function(newItems) {
@@ -414,7 +413,6 @@ angular.module('Pundit2.GeneralItemsContainer')
 
 
 
-        //TODO: only on my items
         // add page to my items
         $scope.onClickAddPageToMyItems = function() {
             if (!MyPundit.isUserLogged()) {
@@ -430,8 +428,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         };
     }
 
-    //TODO: only on page items
-    if(GeneralItemsContainer.isPageItemsType($scope.type)) {
+    if($scope.isMyPageItems) {
         EventDispatcher.addListener('MyPundit.isUserLogged', function (e) {
             $scope.isUserLogged = e.args;
         });
@@ -441,8 +438,7 @@ angular.module('Pundit2.GeneralItemsContainer')
     $scope.search = GeneralItemsContainer.getSearch($scope.type);
 
 
-    //TODO: if in vocabularies
-    if(GeneralItemsContainer.isVocabulariesType($scope.type)){
+    if($scope.isVocabularies){
         var promise;
         $scope.$watch(function() {
             return $scope.search.term;
@@ -622,11 +618,11 @@ angular.module('Pundit2.GeneralItemsContainer')
 
 
 
-            if(GeneralItemsContainer.isMyNotebooksType($scope.type)) {
+            if($scope.isMyNotebooks) {
                 $scope.displayedItems = allItems.filter(function (ns) {
                     return ns.label.toLowerCase().match(reg) !== null;
                 });
-            }else if(GeneralItemsContainer.isPredicatesType($scope.type)) {
+            }else if($scope.isPredicates) {
                 $scope.displayedItems = allItems.filter(function (ns) {
                     if (typeof(ns.mergedLabel) === 'undefined') {
                         return ns.label.toLowerCase().match(reg) !== null;
