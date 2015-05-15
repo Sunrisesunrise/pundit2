@@ -1,4 +1,4 @@
-ddescribe("MyItemsContainer", function(){
+describe("MyItemsContainer", function(){
 
     var MyItemsContainer,
         $rootScope,

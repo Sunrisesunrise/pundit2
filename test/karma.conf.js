@@ -17,6 +17,8 @@ module.exports = function(config) {
             'app/src/templates.js',
             'app/src/Core/Core.js',
             'app/src/AnnotationSidebar/AnnotationSidebar.js',
+            'app/src/Breadcrumbs/Breadcrumbs.js',
+            'app/src/Lists/GeneralItemsContainer/GeneralItemsContainer.js',
             'app/src/Annomatic/Annomatic.js',
             'app/src/Dashboard/Dashboard.js',
             'app/src/Breadcrumbs/Breadcrumbs.js',
