@@ -104,18 +104,6 @@
     <script src="../src/ContextualMenu/ContextualMenu.js"></script>
     <script src="../src/ContextualMenu/ContextualMenu.service.js"></script>
 
-    <script src="../src/Lists/PageItemsContainer/PageItemsContainer.js"></script>
-    <script src="../src/Lists/PageItemsContainer/PageItemsContainer.service.js"></script>
-
-    <script src="../src/Lists/PredicatesContainer/PredicatesContainer.js"></script>
-    <script src="../src/Lists/PredicatesContainer/PredicatesContainer.service.js"></script>
-
-    <script src="../src/Lists/MyNotebooksContainer/MyNotebooksContainer.js"></script>
-    <script src="../src/Lists/MyNotebooksContainer/MyNotebooksContainer.service.js"></script>
-
-    <script src="../src/Lists/VocabulariesContainer/VocabulariesContainer.js"></script>
-
-
     <script src="../src/Item/Item.js"></script>
     <script src="../src/Item/Item.dir.js"></script>
     <script src="../src/Item/Item.ctrl.js"></script>
@@ -126,11 +114,16 @@
     <script src="../src/Lists/GeneralItemsContainer/GeneralItemsContainer.dir.js"></script>
     <script src="../src/Lists/GeneralItemsContainer/GeneralItemsContainer.ctrl.js"></script>
     <script src="../src/Lists/GeneralItemsContainer/GeneralItemsContainer.service.js"></script>
-
     <script src="../src/Lists/MyItemsContainer/MyItemsContainer.js"></script>
     <script src="../src/Lists/MyItemsContainer/MyItemsContainer.service.js"></script>
     <script src="../src/Lists/MyItemsContainer/MyItems.service.js"></script>
-
+    <script src="../src/Lists/PageItemsContainer/PageItemsContainer.js"></script>
+    <script src="../src/Lists/PageItemsContainer/PageItemsContainer.service.js"></script>
+    <script src="../src/Lists/PredicatesContainer/PredicatesContainer.js"></script>
+    <script src="../src/Lists/PredicatesContainer/PredicatesContainer.service.js"></script>
+    <script src="../src/Lists/MyNotebooksContainer/MyNotebooksContainer.js"></script>
+    <script src="../src/Lists/MyNotebooksContainer/MyNotebooksContainer.service.js"></script>
+    <script src="../src/Lists/VocabulariesContainer/VocabulariesContainer.js"></script>
 
     <script src="../src/Tools/TripleComposer/TripleComposer.js"></script>
     <script src="../src/Tools/TripleComposer/TripleComposer.dir.js"></script>
