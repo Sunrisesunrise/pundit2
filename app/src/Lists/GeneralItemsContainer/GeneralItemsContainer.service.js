@@ -1,7 +1,7 @@
 angular.module('Pundit2.GeneralItemsContainer')
 
 
-.service('GeneralItemsContainer', function(MyItemsContainer, PageItemsContainer, SelectorsManager, MyNotebooksContainer, NotebookExchange, PredicatesContainer, Config, ItemsExchange) {
+.service('GeneralItemsContainer', function(MyItemsContainer, PageItemsContainer, SelectorsManager, MyNotebooksContainer, NotebookExchange, PredicatesContainer, VocabulariesContainer, Config, ItemsExchange) {
 
 
     var MY_ITEMS_TYPE = 'myItems';
@@ -17,7 +17,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         }else if(type === PAGE_ITEMS_TYPE){
             return PageItemsContainer;
         }else if(type === VOCABULARIES_TYPE){
-            return SelectorsManager;
+            return VocabulariesContainer;
         }else if(type === MY_NOTEBOOKS_TYPE){
             return MyNotebooksContainer;
         }else if(type === PREDICATES_TYPE){

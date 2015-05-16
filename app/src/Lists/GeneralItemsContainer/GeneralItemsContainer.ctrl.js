@@ -2,7 +2,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
 .controller('GeneralItemsContainerCtrl', function($scope, $rootScope, $modal, $timeout, $element,$injector, $q,
     GeneralItemsContainer, ItemsExchange, MyItems, MyPundit, NotebookComposer, Preview, TypesHelper, PageHandler,
-    TripleComposer, EventDispatcher, Status, Analytics) {
+    TripleComposer, SelectorsManager, EventDispatcher, Status, Analytics) {
 
     $scope.isMyItems = GeneralItemsContainer.isMyItemsType($scope.type);
     $scope.isMyPageItems = GeneralItemsContainer.isPageItemsType($scope.type);
@@ -478,7 +478,7 @@ angular.module('Pundit2.GeneralItemsContainer')
                 queryPromise.resolve();
             }
             queryPromise = $q.defer();
-            ContainerManager.getItems($scope.search.term, queryPromise.promise).then(
+            SelectorsManager.getItems($scope.search.term, queryPromise.promise).then(
                 function() {
                     updateMessage();
                 },
