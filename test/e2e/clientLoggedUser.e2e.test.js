@@ -332,7 +332,7 @@ describe("Client interaction when user is logged in", function() {
     //     });
     // });
 
-    iit("should add my items by ctx menu showed on text selection", function(){
+    it("should add my items by ctx menu showed on text selection", function(){
 
         // dbclick (simulate a selection) on text
         var el = p.findElement(protractor.By.css('.pnd-test-init-selection'));

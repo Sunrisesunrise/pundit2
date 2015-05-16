@@ -67,8 +67,9 @@ describe("The toolbar module", function() {
             userButton[0].click().then(function() {
                 // dropdown-menu should be visible
                 p.findElements(protractor.By.css('.pnd-toolbar-user-button .dropdown-menu li')).then(function(dropdownMenu) {
-                    expect(dropdownMenu.length).toBe(1);
-                    expect(dropdownMenu[0].getText()).toBe("Log out");
+                    expect(dropdownMenu.length).toBe(2);
+                    expect(dropdownMenu[0].getText()).toBe("Edit your profile");
+                    expect(dropdownMenu[1].getText()).toBe("Log out");
                 });
             });
         });

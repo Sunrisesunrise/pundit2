@@ -208,7 +208,7 @@ angular.module('Pundit2.GeneralItemsContainer')
             title = 'Create new notebook';
             text = 'Create new notebook';
             requireLoggedUser = false;
-            btnClass = 'btn btn-xs btn-success pnd-btn-full';
+            btnClass = 'btn btn-xs btn-success pnd-btn-full my-notebooks-btn-new';
         }else if(isPredicatesType(type)){
             title = 'Use as predicate';
             text = 'Set predicate';
