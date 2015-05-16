@@ -332,7 +332,7 @@ describe("Client interaction when user is logged in", function() {
     //     });
     // });
 
-    it("should add my items by ctx menu showed on text selection", function(){
+    iit("should add my items by ctx menu showed on text selection", function(){
 
         // dbclick (simulate a selection) on text
         var el = p.findElement(protractor.By.css('.pnd-test-init-selection'));
@@ -350,7 +350,7 @@ describe("Client interaction when user is logged in", function() {
         p.findElement(protractor.By.css("dashboard dashboard-panel .pnd-tab-header li [data-index='0']")).click();
         
         // chek item content
-        p.findElements(protractor.By.css("dashboard my-items-container .pnd-panel-tab-content-content .pnd-tab-content > .active li .pnd-item-text")).then(function(items){
+        p.findElements(protractor.By.css("dashboard general-items-container[type=myItems] .pnd-panel-tab-content-content .pnd-tab-content > .active li .pnd-item-text")).then(function(items){
             expect(items.length).toBe(1);
             expect(items[0].getText()).toBe("Text fragment Boccaccio");
         });
@@ -495,12 +495,12 @@ describe("Client interaction when user is logged in", function() {
             expect(tabs[4].getText()).toBe("My notebooks");
         });
         // move on notebook item
-        var item = p.findElement(protractor.By.css("dashboard-panel[paneltitle=lists] .pnd-tab-content > div.active my-notebooks-container item-notebook .pnd-item"));
+        var item = p.findElement(protractor.By.css("dashboard-panel[paneltitle=lists] .pnd-tab-content > div.active general-items-container[type=myNotebooks] item-notebook .pnd-item"));
         p.actions().mouseMove(item).perform();
         // wait animation
         p.sleep(500);
         // open ctx menu
-        p.findElements(protractor.By.css("dashboard-panel[paneltitle=lists] .pnd-tab-content > div.active my-notebooks-container item-notebook .pnd-item-buttons")).then(function(btns){
+        p.findElements(protractor.By.css("dashboard-panel[paneltitle=lists] .pnd-tab-content > div.active general-items-container[type=myNotebooks] item-notebook .pnd-item-buttons")).then(function(btns){
             btns[0].click();
         });
         // edit notebook
