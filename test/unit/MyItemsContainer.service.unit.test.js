@@ -1,20 +1,19 @@
-describe("PageItemsContainer", function(){
+describe("MyItemsContainer", function(){
 
-    var PageItemsContainer,
+    var MyItemsContainer,
         $rootScope,
         $compile;
 
     beforeEach(module('Pundit2'));
 
     beforeEach(module(
-        //'src/Lists/PageItemsContainer/PageItemsContainer.dir.tmpl.html',
         'src/Lists/itemList.tmpl.html'
     ));
 
-    beforeEach(inject(function(_$rootScope_, _$compile_, _PageItemsContainer_){
+    beforeEach(inject(function(_$rootScope_, _$compile_, _MyItemsContainer_){
         $rootScope = _$rootScope_;
         $compile = _$compile_;
-        PageItemsContainer = _PageItemsContainer_;
+        MyItemsContainer = _MyItemsContainer_;
     }));
 
     /*var compileDirective = function(){
@@ -29,9 +28,9 @@ describe("PageItemsContainer", function(){
     });*/
 
     it('should correctly initialize', function(){
-        expect(PageItemsContainer.buildItemsArray).toBeDefined();
-        expect(PageItemsContainer.getItemsArrays).toBeDefined();
-        expect(PageItemsContainer.getItemsArrays().length).toBe(0);
+        expect(MyItemsContainer.buildItemsArray).toBeDefined();
+        expect(MyItemsContainer.getItemsArrays).toBeDefined();
+        expect(MyItemsContainer.getItemsArrays().length).toBe(0);
     });
 
 });

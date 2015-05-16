@@ -14,7 +14,11 @@ angular.module('Pundit2.MyNotebooksContainer')
 
     inputIconSearch: 'pnd-icon-search',
 
-    inputIconClear: 'pnd-icon-times'
+    inputIconClear: 'pnd-icon-times',
+
+    order: 'label',
+
+    reverse: false
 
 })
 
