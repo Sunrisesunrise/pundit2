@@ -124,6 +124,7 @@
     <script src="../src/Lists/MyNotebooksContainer/MyNotebooksContainer.js"></script>
     <script src="../src/Lists/MyNotebooksContainer/MyNotebooksContainer.service.js"></script>
     <script src="../src/Lists/VocabulariesContainer/VocabulariesContainer.js"></script>
+    <script src="../src/Lists/VocabulariesContainer/VocabulariesContainer.service.js"></script>
 
     <script src="../src/Tools/TripleComposer/TripleComposer.js"></script>
     <script src="../src/Tools/TripleComposer/TripleComposer.dir.js"></script>

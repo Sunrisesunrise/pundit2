@@ -435,6 +435,10 @@ angular.module('Pundit2.Core')
             // ngdoc in MyItemsContainer.service.js
             active: true
         },
+        VocabulariesContainer: {
+            // ngdoc in VocabulariesContainer.service.js
+            active: true
+        },
         SelectorsManager: {
             // ngdoc in SelectorsManager.service.js
             active: true
