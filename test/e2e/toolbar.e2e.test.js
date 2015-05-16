@@ -94,7 +94,7 @@ describe("The toolbar module", function() {
         });
 
         // dashboard button should be active
-        p.findElements(protractor.By.css('.pnd-toolbar-dashboard-button .pnd-toolbar-active-element')).then(function(dashboardButton) {
+        p.findElements(protractor.By.css('.pnd-toolbar-dashboard-toogle-button .pnd-toolbar-active-element')).then(function(dashboardButton) {
             expect(dashboardButton.length).toBe(1);
         });
 
@@ -137,13 +137,13 @@ describe("The toolbar module", function() {
         });
 
         // open dashboard
-        p.findElement(protractor.By.css('.pnd-toolbar-dashboard-button')).click();
+        p.findElement(protractor.By.css('.pnd-toolbar-dashboard-toogle-button')).click();
         p.findElements(protractor.By.css('.pnd-dashboard-container.ng-hide')).then(function(d){
             expect(d.length).toBe(0);
         });
 
         // close dashboard
-        p.findElement(protractor.By.css('.pnd-toolbar-dashboard-button')).click();
+        p.findElement(protractor.By.css('.pnd-toolbar-dashboard-toogle-button')).click();
         p.findElements(protractor.By.css('.pnd-dashboard-container.ng-hide')).then(function(d){
             expect(d.length).toBe(1);
         });

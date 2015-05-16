@@ -903,7 +903,7 @@ describe("AnnotationSidebar interaction", function() {
                 expect(toolbarHeight + "px").toEqual(sidebarTop);
             });
 
-            p.findElement(protractor.By.css('.pnd-toolbar-toggle-button')).click();
+            p.findElement(protractor.By.css('.pnd-toolbar-dashboard-toogle-button')).click();
 
             dashboardContainer.getSize().then(function(size){
                 dashboardHeight = size.height;
@@ -913,13 +913,13 @@ describe("AnnotationSidebar interaction", function() {
                 });
             });
 
-            p.findElement(protractor.By.css('.pnd-toolbar-toggle-button')).click();
+            p.findElement(protractor.By.css('.pnd-toolbar-dashboard-toogle-button')).click();
 
             sidebarContainer.getCssValue('margin-top').then(function(sidebarTop){
                 expect(toolbarHeight + "px").toEqual(sidebarTop);
             });
 
-            p.findElement(protractor.By.css('.pnd-toolbar-toggle-button')).click();
+            p.findElement(protractor.By.css('.pnd-toolbar-dashboard-toogle-button')).click();
             p.actions().dragAndDrop(dashboardFooter, {x:0, y:100}).perform();
 
             dashboardContainer.getSize().then(function(size){

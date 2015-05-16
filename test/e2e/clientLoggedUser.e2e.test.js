@@ -201,7 +201,7 @@ describe("Client interaction when user is logged in", function() {
         //enable template mode
         p.findElement(protractor.By.css('toolbar .pnd-toolbar-template-mode-button')).click();
         // open dashboard (triple composer is showed by default)
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
+        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
 
         // check triple composer header
         p.findElement(protractor.By.css('triple-composer .pnd-panel-tab-content-header')).then(function(h){
@@ -232,7 +232,7 @@ describe("Client interaction when user is logged in", function() {
         //enable template mode
         p.findElement(protractor.By.css('toolbar .pnd-toolbar-template-mode-button')).click();
         // open dashboard (triple composer is showed by default)
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
+        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
 
         var el = p.findElement(protractor.By.css('.pnd-test-init-selection'));
         // dbclick (simulate a selection) on text populate the triple composer subject
@@ -309,7 +309,7 @@ describe("Client interaction when user is logged in", function() {
     // it("should correctly show ctx menu voice when triple composer is empty", function(){
 
     //     // open dashboard
-    //     p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
+    //     p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
     //     // collapse tools panel
     //     p.findElement(protractor.By.css('dashboard-panel[paneltitle=tools] .btn.btn-default')).click();
     //     // open page items tab
@@ -343,7 +343,7 @@ describe("Client interaction when user is logged in", function() {
         });
 
         // open dashboard
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
+        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // collapse tools panel
         p.findElement(protractor.By.css('dashboard-panel[paneltitle=tools] .btn.btn-default')).click();
         // open my items tab
@@ -361,7 +361,7 @@ describe("Client interaction when user is logged in", function() {
         p.driver.manage().window().setSize(1200, 960);
 
         // open dashboard
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
+        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // open resource panel on subject
         p.findElement(protractor.By.css(".pnd-statement-object .pnd-statement-label")).click();
         // check if popover is showed
@@ -385,7 +385,7 @@ describe("Client interaction when user is logged in", function() {
         p.driver.manage().window().setSize(1200, 960);
 
         // open dashboard
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
+        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // open resource panel on predicate
         p.findElement(protractor.By.css(".pnd-statement-predicate .pnd-statement-label")).click();
         // check if popover is showed
@@ -408,7 +408,7 @@ describe("Client interaction when user is logged in", function() {
         p.driver.manage().window().setSize(1200, 960);
 
         // open dashboard
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
+        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
 
         // open resource panel on subject
         p.findElement(protractor.By.css(".pnd-statement-subject .pnd-row-button-subject .pnd-statement-label")).click();
@@ -436,7 +436,7 @@ describe("Client interaction when user is logged in", function() {
         p.driver.manage().window().setSize(1200, 960);
 
         // open dashboard
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
+        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // open resource panel on predicate
         p.findElement(protractor.By.css(".pnd-statement-predicate .pnd-statement-label")).click();
         // add text inside input to filter predicates
@@ -458,7 +458,7 @@ describe("Client interaction when user is logged in", function() {
         p.driver.manage().window().setSize(1200, 960);
 
         // open dashboard
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
+        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // open resource panel
         p.findElement(protractor.By.css(".pnd-statement-object .pnd-statement-label")).click();
 
@@ -486,7 +486,7 @@ describe("Client interaction when user is logged in", function() {
         p.driver.manage().window().setSize(1700, 960);
 
         // open dashboard
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
+        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // collapse right panel
         p.findElement(protractor.By.css('dashboard-panel[paneltitle=details] .btn.btn-default')).click();
         // open my notebooks tab
@@ -525,7 +525,7 @@ describe("Client interaction when user is logged in", function() {
         p.driver.manage().window().setSize(1700, 960);
 
         // open dashboard
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
+        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // collapse right panel
         p.findElement(protractor.By.css('dashboard-panel[paneltitle=details] .btn.btn-default')).click();
         // open my notebooks tab
@@ -550,7 +550,7 @@ describe("Client interaction when user is logged in", function() {
     //     p.driver.manage().window().setSize(1600, 960);
 
     //     // open dashboard
-    //     p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
+    //     p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
     //     // collapse tools panel
     //     p.findElement(protractor.By.css('dashboard-panel[paneltitle=details] .btn.btn-default')).click();
     //     // open page items tab

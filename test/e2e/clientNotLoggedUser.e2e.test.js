@@ -111,7 +111,7 @@ describe("Client interaction when user is not logged in", function() {
         p.driver.manage().window().setSize(1200, 960);
 
         // open dashboard
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-button')).click();
+        p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // open resource panel on subject
         p.findElement(protractor.By.css(".pnd-statement-subject .pnd-statement-label")).click();
         // check if popover is showed
