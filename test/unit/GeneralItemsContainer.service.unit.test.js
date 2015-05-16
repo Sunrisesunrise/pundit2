@@ -3,7 +3,7 @@ describe("GeneralItemsContainer", function(){
     var GeneralItemsContainer,
         $rootScope,
         $compile,
-        MyItemsContainer, PageItemsContainer, SelectorsManager, MyNotebooksContainer, PredicatesContainer;
+        MyItemsContainer, PageItemsContainer, SelectorsManager, MyNotebooksContainer, PredicatesContainer, VocabulariesContainer;
 
     beforeEach(module('Pundit2'));
 
@@ -11,7 +11,7 @@ describe("GeneralItemsContainer", function(){
         'src/Lists/itemList.tmpl.html'
     ));
 
-    beforeEach(inject(function(_$rootScope_, _$compile_, _GeneralItemsContainer_, _MyItemsContainer_, _PageItemsContainer_, _SelectorsManager_, _MyNotebooksContainer_, _PredicatesContainer_){
+    beforeEach(inject(function(_$rootScope_, _$compile_, _GeneralItemsContainer_, _MyItemsContainer_, _PageItemsContainer_, _SelectorsManager_, _MyNotebooksContainer_, _PredicatesContainer_, _VocabulariesContainer_){
         $rootScope = _$rootScope_;
         $compile = _$compile_;
         GeneralItemsContainer = _GeneralItemsContainer_;
@@ -20,6 +20,7 @@ describe("GeneralItemsContainer", function(){
         SelectorsManager = _SelectorsManager_;
         MyNotebooksContainer = _MyNotebooksContainer_;
         PredicatesContainer = _PredicatesContainer_;
+        VocabulariesContainer = _VocabulariesContainer_;
 
     }));
 
@@ -67,7 +68,7 @@ describe("GeneralItemsContainer", function(){
     it('should return correct container manager', function(){
         expect(GeneralItemsContainer.getManager('myItems') === MyItemsContainer).toBeTruthy();
         expect(GeneralItemsContainer.getManager('pageItems') === PageItemsContainer).toBeTruthy();
-        expect(GeneralItemsContainer.getManager('vocabularies') === SelectorsManager).toBeTruthy();
+        expect(GeneralItemsContainer.getManager('vocabularies') === VocabulariesContainer).toBeTruthy();
         expect(GeneralItemsContainer.getManager('myNotebooks') === MyNotebooksContainer ).toBeTruthy();
         expect(GeneralItemsContainer.getManager('predicates') === PredicatesContainer).toBeTruthy();
         //default
