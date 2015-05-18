@@ -15,7 +15,7 @@ angular.module('Pundit2.Toolbar')
 
     $scope.isUserLogged = false;
 
-    $scope.askThePundit = Toolbar.options.askThePundit;
+    $scope.askThePundit = Config.askThePundit;
     $scope.myNotebooks = Toolbar.options.myNotebooks;
     $scope.dashboard = false;
     $scope.sidebar = false;

@@ -58,9 +58,13 @@
                                 <strong>Notebook:</strong> 
                                 <a href="{{askLink}}{{annotation.notebookId}}" 
                                    target="_blank"
-                                   ng-click="trackAnalyticsEvent('meta--notebook')">
+                                   ng-click="trackAnalyticsEvent('meta--notebook')"
+                                   ng-show="notebookLink">
                                     {{notebookName}}
                                 </a>
+                                <span ng-show="!notebookLink">
+                                    {{notebookName}}
+                                </span>
                             </div>
                             <div ng-show="lodLive">
                                 <strong>Graph:</strong> 

@@ -122,6 +122,21 @@ angular.module('Pundit2.Core')
 
     /**
      * @module punditConfig
+     * @ngdoc property
+     * @name askThePundit
+     *
+     * @description
+     * `boolean`
+     *
+     * Enable/Disable ask the Pundit feature
+     *
+     * Default value:
+     * <pre> askThePundit: false </pre>
+     */
+    askThePundit: false,
+
+    /**
+     * @module punditConfig
      * @ngdoc object
      * @name pndPurl
      * @description

@@ -16,6 +16,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
     $scope.moreInfo = AnnotationDetails.options.moreInfo;
     $scope.notebookName = 'Downloading notebook in progress';
+    $scope.notebookLink = Config.askThePundit;
     $scope.isLoading = false;
 
     if (typeof($scope.annotation) !== 'undefined') {
