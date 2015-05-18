@@ -482,12 +482,14 @@ module.exports = function(grunt) {
                 "multistr": true,
                 "globals": {
                     angular: true,
-                    console: true
+                    console: true,
+                    browser: true,
+                    Range: true
                 },
                 "predef": [
                     "waitsFor",
                     "runs"
-                ],
+                ]
             },
             tests: {
                 options: {
@@ -507,7 +509,9 @@ module.exports = function(grunt) {
                         protractor: true,
                         jasmine: true,
                         angular: true,
-                        KORBODEFAULTCONF: true
+                        KORBODEFAULTCONF: true,
+                        browser: true,
+                        Range: true
                     }
                 },
                 files: {
