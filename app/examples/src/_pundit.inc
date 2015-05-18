@@ -56,6 +56,10 @@
 
     <script src="../src/Annotators/ImgMenu.dir.js"></script>
 
+    <script src="../src/AlertSystem/AlertSystem.js"></script>
+    <script src="../src/AlertSystem/AlertSystem.dir.js"></script>
+    <script src="../src/AlertSystem/AlertSystem.ctrl.js"></script>
+    <script src="../src/AlertSystem/AlertSystem.service.js"></script>
 
     <script src="../src/Breadcrumbs/Breadcrumbs.js"></script>
     <script src="../src/Breadcrumbs/Breadcrumbs.dir.js"></script>
