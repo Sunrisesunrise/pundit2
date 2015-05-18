@@ -164,7 +164,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         }
 
         return eventLabel;
-    }
+    };
 
     var removeSpace = function(str) {
         return str.replace(/ /g, '');
@@ -198,7 +198,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         Analytics.track('buttons', 'click', eventLabel);
 
         resetContainer();
-    }
+    };
 
     var onClickAdd = function () {
         if ($scope.itemSelected === null) {
@@ -214,7 +214,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         }
 
         resetContainer();
-    }
+    };
 
     var createNewNotebook = function () {
         //EventDispatcher.sendEvent('Dashboard.showTab', NotebookComposer.options.clientDashboardTabTitle);
@@ -238,7 +238,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         Analytics.track('buttons', 'click', eventLabel);
 
         resetContainer();
-    }
+    };
 
     $scope.onClickAction = function () {
         if($scope.isMyNotebooks){
@@ -250,7 +250,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         } else {
             onClickAdd();
         }
-    }
+    };
 
     //TODO only in myItems. Probabibly dead code. Commented.
     // delete all my Items
@@ -341,7 +341,7 @@ angular.module('Pundit2.GeneralItemsContainer')
             Analytics.track('buttons', 'click', eventLabel);
 
             resetContainer();
-        }
+        };
 
         $scope.onClickUseObject = function () {
             if ($scope.itemSelected === null) {
@@ -355,7 +355,7 @@ angular.module('Pundit2.GeneralItemsContainer')
             Analytics.track('buttons', 'click', eventLabel);
 
             resetContainer();
-        }
+        };
 
         EventDispatcher.addListener('Pundit.changeSelection', function () {
             resetContainer();
@@ -369,7 +369,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         var isCurrentPageInMyItems = function() {
             var item = PageHandler.createItemFromPage();
             return ItemsExchange.isItemInContainer(item, MyItems.options.container);
-        }
+        };
 
         $scope.dropdownOrdering.push(
             {
@@ -380,8 +380,7 @@ angular.module('Pundit2.GeneralItemsContainer')
             {
                 text: 'Add web page to My items',
                 click: function() {
-                    console.log(arguments);
-                    var item = PageHandler.createItemFromPage();
+                    //var item = PageHandler.createItemFromPage();
                     if (MyPundit.isUserLogged() && !isCurrentPageInMyItems()) {
                         $scope.onClickAddPageToMyItems();
                         $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = true;
@@ -407,7 +406,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
         $scope.$watch(function() {
             return ItemsExchange.getItemsByContainer(MyItems.options.container);
-        }, function(newItems) {
+        }, function() {
             $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = isCurrentPageInMyItems();
         }, true);
 

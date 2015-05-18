@@ -1,6 +1,3 @@
-function GLOBAL_PUNDIT_IFRAME_LOADED() {
-    alert("LOADED");
-}
 angular.module('Pundit2.Core')
 
 .constant('MYPUNDITDEFAULTS', {
@@ -66,7 +63,7 @@ angular.module('Pundit2.Core')
  *
  */
 .service('MyPundit', function(MYPUNDITDEFAULTS, $http, $q, $timeout, $modal, $window, $interval,
-    BaseComponent, EventDispatcher, NameSpace, Analytics, $popover, $rootScope) {
+    BaseComponent, EventDispatcher, NameSpace, Analytics, $popover) {
 
     var myPundit = new BaseComponent('MyPundit', MYPUNDITDEFAULTS);
 
@@ -485,7 +482,7 @@ angular.module('Pundit2.Core')
     myPundit.popoverLogin = function (event, where) {
 
         // If there's already a Login popover I close and destroy it
-        if (popoverState.popover != null) {
+        if (popoverState.popover !== null) {
             popoverState.popover.hide();
             popoverState.popover.destroy(); // TODO Doesn't remove the code?????
             popoverState.popover = null;
@@ -506,7 +503,6 @@ angular.module('Pundit2.Core')
         popoverState.popover.$scope.loginSomeError = false;
 
         popoverState.popover.$scope.loadedContent = function () {
-            alert("Content loaded");
         };
 
         popoverState.popover.$scope.closePopover = function () {
@@ -521,11 +517,11 @@ angular.module('Pundit2.Core')
             popoverState.popover.show();
             popoverState.renderIFrame(where);
         });
-    }
+    };
 
     myPundit.getLoginPopoverSrc = function() {
         return popoverState.loginSrc;
-    }
+    };
 
     myPundit.closeLoginPopover = function() {
         if (popoverState.popover === null) {
@@ -536,11 +532,11 @@ angular.module('Pundit2.Core')
         popoverState.popover.destroy();
         popoverState.popover = null;
 
-    }
+    };
 
     myPundit.editProfile = function() {
         myPundit.popoverLogin(event, 'editProfile');
-    }
+    };
 
     return myPundit;
 });

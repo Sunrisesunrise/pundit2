@@ -23,7 +23,7 @@ angular.module('Pundit2.Preview')
         while (typeof(myScope) !== 'undefined' && myScope !== null);
 
         return eventLabel;
-    }
+    };
 
     $scope.itemDashboardPreview = null;
 

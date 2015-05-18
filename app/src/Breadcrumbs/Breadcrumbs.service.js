@@ -29,11 +29,11 @@ angular.module('Pundit2.Breadcrumbs')
         }
         var newLabel = label;
         itemObject.originalLabel = label;
-        if (label.length == 0 && typeof itemObject.placeholder !== 'undefined') {
+        if (label.length === 0 && typeof itemObject.placeholder !== 'undefined') {
             newLabel = label = itemObject.placeholder;
         }
         // Set charLimit if needed and if it's set.
-        var charLimit = (index + 1) >= state[name].items.length ? itemObject['charLimitAsLast'] : itemObject['charLimit'];
+        var charLimit = (index + 1) >= state[name].items.length ? itemObject.charLimitAsLast : itemObject.charLimit;
         if (typeof charLimit === 'number') {
             charLimit = charLimit < 4 ? 4 : charLimit;
             if (newLabel.length > charLimit) {
@@ -48,7 +48,7 @@ angular.module('Pundit2.Breadcrumbs')
         for (var index in state[name].items) {
             setItemLabel(name, state[name].items[index], undefined, index);
         }
-    }
+    };
 
     breadcrumbs.visible = function(name, value) {
         if (typeof state[name] !== 'undefined') {
@@ -58,7 +58,7 @@ angular.module('Pundit2.Breadcrumbs')
             return state[name].visible;
         }
         return false;
-    }
+    };
 
     breadcrumbs.add = function(name, conf) {
         var bcConf = {
@@ -82,13 +82,13 @@ angular.module('Pundit2.Breadcrumbs')
             state[name] = bcConf;
             updateAllLabels(name);
         }
-    }
+    };
 
     breadcrumbs.remove = function (name) {
         if (typeof state[name] !== 'undefined') {
             delete state[name];
         }
-    }
+    };
 
     breadcrumbs.itemSelect = function(name, index) {
         if (typeof state[name] !== 'undefined') {
@@ -100,21 +100,21 @@ angular.module('Pundit2.Breadcrumbs')
                 breadcrumbs.dropItemsFromIndex(name, index + 1);
             }
         }
-    }
+    };
 
     breadcrumbs.get = function(name) {
         if (typeof state[name] !== 'undefined') {
             return state[name];
         }
         return [];
-    }
+    };
 
     breadcrumbs.getItems = function(name) {
         if (typeof state[name] !== 'undefined') {
             return state[name].items;
         }
         return [];
-    }
+    };
 
     breadcrumbs.getItem = function(name, index) {
         index = index < 0 ? 0 : index;
@@ -122,11 +122,11 @@ angular.module('Pundit2.Breadcrumbs')
             return state[name].items[index];
         }
         return null;
-    }
+    };
 
     breadcrumbs.appendItem = function(name, itemObject) {
         var extendedObject = angular.extend({}, defaultItemObject, itemObject);
-        if (typeof extendedObject.name === 'undefined' || extendedObject.name.length == 0) {
+        if (typeof extendedObject.name === 'undefined' || extendedObject.name.length === 0) {
             extendedObject.name = extendedObject.label;
         }
 
@@ -151,32 +151,32 @@ angular.module('Pundit2.Breadcrumbs')
 
             preAddedItems[name].push(extendedObject);
         }
-    }
+    };
 
     breadcrumbs.indexOfItem = function(name, item) {
         if (typeof state[name] !== 'undefined') {
             for (var i=0; i<state[name].items.length; i++) {
-                if (state[name].items[i].name == item.name) {
+                if (state[name].items[i].name === item.name) {
                     return i;
                 }
             }
         }
         return -1;
-    }
+    };
 
     breadcrumbs.popItem = function(name) {
         if (typeof state[name] !== 'undefined') {
             state[name].items.pop();
             updateAllLabels(name);
         }
-    }
+    };
 
     breadcrumbs.setItemLabel = function(name, index, label) {
         if (!canChangeItemProperty(name, index)) {
             return;
         }
         setItemLabel(name, state[name].items[index], label, index);
-    }
+    };
 
     breadcrumbs.setItemCharLimit = function(name, index, charLimit) {
         if (!canChangeItemProperty(name, index)) {
@@ -184,7 +184,7 @@ angular.module('Pundit2.Breadcrumbs')
         }
         state[name].items[index].charLimit = charLimit;
         setItemLabel(name, state[name].items[index], undefined, index);
-    }
+    };
 
     breadcrumbs.setItemCharLimitAsLast = function(name, index, charLimit) {
         if (!canChangeItemProperty(name, index)) {
@@ -192,7 +192,7 @@ angular.module('Pundit2.Breadcrumbs')
         }
         state[name].items[index].charLimitAsLast = charLimit;
         setItemLabel(name, state[name].items[index], undefined, index);
-    }
+    };
 
     breadcrumbs.setItemPlaceholder = function(name, index, placeholder) {
         if (!canChangeItemProperty(name, index)) {
@@ -200,14 +200,14 @@ angular.module('Pundit2.Breadcrumbs')
         }
         state[name].items[index].placeholder = placeholder;
         setItemLabel(name, state[name].items[index], undefined, index);
-    }
+    };
 
     breadcrumbs.setFirstItemPrefix = function(name, label) {
         if (typeof state[name] === 'undefined') {
             return;
         }
         state[name].firstItemPrefix = label;
-    }
+    };
 
     breadcrumbs.dropItemsFromIndex = function(name, index) {
         if (typeof state[name] !== 'undefined') {
@@ -218,7 +218,7 @@ angular.module('Pundit2.Breadcrumbs')
             state[name].items.splice(index, state[name].items.length - index);
             updateAllLabels(name);
         }
-    }
+    };
 
     return breadcrumbs;
 });

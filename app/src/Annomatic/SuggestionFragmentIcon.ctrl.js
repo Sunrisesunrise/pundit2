@@ -97,8 +97,10 @@ angular.module('Pundit2.Annomatic')
         angular.element('.' + $scope.fragment).addClass(to);
 
         if (from === Annomatic.stateClassMap.hidden) {
+            // TODO: maybe $scope.element ?
             element.removeClass('ann-hidden');
         } else if (to === Annomatic.stateClassMap.hidden) {
+            // TODO: maybe $scope.element ?
             element.addClass('ann-hidden');
         }
 

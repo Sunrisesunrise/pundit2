@@ -259,7 +259,7 @@ angular.module('Pundit2.Core')
         normalizedEventKeyConfig.callback = callback;
         normalizedEventKeyConfig.module = module;
 
-        if (handlers.length == 0) {
+        if (handlers.length === 0) {
             handlers.push(normalizedEventKeyConfig);
         }
         else {

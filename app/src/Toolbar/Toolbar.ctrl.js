@@ -72,11 +72,11 @@ angular.module('Pundit2.Toolbar')
         return;
 
 
-        ResourcePanel.hide();
-        MyPundit.login();
-        if (trackingLoginName === undefined) {
-            trackingLoginName = 'toolbar--otherLogin';
-        }
+        //ResourcePanel.hide();
+        //MyPundit.login();
+        //if (trackingLoginName === undefined) {
+        //    trackingLoginName = 'toolbar--otherLogin';
+        //}
 
     };
 
@@ -264,7 +264,7 @@ angular.module('Pundit2.Toolbar')
     $scope.canUsePageAsSubject = function() {
         var item = PageHandler.createItemFromPage();
         return TripleComposer.canAddItemAsSubject(item);
-    }
+    };
 
     // Watch Annomatic status
     $scope.$watch(function() {
@@ -520,7 +520,7 @@ angular.module('Pundit2.Toolbar')
     $scope.annotateWebPage = function() {
         var item = PageHandler.createItemFromPage();
         TripleComposer.addToSubject(item);
-    }
+    };
 
     $scope.toggleTemplateMode = function() {
         if (TripleComposer.isEditMode() || $scope.isAnnomaticRunning) {

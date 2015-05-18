@@ -26,8 +26,8 @@ angular.module('Pundit2.ResourcePanel')
     $scope.showContentMessage6 = true;
     $scope.useCustomTemplate = false;
     $scope.canShowPaneList = function(title) {
-        return title != 'My items' || (title == 'My items' && $scope.userLoggedIn);
-    }
+        return title !== 'My items' || (title === 'My items' && $scope.userLoggedIn);
+    };
 
     // build tabs by reading active selectors inside selectors manager
     if ($scope.type !== 'pr') {
@@ -151,13 +151,13 @@ angular.module('Pundit2.ResourcePanel')
         }
 
         return res;
-    }
+    };
 
     $scope.useFullPage = function() {
         var item = PageHandler.createItemFromPage();
         $scope.select(item);
         $scope.save(item);
-    }
+    };
 
     $scope.copyInEditor = function() {
         var obj = {};

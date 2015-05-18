@@ -230,7 +230,7 @@ angular.module('Pundit2.Dashboard')
     );
 
     // set a tab as active
-    $scope.setActive = function(index, e) {
+    $scope.setActive = function(index) {
 
         ResourcePanel.hide();
 
@@ -257,10 +257,10 @@ angular.module('Pundit2.Dashboard')
             $scope.hiddenTabIsActive = false;
         }
 
-        var pane = $scope.panes[$scope.active];
+        //var pane = $scope.panes[$scope.active];
 
         // Temporary solution to find hierarchystring.
-        var eventLabel = undefined;
+        var eventLabel;
         if ($scope.panes[$scope.active].hasOwnProperty('hierarchystring')) {
             eventLabel = $scope.panes[$scope.active].hierarchystring;
         } else if (!$scope.panes[$scope.active].hasOwnProperty('hierarchystring') || typeof($scope.panes[$scope.active].hierarchystring) === 'undefined') {

@@ -80,12 +80,12 @@ describe("GeneralItemsContainer", function(){
 
     it('should return correct tabs', function(){
         //should be empty for predicates and myNotebooks
-        expect(GeneralItemsContainer.getTabs('predicates').length==0).toBeTruthy();
-        expect(GeneralItemsContainer.getTabs('myNotebooks').length==0).toBeTruthy();
+        expect(GeneralItemsContainer.getTabs('predicates').length === 0).toBeTruthy();
+        expect(GeneralItemsContainer.getTabs('myNotebooks').length === 0).toBeTruthy();
 
         //should be contains exactly 5 items in myItems and pageItems
-        expect(GeneralItemsContainer.getTabs('myItems').length==5).toBeTruthy();
-        expect(GeneralItemsContainer.getTabs('pageItems').length==5).toBeTruthy();
+        expect(GeneralItemsContainer.getTabs('myItems').length === 5).toBeTruthy();
+        expect(GeneralItemsContainer.getTabs('pageItems').length === 5).toBeTruthy();
 
         //should be defined for vocabularies
         expect(GeneralItemsContainer.getTabs('vocabularies')).toBeTruthy();

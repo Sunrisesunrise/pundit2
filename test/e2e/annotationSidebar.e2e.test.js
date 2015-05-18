@@ -683,8 +683,7 @@ describe("AnnotationSidebar interaction", function() {
                     },
                     "http://sever.url/annotation/annid124": {
                         // annotation medatada here if necessary
-                    }
-                    ,
+                    },
                     "http://sever.url/annotation/annid125": {
                         // annotation medatada here if necessary
                     }

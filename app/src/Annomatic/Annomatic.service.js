@@ -1108,14 +1108,14 @@ angular.module('Pundit2.Annomatic')
             "startXpath": "/html[1]/body[1]/div[@about='http://89.31.77.216/quaderno/2/nota/2']/div[1]/text[1]/p[1]/emph[1]/text()[1]",
             "entities": [{
                 "label": "Risorgimento mento",
-                "uri": "http://purl.org/my­sample­uri",
-                "types": ["type­city", "type­ capital "],
+                "uri": "http://purl.org/my_sample_uri",
+                "types": ["type city", "type capital "],
                 "abstract": "Risorgimento is the blabla...",
                 "depiction": "Thumbnail URL"
             }, {
                 "label": "Risorgimento non mento",
-                "uri": "http://purl.org/my­sample­uri­2",
-                "types": ["type­city", "type­ region "],
+                "uri": "http://purl.org/my_sample_uri_2",
+                "types": ["type city", "type region "],
                 "abstract": "Risorgimento is a bloblo",
                 "depiction": "Thumbnail URL"
             }]
@@ -1227,12 +1227,12 @@ angular.module('Pundit2.Annomatic')
 
         var annotations = data.annotations;
         var validAnnotations = [];
-        var i;
+        var i,ann;
 
         // cycle on all annotations received from NER service
         for (i = 0; i < annotations.length; i++) {
 
-            var ann = annotations[i];
+            ann = annotations[i];
             // get the current node from xpath
             var startCurrentNode = XpointersHelper.getNodeFromXpath(ann.startXpath.replace('/html[1]/body[1]', '/'));
             var endCurrentNode = XpointersHelper.getNodeFromXpath(ann.endXpath.replace('/html[1]/body[1]', '/'));
@@ -1289,7 +1289,7 @@ angular.module('Pundit2.Annomatic')
         for (i = 0; i < validAnnotations.length; i++) {
 
             var currentIndex = i + oldAnnotationNumber;
-            var ann = validAnnotations[i].ann;
+            ann = validAnnotations[i].ann;
 
             annomatic.ann.byNum[currentIndex] = ann;
             annomatic.ann.numToUriMap[currentIndex] = validAnnotations[i].frUri;
@@ -1354,7 +1354,7 @@ angular.module('Pundit2.Annomatic')
         }
 
         // AnnotationSidebar.toggleLoading();
-
+        var annotationsRootNode;
         if (ancestor) {
             angular.element(ancestor).removeClass('selecting-ancestor');
             annotationsRootNode = angular.element(ancestor);
@@ -1377,8 +1377,8 @@ angular.module('Pundit2.Annomatic')
      *
      */
     annomatic.getAnnotationByArea = function() {
-        annotationsRootNode = annomatic.area;
-        if (annotationsRootNode == null) {
+        var annotationsRootNode = annomatic.area;
+        if (annotationsRootNode === null) {
             return;
         }
 
@@ -1388,7 +1388,7 @@ angular.module('Pundit2.Annomatic')
             // AnnotationSidebar.toggleLoading();
             EventDispatcher.sendEvent('Annomatic.loading', false);
             Consolidation.consolidate(ItemsExchange.getItemsByContainer(annomatic.options.container));
-        })
+        });
     };
 
     return annomatic;

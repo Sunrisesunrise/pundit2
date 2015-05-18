@@ -15,11 +15,11 @@ angular.module('Pundit2.TripleComposer')
 
     $scope.showHeader = function() {
         return TripleComposer.showHeader(undefined, $scope.name);
-    }
+    };
 
     $scope.showFooter = function() {
         return TripleComposer.showFooter(undefined, $scope.name);
-    }
+    };
 
     $scope.saving = false;
     $scope.textMessage = TripleComposer.options.savingMsg;
@@ -98,7 +98,7 @@ angular.module('Pundit2.TripleComposer')
 
     this.getName = function() {
         return $scope.name;
-    }
+    };
 
     $scope.isAnnotationErasable = function() {
         return !TripleComposer.isTripleEmpty($scope.name);
@@ -186,7 +186,7 @@ angular.module('Pundit2.TripleComposer')
         while (typeof(myScope) !== 'undefined' && myScope !== null);
 
         return eventLabel;
-    }
+    };
 
     // update triple composer messagge then after "time" (ms)
     // restore default template content

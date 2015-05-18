@@ -290,7 +290,7 @@ describe('ContextualMenu service', function() {
         expect(state.menuElements.length).toBe(4);
         
         ContextualMenu.removeActionByName('fakeElement');
-        expect($log.error.logs.length).toBe(1); 
+        expect($log.error.logs.length).toBe(1);
         $log.reset();
 
         ContextualMenu.removeActionByName('action1');
@@ -321,7 +321,7 @@ describe('ContextualMenu service', function() {
         expect(state.menuElements.length).toBe(4);
         
         ContextualMenu.modifyHeaderActionByName('fakeAction', true);
-        expect($log.error.logs.length).toBe(1); 
+        expect($log.error.logs.length).toBe(1);
         $log.reset();
 
         ContextualMenu.modifyHeaderActionByName('action1', true);

@@ -11,7 +11,7 @@ describe("Breadcrumbs interaction", function () {
             p.findElement(protractor.By.id('action-button-bc0-append')).click();
             p.findElement(protractor.By.id('action-button-bc1-append')).click();
         }
-    }
+    };
 
     it('should correctly append items on different breadcrumbs', function () {
         appendItems(5);

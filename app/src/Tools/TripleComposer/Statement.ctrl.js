@@ -210,7 +210,7 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.onSubjectMouseOver = function() {
-        if (typeof triple.subject.uri === 'undefined' || triple.subject.uri.length == 0) {
+        if (typeof triple.subject.uri === 'undefined' || triple.subject.uri.length === 0) {
             return;
         }
         Preview.showDashboardPreview(triple.subject);
@@ -271,7 +271,7 @@ angular.module('Pundit2.TripleComposer')
                 triple: triple,
                 type: 'sub'
             }
-        }
+        };
 
         if ($scope.subjectFound) {
             EventDispatcher.sendEvent('Pundit.changeSelection');
@@ -369,7 +369,7 @@ angular.module('Pundit2.TripleComposer')
                     triple: triple,
                     type: 'obj'
                 }
-            }
+            };
         } else {
             if ($scope.objectLiteral) {
                 $scope.onClickObjectLiteral($event);

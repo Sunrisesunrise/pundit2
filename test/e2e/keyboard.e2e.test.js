@@ -39,7 +39,7 @@ describe("Item interaction", function() {
 
     it("should correctly handle keydown events", function() {
 
-        var window = p.driver.manage().window;
+        //var window = p.driver.manage().window;
 
         // Register
         p.findElement(protractor.By.id('btn-register-default')).click();

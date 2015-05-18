@@ -215,7 +215,7 @@ angular.module('Pundit2.ResourcePanel')
                 Preview.hideDashboardPreview();
                 hide();
 
-                var eventLabel = 'resourcePanel--' + type
+                var eventLabel = 'resourcePanel--' + type;
                 eventLabel += '--save';
                 Analytics.track('buttons', 'click', eventLabel);
 

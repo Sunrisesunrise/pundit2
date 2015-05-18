@@ -110,11 +110,11 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.trackAnalyticsToggleEvent = function(label, expanded) {
         Analytics.track('buttons', 'click', 'annotation--details--' + label + '--' + (expanded ? 'expand' : 'collapse'));
-    }
+    };
 
     $scope.trackAnalyticsEvent = function(label) {
         Analytics.track('buttons', 'click', 'annotation--details--' + label);
-    }
+    };
 
     $scope.deleteAnnotation = function() {
         openConfirmModal();

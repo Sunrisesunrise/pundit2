@@ -11,7 +11,7 @@ angular.module('KorboEE')
         delay,
         api = APIService.get($scope.conf.globalObjectName),
         basketIDforEdit,
-        revertStore = {},
+        //revertStore = {},
         urlPattern = new RegExp('(http|ftp|https)://[a-z0-9\-_]+(\.[a-z0-9\-_]+)+([a-z0-9\-\.,@\?^=%&;:/~\+#]*[a-z0-9\-@\?^=%&;/~\+#])?', 'i'),
         // Tooltip messages for languages,
         tooltipMessageTitle = "Insert title of the entity in ",
@@ -20,28 +20,28 @@ angular.module('KorboEE')
         errorLabelTooShort = " The Title must be contain at least " + $scope.conf.labelMinLength + " characters",
         timer;
 
-    var searchConf = {
-        discardSearch: function() {
-            //Breadcrumbs.itemSelect($scope.conf.breadcrumbName, (Breadcrumbs.getItems($scope.conf.breadcrumbName).length - 2));
-        },
-        selectUrl: function(item) {
-            if (typeof item !== 'undefined' && typeof item.resource !== 'undefined') {
-                $scope.originalUrl = item.resource;
-                //Breadcrumbs.itemSelect($scope.conf.breadcrumbName, (Breadcrumbs.getItems($scope.conf.breadcrumbName).length - 2));
-            }
-        },
-        copyFromLOD: function(item) {
-            console.log("COPY FROM LOD", item);
-            $scope.tabs = [];
-            $scope.disactiveLanguages = [];
-            buildLanguagesModel(item.uri, item.providerFrom);
-        },
-        subTypeSearchURL: 'SearchURL',
-        subTypeSearchAndCopy: 'SearchAndCopy',
-        searchFieldLabelSearchURL: 'Search entity URL:',
-        searchFieldLabelSearchAndCopy: 'Search entity to copy:',
-        subType: ''
-    };
+    //var searchConf = {
+    //    discardSearch: function() {
+    //        //Breadcrumbs.itemSelect($scope.conf.breadcrumbName, (Breadcrumbs.getItems($scope.conf.breadcrumbName).length - 2));
+    //    },
+    //    selectUrl: function(item) {
+    //        if (typeof item !== 'undefined' && typeof item.resource !== 'undefined') {
+    //            $scope.originalUrl = item.resource;
+    //            //Breadcrumbs.itemSelect($scope.conf.breadcrumbName, (Breadcrumbs.getItems($scope.conf.breadcrumbName).length - 2));
+    //        }
+    //    },
+    //    copyFromLOD: function(item) {
+    //        console.log("COPY FROM LOD", item);
+    //        $scope.tabs = [];
+    //        $scope.disactiveLanguages = [];
+    //        buildLanguagesModel(item.uri, item.providerFrom);
+    //    },
+    //    subTypeSearchURL: 'SearchURL',
+    //    subTypeSearchAndCopy: 'SearchAndCopy',
+    //    searchFieldLabelSearchURL: 'Search entity URL:',
+    //    searchFieldLabelSearchAndCopy: 'Search entity to copy:',
+    //    subType: ''
+    //};
 
     var setCurrentInnerPane = function(name) {
         switch(name) {
@@ -67,7 +67,7 @@ angular.module('KorboEE')
                 break;
         }
         for (var i in $scope.innerPanes.panes) {
-            $scope.innerPanes.panes[i].visible = (i == name);
+            $scope.innerPanes.panes[i].visible = (i === name);
         }
 
         $scope.innerPanes.current = name;
@@ -75,7 +75,7 @@ angular.module('KorboEE')
         ResourcePanel.hide();
         //ContextualMenu.modifyDisabled('showAdvanceOptions', name === 'advancedOptions');
         //ContextualMenu.modifyDisabled('searchAndCopy', name === 'search');
-    }
+    };
 
     // Callback to handle triplecomposer statements changes.
     var tripleComposerStateChangeCallback = function() {
@@ -83,7 +83,7 @@ angular.module('KorboEE')
         // This is needed because statement is added/removed/duplicated but
         // digest cycle is still in progress.
         $timeout(addEntityToAllSubjects, 10);
-    }
+    };
 
     // Initialize types array.
     var initTypes = function () {
@@ -298,9 +298,9 @@ angular.module('KorboEE')
     // Build languages tabs.
     var buildLanguageTabs = function () {
         $scope.conf.languages.sort(function(a, b){
-            var a_val = a.value.toLowerCase();
-            var b_val = b.value.toLowerCase();
-            return a_val === $scope.conf.defaultLanguage ? -1 : b_val === $scope.conf.defaultLanguage ? 1 : 0;
+            var aVal = a.value.toLowerCase();
+            var bVal = b.value.toLowerCase();
+            return aVal === $scope.conf.defaultLanguage ? -1 : bVal === $scope.conf.defaultLanguage ? 1 : 0;
         });
         for (var i = 0; i < $scope.conf.languages.length; i++) {
             if ($scope.conf.languages[i].value.toLowerCase() === $scope.conf.defaultLanguage) {
@@ -370,14 +370,14 @@ angular.module('KorboEE')
             }
         }
 
-        newLabel = newLabel.length == 0 ? 'Entity title' : newLabel;
+        newLabel = newLabel.length === 0 ? 'Entity title' : newLabel;
         $scope.entityTitle = newLabel;
-    }
+    };
 
     // Add given or current entity to all statement subjects.
     var addEntityToAllSubjects = function(entity) {
         var label = $scope.tabs[0].label;
-        label = typeof label === 'undefined' || label.length == 0 ? 'Entity title' : label;
+        label = typeof label === 'undefined' || label.length === 0 ? 'Entity title' : label;
         var typesURI = [];
         angular.forEach($scope.selectedTypes(), function(type) {
             typesURI.push(type.URI);
@@ -389,16 +389,16 @@ angular.module('KorboEE')
                 type: typesURI
             };
         }
-        if (entity.type.length == 0) {
+        if (entity.type.length === 0) {
             return;
         }
 
-        if (typeof entity.uri === 'undefined' || entity.uri.length == 0) {
+        if (typeof entity.uri === 'undefined' || entity.uri.length === 0) {
             entity.uri = 'temporary-uri';
         }
         var item = new Item(entity.uri, entity);
         TripleComposer.addToAllSubject(item, true, korboConf.tripleComposerName);
-    }
+    };
 
     var buildLanguagesModel = function (entityUri, provider, overrideProperties) {
 
@@ -454,9 +454,9 @@ angular.module('KorboEE')
             buildTypesFromConfiguration();
 
             res.languages.sort(function(a, b){
-                var a_val = a.title.toLowerCase();
-                var b_val = b.title.toLowerCase();
-                return a_val === $scope.conf.defaultLanguage ? -1 : b_val === $scope.conf.defaultLanguage ? 1 : 0;
+                var aVal = a.title.toLowerCase();
+                var bVal = b.title.toLowerCase();
+                return aVal === $scope.conf.defaultLanguage ? -1 : bVal === $scope.conf.defaultLanguage ? 1 : 0;
             });
             var tempLang = {};
             for (var i in res.languages) {
@@ -511,7 +511,7 @@ angular.module('KorboEE')
                                 uri: loadedItem.custom_fields[keyPredicate][objectIndex].value,
                                 type: loadedItem.custom_fields[keyPredicate][objectIndex].uri_types,
                                 label: loadedItem.custom_fields[keyPredicate][objectIndex].uri_label
-                            }
+                            };
                             itemObject = new Item(statementObject.uri, statementObject);
                         }
                         else {
@@ -588,14 +588,15 @@ angular.module('KorboEE')
         var triplesData = TripleComposer.buildGraph(korboConf.tripleComposerName);
         var statements = TripleComposer.getStatements(korboConf.tripleComposerName);
         var objects = {};
-        for (var i in statements) {
+        var i;
+        for (i in statements) {
             var triple = statements[i].scope.get();
             objects[triple.object.uri] = triple.object;
         }
 
         for (var subjectURI in triplesData) {
             for (var predicateURI in triplesData[subjectURI]) {
-                for (var i in triplesData[subjectURI][predicateURI]) {
+                for (i in triplesData[subjectURI][predicateURI]) {
                     if (triplesData[subjectURI][predicateURI][i].type === 'uri') {
                         var objectData = objects[triplesData[subjectURI][predicateURI][i].value];
                         if (typeof objectData !== 'undefined') {
@@ -608,7 +609,7 @@ angular.module('KorboEE')
             }
         }
         return triplesData;
-    }
+    };
 
     var buildTypesErrorDetailsMessage = function(item, data) {
         $scope.typesErrorDetails = {
@@ -617,7 +618,7 @@ angular.module('KorboEE')
             predicateTypes: []
         };
         var predicateProp = 'range';
-        if (data.type == 'sub') {
+        if (data.type === 'sub') {
             $scope.typesErrorDetails.entityUsedAs = 'Subject';
             $scope.typesErrorDetails.predicateProperty = 'Domain';
             predicateProp = 'domain';
@@ -630,7 +631,7 @@ angular.module('KorboEE')
             }
             );
         }
-    }
+    };
 
     var canSaveCheck = function() {
         $scope.errorMoreInfo = false;
@@ -668,7 +669,7 @@ angular.module('KorboEE')
             }
         }
         return res;
-    }
+    };
 
     var doSave = function () {
         var checkLang = checkLanguages();
@@ -743,7 +744,7 @@ angular.module('KorboEE')
                     entityForTripleComposer.uri = res;
                     addEntityToAllSubjects(entityForTripleComposer);
 
-                    var httpTriplesPromise = undefined;
+                    var httpTriplesPromise;
                     if (!$scope.conf.tripleComposerForCustomFields) {
                         httpTriplesPromise = AnnotationsCommunication.saveAnnotation(
                         TripleComposer.buildGraph(korboConf.tripleComposerName),
@@ -752,7 +753,7 @@ angular.module('KorboEE')
                         );
                     }
                     else {
-                        triplesData = addTripleObjectInfo();
+                        var triplesData = addTripleObjectInfo();
                         httpTriplesPromise = korboComm.addItemCustomFields($scope.conf.endpoint, $scope.conf.defaultLanguage,basketID, triplesData, $scope.conf.useCredentialInHttpCalls);
                     }
 
@@ -767,8 +768,9 @@ angular.module('KorboEE')
                 }
 
                 function innerLanguageSave() {
+                    var i;
                     if ($scope.conf.languagesSaveMethod === 'multipleCall') {
-                        for (var i = 0; i < $scope.tabs.length; i++) {
+                        for (i = 0; i < $scope.tabs.length; i++) {
                             (function (index) {
                                 var lang = angular.lowercase($scope.tabs[index].title);
                                 var entityToEdit = {
@@ -783,7 +785,7 @@ angular.module('KorboEE')
                     }
                     else if ($scope.conf.languagesSaveMethod === 'singleCall') {
                         var languagesData = [];
-                        for (var i = 0; i < $scope.tabs.length; i++) {
+                        for (i = 0; i < $scope.tabs.length; i++) {
                             var lang = angular.lowercase($scope.tabs[i].title);
                             var langData = {
                                 "label": typeof $scope.tabs[i].label === 'undefined' ? '' : $scope.tabs[i].label,
@@ -873,11 +875,11 @@ angular.module('KorboEE')
                 visible: false
             }
         }
-    }
+    };
 
     $scope.changeInnerPane = function(innerPane) {
         setCurrentInnerPane(innerPane);
-    }
+    };
     $scope.prevBasketID;
     $scope.entityTitle = 'Entity title';
     $scope.tabs = [];
@@ -916,7 +918,7 @@ angular.module('KorboEE')
             showNewButton: false,
             showUseFullPageButton: false
         };
-        ResourcePanel.showItemsForSubject(triple, $event.target, undefined, resourcePanelFooterButtonsOverride).then(function(item, fixed) {
+        ResourcePanel.showItemsForSubject(triple, $event.target, undefined, resourcePanelFooterButtonsOverride).then(function(item/*, fixed*/) {
             var innerCopyFromLOD = function() {
                 $scope.tabs = [];
                 $scope.disactiveLanguages = [];
@@ -986,7 +988,7 @@ angular.module('KorboEE')
                         $scope.loadingStatus = false;
                     }
                 }
-            }
+            };
             if (typeof item !== 'undefined' && typeof item.uri !== 'undefined') {
                 switch(searchType) {
                     case 'original-url':
@@ -1011,7 +1013,7 @@ angular.module('KorboEE')
                 }
             }
         });
-    }
+    };
 
     $scope.updateTypes = function () {
         var count = 0;
@@ -1102,7 +1104,7 @@ angular.module('KorboEE')
         else {
             doSave();
         }
-    }
+    };
 
     $scope.clearForm = function () {
         $scope.saveClicked = false;
@@ -1129,7 +1131,7 @@ angular.module('KorboEE')
 
     $scope.$watch('imageUrl', function (val) {
         if (val !== '' && urlPattern.test(val)) {
-            if (typeof $scope.conf.resourceProxy != 'undefined') {
+            if (typeof $scope.conf.resourceProxy !== 'undefined') {
                 val = $scope.conf.resourceProxy + '?url=' + val;
             }
             $timeout.cancel(timer);
@@ -1232,10 +1234,10 @@ angular.module('KorboEE')
         if (typeof $scope.types === 'undefined') {
             return [];
         }
-        return $scope.types.filter(function(element, index, array){
+        return $scope.types.filter(function(element/*, index, array*/){
             return element.checked;
         });
-    }
+    };
 
     //entityToCreate
     $scope.$watch(function () {
@@ -1272,7 +1274,7 @@ angular.module('KorboEE')
     });
 
     // Deprecating.
-    var resourcePanelLastPromise = ResourcePanel.lastPromiseThen;
+    //var resourcePanelLastPromise = ResourcePanel.lastPromiseThen;
     // replacing resourcePanelLastPromise.
     var resourcePanelLastPromiseData = ResourcePanel.lastPromiseData;
     ResourcePanel.hide();

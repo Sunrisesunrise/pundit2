@@ -25,7 +25,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         }
         //default myitems
         return MyItemsContainer;
-    }
+    };
 
     var getMessage = function(type){
 
@@ -50,7 +50,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         };
 
         return message;
-    }
+    };
 
     var getTabs = function(type){
         var tabs = [];
@@ -59,7 +59,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         }
         if(!isVocabulariesType(type)) {
             // tabs used to filter items list by type (all, text, image and pages)
-            var tabs = [{
+            tabs = [{
                 title: 'All Items',
                 // this is the centralized template to items list
                 template: 'src/Lists/itemList.tmpl.html',
@@ -108,7 +108,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
         return tabs;
 
-    }
+    };
 
 
     var getMessageText = function(type, str){
@@ -148,7 +148,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
 
         return text;
-    }
+    };
 
 
     var getSearch = function(type){
@@ -182,7 +182,7 @@ angular.module('Pundit2.GeneralItemsContainer')
             search.additionalClass = 'vocab-items-btn-order';
         }
         return search;
-    }
+    };
 
     var getActionButton = function(type){
         var title = '';
@@ -222,10 +222,10 @@ angular.module('Pundit2.GeneralItemsContainer')
             action: action,
             btnClass: btnClass,
             requireLoggedUser: requireLoggedUser
-        }
+        };
 
         return actionButton;
-    }
+    };
 
     var getOrderButtonClass = function(type){
         if(isMyNotebooksType(type)){
@@ -234,7 +234,7 @@ angular.module('Pundit2.GeneralItemsContainer')
             return '.predicates-items-btn-order';
         }
         return '';
-    }
+    };
 
     var itemsUpdateWatchFunction = function(type){
         if(isMyNotebooksType(type)){
@@ -247,27 +247,27 @@ angular.module('Pundit2.GeneralItemsContainer')
         }
 
         return;
-    }
+    };
 
     var isMyItemsType = function(type){
         return type === MY_ITEMS_TYPE;
-    }
+    };
 
     var isPageItemsType = function(type){
         return type === PAGE_ITEMS_TYPE;
-    }
+    };
 
     var isVocabulariesType = function(type){
         return type === VOCABULARIES_TYPE;
-    }
+    };
 
     var isMyNotebooksType = function(type){
         return type === MY_NOTEBOOKS_TYPE;
-    }
+    };
 
     var isPredicatesType = function(type){
         return type === PREDICATES_TYPE;
-    }
+    };
 
 
     return {
@@ -284,7 +284,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         isVocabulariesType: isVocabulariesType,
         isMyNotebooksType: isMyNotebooksType,
         isPredicatesType: isPredicatesType
-    }
+    };
 
 
 });

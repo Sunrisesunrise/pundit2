@@ -23,7 +23,7 @@ angular.module('Pundit2.Communication')
         AnnotationsExchange.addAnnotation(this);
     }
 
-    Annotation.prototype.create = function(triple) {
+    Annotation.prototype.create = function() {
         annotationComponent.log('Creating a new Annotation on the server');
         this._q.resolve('New annotation created: TODO, after LOGIN');
     };

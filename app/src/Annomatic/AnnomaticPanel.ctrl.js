@@ -48,7 +48,7 @@ angular.module('Pundit2.Annomatic')
 
     $scope.getSuggestionsArea = function() {
         Annomatic.getAnnotationByArea();
-    }
+    };
 
     $scope.startReview = function() {
         Annomatic.reviewNext(0);

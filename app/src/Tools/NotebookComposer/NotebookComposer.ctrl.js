@@ -27,7 +27,7 @@ angular.module('Pundit2.NotebookComposer')
         while (typeof(myScope) !== 'undefined' && myScope !== null);
 
         return eventLabel;
-    }
+    };
 
     $scope.notebook = {};
     $scope.notebook.visibility = "public";

@@ -12,5 +12,5 @@ angular.module('Pundit2.Core')
 
     $scope.closePopover = function() {
         MyPundit.closeLoginPopover();
-    }
+    };
 });

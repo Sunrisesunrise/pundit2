@@ -217,12 +217,12 @@ angular.module('Pundit2.TripleComposer')
     var tripleComposer = new BaseComponent('TripleComposer', TRIPLECOMPOSERDEFAULTS);
 
     var state = {};
-    var firstInstanceName = undefined; // it will be default triplecomposer.
+    var firstInstanceName; // it will be default triplecomposer.
 
 
-    var statements = [{
-        id: 1
-    }];
+    //var statements = [{
+    //    id: 1
+    //}];
 
     var statementChangeStatus = function() {
         EventDispatcher.sendEvent('TripleComposer.statementChange');
@@ -231,7 +231,7 @@ angular.module('Pundit2.TripleComposer')
     var trackContextualEvent = function(eventString) {
         var eventLabel = "contextualMenu--" + eventString;
         Analytics.track('buttons', 'click', eventLabel);
-    }
+    };
 
     var contextualMenuInitialized = false;
     var fixName = function(name) {
@@ -239,7 +239,7 @@ angular.module('Pundit2.TripleComposer')
             return firstInstanceName;
         }
         return name;
-    }
+    };
 
     // Contextual Menu actions for my items and page items
     var initContextualMenu = function() {
@@ -400,7 +400,7 @@ angular.module('Pundit2.TripleComposer')
             state[name].showHeader = newVal;
         }
         return state[name].showHeader;
-    }
+    };
 
     tripleComposer.showFooter = function(newVal, name) {
         name = fixName(name);
@@ -408,11 +408,11 @@ angular.module('Pundit2.TripleComposer')
             state[name].showFooter = newVal;
         }
         return state[name].showFooter;
-    }
+    };
 
     tripleComposer.initContextualMenu = function() {
         initContextualMenu();
-    }
+    };
 
     tripleComposer.getStatements = function(name) {
         name = fixName(name);
@@ -726,7 +726,7 @@ angular.module('Pundit2.TripleComposer')
         if (typeof triple === 'undefined') {
             return false;
         }
-        if (typeof triple.predicate === 'undefined' || triple.predicate == null) {
+        if (typeof triple.predicate === 'undefined' || triple.predicate === null) {
             return true;
         }
 
@@ -734,7 +734,7 @@ angular.module('Pundit2.TripleComposer')
 
         switch (useAs) {
             case 'sub':
-                if (triple.predicate.domain.length == 0) {
+                if (triple.predicate.domain.length === 0) {
                     res = true;
                     break;
                 }
@@ -746,7 +746,7 @@ angular.module('Pundit2.TripleComposer')
                 });
                 break;
             case 'obj':
-                if (triple.predicate.range.length == 0) {
+                if (triple.predicate.range.length === 0) {
                     res = true;
                     break;
                 }
@@ -760,7 +760,7 @@ angular.module('Pundit2.TripleComposer')
         }
 
         return res;
-    }
+    };
 
     tripleComposer.openTripleComposer = function() {
         if (!Dashboard.isDashboardVisible()) {

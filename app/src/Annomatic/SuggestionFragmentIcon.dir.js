@@ -9,6 +9,6 @@ angular.module('Pundit2.Annomatic')
         templateUrl: 'src/Annomatic/SuggestionFragmentIcon.dir.tmpl.html',
         replace: true,
         controller: "SuggestionFragmentIconCtrl",
-        link: function(scope, element) {} // link()
+        link: function(/*scope, element*/) {} // link()
     };
 });

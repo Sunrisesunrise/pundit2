@@ -252,7 +252,6 @@ describe("Client interaction when user is logged in", function() {
         // dbclick (simulate a selection) on text
         var el = p.findElement(protractor.By.css('.pnd-test-init-selection'));
         p.actions().doubleClick(el).perform();
-
         // check triple composer statement subject text
         p.findElements(protractor.By.css('.dropdown-menu li a')).then(function(a){
             expect(a.length).toBe(3);
@@ -484,7 +483,6 @@ describe("Client interaction when user is logged in", function() {
     it("should correctly show notebook composer by edit notebook voice in ctx menu", function(){
 
         p.driver.manage().window().setSize(1700, 960);
-
         // open dashboard
         p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // collapse right panel
@@ -523,7 +521,6 @@ describe("Client interaction when user is logged in", function() {
     it("should correctly show notebook composer by click on create new notebook", function(){
         
         p.driver.manage().window().setSize(1700, 960);
-
         // open dashboard
         p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // collapse right panel
