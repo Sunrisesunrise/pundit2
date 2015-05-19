@@ -1,3 +1,3 @@
 var PUNDITVERSION = {
-    "version":"2.0.56.beta.20150421"
+    "version":"2.0.57.beta.20150519"
 };
