@@ -2,8 +2,8 @@ angular.module('Pundit2.Communication')
 
 .constant('ANNOTATIONSCOMMUNICATIONDEFAULTS', {
     preventDownload: false,
-    loadMultipleAnnotations: false,
-    loadMultipleAnnotationsRequireCredentials: false
+    loadMultipleAnnotations: false
+    //loadMultipleAnnotationsRequireCredentials: false
 })
 
 .service('AnnotationsCommunication', function(BaseComponent, EventDispatcher, NameSpace, Consolidation, MyPundit,
@@ -94,10 +94,10 @@ angular.module('Pundit2.Communication')
                     withCredentials: false,
                     data: postData
                 };
-                if (annotationsCommunication.options.loadMultipleAnnotationsRequireCredentials) {
-                    httpObject.withCredentials = true;
-                    url: NameSpace.get('asAnnMult');
-                }
+                //if (annotationsCommunication.options.loadMultipleAnnotationsRequireCredentials) {
+                //    httpObject.withCredentials = true;
+                //    httpObject.url =  NameSpace.get('asAnnMult');
+                //}
                 $http(httpObject).success(function(data) {
                     var num = Object.keys(data).length;
                     for (var annId in data) {
