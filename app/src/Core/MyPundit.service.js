@@ -538,5 +538,9 @@ angular.module('Pundit2.Core')
         myPundit.popoverLogin(event, 'editProfile');
     };
 
+    myPundit.editProfile = function() {
+        myPundit.popoverLogin(event, 'editProfile');
+    }
+
     return myPundit;
 });
