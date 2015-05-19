@@ -1,4 +1,4 @@
-ddescribe("The annomatic module", function() {
+describe("The annomatic module", function() {
     var p = protractor.getInstance();
     
     // TODO: mock the datatxt backend with those 25 annotations
