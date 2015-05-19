@@ -1,4 +1,4 @@
-ddescribe("AlertSystem", function(){
+describe("AlertSystem", function(){
 
     var AlertSystem,
         $rootScope,
