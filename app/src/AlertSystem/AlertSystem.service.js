@@ -5,7 +5,10 @@ angular.module('Pundit2.AlertSystem')
 
     var DEFAULT_DISMISS_TIME = 5000;
 
-
+    /**
+     * Enumeration of alert type with relatives default values
+     * @type {{OK: {id: string, alertClass: string, timeout: number, top: boolean, dismissible: boolean}, ERROR: {id: string, alertClass: string, timeout: null, top: boolean, dismissible: boolean}, ALERT: {id: string, alertClass: string, timeout: null, top: boolean, dismissible: boolean}, CUSTOM: {id: string, alertClass: string, timeout: null, top: boolean, dismissible: boolean}}}
+     */
     var AlertType = {
         OK: { id: 'SUCCESS', alertClass: 'alert-success', timeout: DEFAULT_DISMISS_TIME, top: true, dismissible: true},
         ERROR: { id: 'ERROR', alertClass: 'alert-danger', timeout: null, top: true, dismissible: true},
@@ -19,6 +22,15 @@ angular.module('Pundit2.AlertSystem')
     var id = 0;
     var timeouts = {};
 
+    /**
+     * Add an alert. Parameter timeout, top, dismissible and alertClass are used only for AlertType CUSTOM. For other types are ignored.
+     * @param type
+     * @param message
+     * @param timeout
+     * @param top
+     * @param dismissible
+     * @param alertClass
+     */
     var addAlert = function(type, message, timeout, top, dismissible, alertClass) {
         alerts = alerts || [];
         id = (id || 0) + 1;
@@ -48,6 +60,9 @@ angular.module('Pundit2.AlertSystem')
         }
     }
 
+    /**
+     * Clear all alerts
+     */
     var clearAlerts = function() {
         for(var i = 0; i<alerts.length; i++) {
             var alert = alerts[i];
@@ -56,6 +71,10 @@ angular.module('Pundit2.AlertSystem')
         alerts.splice(0,alerts.length)
     }
 
+    /**
+     * Clear the alert
+     * @param id id of the alert
+     */
     var clearAlert = function(id) {
         removeTimeout(id);
         var alertToRemove = -1;
@@ -71,6 +90,11 @@ angular.module('Pundit2.AlertSystem')
         }
     }
 
+
+    /**
+     * Remove the timeout associated to the alert
+     * @param id
+     */
     var removeTimeout = function(id){
         var key = getTimeoutKey(id);
         if(timeouts[key]){
@@ -79,6 +103,10 @@ angular.module('Pundit2.AlertSystem')
         }
     }
 
+    /**
+     * Reset the timeout associated to the alert
+     * @param id
+     */
     var resetTimeout = function(id) {
         removeTimeout(id);
         var alert = getAlert(id);
@@ -86,6 +114,10 @@ angular.module('Pundit2.AlertSystem')
     }
 
 
+    /**
+     * Private function that return the key associated to a timeout promise
+     * @param id
+     */
     var getTimeoutKey = function(id) {
         return 'timeout'+ id;
     }
