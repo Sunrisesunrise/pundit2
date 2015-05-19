@@ -482,9 +482,7 @@ module.exports = function(grunt) {
                 "multistr": true,
                 "globals": {
                     angular: true,
-                    console: true,
-                    browser: true,
-                    Range: true
+                    console: true
                 },
                 "predef": [
                     "waitsFor",

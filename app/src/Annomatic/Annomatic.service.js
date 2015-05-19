@@ -1149,8 +1149,8 @@ angular.module('Pundit2.Annomatic')
         var content = element.parent().html();
 
         NameEntityRecognitionResource.getAnnotations({
-                doc_id: about,
-                html_fragment: content
+                doc_id: about, // jshint ignore:line
+                html_fragment: content // jshint ignore:line
             },
             function(data) {
 

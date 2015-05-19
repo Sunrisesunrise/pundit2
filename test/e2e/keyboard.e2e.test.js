@@ -1,3 +1,5 @@
+/*global browser*/
+
 describe("Item interaction", function() {
     var p = protractor.getInstance();
 

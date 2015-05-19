@@ -1,3 +1,5 @@
+/*global Range*/
+
 angular.module('Pundit2.Annotators')
 
 .constant('XPOINTERSHELPERDEFAULTS', {
