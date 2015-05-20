@@ -296,7 +296,6 @@ angular.module('KorboEE')
             }
         },
         function(error){
-            console.log("server error ", error);
             results = null;
             promise.reject();
         });

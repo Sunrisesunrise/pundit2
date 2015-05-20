@@ -215,7 +215,6 @@ angular.module('KorboEE')
 
         },
         function () {
-            console.log("error to copy entity in korbo");
         });
     };
 

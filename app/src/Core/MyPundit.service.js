@@ -437,7 +437,6 @@ angular.module('Pundit2.Core')
     };
 
     var popoverLoginPostMessageHandler = function(params) {
-        console.log(params);
         if (typeof params.data !== 'undefined') {
             if(params.data === 'loginPageLoaded') {
                 popoverState.popover.$scope.isLoading = false;
