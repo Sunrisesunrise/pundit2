@@ -30,7 +30,7 @@
                 
                 <!-- User button -->
                 <li ng-show="showUserButton()" class="pnd-toolbar-user-button  pnd-toolbar-button-active pnd-calltoaction-btn">
-                    <a href="javascript:void(0)" template="{{dropdownTemplate}}" bs-dropdown="userLoggedInDropdown"><span>{{userData.fullName}}</span></a>
+                    <a href="javascript:void(0)" template="{{dropdownTemplate}}" bs-dropdown="userLoggedInDropdown" ng-click="closePopover($event)"><span>{{userData.fullName}}</span></a>
                 </li>
                 
                 <!-- Ask the Pundit button-->
