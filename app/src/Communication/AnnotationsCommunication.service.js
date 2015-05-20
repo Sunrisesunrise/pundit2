@@ -73,7 +73,6 @@ angular.module('Pundit2.Communication')
                             Consolidation.consolidateAll();
                             setLoading(false);
                             promise.resolve(settled);
-                            console.log((Date.now() - t0) / 1000);
                         }
                     });
                     annPromises.push(a);
@@ -119,7 +118,6 @@ angular.module('Pundit2.Communication')
                                 Consolidation.consolidateAll();
                                 setLoading(false);
                                 promise.resolve(settled);
-                                console.log((Date.now() - t0) / 1000);
                             }
                         });
                     }
@@ -190,7 +188,6 @@ angular.module('Pundit2.Communication')
         var promise = $q.defer();
 
         var postSaveSend = function(url, annotationId) {
-            console.log(url);
             $http({
                 headers: {
                     'Content-Type': 'application/json'
