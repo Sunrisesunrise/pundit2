@@ -171,14 +171,16 @@ angular.module('Pundit2.Vocabularies')
 
             if (res.data.length === 0) {
                 dbpediaSelector.log('Empty response');
-                ItemsExchange.wipeContainer(container);
+                if(offset == null || (typeof offset === 'undefined')) {
+                    ItemsExchange.wipeContainer(container);
+                }
                 // promise is always resolved
                 promise.resolve();
                 return;
             }
 
+
             if(offset == null || (typeof offset === 'undefined')) {
-                console.log('dbpedia wipe container');
                 ItemsExchange.wipeContainer(container);
             }
 
@@ -201,6 +203,8 @@ angular.module('Pundit2.Vocabularies')
                 // add to itemsExchange
                 ItemsExchange.addItemToContainer(new Item(item.uri, item), container);
             }
+            var totalCount = res.metadata.totalCount;
+            ItemsExchange.setRemoteItemCount(totalCount, container);
 
             promise.resolve();
         }).error(function() {

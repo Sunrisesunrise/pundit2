@@ -264,7 +264,6 @@ angular.module('Pundit2.Vocabularies')
     // eg. removing the wipeContainer() to produce a union of two research results
     FreebaseFactory.prototype.getItems = function(term, offset, limit) {
 
-        console.log(term, offset, limit);
 
         if (typeof(term) === 'undefined') {
             return;
@@ -288,7 +287,6 @@ angular.module('Pundit2.Vocabularies')
         }).success(function(data) {
 
             freebaseSelector.log('Http success, get items from freebase', data);
-
             if (data.result.length === 0) {
                 freebaseSelector.log('Http success, but get empty result');
                 if(offset == null || (typeof offset === 'undefined')) {
@@ -301,6 +299,7 @@ angular.module('Pundit2.Vocabularies')
             var promiseArr = [],
                 deferArr = [],
                 itemsArr = [];
+            var totalCount = data.hits;
             for (var i in data.result) {
 
                 // The item borns as half empty, will get filled up
@@ -331,6 +330,7 @@ angular.module('Pundit2.Vocabularies')
                 for (i = 0; i < itemsArr.length; i++) {
                     ItemsExchange.addItemToContainer(new Item(itemsArr[i].uri, itemsArr[i]), container);
                 }
+                ItemsExchange.setRemoteItemCount(totalCount, container);
                 promise.resolve();
             });
 

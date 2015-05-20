@@ -39,7 +39,7 @@
                 <span
                     class="badge pull-right"
                     ng-show="showFilteredResults && !pane.isLoading && pane.isStarted">
-                    {{tabItemsFiltered[$index].length}}
+                    {{ contentTabs[$index].remoteItemCount ? contentTabs[$index].remoteItemCount : tabItemsFiltered[$index].length}}
                 </span>
                 <span
                     class="badge pull-right"
@@ -59,7 +59,7 @@
             <div 
                 ng-repeat="pane in contentTabs" 
                 class="tab-pane pnd-vertical-tab-list-content" 
-                ng-class="[$index == active ? 'active' : '']" unlimited-scroll="infiniteScroll(pane.selector, label, pane.items.length, pane)">
+                ng-class="[$index == active ? 'active' : '']" unlimited-scroll="infiniteScroll(pane, label)">
                 <div 
                     class="kee-server-messages" 
                     ng-if="showContentMessage1 && !contentTabs[$index].serverError">
@@ -109,7 +109,7 @@
                     </li>
                     <li 
                         class="list-group-item" 
-                        ng-repeat="mi in $parent.tabItemsFiltered[$index] =  (contentTabs[$index].items | filter:{label: label})"
+                        ng-repeat="mi in $parent.tabItemsFiltered[$index] = contentTabs[$index].isLocal ? (contentTabs[$index].items | filter:{label: label}) : contentTabs[$index].items"
                         ng-if="showFilteredResults">
                         <item 
                             uri="{{mi.uri}}" 

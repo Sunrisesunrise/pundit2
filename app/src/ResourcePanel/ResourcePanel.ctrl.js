@@ -254,12 +254,15 @@ angular.module('Pundit2.ResourcePanel')
         resetSelection();
     });
 
-
-    $scope.infiniteScroll = function(selector, label, offset, pane){
-        console.log('infiniteScroll',label, offset, pane);
-        var limit = 15;
+    //function colled on list scroll
+    $scope.infiniteScroll = function(pane, label){
+        //if pane is already loading data we return
+        if(pane.isLoading){
+            return;
+        }
         var caller = '';
-        var selectors = [selector];
+        var selectors = [pane.selector];
+        var offset = pane.items.length;
         switch ($scope.type) {
             case 'sub':
                 caller = 'subject';
@@ -277,7 +280,7 @@ angular.module('Pundit2.ResourcePanel')
                 if (Config.annotationServerCallsNeedLoggedUser) {
                     MyPundit.checkLoggedIn().then(function (isLoggedIn) {
                         if (isLoggedIn) {
-                            ResourcePanel.addItems(label, selectors, $scope.triple, caller, offset, limit);
+                            ResourcePanel.addItems(label, selectors, $scope.triple, caller, offset);
                         }
                         else {
                             EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
@@ -285,12 +288,11 @@ angular.module('Pundit2.ResourcePanel')
                     });
                 }
                 else {
-                    ResourcePanel.addItems(label, selectors, $scope.triple, caller, offset, limit);
+                    ResourcePanel.addItems(label, selectors, $scope.triple, caller, offset);
                 }
             }, ResourcePanel.options.vocabSearchTimer);
         }
 
-        ResourcePanel.addItems(label, offset, limit);
     }
 
 });
