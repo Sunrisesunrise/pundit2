@@ -10,6 +10,8 @@ angular.module('Pundit2.Core')
 
         // container: [ array of ItemFactory objects belonging to that container ]
         itemListByContainer = {},
+        // container: total number ItemFactory objects belonging to that container
+        itemTotalCountByContainer = {},
         // item uri : [ array of containers which contains the ItemFactory with that uri ]
         itemContainers = {},
         // [ array of ItemFactory objects ]
@@ -19,6 +21,7 @@ angular.module('Pundit2.Core')
 
     itemsExchange.wipe = function() {
         itemListByContainer = {};
+        itemTotalCountByContainer = {};
         itemContainers = {};
         itemList = [];
         itemListByURI = {};

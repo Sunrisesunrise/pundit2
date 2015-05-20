@@ -531,7 +531,7 @@ angular.module('Pundit2.ResourcePanel')
 
     };
 
-    var searchOnVocab = function(label, selectors, triple, caller) {
+    var searchOnVocab = function(label, selectors, triple, caller, offset, limit) {
 
         var predicate = triple.predicate;
 
@@ -565,7 +565,7 @@ angular.module('Pundit2.ResourcePanel')
                         }
                     }
                     // ... and search label for each selector
-                    selectors[index].getItems(label).then(function() {
+                    selectors[index].getItems(label, offset, limit).then(function() {
 
                         // where results is done, update content for each selector
                         for (var t = 0; t < state.popoverOptions.scope.contentTabs.length; t++) {
@@ -611,6 +611,10 @@ angular.module('Pundit2.ResourcePanel')
         searchOnVocab(label, selectors, triple, caller);
         setLabelToSearch(label);
     };
+
+    resourcePanel.addItems = function(label, selectors, triple, caller, offset, limit){
+        searchOnVocab(label, selectors, triple, caller, offset, limit);
+    }
 
     resourcePanel.updatePosition = function() {
         if (state.popover === null) {

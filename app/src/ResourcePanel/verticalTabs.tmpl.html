@@ -59,7 +59,7 @@
             <div 
                 ng-repeat="pane in contentTabs" 
                 class="tab-pane pnd-vertical-tab-list-content" 
-                ng-class="[$index == active ? 'active' : '']">
+                ng-class="[$index == active ? 'active' : '']" unlimited-scroll="infiniteScroll(pane.selector, label, pane.items.length, pane)">
                 <div 
                     class="kee-server-messages" 
                     ng-if="showContentMessage1 && !contentTabs[$index].serverError">
@@ -109,7 +109,7 @@
                     </li>
                     <li 
                         class="list-group-item" 
-                        ng-repeat="mi in $parent.tabItemsFiltered[$index] = (contentTabs[$index].items | filter:{label: label})"
+                        ng-repeat="mi in $parent.tabItemsFiltered[$index] =  (contentTabs[$index].items | filter:{label: label})"
                         ng-if="showFilteredResults">
                         <item 
                             uri="{{mi.uri}}" 

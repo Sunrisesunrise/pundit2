@@ -38,7 +38,8 @@ angular.module('Pundit2.ResourcePanel')
                 itemsContainer: selectors[j].config.container,
                 items: [],
                 module: 'Pundit2',
-                isStarted: false
+                isStarted: false,
+                selector: selectors[j]
             });
         }
     }
@@ -252,5 +253,44 @@ angular.module('Pundit2.ResourcePanel')
     EventDispatcher.addListener('Pundit.changeSelection', function() {
         resetSelection();
     });
+
+
+    $scope.infiniteScroll = function(selector, label, offset, pane){
+        console.log('infiniteScroll',label, offset, pane);
+        var limit = 15;
+        var caller = '';
+        var selectors = [selector];
+        switch ($scope.type) {
+            case 'sub':
+                caller = 'subject';
+                break;
+            case 'pr':
+                caller = 'predicate';
+                break;
+            case 'obj':
+                caller = 'object';
+                break;
+        }
+        if (caller !== 'pr' && caller !== '') {
+            $timeout.cancel(searchTimer);
+            searchTimer = $timeout(function() {
+                if (Config.annotationServerCallsNeedLoggedUser) {
+                    MyPundit.checkLoggedIn().then(function (isLoggedIn) {
+                        if (isLoggedIn) {
+                            ResourcePanel.addItems(label, selectors, $scope.triple, caller, offset, limit);
+                        }
+                        else {
+                            EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
+                        }
+                    });
+                }
+                else {
+                    ResourcePanel.addItems(label, selectors, $scope.triple, caller, offset, limit);
+                }
+            }, ResourcePanel.options.vocabSearchTimer);
+        }
+
+        ResourcePanel.addItems(label, offset, limit);
+    }
 
 });

@@ -137,7 +137,7 @@ angular.module('Pundit2.Vocabularies')
         this.config = config;
     };
 
-    DbpediaFactory.prototype.getItems = function(term) {
+    DbpediaFactory.prototype.getItems = function(term, offset, limit) {
         if (typeof(term) === 'undefined') {
             return;
         }
@@ -149,8 +149,8 @@ angular.module('Pundit2.Vocabularies')
         var params = {
             q: term,
             p: 'dandeliondbpedia',
-            limit: dbpediaSelector.options.limit,
-            offset: 0,
+            limit: limit || dbpediaSelector.options.limit,
+            offset: offset || 0,
             lang: self.config.language
         };
 
@@ -177,7 +177,10 @@ angular.module('Pundit2.Vocabularies')
                 return;
             }
 
-            ItemsExchange.wipeContainer(container);
+            if(offset == null || (typeof offset === 'undefined')) {
+                console.log('dbpedia wipe container');
+                ItemsExchange.wipeContainer(container);
+            }
 
             for (var i = 0; i < res.data.length; i++) {
                 var current = res.data[i];
