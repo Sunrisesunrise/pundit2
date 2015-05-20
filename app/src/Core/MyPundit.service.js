@@ -438,7 +438,7 @@ angular.module('Pundit2.Core')
 
     var popoverLoginPostMessageHandler = function(params) {
         if (typeof params.data !== 'undefined') {
-            if(params.data === 'loginPageLoaded') {
+            if(params.data === 'loginPageLoaded' || params.data === 'pageLoaded') {
                 popoverState.popover.$scope.isLoading = false;
                 popoverState.popover.$scope.$digest();
             }
@@ -446,6 +446,9 @@ angular.module('Pundit2.Core')
                 popoverState.popover.$scope.isLoading = true;
                 popoverState.popover.$scope.postLoginPreCheck = true;
                 popoverState.popover.$scope.$digest();
+            }
+            else if(params.data === 'profileSuccessfullyUpdated') {
+                myPundit.closeLoginPopover();
             }
             else if(params.data === 'userLoggedIn') {
                 popoverState.popover.$scope.postLoginPreCheck = true;
