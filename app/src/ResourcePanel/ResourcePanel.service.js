@@ -502,7 +502,8 @@ angular.module('Pundit2.ResourcePanel')
             var prop = {
                 title: 'Properties',
                 items: properties,
-                isStarted: true
+                isStarted: true,
+                isLocal: true
             };
             contentTabs.push(prop);
 
