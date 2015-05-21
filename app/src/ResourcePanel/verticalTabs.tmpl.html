@@ -39,7 +39,7 @@
                 <span
                     class="badge pull-right"
                     ng-show="showFilteredResults && !pane.isLoading && pane.isStarted">
-                    {{ contentTabs[$index].selector.config.infiniteScrolling ? contentTabs[$index].remoteItemCount : tabItemsFiltered[$index].length}}
+                    {{ contentTabs[$index].selector.config.infiniteScrolling ? contentTabs[$index].remoteItemCount : tabItemsFiltered[$index].length ? tabItemsFiltered[$index].length : 0}}
                 </span>
                 <span
                     class="badge pull-right"

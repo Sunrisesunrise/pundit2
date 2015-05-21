@@ -257,7 +257,7 @@ angular.module('Pundit2.ResourcePanel')
     //function colled on list scroll
     $scope.infiniteScroll = function(pane, label){
 
-        if(!pane.selector.config.infiniteScrolling){
+        if(!pane.selector || !pane.selector.config || !pane.selector.config.infiniteScrolling){
             return;
         }
 
