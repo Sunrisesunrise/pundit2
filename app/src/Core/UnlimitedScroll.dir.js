@@ -10,7 +10,7 @@ angular.module('Pundit2.Core')
         return function(scope, elm, attr) {
             var raw = elm[0];
             elm.bind('scroll', function() {
-                if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+                if (raw.scrollTop + raw.offsetHeight>= 0.7*raw.scrollHeight) {
                     scope.$apply(attr.unlimitedScroll);
                 }
             });

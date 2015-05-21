@@ -257,6 +257,10 @@ angular.module('Pundit2.ResourcePanel')
     //function colled on list scroll
     $scope.infiniteScroll = function(pane, label){
 
+        if(!pane.selector.config.infiniteScrolling){
+            return;
+        }
+
         //if pane is already loading data we return
         if(pane.isLoading){
             return;

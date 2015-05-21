@@ -178,6 +178,8 @@ angular.module('Pundit2.Vocabularies')
     instances: [{
         // where items is stored inside itemsExchange service
         container: 'freebase',
+        //infinite scrolling
+        infiniteScrolling: true,
         // instance tab title
         label: 'Freebase',
         // enable or disable the instance
