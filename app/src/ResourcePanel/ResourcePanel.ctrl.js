@@ -256,9 +256,20 @@ angular.module('Pundit2.ResourcePanel')
 
     //function colled on list scroll
     $scope.infiniteScroll = function(pane, label){
+
         //if pane is already loading data we return
         if(pane.isLoading){
             return;
+        }
+
+        //if there are no remote items count we return
+        if (typeof(pane.remoteItemCount) === 'undefined' || pane.remoteItemCount==0) {
+            return;
+        } else {
+            //if we have downloaded all items we return
+            if(pane.items.length == pane.remoteItemCount){
+                return;
+            }
         }
         var caller = '';
         var selectors = [pane.selector];
