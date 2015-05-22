@@ -585,9 +585,7 @@ angular.module('Pundit2.ResourcePanel')
                                 }
 
                                 state.popoverOptions.scope.contentTabs[t].items = itemsList;
-                                if (!(typeof(remoteItemCount) === 'undefined')) {
-                                    state.popoverOptions.scope.contentTabs[t].remoteItemCount = remoteItemCount;
-                                }
+                                state.popoverOptions.scope.contentTabs[t].remoteItemCount = remoteItemCount;
                                 // and set loading to false
                                 state.popoverOptions.scope.contentTabs[t].isLoading = false;
                             }

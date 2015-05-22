@@ -71,7 +71,7 @@ angular.module('Pundit2.Core')
         // empty container list
         delete itemListByContainer[container];
         //empty total remote count
-        if (typeof(remoteItemCountByContainer[container]) === 'undefined') {
+        if (typeof(remoteItemCountByContainer[container]) !== 'undefined') {
             delete remoteItemCountByContainer[container];
         }
 
