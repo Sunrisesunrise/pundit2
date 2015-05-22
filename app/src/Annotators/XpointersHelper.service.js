@@ -18,6 +18,10 @@ angular.module('Pundit2.Annotators')
     // textFragmentIconClass are already considered.
     consolidationClasses: ['pnd-cons-svg'],
 
+    // Nodes that represent the icons used by pundits after consolidation.
+    // Node with these classes will be ignored when building xpointers
+    consolidationIconClasses: ['pnd-icon-tag'],
+
     // Classes to assign to named content elements to have them recognized by Pundit
     namedContentClasses: ['pundit-content']
 
@@ -463,10 +467,12 @@ angular.module('Pundit2.Annotators')
 
 
     xp.isTextNode = function(node) {
+        if(!node) return false;
         return node.nodeType === Node.TEXT_NODE;
     };
 
     xp.isElementNode = function(node) {
+        if(!node) return false;
         return node.nodeType === Node.ELEMENT_NODE;
     };
 
@@ -489,6 +495,13 @@ angular.module('Pundit2.Annotators')
             return true;
         }
 
+        //if it is a consolidation icon, return true
+        for(var i = 0; i< xp.options.consolidationIconClasses.length; i++){
+            if(el.hasClass(xp.options.consolidationIconClasses[i])){
+                return true;
+            }
+        }
+
         return false;
     }; // isWrapNode()
 
@@ -502,6 +515,7 @@ angular.module('Pundit2.Annotators')
 
         var toIgnore = [xp.options.textFragmentIconClass, xp.options.wrapNodeClass, xp.options.imgWrapNodeClass];
         toIgnore = toIgnore.concat(xp.options.consolidationClasses);
+        toIgnore = toIgnore.concat(xp.options.consolidationIconClasses);
 
         for (var i = toIgnore.length; i--;) {
             if (angular.element(node).hasClass(toIgnore[i])) {
