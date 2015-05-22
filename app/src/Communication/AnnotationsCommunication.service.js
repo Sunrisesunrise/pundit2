@@ -22,7 +22,6 @@ angular.module('Pundit2.Communication')
     // add notebooks to notebooksExchange
     // than consilidate all items
     annotationsCommunication.getAnnotations = function() {
-        var t0 = Date.now();
         var promise = $q.defer();
 
         if (annotationsCommunication.options.preventDownload) {
@@ -45,6 +44,8 @@ angular.module('Pundit2.Communication')
                 setLoading(false);
                 return;
             }
+
+            var settled = 0;
 
             if (!annotationsCommunication.options.loadMultipleAnnotations) {
                 annotationsCommunication.log("Loading annotations one by one");
@@ -121,7 +122,7 @@ angular.module('Pundit2.Communication')
                             }
                         });
                     }
-                }).error(function(data, statusCode) {
+                }).error(function(/*data, statusCode*/) {
                     setLoading(false);
                 });
             }
