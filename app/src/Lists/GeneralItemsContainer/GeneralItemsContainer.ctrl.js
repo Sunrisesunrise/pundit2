@@ -553,14 +553,17 @@ angular.module('Pundit2.GeneralItemsContainer')
             }, function(newItems) {
                 // update all items array and display new items
                 $scope.displayedItems = ContainerManager.buildItemsArray($scope.tabs.activeTab, $scope.tabs, newItems);
+                if (typeof($scope.displayedItems) !== 'undefined' && typeof($scope.search.term) !== 'undefined') {
+                    filterItems($scope.search.term);
+                }
             }, true);
         }else{
             $scope.$watch(function() {
                 return GeneralItemsContainer.itemsUpdateWatchFunction($scope.type);
             }, function(newItems) {
                 // update all items array and display new items
-                    allItems = newItems;
-                    filterItems($scope.search.term);
+                allItems = newItems;
+                filterItems($scope.search.term);
             }, true);
         }
 
