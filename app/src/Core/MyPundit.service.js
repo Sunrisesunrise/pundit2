@@ -449,6 +449,7 @@ angular.module('Pundit2.Core')
             }
             else if(params.data === 'profileSuccessfullyUpdated') {
                 myPundit.closeLoginPopover();
+                myPundit.checkLoggedIn();
             }
             else if(params.data === 'userLoggedIn') {
                 popoverState.popover.$scope.postLoginPreCheck = true;
