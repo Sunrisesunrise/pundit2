@@ -543,7 +543,7 @@ angular.module('Pundit2.Core')
 
     myPundit.editProfile = function() {
         myPundit.popoverLogin(event, 'editProfile');
-    }
+    };
 
     return myPundit;
 });
