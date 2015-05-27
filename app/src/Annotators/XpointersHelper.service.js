@@ -467,12 +467,16 @@ angular.module('Pundit2.Annotators')
 
 
     xp.isTextNode = function(node) {
-        if(!node) return false;
+        if (!node) {
+            return false;
+        }
         return node.nodeType === Node.TEXT_NODE;
     };
 
     xp.isElementNode = function(node) {
-        if(!node) return false;
+        if (!node) {
+            return false;
+        }
         return node.nodeType === Node.ELEMENT_NODE;
     };
 
@@ -496,8 +500,8 @@ angular.module('Pundit2.Annotators')
         }
 
         //if it is a consolidation icon, return true
-        for(var i = 0; i< xp.options.consolidationIconClasses.length; i++){
-            if(el.hasClass(xp.options.consolidationIconClasses[i])){
+        for (var i = 0; i < xp.options.consolidationIconClasses.length; i++) {
+            if (el.hasClass(xp.options.consolidationIconClasses[i])) {
                 return true;
             }
         }
