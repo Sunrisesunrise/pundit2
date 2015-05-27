@@ -77,6 +77,8 @@ angular.module('Pundit2.Vocabularies')
     instances: [{
         // where items is stored inside itemsExchange service
         container: 'europeana',
+        //infinite scrolling
+        infiniteScrolling: false,
         // instance label tab title
         label: 'Europeana',
         // enable or disable the instance
