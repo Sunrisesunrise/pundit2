@@ -1,19 +1,81 @@
 angular.module('Pundit2.AlertSystem')
 
+.constant('ALERTSYSTEMDEFAULTS', {
 
-.service('AlertSystem', function($timeout) {
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AlertSystem
+     *
+     * @description
+     * `object`
+     *
+     * Configuration object for AlertSystem module.
+     */
 
-    var DEFAULT_DISMISS_TIME = 5000;
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AlertSystem.annotationsRefresh
+     *
+     * @description
+     * `number`
+     *
+     * Delay in ms for the dismiss of the notifications
+     *
+     * Default value:
+     * <pre> defaultDismissTime: 5000 </pre>
+     */
+    defaultDismissTime: 5000,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AlertSystem.clientDomTemplate
+     *
+     * @description
+     * `string`
+     *
+     * The Client will append the content of this template to the DOM to bootstrap this component
+     *
+     * Default value:
+     * <pre> clientDomTemplate: 'src/AlertSystem/ClientAlertSystem.tmpl.html' </pre>
+     */
+    clientDomTemplate: 'src/AlertSystem/ClientAlertSystem.tmpl.html',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AlertSystem.debug
+     *
+     * @description
+     * `boolean`
+     *
+     * Active debug log
+     *
+     * Default value:
+     * <pre> debug: false </pre>
+     */
+    debug: false
+})
+
+.service('AlertSystem', function(BaseComponent, $timeout, ALERTSYSTEMDEFAULTS) {
+
+    var alertSystem = new BaseComponent('AlertSystem', ALERTSYSTEMDEFAULTS);
+
+    var alerts = [];
+    var id = 0;
+    var timeouts = {};
 
     /**
      * Enumeration of alert type with relatives default values
      * @type {{OK: {id: string, alertClass: string, timeout: number, top: boolean, dismissible: boolean}, ERROR: {id: string, alertClass: string, timeout: null, top: boolean, dismissible: boolean}, ALERT: {id: string, alertClass: string, timeout: null, top: boolean, dismissible: boolean}, CUSTOM: {id: string, alertClass: string, timeout: null, top: boolean, dismissible: boolean}}}
      */
-    var AlertType = {
+    alertSystem.AlertType = {
         OK: {
             id: 'SUCCESS',
             alertClass: 'alert-success',
-            timeout: DEFAULT_DISMISS_TIME,
+            timeout: alertSystem.options.defaultDismissTime,
             top: true,
             dismissible: true
         },
@@ -40,12 +102,37 @@ angular.module('Pundit2.AlertSystem')
         }
     };
 
-    var alerts = [];
-    var id = 0;
-    var timeouts = {};
+    alertSystem.alerts = alerts;
 
     /**
-     * Add an alert. Parameter timeout, top, dismissible and alertClass are used only for AlertType CUSTOM. For other types are ignored.
+     * Private function that return the key associated to a timeout promise
+     * @param id
+     */
+    var getTimeoutKey = function(id) {
+        return 'timeout' + id;
+    };
+
+    var setTimeout = function(alert) {
+        var key = getTimeoutKey(alert.id);
+        var promise = $timeout(function() {
+            alertSystem.clearAlert(alert.id);
+        }, alert.timeout);
+        timeouts[key] = promise;
+    };
+
+    var getAlert = function(id) {
+        for (var i = 0; i < alerts.length; i++) {
+            var alert = alerts[i];
+            if (alert.id === id) {
+                return alert;
+            }
+        }
+        return null;
+    };
+
+
+    /**
+     * Add an alert
      * @param type
      * @param message
      * @param timeout
@@ -53,7 +140,7 @@ angular.module('Pundit2.AlertSystem')
      * @param dismissible
      * @param alertClass
      */
-    var addAlert = function(type, message, timeout, top, dismissible, alertClass) {
+    alertSystem.addAlert = function(type, message, timeout, top, dismissible, alertClass) {
         var newId,
             alert;
 
@@ -75,13 +162,13 @@ angular.module('Pundit2.AlertSystem')
             timeout: timeout,
             dismissible: dismissible
         };
-        
+
         if (top) {
-            console.log('top');
             alerts.unshift(alert);
+            alertSystem.log('Pushed alert on top');
         } else {
-            console.log('bottom');
             alerts.push(alert);
+            alertSystem.log('Pushed alert on bottom');
         }
         if (timeout) {
             setTimeout(alert);
@@ -91,10 +178,10 @@ angular.module('Pundit2.AlertSystem')
     /**
      * Clear all alerts
      */
-    var clearAlerts = function() {
+    alertSystem.clearAlerts = function() {
         for (var i = 0; i < alerts.length; i++) {
             var alert = alerts[i];
-            removeTimeout(alert.id);
+            alertSystem.removeTimeout(alert.id);
         }
         alerts.splice(0, alerts.length);
     };
@@ -103,8 +190,8 @@ angular.module('Pundit2.AlertSystem')
      * Clear the alert
      * @param id id of the alert
      */
-    var clearAlert = function(id) {
-        removeTimeout(id);
+    alertSystem.clearAlert = function(id) {
+        alertSystem.removeTimeout(id);
         var alertToRemove = -1;
         for (var i = 0; i < alerts.length; i++) {
             var alert = alerts[i];
@@ -122,7 +209,7 @@ angular.module('Pundit2.AlertSystem')
      * Remove the timeout associated to the alert
      * @param id
      */
-    var removeTimeout = function(id) {
+    alertSystem.removeTimeout = function(id) {
         var key = getTimeoutKey(id);
         if (timeouts[key]) {
             $timeout.cancel(timeouts[key]);
@@ -134,47 +221,11 @@ angular.module('Pundit2.AlertSystem')
      * Reset the timeout associated to the alert
      * @param id
      */
-    var resetTimeout = function(id) {
-        removeTimeout(id);
+    alertSystem.resetTimeout = function(id) {
+        alertSystem.removeTimeout(id);
         var alert = getAlert(id);
         setTimeout(alert);
     };
 
-    /**
-     * Private function that return the key associated to a timeout promise
-     * @param id
-     */
-    var getTimeoutKey = function(id) {
-        return 'timeout' + id;
-    };
-
-    var setTimeout = function(alert) {
-        var key = getTimeoutKey(alert.id);
-        var promise = $timeout(function() {
-            clearAlert(alert.id);
-        }, alert.timeout);
-        timeouts[key] = promise;
-    };
-
-    var getAlert = function(id) {
-        for (var i = 0; i < alerts.length; i++) {
-            var alert = alerts[i];
-            if (alert.id === id) {
-                return alert;
-            }
-        }
-        return null;
-    };
-
-    return {
-        AlertType: AlertType,
-        alerts: alerts,
-        addAlert: addAlert,
-        clearAlerts: clearAlerts,
-        clearAlert: clearAlert,
-        removeTimeout: removeTimeout,
-        resetTimeout: resetTimeout
-    };
-
-
+    return alertSystem;
 });
