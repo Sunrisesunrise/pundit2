@@ -54,24 +54,20 @@ angular.module('Pundit2.AlertSystem')
      * @param alertClass
      */
     var addAlert = function(type, message, timeout, top, dismissible, alertClass) {
+        var newId,
+            alert;
+
         alerts = alerts || [];
         id = (id || 0) + 1;
-        var newId = id;
 
-        // TODO Expected a conditional expression? Why =? 
-        if (type.id = AlertType.CUSTOM.id) {
-            timeout = timeout || type.timeout;
-            top = top || type.top;
-            dismissible = dismissible || type.dismissible;
-            alertClass = alertClass || type.alertClass;
-        } else {
-            timeout = type.timeout;
-            top = type.top;
-            dismissible = type.dismissible;
-            alertClass = type.alertClass;
-        }
+        newId = id;
 
-        var alert = {
+        timeout = typeof(timeout) !== 'undefined' ? timeout : type.timeout;
+        top = typeof(top) !== 'undefined' ? top : type.top;
+        dismissible = typeof(dismissible) !== 'undefined' ? dismissible : type.dismissible;
+        alertClass = alertClass || type.alertClass;
+
+        alert = {
             id: newId,
             type: type.id,
             alertClass: alertClass,

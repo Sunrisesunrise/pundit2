@@ -55,8 +55,6 @@ describe("AlertSystem", function(){
         expect(AlertSystem.alerts.length).toBe(0);
     });
 
-
-
     it('timeout should works correctly', function(){
         expect(AlertSystem.alerts.length).toBe(0);
         //ERROR message dos not auto dismiss
@@ -77,6 +75,5 @@ describe("AlertSystem", function(){
         expect(AlertSystem.alerts.length).toBe(2);
 
     });
-
 
 });
