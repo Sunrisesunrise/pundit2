@@ -59,6 +59,8 @@ angular.module('Pundit2.AlertSystem')
     debug: false
 })
 
+// TODO Add method documentation in JSDoc
+
 .service('AlertSystem', function(BaseComponent, $timeout, ALERTSYSTEMDEFAULTS) {
 
     var alertSystem = new BaseComponent('AlertSystem', ALERTSYSTEMDEFAULTS);
