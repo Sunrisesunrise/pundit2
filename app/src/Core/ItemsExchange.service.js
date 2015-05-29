@@ -177,7 +177,7 @@ angular.module('Pundit2.Core')
 
     };
 
-    itemsExchange.setRemoteItemCount = function(counts, containers){
+    itemsExchange.setRemoteItemCount = function(counts, containers) {
 
         if (!angular.isArray(counts)) {
             counts = [counts];
@@ -191,15 +191,15 @@ angular.module('Pundit2.Core')
             remoteItemCountByContainer[container] = counts[i];
         }
 
-    }
+    };
 
-    itemsExchange.getRemoteItemCount = function(container){
+    itemsExchange.getRemoteItemCount = function(container) {
 
         if (typeof(remoteItemCountByContainer) === 'undefined') {
             return null;
         }
         return remoteItemCountByContainer[container];
-    }
+    };
 
     // TODO must be refactor, pass uri instead of new item reference
     itemsExchange.removeItemFromContainer = function(item, container) {
