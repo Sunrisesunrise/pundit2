@@ -618,7 +618,7 @@ angular.module('Pundit2.ResourcePanel')
 
     resourcePanel.addItems = function(label, selectors, triple, caller, offset, limit){
         searchOnVocab(label, selectors, triple, caller, offset, limit);
-    }
+    };
 
     resourcePanel.updatePosition = function() {
         if (state.popover === null) {

@@ -267,11 +267,11 @@ angular.module('Pundit2.ResourcePanel')
         }
 
         //if there are no remote items count we return
-        if (typeof(pane.remoteItemCount) === 'undefined' || pane.remoteItemCount==0) {
+        if (typeof(pane.remoteItemCount) === 'undefined' || pane.remoteItemCount === 0) {
             return;
         } else {
             //if we have downloaded all items we return
-            if(pane.items.length == pane.remoteItemCount){
+            if(pane.items.length === pane.remoteItemCount){
                 return;
             }
         }
@@ -308,6 +308,6 @@ angular.module('Pundit2.ResourcePanel')
             }, ResourcePanel.options.vocabSearchTimer);
         }
 
-    }
+    };
 
 });

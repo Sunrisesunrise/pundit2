@@ -14,5 +14,5 @@ angular.module('Pundit2.Core')
                     scope.$apply(attr.unlimitedScroll);
                 }
             });
-        }
+        };
     });

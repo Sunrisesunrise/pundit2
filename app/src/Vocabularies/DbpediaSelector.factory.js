@@ -173,7 +173,7 @@ angular.module('Pundit2.Vocabularies')
 
             if (res.data.length === 0) {
                 dbpediaSelector.log('Empty response');
-                if(offset == null || (typeof offset === 'undefined')) {
+                if(offset === null || (typeof offset === 'undefined')) {
                     ItemsExchange.wipeContainer(container);
                 }
                 // promise is always resolved
@@ -182,7 +182,7 @@ angular.module('Pundit2.Vocabularies')
             }
 
 
-            if(offset == null || (typeof offset === 'undefined')) {
+            if(offset === null || (typeof offset === 'undefined')) {
                 ItemsExchange.wipeContainer(container);
             }
 

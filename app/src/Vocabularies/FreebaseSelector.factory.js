@@ -291,7 +291,7 @@ angular.module('Pundit2.Vocabularies')
             freebaseSelector.log('Http success, get items from freebase', data);
             if (data.result.length === 0) {
                 freebaseSelector.log('Http success, but get empty result');
-                if(offset == null || (typeof offset === 'undefined')) {
+                if(offset === null || (typeof offset === 'undefined')) {
                     ItemsExchange.wipeContainer(container);
                 }
                 promise.resolve();
@@ -325,7 +325,7 @@ angular.module('Pundit2.Vocabularies')
                 freebaseSelector.log('Completed all items http request (topic and mql)');
                 // when all http request are completed we can wipe itemsExchange
                 // and put new items inside relative container
-                if(offset == null || (typeof offset === 'undefined')) {
+                if(offset === null || (typeof offset === 'undefined')) {
                     ItemsExchange.wipeContainer(container);
                 }
 
