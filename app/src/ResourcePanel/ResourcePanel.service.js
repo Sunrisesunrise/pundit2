@@ -477,7 +477,8 @@ angular.module('Pundit2.ResourcePanel')
                     title: 'Page items',
                     items: pageItems,
                     module: 'Pundit2',
-                    isStarted: true
+                    isStarted: true,
+                    isLocal: true
                 };
                 contentTabs.push(pageItemsForTabs);
                 content.pageItems = pageItems;
@@ -488,7 +489,8 @@ angular.module('Pundit2.ResourcePanel')
                     title: 'My items',
                     items: myItems,
                     module: 'Pundit2',
-                    isStarted: true
+                    isStarted: true,
+                    isLocal: true
                 };
                 contentTabs.push(myItemsForTabs);
                 content.myItems = myItems;
@@ -500,7 +502,8 @@ angular.module('Pundit2.ResourcePanel')
             var prop = {
                 title: 'Properties',
                 items: properties,
-                isStarted: true
+                isStarted: true,
+                isLocal: true
             };
             contentTabs.push(prop);
 
@@ -531,7 +534,7 @@ angular.module('Pundit2.ResourcePanel')
 
     };
 
-    var searchOnVocab = function(label, selectors, triple, caller) {
+    var searchOnVocab = function(label, selectors, triple, caller, offset, limit) {
 
         var predicate = triple.predicate;
 
@@ -565,14 +568,14 @@ angular.module('Pundit2.ResourcePanel')
                         }
                     }
                     // ... and search label for each selector
-                    selectors[index].getItems(label).then(function() {
+                    selectors[index].getItems(label, offset, limit).then(function() {
 
                         // where results is done, update content for each selector
                         for (var t = 0; t < state.popoverOptions.scope.contentTabs.length; t++) {
                             if (state.popoverOptions.scope.contentTabs[t].title === selectors[index].config.label) {
                                 var container = state.popoverOptions.scope.contentTabs[t].itemsContainer + label.split(' ').join('$');
                                 var itemsList = ItemsExchange.getItemsByContainer(container);
-
+                                var remoteItemCount = ItemsExchange.getRemoteItemCount(container);
                                 if (predicate !== null) {
                                     if (caller === 'subject') {
                                         itemsList = filterSubjectItems(itemsList, predicate);
@@ -582,6 +585,7 @@ angular.module('Pundit2.ResourcePanel')
                                 }
 
                                 state.popoverOptions.scope.contentTabs[t].items = itemsList;
+                                state.popoverOptions.scope.contentTabs[t].remoteItemCount = remoteItemCount;
                                 // and set loading to false
                                 state.popoverOptions.scope.contentTabs[t].isLoading = false;
                             }
@@ -610,6 +614,10 @@ angular.module('Pundit2.ResourcePanel')
         var selectors = SelectorsManager.getActiveSelectors();
         searchOnVocab(label, selectors, triple, caller);
         setLabelToSearch(label);
+    };
+
+    resourcePanel.addItems = function(label, selectors, triple, caller, offset, limit){
+        searchOnVocab(label, selectors, triple, caller, offset, limit);
     };
 
     resourcePanel.updatePosition = function() {

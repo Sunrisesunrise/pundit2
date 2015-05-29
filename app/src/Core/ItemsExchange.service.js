@@ -10,6 +10,8 @@ angular.module('Pundit2.Core')
 
         // container: [ array of ItemFactory objects belonging to that container ]
         itemListByContainer = {},
+        // container: total number of remote ItemFactory objects belonging to that container
+        remoteItemCountByContainer = {},
         // item uri : [ array of containers which contains the ItemFactory with that uri ]
         itemContainers = {},
         // [ array of ItemFactory objects ]
@@ -19,6 +21,7 @@ angular.module('Pundit2.Core')
 
     itemsExchange.wipe = function() {
         itemListByContainer = {};
+        remoteItemCountByContainer = {};
         itemContainers = {};
         itemList = [];
         itemListByURI = {};
@@ -67,6 +70,11 @@ angular.module('Pundit2.Core')
         });
         // empty container list
         delete itemListByContainer[container];
+        //empty total remote count
+        if (typeof(remoteItemCountByContainer[container]) !== 'undefined') {
+            delete remoteItemCountByContainer[container];
+        }
+
 
         itemsExchange.log('Wiped ' + container + ' container.');
     };
@@ -90,7 +98,8 @@ angular.module('Pundit2.Core')
         return {
             itemListByURI: itemListByURI,
             itemListByContainer: itemListByContainer,
-            itemContainers: itemContainers
+            itemContainers: itemContainers,
+            remoteItemTotalCountByContainer: remoteItemCountByContainer
         };
     };
 
@@ -167,6 +176,30 @@ angular.module('Pundit2.Core')
         }
 
     };
+
+    itemsExchange.setRemoteItemCount = function(counts, containers){
+
+        if (!angular.isArray(counts)) {
+            counts = [counts];
+        }
+        if (!angular.isArray(containers)) {
+            containers = [containers];
+        }
+
+        for (var i = containers.length; i--;) {
+            var container = containers[i];
+            remoteItemCountByContainer[container] = counts[i];
+        }
+
+    }
+
+    itemsExchange.getRemoteItemCount = function(container){
+
+        if (typeof(remoteItemCountByContainer) === 'undefined') {
+            return null;
+        }
+        return remoteItemCountByContainer[container];
+    }
 
     // TODO must be refactor, pass uri instead of new item reference
     itemsExchange.removeItemFromContainer = function(item, container) {
