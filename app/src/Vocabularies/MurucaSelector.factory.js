@@ -99,7 +99,7 @@ angular.module('Pundit2.Vocabularies')
         // where items is stored inside itemsExchange service
         container: 'muruca',
         //infinite scrolling
-        infiniteScrolling: false
+        infiniteScrolling: false,
         // instance label tab title
         label: 'Muruca',
         // enable or disable the instance

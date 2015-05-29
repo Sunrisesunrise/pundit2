@@ -78,7 +78,7 @@ angular.module('Pundit2.Vocabularies')
         // where items is stored inside itemsExchange service
         container: 'korbo2',
         //infinite scrolling
-        infiniteScrolling: false
+        infiniteScrolling: false,
         // instance label tab title
         label: 'Korbo2',
         // enable or disable the instance
