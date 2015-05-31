@@ -1,4 +1,4 @@
-ddescribe("Alert interaction", function() {
+describe("Alert interaction", function() {
     var p = protractor.getInstance();
 
     beforeEach(function() {
