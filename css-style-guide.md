@@ -1,0 +1,473 @@
+---
+layout: page
+title: CSS Style Guide
+---
+
+#{{ page.title }}
+
+
+## 1. Introduction
+
+To keep the CSS code written for the project consistent and maintainable we provide CSS guidelines to
+follow during the implementation.
+
+### 1.1	Preprocessor
+
+The CSS code for Pundit will be written using **LESS preprocessor**.
+(These guidelines also applies for projects based on **SCSS** and also pure CSS.)
+
+### 1.2	Tabs and spaces
+
+For the indentation and formatting of the code **we don’t use tabs but spaces**.
+
+Please set up your code editor:
+
+ - with **no tabs**;
+ - **tab size = 4**;
+ - **indent size = 4**.
+
+Spaces are the only way to guarantee code renders the same in any person's environment.
+
+### 1.3	Anatomy of a Ruleset
+
+Before we discuss how we write out our rulesets, let’s first familiarise ourselves with the relevant terminology:
+
+    [selector] {
+        [property]: [value];
+        [<--declaration--->]
+    }
+
+### 1.4	HTML inline styles
+
+We must **never** write inline style in the HTML code.
+Inline styles generate critical **<a href="http://www.smashingmagazine.com/2007/07/27/css-specificity-things-you-should-know/" target="_blank">specificity problems</a>**
+that might be very difficult to fix and impose the usage of **!important**.
+
+
+### 1.5	Temporary css
+
+Sometimes is necessary to write a CSS declaration very fast and it might not be possible to compile the LESS files.
+**It is mandatory not to write in the style.css compiled by LESS**: these modifications will be lost the
+next time a developer compiles it again.
+
+<table bgcolor="#e7edf8">
+  <tr>
+    <td>For this reason we provide a <strong>static temporary.css</strong> files that is linked by the HTML right after the
+    style.css: in this file is possible to write CSS declarations when it is not possible to compile LESS file.
+    This must be used only for critical situations and urgent bug fixings. Then the declarations in this file must
+    be moved to the LESS files. The temporary css file must be empty most of the time.</td>
+  </tr>
+</table>
+
+
+### 1.6	80 characters wide
+
+Where possible, limit CSS files’ width to 80 characters. Reasons for this include:
+
+  - the ability to have multiple files open side by side;
+  - viewing CSS on sites like GitHub, or in terminal windows;
+  - providing a comfortable line length for comments.
+
+---
+
+
+## 2. LESS file organization
+
+**TODO**
+
+A good file organization is very important for maintaining a big project in time. We have these folder structure:
+
+* root
+
+    * style.less
+
+    * global
+
+        * variables.less
+
+        * mixins.less
+
+        * typography.less
+
+        * normalize.less
+
+        * bootstrap-theme.less
+
+        * ...
+
+    * components
+
+        * widget1.less
+
+        * widget2.less
+
+        * ...
+
+    * sections
+
+        * header.less
+
+        * footer.less
+
+        * ...
+
+    * layouts
+
+        * homepage.less
+
+        * portoflio.less
+
+        * work.less
+
+        * ...
+
+**Global:** contains utilities files that don’t style specific components or classes.
+Here we find **variables, mixins**, general **typography**, few **general tags declarations**, **reset** or
+**normalize** files. If we are using a CSS/Javascript framework like
+[Bootstrap](http://getbootstrap.com/) we can include a theme file in the global
+folder to customize the appearance of the framework’s elements.
+
+**Components:** here we find files relative to components that are used in the interface.
+Since we follow the OOCSS guidelines these components can be used in different
+parts or pages of the application. The components are reusable elements.
+
+**Sections:** components of the page like **header**, **navigation**, **footer**,
+usually are present in all layouts.
+
+**Layouts:** specific files for layouts or templates of the project.
+
+All these files are imported by **style.less**. Inside the **style.less**
+there are no declarations but just imports and comments. This is processed to build a single **style.css** file.
+
+In the HTML, after the style.css, we are linking also the **temporary.css**.
+
+
+---
+
+
+## 3. Style.less
+
+**TODO**
+
+We’ve seen the style.less file has no declarations but just imports. It’s a good practice to organize and comment these imports to make clear how files are organized and what they’re doing.
+
+We will introduce each section of imports (**global, components, sections, layouts**) with a comment like this:
+
+// ------------------------------------ //
+// GLOBAL
+// ------------------------------------ //
+
+Then each single import is introduced by a single comment that will explain what the single file is about:
+
+// Import of variables
+@import "global/variables.less";
+
+
+---
+
+
+## 4. Naming conventions
+
+Naming conventions in CSS are hugely useful in making your code more strict, more transparent, and more informative.
+
+The naming convention we follow is very simple: **hyphen (-) delimited strings**.
+
+### 4.1 HTML elements
+
+All strings in classes are delimited with a hyphen (-), like so:
+
+    .page-head {}
+    .sub-content {}
+
+**Camel case and underscores are not used for regular classes**.
+
+### 4.2 Variables
+
+Also variables use the **hyphen (-) as string separator**.
+
+The string will be composed by parts ordered in a **hierarchy starting from higher level going into more detail**.
+
+Some examples:
+
+    @color-text-link-hover: #0071bc;
+    @color-header-border-top: #ff00cc;
+    @footer-margin-bottom: 20px;
+
+We see that the variable name starts from a higher level and each following part of the string defines a
+more detailed level.
+
+Variables must be grouped into logical groups that must be introduced by a comment like:
+
+    // ------------------------------------ //
+    //  COLORS
+    // ------------------------------------ //
+
+and variables whose name is not completely explaining its meaning must be preceded by a comment like:
+
+    // Sets the margin between the content and the footer
+    @content-margin-bottom: 20px;
+
+Sometimes it can be useful to define variables with values relative to other variables.
+This allows to change LESS values when we need to make some modifications.
+This is clear with colors: we can have a main color for links and a hover color which is the **same color but lighter**.
+If we write something like this:
+
+    @color-text-link: #0071bc;
+    @color-text-link-hover: lighten(@color-text-link, 25);
+
+if we change the color of link we must **change only one value** and the second one is changed automatically.
+
+
+---
+
+
+## 5. Formatting
+
+    [selector] {
+        [property]: [value];
+        [<--declaration--->]
+    }
+
+Here are some formatting guidelines:
+
+  - a **space before** the opening brace **({)**;
+  - the opening brace **({)** on the **same line as the last selector**;
+  - the first declaration **on a new line after the opening brace** **({)**;
+  - **properties and values always on the same line**;
+  - a **space after** the property–value delimiting colon **(:)**;
+  - each **declaration on its own new line** (line breaks between declarations);
+  - the **closing brace** **(})** on its own **new line**;
+  - each **declaration indented** by four (4) spaces.
+
+Let’s see an example:
+
+    .footer, .footer-bar {
+        display: block;
+        background-color: @color-page-background;
+        color: @color-footer-text;
+    }
+
+Avoid specifying **units for zero values**:
+
+    margin: 0; /* Good */
+
+instead of
+
+    margin: 0px; /* No good */
+
+For nested ruleset we also leave a blank line before the nested ruleset. Here’s an example:
+
+    .footer {
+        color: @color-footer-text;
+
+        .bar {
+            color: @color-footer-bar-text;
+        }
+    }
+
+Nesting in LESS should be avoided wherever possible and used only when necessary to have the desired specificity.
+
+### 5.1 Whitespaces
+
+As well as indentation, we can provide a lot of information through liberal
+and judicious use of whitespace between rulesets.
+We usually have one (1) empty line between rulesets and two (2) empty lines at
+the end of each main section of code.
+
+### 5.2 Colors
+
+We prefer using hex color codes (#000000).
+
+### 5.3 Declarations order
+
+Also declarations inside a ruleset can be organized following this order:
+
+1. **Box model:**
+
+        display: block;
+        float: right;
+        box-sizing; border-box;
+        width: 100px;
+        height: 100px;
+        margin: 0;
+        padding: 0;
+
+2. **Positioning:**
+
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+
+3. **Visual** (Borders & Background):
+
+        background-color: #f5f5f5;
+        border: 1px solid #e5e5e5;
+        border-radius: 3px;
+
+4. **Typography:**
+
+        font-weight: 100;
+        font-size: 13px;
+        font-family: Helvetica;
+        line-height: 1.5;
+        color: #333;
+        text-align: center;
+        text-transform: uppercase;
+
+5. **Misc:**
+
+        animations, transforms, etc.
+
+
+
+---
+
+
+## 6. Comments and code sections
+
+CSS is not telling its own story very well, **it is a language that really does benefit from being heavily commented**.
+
+As a rule, you should comment anything that isn’t immediately obvious from the code alone.
+That is to say, there is no need to tell someone that **color: red;** will make something red,
+but if you’re using **overflow: hidden;** to clear floats—as opposed to clipping an element’s overflow—this
+is probably something worth documenting.
+
+In LESS we can use comments with two different syntax:
+
+    /* */
+
+and
+
+    //
+
+The main difference is that the **first will be processed and included in the resulting .css file** while the
+second **will be ignored by the preprocessor**.
+For this reason we must use the /* */ syntax for comments we want to include in the .css file while we use // for
+comments we don’t need to be compiled.
+This will make no difference when we compile a **minified** and no-comments version of the file for production,
+but while we’re developing we’ll probably have a not-minified CSS file and comments can be very useful.
+
+E clear example is the **variables.less**: this will be transparent in the compiled CSS file so it’s a
+good practice to insert all comments using // otherwise there will be comments floating around with no related code.
+
+We identify **four** different types of commenting.
+
+### 6.1 Document level comments
+
+These comments are **mandatory** and must explain what the current LESS document is about:
+we place them at the beginning of each LESS file.
+
+    /**
+     * DOCUMENT TITLE
+     *
+     * Text describing in detail what this file is doing...
+     */
+
+If we want to write the same comment but this must not be compiled by the preprocessor, please write it this way:
+
+    //
+    // DOCUMENT TITLE (COMMENT HIDDEN FROM COMPILER)
+    //
+    // Text describing in detail what this file is doing...
+    //
+
+### 6.2 Section level comments
+
+The css declarations inside each file must be divided and organized in logical sections.
+These sections must be introduced by a **mandatory** comment with a title of the section.
+Only if the content is extremely hard to understand reading the code please provide some additional lines of text.
+
+    /* ------------------------------------ *\
+       #SECTION-TITLE
+    \* ------------------------------------ */
+
+If we want to write the same comment but this must not be compiled by the preprocessor, please write it this way:
+
+    // ------------------------------------ //
+    // #SECTION-TITLE
+    // ------------------------------------ //
+
+### 6.3 Selector level comments
+
+This is not mandatory but needed when writing css code that perform
+some strange or unexpected action. We need to use this comments when writing css
+related to the entire css selector that will be hard to understand week or months after.
+
+This is a simple single line comment:
+
+    /* This set of declarations is doing this and that */
+
+If we want to write the same comment but this must not be compiled by the preprocessor, please write it this way:
+
+    // This set of declarations is doing this and that
+
+### 6.4 Inline comments
+
+These are comments written at the level of each css declaration that we
+need when writing hard-to-understand code. We write it like this:
+
+    color: blue; /* The text color id blue */
+
+If we want to write the same comment but this must not be compiled by the preprocessor, please write it this way:
+
+    color: blue; // The text color id blue
+
+
+---
+
+
+## 7. Media Queries
+
+Media queries **shouldn’t be written in a single file**
+but divided in each LESS file to define media queries
+behaviour for each specific component, section or layout.
+
+
+---
+
+
+## 8. Specificity
+
+The overall philosophy is keep **specificity low**.
+
+There will always be times you need to override it, so the lower the specificity is on a selector,
+the easier it is to override.
+Not only that, but override in such a way you might even be able to override it again
+without going crazy with an **ID selector** or **!important**.
+
+**ID selectors must be (almost) never used**: If you must use an ID selector (#selector)
+make sure that you have **no more than one in your rule declaration**.
+A rule like:
+
+    #header .search #quicksearch { ... }
+
+is considered harmful.
+
+
+---
+
+
+## 9. Sizing
+
+We don’t have a strong rule for **sizing** but since we are dropping IE8 we can use <a href="http://caniuse.com/#feat=rem" target="">rem</a>
+for font-size and pixels for most other sizes (plenty of exceptions).
+
+Additionally, unit-less **line-height** is preferred because it does not inherit a
+percentage value of its parent element, but instead is based on a multiplier of the font-size.
+
+
+---
+
+
+## 10. Resources
+
+
+  - <a href="http://cssguidelin.es" target="_blank">High-level advice and guidelines for writing sane, manageable, scalable CSS</a>
+  - <a href="http://codepen.io/chriscoyier/blog/codepens-css" target="_blank">CodePen's CSS</a>
+  - <a href="http://blog.trello.com/refining-the-way-we-structure-our-css-at-trello/?utm_source=CSS-Weekly&utm_campaign=Issue-128&utm_medium=email" target="_blank">Refining The Way We Structure Our CSS At Trello</a>
+  - <a href="http://geek-rocket.de/frontend-development/scss-styleguide-with-bem-oocss-smacss/" target="_blank">Scss-Styleguide with BEM, OOCSS & SMACSS</a>
+  - <a href="https://medium.com/@fat/mediums-css-is-actually-pretty-fucking-good-b8e2a6c78b06" target="_blank">Medium’s CSS is actually pretty f***ing good.</a>
+  - <a href="https://github.com/evernote/sass-build-structure" target="_blank">Evernote SASS build structure</a>

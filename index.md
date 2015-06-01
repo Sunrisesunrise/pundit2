@@ -19,7 +19,7 @@ the blog please visit the [Pundit website](http://thepund.it/).
 
 There are three main ways you can use Pundit:
 
-##Chrome Extension
+##1. Chrome Extension
 
 This is the preferred way of using Pundit as a general purpose application to annotate **general web pages** while browsing the web.
 The extension allows you to launch Pundit on any page you want to annotate and build your semantic annotations.
@@ -27,14 +27,14 @@ The extension allows you to launch Pundit on any page you want to annotate and b
 **The Chrome Extension will be available soon**, follow [Pundit on Twitter](https://twitter.com/_thepundit) to get some fresh updates and know
 when the Extension will be released.
 
-##Embed Pundit in your project
+##2. Embed Pundit in your project
 
 In the case of custom archives or web sites where is possible to hardcode some HTML code inside the pages we can directly inject the Pundit code.
 So Pundit will be launched as the page loads.
 In this case we can use a custom configuration there properties ontologies and entities can be used.
 This case is detailed at [this page](embed-pundit.html)
 
-##Feed the Pundit
+##3. Feed the Pundit
 
 For custom archives where we don't want to embed the Pundit code we can use also **Feed**.
 Feed allows to work with Images, RDF files and HTML pages. You can find more detailed information about Feed at [this page](feed.html)
