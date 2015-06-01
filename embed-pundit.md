@@ -1,59 +1,51 @@
 ---
 layout: page
-title: Embed Pundit
+title: Embed Pundit setup
 ---
 
-Guidelines - Pundit 2.X setup
+#{{ page.title }}
 
-# 1. Setup the client
+## 1. Setup the client
 
 You can use the **Pundit client** by installing it on your webpages.
 
-Create a configuration file (**eg: pundit-conf.js**) and include it before calling Pundit initialization commands. The configuration file can be anywhere, with the name you prefer.
+Create a configuration file (**e.g.: pundit-conf.js**) and include it before calling Pundit initialization commands.
+The configuration file can be anywhere, with the name you prefer.
 
 Then include something like this somewhere in your page:
 
-        <table>
-          <tr>
-            <td><div data-ng-app="Pundit2" class="pnd-wrp ng-scope">
+    <div data-ng-app="Pundit2" class="pnd-wrp ng-scope">
+    <link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/pundit2.css" type="text/css">
+    <script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript" ></script>
+    <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript" ></script>
+    <script src="http://conf.thepund.it/V2/clients/pundit2_site_demo.js" type="text/javascript" ></script>
 
-        <link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/pundit2.css" type="text/css">
-        <script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript" ></script>
-        <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript" ></script>
-        <script src="http://conf.thepund.it/V2/clients/pundit2_site_demo.js" type="text/javascript" ></script></td>
-          </tr>
-        </table>
+### 1.1 Configure it
 
+To overwrite Pundit’s defaults just edit the configuration file included in the page.
 
-### 1.1.3 Configure it
+Using javascript syntax create an object called **"punditConfig"** and set the desired properties:
 
-* To overwrite Pundit’s defaults just edit the configuration file included in the page.
+    var punditConfig = {
+        debugAllModules: true,
+        useBasicRelations: false,
+        vocabularies: [
+            'http://my_site.com/my_taxonomy.jsonp'
+        ],
+    }
 
-* Using javascript syntax create an object called "punditConfig" and set the desired properties:
+The guidelines for creating a Pundit configuration file can be found [here](http://dev.thepund.it/download/client/last-beta/docs/index.html#!/api/punditConfig](http://dev.thepund.it/download/client/last-beta/docs/index.html#!/api/punditConfig).
 
-<table>
-  <tr>
-    <td>var punditConfig = {
-    debugAllModules: true,
-    useBasicRelations: false,
-    vocabularies: [
-         'http://my_site.com/my_taxonomy.jsonp'
-    ],
-}</td>
-  </tr>
-</table>
+### 1.2 Relations vocabulary
 
+A relations set is a vocabulary of type **"predicates"**, it is similar to a taxonomy,
+but items are expected to have the **“rdftype”** attribute equal to **rdf:Property**.
+Specifies relations vocabularies that will be available to Pundit users
+(defines a list of relations with domain and ranges).
+Each vocabulary definition is a JSONP file available on the Web and is loaded by resolving an absolute URL.
+The following code (see pundit 2.0 configuration (NOTE:  http://dev.thepund.it/download/client/last-beta/docs/index.html#!/api/punditConfig/object/vocabularies)) shows an example.
 
-The guidelines for creating a Pundit configuration file can be found here:[http://dev.thepund.it/download/client/last-beta/docs/index.html#!/api/punditConfig](http://dev.thepund.it/download/client/last-beta/docs/index.html#!/api/punditConfig)
-
-## 1.2 Relations vocabulary
-
-A relations set is a vocabulary of type **"predicates"**, it is similar to a taxonomy, but items are expected to have the **“rdftype”** attribute equal to **rdf:Property**. Specifies relations vocaularies that will be available to Pundit users (defines a list of relations with domain and ranges). Each vocabulary definition is a JSONP file available on the Web and is loaded by resolving an absolute URL. The following code (see pundit 2.0 configuration (NOTE:  http://dev.thepund.it/download/client/last-beta/docs/index.html#!/api/punditConfig/object/vocabularies)) shows an example.
-
-<table>
-  <tr>
-    <td>{
-     result: {
+    result: {
          items: [
              "value": "http://purl.org/dc/terms/creator",
              "rdftype":["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
@@ -69,23 +61,24 @@ A relations set is a vocabulary of type **"predicates"**, it is similar to a tax
                  "http://xmlns.com/foaf/0.1/Person",
                  "http://www.freebase.com/schema/people/person"
               ],
-         ...other items...
-         ]
-     }
-}</td>
-  </tr>
-</table>
+            ...other items...
+             ]
+        }
+    }
 
+Image: ![image alt text](image_0.png)
 
-![image alt text](image_0.png)
+The Relation vocabulary is then used by the Pundit Client in the Resource Panel to show the predicates
+available to the user to build triples.
 
-The Relation vocabulary is then used by the Pundit Client in the Resource Panel to show the predicates available to the user to build triples.
+## 2. HTML pages requirements
 
-# 2. HTML pages requirements
+Since the original Pundit requirements expect **HTML as "container" for annotatable content**,
+providers would have to provide their content accordingly in order to be able to have it available to
+scholars working with Pundit. As it cannot be expected that every provider will be able to meet these
+requirements, alternative means of providing content are offered in this section.
 
-Since the original Pundit requirements expect **HTML as "container" for annotatable content**, providers would have to provide their content accordingly in order to be able to have it available to scholars working with Pundit. As it cannot be expected that every provider will be able to meet these requirements, alternative means of providing content are offered in this section.
-
-## 2.1 Requirements
+### 2.1 Requirements
 
 Provided content is annotatable if:
 
@@ -95,16 +88,11 @@ Provided content is annotatable if:
 
 * As HTML containing the following markup (See Section 2.2.1):
 
-<table>
-  <tr>
-    <td><div class="pundit-content” about=”content URI”>
-<!-- An HMTL to be annotated - This can contain text as well as images
-- see https://doc.dm2e.huberlin.de/redmine/projects/wp3/wiki/Named_content_markup
--->
-</div></td>
-  </tr>
-</table>
-
+    <div class="pundit-content” about=”content URI”>
+    <!-- An HMTL to be annotated - This can contain text as well as images
+    - see https://doc.dm2e.huberlin.de/redmine/projects/wp3/wiki/Named_content_markup
+    -->
+    </div>
 
 The **content URI** is a stable URI that serves as unique identifier for one content segment. The granularity of the annotable content should be decided by the content provider, but it should be at least on page level in order to be useful.
 The HTML named contents can, however, be further nested below page level (See https://doc.dm2e.huberlin.de/redmine/projects/wp3/wiki/Named_content_markup)
@@ -115,7 +103,7 @@ The HTML named contents can, however, be further nested below page level (See ht
 
 We strongly encourage the **content URI** to be an URL and to be dereferenceable to the same HTML representation as shown above. In other words:** The content URI can be equal to the annotatable URL.** It must be ensured that the **annotatable URL is always stable and will not change in future**. If this is not the case, providers should implement "generic" stable URLs serving as stable IDs, redirecting to the actual content via HTTP 303 - This can be easily implemented by using e.g. Rewrite Rules in Apache1.
 
-## 2.2 Interplay between metadata and provided content
+### 2.2 Interplay between metadata and provided content
 
 Usually, every annotatable URI corresponds to one provided Cultural Heritage Object (CHO) that is linked to other CHOs, e.g., a CHO representing a single digitised page image and a CHO that represents the manuscript. The annotatable URI has to be linked from the metadata of the corresponding CHO using **dm2e:hasAnnotatableVersionAt**.
 

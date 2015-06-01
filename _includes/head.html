@@ -2,8 +2,29 @@
     <meta charset="UTF-8">
     <title>Pundit developers</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+
     <link href='http://fonts.googleapis.com/css?family=Signika:400,600,700,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+
+    <!-- SmartMenus core CSS (required) -->
+    <link href="stylesheets/sm-core-css.css" rel="stylesheet" type="text/css" /
+    <!-- Main JS -->
+    <script type="text/javascript" src="js/jquery-loader.js"></script>
+    <!-- SmartMenus jQuery plugin -->
+    <script type="text/javascript" src="js/jquery.smartmenus.min.js"></script>
+    <!-- SmartMenus jQuery init -->
+    <script type="text/javascript">
+        $(function() {
+            $('#main-menu').smartmenus({
+                subMenusSubOffsetX: 1,
+                subMenusSubOffsetY: -8
+            });
+        });
+    </script>
+
+    <!-- Main JS -->
+    <script type="text/javascript" src="js/main.js"></script>
+
 </head>
