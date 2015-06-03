@@ -73,6 +73,82 @@ Where possible, limit CSS files’ width to 80 characters. Reasons for this incl
 
 ## 2. LESS file organization
 
+The LESS file organization is quite complex due to the complexity of the Pundit project itself.
+Into the *pundit2/app/styles/* folder in the project you fill find all LESS files you'll be working on.
+These files are grouped in these folders:
+
+###*bootstrap*
+
+Pundit is based on <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>
+and <a href="http://mgcrea.github.io/angular-strap/" target="_blank">AngularStrap</a>.
+For this reason we need to overwrite the basic style of these two frameworks to achieve a custom style.
+In this folder you'll find all files used for customizing the original Bootstrap style:
+
+  - *bootstrap-variables.less*: will overwrite basic Boostrap variables. It's a good practice to keep here
+  **only** the variables that are really overwritten (please don't include all Boostrap variables
+  when these are the same as the default value);
+  - *bootstrap-theme.less*: this style is used **only** to override styles for Bootstrap elements and
+  it's **common** for all applications and components. Please don't add here generic
+  styles for the application other than styling for basic Bootstrap elements.
+
+Sidenote: we would like to drop the dependency from Bootstrap.
+
+###*components*
+
+In this folder you will find all reusable components of the interface.
+When writing Pundit CSS we follow the OOCSS philosophy and so we try to keep each component independent from the
+others and reusable in any context or application.
+
+Some of there LESS files have a corresponding component in the source files.
+
+###global
+
+Collection of LESS files that don't refer to a specific component or application (e.g. variables, normalization).
+
+###img
+
+Images referred by CSS declarations.
+
+###pundit
+
+The files structure allows to develop more than one application: the modularity both of the LESS and AngularJS files
+offer the possibility of reusing all the components to build different applications, like using a framework.
+
+
+
+
+<a href="" target="_blank"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###korboee
+
+
+External files
+
+
+Wrapper
+
+
+Grunt
+
+
+
+
+
+
+
 **TODO**
 
 A good file organization is very important for maintaining a big project in time. We have these folder structure:

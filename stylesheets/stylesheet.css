@@ -387,7 +387,7 @@ strong, b {
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 899px) {
     .pundit-top-header {
         height: auto;
         overflow: hidden;
@@ -403,7 +403,7 @@ strong, b {
         display: block;
     }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 899px) {
     #pundit-logo {
         margin: 0;
         overflow: hidden;
@@ -541,7 +541,7 @@ item or check the "markCurrentItem" script option */
 }
 
 /* Navigation media query */
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 899px) {
 
     #main-menu {
         display: none;
