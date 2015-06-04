@@ -1,6 +1,6 @@
 
 angular.module('Pundit2', [
-    'ngResource', 'ngSanitize', 'ngAnimate', 'mgcrea.ngStrap', 'templates-main',
+    'ngResource', 'ngSanitize', 'ngAnimate', 'mgcrea.ngStrap', 'templates-main', 'datePicker',
     'Pundit2.Core', 'Pundit2.Annomatic', 'Pundit2.AnnotationSidebar', 'Pundit2.AlertSystem', 'Pundit2.Dashboard',
     'Pundit2.Toolbar', 'Pundit2.Communication', 'Pundit2.Annotators', 'Pundit2.ContextualMenu',
     'Pundit2.Preview', 'Pundit2.Client', 'Pundit2.GeneralItemsContainer', 'Pundit2.PageItemsContainer', 'Pundit2.Item', 'Pundit2.MyItemsContainer',
