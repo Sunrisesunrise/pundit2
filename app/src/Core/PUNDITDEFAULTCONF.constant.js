@@ -122,7 +122,7 @@ angular.module('Pundit2.Core')
 
     /**
      * @module punditConfig
-     * @ngdoc property
+     * @ngdoc object
      * @name askThePundit
      *
      * @description
