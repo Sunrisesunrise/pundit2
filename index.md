@@ -46,9 +46,9 @@ Feed allows to work with Images, RDF files and HTML pages. You can find more det
 You can find more detailed info at these pages:
 
  - <a href="http://demo-cloud.as.thepund.it/pundit2/build/docs/#!/api/punditConfig" target="_blank">Online documentation (External URL)</a>
- - <a href="as-installation.html">Installing the server</a>
- - <a href="data-model.html">Annotations data model</a>
- - <a href="rest-api.html">REST API documentation</a>
+ - <a href="as-installation.html">Annotation Server installation</a>
+ - <a href="data-model.html">Pundit RDF annotation data model</a>
+ - <a href="rest-api.html">Annotation Server REST API</a>
  - <a href="css-style-guide.html">CSS Style guide</a>
  - <a href="javascript.html">Javascript coding and naming policies</a>
 

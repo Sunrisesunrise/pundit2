@@ -14,34 +14,22 @@ title: Annotation Server installation
 
 ---
 
-##2. Sesame installation
-
-* Go to <a href="http://www.openrdf.org/download.jsp" target="_blank">http://www.openrdf.org/download.jsp</a>.
-* Download the tar.gz (eg: openrdf-sesame-2.7.10-sdk.tar.gz).
-* Tar xvfz the package and deploy `/war/openrdf-sesame.war` and `/war/openrdf-workbench.war` under tomcat.
-* Create sesame home directory `mkdir -p /usr/share/tomcat7/.aduna`.
-* Give permissions to it `chown -R tomcat7:tomcat7 /usr/share/tomcat7/`.
-* Relaunch tomcat `service tomcat7 restart`.
-* Ppen `http://YOUR-IP-OR-HOSTNAME/openrdf-workbench/.
-* Create a new repository, id for example "pundit", type native java store.
-
----
-
-##3. Annotation server installation
+##2. Annotation server installation
 
 1. Copy `./web/WEB-INF/web-example.xml` in `./web/WEB-INF/web.xml`.
-2. Substitute `{hostname}:{port}` with your hostname and port (tomcat service) in `./web/WEB-INF/web.xml`.
-3. Check RDBMS connection in **DATABASE Repository Configurations:**
+2. Substitute *{hostname}:{port}* with your hostname and port (tomcat service) in `./web/WEB-INF/web.xml`.
+3. Install and check check RDBMS connection in **DATABASE Repository Configurations**:
+    - in order to create DB Schema and Tables run:<br />
+   `mysql -u user -ppassword < ./database/annotationserver.sql`<br />
+    the database name will be **annotationserver**.
 
-    3.A in order to create DB Schema and Tables run:<br />
-    `mysql -u user -ppassword < ./database/annotationserver.sql`
-    <br />the database name will be *annotationserver*
-
-4. Check SESAME connection  in **SESAME Repository Configurations:**
-
-    4.A Installing Sesame: Download sesame and copy `openrdf-sesame.war` and `openrdf-workbench.war` in `${TOMCAT_HOME}/webapps/`.
-
-    4.B Go to `http://{hostanme}:{port}/openrdf-workbench` and create new repository called **pundit**. The name MUST be the same of `eu.semlibproject.annotationserver.config.db.id` of your `web.xml`.
+4. Install and Check check SESAME connection  in **SESAME Repository Configurations**
+ - Download and untar sesame from http://www.openrdf.org/download.jsp and copy `openrdf-sesame.war`
+ and `openrdf-workbench.war` in ${TOMCAT_HOME}/webapps/.
+ - Create sesame home directory `mkdir -p /usr/share/tomcat7/.aduna`.
+ - Give permissions to it `chown -R tomcat7:tomcat7 /usr/share/tomcat7/`.
+ - Relaunch tomcat: `service tomcat7 restart`
+ - Go to *http://{hostanme}:{port}/openrdf-workbench* and create new repository called *pundit*. the name MUST be the same of *eu.semlibproject.annotationserver.config.db.id* of your *web.xml*.
 
 5. Oauth configuration (for installation see next section).<br />
 In `web.xml` you have to configure the following paramters:
@@ -90,7 +78,7 @@ In `web.xml` property *eu.semlibproject.annotationserver.config.authentication.e
 
 ---
 
-##4. Build & create package
+##3. Build & create package
 
 First open file `nbproject/project.properties` and modify following properties with your local tomcat installation:
 
@@ -104,19 +92,19 @@ then into the main directory run `ant deploy-package`.
 
 ---
 
-##5. Deploy Annotation Server
+##4. Deploy Annotation Server
 
 Copy `./dist/annotationserver.war]` into `{TOMCAT_HOME}/webapps/` and run tomcat `{TOMCAT_HOME}/bin/startup.sh`.
 
 ---
 
-##6. Check running application
+##5. Check running application
 
 Go to `http://{hostname}:{port}/annotationserver` to see welcome page with some configurations form `web.xml`.
 
 ---
 
-##7. Oauth symfony service installation
+##6. Oauth symfony service installation
 
 You have to install **apache** service.<br />
 Prerequisite section of

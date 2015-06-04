@@ -83,14 +83,14 @@ These files are grouped in these folders:
 
 This is the main folder for the Pundit application. The files structure allows to develop
 more than one application: the modularity both of the LESS and AngularJS files
-offer the possibility of reusing all the components to build different applications, like using a framework.
+offer the possibility of reusing all the components to build different applications, like if you were using a framework.
 If you need to create a new application (like Pundit or Korbo) you have to create a new folder with a similar structure.
 
 These are the main files in this folder:
 
   - *pundit2.less:* imports all the LESS files that are used by the application;
   - *pundit-variables.less:* custom variables used **only** by Pundit (not by other applications). This file is
-  currently empty but it might be useful in the future.
+  currently empty but it might be useful in the future (if not... we are going to delete it).
 
 ###*korbo*
 
@@ -104,7 +104,7 @@ The files structure is similar to the one that we've seen in Pundit.
 
 ###*global*
 
-Collection of LESS files that don't refer to a specific component or application (e.g. *variables*, *normalization*).
+Collection of LESS files that don't refer to a specific component or application (e.g. *variables*, *normalization, ...*).
 
 ###*components*
 
@@ -128,6 +128,10 @@ In this folder you'll find all files used for customizing the original Bootstrap
   it's **common** for all applications and components. Please don't add here generic
   styles for the application other than styling for basic Bootstrap elements.
 
+Getting rid of Bootstrap: after months of development we've come to the conclusion that we spend a lot of time overwriting
+the CSS declarations of Bootstrap, so it would be better to get rid of it as soon as possible. In the meantime
+(while we still have Bootstrap in the application) please try not to use Bootstrap classes and create custom ones.
+
 ###*img*
 
 Images referred by CSS declarations.
@@ -142,7 +146,7 @@ These files must be imported from the main LESS (e.g. *pundit2.less*). You shoul
 ### 2.3 Grunt
 
 Please be aware that the LESS files are compiled by the **Gruntfile.js** in the root of the project.
-Grunt also takes care of the minification of the CSS files.
+Grunt also takes care of the **minification** of the CSS files.
 
 ---
 
@@ -153,11 +157,11 @@ Pundit is an application built to be launched into third parties web pages and C
   - the Pundit CSS can interfere with the style of the page thus producing some unwanted styles in the page we want to annotate;
   - the page CSS can interfere with Pundit style thus modifying the style of the Pundit interface.
 
-Let's what we can do to avoid these problems.
+Let's see what we can do to avoid these problems.
 
 ### 3.1 Wrapping Pundit
 
-All the Pundit DOM elements are always wrapped into an element with the class *.pnd-wrp*. Let's see an example:
+All the Pundit DOM elements are always wrapped into an element with the class `.pnd-wrp`. Let's see an example:
 
     <div data-ng-app="Pundit2" class="pnd-wrp ng-scope">
         <div class="pnd-dropdown-contextual-menu-anchor">
@@ -182,8 +186,10 @@ in this way we are sure that our CSS declarations **cannot** influence the style
 Sometimes we discover new CSS declarations of the annotated web page that influence the Pundit CSS style modifying the
 layout of the interface (this mostly happens to HTML tags).
 
-To fix this problem we have a **normalize.less** where we overwrite conflicting declarations. We chose not to use a
-third party normalization file but to have our own adding new declarations when needed.
+To fix this problem we have a **normalize.less** where we overwrite conflicting declarations.
+
+We chose not to use a third party normalization file but to have our own adding new declarations when needed:
+this file is always work in progress so please add normalizing declarations as you discover new CSS conflicts.
 
 ---
 
