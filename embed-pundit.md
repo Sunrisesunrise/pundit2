@@ -99,7 +99,7 @@ Provided content is annotatable if:
         </div>
 
     The **content URI** is a stable URI that serves as unique identifier for one content segment.
-    The granularity of the annotable content should be decided by the content provider, but it should be at least on page level in order to be useful.
+    The granularity of the annotatable content should be decided by the content provider, but it should be at least on page level in order to be useful.
     The HTML named contents can, however, be further nested below page level (See https://doc.dm2e.huberlin.de/redmine/projects/wp3/wiki/Named_content_markup)
 
 * As an **image file** of a format that can be displayed in a Web Browser (JPG, PNG) under a stable URL (See Section 2.2.2)
