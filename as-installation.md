@@ -88,7 +88,7 @@ First open file `nbproject/project.properties` and modify following properties w
     j2ee.server.instance=tomcat70:home={TOMCAT_HOME}
 
 
-then into the main directory run `ant deploy-package`.
+then into the main directory run `ant dist`.
 
 ---
 
