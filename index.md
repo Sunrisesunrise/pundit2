@@ -17,7 +17,7 @@ the blog please visit the <a href="http://thepund.it/" target="_blank">Pundit we
 
 #How to use Puntid
 
-There are three main ways you can use Pundit:
+There are **three main ways** you can use Pundit:
 
 ##1. Chrome Extension
 
@@ -46,9 +46,11 @@ Feed allows to work with Images, RDF files and HTML pages. You can find more det
 You can find more detailed info at these pages:
 
  - <a href="http://demo-cloud.as.thepund.it/pundit2/build/docs/#!/api/punditConfig" target="_blank">Online documentation (External URL)</a>
- - Annotation server
- - Javascript coding policies
- - CSS style guide
+ - <a href="as-installation.html" target="_blank">Installing the server</a>
+ - <a href="data-model.html" target="_blank">Annotations data model</a>
+ - <a href="rest-api.html" target="_blank">REST API documentation</a>
+ - <a href="css-style-guide.html" target="_blank">CSS Style guide</a>
+ - <a href="javascript.html" target="_blank">Javascript coding and naming policies</a>
 
  - - -
 
