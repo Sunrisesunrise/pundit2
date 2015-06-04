@@ -71,6 +71,8 @@ The following code (see pundit 2.0 configuration (NOTE:  http://dev.thepund.it/d
 The Relation vocabulary is then used by the Pundit Client in the **Resource Panel** to show the predicates
 available to the user to build triples.
 
+---
+
 ## 2. HTML pages requirements
 
 Since the original Pundit requirements expect **HTML as "container" for annotatable content**,
@@ -86,12 +88,19 @@ Provided content is annotatable if:
 
 2. It is available in one of the following forms:
 
-* As **HTML** containing the following markup (See Section 2.2.1):<br /><br />```<div class="pundit-content” about=”content URI”>
-<!-- An HMTL to be annotated - This can contain text as well as images - see https://doc.dm2e.huberlin.de/redmine/projects/wp3/wiki/Named_content_markup
---> </div>```<br /><br />
-The **content URI** is a stable URI that serves as unique identifier for one content segment.
-The granularity of the annotable content should be decided by the content provider, but it should be at least on page level in order to be useful.
-The HTML named contents can, however, be further nested below page level (See https://doc.dm2e.huberlin.de/redmine/projects/wp3/wiki/Named_content_markup)
+* As **HTML** containing the following markup (See Section 2.2.1):
+
+        <div class="pundit-content” about=”content URI”>
+        <!--
+        An HMTL to be annotated
+        This can contain text as well as images
+        See https://doc.dm2e.huberlin.de/redmine/projects/wp3/wiki/Named_content_markup
+        -->
+        </div>
+
+    The **content URI** is a stable URI that serves as unique identifier for one content segment.
+    The granularity of the annotable content should be decided by the content provider, but it should be at least on page level in order to be useful.
+    The HTML named contents can, however, be further nested below page level (See https://doc.dm2e.huberlin.de/redmine/projects/wp3/wiki/Named_content_markup)
 
 * As an **image file** of a format that can be displayed in a Web Browser (JPG, PNG) under a stable URL (See Section 2.2.2)
 
@@ -259,6 +268,8 @@ should point to the resource by using **edm:isShownBy**.
 software that cannot offer access to e.g. single pages or cannot be
 extended to include Pundit-tags (e.g. Digitool or any Flash based viewer)
 then the **ore:Aggregation** on item level should point to the resource by using **edm:isShownAt**.
+
+---
 
 ## 3. Pundit ignore
 

@@ -73,9 +73,46 @@ Where possible, limit CSS files’ width to 80 characters. Reasons for this incl
 
 ## 2. LESS file organization
 
+### 2.1 Main files
+
 The LESS file organization is quite complex due to the complexity of the Pundit project itself.
 Into the *pundit2/app/styles/* folder in the project you fill find all LESS files you'll be working on.
 These files are grouped in these folders:
+
+###*pundit*
+
+This is the main folder for the Pundit application. The files structure allows to develop
+more than one application: the modularity both of the LESS and AngularJS files
+offer the possibility of reusing all the components to build different applications, like using a framework.
+If you need to create a new application (like Pundit or Korbo) you have to create a new folder with a similar structure.
+
+These are the main files in this folder:
+
+  - *pundit2.less:* imports all the LESS files that are used by the application;
+  - *pundit-variables.less:* custom variables used **only** by Pundit (not by other applications). This file is
+  currently empty but it might be useful in the future.
+
+###*korbo*
+
+Korbo is another application like Pundit (more info about Korbo <a href="http://korbo.muruca.org/" target="_blank">here</a>).
+The files structure is similar to the one that we've seen in Pundit.
+
+  - *korboee.less:* imports all the LESS files that are used by the Korbo application;
+  - *korboee-variables.less:* custom variables used **only** by Korbo (not by other applications).
+  - *korboee-styles.less*: custom styles for the Korbo application. It's advisable to have as little as
+  possible CSS code here: the code should be divided into components.
+
+###*global*
+
+Collection of LESS files that don't refer to a specific component or application (e.g. *variables*, *normalization*).
+
+###*components*
+
+In this folder you will find all reusable components of the interface.
+When writing Pundit CSS we follow the OOCSS philosophy and so we try to keep each component independent from the
+others and reusable in any context or application. The components are reusable elements.
+
+Some of there LESS files have a corresponding component in the source files.
 
 ###*bootstrap*
 
@@ -84,160 +121,69 @@ and <a href="http://mgcrea.github.io/angular-strap/" target="_blank">AngularStra
 For this reason we need to overwrite the basic style of these two frameworks to achieve a custom style.
 In this folder you'll find all files used for customizing the original Bootstrap style:
 
-  - *bootstrap-variables.less*: will overwrite basic Boostrap variables. It's a good practice to keep here
-  **only** the variables that are really overwritten (please don't include all Boostrap variables
+  - *bootstrap-variables.less:* will overwrite basic Bootstrap variables. It's a good practice to keep here
+  **only** the variables that are really overwritten (please don't include all Bootstrap variables
   when these are the same as the default value);
-  - *bootstrap-theme.less*: this style is used **only** to override styles for Bootstrap elements and
+  - *bootstrap-theme.less:* this style is used **only** to override styles for Bootstrap elements and
   it's **common** for all applications and components. Please don't add here generic
   styles for the application other than styling for basic Bootstrap elements.
 
-Sidenote: we would like to drop the dependency from Bootstrap.
-
-###*components*
-
-In this folder you will find all reusable components of the interface.
-When writing Pundit CSS we follow the OOCSS philosophy and so we try to keep each component independent from the
-others and reusable in any context or application.
-
-Some of there LESS files have a corresponding component in the source files.
-
-###global
-
-Collection of LESS files that don't refer to a specific component or application (e.g. variables, normalization).
-
-###img
+###*img*
 
 Images referred by CSS declarations.
 
-###pundit
+### 2.2 External files
 
-The files structure allows to develop more than one application: the modularity both of the LESS and AngularJS files
-offer the possibility of reusing all the components to build different applications, like using a framework.
+There are also LESS files imported from <a href="http://bower.io/" target="_blank">Bower</a>. These are in the folder *bower_components* of the project
+and ignored by git.
 
+These files must be imported from the main LESS (e.g. *pundit2.less*). You should never modify these files.
 
+### 2.3 Grunt
 
-
-<a href="" target="_blank"></a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-###korboee
-
-
-External files
-
-
-Wrapper
-
-
-Grunt
-
-
-
-
-
-
-
-**TODO**
-
-A good file organization is very important for maintaining a big project in time. We have these folder structure:
-
-* root
-
-    * style.less
-
-    * global
-
-        * variables.less
-
-        * mixins.less
-
-        * typography.less
-
-        * normalize.less
-
-        * bootstrap-theme.less
-
-        * ...
-
-    * components
-
-        * widget1.less
-
-        * widget2.less
-
-        * ...
-
-    * sections
-
-        * header.less
-
-        * footer.less
-
-        * ...
-
-    * layouts
-
-        * homepage.less
-
-        * portoflio.less
-
-        * work.less
-
-        * ...
-
-**Global:** contains utilities files that don’t style specific components or classes.
-Here we find **variables, mixins**, general **typography**, few **general tags declarations**, **reset** or
-**normalize** files. If we are using a CSS/Javascript framework like
-[Bootstrap](http://getbootstrap.com/) we can include a theme file in the global
-folder to customize the appearance of the framework’s elements.
-
-**Components:** here we find files relative to components that are used in the interface.
-Since we follow the OOCSS guidelines these components can be used in different
-parts or pages of the application. The components are reusable elements.
-
-**Sections:** components of the page like **header**, **navigation**, **footer**,
-usually are present in all layouts.
-
-**Layouts:** specific files for layouts or templates of the project.
-
-All these files are imported by **style.less**. Inside the **style.less**
-there are no declarations but just imports and comments. This is processed to build a single **style.css** file.
-
-In the HTML, after the style.css, we are linking also the **temporary.css**.
-
+Please be aware that the LESS files are compiled by the **Gruntfile.js** in the root of the project.
+Grunt also takes care of the minification of the CSS files.
 
 ---
 
+## 3 Avoiding CSS conficts
 
-## 3. Style.less
+Pundit is an application built to be launched into third parties web pages and CSS interferences are a real problem:
 
-**TODO**
+  - the Pundit CSS can interfere with the style of the page thus producing some unwanted styles in the page we want to annotate;
+  - the page CSS can interfere with Pundit style thus modifying the style of the Pundit interface.
 
-We’ve seen the style.less file has no declarations but just imports. It’s a good practice to organize and comment these imports to make clear how files are organized and what they’re doing.
+Let's what we can do to avoid these problems.
 
-We will introduce each section of imports (**global, components, sections, layouts**) with a comment like this:
+### 3.1 Wrapping Pundit
 
-// ------------------------------------ //
-// GLOBAL
-// ------------------------------------ //
+All the Pundit DOM elements are always wrapped into an element with the class *.pnd-wrp*. Let's see an example:
 
-Then each single import is introduced by a single comment that will explain what the single file is about:
+    <div data-ng-app="Pundit2" class="pnd-wrp ng-scope">
+        <div class="pnd-dropdown-contextual-menu-anchor">
+            ....
+        </div>
+    </div>
 
-// Import of variables
-@import "global/variables.less";
+Most of the imports in the *pundit2.less* are then wrapped in the same class in this way:
 
+    .pnd-wrp {
+        @import "../global/normalize.less";
+        @import "../components/annotation-sidebar";
+        @import "../components/login.less";
+        ...
+    }
+
+With this solution all the CSS selectors have our custom class as parent selector and an higher level of specificity:
+in this way we are sure that our CSS declarations **cannot** influence the style of the web page.
+
+### 3.2 Normalization
+
+Sometimes we discover new CSS declarations of the annotated web page that influence the Pundit CSS style modifying the
+layout of the interface (this mostly happens to HTML tags).
+
+To fix this problem we have a **normalize.less** where we overwrite conflicting declarations. We chose not to use a
+third party normalization file but to have our own adding new declarations when needed.
 
 ---
 
