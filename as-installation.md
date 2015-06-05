@@ -37,7 +37,7 @@ title: Annotation Server installation
   6.1 In `web.xml` property *eu.semlibproject.annotationserver.config.authentication.enabled*
     - **NO** is for testing in standalone mode (eg:running junit)
     - **YES** is for testing with pundit client
-    
+
   6.2 Then in **./src/java/eu/semlibproject/annotationserver/servlets/login_authentication.properties** set the credentials
 
 
@@ -59,7 +59,7 @@ then into the main directory run `ant dist`.
 
 ##4. Deploy Annotation Server
 
-Copy `./dist/annotationserver.war]` into `{TOMCAT_HOME}/webapps/` and run tomcat `{TOMCAT_HOME}/bin/startup.sh`.
+Copy `./dist/annotationserver.war` into `{TOMCAT_HOME}/webapps/` and run tomcat `{TOMCAT_HOME}/bin/startup.sh`.
 
 ---
 
