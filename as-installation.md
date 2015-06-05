@@ -37,6 +37,7 @@ title: Annotation Server installation
   6.1 In `web.xml` property *eu.semlibproject.annotationserver.config.authentication.enabled*
     - **NO** is for testing in standalone mode (eg:running junit)
     - **YES** is for testing with pundit client
+    
   6.2 Then in **./src/java/eu/semlibproject/annotationserver/servlets/login_authentication.properties** set the credentials
 
 
@@ -67,9 +68,3 @@ Copy `./dist/annotationserver.war]` into `{TOMCAT_HOME}/webapps/` and run tomcat
 Go to `http://{hostname}:{port}/annotationserver` to see welcome page with some configurations form `web.xml`.
 
 ---
-
-
-        facebook_app_id: XXXyour-FB-appIDXXXX
-        facebook_app_secret: XXyour-FB-app-SECRETXXXX
-        google_app_id: XXXyour-GOOGLE-appIDXXXX.apps.googleusercontent.com
-        google_app_secret: XXyour-GOOGLE-app-SECRETXXXX
