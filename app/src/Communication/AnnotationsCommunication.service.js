@@ -163,6 +163,10 @@ angular.module('Pundit2.Communication')
                 ItemsExchange.wipeContainer(Config.modules.PageItemsContainer.container);
                 // wipe all annotations (are in chace)
                 AnnotationsExchange.wipe();
+
+                // Dispatch event
+                EventDispatcher.sendEvent('AnnotationsCommunication.annotationDeleted', annID);
+
                 // reload all annotation
                 annotationsCommunication.getAnnotations().then(function() {
                     promise.resolve(annID);
