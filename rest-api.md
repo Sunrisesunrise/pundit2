@@ -668,7 +668,7 @@ For example the query "mywebsite.org" could match the following URLs: "http://my
 A resource is involved in an annotation when:
  - It is the target of the annotation (using oa:hasTarget RDF property). ;
  - Is the page context of the annotation, which is the web page containing some target of the annotation, e.g. a picture is contained in a we page, or even in different ones at the same time. (using pundit:hasPageContext RDF property)
- - The target of the annotation is a part of the resource. For example an annotation could target a fragment of text contained in a web page or in a named-content. A named-content is simply an HTML content marked with a stable URL (see http://www.thepund.it/documentation/play-nice-with-pundit/).
+ - The target of the annotation is a part of the resource. For example an annotation could target a fragment of text contained in a web page or in a named-content. A named-content is simply an HTML content marked with a stable URL.
 
 Note: An annotation can involve more that one resource (e.g. two distinct images from the same web page).
 
