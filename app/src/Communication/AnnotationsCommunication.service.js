@@ -49,8 +49,7 @@ angular.module('Pundit2.Communication')
 
             if (!annotationsCommunication.options.loadMultipleAnnotations) {
                 annotationsCommunication.log("Loading annotations one by one");
-                var annPromises = [],
-                settled = 0;
+                var annPromises = [];
                 for (var i = 0; i < ids.length; i++) {
                     var a = new Annotation(ids[i]);
                     a.then(function(ann) {
@@ -82,7 +81,6 @@ angular.module('Pundit2.Communication')
             else {
                 // Load all annotations with one call.
                 annotationsCommunication.log("Loading all annotations with one call");
-                settled = 0;
                 var postData = ids.join(';');
                 var httpObject = {
                     headers: {
