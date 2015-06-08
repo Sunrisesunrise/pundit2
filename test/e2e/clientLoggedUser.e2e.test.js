@@ -487,10 +487,14 @@ describe("Client interaction when user is logged in", function() {
         p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // collapse right panel
         p.findElement(protractor.By.css('dashboard-panel[paneltitle=details] .btn.btn-default')).click();
+        // collapse tools panel
+        p.findElement(protractor.By.css('dashboard-panel[paneltitle=tools] .btn.btn-default')).click();
+
         // open my notebooks tab
         p.findElements(protractor.By.css("dashboard-panel[paneltitle=lists] .pnd-tab-header > li > a")).then(function(tabs) {
-            tabs[4].click();
+            expect(tabs.length).toBeGreaterThan(4);
             expect(tabs[4].getText()).toBe("My notebooks");
+            tabs[4].click();
         });
         // move on notebook item
         var item = p.findElement(protractor.By.css("dashboard-panel[paneltitle=lists] .pnd-tab-content > div.active general-items-container[type=myNotebooks] item-notebook .pnd-item"));
@@ -525,6 +529,8 @@ describe("Client interaction when user is logged in", function() {
         p.findElement(protractor.By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // collapse right panel
         p.findElement(protractor.By.css('dashboard-panel[paneltitle=details] .btn.btn-default')).click();
+        // collapse tools panel
+        p.findElement(protractor.By.css('dashboard-panel[paneltitle=tools] .btn.btn-default')).click();
         // open my notebooks tab
         p.findElements(protractor.By.css("dashboard-panel[paneltitle=lists] .pnd-tab-header > li > a")).then(function(tabs) {
             tabs[4].click();
