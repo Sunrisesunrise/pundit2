@@ -457,6 +457,7 @@ angular.module('Pundit2.Core')
                     popoverState.popover.$scope.isLoading = false;
                     if (status) {
                         popoverState.loginSuccess();
+                        loginPromise.resolve(true);
                     }
                     else {
                         popoverState.popover.$scope.loginSomeError = true;
@@ -483,6 +484,7 @@ angular.module('Pundit2.Core')
 
     // TODO This is not really a popoverLogin but more a popover toggler
     myPundit.popoverLogin = function (event, where) {
+        loginPromise = $q.defer();
 
         // If there's already a Login popover I close and destroy it
         if (popoverState.popover !== null) {
@@ -520,6 +522,8 @@ angular.module('Pundit2.Core')
             popoverState.popover.show();
             popoverState.renderIFrame(where);
         });
+
+        return loginPromise.promise;
     };
 
     myPundit.getLoginPopoverSrc = function() {
