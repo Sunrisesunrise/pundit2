@@ -1,9 +1,20 @@
-# Pundit 2
+# Pundit client
+
+Pundit is a web application that allows users to annotate web pages. Compared to others annotations tool Pundit is a bit “special” since it allows to create **semantic annotations**.
+
+This is the official and open source repository for the Pundit client.
+
+## Developers site
+
+The developers site is available at [this URL](http://net7.github.io/pundit2/).
+
+## Annotation server
+
+The Pundit client needs the Annotation Server you can [download here](http://release.server.thepund.it/annotationserver-1.6.2.zip).
 
 ## License
 
 http://thepund.it/license/
-
 
 ## Install
 
@@ -61,25 +72,7 @@ Plus all of the examples using the production code: index.html or just *.html.
 Plus the documentation in /Docs.
 
 
-# Code + naming policies
 
-* Modules: "Pundit2.ModuleName", camel case with first capitalized
-* Constants: "PUNDITDEFAULTCONF", all capitalized
-* Services/Factories/Providers: "ServiceName", camel case with first capitalized
-* Filenames: 
-    - javascript: "$name.$what.js" (eg Example.dir.js)
-         - $what is one of: module, service, factory, ctrl, constant, dir (directive)...
-         - $name is the same name of the $what defined inside (camel case etc)
-    - templates: "$name.$what.tmpl.html" (eg: Example.dir.tmpl.html)
-         - $name.$what is the same name of module this template belongs to 
-    - unit test: "$name.$what.unit.test.js" (eg: Example.service.unit.test.js)
-    - e2e test: "$name.e2e.test.js" (eg: Example.e2e.test.js)
-* Directories: name of the module / component
-* Css classnames:
-    - words are separated by hyphens "-"    
-    - they *all* start with "pnd-" (eg: pnd-dashboard-container)
-    - they are all lowercase
-    
 # Used in this project
 
 * Js framework: Angular js https://docs.angularjs.org/api
