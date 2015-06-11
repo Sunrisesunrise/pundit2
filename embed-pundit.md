@@ -273,4 +273,19 @@ then the **ore:Aggregation** on item level should point to the resource by using
 
 ## 3. Pundit ignore
 
-Say something about pundit ignore class.
+You might have some HTML elements in the page you don't want your users to annotate (e.g. site header, navigation, footer).
+You can force Pundit to **ignore** those elements just by adding a special class:
+
+    .pnd-ignore
+
+Any DOM element that has this class is ignored by Pundit and thus cannot be annotated.
+
+Here's an example of a navigation menu that we don't want users to annotate:
+
+    <div class="pnd-ignore">
+        <ul>
+            <li>...</li>
+            <li>...</li>
+            <li>...</li>
+        </ul>
+    </div>
