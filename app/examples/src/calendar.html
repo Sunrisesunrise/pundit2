@@ -10,7 +10,8 @@
 
 <div data-ng-app="Pundit2" class="pnd-wrp" ng-controller="CalendarDemoCtrl">
     <div date-picker="start"></div>
-    {{start}}
+    <p> year: {{start | amDateFormat:'YYYY'}} // month: {{start | amDateFormat:'MMMM'}} // day: {{start | amDateFormat:'dddd'}} </p>
+    <p> hour: {{start | amDateFormat:'h:mm:ss a'}}</p>
 </div>
 
 <!-- buildexamples:section footer --><!-- /buildexamples -->
