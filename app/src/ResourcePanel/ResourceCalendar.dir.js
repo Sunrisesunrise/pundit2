@@ -12,6 +12,9 @@ angular.module('Pundit2.ResourcePanel')
                 scope.model = {};
             }
 
+            scope.mode = 'date';
+            scope.focus = 'year';
+
             scope.year = {
                 focus: false,
                 editable: true
@@ -24,9 +27,23 @@ angular.module('Pundit2.ResourcePanel')
                 focus: false,
                 editable: false
             };
+            scope.time = {
+                focus: false,
+                editable: false
+            };
 
-            scope.model.value = new Date();
-            scope.model.valid = true;
+            scope.switchFocus = function(focus) {
+                scope.focus = focus;
+            };
+
+            // scope.model.value = new Date();
+            // scope.model.valid = true;
+
+            scope.switchMode = function(mode) {
+                scope.mode = mode;
+            };
+
+
             // console.log(scope.model);
         }
     };

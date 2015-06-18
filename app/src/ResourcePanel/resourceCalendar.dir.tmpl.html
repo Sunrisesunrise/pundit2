@@ -14,26 +14,53 @@
 <div date-picker="start" max-view="year" min-view="year"></div> -->
 
 <div class="pnd-resource-calendar-container">
-    <input  type="text" 
-            class="form-control"
-            ng-model="start"
-            focus-on="year.focus"
-            ng-disabled="!year.editable">
-    <input  type="text" 
-            class="form-control"
-            ng-model="start"
-            focus-on="month.focus"
-            ng-disabled="!month.editable">
-    <input  type="text" 
-            class="form-control"
-            ng-model="start"
-            focus-on="day.focus"
-            ng-disabled="!day.editable">
+    <span>
+        Year: <input type="text" 
+                     class="form-control"
+                     ng-model="currentDate"
+                     focus-on="switchFocus('year')">
+    </span>
+    <span ng-show="mode == 'gYearMonth' || mode == 'date' || mode == 'dateTime'">
+        Month: <input type="text" 
+                      class="form-control"
+                      ng-model="currentDate"
+                      focus-on="switchFocus('month')">
+    </span>
+    <span ng-show="mode == 'date' || mode == 'dateTime'">
+        Day: <input type="text" 
+                    class="form-control"
+                    ng-model="currentDate"
+                    focus-on="day.focus">
+    </span>
+    <span ng-show="mode == 'dateTime'">
+        Time: <input type="text" 
+                     class="form-control"
+                     ng-model="currentDate"
+                     focus-on="time.focus">
+    </span>
 
-    <button ng-click="day.focus = true">{{day.focus}}</button>
+    <div class="pnd-date-picker" >
+        <div ng-if="focus == 'year'"><span date-picker="$parent.currentDate" max-view="year" min-view="year"></span></div>
+        <div ng-if="focus == 'month'"><span date-picker="$parent.currentDate" min-view="month"></span></div>
+    </div>
 
-    <div class="pnd-date-picker">
-        <div date-picker="start" max-view="year" min-view="year"></div>
+    <div class="pnd-format-selector">
+        <button 
+            ng-class="{'pnd-format-current': mode == 'gYear'}" 
+            ng-click="switchMode('gYear')"
+            ng-disabled="mode == 'gYear'">Year</button>
+        <button 
+            ng-class="{'pnd-format-current': mode == 'gYearMonth'}" 
+            ng-click="switchMode('gYearMonth')"
+            ng-disabled="mode == 'gYearMonth'">Month</button>
+        <button 
+            ng-class="{'pnd-format-current': mode == 'date'}" 
+            ng-click="switchMode('date')"
+            ng-disabled="mode == 'date'">Day</button>
+        <button 
+            ng-class="{'pnd-format-current': mode == 'dateTime'}" 
+            ng-click="switchMode('dateTime')"
+            ng-disabled="mode == 'dateTime'">Time</button>
     </div>
     
 </div>
