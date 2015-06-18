@@ -211,9 +211,18 @@ angular.module('Pundit2.ResourcePanel')
 
             state.popoverOptions.scope.save = function() {
 
-                state.resourcePromise.resolve(new Date(this.selectedDate));
-                Preview.hideDashboardPreview();
-                hide();
+                console.log(this.modelDate);
+
+                if (typeof(this.modelDate) !== 'undefined' && this.modelDate.valid) {
+                    this.modelDate.type = 'date';
+                    state.resourcePromise.resolve(this.modelDate);
+                    Preview.hideDashboardPreview();
+                    hide();
+                }
+
+                // state.resourcePromise.resolve(new Date(this.selectedDate));
+                // Preview.hideDashboardPreview();
+                // hide();
 
                 var eventLabel = 'resourcePanel--' + type;
                 eventLabel += '--save';

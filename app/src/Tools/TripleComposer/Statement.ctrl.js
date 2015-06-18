@@ -318,6 +318,10 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.setObject = function(item, fixed) {
+        if (typeof(item) === 'undefined') {
+            return;
+        }
+
         $scope.objectFound = true;
 
         if (typeof(fixed) !== 'undefined') {
@@ -331,10 +335,11 @@ angular.module('Pundit2.TripleComposer')
             $scope.objectLabel = item;
             $scope.objectTypeLabel = TypesHelper.getLabel(NameSpace.rdfs.literal);
             $scope.objectLiteral = true;
-        } else if (item instanceof Date) {
+        } else if (typeof(item.type) !== 'undefined' && item.type === 'date') {
             // date item
-            lastDate = item;
-            triple.object = parseDate(item);
+            lastDate = item.value;
+            triple.object = parseDate(item.value);
+            // triple.objType = item.dateType;
             $scope.objectLabel = triple.object;
             $scope.objectTypeLabel = TypesHelper.getLabel(NameSpace.dateTime);
             $scope.objectDate = true;
@@ -350,7 +355,6 @@ angular.module('Pundit2.TripleComposer')
         $scope.tripleComposerCtrl.isAnnotationComplete();
         $scope.tripleComposerCtrl.isTripleErasable();
         Preview.clearItemDashboardSticky();
-
     };
 
     $scope.onClickObject = function($event) {
