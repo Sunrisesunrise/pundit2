@@ -215,7 +215,8 @@ angular.module('Pundit2.Core')
             loginPromise.resolve(true);
         } else {
             loginStatus = 'loggedOff';
-            myPundit.openLoginPopUp();
+            myPundit.popoverLogin(null, 'login');
+            // myPundit.openLoginPopUp();
         }
 
         return loginPromise.promise;
