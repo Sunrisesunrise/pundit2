@@ -81,6 +81,7 @@ angular.module('Pundit2.Communication')
             else {
                 // Load all annotations with one call.
                 annotationsCommunication.log("Loading all annotations with one call");
+                var nsKey = (MyPundit.isUserLogged()) ? 'asAnnMult' : 'asOpenAnnMult';
                 var postData = ids.join(';');
                 var httpObject = {
                     headers: {
@@ -88,8 +89,8 @@ angular.module('Pundit2.Communication')
                         'Content-Type': 'text/plain'
                     },
                     method: 'POST',
-                    url: NameSpace.get('asOpenAnnMult'),
-                    withCredentials: false,
+                    url: NameSpace.get(nsKey),
+                    withCredentials: true,
                     data: postData
                 };
                 //if (annotationsCommunication.options.loadMultipleAnnotationsRequireCredentials) {
