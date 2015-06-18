@@ -29,6 +29,9 @@ angular.module("Pundit2.Core")
     ns.rdfs.literal = _rdfs + "Literal";
     ns.rdfs.seeAlso = _rdfs + "seeAlso";
 
+    ns.gYear = "http://www.w3.org/2001/XMLSchema#gYear";
+    ns.gYearMonth = "http://www.w3.org/2001/XMLSchema#gYearMonth";
+    ns.date = "http://www.w3.org/2001/XMLSchema#date";
     ns.dateTime = "http://www.w3.org/2001/XMLSchema#dateTime";
 
 
