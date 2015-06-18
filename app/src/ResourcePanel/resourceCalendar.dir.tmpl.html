@@ -1,0 +1,39 @@
+<!-- <span ng-if="gatto">
+    <div date-picker="start"></div>
+</span>
+<button ng-click= "gatto = !gatto">a</button>
+<p> year: {{start | amDateFormat:'YYYY'}} // month: {{start | amDateFormat:'MMMM'}} // day: {{start | amDateFormat:'dddd'}} </p>
+<p> hour: {{start | amDateFormat:'h:mm:ss a'}}</p>
+
+<input  type="text" 
+        class="form-control"
+        data-date-format="dd/MM/yyyy" 
+        ng-model="start">
+{{start}}
+
+<div date-picker="start" max-view="year" min-view="year"></div> -->
+
+<div class="pnd-resource-calendar-container">
+    <input  type="text" 
+            class="form-control"
+            ng-model="start"
+            focus-on="year.focus"
+            ng-disabled="!year.editable">
+    <input  type="text" 
+            class="form-control"
+            ng-model="start"
+            focus-on="month.focus"
+            ng-disabled="!month.editable">
+    <input  type="text" 
+            class="form-control"
+            ng-model="start"
+            focus-on="day.focus"
+            ng-disabled="!day.editable">
+
+    <button ng-click="day.focus = true">{{day.focus}}</button>
+
+    <div class="pnd-date-picker">
+        <div date-picker="start" max-view="year" min-view="year"></div>
+    </div>
+    
+</div>
