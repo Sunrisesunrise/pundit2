@@ -508,6 +508,7 @@ angular.module('Pundit2.TripleComposer')
         state[name].statements.push({
             id: state[name].nextId
         });
+        state[name].editMode = false;
         EventDispatcher.sendEvent('TripleComposer.reset');
         tripleComposer.log('statements reset', state[name].statements);
     };

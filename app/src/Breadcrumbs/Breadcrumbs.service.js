@@ -25,7 +25,7 @@ angular.module('Pundit2.Breadcrumbs')
 
     var setItemLabel = function(name, itemObject, label, index) {
         if (typeof label === 'undefined') {
-            label = typeof itemObject.originalLabel !== 'undefined ' ? itemObject.originalLabel : itemObject.label;
+            label = typeof itemObject.originalLabel !== 'undefined' ? itemObject.originalLabel : itemObject.label;
         }
         var newLabel = label;
         itemObject.originalLabel = label;

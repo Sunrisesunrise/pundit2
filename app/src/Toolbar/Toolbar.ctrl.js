@@ -3,7 +3,7 @@
 angular.module('Pundit2.Toolbar')
 
 .controller('ToolbarCtrl', function($scope, $rootScope, $modal, $http, $window, NameSpace, Config, Toolbar, SelectorsManager, Fp3,
-    MyPundit, Dashboard, TripleComposer, AnnotationSidebar, Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, Analytics, PageHandler) {
+    MyPundit, Dashboard, TripleComposer, AnnotationSidebar, Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, Analytics, PageHandler, EventDispatcher) {
 
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
     $scope.dropdownTemplateMyNotebook = "src/Toolbar/myNotebooksDropdown.tmpl.html";
@@ -65,9 +65,9 @@ angular.module('Pundit2.Toolbar')
         $scope.login('toolbar--login', $event);
     };
 
-    $scope.closePopover = function($event) {
+    $scope.closePopover = function() {
         MyPundit.closeLoginPopover();
-    }
+    };
 
     $scope.login = function(trackingLoginName, event) {
         ResourcePanel.hide();
@@ -489,6 +489,13 @@ angular.module('Pundit2.Toolbar')
         return MyPundit.isUserLogged();
     }, function(newStatus) {
         $scope.isUserLogged = newStatus;
+        $scope.userData = MyPundit.getUserData();
+    });
+
+    // Handles userdata changes after edit profile, maybe we can remove the above
+    // $watch.
+    EventDispatcher.addListener('MyPundit.isUserLogged', function (e) {
+        $scope.isUserLogged = e.args;
         $scope.userData = MyPundit.getUserData();
     });
 

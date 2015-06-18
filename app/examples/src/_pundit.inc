@@ -36,6 +36,7 @@
     <script src="../src/Core/TemplatesSelector.service.js"></script>
     <script src="../src/Core/Fp3.service.js"></script>
     <script src="../src/Core/ImageFragmentAnnotatorHelper.service.js"></script>
+    <script src="../src/Core/UnlimitedScroll.dir.js"></script>
 
     <script src="../src/Core/Template.factory.js"></script>
     <script src="../src/Core/Item.factory.js"></script>
@@ -56,6 +57,10 @@
 
     <script src="../src/Annotators/ImgMenu.dir.js"></script>
 
+    <script src="../src/AlertSystem/AlertSystem.js"></script>
+    <script src="../src/AlertSystem/AlertSystem.dir.js"></script>
+    <script src="../src/AlertSystem/AlertSystem.ctrl.js"></script>
+    <script src="../src/AlertSystem/AlertSystem.service.js"></script>
 
     <script src="../src/Breadcrumbs/Breadcrumbs.js"></script>
     <script src="../src/Breadcrumbs/Breadcrumbs.dir.js"></script>

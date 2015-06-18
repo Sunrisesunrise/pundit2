@@ -38,7 +38,8 @@ angular.module('Pundit2.ResourcePanel')
                 itemsContainer: selectors[j].config.container,
                 items: [],
                 module: 'Pundit2',
-                isStarted: false
+                isStarted: false,
+                selector: selectors[j]
             });
         }
     }
@@ -252,5 +253,61 @@ angular.module('Pundit2.ResourcePanel')
     EventDispatcher.addListener('Pundit.changeSelection', function() {
         resetSelection();
     });
+
+    //function colled on list scroll
+    $scope.infiniteScroll = function(pane, label){
+
+        if(!pane.selector || !pane.selector.config || !pane.selector.config.infiniteScrolling){
+            return;
+        }
+
+        //if pane is already loading data we return
+        if(pane.isLoading){
+            return;
+        }
+
+        //if there are no remote items count we return
+        if (typeof(pane.remoteItemCount) === 'undefined' || pane.remoteItemCount === 0) {
+            return;
+        } else {
+            //if we have downloaded all items we return
+            if(pane.items.length === pane.remoteItemCount){
+                return;
+            }
+        }
+        var caller = '';
+        var selectors = [pane.selector];
+        var offset = pane.items.length;
+        switch ($scope.type) {
+            case 'sub':
+                caller = 'subject';
+                break;
+            case 'pr':
+                caller = 'predicate';
+                break;
+            case 'obj':
+                caller = 'object';
+                break;
+        }
+        if (caller !== 'pr' && caller !== '') {
+            $timeout.cancel(searchTimer);
+            searchTimer = $timeout(function() {
+                if (Config.annotationServerCallsNeedLoggedUser) {
+                    MyPundit.checkLoggedIn().then(function (isLoggedIn) {
+                        if (isLoggedIn) {
+                            ResourcePanel.addItems(label, selectors, $scope.triple, caller, offset);
+                        }
+                        else {
+                            EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
+                        }
+                    });
+                }
+                else {
+                    ResourcePanel.addItems(label, selectors, $scope.triple, caller, offset);
+                }
+            }, ResourcePanel.options.vocabSearchTimer);
+        }
+
+    };
 
 });

@@ -39,7 +39,7 @@
                 <span
                     class="badge pull-right"
                     ng-show="showFilteredResults && !pane.isLoading && pane.isStarted">
-                    {{tabItemsFiltered[$index].length}}
+                    {{ contentTabs[$index].selector.config.infiniteScrolling ? (contentTabs[$index].remoteItemCount || 0) : tabItemsFiltered[$index].length ? tabItemsFiltered[$index].length : 0}}
                 </span>
                 <span
                     class="badge pull-right"
@@ -59,7 +59,7 @@
             <div 
                 ng-repeat="pane in contentTabs" 
                 class="tab-pane pnd-vertical-tab-list-content" 
-                ng-class="[$index == active ? 'active' : '']">
+                ng-class="[$index == active ? 'active' : '']" unlimited-scroll="infiniteScroll(pane, label)">
                 <div 
                     class="kee-server-messages" 
                     ng-if="showContentMessage1 && !contentTabs[$index].serverError">
@@ -97,6 +97,19 @@
 
                 <!-- TODO: find a better way to show partial counting -->
                 <ul class="list-group" ng-init="$parent.tabItemsFiltered = $parent.tabItemsFiltered || []; initTabItemsFiltered()">
+                    <li 
+                        class="list-group-item" 
+                        ng-repeat="mi in $parent.tabItemsFiltered[$index] = contentTabs[$index].isLocal ? (contentTabs[$index].items | filter:{label: label}) : contentTabs[$index].items"
+                        ng-if="showFilteredResults">
+                        <item 
+                            uri="{{mi.uri}}" 
+                            is-selected="isSelected(mi)" 
+                            ng-click="select(mi)"
+                            ng-dblclick="save(mi)"
+                            hide-options="true" 
+                            hide-sticky-button="true"></item>
+                    </li>
+
                     <!-- messages 5 -->
                     <li 
                         ng-if="showContentMessage5 && $parent.tabItemsFiltered[$index].length === 0 && label.length > 2 && !pane.isLoading">
@@ -106,18 +119,6 @@
                     <li 
                         ng-if="showContentMessage6 && label.length > 2 && pane.isLoading">
                         Loading ... 
-                    </li>
-                    <li 
-                        class="list-group-item" 
-                        ng-repeat="mi in $parent.tabItemsFiltered[$index] = (contentTabs[$index].items | filter:{label: label})"
-                        ng-if="showFilteredResults">
-                        <item 
-                            uri="{{mi.uri}}" 
-                            is-selected="isSelected(mi)" 
-                            ng-click="select(mi)"
-                            ng-dblclick="save(mi)"
-                            hide-options="true" 
-                            hide-sticky-button="true"></item>
                     </li>
 
                     <!-- Korbo -->

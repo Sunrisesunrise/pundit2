@@ -295,7 +295,7 @@ angular.module('KorboEE')
                 promise.resolve(results);
             }
         },
-        function(error){
+        function(){
             results = null;
             promise.reject();
         });

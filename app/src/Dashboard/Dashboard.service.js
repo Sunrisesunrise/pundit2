@@ -259,7 +259,7 @@ angular.module('Pundit2.Dashboard')
 
 })
 
-.service('Dashboard', function(BaseComponent, DASHBOARDDEFAULTS, $window, $rootScope) {
+.service('Dashboard', function(BaseComponent, DASHBOARDDEFAULTS, $window, $rootScope, EventDispatcher) {
 
     var dashboard = new BaseComponent('Dashboard', DASHBOARDDEFAULTS);
 
@@ -673,6 +673,12 @@ angular.module('Pundit2.Dashboard')
         //dashboard.log("Added tab " + tabName + " to non-existing panel " + panelTitle + ": for later use." + ' [hierarchyString: ' + hierarchyString + ']');
         dashboard.log("Added tab " + tabName + " to non-existing panel " + panelTitle + ": for later use.");
     };
+
+    EventDispatcher.addListener('Dashboard.close', function(/*e*/) {
+        if (state.isDashboardVisible) {
+            dashboard.toggle();
+        }
+    });
 
     dashboard.log('Service run');
 

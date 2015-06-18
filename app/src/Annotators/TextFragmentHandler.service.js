@@ -373,7 +373,7 @@ angular.module('Pundit2.Annotators')
             if (xp.isTextNode(currentNode)) {
                 offset += currentNode.length;
             } else if (xp.isWrapNode(currentNode)) {
-                offset += currentNode.firstChild.length;
+                offset += currentNode.firstChild ? currentNode.firstChild.length : 0;
             }
 
             node = currentNode;

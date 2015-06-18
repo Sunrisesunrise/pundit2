@@ -22,7 +22,6 @@ angular.module('Pundit2.Communication')
     // add notebooks to notebooksExchange
     // than consilidate all items
     annotationsCommunication.getAnnotations = function() {
-        var t0 = Date.now();
         var promise = $q.defer();
 
         if (annotationsCommunication.options.preventDownload) {
@@ -46,10 +45,11 @@ angular.module('Pundit2.Communication')
                 return;
             }
 
+            var settled = 0;
+
             if (!annotationsCommunication.options.loadMultipleAnnotations) {
                 annotationsCommunication.log("Loading annotations one by one");
-                var annPromises = [],
-                settled = 0;
+                var annPromises = [];
                 for (var i = 0; i < ids.length; i++) {
                     var a = new Annotation(ids[i]);
                     a.then(function(ann) {
@@ -81,7 +81,6 @@ angular.module('Pundit2.Communication')
             else {
                 // Load all annotations with one call.
                 annotationsCommunication.log("Loading all annotations with one call");
-                settled = 0;
                 var postData = ids.join(';');
                 var httpObject = {
                     headers: {
@@ -121,7 +120,7 @@ angular.module('Pundit2.Communication')
                             }
                         });
                     }
-                }).error(function(data, statusCode) {
+                }).error(function(/*data, statusCode*/) {
                     setLoading(false);
                 });
             }
@@ -162,6 +161,10 @@ angular.module('Pundit2.Communication')
                 ItemsExchange.wipeContainer(Config.modules.PageItemsContainer.container);
                 // wipe all annotations (are in chace)
                 AnnotationsExchange.wipe();
+
+                // Dispatch event
+                EventDispatcher.sendEvent('AnnotationsCommunication.annotationDeleted', annID);
+
                 // reload all annotation
                 annotationsCommunication.getAnnotations().then(function() {
                     promise.resolve(annID);

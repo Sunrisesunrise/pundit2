@@ -1,0 +1,75 @@
+<!-- buildexamples:section header --><!-- /buildexamples -->
+
+<script>
+
+    var punditConfig = {
+        debugAllModules: true
+    };
+
+    function AlertSystemDemoCtrl($scope, AlertSystem) {
+        $scope.message = 'message';
+        $scope.putTop = true;
+        var id = 1;
+        $scope.sendAlert = function(messageType){
+            var messageId = id++;
+            var timeout = null;
+            var type = AlertSystem.AlertType.CUSTOM;
+            switch (messageType){
+                case 'SUCCESS':
+                    type = AlertSystem.AlertType.OK;
+                    break;
+                case 'ERROR':
+                    type = AlertSystem.AlertType.ERROR;
+                    break;
+                case 'ALERT':
+                    type = AlertSystem.AlertType.ALERT;
+                    break;
+                case 'CUSTOM':
+                    type = AlertSystem.AlertType.CUSTOM;
+                    break;
+            }
+            if(($scope.useTimeout)){
+                timeout = $scope.timeout;
+            }
+
+            AlertSystem.addAlert(type,messageId+': '+$scope.message, timeout, $scope.putTop);
+        }
+        $scope.reset = function() {
+            AlertSystem.clearAlerts();
+        };
+    }
+
+</script>
+
+<div data-ng-app="Pundit2">
+    <div ng-controller="AlertSystemDemoCtrl" class="pnd-wrp">
+        <a class="btn btn-success" ng-click="sendAlert('SUCCESS')">Do Success</a>
+        <a class="btn btn-danger" ng-click="sendAlert('ERROR')">Do Error</a>
+        <a class="btn btn-info" ng-click="sendAlert('ALERT')">Do Alert</a>
+        <a class="btn btn-warning" ng-click="sendAlert('CUSTOM')">Do Custom</a>
+        <a class="btn btn-default" ng-click="reset()">Reset</a>
+        <hr>
+        <div>
+        Message
+        <input type="text" placeholder="message" ng-model="message">
+        </div>
+        <hr>
+        <div>
+        Timeout
+        <input type="checkbox" ng-model="useTimeout" class="useTimeout">
+        <input type="text" placeholder="timeout" ng-model="timeout">
+        </div>
+        <hr>
+        <div>
+            Put message on the top
+            <input type="checkbox" ng-model="putTop">
+        </div>
+
+    </div>
+    <hr>
+    <div style="padding: 10px">
+        <alert-system></alert-system>
+    </div>
+</div>
+
+<!-- buildexamples:section footer --><!-- /buildexamples -->

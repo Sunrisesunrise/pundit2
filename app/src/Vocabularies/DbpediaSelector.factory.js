@@ -77,6 +77,8 @@ angular.module('Pundit2.Vocabularies')
     instances: [{
         // where items is stored inside itemsExchange service
         container: 'dbpedia',
+        //infinite scrolling
+        infiniteScrolling: false,
         // instance label tab title
         label: 'Dbpedia',
         // enable or disable the instance
@@ -137,7 +139,7 @@ angular.module('Pundit2.Vocabularies')
         this.config = config;
     };
 
-    DbpediaFactory.prototype.getItems = function(term) {
+    DbpediaFactory.prototype.getItems = function(term, offset, limit) {
         if (typeof(term) === 'undefined') {
             return;
         }
@@ -149,8 +151,8 @@ angular.module('Pundit2.Vocabularies')
         var params = {
             q: term,
             p: 'dandeliondbpedia',
-            limit: dbpediaSelector.options.limit,
-            offset: 0,
+            limit: limit || dbpediaSelector.options.limit,
+            offset: offset || 0,
             lang: self.config.language
         };
 
@@ -171,13 +173,18 @@ angular.module('Pundit2.Vocabularies')
 
             if (res.data.length === 0) {
                 dbpediaSelector.log('Empty response');
-                ItemsExchange.wipeContainer(container);
+                if(offset === null || (typeof offset === 'undefined')) {
+                    ItemsExchange.wipeContainer(container);
+                }
                 // promise is always resolved
                 promise.resolve();
                 return;
             }
 
-            ItemsExchange.wipeContainer(container);
+
+            if(offset === null || (typeof offset === 'undefined')) {
+                ItemsExchange.wipeContainer(container);
+            }
 
             for (var i = 0; i < res.data.length; i++) {
                 var current = res.data[i];
@@ -198,6 +205,8 @@ angular.module('Pundit2.Vocabularies')
                 // add to itemsExchange
                 ItemsExchange.addItemToContainer(new Item(item.uri, item), container);
             }
+            var totalCount = res.metadata.totalCount;
+            ItemsExchange.setRemoteItemCount(totalCount, container);
 
             promise.resolve();
         }).error(function() {

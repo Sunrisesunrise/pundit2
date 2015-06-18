@@ -98,6 +98,8 @@ angular.module('Pundit2.Vocabularies')
         queryType: 'http://purl.org/galassiariosto/types/Azione',
         // where items is stored inside itemsExchange service
         container: 'muruca',
+        //infinite scrolling
+        infiniteScrolling: false,
         // instance label tab title
         label: 'Muruca',
         // enable or disable the instance
