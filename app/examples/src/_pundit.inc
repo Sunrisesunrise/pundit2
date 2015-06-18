@@ -36,6 +36,7 @@
     <script src="../src/Core/TemplatesSelector.service.js"></script>
     <script src="../src/Core/Fp3.service.js"></script>
     <script src="../src/Core/ImageFragmentAnnotatorHelper.service.js"></script>
+    <script src="../src/Core/FocusOn.dir.js"></script>
     <script src="../src/Core/UnlimitedScroll.dir.js"></script>
 
     <script src="../src/Core/Template.factory.js"></script>
