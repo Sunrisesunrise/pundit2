@@ -20,19 +20,19 @@
                      ng-model="currentDate"
                      focus-on="switchFocus('year')">
     </span>
-    <span ng-show="mode == 'gYearMonth' || mode == 'date' || mode == 'dateTime'">
+    <span ng-show="mode == 'month' || mode == 'day' || mode == 'time'">
         Month: <input type="text" 
                       class="form-control"
                       ng-model="currentDate"
                       focus-on="switchFocus('month')">
     </span>
-    <span ng-show="mode == 'date' || mode == 'dateTime'">
+    <span ng-show="mode == 'day' || mode == 'time'">
         Day: <input type="text" 
                     class="form-control"
                     ng-model="currentDate"
                     focus-on="day.focus">
     </span>
-    <span ng-show="mode == 'dateTime'">
+    <span ng-show="mode == 'time'">
         Time: <input type="text" 
                      class="form-control"
                      ng-model="currentDate"
@@ -41,26 +41,26 @@
 
     <div class="pnd-date-picker" >
         <div ng-if="focus == 'year'"><span date-picker="$parent.currentDate" max-view="year" min-view="year"></span></div>
-        <div ng-if="focus == 'month'"><span date-picker="$parent.currentDate" min-view="month"></span></div>
+        <div ng-if="focus == 'month'"><span date-picker="$parent.currentDate" max-view="month" min-view="month"></span></div>
     </div>
 
     <div class="pnd-format-selector">
         <button 
-            ng-class="{'pnd-format-current': mode == 'gYear'}" 
-            ng-click="switchMode('gYear')"
-            ng-disabled="mode == 'gYear'">Year</button>
+            ng-class="{'pnd-format-current': mode == 'year'}" 
+            ng-click="switchMode('year')"
+            ng-disabled="mode == 'year'">Year</button>
         <button 
-            ng-class="{'pnd-format-current': mode == 'gYearMonth'}" 
-            ng-click="switchMode('gYearMonth')"
-            ng-disabled="mode == 'gYearMonth'">Month</button>
+            ng-class="{'pnd-format-current': mode == 'month'}" 
+            ng-click="switchMode('month')"
+            ng-disabled="mode == 'month'">Month</button>
         <button 
-            ng-class="{'pnd-format-current': mode == 'date'}" 
-            ng-click="switchMode('date')"
-            ng-disabled="mode == 'date'">Day</button>
+            ng-class="{'pnd-format-current': mode == 'day'}" 
+            ng-click="switchMode('day')"
+            ng-disabled="mode == 'day'">Day</button>
         <button 
-            ng-class="{'pnd-format-current': mode == 'dateTime'}" 
-            ng-click="switchMode('dateTime')"
-            ng-disabled="mode == 'dateTime'">Time</button>
+            ng-class="{'pnd-format-current': mode == 'time'}" 
+            ng-click="switchMode('time')"
+            ng-disabled="mode == 'time'">Time</button>
     </div>
     
 </div>

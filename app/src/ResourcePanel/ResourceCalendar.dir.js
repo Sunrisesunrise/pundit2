@@ -12,7 +12,7 @@ angular.module('Pundit2.ResourcePanel')
                 scope.model = {};
             }
 
-            scope.mode = 'date';
+            scope.mode = 'day';
             scope.focus = 'year';
 
             scope.year = {
@@ -41,6 +41,7 @@ angular.module('Pundit2.ResourcePanel')
 
             scope.switchMode = function(mode) {
                 scope.mode = mode;
+                scope.focus = mode;
             };
 
 
