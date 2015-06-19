@@ -1,62 +1,53 @@
-<!-- <span ng-if="gatto">
-    <div date-picker="start"></div>
-</span>
-<button ng-click= "gatto = !gatto">a</button>
-<p> year: {{start | amDateFormat:'YYYY'}} // month: {{start | amDateFormat:'MMMM'}} // day: {{start | amDateFormat:'dddd'}} </p>
-<p> hour: {{start | amDateFormat:'h:mm:ss a'}}</p>
-
-<input  type="text" 
-        class="form-control"
-        data-date-format="dd/MM/yyyy" 
-        ng-model="start">
-{{start}}
-
-<div date-picker="start" max-view="year" min-view="year"></div> -->
-
 <div class="pnd-resource-calendar-container">
     <span>
-        Year: <input type="text" 
-                     class="form-control"
-                     ng-model="currentDate"
-                     focus-on="switchFocus('year')">
+        Year: 
+        <input  type="text" 
+                class="form-control"
+                ng-model="currentDate"
+                focus-on="switchFocus('year')">
     </span>
     <span ng-show="mode == 'month' || mode == 'day' || mode == 'time'">
-        Month: <input type="text" 
-                      class="form-control"
-                      ng-model="currentDate"
-                      focus-on="switchFocus('month')">
+        Month: 
+        <input  type="text" 
+                class="form-control"
+                ng-model="currentDate"
+                focus-on="switchFocus('month')">
     </span>
     <span ng-show="mode == 'day' || mode == 'time'">
-        Day: <input type="text" 
-                    class="form-control"
-                    ng-model="currentDate"
-                    focus-on="day.focus">
+        Day: 
+        <input  type="text" 
+                class="form-control"
+                ng-model="currentDate"
+                focus-on="switchFocus('day')">
     </span>
     <span ng-show="mode == 'time'">
-        Time: <input type="text" 
-                     class="form-control"
-                     ng-model="currentDate"
-                     focus-on="time.focus">
+        Time: 
+        <input  type="text" 
+                class="form-control"
+                ng-model="currentDate"
+                focus-on="switchFocus('time')">
     </span>
 
     <div class="pnd-date-picker" >
         <div ng-if="focus == 'year'"><span date-picker="$parent.currentDate" max-view="year" min-view="year"></span></div>
         <div ng-if="focus == 'month'"><span date-picker="$parent.currentDate" max-view="month" min-view="month"></span></div>
+        <div ng-if="focus == 'day'"><span date-picker="$parent.currentDate" max-view="date" min-view="date"></span></div>
+        <div ng-if="focus == 'time'"><span date-picker="$parent.currentDate" max-view="hours" min-view="minutes"></span></div>
     </div>
 
     <div class="pnd-format-selector">
         <button 
             ng-class="{'pnd-format-current': mode == 'year'}" 
             ng-click="switchMode('year')"
-            ng-disabled="mode == 'year'">Year</button>
+            ng-disabled="mode == 'year'">Year</button> -
         <button 
             ng-class="{'pnd-format-current': mode == 'month'}" 
             ng-click="switchMode('month')"
-            ng-disabled="mode == 'month'">Month</button>
+            ng-disabled="mode == 'month'">Month</button> - 
         <button 
             ng-class="{'pnd-format-current': mode == 'day'}" 
             ng-click="switchMode('day')"
-            ng-disabled="mode == 'day'">Day</button>
+            ng-disabled="mode == 'day'">Day</button> - 
         <button 
             ng-class="{'pnd-format-current': mode == 'time'}" 
             ng-click="switchMode('time')"
