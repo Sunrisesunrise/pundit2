@@ -1,9 +1,11 @@
-<div class="pnd-resource-calendar-container">
+<div class="pnd-resource-calendar-container"> {{currentDate}}
     <span>
         Year: 
         <input  type="text" 
                 class="form-control"
-                ng-model="currentDate"
+                ng-class="{'pnd-input-current': focus == 'year'}"
+                ng-model="inputDate.year"
+                ng-keyup="updateYear()"
                 focus-on="switchFocus('year')"
                 focus="activeFocus">
     </span>
@@ -11,7 +13,9 @@
         Month: 
         <input  type="text" 
                 class="form-control"
-                ng-model="currentDate"
+                ng-class="{'pnd-input-current': focus == 'month'}"
+                ng-model="inputDate.month"
+                ng-keyup="updateMonth()"
                 focus-on="switchFocus('month')"
                 focus="activeFocus">
     </span>
@@ -19,7 +23,9 @@
         Day: 
         <input  type="text" 
                 class="form-control"
-                ng-model="currentDate"
+                ng-class="{'pnd-input-current': focus == 'day'}"
+                ng-model="inputDate.day"
+                ng-keyup="updateDay()"
                 focus-on="switchFocus('day')"
                 focus="activeFocus">
     </span>
@@ -27,7 +33,9 @@
         Time: 
         <input  type="text" 
                 class="form-control"
-                ng-model="currentDate"
+                ng-class="{'pnd-input-current': focus == 'time'}"
+                ng-model="inputDate.time"
+                ng-keyup="updateTime()"
                 focus-on="switchFocus('time')"
                 focus="activeFocus">
     </span>
