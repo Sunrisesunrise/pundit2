@@ -15,6 +15,8 @@ angular.module('Pundit2.ResourcePanel')
             scope.mode = 'day';
             scope.focus = 'year';
 
+            scope.activeFocus = false;
+
             scope.year = {
                 focus: false,
                 editable: true
@@ -43,6 +45,38 @@ angular.module('Pundit2.ResourcePanel')
                 scope.mode = mode;
                 scope.focus = mode;
             };
+
+            scope.$watch('currentDate', function(value) {
+                if (!scope.activeFocus && !isNaN(scope.currentDate)) {
+                    switch (scope.mode) {
+                        case 'month':
+                            if (scope.focus === 'year') {
+                                // if (isValidDate )
+                                scope.switchFocus('month');
+                            }
+                            break;
+                        case 'day':
+                            if (scope.focus === 'year') {
+                                scope.switchFocus('month');
+                            } else if (scope.focus === 'month') {
+                                scope.switchFocus('day')
+                            }
+                            break;
+                        case 'time':
+                            if (scope.focus === 'year') {
+                                // if (isValidDate )
+                                scope.switchFocus('month');
+                            } else if (scope.focus === 'month') {
+                                // if (isValidDate)
+                                scope.switchFocus('day')
+                            } else if (scope.focus === 'day') {
+                                // if (isValidDate)
+                                scope.switchFocus('time')
+                            }
+                            break;
+                    }
+                }
+            });
 
 
             // console.log(scope.model);

@@ -18,12 +18,13 @@ angular.module('Pundit2.Core')
             // });
             element.bind("blur", function(e) {
                 $timeout(function() {
-                    // scope.$apply(attrs.focusOn + "=false");
+                    scope.$apply(attrs.focus + "=false");
                 }, 0);
             });
             element.bind("focus", function(e) {
                 $timeout(function() {
                     scope.$apply(attrs.focusOn);
+                    scope.$apply(attrs.focus + "=true");
                 }, 0);
             })
         }

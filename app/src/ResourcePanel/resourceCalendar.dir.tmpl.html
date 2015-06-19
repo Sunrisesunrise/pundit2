@@ -4,35 +4,47 @@
         <input  type="text" 
                 class="form-control"
                 ng-model="currentDate"
-                focus-on="switchFocus('year')">
+                focus-on="switchFocus('year')"
+                focus="activeFocus">
     </span>
     <span ng-show="mode == 'month' || mode == 'day' || mode == 'time'">
         Month: 
         <input  type="text" 
                 class="form-control"
                 ng-model="currentDate"
-                focus-on="switchFocus('month')">
+                focus-on="switchFocus('month')"
+                focus="activeFocus">
     </span>
     <span ng-show="mode == 'day' || mode == 'time'">
         Day: 
         <input  type="text" 
                 class="form-control"
                 ng-model="currentDate"
-                focus-on="switchFocus('day')">
+                focus-on="switchFocus('day')"
+                focus="activeFocus">
     </span>
     <span ng-show="mode == 'time'">
         Time: 
         <input  type="text" 
                 class="form-control"
                 ng-model="currentDate"
-                focus-on="switchFocus('time')">
+                focus-on="switchFocus('time')"
+                focus="activeFocus">
     </span>
 
     <div class="pnd-date-picker" >
-        <div ng-if="focus == 'year'"><span date-picker="$parent.currentDate" max-view="year" min-view="year"></span></div>
-        <div ng-if="focus == 'month'"><span date-picker="$parent.currentDate" max-view="month" min-view="month"></span></div>
-        <div ng-if="focus == 'day'"><span date-picker="$parent.currentDate" max-view="date" min-view="date"></span></div>
-        <div ng-if="focus == 'time'"><span date-picker="$parent.currentDate" max-view="hours" min-view="minutes"></span></div>
+        <div ng-if="focus == 'year'">
+            <span date-picker="$parent.currentDate" max-view="year" min-view="year"></span>
+        </div>
+        <div ng-if="focus == 'month'">
+            <span date-picker="$parent.currentDate" max-view="month" min-view="month"></span>
+        </div>
+        <div ng-if="focus == 'day'">
+            <span date-picker="$parent.currentDate" max-view="date" min-view="date"></span>
+        </div>
+        <div ng-if="focus == 'time'">
+            <span date-picker="$parent.currentDate" max-view="hours" min-view="minutes"></span>
+        </div>
     </div>
 
     <div class="pnd-format-selector">
