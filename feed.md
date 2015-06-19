@@ -14,7 +14,7 @@ Feeds receives two parameters as GET variables:
  (the Annotation Server URL, external predicates vocabularies URL,
  internal predicates vocabularies, information of selectors of data provider like DBPedia, etc).
 
-You can <a href="http://demo-cloud.as.thepund.it/pundit2/build/docs/#!/api/punditConfig" target="_blank">check here</a> an overview of the configurations available for Pundit.
+You can <a href="http://dev.thepund.it/download/client/last-beta/docs/index.html#!/api/punditConfig" target="_blank">check here</a> an overview of the configurations available for Pundit.
 
 ##How does Feed works?
 The content to be annotated is **pasted inside the body of the HTML page of Feed** and there it can be annotated.

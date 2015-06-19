@@ -34,7 +34,7 @@ Using javascript syntax create an object called **"punditConfig"** and set the d
         ],
     }
 
-The guidelines for creating a Pundit configuration file can be found <a href="http://demo-cloud.as.thepund.it/pundit2/build/docs/#!/api/punditConfig" target="_blank">here</a>.
+The guidelines for creating a Pundit configuration file can be found <a href="http://dev.thepund.it/download/client/last-beta/docs/index.html#!/api/punditConfig" target="_blank">here</a>.
 
 ### 1.2 Relations vocabulary
 
@@ -43,7 +43,7 @@ but items are expected to have the **“rdftype”** attribute equal to **rdf:Pr
 Specifies relations vocabularies that will be available to Pundit users
 (defines a list of relations with domain and ranges).
 Each vocabulary definition is a JSONP file available on the Web and is loaded by resolving an absolute URL.
-The following code (<a href="http://demo-cloud.as.thepund.it/pundit2/build/docs/#!/api/punditConfig/object/vocabularies" target="_blank">see pundit 2.0 configuration</a>) shows an example.
+The following code (<a href="http://dev.thepund.it/download/client/last-beta/docs/index.html#!/api/punditConfig/object/vocabularies" target="_blank">see pundit 2.0 configuration</a>) shows an example.
 
     result: {
          items: [
