@@ -10,6 +10,10 @@ angular.module('Pundit2.ResourcePanel')
         link: function(scope, element, attrs) {
             if (typeof(scope.model) === 'undefined') {
                 scope.model = {};
+            } else {
+                if (scope.model.valid) {
+                    scope.currentDate = scope.model.value;
+                }
             }
 
             scope.mode = 'day';
@@ -39,6 +43,39 @@ angular.module('Pundit2.ResourcePanel')
                 }
 
                 return true;
+            };
+
+            var updateModel = function() {
+                var currentDate = scope.currentDate,
+                    momentDate = moment(currentDate),
+                    year = momentDate.year();
+                    month = momentDate.month()+1;
+                    day = momentDate.date(),
+                    time = momentDate.format('hh:mm:ss');
+
+                if (currentDate instanceof Date) {
+                    switch (scope.mode) {
+                        case 'year':
+                            // scope.model.dateType = ns
+                            scope.model.value = year;
+                            break;
+                        case 'month':
+                            // scope.model.dataType = ns
+                            scope.model.value = year + '-' + month;
+                            break;
+                        case 'day':
+                            // scope.model.dataType = ns
+                            scope.model.value = year + '-' + month + '-' + day;
+                            break;
+                        case 'time':
+                            // scope.model.dataType = ns
+                            scope.model.value = year + '-' + month + '-' + day + 'T' + time;
+                            break;
+                    }
+                } else {
+                    scope.model = {};
+                    scope.model.valid = false;
+                }
             };
 
             var updateCalendarView = function(currentDate) {
@@ -84,7 +121,7 @@ angular.module('Pundit2.ResourcePanel')
                     year: momentDate.year(),
                     month: momentDate.month() + 1,
                     day: momentDate.date(),
-                    time: momentDate.hours() + ':' + momentDate.minutes()
+                    time: momentDate.format('hh:mm')
                 };
             };
 
@@ -121,6 +158,8 @@ angular.module('Pundit2.ResourcePanel')
             scope.switchMode = function(mode) {
                 scope.mode = mode;
                 scope.focus = mode;
+
+                updateModel();
             };
 
             scope.$watch('activeFocus', function() {
@@ -134,6 +173,8 @@ angular.module('Pundit2.ResourcePanel')
                     }
                     updateInput(value);
                 }
+
+                updateModel();
             });
         }
     };
