@@ -99,18 +99,18 @@ angular.module('Pundit2.TripleComposer')
         }
     };
 
-    var parseDate = function(date) {
-        var month = date.getMonth() + 1,
-            day = date.getDate();
+    // var parseDate = function(date) {
+    //     var month = date.getMonth() + 1,
+    //         day = date.getDate();
 
-        if (month < 10) {
-            month = "0" + month;
-        }
-        if (day < 10) {
-            day = "0" + day;
-        }
-        return date.getFullYear() + "-" + month + "-" + day;
-    };
+    //     if (month < 10) {
+    //         month = "0" + month;
+    //     }
+    //     if (day < 10) {
+    //         day = "0" + day;
+    //     }
+    //     return date.getFullYear() + "-" + month + "-" + day;
+    // };
 
     $scope.isStatementComplete = function() {
         if (triple.subject !== null && triple.predicate !== null && triple.object !== null) {
@@ -203,6 +203,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.objectDate = false;
         $scope.objectFixed = false;
         triple.object = null;
+        triple.objType = null;
         ResourcePanel.hide();
         angular.element('.pnd-triplecomposer-save').addClass('disabled');
         $scope.tripleComposerCtrl.isTripleErasable();
@@ -392,12 +393,13 @@ angular.module('Pundit2.TripleComposer')
     $scope.onClickObjectCalendar = function($event) {
         // TODO: improve parent selection
         var target = $event.target.parentNode.parentNode.parentNode;
-        var d;
+        var d = {};
 
         if ($scope.objectDate) {
-            d = lastDate;
+            d.value = lastDate;
+            d.datatype = triple.objType;
         } else {
-            d = new Date();
+            d.value = '';
         }
 
         ResourcePanel.hide();

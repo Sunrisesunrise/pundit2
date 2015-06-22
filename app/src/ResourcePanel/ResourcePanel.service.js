@@ -191,17 +191,26 @@ angular.module('Pundit2.ResourcePanel')
 
             state.popoverOptions.template = 'src/ResourcePanel/popoverCalendar.tmpl.html';
 
-            if (typeof(content.date) === 'undefined' || content.date === '') {
-
-                if (typeof(resourcePanel.options.initialCalendarDate) === 'undefined' || resourcePanel.options.initialCalendarDate === '') {
-                    state.popoverOptions.scope.selectedDate = new Date().toString();
-                } else {
-                    state.popoverOptions.scope.selectedDate = resourcePanel.options.initialCalendarDate;
-                }
-
-            } else {
-                state.popoverOptions.scope.selectedDate = content.date;
+            if (content !== '') {
+                if (typeof(content.value) !== 'undefined' && content.value !== '') {
+                    state.popoverOptions.scope.modelDate = {};
+                    state.popoverOptions.scope.modelDate.valid = true;
+                    state.popoverOptions.scope.modelDate.value = content.value;
+                    state.popoverOptions.scope.modelDate.datatype = content.datatype;
+                } 
             }
+
+            // if (typeof(content.date) === 'undefined' || content.date === '') {
+
+            //     if (typeof(resourcePanel.options.initialCalendarDate) === 'undefined' || resourcePanel.options.initialCalendarDate === '') {
+            //         state.popoverOptions.scope.selectedDate = new Date().toString();
+            //     } else {
+            //         state.popoverOptions.scope.selectedDate = resourcePanel.options.initialCalendarDate;
+            //     }
+
+            // } else {
+            //     state.popoverOptions.scope.selectedDate = content.date;
+            // }
 
             state.popoverOptions.scope.escapeEvent = function(e) {
                 if (e.which === 27) {
@@ -723,7 +732,8 @@ angular.module('Pundit2.ResourcePanel')
      */
     resourcePanel.showPopoverCalendar = function(date, target) {
         var content = {};
-        content.date = date;
+        content.value = date.value;
+        content.datatype = date.datatype;
         // if no popover is shown, just show it
         if (state.popover === null) {
             state.popover = initPopover(content, target, "", 'calendar');
