@@ -1097,7 +1097,7 @@ angular.module('Pundit2.TripleComposer')
     };
 
     tripleComposer.buildObject = function(item, objType) {
-        if (typeof(item) === 'string') {
+        if (typeof(item) === 'string' && typeof(objType) === 'undefined') {
             // literal
             return {
                 type: 'literal',
