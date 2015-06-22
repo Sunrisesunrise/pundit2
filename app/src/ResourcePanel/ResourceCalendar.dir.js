@@ -1,6 +1,6 @@
 angular.module('Pundit2.ResourcePanel')
 
-.directive('resourceCalendar', function() {
+.directive('resourceCalendar', function(NameSpace) {
     return {
         restrict: 'E',
         scope: {
@@ -94,25 +94,25 @@ angular.module('Pundit2.ResourcePanel')
                     year = momentDate.year();
                     month = momentDate.month()+1;
                     day = momentDate.date(),
-                    time = momentDate.format('HH:mm:ss');
+                    time = momentDate.format('HH:mm');
 
                 if (currentDate instanceof Date) {
                     switch (scope.mode) {
                         case 'year':
-                            // scope.model.dateType = ns
+                            scope.model.datatype = NameSpace.gYear;
                             scope.model.value = year;
                             break;
                         case 'month':
-                            // scope.model.dataType = ns
+                            scope.model.datatype = NameSpace.gYearMonth;
                             scope.model.value = year + '-' + month;
                             break;
                         case 'day':
-                            // scope.model.dataType = ns
+                            scope.model.datatype = NameSpace.date;
                             scope.model.value = year + '-' + month + '-' + day;
                             break;
                         case 'time':
-                            // scope.model.dataType = ns
-                            scope.model.value = year + '-' + month + '-' + day + 'T' + time;
+                            scope.model.datatype = NameSpace.dateTime;
+                            scope.model.value = year + '-' + month + '-' + day + 'T' + time + ':00';
                             break;
                     }
                 } else {
