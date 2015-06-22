@@ -8,25 +8,43 @@ angular.module('Pundit2.ResourcePanel')
         },
         templateUrl: "src/ResourcePanel/resourceCalendar.dir.tmpl.html",
         link: function(scope, element, attrs) {
-            if (typeof(scope.model) === 'undefined') {
-                scope.model = {};
-            } else {
-                if (scope.model.valid) {
-                    scope.currentDate = scope.model.value;
-                }
-            }
-
-            scope.mode = 'day';
-            scope.focus = 'year';
-
+            
             scope.activeFocus = false;
-
             scope.inputDate = {
                 year: '',
                 month: '',
                 day: '',
                 time: ''
             };
+            scope.mode = 'day';
+            scope.focus = 'year';
+
+            if (typeof(scope.model) === 'undefined') {
+                scope.model = {};
+            } else {
+                if (scope.model.valid) {
+                    switch (scope.model.datatype) {
+                        case NameSpace.gYear:
+                            scope.mode = 'year';
+                            scope.focus = 'year';
+                            break;
+                        case NameSpace.gYearMonth:
+                            scope.mode = 'month';
+                            scope.focus = 'month';
+                            break;
+                        case NameSpace.date:
+                            scope.mode = 'day';
+                            scope.focus = 'day';
+                            break;
+                        case NameSpace.dateTime:
+                            scope.mode = 'time';
+                            scope.focus = 'time';
+                            break;
+                    }
+                    scope.currentDate = moment(scope.model.value).toDate();
+                }
+            }
+
 
             var isValidField = function(input) {
                 if (typeof(input) === 'undefined') {
@@ -92,15 +110,15 @@ angular.module('Pundit2.ResourcePanel')
                 var currentDate = scope.currentDate,
                     momentDate = moment(currentDate),
                     year = momentDate.year();
-                    month = momentDate.month()+1;
-                    day = momentDate.date(),
+                    month = momentDate.format('MM');
+                    day = momentDate.format('GG'),
                     time = momentDate.format('HH:mm');
 
                 if (currentDate instanceof Date) {
                     switch (scope.mode) {
                         case 'year':
                             scope.model.datatype = NameSpace.gYear;
-                            scope.model.value = year;
+                            scope.model.value = year.toString();
                             break;
                         case 'month':
                             scope.model.datatype = NameSpace.gYearMonth;
