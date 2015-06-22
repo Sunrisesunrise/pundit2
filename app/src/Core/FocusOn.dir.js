@@ -11,11 +11,6 @@ angular.module('Pundit2.Core')
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
-            // scope.$watch(attrs.focusOn, function(value) {
-            //     if (value) {
-            //         element[0].focus();
-            //     }
-            // });
             element.bind("blur", function(e) {
                 $timeout(function() {
                     scope.$apply(attrs.focus + "=false");

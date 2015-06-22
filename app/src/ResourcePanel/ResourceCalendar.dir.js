@@ -38,6 +38,14 @@ angular.module('Pundit2.ResourcePanel')
                 if (isNaN(input)) {
                     return false;
                 }
+
+                return true;
+            };
+
+            var isValidYear = function(input) {
+                if (!isValidField(input)) {
+                    return false;
+                }
                 if (input < 1 || input > 9999) {
                     return false;
                 }
@@ -45,18 +53,38 @@ angular.module('Pundit2.ResourcePanel')
                 return true;
             };
 
-            var isValidTime = function(input) {
-                if (typeof(input) === 'undefined') {
+            var isValidMonth = function(input) {
+                if (!isValidField(input)) {
                     return false;
                 }
-                if (input === '') {
-                    return false;
-                }
-                // TODO Add regular expression
-                if (input.split(':').length !== 2) {
+                if (input < 1 || input > 12) {
                     return false;
                 }
 
+                return true;
+            };
+
+            var isValidDay = function(input) {
+                if (!isValidField(input)) {
+                    return false;
+                }
+                if (input < 1 || input > 31) {
+                    return false;
+                }
+
+                return true;
+            };
+
+            var isValidTime = function(input) {
+                var regExpTime = /^\d{1,2}:\d{2}([ap]m)?$/;
+                
+                if (typeof(input) === 'undefined') {
+                    return false;
+                }
+                if (!input.match(regExpTime)) {
+                    return false;
+                }
+                
                 return true;
             };
 
@@ -142,7 +170,7 @@ angular.module('Pundit2.ResourcePanel')
 
             scope.updateYear = function() {
                 var currentYear = scope.inputDate.year;
-                if (isValidField(currentYear)) {
+                if (isValidYear(currentYear)) {
                     var dateWithNewYear = moment(scope.currentDate).year(currentYear);
                     scope.currentDate = new Date(dateWithNewYear.format());
                 }
@@ -150,7 +178,7 @@ angular.module('Pundit2.ResourcePanel')
 
             scope.updateMonth = function() {
                 var currentMonth = scope.inputDate.month;
-                if (isValidField(currentMonth)) {
+                if (isValidMonth(currentMonth)) {
                     var dateWithNewMonth = moment(scope.currentDate).month(currentMonth - 1);
                     scope.currentDate = new Date(dateWithNewMonth.format());
                 }
@@ -158,7 +186,7 @@ angular.module('Pundit2.ResourcePanel')
 
             scope.updateDay = function() {
                 var currentDay = scope.inputDate.day;
-                if (isValidField(currentDay)) {
+                if (isValidDay(currentDay)) {
                     var dateWithNewDay = moment(scope.currentDate).date(currentDay);
                     scope.currentDate = new Date(dateWithNewDay.format());
                 }
