@@ -195,7 +195,10 @@ angular.module('Pundit2.Core')
      * URL Response Example:
      * <pre> {
      *      result: {
-     *          items: [
+     *          vocab_label: "Relations-X",
+     *          vocab_id: "91",
+     *          vocab_type: "predicates",
+     *          items: [{
      *              "value": "http://purl.org/dc/terms/creator",
      *              "rdftype":["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
      *              "label":"has creator",
@@ -211,7 +214,7 @@ angular.module('Pundit2.Core')
      *                  "http://www.freebase.com/schema/people/person"
      *               ],
      *          ...other items...
-     *          ]
+     *          }]
      *      }
      * }</pre>
      */
