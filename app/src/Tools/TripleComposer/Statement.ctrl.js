@@ -293,6 +293,7 @@ angular.module('Pundit2.TripleComposer')
             if (item.range.indexOf(NameSpace.rdfs.literal) === -1 && item.range.length > 0) {
                 $scope.canBeObjectLiteral = false;
             }
+            // TODO change data check and expand to other format (y, ym, ymd, ymdt)
             if (item.range.indexOf(NameSpace.dateTime) === -1 && item.range.length > 0) {
                 $scope.canBeObjectDate = false;
             }
@@ -338,10 +339,10 @@ angular.module('Pundit2.TripleComposer')
         } else if (typeof(item.type) !== 'undefined' && item.type === 'date') {
             // date item
             lastDate = item.value;
-            triple.object = parseDate(item.value);
-            // triple.objType = item.dateType;
+            triple.object = lastDate;
+            triple.objType = item.datatype;
             $scope.objectLabel = triple.object;
-            $scope.objectTypeLabel = TypesHelper.getLabel(NameSpace.dateTime);
+            $scope.objectTypeLabel = triple.objType;
             $scope.objectDate = true;
         } else {
             // standard item
@@ -401,7 +402,7 @@ angular.module('Pundit2.TripleComposer')
 
         ResourcePanel.hide();
         ResourcePanel.showPopoverCalendar(d, target).then(function(date) {
-            if (isNaN(date)) {
+            if (!date.valid) {
                 return;
             }
             $scope.setObject(date);
@@ -448,6 +449,7 @@ angular.module('Pundit2.TripleComposer')
         }
         if (triple.object !== null) {
             if (triple.isDate) {
+                // TODO ASAP change date generation
                 $scope.setObject(new Date(triple.object));
             } else {
                 $scope.setObject(triple.object);

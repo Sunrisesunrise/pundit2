@@ -115,6 +115,7 @@ angular.module('Pundit2.ResourcePanel')
                             scope.model.value = year + '-' + month + '-' + day + 'T' + time + ':00';
                             break;
                     }
+                    scope.model.valid = true;
                 } else {
                     scope.model = {};
                     scope.model.valid = false;

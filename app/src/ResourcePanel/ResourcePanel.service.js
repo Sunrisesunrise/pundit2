@@ -211,8 +211,6 @@ angular.module('Pundit2.ResourcePanel')
 
             state.popoverOptions.scope.save = function() {
 
-                console.log(this.modelDate);
-
                 if (typeof(this.modelDate) !== 'undefined' && this.modelDate.valid) {
                     this.modelDate.type = 'date';
                     state.resourcePromise.resolve(this.modelDate);
