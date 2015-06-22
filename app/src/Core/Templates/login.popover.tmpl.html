@@ -12,8 +12,8 @@
          ng-show="isLoading">
         <div class="popover-login-pane-content">
             <h1>Hold on</h1>
-            <small ng-show="!postLoginPreCheck">Pundit is loading the login form</small>
-            <small ng-show="postLoginPreCheck">Pundit is completing login procedure</small>
+            <small ng-show="!postLoginPreCheck">Pundit is loading the log in form</small>
+            <small ng-show="postLoginPreCheck">Pundit is completing log in procedure</small>
             <span class="pnd-icon pnd-icon-refresh pnd-icon-spin"></span>
         </div>
     </div>
@@ -25,7 +25,7 @@
         <div class="popover-login-pane-content">
             <span class="pnd-icon pnd-icon-exclamation-circle"></span>
             <h1>Ops, something went wrong</h1>
-            <p>Unfortunately there was an error while trying to perform your request... please try again later</p>
+            <p>Unfortunately there was an error while trying to process your request... please try again later</p>
             <small>Click <a href="#" ng-click="loginRetry()">here</a> to try again</small>
         </div>
     </div>
@@ -41,7 +41,7 @@
 
             <p>Now you can start browsing and creating annotations</p>
             <!-- (autoclose in {{autoCloseIn}}) -->
-            <small><a href="#" ng-click="closePopover()">Close this dialog</a></small>
+            <small><a href="#" ng-click="closePopover()">Close this window</a></small>
         </div>
     </div>
     <!-- END // Success message -->
