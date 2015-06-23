@@ -242,8 +242,8 @@ angular.module('Pundit2.TripleComposer')
     };
 
     var dateSpace = [
-        NameSpace.gYear, 
-        NameSpace.gYearMonth, 
+        NameSpace.gYear,
+        NameSpace.gYearMonth,
         NameSpace.date,
         NameSpace.dateTime
     ];
@@ -386,7 +386,7 @@ angular.module('Pundit2.TripleComposer')
             }],
             editMode: false,
             editAnnID: undefined,
-            closeAfterOp:false,
+            closeAfterOp: false,
             showHeader: true,
             showFooter: true
         };
@@ -882,8 +882,7 @@ angular.module('Pundit2.TripleComposer')
             } else {
                 ContextualMenu.modifyDisabled('removeTriple', true);
             }
-        }
-        else {
+        } else {
             ContextualMenu.modifyDisabled('removeTriple', false);
         }
     };
@@ -986,13 +985,7 @@ angular.module('Pundit2.TripleComposer')
                             state[name].statements[i].scope.setObject(newItem);
                         } else {
                             state[name].statements[i].scope.setObject(triples[i].object.value);
-                        }                       
-
-                        // if (Utils.isValidDate(triples[i].object.value)) {
-                        //     state[name].statements[i].scope.setObject(new Date(triples[i].object.value));
-                        // } else {
-                        //     state[name].statements[i].scope.setObject(triples[i].object.value);
-                        // }
+                        }
                     } else {
                         tripleComposer.log('Try to add incompatible type of object', triples[i].object);
                     }

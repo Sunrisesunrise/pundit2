@@ -8,7 +8,7 @@ angular.module('Pundit2.ResourcePanel')
         },
         templateUrl: "src/ResourcePanel/resourceCalendar.dir.tmpl.html",
         link: function(scope, element, attrs) {
-            
+
             scope.activeFocus = false;
             scope.inputDate = {
                 year: '',
@@ -95,14 +95,14 @@ angular.module('Pundit2.ResourcePanel')
 
             var isValidTime = function(input) {
                 var regExpTime = /^\d{1,2}:\d{2}([ap]m)?$/;
-                
+
                 if (typeof(input) === 'undefined') {
                     return false;
                 }
                 if (!input.match(regExpTime)) {
                     return false;
                 }
-                
+
                 return true;
             };
 
@@ -110,8 +110,8 @@ angular.module('Pundit2.ResourcePanel')
                 var currentDate = scope.currentDate,
                     momentDate = moment(currentDate),
                     year = momentDate.year();
-                    month = momentDate.format('MM');
-                    day = momentDate.format('GG'),
+                month = momentDate.format('MM');
+                day = momentDate.format('GG'),
                     time = momentDate.format('HH:mm');
 
                 if (currentDate instanceof Date) {
