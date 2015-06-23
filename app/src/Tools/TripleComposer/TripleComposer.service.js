@@ -983,6 +983,7 @@ angular.module('Pundit2.TripleComposer')
                                 type: 'date',
                                 value: triples[i].object.value
                             }
+                            state[name].statements[i].scope.setObject(newItem);
                         } else {
                             state[name].statements[i].scope.setObject(triples[i].object.value);
                         }                       
