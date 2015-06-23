@@ -467,6 +467,12 @@ angular.module('Pundit2.Core')
         },
         NotebookComposer: {
             active: true
+        },
+        VocabulariesContainer: {
+            active: false
+        },
+        PageItemsContainer: {
+            active: false
         }
     },
 
