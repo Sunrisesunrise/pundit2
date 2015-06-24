@@ -449,7 +449,9 @@ angular.module('Pundit2.Core')
                 popoverState.popover.$scope.$digest();
             }
             else if(params.data === 'profileSuccessfullyUpdated') {
-                myPundit.closeLoginPopover();
+                $timeout(function() {
+                    myPundit.closeLoginPopover();
+                }, 2500);
                 myPundit.checkLoggedIn();
             }
             else if(params.data === 'userLoggedIn') {
