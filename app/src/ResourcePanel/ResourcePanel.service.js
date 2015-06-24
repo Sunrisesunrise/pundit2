@@ -147,6 +147,7 @@ angular.module('Pundit2.ResourcePanel')
     var show = function() {
         state.popover.show();
         EventDispatcher.sendEvent('ResourcePanel.toggle', true);
+        resourcePanel.updatePosition();
     };
 
     var hide = function() {
@@ -203,6 +204,8 @@ angular.module('Pundit2.ResourcePanel')
                 state.popoverOptions.scope.selectedDate = content.date;
             }
 
+            state.popoverOptions.scope.container = "[data-ng-app='Pundit2'] .popover-datepicker .popover-content .form-group";
+
             state.popoverOptions.scope.escapeEvent = function(e) {
                 if (e.which === 27) {
                     e.stopPropagation();
@@ -231,7 +234,8 @@ angular.module('Pundit2.ResourcePanel')
             };
 
             // initialize a literal popover
-        } else if (type === 'literal') {
+        }
+        else if (type === 'literal') {
 
             state.popoverOptions.template = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
 
@@ -269,7 +273,8 @@ angular.module('Pundit2.ResourcePanel')
             };
 
             // initialize a resource panel popover
-        } else if (type === 'resourcePanel') {
+        }
+        else if (type === 'resourcePanel') {
 
             if (typeof(Config.korbo) !== 'undefined' && Config.korbo.active) {
                 var name = $window[Config.korbo.confName].globalObjectName;
@@ -305,6 +310,7 @@ angular.module('Pundit2.ResourcePanel')
             state.popoverOptions.scope.myItems = content.myItems;
             state.popoverOptions.scope.properties = content.properties;
             state.popoverOptions.scope.contentTabs = contentTabs;
+            state.popoverOptions.scope.active = 0;
             if (content.label !== '' && typeof(content.label) !== 'undefined') {
                 setLabelToSearch(content.label);
             } else {
@@ -340,6 +346,10 @@ angular.module('Pundit2.ResourcePanel')
             };
         }
 
+        state.popoverOptions.scope.setActive = function (index, event) {
+            state.popoverOptions.scope.active = index;
+        }
+
         // common for all type of popover
         if (typeof(placement) === 'undefined' || placement === '') {
             state.popoverOptions.placement = state.defaultPlacement;
@@ -372,7 +382,8 @@ angular.module('Pundit2.ResourcePanel')
         });
 
         //state.popover = $popover(angular.element(target), state.popoverOptions);
-        state.popover = $popover(state.anchor, state.popoverOptions);
+        //state.popover = $popover(state.anchor, state.popoverOptions);
+        state.popover = $popover(angular.element(target), state.popoverOptions);
         state.popover.posPopMod = posPopMod;
 
         // Open the calendar automatically
@@ -391,6 +402,61 @@ angular.module('Pundit2.ResourcePanel')
 
         state.popover.clickTarget = target;
         return state.popover;
+    };
+
+    var initPopover_new = function(content, target, placement, type, contentTabs, tripleElemType) {
+        var posPopMod = 0,
+        valMod = 100;
+        state.popoverOptions.scope.arrowLeft = '-11px';
+
+        if (typeof(tripleElemType) !== 'undefined') {
+            if (tripleElemType === 'sub') {
+                posPopMod = valMod + 27;
+                state.popoverOptions.scope.arrowLeft = '-' + valMod - 27 + 'px';
+            } else if (tripleElemType === 'obj') {
+                state.popoverOptions.scope.arrowLeft = valMod + 'px';
+                posPopMod = -valMod;
+            }
+        }
+
+        switch (type) {
+            case 'literal':
+                state.popoverOptions.template = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
+
+                if (typeof(content.literalText) === 'undefined') {
+                    state.popoverOptions.scope.literalText = '';
+                } else {
+                    state.popoverOptions.scope.literalText = content.literalText;
+                }
+
+                state.popoverOptions.scope.escapeEvent = function(e) {
+                    if (e.which === 27) {
+                        e.stopPropagation();
+                    }
+                };
+
+                // handle save a new popoverLiteral
+                state.popoverOptions.scope.save = function() {
+                    state.resourcePromise.resolve(this.literalText);
+                    Preview.hideDashboardPreview();
+                    hide();
+
+                    var eventLabel = 'resourcePanel--' + type;
+                    eventLabel += '--save';
+                    Analytics.track('buttons', 'click', eventLabel);
+                };
+
+                // close popoverLiteral popover without saving
+                state.popoverOptions.scope.cancel = function() {
+                    Preview.hideDashboardPreview();
+                    hide();
+
+                    var eventLabel = 'resourcePanel--' + type;
+                    eventLabel += '--cancel';
+                    Analytics.track('buttons', 'click', eventLabel);
+                };
+                break;
+        }
     };
 
     var setLabelToSearch = function(val) {
