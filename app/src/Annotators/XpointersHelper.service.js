@@ -453,7 +453,8 @@ angular.module('Pundit2.Annotators')
             var i = node.childNodes.length - 1;
 
             var child, sibling;
-            while (child = node.childNodes[i--]) {
+            // TODO is there a better way to do this?
+            while (child = node.childNodes[i--]) { // jshint ignore:line
                 if (xp.isTextNode(child) && (sibling = node.childNodes[i]) && xp.isTextNode(sibling)) {
                     sibling.nodeValue = sibling.nodeValue + child.nodeValue;
                     node.removeChild(child);

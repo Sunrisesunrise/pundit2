@@ -352,7 +352,7 @@ angular.module('Pundit2.Annotators')
         // Iterate over previous siblings (to the left of this current node) and calculate
         // the right offset. We start from the dirty one
         offset = dirtyOffset;
-        while (currentNode = node.previousSibling) {
+        while (currentNode = node.previousSibling) { // jshint ignore:line
 
             // If the node is not added by consolidation but it's an element, we're done
             if (!xp.isConsolidationNode(currentNode) && xp.isElementNode(currentNode) && !xp.isWrapNode(currentNode)) {
@@ -424,7 +424,7 @@ angular.module('Pundit2.Annotators')
         if (xp.isTextNode(node)) {
 
             // If it's a text node: skip ignore nodes, counting text/element nodes
-            while (currentNode = lastNode.previousSibling) {
+            while (currentNode = lastNode.previousSibling) { // jshint ignore:line
                 if (check1(currentNode) && (check2(lastNode) || xp.isWrappedElementNode(lastNode))) {
                     cleanN++;
                 }
@@ -433,7 +433,7 @@ angular.module('Pundit2.Annotators')
         } else {
 
             // If it's an element node, count the siblings skipping consolidation nodes
-            while (currentNode = lastNode.previousSibling) {
+            while (currentNode = lastNode.previousSibling) { // jshint ignore:line
                 if (getXPathNodeName(currentNode) === nodeName && !xp.isConsolidationNode(currentNode)) {
                     cleanN++;
                 }
@@ -501,7 +501,7 @@ angular.module('Pundit2.Annotators')
         // If it's not a text node, and there's a siblings with the same
         // nodeName, accumulate their number
         if (!xp.isTextNode(currentNode)) {
-            while (sibling = currentNode.previousSibling) {
+            while (sibling = currentNode.previousSibling) { // jshint ignore:line
                 if (getXPathNodeName(sibling) === nodeName && !xp.isConsolidationNode(sibling)) {
                     num++;
                 }
