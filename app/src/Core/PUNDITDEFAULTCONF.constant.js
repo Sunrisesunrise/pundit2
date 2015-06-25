@@ -440,7 +440,7 @@ angular.module('Pundit2.Core')
         },
         PageItemsContainer: {
             // ngdoc in PageItemsContainer.service.js
-            active: true
+            active: false
         },
         PredicatesContainer: {
             // ngdoc in PredicatesContainer.service.js
@@ -455,7 +455,7 @@ angular.module('Pundit2.Core')
         },
         VocabulariesContainer: {
             // ngdoc in VocabulariesContainer.service.js
-            active: true
+            active: false
         },
         SelectorsManager: {
             // ngdoc in SelectorsManager.service.js
@@ -467,12 +467,6 @@ angular.module('Pundit2.Core')
         },
         NotebookComposer: {
             active: true
-        },
-        VocabulariesContainer: {
-            active: false
-        },
-        PageItemsContainer: {
-            active: false
         }
     },
 
