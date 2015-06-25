@@ -63,13 +63,13 @@ describe("Test some Korbo UI features", function() {
                 // Check if entity saving is correctly blocked and if UI shows that.
                 // 1. check active tab, it shold be "Advanced fields".
                 p.findElements(protractor.By.css('.kee-modal-container .kee-top-area ul.nav-tabs li')).then(function(elements){
-                    expect(elements[1].getAttribute('class')).toMatch('active')
+                    expect(elements[1].getAttribute('class')).toMatch('active');
                 });
                 // 2. check for error message.
                 p.findElement(protractor.By.css('.kee-modal-container .kee-top-area-message')).then(function(element){
                     element.getText().then(function(text){
                         text = text.trim();
-                        var hasCorrectText = text.indexOf('Incompatible entity types') != -1;
+                        var hasCorrectText = text.indexOf('Incompatible entity types') !== -1;
                         expect(hasCorrectText).toBe(true);
                     });
                 });

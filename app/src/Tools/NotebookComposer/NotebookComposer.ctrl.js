@@ -150,7 +150,7 @@ angular.module('Pundit2.NotebookComposer')
                 }
 
             });
-        
+
         var eventLabel = getHierarchyString();
         eventLabel += "--saveNewNotebook";
         Analytics.track('buttons', 'click', eventLabel);
@@ -252,5 +252,12 @@ angular.module('Pundit2.NotebookComposer')
             Analytics.track('buttons', 'click', eventLabel);
         }
     };
+
+    EventDispatcher.addListener('MyPundit.popoverClose', function() {
+        if ($scope.saving) {
+            updateMessagge(NotebookComposer.options.notificationErrorMsg, NotebookComposer.options.notificationMsgTime, true);
+            $scope.clear();
+        }
+    });    
 
 });

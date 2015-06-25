@@ -253,8 +253,7 @@ angular.module('Pundit2.TripleComposer')
 
         var promise = $q.defer();
 
-        //MyPundit.login().then(function(logged) {
-        MyPundit.popoverLogin(null, 'login').then(function(logged) {
+        MyPundit.login().then(function(logged) {
 
             if (logged) {
                 var abort = $scope.statements.some(function(el) {

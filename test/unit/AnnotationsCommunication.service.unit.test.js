@@ -12,6 +12,18 @@ describe('AnnotationsCommunication service', function() {
     var userLoggedIn = {
         loginStatus: 1
     };
+
+    var addLoginButton = function() {
+        var loginButton = angular.element('<div/>').addClass('pnd-toolbar-login-button');
+        angular.element('body').append(loginButton);
+        $rootScope.$digest();
+        return loginButton;
+    };
+
+    var removeLoginButton = function() {
+        angular.element('.pnd-toolbar-login-button').remove();
+    };
+
     // var userNotLoggedIn = {
     //     loginStatus: 0
     // };
@@ -29,7 +41,13 @@ describe('AnnotationsCommunication service', function() {
         $httpBackend = _$httpBackend_;
         $q = _$q_;
         $rootScope = _$rootScope_;
+
+        addLoginButton();
     }));
+
+    afterEach(function(){
+        removeLoginButton();
+    });
 
     it("should correctly delete an annotation", function(){
         var ann = {
