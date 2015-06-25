@@ -486,6 +486,7 @@ angular.module('Pundit2.Core')
     }
 
     // TODO This is not really a popoverLogin but more a popover toggler
+    // TODO Is event used? 
     myPundit.popoverLogin = function (event, where) {
         loginPromise = $q.defer();
 
@@ -544,6 +545,8 @@ angular.module('Pundit2.Core')
         popoverState.popover = null;
 
     };
+
+    // TODO ASAP Two function editProfile?! and .. who is event?
 
     myPundit.editProfile = function() {
         myPundit.popoverLogin(event, 'editProfile');
