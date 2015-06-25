@@ -92,16 +92,17 @@ angular.module('Pundit2.Annomatic')
         // .. better store it in the ann.state directly and have the setStateClass
         // remove it directly?
 
+        var element = angular.element('.' + $scope.fragment);
+
         // Set the state class on every bit belonging to this fragment
-        angular.element('.' + $scope.fragment).removeClass(from + ' ann-active');
-        angular.element('.' + $scope.fragment).addClass(to);
+        element.removeClass(from + ' ann-active');
+        element.addClass(to);
 
         if (from === Annomatic.stateClassMap.hidden) {
-            // TODO: maybe $scope.element ?
             element.removeClass('ann-hidden');
         } else if (to === Annomatic.stateClassMap.hidden) {
-            // TODO: maybe $scope.element ?
             element.addClass('ann-hidden');
+
         }
 
     };
