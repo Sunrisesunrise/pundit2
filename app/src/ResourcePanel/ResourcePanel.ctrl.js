@@ -7,6 +7,7 @@ angular.module('Pundit2.ResourcePanel')
     var actualContainer;
     var selectors = SelectorsManager.getActiveSelectors();
     var searchTimer;
+    var resetHandler;
 
     $scope.label = '';
 
@@ -89,7 +90,7 @@ angular.module('Pundit2.ResourcePanel')
             res = true;
         }
         if (typeof ResourcePanel.overrideFooterExtraButtons !== 'undefined' &&
-        typeof ResourcePanel.overrideFooterExtraButtons.showUseAndCopy !== 'undefined' ) {
+            typeof ResourcePanel.overrideFooterExtraButtons.showUseAndCopy !== 'undefined') {
             res &= ResourcePanel.overrideFooterExtraButtons.showUseAndCopy;
         }
         return res;
@@ -101,7 +102,7 @@ angular.module('Pundit2.ResourcePanel')
             res = true;
         }
         if (typeof ResourcePanel.overrideFooterExtraButtons !== 'undefined' &&
-            typeof ResourcePanel.overrideFooterExtraButtons.showNewButton !== 'undefined' ) {
+            typeof ResourcePanel.overrideFooterExtraButtons.showNewButton !== 'undefined') {
             res &= ResourcePanel.overrideFooterExtraButtons.showNewButton;
         }
         return res;
@@ -125,7 +126,7 @@ angular.module('Pundit2.ResourcePanel')
             res = true;
         }
         if (typeof ResourcePanel.overrideFooterExtraButtons !== 'undefined' &&
-            typeof ResourcePanel.overrideFooterExtraButtons.showCopyInEditorButton !== 'undefined' ) {
+            typeof ResourcePanel.overrideFooterExtraButtons.showCopyInEditorButton !== 'undefined') {
             res &= ResourcePanel.overrideFooterExtraButtons.showCopyInEditorButton;
         }
         return res;
@@ -147,7 +148,7 @@ angular.module('Pundit2.ResourcePanel')
         }
 
         if (typeof ResourcePanel.overrideFooterExtraButtons !== 'undefined' &&
-        typeof ResourcePanel.overrideFooterExtraButtons.showUseFullPageButton !== 'undefined' ) {
+            typeof ResourcePanel.overrideFooterExtraButtons.showUseFullPageButton !== 'undefined') {
             res &= ResourcePanel.overrideFooterExtraButtons.showUseFullPageButton;
         }
 
@@ -190,16 +191,14 @@ angular.module('Pundit2.ResourcePanel')
                 $timeout.cancel(searchTimer);
                 searchTimer = $timeout(function() {
                     if (Config.annotationServerCallsNeedLoggedUser) {
-                        MyPundit.checkLoggedIn().then(function (isLoggedIn) {
+                        MyPundit.checkLoggedIn().then(function(isLoggedIn) {
                             if (isLoggedIn) {
                                 ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
-                            }
-                            else {
+                            } else {
                                 EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
                             }
                         });
-                    }
-                    else {
+                    } else {
                         ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
                     }
                 }, ResourcePanel.options.vocabSearchTimer);
@@ -208,16 +207,14 @@ angular.module('Pundit2.ResourcePanel')
             $timeout.cancel(searchTimer);
             // TODO: add specific method in ResourcePanel to reset search
             if (Config.annotationServerCallsNeedLoggedUser) {
-                MyPundit.checkLoggedIn().then(function (isLoggedIn) {
+                MyPundit.checkLoggedIn().then(function(isLoggedIn) {
                     if (isLoggedIn) {
                         ResourcePanel.updateVocabSearch('', $scope.triple, caller);
-                    }
-                    else {
+                    } else {
                         EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
                     }
                 });
-            }
-            else {
+            } else {
                 ResourcePanel.updateVocabSearch('', $scope.triple, caller);
             }
         }
@@ -227,6 +224,60 @@ angular.module('Pundit2.ResourcePanel')
         if (e.which === 27) {
             e.stopPropagation();
         }
+    };
+
+    //function colled on list scroll
+    $scope.infiniteScroll = function(pane, label) {
+
+        if (!pane.selector || !pane.selector.config || !pane.selector.config.infiniteScrolling) {
+            return;
+        }
+
+        //if pane is already loading data we return
+        if (pane.isLoading) {
+            return;
+        }
+
+        //if there are no remote items count we return
+        if (typeof(pane.remoteItemCount) === 'undefined' || pane.remoteItemCount === 0) {
+            return;
+        } else {
+            //if we have downloaded all items we return
+            if (pane.items.length === pane.remoteItemCount) {
+                return;
+            }
+        }
+        var caller = '';
+        var selectors = [pane.selector];
+        var offset = pane.items.length;
+        switch ($scope.type) {
+            case 'sub':
+                caller = 'subject';
+                break;
+            case 'pr':
+                caller = 'predicate';
+                break;
+            case 'obj':
+                caller = 'object';
+                break;
+        }
+        if (caller !== 'pr' && caller !== '') {
+            $timeout.cancel(searchTimer);
+            searchTimer = $timeout(function() {
+                if (Config.annotationServerCallsNeedLoggedUser) {
+                    MyPundit.checkLoggedIn().then(function(isLoggedIn) {
+                        if (isLoggedIn) {
+                            ResourcePanel.addItems(label, selectors, $scope.triple, caller, offset);
+                        } else {
+                            EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
+                        }
+                    });
+                } else {
+                    ResourcePanel.addItems(label, selectors, $scope.triple, caller, offset);
+                }
+            }, ResourcePanel.options.vocabSearchTimer);
+        }
+
     };
 
     // TODO: why?!
@@ -249,65 +300,12 @@ angular.module('Pundit2.ResourcePanel')
         $scope.userLoggedIn = newStatus;
     });
 
-    // TODO: remove from ctrl and find a better way to reset the selection
-    EventDispatcher.addListener('Pundit.changeSelection', function() {
-        resetSelection();
+    $scope.$on('$destroy', function() {
+        EventDispatcher.removeListener(resetHandler);
     });
 
-    //function colled on list scroll
-    $scope.infiniteScroll = function(pane, label){
-
-        if(!pane.selector || !pane.selector.config || !pane.selector.config.infiniteScrolling){
-            return;
-        }
-
-        //if pane is already loading data we return
-        if(pane.isLoading){
-            return;
-        }
-
-        //if there are no remote items count we return
-        if (typeof(pane.remoteItemCount) === 'undefined' || pane.remoteItemCount === 0) {
-            return;
-        } else {
-            //if we have downloaded all items we return
-            if(pane.items.length === pane.remoteItemCount){
-                return;
-            }
-        }
-        var caller = '';
-        var selectors = [pane.selector];
-        var offset = pane.items.length;
-        switch ($scope.type) {
-            case 'sub':
-                caller = 'subject';
-                break;
-            case 'pr':
-                caller = 'predicate';
-                break;
-            case 'obj':
-                caller = 'object';
-                break;
-        }
-        if (caller !== 'pr' && caller !== '') {
-            $timeout.cancel(searchTimer);
-            searchTimer = $timeout(function() {
-                if (Config.annotationServerCallsNeedLoggedUser) {
-                    MyPundit.checkLoggedIn().then(function (isLoggedIn) {
-                        if (isLoggedIn) {
-                            ResourcePanel.addItems(label, selectors, $scope.triple, caller, offset);
-                        }
-                        else {
-                            EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
-                        }
-                    });
-                }
-                else {
-                    ResourcePanel.addItems(label, selectors, $scope.triple, caller, offset);
-                }
-            }, ResourcePanel.options.vocabSearchTimer);
-        }
-
-    };
+    resetHandler = EventDispatcher.addListener('Pundit.changeSelection', function() {
+        resetSelection();
+    });
 
 });
