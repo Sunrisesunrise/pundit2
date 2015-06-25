@@ -494,6 +494,7 @@ angular.module('Pundit2.Core')
             popoverState.popover.hide();
             popoverState.popover.destroy(); // TODO Doesn't remove the code?????
             popoverState.popover = null;
+            EventDispatcher.sendEvent('MyPundit.popoverClose');
             return;
         }
 
