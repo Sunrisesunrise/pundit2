@@ -63,7 +63,7 @@
                 <!-- Annotate page button -->
                 <li class="pnd-toolbar-annotate-page-button"
                     ng-click="annotateWebPage()"
-                    ng-class="{'pnd-not-clickable':!canUsePageAsSubject()}">
+                    ng-class="{'pnd-not-clickable':!canUsePageAsSubject, 'disabled':!canUsePageAsSubject}">
                     <a href="javascript:void(0)">
                         <span>Annotate web page</span>
                     </a>

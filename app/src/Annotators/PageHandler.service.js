@@ -46,7 +46,7 @@ angular.module('Pundit2.Annotators')
 
 })
 
-.service('PageHandler', function($document, PAGEHANDLERDEFAULTS, NameSpace, BaseComponent, Item, XpointersHelper) {
+.service('PageHandler', function($document, PAGEHANDLERDEFAULTS, NameSpace, BaseComponent, Item, ItemsExchange, XpointersHelper) {
     // ContextualMenu, XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer,
     // $document
 
@@ -87,6 +87,17 @@ angular.module('Pundit2.Annotators')
 
         return new Item(values.uri, values);
     };
+
+    pageHandler.getPageItem = function() {
+        var pageItem = ItemsExchange.getItemByUri(XpointersHelper.getSafePageContext());
+
+        if (typeof pageItem !== 'undefined') {
+            return pageItem;
+        }
+
+        return pageHandler.createItemFromPage();
+    }
+
 
     pageHandler.log('Component up and running');
     return pageHandler;

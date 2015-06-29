@@ -166,6 +166,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.wipeObject();
         Preview.clearItemDashboardSticky();
         EventDispatcher.sendEvent('Pundit.changeSelection');
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
     $scope.wipeSubject = function() {
@@ -179,6 +180,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.tripleComposerCtrl.isTripleErasable();
         Preview.clearItemDashboardSticky();
         EventDispatcher.sendEvent('Pundit.changeSelection');
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
     $scope.wipePredicate = function() {
@@ -193,6 +195,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.tripleComposerCtrl.isTripleErasable();
         Preview.clearItemDashboardSticky();
         EventDispatcher.sendEvent('Pundit.changeSelection');
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
     $scope.wipeObject = function() {
@@ -207,6 +210,7 @@ angular.module('Pundit2.TripleComposer')
         angular.element('.pnd-triplecomposer-save').addClass('disabled');
         $scope.tripleComposerCtrl.isTripleErasable();
         EventDispatcher.sendEvent('Pundit.changeSelection');
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
     $scope.onSubjectMouseOver = function() {
@@ -249,6 +253,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.tripleComposerCtrl.isAnnotationComplete();
         $scope.tripleComposerCtrl.isTripleErasable();
         Preview.clearItemDashboardSticky();
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
     $scope.onClickSubject = function($event) {
@@ -303,6 +308,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.tripleComposerCtrl.isAnnotationComplete();
         $scope.tripleComposerCtrl.isTripleErasable();
         Preview.clearItemDashboardSticky();
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
     $scope.onClickPredicate = function($event) {
@@ -350,7 +356,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.tripleComposerCtrl.isAnnotationComplete();
         $scope.tripleComposerCtrl.isTripleErasable();
         Preview.clearItemDashboardSticky();
-
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
     $scope.onClickObject = function($event) {
