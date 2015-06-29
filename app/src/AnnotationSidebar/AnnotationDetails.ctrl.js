@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.controller('AnnotationDetailsCtrl', function($scope, $rootScope, $element, $modal, $timeout, $window,
+.controller('AnnotationDetailsCtrl', function($scope, $rootScope, $element, $modal, $timeout, $window, $timeout,
     AnnotationSidebar, AnnotationDetails, AnnotationsExchange, AnnotationsCommunication, Config,
     EventDispatcher, NotebookExchange, ItemsExchange, TripleComposer, Dashboard, ImageAnnotator,
     TextFragmentAnnotator, TypesHelper, MyPundit, Consolidation, Status, Analytics) {
@@ -254,6 +254,12 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
+    $scope.forceUpdate = function() {
+        $timeout(function(){
+            $rootScope.$$phase || $rootScope.$digest();
+        });
+    };
+
     var cancelWatchNotebookName = $scope.$watch(function() {
         return NotebookExchange.getNotebookById(notebookId);
     }, function(nb) {
@@ -278,7 +284,7 @@ angular.module('Pundit2.AnnotationSidebar')
     });
 
     $scope.$watch(function() {
-        return currentElement.height();
+        return angular.element($element).find('.pnd-annotation-details-wrap').height();
     }, function(newHeight, oldHeight) {
         if (typeof($scope.annotation) !== 'undefined') {
             if (newHeight !== oldHeight && $scope.annotation.expanded) {
