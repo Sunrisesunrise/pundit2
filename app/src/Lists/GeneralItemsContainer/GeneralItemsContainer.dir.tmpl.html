@@ -35,11 +35,12 @@
                 <li
                         class="list-group-item"
                         ng-repeat="item in displayedItems | orderBy:getOrderProperty:reverse">
-                    <item-notebook ng-if="isMyNotebooks"
-                                   nid="{{item.id}}"
-                                   menu-type="{{itemMenuType}}"
-                                   hide-sticky-button="true"
-                                   force-sticky="true"></item-notebook>
+                    <item ng-if="isMyNotebooks"
+                          nid="{{item.id}}"
+                          menu-type="{{itemMenuType}}"
+                          item-type="notebook"
+                          hide-sticky-button="true"
+                          force-sticky="true"></item>
                     <item ng-if="isPredicates"
                           uri="{{item.uri}}"
                           menu-type="{{itemMenuType}}"
