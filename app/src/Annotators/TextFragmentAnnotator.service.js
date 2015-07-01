@@ -71,8 +71,22 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> suggestionIconClass: 'pnd-icon-pencil' </pre>
      */
-    suggestionIconClass: "pnd-icon-pencil"
+    suggestionIconClass: "pnd-icon-pencil", 
 
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#TextFragmentAnnotator.addIcon
+     *
+     * @description
+     * `boolean`
+     *
+     * Add or not the icon to the text fragments
+     *
+     * Default value:
+     * <pre> addIcon: 'true' </pre>
+     */
+     addIcon: true
 })
 
 .service('TextFragmentAnnotator', function(TEXTFRAGMENTANNOTATORDEFAULTS, NameSpace, BaseComponent, Consolidation,
@@ -191,8 +205,9 @@ angular.module('Pundit2.Annotators')
     // TODO: Move this to XpointersHelper .something() ?
     var activateFragments = function() {
 
-        // TODO: do we want this to be configurable? Or icons are here to stay?
-        placeIcons();
+        if (tfa.options.addIcon) {
+            placeIcons();
+        }
 
         var consolidated = angular.element('.pnd-cons');
         $compile(consolidated)($rootScope);
