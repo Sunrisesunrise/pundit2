@@ -127,6 +127,8 @@ angular.module('Pundit2.Core')
             }
         }
 
+        EventDispatcher.sendEvent('Consolidation.consolidate');
+
         // TODO: ImageConsolidator ? (polygons, areas, whatever: on images?)
         // TODO: More consolidator types? Video? Maps? ..
     };
