@@ -775,7 +775,9 @@ angular.module('Pundit2.TripleComposer')
     // Used to add a object from outside of triple composer
     tripleComposer.addToObject = function(item, name) {
         name = fixName(name);
-        tripleComposer.closeAfterOp(name);
+        if (Dashboard.isDashboardVisible() === false) {
+            tripleComposer.closeAfterOp(name);
+        }
         tripleComposer.openTripleComposer();
 
         for (var i in state[name].statements) {
@@ -794,7 +796,9 @@ angular.module('Pundit2.TripleComposer')
     // Used to add a predicate from outside of triple composer
     tripleComposer.addToPredicate = function(item, name) {
         name = fixName(name);
-        tripleComposer.closeAfterOp(name);
+        if (Dashboard.isDashboardVisible() === false) {
+            tripleComposer.closeAfterOp(name);
+        }
         tripleComposer.openTripleComposer();
 
         for (var i in state[name].statements) {
@@ -813,7 +817,9 @@ angular.module('Pundit2.TripleComposer')
     // Used to add a subject from outside of triple composer
     tripleComposer.addToSubject = function(item, name) {
         name = fixName(name);
-        tripleComposer.closeAfterOp(name);
+        if (Dashboard.isDashboardVisible() === false) {
+            tripleComposer.closeAfterOp(name);
+        }
         tripleComposer.openTripleComposer();
 
         for (var i in state[name].statements) {
