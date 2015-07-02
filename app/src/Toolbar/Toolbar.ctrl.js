@@ -576,6 +576,7 @@ angular.module('Pundit2.Toolbar')
         if (!$scope.isAnnomaticRunning) {
             ResourcePanel.hide();
             Analytics.track('buttons', 'click', 'toolbar--dashboard--' + (Dashboard.isDashboardVisible() ? 'closed' : 'open'));
+            TripleComposer.closeAfterOpOff();
             Dashboard.toggle();
         }
     };
