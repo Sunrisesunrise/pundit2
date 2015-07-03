@@ -69,6 +69,7 @@
 
 
     <script src="../src/Communication/Communication.js"></script>
+    <script src="../src/Communication/ModelBuilder.service.js"></script>
     <script src="../src/Communication/Notebook.factory.js"></script>
     <script src="../src/Communication/NotebooksExchange.service.js"></script>
     <script src="../src/Communication/NotebooksCommunication.service.js"></script>
