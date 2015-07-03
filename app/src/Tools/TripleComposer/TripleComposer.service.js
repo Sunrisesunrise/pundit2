@@ -431,11 +431,17 @@ angular.module('Pundit2.TripleComposer')
 
     tripleComposer.closeAfterOp = function(name) {
         name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
         state[name].closeAfterOp = true;
     };
 
     tripleComposer.closeAfterOpOff = function(name) {
         name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
         state[name].closeAfterOp = false;
     };
 
