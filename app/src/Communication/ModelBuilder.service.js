@@ -1,10 +1,18 @@
 angular.module('Pundit2.Communication')
 .constant('MODELBUILDERDEFAULTS', {
-
+    annotationServerPrefix: 'http://purl.org/pundit/local/'
 })
-.service('ModelBuilder', function(BaseComponent, MODELBUILDERDEFAULTS, MyPundit, TripleComposer, NameSpace, TypesHelper) {
+.service('ModelBuilder', function(BaseComponent, MODELBUILDERDEFAULTS, Consolidation, XpointersHelper, MyPundit, TripleComposer, NameSpace, TypesHelper, md5) {
 
     var modelBuilder = new BaseComponent("ModelBuilder", MODELBUILDERDEFAULTS);
+
+    var targetURIs = function(uri) {
+        var md5URI = md5.createHash(uri);
+        return {
+            'target': modelBuilder.options.annotationServerPrefix + 'target/' + md5URI,
+            'selector': modelBuilder.options.annotationServerPrefix + 'selector/' + md5URI
+        };
+    };
 
     var addGraphElem = function(el, res) {
         var triple = el.scope.get();
@@ -123,6 +131,111 @@ angular.module('Pundit2.Communication')
         });
     }
 
+    var addTargetElem = function(el, res) {
+        var triple = el.scope.get(),
+            uris;
+
+        // Skip incomplete triple.
+        if (triple.subject === null || triple.predicate === null || triple.object === null) {
+            return;
+        }
+
+        // Subject.
+        [triple.subject, triple.object].forEach(function (a, i, arr) {
+            var statementPart = arr[i];
+            if (typeof statementPart === 'string') {
+                return;
+            }
+            if (statementPart.isTextFragment() ||
+            statementPart.isImage() ||
+            statementPart.isImageFragment() ||
+            statementPart.isWebPage()
+            ) {
+                uris = targetURIs(statementPart.uri);
+                // If it's not already present.
+                if (typeof res[uris.target] === 'undefined') {
+                    var target = {};
+                    var selector = {};
+
+                    // Building target info.
+                    // isPartOf.
+                    if (statementPart.hasOwnProperty('isPartOf')) {
+                        target[NameSpace.item.isPartOf] = [
+                            {
+                                "value": statementPart.isPartOf,
+                                "type": "uri"
+                            }
+                        ];
+                    }
+                    // hasSelector.
+                    target[NameSpace.annotation.hasSelector] = [
+                        {
+                            "value": uris.selector,
+                            "type": "uri"
+                        }
+                    ];
+                    // hasScope.
+                    target[NameSpace.annotation.hasScope] = [
+                        {
+                            "value": XpointersHelper.getSafePageContext(),
+                            "type": "uri"
+                        }
+                    ];
+                    // hasSource.
+                    target[NameSpace.annotation.hasSource] = [
+                        {
+                            "value": XpointersHelper.getSafePageContext(),
+                            "type": "uri"
+                        }
+                    ];
+                    // type
+                    target[NameSpace.rdf.type] = [];
+                    for (var i in statementPart.type) {
+                        target[NameSpace.rdf.type].push({
+                            'value': statementPart.type[i],
+                            'type': 'uri'
+                        });
+                    }
+
+                    // Building selector info.
+                    // conformsTo.
+                    selector[NameSpace.target.conformsTo] = [
+                        {
+                            "value": "http://tools.ietf.org/rfc/rfc3023",
+                            "type": "uri"
+                        }
+                    ];
+
+                    // Type
+                    if (statementPart.isTextFragment() || statementPart.isImage()) {
+                        selector[NameSpace.rdf.type] = [
+                            {
+                                "value": NameSpace.target.fragmentSelector,
+                                "type": "uri"
+                            }
+                        ];
+
+                        // Value
+                        selector[NameSpace.rdfs.label] = [
+                            {
+                                "value": statementPart.label,
+                                "type": "literal"
+                                // "lang": "it"
+                            }
+                        ];
+                    }
+                    else {
+                        // TODO check other types.
+                    }
+
+                    res[uris.target] = target;
+                    res[uris.selector] = selector;
+
+                }
+            }
+        });
+    };
+
     modelBuilder.buildObject = function(item) {
         if (typeof(item) === 'string') {
             // date or literal
@@ -138,9 +251,8 @@ angular.module('Pundit2.Communication')
         }
     };
 
-    modelBuilder.buildGraph = function(tripleComposerName) {
-        var res = {},
-            statements = TripleComposer.getStatements(tripleComposerName);
+    modelBuilder.buildGraph = function(statements) {
+        var res = {};
 
         statements.forEach(function(el) {
             addGraphElem(el, res);
@@ -149,9 +261,8 @@ angular.module('Pundit2.Communication')
         return res;
     };
 
-    modelBuilder.buildItems = function(tripleComposerName) {
+    modelBuilder.buildItems = function(statements) {
         var res = {},
-            statements = TripleComposer.getStatements(tripleComposerName),
             val;
 
         statements.forEach(function(el) {
@@ -161,25 +272,26 @@ angular.module('Pundit2.Communication')
         return res;
     };
 
-    modelBuilder.buildTargets = function(tripleComposerName) {
-        var res = {},
-        statements = TripleComposer.getStatements(tripleComposerName);
-
+    modelBuilder.buildTargets = function(statements) {
+        var res = {};
+        statements.forEach(function(el) {
+            addTargetElem(el, res);
+        });
         return res;
     };
 
-    modelBuilder.buildAllData = function(tripleComposerName) {
+    modelBuilder.buildAllData = function(statements) {
         var res = {
                 'graph': {},
                 'items': {},
                 'target': {}
             },
-            val,
-            statements = TripleComposer.getStatements(tripleComposerName);
+            val;
 
         statements.forEach(function(el) {
             addGraphElem(el, res.graph);
             addItemElem(el, res.items, val);
+            addTargetElem(el, res.target);
         });
 
         return res;

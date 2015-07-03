@@ -7,7 +7,8 @@ angular.module("Pundit2.Core")
         _dce = "http://purl.org/dc/elements/1.1/",
         _dct = "http://purl.org/dc/terms/",
         _pnd = "http://purl.org/pundit/ont/ao#",
-        _skos = "http://www.w3.org/2004/02/skos/core#";
+        _skos = "http://www.w3.org/2004/02/skos/core#",
+        _oa = "http://www.openannotation.org/ns/";
 
     $window.PUNDIT.ns = ns;
 
@@ -31,6 +32,13 @@ angular.module("Pundit2.Core")
 
     ns.dateTime = "http://www.w3.org/2001/XMLSchema#dateTime";
 
+    ns.target = {
+        conformsTo: _dct + 'conformsTo',
+        fragmentSelector: _oa + 'FragmentSelector'
+        /* ns.rdf.type */
+        /* ns.rdf.value */
+        /* ns.rdfs.label */
+    };
 
     // Item properties
     ns.item = {
@@ -94,7 +102,10 @@ angular.module("Pundit2.Core")
         creator: _dct + "creator",
         modified: _dct + "modified",
         pageContext: _pnd + "hasPageContext",
-        target: "http://www.openannotation.org/ns/hasTarget",
+        target: _oa + "hasTarget",
+        hasScope: _oa + "hasScope",
+        hasSource: _oa + "hasSource",
+        hasSelector: _oa + "hasSelector",
         isIncludedIn: _pnd + "isIncludedIn",
         hasTemplate: _pnd + "hasTemplate"
     };
