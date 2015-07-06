@@ -117,6 +117,13 @@ angular.module('Pundit2.Core')
         ItemsExchange.addItem(this);
     };
 
+    ItemFactory.prototype.isTarget = function() {
+        return this.isTextFragment() ||
+            this.isImage() ||
+            this.isImageFragment() ||
+            this.isWebPage();
+    };
+
     ItemFactory.prototype.isProperty = function() {
         return this.type.indexOf(NameSpace.rdf.property) !== -1;
     };

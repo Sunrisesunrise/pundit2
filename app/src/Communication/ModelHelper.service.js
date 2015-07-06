@@ -1,16 +1,20 @@
 angular.module('Pundit2.Communication')
-.constant('MODELBUILDERDEFAULTS', {
-    annotationServerPrefix: 'http://purl.org/pundit/local/'
+.constant('modelHelperDEFAULTS', {
+    annotationServerPrefix: 'http://purl.org/pundit/local/',
+    mode: "mode1" // mode1 or mode2
 })
-.service('ModelBuilder', function(BaseComponent, MODELBUILDERDEFAULTS, Consolidation, XpointersHelper, MyPundit, TripleComposer, NameSpace, TypesHelper, md5) {
+.service('ModelHelper', function(BaseComponent, modelHelperDEFAULTS, Consolidation, XpointersHelper, MyPundit, NameSpace, TypesHelper, md5) {
 
-    var modelBuilder = new BaseComponent("ModelBuilder", MODELBUILDERDEFAULTS);
+    var modelHelper = new BaseComponent("ModelHelper", modelHelperDEFAULTS);
+
+    var error = false,
+        errorMessage = '';
 
     var targetURIs = function(uri) {
         var md5URI = md5.createHash(uri);
         return {
-            'target': modelBuilder.options.annotationServerPrefix + 'target/' + md5URI,
-            'selector': modelBuilder.options.annotationServerPrefix + 'selector/' + md5URI
+            'target': modelHelper.options.annotationServerPrefix + 'target/' + md5URI,
+            'selector': modelHelper.options.annotationServerPrefix + 'selector/' + md5URI
         };
     };
 
@@ -24,13 +28,13 @@ angular.module('Pundit2.Communication')
             // subject uri not exist (happy it's easy)
             res[triple.subject.uri] = {};
             // predicate uri not exist
-            res[triple.subject.uri][triple.predicate.uri] = [modelBuilder.buildObject(triple.object)];
+            res[triple.subject.uri][triple.predicate.uri] = [modelHelper.buildObject(triple.object)];
         }
         else {
             // subject uri already exists
             if (typeof(res[triple.subject.uri][triple.predicate.uri]) === 'undefined') {
                 // predicate uri not exist (happy it's easy)
-                res[triple.subject.uri][triple.predicate.uri] = [modelBuilder.buildObject(triple.object)];
+                res[triple.subject.uri][triple.predicate.uri] = [modelHelper.buildObject(triple.object)];
             }
             else {
                 // predicate uri already exists
@@ -42,7 +46,7 @@ angular.module('Pundit2.Communication')
                 });
                 // object not eqaul (happy it's easy)
                 if (!found) {
-                    arr.push(modelBuilder.buildObject(triple.object));
+                    arr.push(modelHelper.buildObject(triple.object));
                 }
             }
         }
@@ -131,7 +135,7 @@ angular.module('Pundit2.Communication')
         });
     }
 
-    var addTargetElem = function(el, res) {
+    var addTargetElem = function(el, res, flat) {
         var triple = el.scope.get(),
             uris;
 
@@ -142,15 +146,12 @@ angular.module('Pundit2.Communication')
 
         // Subject.
         [triple.subject, triple.object].forEach(function (a, i, arr) {
+            // TODO: add code to handle imageFragments.
             var statementPart = arr[i];
             if (typeof statementPart === 'string') {
                 return;
             }
-            if (statementPart.isTextFragment() ||
-            statementPart.isImage() ||
-            statementPart.isImageFragment() ||
-            statementPart.isWebPage()
-            ) {
+            if (statementPart.isTarget()) {
                 uris = targetURIs(statementPart.uri);
                 // If it's not already present.
                 if (typeof res[uris.target] === 'undefined') {
@@ -167,27 +168,38 @@ angular.module('Pundit2.Communication')
                             }
                         ];
                     }
-                    // hasSelector.
-                    target[NameSpace.annotation.hasSelector] = [
-                        {
-                            "value": uris.selector,
-                            "type": "uri"
+                    if (!statementPart.isWebPage()) {
+                        // hasSelector.
+                        target[NameSpace.annotation.hasSelector] = [
+                            {
+                                "value": uris.selector,
+                                "type": "uri"
+                            }
+                        ];
+
+                        if (statementPart.hasOwnProperty('pageContext')) {
+                            // hasScope.
+                            target[NameSpace.annotation.hasScope] = [
+                                {
+                                    "value": statementPart.pageContext,
+                                    "type": "uri"
+                                }
+                            ];
+                            // hasSource.
+                            target[NameSpace.annotation.hasSource] = [
+                                {
+                                    "value": statementPart.isImage() ? statementPart.image : statementPart.pageContext,
+                                    "type": "uri"
+                                }
+                            ];
                         }
-                    ];
-                    // hasScope.
-                    target[NameSpace.annotation.hasScope] = [
-                        {
-                            "value": XpointersHelper.getSafePageContext(),
-                            "type": "uri"
+                        else {
+                            error = true;
+                            errorMessage = 'Page context missing! Cannot proceed with annotation build.';
+                            return;
                         }
-                    ];
-                    // hasSource.
-                    target[NameSpace.annotation.hasSource] = [
-                        {
-                            "value": XpointersHelper.getSafePageContext(),
-                            "type": "uri"
-                        }
-                    ];
+                    }
+
                     // type
                     target[NameSpace.rdf.type] = [];
                     for (var i in statementPart.type) {
@@ -197,46 +209,59 @@ angular.module('Pundit2.Communication')
                         });
                     }
 
-                    // Building selector info.
-                    // conformsTo.
-                    selector[NameSpace.target.conformsTo] = [
-                        {
-                            "value": "http://tools.ietf.org/rfc/rfc3023",
-                            "type": "uri"
-                        }
-                    ];
-
-                    // Type
-                    if (statementPart.isTextFragment() || statementPart.isImage()) {
-                        selector[NameSpace.rdf.type] = [
+                    if (!statementPart.isWebPage()) {
+                        // Building selector info.
+                        // conformsTo.
+                        selector[NameSpace.target.conformsTo] = [
                             {
-                                "value": NameSpace.target.fragmentSelector,
+                                "value": "http://tools.ietf.org/rfc/rfc3023",
                                 "type": "uri"
                             }
                         ];
 
-                        // Value
-                        selector[NameSpace.rdfs.label] = [
-                            {
-                                "value": statementPart.label,
-                                "type": "literal"
-                                // "lang": "it"
-                            }
-                        ];
-                    }
-                    else {
-                        // TODO check other types.
+                        // Type
+                        if (statementPart.isTextFragment() || statementPart.isImage()) {
+                            selector[NameSpace.rdf.type] = [
+                                {
+                                    "value": NameSpace.target.fragmentSelector,
+                                    "type": "uri"
+                                }
+                            ];
+
+                            // Label
+                            selector[NameSpace.rdfs.label] = [
+                                {
+                                    "value": statementPart.label,
+                                    "type": "literal"
+                                    // "lang": "it"
+                                }
+                            ];
+
+                            // Value
+                            selector[NameSpace.rdf.value] = [
+                                {
+                                    "value": statementPart.uri,
+                                    "type": "literal"
+                                    // "lang": "it"
+                                }
+                            ];
+                        }
+                        else {
+                            // TODO check other types.
+                        }
+
+                        // Add selector info only if it's not a webpage.
+                        res[uris.selector] = selector;
                     }
 
                     res[uris.target] = target;
-                    res[uris.selector] = selector;
-
+                    flat.push(statementPart.uri);
                 }
             }
         });
     };
 
-    modelBuilder.buildObject = function(item) {
+    modelHelper.buildObject = function(item) {
         if (typeof(item) === 'string') {
             // date or literal
             return {
@@ -251,7 +276,7 @@ angular.module('Pundit2.Communication')
         }
     };
 
-    modelBuilder.buildGraph = function(statements) {
+    modelHelper.buildGraph = function(statements) {
         var res = {};
 
         statements.forEach(function(el) {
@@ -261,7 +286,7 @@ angular.module('Pundit2.Communication')
         return res;
     };
 
-    modelBuilder.buildItems = function(statements) {
+    modelHelper.buildItems = function(statements) {
         var res = {},
             val;
 
@@ -272,30 +297,53 @@ angular.module('Pundit2.Communication')
         return res;
     };
 
-    modelBuilder.buildTargets = function(statements) {
+    modelHelper.buildTargets = function(statements) {
         var res = {};
+        var flat = [];
         statements.forEach(function(el) {
-            addTargetElem(el, res);
+            addTargetElem(el, res, flat);
         });
-        return res;
+
+        return {
+            'obj': res,
+            'flat': flat
+        };
     };
 
-    modelBuilder.buildAllData = function(statements) {
+    modelHelper.buildAllData = function(statements) {
+        error = false;
+        errorMessage = '';
         var res = {
                 'graph': {},
                 'items': {},
-                'target': {}
+                'target': {},
+                'flatTargets': []
             },
             val;
 
         statements.forEach(function(el) {
             addGraphElem(el, res.graph);
             addItemElem(el, res.items, val);
-            addTargetElem(el, res.target);
+            addTargetElem(el, res.target, res.flatTargets);
         });
+        
+        if (modelHelper.options.mode === 'mode1') {
+            res.target = undefined;
+        }
 
         return res;
     };
 
-    return modelBuilder;
+    modelHelper.getLastError = function() {
+        return {
+            error: error,
+            errorMessage: errorMessage
+        }
+    };
+
+    modelHelper.hasError = function() {
+        return !error;
+    }
+
+    return modelHelper;
 });

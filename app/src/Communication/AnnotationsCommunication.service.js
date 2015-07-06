@@ -186,8 +186,7 @@ angular.module('Pundit2.Communication')
         return promise.promise;
     };
 
-    annotationsCommunication.saveAnnotation = function(graph, items, targets, templateID, skipConsolidation) {
-
+    annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, skipConsolidation, postDataTargets) {
         // var completed = 0;
         var promise = $q.defer();
 
@@ -217,6 +216,9 @@ angular.module('Pundit2.Communication')
                 graph: graph,
                 items: items
             };
+            if (typeof postDataTargets !== 'undefined') {
+                postData.target = postDataTargets;
+            }
             if (typeof(templateID) !== 'undefined') {
                 postData.metadata = {
                     template: templateID
@@ -231,7 +233,7 @@ angular.module('Pundit2.Communication')
                 url: NameSpace.get('asNBCurrent'),
                 params: {
                     context: angular.toJson({
-                        targets: targets,
+                        targets: flatTargets,
                         pageContext: XpointersHelper.getSafePageContext()
                     })
                 },
