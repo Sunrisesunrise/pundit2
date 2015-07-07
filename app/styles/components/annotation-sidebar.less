@@ -14,12 +14,13 @@
     position: absolute;
     right: 0;
     top: 0;
-    margin-top: @toolbar-height;
     bottom: 0;
+    margin-top: @toolbar-height;
     height: 100%;
     z-index: @zindex-pnd-annotation-sidebar;
     display: block;
-    background-color: @gray-dark;
+    // background-color: @gray-dark;
+    #gradient > .horizontal-three-colors(darken(@gray-dark, 10); @gray-dark; 2%; @gray-dark);
 }
 
 .pnd-annotation-sidebar-content {
@@ -342,7 +343,7 @@
         line-height: @annotation-header-height;
         height: @annotation-header-height;
         width: @annotation-sidebar-width;
-        #gradient > .horizontal-three-colors(darken(@color-annotation-header, 4); @color-annotation-header; 2%; @color-annotation-header);
+        #gradient > .horizontal-three-colors(darken(@color-annotation-header, 12); @color-annotation-header; 2%; @color-annotation-header);
         color: @color-annotation-header-text;
         cursor: pointer;
 
@@ -352,7 +353,7 @@
         }
 
         &:hover {
-            #gradient > .horizontal-three-colors(darken(darken(@color-annotation-header, 5%), 4); darken(@color-annotation-header, 5%); 2%; darken(@color-annotation-header, 5%));
+            #gradient > .horizontal-three-colors(darken(darken(@color-annotation-header, 5%), 12); darken(@color-annotation-header, 5%); 2%; darken(@color-annotation-header, 5%));
         }
 
         &.pnd-annotation-details-broken {
@@ -624,10 +625,11 @@
 
     .pnd-annotation-details-header {
         width: @annotation-sidebar-coll-width;
+        #gradient > .horizontal-three-colors(darken(@color-annotation-header, 20); @color-annotation-header; 50%; @color-annotation-header);
 
         &:hover {
             color: #fff;
-            background-color: darken(@subject-color, 10%);
+            #gradient > .horizontal-three-colors(darken(darken(@color-annotation-header, 5%), 20); darken(@color-annotation-header, 5%); 50%; darken(@color-annotation-header, 5%));
         }
 
         &.pnd-annotation-details-broken {
