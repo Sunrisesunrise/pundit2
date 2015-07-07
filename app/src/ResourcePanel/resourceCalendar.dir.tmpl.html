@@ -1,44 +1,46 @@
-<div class="pnd-resource-calendar-container">
-    <span>
-        Year: 
-        <input  type="text" 
-                class="form-control"
-                ng-class="{'pnd-input-current': focus == 'year'}"
-                ng-model="inputDate.year"
-                ng-keyup="updateYear()"
-                focus-on="switchFocus('year')"
-                focus="activeFocus">
-    </span>
-    <span ng-show="mode == 'month' || mode == 'day' || mode == 'time'">
-        Month: 
-        <input  type="text" 
-                class="form-control"
-                ng-class="{'pnd-input-current': focus == 'month'}"
-                ng-model="inputDate.month"
-                ng-keyup="updateMonth()"
-                focus-on="switchFocus('month')"
-                focus="activeFocus">
-    </span>
-    <span ng-show="mode == 'day' || mode == 'time'">
-        Day: 
-        <input  type="text" 
-                class="form-control"
-                ng-class="{'pnd-input-current': focus == 'day'}"
-                ng-model="inputDate.day"
-                ng-keyup="updateDay()"
-                focus-on="switchFocus('day')"
-                focus="activeFocus">
-    </span>
-    <span ng-show="mode == 'time'">
-        Time: 
-        <input  type="text" 
-                class="form-control"
-                ng-class="{'pnd-input-current': focus == 'time'}"
-                ng-model="inputDate.time"
-                ng-keyup="updateTime()"
-                focus-on="switchFocus('time')"
-                focus="activeFocus">
-    </span>
+<div class="pnd-resource-calendar-container pnd-ignore">
+    <div class="pnd-date-inputs" >
+        <span>
+            Year
+            <input  type="text"
+                    class="form-control"
+                    ng-class="{'pnd-input-current': focus == 'year'}"
+                    ng-model="inputDate.year"
+                    ng-keyup="updateYear()"
+                    focus-on="switchFocus('year')"
+                    focus="activeFocus">
+        </span>
+        <span ng-show="mode == 'month' || mode == 'day' || mode == 'time'">
+            Month
+            <input  type="text"
+                    class="form-control"
+                    ng-class="{'pnd-input-current': focus == 'month'}"
+                    ng-model="inputDate.month"
+                    ng-keyup="updateMonth()"
+                    focus-on="switchFocus('month')"
+                    focus="activeFocus">
+        </span>
+        <span ng-show="mode == 'day' || mode == 'time'">
+            Day
+            <input  type="text"
+                    class="form-control"
+                    ng-class="{'pnd-input-current': focus == 'day'}"
+                    ng-model="inputDate.day"
+                    ng-keyup="updateDay()"
+                    focus-on="switchFocus('day')"
+                    focus="activeFocus">
+        </span>
+        <span ng-show="mode == 'time'">
+            Time
+            <input  type="text"
+                    class="form-control"
+                    ng-class="{'pnd-input-current': focus == 'time'}"
+                    ng-model="inputDate.time"
+                    ng-keyup="updateTime()"
+                    focus-on="switchFocus('time')"
+                    focus="activeFocus">
+        </span>
+    </div>
 
     <div class="pnd-date-picker" >
         <div ng-if="focus == 'year'">
