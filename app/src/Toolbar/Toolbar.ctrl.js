@@ -3,7 +3,7 @@
 angular.module('Pundit2.Toolbar')
 
 .controller('ToolbarCtrl', function($scope, $rootScope, $modal, $http, $window, NameSpace, Config, Toolbar, SelectorsManager, Fp3,
-    MyPundit, Dashboard, TripleComposer, AnnotationSidebar, Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, Analytics, PageHandler, EventDispatcher) {
+    MyPundit, Dashboard, TripleComposer, AnnotationSidebar, Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, Analytics, PageHandler, EventDispatcher, Annotation) {
 
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
     $scope.dropdownTemplateMyNotebook = "src/Toolbar/myNotebooksDropdown.tmpl.html";
@@ -23,6 +23,161 @@ angular.module('Pundit2.Toolbar')
     $scope.menuCustomBtn = false;
     $scope.menuCustomDropdown = [];
     $scope.menuCustomBtn = [];
+
+    $scope.simulateNewAnnotationsLoad = function() {
+        var serverResponse = {
+            "graph": {
+                "http://qualcosa/77889900": {
+                    "http://purl.org/pundit/local/target/7c812c29f84c2b012dc64e7039add50a": {
+                        "http://schema.org/comment": [
+                            {
+                                "type": "literal",
+                                "value": "asdasd"
+                            }
+                        ]
+                    }
+                }
+            },
+            "items": {
+                "http://it.wikipedia.org/wiki/Palaia#xpointer(start-point(string-range(//DIV…http://it.wikipedia.org/wiki/Palaia']/DIV[3]/DIV[4]/P[12]/text()[1],'',327)))": {
+                    "http://www.w3.org/2000/01/rdf-schema#label": [
+                        {
+                            "type": "literal",
+                            "value": "stello con tre torri, il tutto sotto una .."
+                        }
+                    ],
+                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+                        {
+                            "type": "uri",
+                            "value": "http://purl.org/pundit/ont/ao#fragment-text"
+                        }
+                    ],
+                    "http://purl.org/dc/elements/1.1/description": [
+                        {
+                            "type": "literal",
+                            "value": "stello con tre torri, il tutto sotto una corona a nove punte, in basso un ramoscello di mirto e un ramoscello di quercia. La blasonatura del gonfalone è costituita da uno stendardo di colore azzurro e bianco a forma rettangolare "
+                        }
+                    ],
+                    "http://purl.org/pundit/ont/ao#hasPageContext": [
+                        {
+                            "type": "uri",
+                            "value": "http://localhost:9000/app/examples/client-REAL.html"
+                        }
+                    ],
+                    "http://purl.org/dc/terms/isPartOf": [
+                        {
+                            "type": "uri",
+                            "value": "http://it.wikipedia.org/wiki/Palaia"
+                        }
+                    ]
+                },
+                "http://schema.org/comment": {
+                    "http://www.w3.org/2000/01/rdf-schema#label": [
+                        {
+                            "type": "literal",
+                            "value": "has comment (free text)"
+                        }
+                    ],
+                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+                        {
+                            "type": "uri",
+                            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+                        }
+                    ],
+                    "http://purl.org/dc/elements/1.1/description": [
+                        {
+                            "type": "literal",
+                            "value": "Any comment related to the selected fragment of text or image"
+                        }
+                    ]
+                },
+                "http://purl.org/pundit/ont/ao#fragment-text": {
+                    "http://www.w3.org/2000/01/rdf-schema#label": [
+                        {
+                            "type": "literal",
+                            "value": "Text fragment"
+                        }
+                    ]
+                },
+                "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property": {
+                    "http://www.w3.org/2000/01/rdf-schema#label": [
+                        {
+                            "type": "literal",
+                            "value": "Property"
+                        }
+                    ]
+                }
+            },
+            "target": {
+                "http://purl.org/pundit/local/selector/7c812c29f84c2b012dc64e7039add50a": {
+                    "http://purl.org/dc/terms/conformsTo": [
+                        {
+                            "value": "http://tools.ietf.org/rfc/rfc3023",
+                            "type": "uri"
+                        }
+                    ],
+                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+                        {
+                            "value": "http://www.openannotation.org/ns/FragmentSelector",
+                            "type": "uri"
+                        }
+                    ],
+                    "http://www.w3.org/2000/01/rdf-schema#label": [
+                        {
+                            "value": "stello con tre torri, il tutto sotto una ..",
+                            "type": "literal"
+                        }
+                    ],
+                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+                        {
+                            "value": "http://it.wikipedia.org/wiki/Palaia#xpointer(start-point(string-range(//DIV…http://it.wikipedia.org/wiki/Palaia']/DIV[3]/DIV[4]/P[12]/text()[1],'',327)))",
+                            "type": "literal"
+                        }
+                    ]
+                },
+                "http://purl.org/pundit/local/target/7c812c29f84c2b012dc64e7039add50a": {
+                    "http://purl.org/dc/terms/isPartOf": [
+                        {
+                            "value": "http://it.wikipedia.org/wiki/Palaia",
+                            "type": "uri"
+                        }
+                    ],
+                    "http://www.openannotation.org/ns/hasSelector": [
+                        {
+                            "value": "http://purl.org/pundit/local/selector/7c812c29f84c2b012dc64e7039add50a",
+                            "type": "uri"
+                        }
+                    ],
+                    "http://www.openannotation.org/ns/hasScope": [
+                        {
+                            "value": "http://localhost:9000/app/examples/client-REAL.html",
+                            "type": "uri"
+                        }
+                    ],
+                    "http://www.openannotation.org/ns/hasSource": [
+                        {
+                            "value": "http://localhost:9000/app/examples/client-REAL.html",
+                            "type": "uri"
+                        }
+                    ],
+                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+                        {
+                            "value": "http://purl.org/pundit/ont/ao#fragment-text",
+                            "type": "uri"
+                        }
+                    ]
+                }
+            },
+            "metadata": {
+                "http://qualcosaltro/77889900": {
+
+                }
+            }
+        };
+
+        // Cycling metadata
+
+    }
 
     var menuCustom = Toolbar.options.menuCustom;
 

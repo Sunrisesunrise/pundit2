@@ -343,7 +343,29 @@ angular.module('Pundit2.Communication')
 
     modelHelper.hasError = function() {
         return !error;
-    }
+    };
+
+    modelHelper.parseAnnotations = function(data) {
+        if( typeof(data) === "undefined" ||
+            typeof(data.graph) === "undefined" ||
+            typeof(data.metadata) === "undefined" ||
+            typeof(data.items) === "undefined" ||
+            typeof(data.target) === "undefined") {
+            error = true;
+            errorMessage = "Malformed annotations data";
+            return;
+        }
+
+        // Cycling metadata.
+        for (var metadataURI in data.metadata) {
+            // Get metadata object
+            var metadata = data.metadata[metadataURI];
+            // Get graph URI.
+            var graphURI = metadata.hasBody[0].value;
+            // Get graph.
+            var graph = data.graph[graphURI];
+        }
+    };
 
     return modelHelper;
 });
