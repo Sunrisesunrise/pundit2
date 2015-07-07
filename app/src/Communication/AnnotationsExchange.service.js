@@ -53,12 +53,24 @@ angular.module('Pundit2.Communication')
             }
 
             var ids = [];
-            for (var annURI in data) {
-                var id = annURI.match(/[a-z0-9]*$/);
-                if (id !== null) {
-                    ids.push(id[0]);
+            if (data.hasOwnProperty('AnnotationIDs')) {
+                for (var i in data.AnnotationIDs) {
+                    var annURI = data.AnnotationIDs[i];
+                    var id = annURI.match(/[a-z0-9]*$/);
+                    if (id !== null) {
+                        ids.push(id[0]);
+                    }
                 }
             }
+            else {
+                for (var annURI in data) {
+                    var id = annURI.match(/[a-z0-9]*$/);
+                    if (id !== null) {
+                        ids.push(id[0]);
+                    }
+                }
+            }
+
 
             promise.resolve(ids);
             annotationExchange.log("Retrieved annotations IDs searching by URIs");
