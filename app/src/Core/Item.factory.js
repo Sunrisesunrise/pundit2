@@ -333,6 +333,18 @@ angular.module('Pundit2.Core')
         return itemComponent.options.classDefault;
     };
 
+    ItemFactory.prototype.getXPointer = function() {
+        var xpointer;
+
+        if (this.uri.indexOf('#xpointer(') !== -1) {
+            xpointer = this.uri;
+        } else {
+            xpointer = this.xpointer;
+        }
+
+        return xpointer;
+    };
+
     itemComponent.log('Component up and running');
 
     return ItemFactory;
