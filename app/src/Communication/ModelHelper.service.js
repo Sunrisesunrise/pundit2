@@ -1,11 +1,11 @@
 angular.module('Pundit2.Communication')
-.constant('modelHelperDEFAULTS', {
+.constant('MODELHELPERDEFAULTS', {
     annotationServerPrefix: 'http://purl.org/pundit/local/',
     mode: "mode1" // mode1 or mode2
 })
-.service('ModelHelper', function(BaseComponent, modelHelperDEFAULTS, Consolidation, XpointersHelper, MyPundit, NameSpace, TypesHelper, md5) {
+.service('ModelHelper', function(BaseComponent, MODELHELPERDEFAULTS, Consolidation, XpointersHelper, MyPundit, NameSpace, TypesHelper, md5) {
 
-    var modelHelper = new BaseComponent("ModelHelper", modelHelperDEFAULTS);
+    var modelHelper = new BaseComponent("ModelHelper", MODELHELPERDEFAULTS);
 
     var error = false,
         errorMessage = '';
@@ -345,7 +345,20 @@ angular.module('Pundit2.Communication')
         return !error;
     };
 
+    /**
+     * @ngdoc method
+     * @name ModelHelper#parseAnnotations
+     * @module Pundit2.Communication
+     * @function
+     *
+     * @description
+     *
+     */
     modelHelper.parseAnnotations = function(data) {
+        if (modelHelper.options.mode === 'mode1') {
+            return data;
+        }
+
         if( typeof(data) === "undefined" ||
             typeof(data.graph) === "undefined" ||
             typeof(data.metadata) === "undefined" ||
@@ -356,14 +369,64 @@ angular.module('Pundit2.Communication')
             return;
         }
 
+        var res = {};
         // Cycling metadata.
         for (var metadataURI in data.metadata) {
             // Get metadata object
             var metadata = data.metadata[metadataURI];
+
+            // Get Annotation ID.
+            var metadataURIParts = metadataURI.split('/');
+            var annotationID = metadataURIParts[metadataURIParts.length - 1];
+
             // Get graph URI.
             var graphURI = metadata.hasBody[0].value;
+
+            res[annotationID] = {
+                'graph': data.graph[graphURI],
+                'metadata': {
+                    metadataURI: metadata
+                }
+            };
+
             // Get graph.
-            var graph = data.graph[graphURI];
+            //var graph = data.graph[graphURI];
+
+            // Reusable var.
+            //var selectorURI;
+
+            //// Replace hashed graph URI
+            //for (var subjectURI in graph) {
+            //    var newSubjectURI = subjectURI;
+            //    /*
+            //    // Replace hash
+            //    if (typeof data.target[subjectURI] !== 'undefined') {
+            //        selectorURI = data.target[subjectURI][NameSpace.annotation.hasSelector][0].value;
+            //        if (typeof data.target[selectorURI] !== 'undefined') {
+            //            newSubjectURI = data.target[selectorURI][NameSpace.rdf.value][0].value;
+            //        }
+            //    }
+            //    */
+            //    res[annotationID].graph[newSubjectURI] = {};
+            //    for (var predicateURI in graph[subjectURI]) {
+            //        res[annotationID].graph[newSubjectURI][predicateURI] = [];
+            //        for (var i in graph[subjectURI][predicateURI]) {
+            //            var objectValue = graph[subjectURI][predicateURI][i].value;
+            //            /*
+            //            // Replace hash
+            //            if (graph[subjectURI][predicateURI][i].type === 'uri' && typeof data.target[objectValue] !== 'undefined' ) {
+            //                selectorURI = data.target[objectValue][NameSpace.annotation.hasSelector][0].value;
+            //                objectValue = data.target[selectorURI][NameSpace.rdf.value][0].value;
+            //            }
+            //            */
+            //            res[annotationID].graph[newSubjectURI][predicateURI].push({
+            //                'type': graph[subjectURI][predicateURI][i].type,
+            //                'value': objectValue
+            //            });
+            //        }
+            //    }
+            //}
+
         }
     };
 
