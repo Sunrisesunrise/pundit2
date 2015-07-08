@@ -58,22 +58,23 @@
     </div>
 
     <div class="pnd-format-selector">
-        <button 
-            ng-class="{'pnd-format-current': mode == 'year'}" 
+        <p>Change date format</p>
+        <span
+            ng-class="{'pnd-format-current': mode == 'year'}"
             ng-click="switchMode('year')"
-            ng-disabled="mode == 'year'">Year</button> -
-        <button 
-            ng-class="{'pnd-format-current': mode == 'month'}" 
+            ng-disabled="mode == 'year'">Year</span> -
+        <span
+            ng-class="{'pnd-format-current': mode == 'month'}"
             ng-click="switchMode('month')"
-            ng-disabled="mode == 'month'">Month</button> - 
-        <button 
-            ng-class="{'pnd-format-current': mode == 'day'}" 
+            ng-disabled="mode == 'month'">Month</span> -
+        <span
+            ng-class="{'pnd-format-current': mode == 'day'}"
             ng-click="switchMode('day')"
-            ng-disabled="mode == 'day'">Day</button> - 
-        <button 
-            ng-class="{'pnd-format-current': mode == 'time'}" 
+            ng-disabled="mode == 'day'">Day</span> -
+        <span
+            ng-class="{'pnd-format-current': mode == 'time'}"
             ng-click="switchMode('time')"
-            ng-disabled="mode == 'time'">Time</button>
+            ng-disabled="mode == 'time'">Time</span>
     </div>
     
 </div>
