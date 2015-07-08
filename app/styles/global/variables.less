@@ -11,12 +11,20 @@
 // #COLORS
 // ------------------------------------ //
 
+// Text colors
+@color-text-link: #39b54a;
+@color-text-link-hover: darken(@color-text-link, 15%);
+@color-text: #555;
+
+// Borders
+@color-border-normal: #999;
+@color-border-light: #DDD;
+
+// Shades of gray
 @gray-soft-dark: lighten(#000, 26%);
 @gray-extra-light: lighten(#000, 80%);
 @gray-extra-lighter: lighten(#000, 90%);
 @gray-extra-lightest: lighten(#000, 98%); // It's obvious some crazy guys are working on this project
-
-@color-toolbar-disabled: lighten(#000, 45%);
 
 // Semantic colors
 @subject-color: #54b4e6;
@@ -26,7 +34,10 @@
 @object-color: #0084c8;
 @object-color-text: desaturate(lighten(@object-color, 27), 30);
 
-// @text-fragment-color: rgba(255,255,10,0.3); // #f8cd48;
+
+@color-toolbar-disabled: lighten(#000, 45%);
+
+
 @text-fragment-color: #f8cd48; // #f8cd48;
 
 @color-type-background: @gray-lighter;
@@ -35,11 +46,6 @@
 @color-login-popover-background: #FFF;
 @color-login-popover-border: #979797;
 
-// Call to action and link colors
-@color-text-link: #39b54a;
-@color-text-link-hover: darken(@color-text-link, 15%);
-
-@color-text: #555;
 
 
 
@@ -128,6 +134,12 @@
 // ------------------------------------ //
 @resource-panel-width: 400px;
 @resource-panel-height: 250px;
+
+
+// ------------------------------------ //
+// #CALEDAR-WIDGET
+// ------------------------------------ //
+@calendar-popover-width: 280px;
 
 
 // ------------------------------------ //

@@ -14,6 +14,7 @@
 \* ------------------------------------ */
 
 .pnd-popover-calendar {
+    max-width: @calendar-popover-width;
 
     .popover-content {
         padding: 0;
@@ -21,14 +22,20 @@
 
     .pnd-resource-calendar-container {
         padding: 0;
-        width: 230px;
+        width: @calendar-popover-width;
 
         .pnd-date-inputs {
             padding: 10px;
+            width: @calendar-popover-width - 2; /* Minus border */
 
             /* Input fields */
             input[type="text"] {
                 width: 42px;
+            }
+
+            /* Wider input for time */
+            .pnd-date-time-input input[type="text"] {
+                width: 50px;
             }
 
             span {
@@ -38,14 +45,16 @@
         }
 
         .pnd-date-picker {
-            border-top: 1px solid @gray-extra-lighter;
+            border-top: 1px solid @color-border-light;
+            width: @calendar-popover-width - 2; /* Minus border */
         }
 
         .pnd-format-selector {
             padding: 10px;
             background: @gray-extra-lightest;
-            border-top: 1px solid @gray-extra-lighter;
+            border-top: 1px solid @color-border-light;
             text-align: center;
+            width: @calendar-popover-width - 2; /* Minus border */
 
             span {
                 color: @color-text-link;
@@ -62,6 +71,7 @@
         }
     }
 }
+
 
 /* ------------------------------------ *\
    #DATA-PICKER-CSS
@@ -165,18 +175,16 @@
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
-    // -webkit-border-radius: 4px;
-    // -moz-border-radius: 4px;
-    // border-radius: 4px;
-    // background-color: #fff;
-    /* GENERAL */
-    padding: 4px;
-    /* SPECIFIC */
 }
 
 [date-picker] table {
-    margin: 0;
-    width: 230px;
+    margin: 6px;
+    width: @calendar-popover-width - 12; /* Minus padding */
+}
+
+[date-picker] thead {
+    border-top: 1px solid @color-border-light;
+    border-left: 1px solid @color-border-light;
 }
 
 [date-picker] td,
@@ -185,10 +193,18 @@
     text-align: center;
     width: 20px;
     height: 20px;
-    // -webkit-border-radius: 4px;
-    //-moz-border-radius: 4px;
-    // border-radius: 4px;
     border: none;
+}
+
+[date-picker] td {
+    padding: 0;
+    border-top: 1px solid @color-border-light;
+    border-left: 1px solid @color-border-light;
+}
+
+[date-picker] th {
+    border-right: 1px solid @color-border-light;
+    border-bottom: 1px solid @color-border-light;
 }
 
 [date-picker] .switch {
@@ -197,16 +213,31 @@
 
 [date-picker] span {
     display: block;
-    width: 23%;
+    width: 25%;
     height: 26px;
     line-height: 25px;
     float: left;
-    margin: 1%;
+    // margin: 1%;
     cursor: pointer;
     // -webkit-border-radius: 4px;
     // -moz-border-radius: 4px;
     // border-radius: 4px;
+    border-right: 1px solid @color-border-light;
+    border-bottom: 1px solid @color-border-light;
 }
+
+.pnd-date-day-selector {
+    [date-picker] span {
+        border: 0;
+    }
+
+    tbody {
+        border-right: 1px solid @color-border-light;
+        border-bottom: 1px solid @color-border-light;
+    }
+}
+
+
 
 [date-picker] span:hover {
     background: #eeeeee;
