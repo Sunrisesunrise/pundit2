@@ -715,7 +715,9 @@ angular.module('Pundit2.ResourcePanel')
             state.popover = initPopover(content, target, "", 'calendar');
             state.popover.$promise.then(function() {
                 show();
-                setFocus('input.pnd-resource-calendar-input-year');
+                if (date.value === '') {
+                    setFocus('input.pnd-resource-calendar-input-year');
+                }
 
                 //$datepicker.show;
                 // angular.element('input.pnd-input-calendar')[0].focus();
@@ -728,7 +730,9 @@ angular.module('Pundit2.ResourcePanel')
             state.popover = initPopover("", target, "", 'calendar');
             state.popover.$promise.then(function() {
                 show();
-                setFocus('input.pnd-resource-calendar-input-year');
+                if (date.value === '') {
+                    setFocus('input.pnd-resource-calendar-input-year');
+                }
 
                 //$datepicker.show;
                 // angular.element('input.pnd-input-calendar')[0].focus();
