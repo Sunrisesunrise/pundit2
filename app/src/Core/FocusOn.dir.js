@@ -5,7 +5,7 @@ angular.module('Pundit2.Core')
  * @name focusOn
  * @module Pundit2.Core
  * @description
- * directive for infinite scrolling
+ * directive for input focus
  */
 .directive('focusOn', function($timeout) {
     return {
@@ -13,15 +13,21 @@ angular.module('Pundit2.Core')
         link: function(scope, element, attrs) {
             element.bind("blur", function(e) {
                 $timeout(function() {
-                    scope.$apply(attrs.focus + "=false");
+                    scope.$apply(attrs.focusOnChange + "=false");
                 }, 0);
             });
             element.bind("focus", function(e) {
                 $timeout(function() {
                     scope.$apply(attrs.focusOn);
-                    scope.$apply(attrs.focus + "=true");
+                    scope.$apply(attrs.focusOnChange + "=true");
                 }, 0);
-            })
+            });
+            scope.$watch(attrs.focusSet, function(value) {
+                if (value) {
+                    element[0].focus();
+                }
+            });
+
         }
     }
 });
