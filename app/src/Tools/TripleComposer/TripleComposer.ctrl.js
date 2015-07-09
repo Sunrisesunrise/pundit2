@@ -254,7 +254,7 @@ angular.module('Pundit2.TripleComposer')
         ModelHelper.buildGraph(statements);
         ModelHelper.buildItems(statements);
 
-        ModelHelper.buildAllData(statements);
+        console.log(ModelHelper.buildAllData(statements));
     };
 
     $scope.saveAnnotation = function() {
