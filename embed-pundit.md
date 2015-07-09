@@ -9,11 +9,11 @@ title: Embed Pundit setup
 
 You can use the **Pundit client** by installing it on your webpages.
 
-In the *HEAD* of your *HTML* page link the Pundit CSS file by inserting this line of code:
+In the **HEAD** of your **HTML** page link the Pundit CSS file by inserting this line of code:
 
     <link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/pundit2.css" type="text/css">
 
-Then create a configuration file (**e.g.: pundit-conf.js**) as described in 1.1 and save it on your server. Include it in your HTML page right after the opening *BODY* tag.
+Then create a configuration file (**e.g.: pundit-conf.js**) as described in 1.1 and save it on your server. Include it in your HTML page right after the opening **BODY** tag.
 
     <script src="http://your-server-url/pundit-conf.js" type="text/javascript" ></script>
 
@@ -44,9 +44,7 @@ This is an example of an HTML page with Pundit:
     </body>
     </html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" class=" com-genius-Genius-js com-genius-Genius-no-touch"><head><meta http-equiv="Content-
 
-    
 ### 1.1 Create a configuration file
 
 To overwrite Pundit’s defaults just edit the configuration file included in the page.
