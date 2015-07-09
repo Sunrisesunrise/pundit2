@@ -9,18 +9,45 @@ title: Embed Pundit setup
 
 You can use the **Pundit client** by installing it on your webpages.
 
-Create a configuration file (**e.g.: pundit-conf.js**) and include it before calling Pundit initialization commands.
-The configuration file can be anywhere, with the name you prefer.
+In the *HEAD* of your *HTML* page link the Pundit CSS file by inserting this line of code:
 
-Then include something like this somewhere in your page:
+    <link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/pundit2.css" type="text/css">
+
+Then create a configuration file (**e.g.: pundit-conf.js**) as described in 1.1 and save it on your server. Include it in your HTML page right after the opening *BODY* tag.
+
+    <script src="http://your-server-url/pundit-conf.js" type="text/javascript" ></script>
+
+Right after this, copy this snippet of code:
 
     <div data-ng-app="Pundit2" class="pnd-wrp ng-scope">
-    <link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/pundit2.css" type="text/css">
     <script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript" ></script>
     <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript" ></script>
-    <script src="http://conf.thepund.it/V2/clients/pundit2_site_demo.js" type="text/javascript" ></script>
 
-### 1.1 Configure it
+This is an example of an HTML page with Pundit:
+
+    <!DOCTYPE HTML>
+    <html>
+    <head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    	<title>Your Website</title>
+    	<link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/pundit2.css" type="text/css">
+    </head>
+    
+    <body>
+        <script src="http://your-server-url/pundit-conf.js" type="text/javascript" ></script>
+        <div data-ng-app="Pundit2" class="pnd-wrp ng-scope">
+        <script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript" ></script>
+        <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript" ></script>
+    
+        ...
+        
+    </body>
+    </html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" class=" com-genius-Genius-js com-genius-Genius-no-touch"><head><meta http-equiv="Content-
+
+    
+### 1.1 Create a configuration file
 
 To overwrite Pundit’s defaults just edit the configuration file included in the page.
 
