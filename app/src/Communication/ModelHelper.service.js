@@ -1,17 +1,18 @@
 angular.module('Pundit2.Communication')
 .constant('MODELHELPERDEFAULTS', {
-    annotationServerPrefix: 'http://purl.org/pundit/local/',
-    mode: "mode1" // mode1 or mode2
+    annotationServerPrefix: 'http://purl.org/pundit/local/'
 })
-.service('ModelHelper', function(BaseComponent, MODELHELPERDEFAULTS, Consolidation, XpointersHelper, MyPundit, NameSpace, TypesHelper, md5) {
+.service('ModelHelper', function(BaseComponent, Config, MODELHELPERDEFAULTS, Consolidation, XpointersHelper, MyPundit, NameSpace, TypesHelper, md5) {
 
     var modelHelper = new BaseComponent("ModelHelper", MODELHELPERDEFAULTS);
+
+    var annotationServerVersion = Config.annotationServerVersion;
 
     var error = false,
         errorMessage = '';
 
-    var targetURIs = function(uri) {
-        var md5URI = md5.createHash(uri);
+    var targetURIs = function(xpointer) {
+        var md5URI = md5.createHash(xpointer);
         return {
             'target': modelHelper.options.annotationServerPrefix + 'target/' + md5URI,
             'selector': modelHelper.options.annotationServerPrefix + 'selector/' + md5URI
@@ -152,7 +153,7 @@ angular.module('Pundit2.Communication')
                 return;
             }
             if (statementPart.isTarget()) {
-                uris = targetURIs(statementPart.uri);
+                uris = targetURIs(statementPart.xpointer);
                 // If it's not already present.
                 if (typeof res[uris.target] === 'undefined') {
                     var target = {};
@@ -327,7 +328,7 @@ angular.module('Pundit2.Communication')
             addTargetElem(el, res.target, res.flatTargets);
         });
         
-        if (modelHelper.options.mode === 'mode1') {
+        if (annotationServerVersion === 'v1') {
             res.target = undefined;
         }
 
@@ -355,7 +356,7 @@ angular.module('Pundit2.Communication')
      *
      */
     modelHelper.parseAnnotations = function(data) {
-        if (modelHelper.options.mode === 'mode1') {
+        if (annotationServerVersion === 'v1') {
             return data;
         }
 
