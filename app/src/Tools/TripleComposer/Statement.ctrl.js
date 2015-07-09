@@ -440,6 +440,7 @@ angular.module('Pundit2.TripleComposer')
     // this function should be invoked only one time (in the link function)
     // when you duplicate a statement, elsewhere probably is an error
     $scope.init = function() {
+        var date = {};
         triple = $scope.duplicated;
         delete $scope.duplicated;
 
@@ -451,8 +452,10 @@ angular.module('Pundit2.TripleComposer')
         }
         if (triple.object !== null) {
             if (triple.isDate) {
-                // TODO ASAP change date generation
-                $scope.setObject(new Date(triple.object));
+                date.type = 'date';
+                date.datatype = triple.objType;
+                date.value = triple.object;
+                $scope.setObject(date);
             } else {
                 $scope.setObject(triple.object);
             }
