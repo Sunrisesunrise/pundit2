@@ -114,11 +114,11 @@ angular.module('Pundit2.Annotators')
         } else if (item.type.indexOf(tfa.type) === -1) {
             tfa.log("Item not valid: not a " + tfa.type);
             return false;
-        } else if (!XpointersHelper.isValidXpointerURI(item.uri)) {
-            tfa.log("Item not valid: not a valid xpointer uri: " + item.uri);
+        } else if (!XpointersHelper.isValidXpointerURI(item.getXPointer())) {
+            tfa.log("Item not valid: not a valid xpointer uri: " + item.getXPointer());
             return false;
-        } else if (!XpointersHelper.isValidXpointer(item.uri)) {
-            tfa.log("Item not valid: not consolidable on this page: " + item.uri);
+        } else if (!XpointersHelper.isValidXpointer(item.getXPointer())) {
+            tfa.log("Item not valid: not consolidable on this page: " + item.getXPointer());
             return false;
         }
 
@@ -156,7 +156,7 @@ angular.module('Pundit2.Annotators')
         fragmentById = {};
 
         for (var uri in items) {
-            xpointers.push(uri);
+            xpointers.push(items[uri].getXPointer());
             fragmentIds[uri] = ["fr-" + i];
             fragmentById["fr-" + i] = {
                 uri: uri,
