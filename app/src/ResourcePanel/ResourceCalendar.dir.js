@@ -221,12 +221,50 @@ angular.module('Pundit2.ResourcePanel')
             };
 
             scope.switchFocus = function(focus) {
+                if (scope.focus === focus) {
+                    return;
+                }
                 scope.focus = focus;
             };
 
             scope.switchMode = function(mode) {
+                if (scope.mode === mode) {
+                    return;
+                }
+
                 scope.mode = mode;
-                scope.focus = mode;
+
+                switch (mode) {
+                    case 'month':
+                        if (scope.inputDate.year === '') {
+                            scope.focus = 'year';
+                        } else {
+                            scope.focus = 'month';
+                        }
+                        break;
+                    case 'day':
+                        if (scope.inputDate.year === '') {
+                            scope.focus = 'year';
+                        } else if (scope.inputDate.month === ''){
+                            scope.focus = 'month';
+                        } else {
+                            scope.focus = 'day'
+                        }
+                        break;
+                    case 'time':
+                        if (scope.inputDate.year === '') {
+                            scope.focus = 'year';
+                        } else if (scope.inputDate.month === ''){
+                            scope.focus = 'month';
+                        } else if (scope.inputDate.day === '') {
+                            scope.focus = 'day';
+                        } else {
+                            scope.focus = 'time';
+                        }
+                        break;
+                    default:
+                        scope.focus = mode;                        
+                }
 
                 updateModel();
             };

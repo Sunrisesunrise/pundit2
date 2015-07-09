@@ -3,12 +3,13 @@
         <span class="pnd-date-year-input">
             Year
             <input  type="text"
-                    class="form-control"
+                    class="form-control pnd-resource-calendar-input-year"
                     ng-class="{'pnd-input-current': focus == 'year'}"
                     ng-model="inputDate.year"
                     ng-keyup="updateYear()"
                     focus-on="switchFocus('year')"
-                    focus="activeFocus">
+                    focus-on-change="activeFocus"
+                    focus-set="focus == 'year'">
         </span>
         <span class="pnd-date-month-input" ng-show="mode == 'month' || mode == 'day' || mode == 'time'">
             Month
@@ -18,7 +19,8 @@
                     ng-model="inputDate.month"
                     ng-keyup="updateMonth()"
                     focus-on="switchFocus('month')"
-                    focus="activeFocus">
+                    focus-on-change="activeFocus"
+                    focus-set="focus == 'month'">
         </span>
         <span class="pnd-date-day-input" ng-show="mode == 'day' || mode == 'time'">
             Day
@@ -28,7 +30,8 @@
                     ng-model="inputDate.day"
                     ng-keyup="updateDay()"
                     focus-on="switchFocus('day')"
-                    focus="activeFocus">
+                    focus-on-change="activeFocus"
+                    focus-set="focus == 'day'">
         </span>
         <span class="pnd-date-time-input" ng-show="mode == 'time'">
             Time
@@ -38,7 +41,8 @@
                     ng-model="inputDate.time"
                     ng-keyup="updateTime()"
                     focus-on="switchFocus('time')"
-                    focus="activeFocus">
+                    focus-on-change="activeFocus"
+                    focus-set="focus == 'time'">
         </span>
     </div>
 
