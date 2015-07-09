@@ -97,7 +97,7 @@ angular.module('Pundit2.Communication')
         //     }];
         // }
 
-        if (triple.subject.isTarget() === false) {
+        if (annotationServerVersion === 'v1' || triple.subject.isTarget() === false) {
             // add item and its rdf properties
             res[triple.subject.uri] = triple.subject.toRdf();
         }
@@ -106,7 +106,7 @@ angular.module('Pundit2.Communication')
 
         // discard literals
         if (typeof(triple.object.uri) !== 'undefined') {
-            if (triple.object.isTarget() === false) {
+            if (annotationServerVersion === 'v1' || triple.object.isTarget() === false) {
                 res[triple.object.uri] = triple.object.toRdf();
                 // add object types and its label
                 triple.object.type.forEach(function(e, i) {
@@ -120,7 +120,7 @@ angular.module('Pundit2.Communication')
             }
         }
 
-        if (triple.subject.isTarget() === false) {
+        if (annotationServerVersion === 'v1' || triple.subject.isTarget() === false) {
             // add subject types and its label
             triple.subject.type.forEach(function(e, i) {
                 var type = triple.subject.type[i];
@@ -160,7 +160,7 @@ angular.module('Pundit2.Communication')
                 return;
             }
             if (statementPart.isTarget()) {
-                uris = targetURIs(statementPart.xpointer);
+                uris = targetURIs(statementPart.getXPointer());
                 // If it's not already present.
                 if (typeof res[uris.target] === 'undefined') {
                     var target = {};
@@ -317,6 +317,7 @@ angular.module('Pundit2.Communication')
             addTargetElem(el, res.target, res.flatTargets);
         });
 
+        // TODO: skip completely target build if we're in v1 mode
         if (annotationServerVersion === 'v1') {
             res.target = undefined;
         }
