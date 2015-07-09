@@ -95,8 +95,10 @@ angular.module('Pundit2.Core')
     classEntity: 'pnd-item-entity'
 })
 
-.factory('Item', function(BaseComponent, NameSpace, Utils, ItemsExchange, ITEMDEFAULTS) {
+.factory('Item', function(BaseComponent, Config, NameSpace, Utils, ItemsExchange, md5, ITEMDEFAULTS) {
     var itemComponent = new BaseComponent("Item", ITEMDEFAULTS);
+
+    var annotationServerVersion = Config.annotationServerVersion;
 
     var ItemFactory = function(uri, values) {
         // To create a new Item at least a URI is needed
@@ -104,7 +106,17 @@ angular.module('Pundit2.Core')
             itemComponent.err("Can't create an item without an URI");
             return;
         }
-        this.uri = uri;
+
+        if (annotationServerVersion === 'v2' && uri.indexOf('#xpointer(') !== -1){
+            this.uri = 'http://purl.org/pundit/local/target/' + md5.createHash(uri);
+            if (angular.isObject(values)) {
+                values.uri = this.uri;
+            }
+            this.xpointer = uri;
+        } else {
+            this.uri = uri;
+        }
+
         this.type = [];
         this.label = 'default item label';
 
@@ -334,15 +346,7 @@ angular.module('Pundit2.Core')
     };
 
     ItemFactory.prototype.getXPointer = function() {
-        var xpointer;
-
-        if (this.uri.indexOf('#xpointer(') !== -1) {
-            xpointer = this.uri;
-        } else {
-            xpointer = this.xpointer;
-        }
-
-        return xpointer;
+        return typeof(this.xpointer) !== 'undefined' ? this.xpointer : this.uri;
     };
 
     itemComponent.log('Component up and running');
