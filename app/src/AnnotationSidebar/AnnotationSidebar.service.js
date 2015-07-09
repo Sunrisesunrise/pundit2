@@ -567,7 +567,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         for (var subject in graph) {
             currentItem = ItemsExchange.getItemByUri(subject);
-            if (currentItem.isTextFragment() || currentItem.isImageFragment() || currentItem.isImage() || currentItem.isWebPage()) {
+            if (currentItem && currentItem.isTextFragment() || currentItem.isImageFragment() || currentItem.isImage() || currentItem.isWebPage()) {
                 if (Consolidation.isConsolidated(currentItem)) {
                     return subject;
                 }
@@ -582,7 +582,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
                     if (objectType === 'uri') {
                         currentItem = ItemsExchange.getItemByUri(objectValue);
-                        if (currentItem.isTextFragment() || currentItem.isImageFragment() || currentItem.isImage() || currentItem.isWebPage()) {
+                        if (currentItem && currentItem.isTextFragment() || currentItem.isImageFragment() || currentItem.isImage() || currentItem.isWebPage()) {
                             if (Consolidation.isConsolidated(currentItem)) {
                                 return objectValue;
                             }
