@@ -192,6 +192,8 @@ angular.module('Pundit2.ResourcePanel')
                 if (isValidYear(currentYear)) {
                     var dateWithNewYear = moment(scope.currentDate).year(currentYear);
                     scope.currentDate = new Date(dateWithNewYear.format());
+                } else {
+                    scope.inputDate.year = currentYear.substring(0, currentYear.length -1);
                 }
             };
 
@@ -200,6 +202,8 @@ angular.module('Pundit2.ResourcePanel')
                 if (isValidMonth(currentMonth)) {
                     var dateWithNewMonth = moment(scope.currentDate).month(currentMonth - 1);
                     scope.currentDate = new Date(dateWithNewMonth.format());
+                } else {
+                    scope.inputDate.month = currentMonth.substring(0, currentMonth.length -1);
                 }
             };
 
@@ -208,6 +212,8 @@ angular.module('Pundit2.ResourcePanel')
                 if (isValidDay(currentDay)) {
                     var dateWithNewDay = moment(scope.currentDate).date(currentDay);
                     scope.currentDate = new Date(dateWithNewDay.format());
+                } else {
+                    scope.inputDate.day = currentDay.substring(0, currentDay.length -1);
                 }
             };
 
@@ -217,6 +223,8 @@ angular.module('Pundit2.ResourcePanel')
                     var timeArray = scope.inputDate.time.split(':');
                     var dateWithNewTime = moment(scope.currentDate).hours(timeArray[0]).minutes(timeArray[1]);
                     scope.currentDate = new Date(dateWithNewTime.format());
+                } else {
+                    scope.inputDate.time = currentTime.substring(0, currentTime.length -1);
                 }
             };
 
