@@ -160,7 +160,14 @@ angular.module('Pundit2.Communication')
                 return;
             }
             if (statementPart.isTarget()) {
-                uris = targetURIs(statementPart.getXPointer());
+                if (statementPart.isWebPage()) {
+                    uris = {
+                        target: statementPart.uri
+                    };
+                } else {
+                    uris = targetURIs(statementPart.getXPointer());
+                }
+
                 // If it's not already present.
                 if (typeof res[uris.target] === 'undefined') {
                     var target = {};
@@ -370,6 +377,7 @@ angular.module('Pundit2.Communication')
         }
 
         var res = {};
+
         // Cycling metadata.
         for (var metadataURI in data.metadata) {
             // Get metadata object
@@ -380,7 +388,7 @@ angular.module('Pundit2.Communication')
             var annotationID = metadataURIParts[metadataURIParts.length - 1];
 
             // Get graph URI.
-            var graphURI = metadata.hasBody[0].value;
+            var graphURI = metadata[NameSpace.annotation.hasBody][0].value;
 
             res[annotationID] = {
                 'graph': data.graph[graphURI],
@@ -428,6 +436,7 @@ angular.module('Pundit2.Communication')
             //}
 
         }
+        return res;
     };
 
     return modelHelper;
