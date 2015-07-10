@@ -31,12 +31,12 @@ angular.module('Pundit2.Communication')
             // subject uri not exist (happy it's easy)
             res[triple.subject.uri] = {};
             // predicate uri not exist
-            res[triple.subject.uri][triple.predicate.uri] = [modelHelper.buildObject(triple.object)];
+            res[triple.subject.uri][triple.predicate.uri] = [modelHelper.buildObject(triple.object, triple.objType)];
         } else {
             // subject uri already exists
             if (typeof(res[triple.subject.uri][triple.predicate.uri]) === 'undefined') {
                 // predicate uri not exist (happy it's easy)
-                res[triple.subject.uri][triple.predicate.uri] = [modelHelper.buildObject(triple.object)];
+                res[triple.subject.uri][triple.predicate.uri] = [modelHelper.buildObject(triple.object, triple.objType)];
             } else {
                 // predicate uri already exists
                 var u = triple.object.uri,
@@ -47,7 +47,7 @@ angular.module('Pundit2.Communication')
                 });
                 // object not eqaul (happy it's easy)
                 if (!found) {
-                    arr.push(modelHelper.buildObject(triple.object));
+                    arr.push(modelHelper.buildObject(triple.object, triple.objType));
                 }
             }
         }
@@ -251,14 +251,23 @@ angular.module('Pundit2.Communication')
         });
     };
 
-    modelHelper.buildObject = function(item) {
-        if (typeof(item) === 'string') {
-            // date or literal
+    modelHelper.buildObject = function(item, objType) {
+        if (typeof(item) === 'string' && typeof(objType) === 'undefined') {
+            // literal
             return {
                 type: 'literal',
+                datatype: NameSpace.string,
                 value: item
             };
+        } else if (typeof(objType) !== 'undefined') {
+            // date
+            return {
+                type: 'literal',
+                datatype: objType,
+                value: item
+            }
         } else {
+            // standard item
             return {
                 type: 'uri',
                 value: item.uri
