@@ -8,7 +8,8 @@ angular.module("Pundit2.Core")
         _dct = "http://purl.org/dc/terms/",
         _pnd = "http://purl.org/pundit/ont/ao#",
         _skos = "http://www.w3.org/2004/02/skos/core#",
-        _oa = "http://www.openannotation.org/ns/";
+        _oa = "http://www.openannotation.org/ns/",
+        _xsd = "http://www.w3.org/2001/XMLSchema#";
 
     $window.PUNDIT.ns = ns;
 
@@ -30,7 +31,10 @@ angular.module("Pundit2.Core")
     ns.rdfs.literal = _rdfs + "Literal";
     ns.rdfs.seeAlso = _rdfs + "seeAlso";
 
-    ns.dateTime = "http://www.w3.org/2001/XMLSchema#dateTime";
+    ns.gYear = _xsd + "gYear";
+    ns.gYearMonth = _xsd + "gYearMonth";
+    ns.date = _xsd + "date";
+    ns.dateTime = _xsd + "dateTime";
 
     ns.target = {
         conformsTo: _dct + 'conformsTo',
@@ -39,6 +43,8 @@ angular.module("Pundit2.Core")
         /* ns.rdf.value */
         /* ns.rdfs.label */
     };
+    
+    ns.string = _xsd + "string";
 
     // Item properties
     ns.item = {

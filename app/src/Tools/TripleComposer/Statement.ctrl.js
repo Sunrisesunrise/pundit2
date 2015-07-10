@@ -99,18 +99,18 @@ angular.module('Pundit2.TripleComposer')
         }
     };
 
-    var parseDate = function(date) {
-        var month = date.getMonth() + 1,
-            day = date.getDate();
+    // var parseDate = function(date) {
+    //     var month = date.getMonth() + 1,
+    //         day = date.getDate();
 
-        if (month < 10) {
-            month = "0" + month;
-        }
-        if (day < 10) {
-            day = "0" + day;
-        }
-        return date.getFullYear() + "-" + month + "-" + day;
-    };
+    //     if (month < 10) {
+    //         month = "0" + month;
+    //     }
+    //     if (day < 10) {
+    //         day = "0" + day;
+    //     }
+    //     return date.getFullYear() + "-" + month + "-" + day;
+    // };
 
     $scope.isStatementComplete = function() {
         if (triple.subject !== null && triple.predicate !== null && triple.object !== null) {
@@ -206,6 +206,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.objectDate = false;
         $scope.objectFixed = false;
         triple.object = null;
+        triple.objType = null;
         ResourcePanel.hide();
         angular.element('.pnd-triplecomposer-save').addClass('disabled');
         $scope.tripleComposerCtrl.isTripleErasable();
@@ -298,6 +299,7 @@ angular.module('Pundit2.TripleComposer')
             if (item.range.indexOf(NameSpace.rdfs.literal) === -1 && item.range.length > 0) {
                 $scope.canBeObjectLiteral = false;
             }
+            // TODO change data check and expand to other format (y, ym, ymd, ymdt)
             if (item.range.indexOf(NameSpace.dateTime) === -1 && item.range.length > 0) {
                 $scope.canBeObjectDate = false;
             }
@@ -324,6 +326,10 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.setObject = function(item, fixed) {
+        if (typeof(item) === 'undefined') {
+            return;
+        }
+
         $scope.objectFound = true;
 
         if (typeof(fixed) !== 'undefined') {
@@ -337,12 +343,13 @@ angular.module('Pundit2.TripleComposer')
             $scope.objectLabel = item;
             $scope.objectTypeLabel = TypesHelper.getLabel(NameSpace.rdfs.literal);
             $scope.objectLiteral = true;
-        } else if (item instanceof Date) {
+        } else if (typeof(item.type) !== 'undefined' && item.type === 'date') {
             // date item
-            lastDate = item;
-            triple.object = parseDate(item);
+            lastDate = item.value;
+            triple.object = lastDate;
+            triple.objType = item.datatype;
             $scope.objectLabel = triple.object;
-            $scope.objectTypeLabel = TypesHelper.getLabel(NameSpace.dateTime);
+            $scope.objectTypeLabel = triple.objType;
             $scope.objectDate = true;
         } else {
             // standard item
@@ -356,6 +363,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.tripleComposerCtrl.isAnnotationComplete();
         $scope.tripleComposerCtrl.isTripleErasable();
         Preview.clearItemDashboardSticky();
+
         EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
@@ -393,17 +401,18 @@ angular.module('Pundit2.TripleComposer')
     $scope.onClickObjectCalendar = function($event) {
         // TODO: improve parent selection
         var target = $event.target.parentNode.parentNode.parentNode;
-        var d;
+        var d = {};
 
         if ($scope.objectDate) {
-            d = lastDate;
+            d.value = lastDate;
+            d.datatype = triple.objType;
         } else {
-            d = new Date();
+            d.value = '';
         }
 
         ResourcePanel.hide();
         ResourcePanel.showPopoverCalendar(d, target).then(function(date) {
-            if (isNaN(date)) {
+            if (!date.valid) {
                 return;
             }
             $scope.setObject(date);
@@ -439,6 +448,7 @@ angular.module('Pundit2.TripleComposer')
     // this function should be invoked only one time (in the link function)
     // when you duplicate a statement, elsewhere probably is an error
     $scope.init = function() {
+        var date = {};
         triple = $scope.duplicated;
         delete $scope.duplicated;
 
@@ -450,7 +460,10 @@ angular.module('Pundit2.TripleComposer')
         }
         if (triple.object !== null) {
             if (triple.isDate) {
-                $scope.setObject(new Date(triple.object));
+                date.type = 'date';
+                date.datatype = triple.objType;
+                date.value = triple.object;
+                $scope.setObject(date);
             } else {
                 $scope.setObject(triple.object);
             }

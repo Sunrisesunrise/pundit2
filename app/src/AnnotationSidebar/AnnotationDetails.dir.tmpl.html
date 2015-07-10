@@ -45,9 +45,6 @@
 
                     <div ng-show="meta" class="pnd-sub-info">
                         <span ng-if="meta">
-                            <div class="pnd-annotation-details-info-id">
-                                <strong>ID:</strong> {{annotation.id}}
-                            </div>
                             <div class="pnd-annotation-details-info-author">
                                 <strong>Author:</strong> {{annotation.creatorName}}
                             </div>
@@ -65,6 +62,9 @@
                                 <span ng-show="!notebookLink">
                                     {{notebookName}}
                                 </span>
+                            </div>
+                            <div class="pnd-annotation-details-info-id">
+                                <strong>Annotation ID:</strong> {{annotation.id}}
                             </div>
                             <div ng-show="lodLive">
                                 <strong>Graph:</strong> 
