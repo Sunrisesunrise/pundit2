@@ -921,8 +921,12 @@ angular.module('Pundit2.TripleComposer')
                         state[name].statements[i].scope.setSubject(triple.subject.value, true);
                     }
                     if (typeof(triple.object) !== 'undefined') {
-                        // TODO ASAP add date support for template
-                        state[name].statements[i].scope.setObject(triple.object.value, true);
+                        // TODO check the datatype and use "literal" in the object definiton
+                        if (triple.object.type === 'date') {
+                            state[name].statements[i].scope.setObject(triple.object, true);
+                        } else {
+                            state[name].statements[i].scope.setObject(triple.object.value, true);
+                        }
                     }
                     // check if the triple is mandatory (if must be completed or if can be skipped when save annotation)
                     if (typeof(triple.mandatory) !== 'undefined') {

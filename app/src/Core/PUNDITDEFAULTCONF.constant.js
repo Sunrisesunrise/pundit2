@@ -267,10 +267,19 @@ angular.module('Pundit2.Core')
      *       },
      *       "object" : {
      *         "value" : ....,
-     *         "type": "uri|literal"
+     *         "type": "uri|literal|date"
      *       }
      * }
      * </pre>
+     * 
+     * Where a date object is defined by
+     * "object" : {
+     *   "value" : "2010-01-05",
+     *   "type" : "date",
+     *   "datatype" : "http://www.w3.org/2001/XMLSchema#date"
+     * }
+     * 
+     *  
      * All propeties are optional. By default a triple is mandatory.
      */
     templates: [
