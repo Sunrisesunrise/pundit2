@@ -111,6 +111,7 @@ angular.module("Pundit2.Core")
         target: _oa + "hasTarget",
         hasScope: _oa + "hasScope",
         hasSource: _oa + "hasSource",
+        hasBody: _oa + "hasBody",
         hasSelector: _oa + "hasSelector",
         isIncludedIn: _pnd + "isIncludedIn",
         hasTemplate: _pnd + "hasTemplate"
