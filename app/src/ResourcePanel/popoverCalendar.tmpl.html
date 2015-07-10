@@ -28,7 +28,16 @@
     </div>
 
     <div class="popover-footer">
-        <button class="btn btn-sm btn-success pnd-btn-full"  ng-click="save()">Save date</button>
-        <button class="btn btn-sm btn-info pnd-btn-full" ng-click="cancel()">Cancel</button>
+        <button 
+            class="btn btn-sm btn-success pnd-btn-full" 
+            ng-click="save()" 
+            ng-disabled="!modelDate.valid">
+            Save date
+        </button>
+        <button 
+            class="btn btn-sm btn-info pnd-btn-full" 
+            ng-click="cancel()">
+            Cancel
+        </button>
     </div>
 </div>
