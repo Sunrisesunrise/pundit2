@@ -997,6 +997,7 @@ angular.module('Pundit2.TripleComposer')
                         if (dateSpace.indexOf(triples[i].object.datatype) !== -1) {
                             var newItem = {
                                 type: 'date',
+                                datatype: triples[i].object.datatype,
                                 value: triples[i].object.value
                             }
                             state[name].statements[i].scope.setObject(newItem);
