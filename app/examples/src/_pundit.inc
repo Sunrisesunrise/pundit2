@@ -68,9 +68,11 @@
     <script src="../src/Breadcrumbs/Breadcrumbs.ctrl.js"></script>
     <script src="../src/Breadcrumbs/Breadcrumbs.service.js"></script>
 
+    <script src="../src/Model/Model.js"></script>
+    <script src="../src/Model/ModelHelper.service.js"></script>
+    <script src="../src/Model/ModelHandler.service.js"></script>
 
     <script src="../src/Communication/Communication.js"></script>
-    <script src="../src/Communication/ModelHelper.service.js"></script>
     <script src="../src/Communication/Notebook.factory.js"></script>
     <script src="../src/Communication/NotebooksExchange.service.js"></script>
     <script src="../src/Communication/NotebooksCommunication.service.js"></script>

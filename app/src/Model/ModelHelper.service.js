@@ -1,4 +1,4 @@
-angular.module('Pundit2.Communication')
+angular.module('Pundit2.Model')
 
 .constant('MODELHELPERDEFAULTS', {
     annotationServerPrefix: 'http://purl.org/pundit/local/'
@@ -239,7 +239,7 @@ angular.module('Pundit2.Communication')
 
                             // Value
                             selector[NameSpace.rdf.value] = [{
-                                "value": statementPart.uri,
+                                "value": statementPart.getXPointer(),
                                 "type": "literal"
                                     // "lang": "it"
                             }];
@@ -373,6 +373,7 @@ angular.module('Pundit2.Communication')
             typeof(data.target) === "undefined") {
             error = true;
             errorMessage = "Malformed annotations data";
+            modelHelper.err('Malformed annotations data: ', data);
             return;
         }
 
@@ -390,11 +391,12 @@ angular.module('Pundit2.Communication')
             // Get graph URI.
             var graphURI = metadata[NameSpace.annotation.hasBody][0].value;
 
+            var metadataContent = {};
+            metadataContent[metadataURI] = metadata;
+
             res[annotationID] = {
                 'graph': data.graph[graphURI],
-                'metadata': {
-                    metadataURI: metadata
-                }
+                'metadata': metadataContent
             };
 
             // Get graph.
