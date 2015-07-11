@@ -108,7 +108,7 @@ angular.module("Pundit2.Core")
         creator: _dct + "creator",
         modified: _dct + "modified",
         pageContext: _pnd + "hasPageContext",
-        target: _oa + "hasTarget",
+        hastarget: _oa + "hasTarget",
         hasScope: _oa + "hasScope",
         hasSource: _oa + "hasSource",
         hasBody: _oa + "hasBody",
