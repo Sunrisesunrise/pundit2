@@ -7,42 +7,20 @@ angular.module('Pundit2.Communication')
 })
 
 .service('AnnotationsCommunication', function(BaseComponent, EventDispatcher, NameSpace, Consolidation, MyPundit, ModelHelper,
-    AnnotationsExchange, Annotation, NotebookExchange, Notebook, ItemsExchange, Config, XpointersHelper,
+    AnnotationsExchange, Annotation, NotebookExchange, Notebook, ItemsExchange, Config, XpointersHelper, ModelHandler,
     $http, $q, $rootScope, ANNOTATIONSCOMMUNICATIONDEFAULTS) {
 
     var annotationsCommunication = new BaseComponent("AnnotationsCommunication", ANNOTATIONSCOMMUNICATIONDEFAULTS);
 
+    var annotationServerVersion = Config.annotationServerVersion;
     var setLoading = function(state) {
         EventDispatcher.sendEvent('AnnotationsCommunication.loading', state);
     };
 
     var makeTargetsAndItems = function(data) {
-        // data.realItems = uri + values
-
-        // if (ModelHelper.options.mode === 'mode2') {
-        //     for (var uri in data.items) {
-        //         var item = ItemsExchange.getItemByUri(uri);
-        //         if (typeof(item) === "undefined") {
-
-        //             // If it's not empty, let ItemFactory extend it with the previously gathered
-        //             // values
-        //             if (angular.equals(ann.items[uri], {})) {
-        //                 item = new Item(uri);
-        //             } else {
-        //                 item = new Item(uri, ann.items[uri]);
-        //             }
-
-        //             if (item.isProperty()) {
-        //                 // Add specific flag, this properties are deleted if an other property 
-        //                 // with the same uri is added
-        //                 item.isAnnotationProperty = true;
-        //             }
-
-        //             // And read what the annotation says about the item
-        //             item.fromAnnotationRdf(data.items);
-        //         }
-        //     }
-        // }
+        if (annotationServerVersion === 'v2')  {
+            ModelHandler.makeTargetsAndItems(data);
+        }
     };
 
     // get all annotations of the page from the server
@@ -364,6 +342,7 @@ angular.module('Pundit2.Communication')
             }).success(function() {
                 if (completed > 0) {
                     AnnotationsExchange.getAnnotationById(annID).update().then(function() {
+                        makeTargetsAndItems(data);
                         Consolidation.consolidateAll();
                         EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
                         setLoading(false);
@@ -391,6 +370,7 @@ angular.module('Pundit2.Communication')
             }).success(function() {
                 if (completed > 0) {
                     AnnotationsExchange.getAnnotationById(annID).update().then(function() {
+                        makeTargetsAndItems(data);
                         Consolidation.consolidateAll();
                         EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
                         setLoading(false);
