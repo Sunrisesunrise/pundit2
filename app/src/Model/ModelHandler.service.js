@@ -2,7 +2,7 @@ angular.module('Pundit2.Model')
 
 .constant('MODELHANDLERDEFAULTS', {})
 
-.service('ModelHandler', function(BaseComponent, Config, MODELHANDLERDEFAULTS, NameSpace, Item, ItemsExchange) {
+.service('ModelHandler', function(BaseComponent, Config, MODELHANDLERDEFAULTS, NameSpace, Item, ItemsExchange, TypesHelper) {
 
     var modelHandler = new BaseComponent("ModelHandler", MODELHANDLERDEFAULTS);
     var annotationServerVersion = Config.annotationServerVersion;
@@ -10,12 +10,18 @@ angular.module('Pundit2.Model')
     modelHandler.makeTargetsAndItems = function(data) {
         if (typeof(data) === "undefined" ||
             typeof(data.target) === "undefined" ||
+            typeof(data.type) === "undefined" ||
             typeof(data.items) === "undefined") {
             modelHandler.err('Malformed data : ', data);
             return false;
         }
 
         var currentSelector;
+
+        // Add types from data
+        for (var t in data.type) {
+            TypesHelper.addFromAnnotationRdf(data.type[t], data.type);
+        }
 
         // Add items from data
         for (var uri in data.items) {
@@ -24,7 +30,7 @@ angular.module('Pundit2.Model')
                 item = new Item(uri);
 
                 if (item.isProperty()) {
-                    // Add specific flag, this properties are deleted if an other property 
+                    // Add specific flag, this property is deleted if an other property 
                     // with the same uri is added
                     item.isAnnotationProperty = true;
                 }
