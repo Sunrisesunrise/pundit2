@@ -388,10 +388,12 @@ angular.module('Pundit2.Core')
                 if (typeof target[NameSpace.item.isPartOf] !== 'undefined') {
                     values[NameSpace.item.isPartOf] = target[NameSpace.item.isPartOf][0].value;
                 }
+                values[NameSpace.annotation.hasScope] = target[NameSpace.annotation.hasScope][0].value;
+                values[NameSpace.annotation.hasSource] = target[NameSpace.annotation.hasSource][0].value;
+                values.xpointer = selector[NameSpace.rdf.value][0].value;
+                values.label = selector[NameSpace.rdfs.label][0].value];
                 break;
         }
-
-
 
         return new ItemFactory(uri, values);
     };
