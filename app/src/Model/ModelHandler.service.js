@@ -26,12 +26,12 @@ angular.module('Pundit2.Model')
 
         // Add items from data.items
         for (var uri in data.items) {
-            item.createFromItems(uri, data.items);
+            Item.createFromItems(uri, data.items);
         }
 
         // Add items from data.target
         for (var uri in data.target) {
-            item.createFromTarget(uri, data.target);
+            Item.createFromTarget(uri, data.target);
         }
 
     };
