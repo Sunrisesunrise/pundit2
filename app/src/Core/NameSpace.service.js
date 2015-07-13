@@ -38,7 +38,8 @@ angular.module("Pundit2.Core")
 
     ns.target = {
         conformsTo: _dct + 'conformsTo',
-        fragmentSelector: _oa + 'FragmentSelector'
+        fragmentSelector: _oa + 'FragmentSelector',
+        specificResource: _oa + 'SpecificResource'
         /* ns.rdf.type */
         /* ns.rdf.value */
         /* ns.rdfs.label */
