@@ -4,10 +4,90 @@
  * Style for custom buttons
  */
 
+/* ------------------------------------ *\
+   #PUNDIT-BUTTON
+\* ------------------------------------ */
+
+/* Default button */
+.pnd-btn {
+    display: inline-block;
+    height: 29px;
+    margin: 0;
+    padding: 0 10px;
+
+    /* Gradient bg with mixin */
+    #gradient > .vertical(lighten(@color-button-bg, 2); darken(@color-button-bg, 2)); // It's a Bootstrap mixin
+    border: 0;
+
+    color: @color-button-text-dark;
+    .text-white-emboss();
+    font-size: 12px;
+    font-weight: @btn-font-weight;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    cursor: pointer;
+
+    &:hover,
+    &:focus,
+    &.focus {
+        /* Gradient bg with mixin */
+        #gradient > .vertical(lighten(darken(@color-button-bg, 3), 2); darken(darken(@color-button-bg, 3), 2));
+    }
+
+    &:active,
+    &.active {
+        outline: 0;
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        cursor: @cursor-disabled;
+        color: fade(@color-button-text-dark, 50%);
+        pointer-events: none; // Future-proof disabling of clicks
+        /* Gradient bg with mixin */
+        #gradient > .vertical(lighten(lighten(@color-button-bg, 5), 2); darken(lighten(@color-button-bg, 5), 2));
+    }
+}
+
+
+/* ------------------------------------ *\
+   #CALL-TO-ACTION-BUTTON
+\* ------------------------------------ */
+
+/* Usually green button */
+.pnd-btn-calltoaction {
+    /* Gradient bg with mixin */
+    #gradient > .vertical(lighten(@color-button-bg-cta, 2); darken(@color-button-bg-cta, 2));
+    color: @color-button-text-light;
+    .text-dark-emboss();
+
+    &:hover,
+    &:focus,
+    &.focus {
+        /* Gradient bg with mixin */
+        #gradient > .vertical(lighten(darken(@color-button-bg-cta, 3), 2); darken(darken(@color-button-bg-cta, 3), 2));
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 60%);
+        text-shadow: none;
+        /* Gradient bg with mixin */
+        #gradient > .vertical(lighten(lighten(@color-button-bg-cta, 30), 2); darken(lighten(@color-button-bg-cta, 30), 2));
+    }
+
+}
+
 
 /* ------------------------------------ *\
    #BUTTONS-CUSTOM-HEIGHTS
 \* ------------------------------------ */
+
+// TODO All buttons are like this... please remove this when
+// the class pnd-btn have been applied to all buttons in the interface
 
 /* Higher button used in panels and resource panel's footer */
 .pnd-btn-full {

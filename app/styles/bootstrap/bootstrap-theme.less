@@ -623,6 +623,8 @@ input {
 
 .popover {
     padding: 0;
+    border-radius: 3px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
 
     .popover-content {
         padding: 10px;
@@ -637,14 +639,18 @@ input {
     }
 
     .popover-footer {
-        border-top: 1px solid @gray-light;
+        border-top: 1px solid @color-border-normal;
+        border-radius: 0 0 3px 3px;
+        overflow: hidden;
         height: 30px;
 
+        /*
+        TODO: to be removed
         .btn {
             display: block;
             float: left;
             border-right: 1px solid #fff;
-        }
+        }*/
     }
 
     &.pnd-popover-literal {

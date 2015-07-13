@@ -11,18 +11,24 @@
 // #COLORS
 // ------------------------------------ //
 // Text colors
-@color-text-link: #39b54a;
-@color-text-link-hover: darken(@color-text-link, 15%);
 @color-text: #555;
+@color-text-link: #48bb58; // #39b54a;
+@color-text-link-hover: darken(@color-text-link, 15%);
 
 // Borders
-@color-border-normal: #999;
+@color-border-normal: #cacaca;
 @color-border-light: #DDD;
 
 // Backgrounds
 @color-background-base: #FFF;
 @color-background-light: lighten(#000, 96%);
 @color-background-medium: lighten(#000, 90%);
+
+// Buttons
+@color-button-bg-cta: @color-text-link;
+@color-button-bg: @color-background-medium;
+@color-button-text-light: #fff;
+@color-button-text-dark: @color-text;
 
 // Shades of gray
 @gray-soft-dark: lighten(#000, 26%);
@@ -55,8 +61,8 @@
 // ------------------------------------ //
 // #INLINE-CONSOLIDATION
 // ------------------------------------ //
-@text-fragment-color: #f8cd48; // rgba(255,255,0,.32); // #f8cd48;
-@text-fragment-color-hover: darken(#f8cd48, 5); // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
+@text-fragment-color: #f2da6c; // Original from Sione Fonda #f8cd48; // rgba(255,255,0,.32); // #f8cd48;
+@text-fragment-color-hover: darken(@text-fragment-color, 5); // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
 
 
 // ------------------------------------ //
