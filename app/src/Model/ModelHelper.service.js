@@ -109,42 +109,16 @@ angular.module('Pundit2.Model')
         if (typeof(triple.object.uri) !== 'undefined') {
             if (annotationServerVersion === 'v1' || triple.object.isTarget() === false) {
                 res[triple.object.uri] = triple.object.toRdf();
-                // add object types and its label
-                //
-                //triple.object.type.forEach(function(e, i) {
-                //    var type = triple.object.type[i];
-                //    res[type] = {};
-                //    res[type][NameSpace.rdfs.label] = [{
-                //        type: 'literal',
-                //        value: TypesHelper.getLabel(e)
-                //    }];
-                //});
             }
         }
 
         if (annotationServerVersion === 'v1' || triple.subject.isTarget() === false) {
             // add subject types and its label
             addTypeElem(triple.subject.type, types);//
-            //triple.subject.type.forEach(function(e, i) {
-            //    var type = triple.subject.type[i];
-            //    res[type] = {};
-            //    res[type][NameSpace.rdfs.label] = [{
-            //        type: 'literal',
-            //        value: TypesHelper.getLabel(e)
-            //    }];
-            //});
         }
 
         // add predicate types and its label
         addTypeElem(triple.predicate.type, types);
-        //triple.predicate.type.forEach(function(e, i) {
-        //    var type = triple.predicate.type[i];
-        //    res[type] = {};
-        //    res[type][NameSpace.rdfs.label] = [{
-        //        type: 'literal',
-        //        value: TypesHelper.getLabel(e)
-        //    }];
-        //});
     }
 
     var addTargetElem = function(el, res, flat, types) {
@@ -156,7 +130,7 @@ angular.module('Pundit2.Model')
             return;
         }
 
-        addTypeElem(triple.predicate.type, types);
+        addTypeElem([NameSpace.target.specificResource].concat(triple.predicate.type), types);
 
         [triple.subject, triple.object].forEach(function(a, i, arr) {
             // TODO: add code to handle imageFragments.
@@ -220,6 +194,14 @@ angular.module('Pundit2.Model')
                         });
                     }
 
+                    if (statementPart.isTextFragment() || statementPart.isImage()) {
+                        target[NameSpace.rdf.type].push({
+                            'value': NameSpace.target.specificResource,
+                            'type': 'uri'
+                        });
+                        // TODO: aggiungere anche ai types.
+                    }
+
                     addTypeElem(statementPart.type, types);
 
                     if (!statementPart.isWebPage()) {
@@ -241,7 +223,7 @@ angular.module('Pundit2.Model')
                             selector[NameSpace.rdfs.label] = [{
                                 "value": statementPart.label,
                                 "type": "literal"
-                                    // "lang": "it"
+                                // "lang": "it"
                             }];
 
                             // Value
