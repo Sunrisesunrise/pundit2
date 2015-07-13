@@ -53,7 +53,7 @@ angular.module('Pundit2.Model')
         }
     };
 
-    var addItemElem = function(el, res, val) {
+    var addItemElem = function(el, res, types) {
         var triple = el.scope.get();
 
         // skip incomplete triple
@@ -61,7 +61,8 @@ angular.module('Pundit2.Model')
             return;
         }
 
-        // TODO: Add support to image fragment 
+        // TODO: Add support to image fragment
+        // var val;
         // // check if items are image fragment
         // // in this case add the polygon to the items list
         // if (typeof(triple.subject.polygon) !== 'undefined' && typeof(triple.subject.polygonUri) !== 'undefined') {
@@ -109,41 +110,44 @@ angular.module('Pundit2.Model')
             if (annotationServerVersion === 'v1' || triple.object.isTarget() === false) {
                 res[triple.object.uri] = triple.object.toRdf();
                 // add object types and its label
-                triple.object.type.forEach(function(e, i) {
-                    var type = triple.object.type[i];
-                    res[type] = {};
-                    res[type][NameSpace.rdfs.label] = [{
-                        type: 'literal',
-                        value: TypesHelper.getLabel(e)
-                    }];
-                });
+                //
+                //triple.object.type.forEach(function(e, i) {
+                //    var type = triple.object.type[i];
+                //    res[type] = {};
+                //    res[type][NameSpace.rdfs.label] = [{
+                //        type: 'literal',
+                //        value: TypesHelper.getLabel(e)
+                //    }];
+                //});
             }
         }
 
         if (annotationServerVersion === 'v1' || triple.subject.isTarget() === false) {
             // add subject types and its label
-            triple.subject.type.forEach(function(e, i) {
-                var type = triple.subject.type[i];
-                res[type] = {};
-                res[type][NameSpace.rdfs.label] = [{
-                    type: 'literal',
-                    value: TypesHelper.getLabel(e)
-                }];
-            });
+            addTypeElem(triple.subject.type, types);//
+            //triple.subject.type.forEach(function(e, i) {
+            //    var type = triple.subject.type[i];
+            //    res[type] = {};
+            //    res[type][NameSpace.rdfs.label] = [{
+            //        type: 'literal',
+            //        value: TypesHelper.getLabel(e)
+            //    }];
+            //});
         }
 
         // add predicate types and its label
-        triple.predicate.type.forEach(function(e, i) {
-            var type = triple.predicate.type[i];
-            res[type] = {};
-            res[type][NameSpace.rdfs.label] = [{
-                type: 'literal',
-                value: TypesHelper.getLabel(e)
-            }];
-        });
+        addTypeElem(triple.predicate.type, types);
+        //triple.predicate.type.forEach(function(e, i) {
+        //    var type = triple.predicate.type[i];
+        //    res[type] = {};
+        //    res[type][NameSpace.rdfs.label] = [{
+        //        type: 'literal',
+        //        value: TypesHelper.getLabel(e)
+        //    }];
+        //});
     }
 
-    var addTargetElem = function(el, res, flat) {
+    var addTargetElem = function(el, res, flat, types) {
         var triple = el.scope.get(),
             uris;
 
@@ -152,7 +156,8 @@ angular.module('Pundit2.Model')
             return;
         }
 
-        // Subject.
+        addTypeElem(triple.predicate.type, types);
+
         [triple.subject, triple.object].forEach(function(a, i, arr) {
             // TODO: add code to handle imageFragments.
             var statementPart = arr[i];
@@ -215,6 +220,8 @@ angular.module('Pundit2.Model')
                         });
                     }
 
+                    addTypeElem(statementPart.type, types);
+
                     if (!statementPart.isWebPage()) {
                         // Building selector info.
                         // conformsTo.
@@ -258,6 +265,20 @@ angular.module('Pundit2.Model')
         });
     };
 
+    var addTypeElem = function(types, dest) {
+        types.forEach(function(e, i) {
+            var type = types[i];
+            if (typeof dest[type] !== 'undefined') {
+                return;
+            }
+            dest[type] = {};
+            dest[type][NameSpace.rdfs.label] = [{
+                type: 'literal',
+                value: TypesHelper.getLabel(e)
+            }];
+        });
+    };
+
     modelHelper.buildObject = function(item, objType) {
         if (typeof(item) === 'string' && typeof(objType) === 'undefined') {
             // literal
@@ -292,27 +313,36 @@ angular.module('Pundit2.Model')
         return res;
     };
 
-    modelHelper.buildItems = function(statements) {
-        var res = {},
-            val;
+    modelHelper.buildItems = function(statements, types) {
+        var res = {};
+        if (typeof types === 'undefined') {
+            types = {};
+        }
 
         statements.forEach(function(el) {
-            addItemElem(el, res, val);
+            addItemElem(el, res, types);
         });
 
-        return res;
+        return {
+            'obj': res,
+            'types': types
+        };
     };
 
-    modelHelper.buildTargets = function(statements) {
+    modelHelper.buildTargets = function(statements, types) {
         var res = {};
         var flat = [];
+        if (typeof types === 'undefined') {
+            types = {};
+        }
         statements.forEach(function(el) {
             addTargetElem(el, res, flat);
         });
 
         return {
             'obj': res,
-            'flat': flat
+            'flat': flat,
+            'types': types
         };
     };
 
@@ -324,13 +354,13 @@ angular.module('Pundit2.Model')
                 'items': {},
                 'target': {},
                 'flatTargets': []
-            },
-            val;
+                //, 'type': {}
+            };
 
         statements.forEach(function(el) {
             addGraphElem(el, res.graph);
-            addItemElem(el, res.items, val);
-            addTargetElem(el, res.target, res.flatTargets);
+            addItemElem(el, res.items, res.items /*temporary, it will be replaced with res.types*/);
+            addTargetElem(el, res.target, res.flatTargets, res.items /*temporary, it will be replaced with res.types*/);
         });
 
         // TODO: skip completely target build if we're in v1 mode
