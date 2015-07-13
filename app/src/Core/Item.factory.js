@@ -349,6 +349,53 @@ angular.module('Pundit2.Core')
         return typeof(this.xpointer) !== 'undefined' ? this.xpointer : this.uri;
     };
 
+    ItemFactory.createFromTarget = function(uri, targets) {
+        if (typeof targets[uri] === 'undefined') {
+            return null;
+        }
+
+        if (typeof ItemsExchange.getItemByUri(uri) !== 'undefined') {
+            return null;
+        }
+
+        var target = targets[uri],
+            values = {
+                uri: uri,
+                type: []
+            },
+            itemBaseType = 'target';
+
+        for (var i in target[NameSpace.rdf.type]) {
+            values.type.push(target[NameSpace.rdf.type][i].value)
+            if (target[NameSpace.rdf.type][i].value === NameSpace.types.page) {
+                itemBaseType = NameSpace.types.page;
+                // Do not break even if it's been discovered it's a webpage.
+                //break;
+            }
+            if (target[NameSpace.rdf.type][i].value === NameSpace.target.fragmentSelector) {
+                itemBaseType = NameSpace.target.fragmentSelector;
+                // No need to create item if it's a fragment Selector.
+                return null;
+            }
+        }
+
+        switch (itemBaseType) {
+            case NameSpace.types.page: //WebPage.
+
+                break;
+            case 'target':
+                var selector = targets[target[NameSpace.annotation.hasSelector][0].value];
+                if (typeof target[NameSpace.item.isPartOf] !== 'undefined') {
+                    values[NameSpace.item.isPartOf] = target[NameSpace.item.isPartOf][0].value;
+                }
+                break;
+        }
+
+
+
+        return new ItemFactory(uri, values);
+    };
+
     itemComponent.log('Component up and running');
 
     return ItemFactory;
