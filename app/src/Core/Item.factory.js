@@ -96,18 +96,18 @@ angular.module('Pundit2.Core')
 })
 
 .factory('Item', function(BaseComponent, Config, NameSpace, Utils, ItemsExchange, md5, ITEMDEFAULTS) {
-    var itemComponent = new BaseComponent("Item", ITEMDEFAULTS);
+    var itemComponent = new BaseComponent('Item', ITEMDEFAULTS);
 
     var annotationServerVersion = Config.annotationServerVersion;
 
     var ItemFactory = function(uri, values) {
         // To create a new Item at least a URI is needed
-        if (typeof(uri) === "undefined") {
-            itemComponent.err("Can't create an item without an URI");
+        if (typeof(uri) === 'undefined') {
+            itemComponent.err('Can\'t create an item without an URI');
             return;
         }
 
-        if (annotationServerVersion === 'v2' && uri.indexOf('#xpointer(') !== -1){
+        if (annotationServerVersion === 'v2' && uri.indexOf('#xpointer(') !== -1) {
             this.uri = 'http://purl.org/pundit/local/target/' + md5.createHash(uri);
             if (angular.isObject(values)) {
                 values.uri = this.uri;
@@ -173,7 +173,7 @@ angular.module('Pundit2.Core')
 
 
         // Cant find any rdf for this item?? Where is it?!1?
-        if (typeof(itemRDF) === "undefined") {
+        if (typeof(itemRDF) === 'undefined') {
             itemComponent.log('Error? No RDF for this item? ', this.uri);
             return;
         }
@@ -235,7 +235,7 @@ angular.module('Pundit2.Core')
 
         // TODO: more special cases, named content, webpage, video fragment, other selectors?
 
-        itemComponent.log("Created new item from annotation RDF: "+ this.label);
+        itemComponent.log('Created new item from annotation RDF: ' + this.label);
     };
 
     ItemFactory.prototype.toRdf = function() {
@@ -396,6 +396,34 @@ angular.module('Pundit2.Core')
         }
 
         return new ItemFactory(uri, values);
+    };
+
+    ItemFactory.createFromItems = function(uri, items) {
+        if (typeof items[uri] === 'undefined') {
+            return null;
+        }
+
+        if (typeof ItemsExchange.getItemByUri(uri) !== 'undefined') {
+            return null;
+        }
+
+        var item = items[uri],
+            values = {
+                uri: uri,
+                type: []
+            };
+
+        for (var i in item[NameSpace.rdf.type]) {
+            values.type.push(item[NameSpace.rdf.type][i].value)
+            if (item[NameSpace.rdf.type][i].value === NameSpace.rdf.property) {
+                values.isAnnotationProperty = true;
+            }
+        }
+
+        item = new ItemFactory(uri, values);
+        item.fromAnnotationRdf(items);
+
+        return item;
     };
 
     itemComponent.log('Component up and running');

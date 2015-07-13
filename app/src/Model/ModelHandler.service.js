@@ -2,16 +2,17 @@ angular.module('Pundit2.Model')
 
 .constant('MODELHANDLERDEFAULTS', {})
 
-.service('ModelHandler', function(BaseComponent, Config, MODELHANDLERDEFAULTS, NameSpace, Item, ItemsExchange, TypesHelper) {
+.service('ModelHandler', function(BaseComponent, Config, MODELHANDLERDEFAULTS, Item, ItemsExchange, TypesHelper) {
 
     var modelHandler = new BaseComponent("ModelHandler", MODELHANDLERDEFAULTS);
     var annotationServerVersion = Config.annotationServerVersion;
 
     modelHandler.makeTargetsAndItems = function(data) {
-        if (typeof(data) === "undefined" ||
-            typeof(data.target) === "undefined" ||
-            typeof(data.type) === "undefined" ||
-            typeof(data.items) === "undefined") {
+
+        if (typeof(data) === 'undefined' ||
+            typeof(data.target) === 'undefined' ||
+            typeof(data.type) === 'undefined' ||
+            typeof(data.items) === 'undefined') {
             modelHandler.err('Malformed data : ', data);
             return false;
         }
@@ -23,29 +24,14 @@ angular.module('Pundit2.Model')
             TypesHelper.addFromAnnotationRdf(data.type[t], data.type);
         }
 
-        // Add items from data
+        // Add items from data.items
         for (var uri in data.items) {
-            var item = ItemsExchange.getItemByUri(uri);
-            if (typeof(item) === "undefined") {
-                item = new Item(uri);
-
-                if (item.isProperty()) {
-                    // Add specific flag, this property is deleted if an other property 
-                    // with the same uri is added
-                    item.isAnnotationProperty = true;
-                }
-
-                // And read what the annotation says about the item
-                item.fromAnnotationRdf(data.items);
-            }
+            item.createFromItems(uri, data.items);
         }
 
-        // Add target items 
+        // Add items from data.target
         for (var uri in data.target) {
-            if (data.target[uri][NameSpace.rdf.type][0].value === NameSpace.fragments.text) {
-                currentSelector = data.target[uri][NameSpace.annotation.hasSelector][0].value;
-                console.log(data.target[currentSelector]);
-            }
+            item.createFromTarget(uri, data.target);
         }
 
     };
