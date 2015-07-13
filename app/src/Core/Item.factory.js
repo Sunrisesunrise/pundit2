@@ -381,7 +381,7 @@ angular.module('Pundit2.Core')
 
         switch (itemBaseType) {
             case NameSpace.types.page: //WebPage.
-
+                values.label = target[NameSpace.rdfs.label][0].value;
                 break;
             case 'target':
                 var selector = targets[target[NameSpace.annotation.hasSelector][0].value];
@@ -391,7 +391,7 @@ angular.module('Pundit2.Core')
                 values[NameSpace.annotation.hasScope] = target[NameSpace.annotation.hasScope][0].value;
                 values[NameSpace.annotation.hasSource] = target[NameSpace.annotation.hasSource][0].value;
                 values.xpointer = selector[NameSpace.rdf.value][0].value;
-                values.label = selector[NameSpace.rdfs.label][0].value];
+                values.label = selector[NameSpace.rdfs.label][0].value;
                 break;
         }
 
