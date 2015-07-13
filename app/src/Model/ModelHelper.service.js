@@ -238,6 +238,13 @@ angular.module('Pundit2.Model')
 
                         // Add selector info only if it's not a webpage.
                         res[uris.selector] = selector;
+                    } else {
+                        // Add label for webpage target
+                        target[NameSpace.rdfs.label] = [{
+                            "value": statementPart.label,
+                            "type": "literal"
+                            // "lang": "it"
+                        }];
                     }
 
                     res[uris.target] = target;
