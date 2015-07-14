@@ -395,7 +395,10 @@ angular.module('Pundit2.Core')
                 break;
         }
 
-        return new ItemFactory(uri, values);
+        var item = new ItemFactory(uri, values);
+        ItemsExchange.addItemToContainer(item, PageItemsContainer.options.container);
+
+        return item;
     };
 
     ItemFactory.createFromItems = function(uri, items) {
