@@ -372,9 +372,9 @@ angular.module('Pundit2.Communication')
                     var object = data.graph[s][p][o];
                     if (object.type === "uri" && ann.entities.indexOf(object.value) === -1) {
                         ann.entities.push(object.value);
-                        item = ItemsExchange.getItemByUri(o);
+                        item = ItemsExchange.getItemByUri(object.value);
                         if (typeof(item) !== 'undefined') {
-                            ann.items[o] = item;
+                            ann.items[object.value] = item;
                         }
                     }
                 } // for o (objects)
