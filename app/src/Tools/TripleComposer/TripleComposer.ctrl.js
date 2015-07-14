@@ -292,7 +292,8 @@ angular.module('Pundit2.TripleComposer')
                         modelData.flatTargets,
                         TemplatesExchange.getCurrent().id,
                         undefined,
-                        modelData.target // Can be undefined if ModelHelper is acting in mode1
+                        modelData.target, // Can be undefined if ModelHelper is acting in mode1
+                        modelData.type
                     );
                 } else {
                     httpPromise = AnnotationsCommunication.saveAnnotation(
@@ -301,7 +302,8 @@ angular.module('Pundit2.TripleComposer')
                         modelData.flatTargets,
                         undefined, // templateID
                         undefined, // skipConsolidation
-                        modelData.target // Can be undefined if ModelHelper is acting in mode1
+                        modelData.target, // Can be undefined if ModelHelper is acting in mode1
+                        modelData.type
                     );
                 }
 

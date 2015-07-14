@@ -197,7 +197,7 @@ angular.module('Pundit2.Communication')
         return promise.promise;
     };
 
-    annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, skipConsolidation, postDataTargets) {
+    annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, skipConsolidation, postDataTargets, types) {
         // var completed = 0;
         var promise = $q.defer();
 
@@ -229,6 +229,9 @@ angular.module('Pundit2.Communication')
             };
             if (typeof postDataTargets !== 'undefined') {
                 postData.target = postDataTargets;
+            }
+            if (annotationServerVersion === 'v2') {
+                postData.type = types;
             }
             if (typeof(templateID) !== 'undefined') {
                 postData.metadata = {

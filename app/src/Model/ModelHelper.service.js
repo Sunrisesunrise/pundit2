@@ -109,12 +109,15 @@ angular.module('Pundit2.Model')
         if (typeof(triple.object.uri) !== 'undefined') {
             if (annotationServerVersion === 'v1' || triple.object.isTarget() === false) {
                 res[triple.object.uri] = triple.object.toRdf();
+
+                // add object types and its label
+                addTypeElem(triple.object.type, types);
             }
         }
 
         if (annotationServerVersion === 'v1' || triple.subject.isTarget() === false) {
             // add subject types and its label
-            addTypeElem(triple.subject.type, types);//
+            addTypeElem(triple.subject.type, types);
         }
 
         // add predicate types and its label
@@ -342,14 +345,14 @@ angular.module('Pundit2.Model')
                 'graph': {},
                 'items': {},
                 'target': {},
-                'flatTargets': []
-                //, 'type': {}
+                'flatTargets': [],
+                'type': {}
             };
 
         statements.forEach(function(el) {
             addGraphElem(el, res.graph);
-            addItemElem(el, res.items, res.items /*temporary, it will be replaced with res.types*/);
-            addTargetElem(el, res.target, res.flatTargets, res.items /*temporary, it will be replaced with res.types*/);
+            addItemElem(el, res.items, res.type);
+            addTargetElem(el, res.target, res.flatTargets, res.type);
         });
 
         // TODO: skip completely target build if we're in v1 mode
