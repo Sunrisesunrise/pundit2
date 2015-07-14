@@ -37,7 +37,7 @@ body.pnd-toolbar-active {
 \* ------------------------------------ */
 .pnd-toolbar-navbar .navbar-nav li {
 
-    /* Normal buttons... now darg gray */
+    /* Normal buttons... now dark gray */
     a {
         line-height: 1.5;
         height: @toolbar-height - @toolbar-border-bottom;
@@ -191,6 +191,17 @@ body.pnd-toolbar-active {
         &.pnd-filter-active {
             color: @brand-primary;
         }
+    }
+}
+
+/* First button with Pundit Logo and error icon when necessary */
+.pnd-toolbar-navbar .navbar-nav .pnd-toolbar-status-button-ok {
+    a {
+        padding-top: 4px;
+    }
+
+    .pnd-icon {
+        font-size: 24px;
     }
 }
 
