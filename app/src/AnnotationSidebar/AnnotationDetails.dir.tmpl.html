@@ -22,7 +22,7 @@
                         <span class="pnd-item-title">{{annotation.mainItem.label}}</span>
                 </div>    
                 <button type="button" class="btn pull-right">
-                    <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-sort-down'}[annotation.expanded]"></span>
+                    <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[annotation.expanded]"></span>
                 </button>
         </div>
     </div>
@@ -39,7 +39,7 @@
                             <span>Annotation's info</span>
                         </div>
                         <button type="button" class="btn btn-link pull-right">
-                            <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-sort-down'}[meta]"></span>
+                            <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[meta]"></span>
                         </button>
                     </div>
 
@@ -96,7 +96,7 @@
                                 <span ng-bind-html="item.subject.label">{{item.subject.label}}</span>
                             </div>
                             <button type="button" class="btn btn-link pull-right">
-                                <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-sort-down'}[subInfo]"></span>
+                                <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[subInfo]"></span>
                             </button>
                         </div>
 
@@ -120,7 +120,7 @@
                                 <span ng-bind-html="item.predicate.label">{{item.predicate.label}}</span>
                             </div>
                             <button type="button" class="btn  btn-link pull-right">
-                                <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-sort-down'}[preInfo]"></span>
+                                <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[preInfo]"></span>
                             </button>
                         </div>
 
@@ -153,7 +153,7 @@
                                     </span>
                                 </div>
                                 <button type="button" class="btn  btn-link pull-right">
-                                        <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-sort-down'}[objInfo]"></span>
+                                        <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[objInfo]"></span>
                                 </button>
                             </div>
                             <div ng-show="objInfo" class="pnd-sub-info">
@@ -182,12 +182,11 @@
             <button 
                 type="button" 
                 ng-if="showEdit()" 
-                class="btn btn-xs btn-success pnd-btn-half pnd-btn-fill-width"
+                class="pnd-btn pnd-btn-calltoaction pnd-btn-fill-width"
                 ng-click="editAnnotation()"
-                ng-disable="isLoading">Edit</button>
-            <button 
+                ng-disable="isLoading">Edit</button><button
                 type="button" 
-                class="btn btn-xs btn-info pnd-btn-half pnd-btn-fill-width"
+                class="pnd-btn pnd-btn-fill-width"
                 ng-click="deleteAnnotation()"
                 ng-disable="isLoading">Delete</button>
         </div>

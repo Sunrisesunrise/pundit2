@@ -20,7 +20,7 @@
     z-index: @zindex-pnd-annotation-sidebar;
     display: block;
     // background-color: @gray-dark;
-    #gradient > .horizontal-three-colors(darken(@gray-dark, 10); @gray-dark; 2%; @gray-dark);
+    #gradient > .horizontal-three-colors(darken(@color-annotation-sidebar-bg, 10); @color-annotation-sidebar-bg; 2%; @color-annotation-sidebar-bg);
 }
 
 .pnd-annotation-sidebar-content {
@@ -343,24 +343,31 @@
         line-height: @annotation-header-height;
         height: @annotation-header-height;
         width: @annotation-sidebar-width;
-        #gradient > .horizontal-three-colors(darken(@color-annotation-header, 12); @color-annotation-header; 2%; @color-annotation-header);
+        #gradient > .horizontal-three-colors(darken(@color-annotation-header, 5); @color-annotation-header; 2%; @color-annotation-header);
         color: @color-annotation-header-text;
         cursor: pointer;
 
         /* Text string shown... */
         .pnd-annotation-item-header-text {
-            text-shadow: @annotation-header-text-shadow;
+
+            .pnd-annotation-icon-color .pnd-icon {
+                opacity: .7;
+            }
+
+            .pnd-item-title {
+                text-shadow: @annotation-header-text-shadow;
+            }
         }
 
         &:hover {
-            #gradient > .horizontal-three-colors(darken(darken(@color-annotation-header, 5%), 12); darken(@color-annotation-header, 5%); 2%; darken(@color-annotation-header, 5%));
+            #gradient > .horizontal-three-colors(darken(darken(@color-annotation-header, 5%), 5); darken(@color-annotation-header, 5%); 2%; darken(@color-annotation-header, 5%));
         }
 
         &.pnd-annotation-details-broken {
-            background-color: @color-annotation-broken-header;
+            #gradient > .horizontal-three-colors(darken(darken(@color-annotation-broken-header, 5%), 5); darken(@color-annotation-broken-header, 5%); 2%; darken(@color-annotation-broken-header, 5%));
 
             &:hover {
-                background-color: darken(@color-annotation-broken-header, 5%);
+                #gradient > .horizontal-three-colors(darken(darken(@color-annotation-broken-header, 5%), 5); darken(@color-annotation-broken-header, 5%); 2%; darken(@color-annotation-broken-header, 5%));
             }
         }
 
@@ -488,6 +495,7 @@
                 padding: 5px 10px;
                 overflow-y: hidden;
                 font-size: 11px;
+                line-height: 1.7;
             }
         }
 
@@ -625,17 +633,18 @@
 
     .pnd-annotation-details-header {
         width: @annotation-sidebar-coll-width;
-        #gradient > .horizontal-three-colors(darken(@color-annotation-header, 20); @color-annotation-header; 50%; @color-annotation-header);
+        #gradient > .horizontal-three-colors(darken(@color-annotation-header, 9); @color-annotation-header; 50%; @color-annotation-header);
 
         &:hover {
             color: #fff;
-            #gradient > .horizontal-three-colors(darken(darken(@color-annotation-header, 5%), 20); darken(@color-annotation-header, 5%); 50%; darken(@color-annotation-header, 5%));
+            #gradient > .horizontal-three-colors(darken(darken(@color-annotation-header, 5%), 9); darken(@color-annotation-header, 5%); 50%; darken(@color-annotation-header, 5%));
         }
 
         &.pnd-annotation-details-broken {
+            #gradient > .horizontal-three-colors(darken(@color-annotation-broken-header, 9); @color-annotation-broken-header; 50%; @color-annotation-broken-header);
 
             &:hover {
-                background-color: darken(@brand-warning, 10%);
+                #gradient > .horizontal-three-colors(darken(darken(@color-annotation-broken-header, 5%), 9); darken(@color-annotation-broken-header, 5%); 50%; darken(@color-annotation-broken-header, 5%));
             }
         }
 
