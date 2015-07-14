@@ -156,8 +156,9 @@ angular.module('Pundit2.Annotators')
         fragmentById = {};
 
         for (var uri in items) {
-            xpointers.push(items[uri].getXPointer());
-            fragmentIds[uri] = ["fr-" + i];
+            var itemXPointer = items[uri].getXPointer();
+            xpointers.push(itemXPointer);
+            fragmentIds[itemXPointer] = ["fr-" + i];
             fragmentById["fr-" + i] = {
                 uri: uri,
                 bits: [],
