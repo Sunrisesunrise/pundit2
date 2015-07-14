@@ -498,6 +498,10 @@ angular.module('Pundit2.Toolbar')
 
     // Handle changes in triple composer.
     EventDispatcher.addListeners(['TripleComposer.statementChanged', 'TripleComposer.reset'], function (e) {
+        if (e.name === 'TripleComposer.reset') {
+            $scope.canUsePageAsSubject = true;
+            return;
+        }
         var item = PageHandler.getPageItem();
         $scope.canUsePageAsSubject = TripleComposer.canAddItemAsSubject(item);
     });

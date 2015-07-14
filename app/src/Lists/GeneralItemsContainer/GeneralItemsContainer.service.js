@@ -94,7 +94,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     var generalItemsContainer = new BaseComponent('GeneralItemsContainer', GENERALITEMSCONTAINER);
 
-    var MY_ITEMS_TYPE = generalItemsContainer.options.myItems;
+    var MY_ITEMS_TYPE = generalItemsContainer.options.myItemsType;
     var PAGE_ITEMS_TYPE = generalItemsContainer.options.pageItemsType;
     var VOCABULARIES_TYPE = generalItemsContainer.options.vocabulariesType;
     var MY_NOTEBOOKS_TYPE = generalItemsContainer.options.myNotebooksType;
