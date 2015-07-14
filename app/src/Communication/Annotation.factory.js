@@ -18,7 +18,11 @@ angular.module('Pundit2.Communication')
         if (typeof(id) !== "undefined") {
             this.id = id;
             if (typeof loadedData !== 'undefined') {
-                readAnnotationData(this, loadedData);
+                if (annotationServerVersion === 'v1') {
+                    readAnnotationData(this, loadedData);
+                } else {
+                    readAnnotationMetadataAndGraph(this, loadedData);
+                }
                 this._q.resolve(this);
             } else {
                 this.load(useCache);
@@ -54,7 +58,11 @@ angular.module('Pundit2.Communication')
         }).success(function(data) {
 
             // update info
-            readAnnotationData(self, data);
+            if (annotationServerVersion === 'v1') {
+                readAnnotationData(self, data);
+            } else {
+                readAnnotationMetadataAndGraph(self, data);
+            }
 
             promise.resolve();
             annotationComponent.log("Retrieved annotation " + self.id + " metadata");
@@ -90,7 +98,11 @@ angular.module('Pundit2.Communication')
 
         }).success(function(data) {
 
-            readAnnotationData(self, data);
+            if (annotationServerVersion === 'v1') {
+                readAnnotationData(self, data);
+            } else {
+                readAnnotationMetadataAndGraph(self, data);
+            }
 
             // TODO: if ret, resolve() .. otherwise reject()?
             // TODO: the annotation might be corrupted (no items? no something..)
@@ -292,7 +304,8 @@ angular.module('Pundit2.Communication')
         }
 
         var ns = NameSpace.annotation,
-            annData = data.metadata[ann.uri];
+            annData = data.metadata[ann.uri],
+            item;
 
         // Those properties are a single value inside an array, read them
         // one by one by using the correct URI taken from the NameSpace,
@@ -335,18 +348,19 @@ angular.module('Pundit2.Communication')
 
             if (ann.entities.indexOf(s) === -1) {
                 ann.entities.push(s);
-                ann.items[s] = {};
+                item = ItemsExchange.getItemByUri(s);
+                if (typeof(item) !== 'undefined') {
+                    ann.items[s] = item;
+                }
             }
 
             for (var p in data.graph[s]) {
 
                 if (ann.entities.indexOf(p) === -1) {
-                    // Some annotations dont have a proper item for the predicate, supply
-                    // at least a type so we dont get confused ..
-                    ann.items[p] = {
-                        type: [NameSpace.rdf.property],
-                        label: Utils.getLabelFromURI(p)
-                    };
+                    item = ItemsExchange.getItemByUri(p);
+                    if (typeof(item) !== 'undefined') {
+                        ann.items[p] = item;
+                    }
                     if (ann.predicates.indexOf(p) === -1) {
                         ann.predicates.push(p);
                     }
@@ -356,55 +370,14 @@ angular.module('Pundit2.Communication')
                     var object = data.graph[s][p][o];
                     if (object.type === "uri" && ann.entities.indexOf(object.value) === -1) {
                         ann.entities.push(object.value);
-                        ann.items[object.value] = {};
+                        item = ItemsExchange.getItemByUri(o);
+                        if (typeof(item) !== 'undefined') {
+                            ann.items[o] = item;
+                        }
                     }
                 } // for o (objects)
             } // for p (predicates)
         } // for s (subjects)
-
-        // Create a real Item for each previously identified item
-        for (var uri in ann.items) {
-
-            // This item might exist already (my item? another annotation?). If it does not
-            // exist, create it from this annotation content
-            var item = ItemsExchange.getItemByUri(uri);
-            if (typeof(item) === "undefined") {
-
-                // If it's not empty, let ItemFactory extend it with the previously gathered
-                // values
-                if (angular.equals(ann.items[uri], {})) {
-                    item = new Item(uri);
-                } else {
-                    item = new Item(uri, ann.items[uri]);
-                }
-
-                if (item.isProperty()) {
-                    // Add specific flag, this properties are deleted if an other property 
-                    // with the same uri is added
-                    item.isAnnotationProperty = true;
-                }
-
-                // And read what the annotation says about the item
-                item.fromAnnotationRdf(data.items);
-            }
-
-            // discard predicates
-            if (!item.isProperty()) {
-                // Add the item to the page items container
-                ItemsExchange.addItemToContainer(item, PageItemsContainer.options.container);
-            }
-
-            // Help out by giving the types to the helper, UI will say thanks
-            for (var z in item.type) {
-                TypesHelper.addFromAnnotationRdf(item.type[z], data.items);
-            }
-
-            ann.items[uri] = item;
-        } // for uri in ann.items
-    };
-
-    var readAnnotationGraph = function() {
-
     };
 
     // Returns a promise associated with an annotation. The user will
