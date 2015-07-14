@@ -21,7 +21,7 @@ angular.module('Pundit2.Model')
 
         // Add types from data
         for (var t in data.type) {
-            TypesHelper.addFromAnnotationRdf(data.type[t], data.type);
+            TypesHelper.addFromAnnotationRdf(t, data.type);
         }
 
         // Add items from data.items
