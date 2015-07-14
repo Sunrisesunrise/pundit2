@@ -3,7 +3,7 @@
         <a data-toggle="tab" ng-click="setActive($index, $event)" data-index="{{$index}}" ng-bind-html="pane.title"></a>
     </li>
     <li class="pull-right show-tabs" ng-class="{active: hiddenTabIsActive}" placement="bottom-right" template="{{hiddenTabsDropdownTemplate}}" bs-dropdown="hiddenTabs" ng-show="hiddenTabsToShow()">
-        <a><span class="pnd-icon  pnd-icon-bars"></span></a>
+        <a><span class="pnd-icon pnd-icon-dots"></span></a>
     </li>
 </ul>
 <div class="tab-content pnd-tab-content">

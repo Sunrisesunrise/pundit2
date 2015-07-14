@@ -83,21 +83,19 @@
 <div class="pnd-panel-tab-content-footer">
 
     <button 
-        class="pnd-notebookcomposer-add-blank btn btn-success btn-xs pnd-btn-full" 
+        class="pnd-btn pnd-btn-calltoaction"
         ng-if="!editMode" 
         ng-class="{disabled: notebook.name == ''}" 
         ng-click="save()">
         Save
-    </button>
-    <button 
-        class="pnd-notebookcomposer-add-blank btn btn-success btn-xs pnd-btn-full" 
+    </button><button
+        class="pnd-btn pnd-btn-calltoaction"
         ng-if="editMode" 
         ng-class="{disabled: notebook.name == ''}" 
         ng-click="edit()">
         Save
-    </button>
-    <button 
-        class="pnd-notebookcomposer-save btn btn-info btn-xs pnd-btn-full" 
+    </button><button
+        class="pnd-btn"
         ng-class="{disabled: notebook.name == ''}" 
         ng-click="clear(true)">
         Reset

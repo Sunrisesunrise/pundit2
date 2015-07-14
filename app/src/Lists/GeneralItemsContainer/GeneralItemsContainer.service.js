@@ -285,25 +285,28 @@ angular.module('Pundit2.GeneralItemsContainer')
             title = 'Remove from my items';
             text = 'Remove';
             action = 'remove';
+            btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isPageItemsType(type)) {
             title = 'Add to myItems';
             text = 'Add to myItems';
             action = 'add';
+            btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isVocabulariesType(type)) {
             title = 'Add to myItems';
             text = 'Add to myItems';
             action = 'add';
             requireLoggedUser = false;
+            btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isMyNotebooksType(type)) {
             title = 'Create new notebook';
             text = 'Create new notebook';
             requireLoggedUser = false;
-            btnClass = 'btn btn-xs btn-success pnd-btn-full my-notebooks-btn-new';
+            btnClass = 'pnd-btn pnd-btn-calltoaction';
         } else if (generalItemsContainer.isPredicatesType(type)) {
             title = 'Use as predicate';
             text = 'Set predicate';
             requireLoggedUser = false;
-            btnClass = 'pnd-triplecomposer-cancel btn btn-predicate btn-xs pnd-btn-full';
+            btnClass = 'pnd-btn pnd-btn-predicate';
         }
 
         var actionButton = {

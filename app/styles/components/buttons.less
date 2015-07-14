@@ -17,6 +17,7 @@
 
     /* Gradient bg with mixin */
     #gradient > .vertical(lighten(@color-button-bg, 2); darken(@color-button-bg, 2)); // It's a Bootstrap mixin
+    background-color: #fff;
     border: 0;
 
     color: @color-button-text-dark;
@@ -32,7 +33,7 @@
     &:focus,
     &.focus {
         /* Gradient bg with mixin */
-        #gradient > .vertical(lighten(darken(@color-button-bg, 3), 2); darken(darken(@color-button-bg, 3), 2));
+        #gradient > .vertical(darken(lighten(@color-button-bg, 2), 5); darken(darken(@color-button-bg, 2), 5));
     }
 
     &:active,
@@ -47,7 +48,7 @@
         color: fade(@color-button-text-dark, 50%);
         pointer-events: none; // Future-proof disabling of clicks
         /* Gradient bg with mixin */
-        #gradient > .vertical(lighten(lighten(@color-button-bg, 5), 2); darken(lighten(@color-button-bg, 5), 2));
+        #gradient > .vertical(fade(lighten(@color-button-bg, 2), 40%); fade(darken(@color-button-bg, 2), 40%));
     }
 }
 
@@ -67,7 +68,7 @@
     &:focus,
     &.focus {
         /* Gradient bg with mixin */
-        #gradient > .vertical(lighten(darken(@color-button-bg-cta, 3), 2); darken(darken(@color-button-bg-cta, 3), 2));
+        #gradient > .vertical(darken(lighten(@color-button-bg-cta, 2), 5); darken(darken(@color-button-bg-cta, 2), 5));
     }
 
     &.disabled,
@@ -76,61 +77,80 @@
         color: fade(@color-button-text-light, 60%);
         text-shadow: none;
         /* Gradient bg with mixin */
-        #gradient > .vertical(lighten(lighten(@color-button-bg-cta, 30), 2); darken(lighten(@color-button-bg-cta, 30), 2));
+        #gradient > .vertical(fade(lighten(@color-button-bg-cta, 2), 40%); fade(darken(@color-button-bg-cta, 2), 40%));
     }
 
 }
 
 
 /* ------------------------------------ *\
-   #BUTTONS-CUSTOM-HEIGHTS
+   #SEMANTIC-BUTTONS
 \* ------------------------------------ */
+/* Buttons with custom colors for Subject, Object, Predicate */
 
-// TODO All buttons are like this... please remove this when
-// the class pnd-btn have been applied to all buttons in the interface
+/* Subject button */
+.pnd-btn-subject {
+    #gradient > .vertical(lighten(@subject-color, 2); darken(@subject-color, 2));
+    color: @color-button-text-light;
+    .text-dark-emboss();
 
-/* Higher button used in panels and resource panel's footer */
-.pnd-btn-full {
-    height: 29px;
-    padding: 0 10px;
-    border: 0;
-}
+    &:hover,
+    &:focus,
+    &.focus {
+        #gradient > .vertical(darken(lighten(@subject-color, 2), 5); darken(darken(@subject-color, 2), 5));
+    }
 
-/* Smaller button */
-.pnd-btn-half {
-    height: 21px; // It was 20px
-    padding: 0 10px;
-    border: 0;
-}
-
-
-/* ------------------------------------ *\
-   #DISABLED BUTTONS
-\* ------------------------------------ */
-.btn {
-    /* Custom opacity for disabled buttons */
     &.disabled,
-    &[disabled] {
-        .opacity(.5);
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 60%);
+        text-shadow: none;
+        #gradient > .vertical(fade(lighten(@subject-color, 2), 40%); fade(darken(@subject-color, 2), 40%));
     }
+
 }
 
+/* Predicate button */
+.pnd-btn-predicate {
+    #gradient > .vertical(lighten(@predicate-color, 2); darken(@predicate-color, 2));
+    color: @color-button-text-light;
+    .text-dark-emboss();
 
-/* ------------------------------------ *\
-   #SUBJECT-PREDICATE-OBJECT-COLORS
-\* ------------------------------------ */
+    &:hover,
+    &:focus,
+    &.focus {
+        #gradient > .vertical(darken(lighten(@predicate-color, 2), 5); darken(darken(@predicate-color, 2), 5));
+    }
 
-/* Custom colors for buttons reffering to subject, predicate, object */
-.btn-subject {
-    .button-variant(#ffffff; @subject-color; @subject-color);
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 60%);
+        text-shadow: none;
+        #gradient > .vertical(fade(lighten(@predicate-color, 2), 40%); fade(darken(@predicate-color, 2), 40%));
+    }
+
 }
 
-.btn-predicate {
-    .button-variant(#ffffff; @predicate-color; @predicate-color);
-}
+/* Object button */
+.pnd-btn-object {
+    #gradient > .vertical(lighten(@object-color, 2); darken(@object-color, 2));
+    color: @color-button-text-light;
+    .text-dark-emboss();
 
-.btn-object {
-    .button-variant(#ffffff; @object-color; @object-color);
+    &:hover,
+    &:focus,
+    &.focus {
+        #gradient > .vertical(darken(lighten(@object-color, 2), 5); darken(darken(@object-color, 2), 5));
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 60%);
+        text-shadow: none;
+        #gradient > .vertical(fade(lighten(@object-color, 2), 40%); fade(darken(@object-color, 2), 40%));
+    }
 }
 
 
