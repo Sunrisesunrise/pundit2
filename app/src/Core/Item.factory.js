@@ -95,7 +95,7 @@ angular.module('Pundit2.Core')
     classEntity: 'pnd-item-entity'
 })
 
-.factory('Item', function(BaseComponent, Config, NameSpace, Utils, ItemsExchange, md5, ITEMDEFAULTS) {
+.factory('Item', function(BaseComponent, Config, NameSpace, Utils, ItemsExchange, PageItemsContainer, md5, ITEMDEFAULTS) {
     var itemComponent = new BaseComponent('Item', ITEMDEFAULTS);
 
     var annotationServerVersion = Config.annotationServerVersion;
@@ -422,6 +422,12 @@ angular.module('Pundit2.Core')
 
         item = new ItemFactory(uri, values);
         item.fromAnnotationRdf(items);
+
+
+        if (!item.isProperty()) {
+            ItemsExchange.addItemToContainer(item, PageItemsContainer.options.container);
+        }
+
 
         return item;
     };
