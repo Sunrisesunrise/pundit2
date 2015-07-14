@@ -155,10 +155,13 @@ angular.module('Pundit2.Annotators')
         fragmentIds = {};
         fragmentById = {};
 
+        var tempFragmentIds = {};
+
         for (var uri in items) {
             var itemXPointer = items[uri].getXPointer();
             xpointers.push(itemXPointer);
-            fragmentIds[itemXPointer] = ["fr-" + i];
+            fragmentIds[uri] = ["fr-" + i];
+            tempFragmentIds[itemXPointer] = ["fr-" + i];
             fragmentById["fr-" + i] = {
                 uri: uri,
                 bits: [],
@@ -171,7 +174,7 @@ angular.module('Pundit2.Annotators')
             sorted = XpointersHelper.splitAndSortXPaths(xpaths),
             // After splitting and sorting each bit has a list of fragment ids it belongs to.
             // Instead of using classes, these ids will be saved in a node attribute.
-            xpathsFragmentIds = XpointersHelper.getClassesForXpaths(xpointers, sorted, xpaths, fragmentIds);
+            xpathsFragmentIds = XpointersHelper.getClassesForXpaths(xpointers, sorted, xpaths, tempFragmentIds);
 
         XpointersHelper.updateDOM(sorted, XpointersHelper.options.wrapNodeClass, xpathsFragmentIds);
 
