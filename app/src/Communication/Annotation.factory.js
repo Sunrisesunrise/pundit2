@@ -289,6 +289,8 @@ angular.module('Pundit2.Communication')
             annotationComponent.err('Malformed annotation id=' + ann.id + ': ', data);
             return false;
         }
+
+        ann.items = {};
         ann.graph = angular.copy(data.graph);
 
         // For some weird reason, the first level of the object is
