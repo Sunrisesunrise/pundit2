@@ -392,6 +392,7 @@ angular.module('Pundit2.Core')
                 values[NameSpace.target.hasSource] = target[NameSpace.target.hasSource][0].value;
                 values.xpointer = selector[NameSpace.rdf.value][0].value;
                 values.label = selector[NameSpace.rdfs.label][0].value;
+                values.description = values.label;
                 break;
         }
 
