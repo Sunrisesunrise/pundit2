@@ -321,6 +321,10 @@ angular.module('Pundit2.Communication')
                 ann[property] = '';
             }
         }
+        
+        ann['created'] = ann['annotatedAt'];
+        ann['creator'] = ann['annotatedBy'];
+        ann['creatorName'] = annData[ns['annotatedBy']][1].value;
 
         // .isIncludedIn is an URI, get out the id too
         if (ns.isIncludedIn in annData) {
@@ -338,7 +342,6 @@ angular.module('Pundit2.Communication')
             for (var t = 0; t < annData[ns.target].length; t++) {
                 ann.target.push(annData[ns.target][t].value);
             }
-
         }
 
         // Extract all of the entities and items involved in this annotation:

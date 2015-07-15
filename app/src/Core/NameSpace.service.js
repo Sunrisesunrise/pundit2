@@ -39,7 +39,10 @@ angular.module("Pundit2.Core")
     ns.target = {
         conformsTo: _dct + 'conformsTo',
         fragmentSelector: _oa + 'FragmentSelector',
-        specificResource: _oa + 'SpecificResource'
+        specificResource: _oa + 'SpecificResource',
+        hasScope: _oa + "hasScope",
+        hasSource: _oa + "hasSource",
+        hasSelector: _oa + "hasSelector"
         /* ns.rdf.type */
         /* ns.rdf.value */
         /* ns.rdfs.label */
@@ -109,13 +112,13 @@ angular.module("Pundit2.Core")
         creator: _dct + "creator",
         modified: _dct + "modified",
         pageContext: _pnd + "hasPageContext",
-        hastarget: _oa + "hasTarget",
-        hasScope: _oa + "hasScope",
-        hasSource: _oa + "hasSource",
+        hasTarget: _oa + "hasTarget",
         hasBody: _oa + "hasBody",
-        hasSelector: _oa + "hasSelector",
         isIncludedIn: _pnd + "isIncludedIn",
-        hasTemplate: _pnd + "hasTemplate"
+        hasTemplate: _pnd + "hasTemplate",
+        annotatedBy: _oa + 'annotatedBy',
+        annotatedAt: _oa + 'annotatedAt'
+
     };
 
     // TODO: move to Consolidation.options ??

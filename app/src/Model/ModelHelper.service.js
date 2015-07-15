@@ -165,19 +165,19 @@ angular.module('Pundit2.Model')
                     }
                     if (!statementPart.isWebPage()) {
                         // hasSelector.
-                        target[NameSpace.annotation.hasSelector] = [{
+                        target[NameSpace.target.hasSelector] = [{
                             "value": uris.selector,
                             "type": "uri"
                         }];
 
                         if (statementPart.hasOwnProperty('pageContext')) {
                             // hasScope.
-                            target[NameSpace.annotation.hasScope] = [{
+                            target[NameSpace.target.hasScope] = [{
                                 "value": statementPart.pageContext,
                                 "type": "uri"
                             }];
                             // hasSource.
-                            target[NameSpace.annotation.hasSource] = [{
+                            target[NameSpace.target.hasSource] = [{
                                 "value": statementPart.isImage() ? statementPart.image : statementPart.pageContext,
                                 "type": "uri"
                             }];
