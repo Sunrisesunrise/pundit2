@@ -345,7 +345,6 @@ angular.module('Pundit2.Communication')
             }).success(function() {
                 if (completed > 0) {
                     AnnotationsExchange.getAnnotationById(annID).update().then(function() {
-                        makeTargetsAndItems(data);
                         Consolidation.consolidateAll();
                         EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
                         setLoading(false);
@@ -373,7 +372,6 @@ angular.module('Pundit2.Communication')
             }).success(function() {
                 if (completed > 0) {
                     AnnotationsExchange.getAnnotationById(annID).update().then(function() {
-                        makeTargetsAndItems(data);
                         Consolidation.consolidateAll();
                         EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
                         setLoading(false);

@@ -1,7 +1,7 @@
 angular.module('Pundit2.Communication')
 
 .factory('Annotation', function(BaseComponent, Config, NameSpace, Utils, Item, TypesHelper, Analytics,
-    AnnotationsExchange, Consolidation, MyPundit, ItemsExchange, PageItemsContainer,
+    AnnotationsExchange, Consolidation, MyPundit, ItemsExchange, PageItemsContainer, ModelHandler,
     $http, $q) {
 
     var annotationComponent = new BaseComponent("Annotation");
@@ -61,6 +61,7 @@ angular.module('Pundit2.Communication')
             if (annotationServerVersion === 'v1') {
                 readAnnotationData(self, data);
             } else {
+                ModelHandler.makeTargetsAndItems(data);
                 readAnnotationMetadataAndGraph(self, data);
             }
 
@@ -101,6 +102,7 @@ angular.module('Pundit2.Communication')
             if (annotationServerVersion === 'v1') {
                 readAnnotationData(self, data);
             } else {
+                ModelHandler.makeTargetsAndItems(data);
                 readAnnotationMetadataAndGraph(self, data);
             }
 
