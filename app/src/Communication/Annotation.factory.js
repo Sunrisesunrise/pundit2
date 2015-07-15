@@ -321,7 +321,8 @@ angular.module('Pundit2.Communication')
                 ann[property] = '';
             }
         }
-        
+
+        // In v2 version creator and date are saved with a different uri
         ann['created'] = ann['annotatedAt'];
         ann['creator'] = ann['annotatedBy'];
         ann['creatorName'] = annData[ns['annotatedBy']][1].value;
