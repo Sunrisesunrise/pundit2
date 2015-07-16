@@ -62,7 +62,11 @@ angular.module('Pundit2.Communication')
                 readAnnotationData(self, data);
             } else {
                 ModelHandler.makeTargetsAndItems(data);
-                readAnnotationMetadataAndGraph(self, data);
+                var parsedData = {
+                    metadata: data.metadata,
+                    graph: data.graph[self.hasBody]
+                };
+                readAnnotationMetadataAndGraph(self, parsedData);
             }
 
             promise.resolve();

@@ -170,15 +170,17 @@ angular.module('Pundit2.Model')
                             "type": "uri"
                         }];
 
-                        if (statementPart.hasOwnProperty('pageContext')) {
+                        // TODO: ASAP add pageContext in ItemFactory.
+                        var context = statementPart.pageContext || statementPart[NameSpace.item.isPartOf];
+                        if (context) {
                             // hasScope.
                             target[NameSpace.target.hasScope] = [{
-                                "value": statementPart.pageContext,
+                                "value": context,
                                 "type": "uri"
                             }];
                             // hasSource.
                             target[NameSpace.target.hasSource] = [{
-                                "value": statementPart.isImage() ? statementPart.image : statementPart.pageContext,
+                                "value": statementPart.isImage() ? statementPart.image : context,
                                 "type": "uri"
                             }];
                         } else {

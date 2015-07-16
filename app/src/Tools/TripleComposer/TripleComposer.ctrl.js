@@ -142,11 +142,16 @@ angular.module('Pundit2.TripleComposer')
             var savePromise = initSavingProcess();
             angular.element('.pnd-triplecomposer-cancel').addClass('disabled');
 
+            var statements = TripleComposer.getStatements($scope.name);
+            var modelData = ModelHelper.buildAllData(statements);
+
             AnnotationsCommunication.editAnnotation(
                 annID,
-                TripleComposer.buildGraph($scope.name),
-                TripleComposer.buildItems($scope.name),
-                TripleComposer.buildTargets($scope.name)
+                modelData.graph,
+                modelData.items,
+                modelData.flatTargets,
+                modelData.target,
+                modelData.type
             ).then(function() {
                 stopSavingProcess(
                     savePromise,
