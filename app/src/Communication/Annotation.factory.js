@@ -61,7 +61,7 @@ angular.module('Pundit2.Communication')
             if (annotationServerVersion === 'v1') {
                 readAnnotationData(self, data);
             } else {
-                ModelHandler.makeTargetsAndItems(data);
+                ModelHandler.makeTargetsAndItems(data, true);
                 var parsedData = {
                     metadata: data.metadata,
                     graph: data.graph[self.hasBody]
