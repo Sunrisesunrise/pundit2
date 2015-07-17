@@ -349,12 +349,19 @@ angular.module('Pundit2.Core')
         return typeof(this.xpointer) !== 'undefined' ? this.xpointer : this.uri;
     };
 
-    ItemFactory.createFromTarget = function(uri, targets) {
+    ItemFactory.createFromTarget = function(uri, targets, forceAdd) {
+        if (typeof forceAdd === 'undefined') {
+            forceAdd = false;
+        }
         if (typeof targets[uri] === 'undefined') {
             return null;
         }
 
-        if (typeof ItemsExchange.getItemByUri(uri) !== 'undefined') {
+        var item = ItemsExchange.getItemByUri(uri);
+        if (typeof item !== 'undefined') {
+            if (forceAdd && !item.isProperty()) {
+                ItemsExchange.addItemToContainer(item, PageItemsContainer.options.container);
+            }
             return null;
         }
 
@@ -396,18 +403,25 @@ angular.module('Pundit2.Core')
                 break;
         }
 
-        var item = new ItemFactory(uri, values);
+        item = new ItemFactory(uri, values);
         ItemsExchange.addItemToContainer(item, PageItemsContainer.options.container);
 
         return item;
     };
 
-    ItemFactory.createFromItems = function(uri, items) {
+    ItemFactory.createFromItems = function(uri, items, forceAdd) {
+        if (typeof forceAdd === 'undefined') {
+            forceAdd = false;
+        }
         if (typeof items[uri] === 'undefined') {
             return null;
         }
 
-        if (typeof ItemsExchange.getItemByUri(uri) !== 'undefined') {
+        var item = ItemsExchange.getItemByUri(uri);
+        if (typeof item !== 'undefined') {
+            if (forceAdd && !item.isProperty()) {
+                ItemsExchange.addItemToContainer(item, PageItemsContainer.options.container);
+            }
             return null;
         }
 

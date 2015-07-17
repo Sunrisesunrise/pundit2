@@ -7,7 +7,10 @@ angular.module('Pundit2.Model')
     var modelHandler = new BaseComponent("ModelHandler", MODELHANDLERDEFAULTS);
     var annotationServerVersion = Config.annotationServerVersion;
 
-    modelHandler.makeTargetsAndItems = function(data) {
+    // forceAdd - annotation items and target might be already present
+    // in ItemsExchange but "pageItems" container has been already removed, so
+    // it's necessary to add again items to container.
+    modelHandler.makeTargetsAndItems = function(data, forceAdd) {
 
         if (typeof(data) === 'undefined' ||
             typeof(data.target) === 'undefined' ||
@@ -26,12 +29,12 @@ angular.module('Pundit2.Model')
 
         // Add items from data.items
         for (var uri in data.items) {
-            Item.createFromItems(uri, data.items);
+            Item.createFromItems(uri, data.items, forceAdd);
         }
 
         // Add items from data.target
         for (var uri in data.target) {
-            Item.createFromTarget(uri, data.target);
+            Item.createFromTarget(uri, data.target, forceAdd);
         }
 
     };

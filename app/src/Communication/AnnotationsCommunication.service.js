@@ -17,9 +17,9 @@ angular.module('Pundit2.Communication')
         EventDispatcher.sendEvent('AnnotationsCommunication.loading', state);
     };
 
-    var makeTargetsAndItems = function(data) {
+    var makeTargetsAndItems = function(data, forceAddToContainer) {
         if (annotationServerVersion === 'v2')  {
-            ModelHandler.makeTargetsAndItems(data);
+            ModelHandler.makeTargetsAndItems(data, forceAddToContainer);
         }
     };
 
@@ -28,7 +28,11 @@ angular.module('Pundit2.Communication')
     // add items to page items inside itemsExchange
     // add notebooks to notebooksExchange
     // than consilidate all items
-    annotationsCommunication.getAnnotations = function() {
+    //
+    // forceAddToContainer - annotation items and target might be already present
+    // in ItemsExchange but "pageItems" container has been already removed, so
+    // it's necessary to add again items to container.
+    annotationsCommunication.getAnnotations = function(forceAddToContainer) {
         var promise = $q.defer();
 
         if (annotationsCommunication.options.preventDownload) {
@@ -108,7 +112,7 @@ angular.module('Pundit2.Communication')
                     var parsedData = ModelHelper.parseAnnotations(data);
                     var num = Object.keys(parsedData).length;
 
-                    makeTargetsAndItems(data);
+                    makeTargetsAndItems(data, forceAddToContainer);
 
                     for (var annId in parsedData) {
                         var a = new Annotation(annId, false, parsedData[annId]);
@@ -178,7 +182,7 @@ angular.module('Pundit2.Communication')
                 EventDispatcher.sendEvent('AnnotationsCommunication.annotationDeleted', annID);
 
                 // reload all annotation
-                annotationsCommunication.getAnnotations().then(function() {
+                annotationsCommunication.getAnnotations(true).then(function() {
                     promise.resolve(annID);
                 }, function() {
                     promise.reject("Error during getAnnotations after a delete of: " + annID);
