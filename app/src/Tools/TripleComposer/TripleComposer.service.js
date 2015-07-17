@@ -999,7 +999,7 @@ angular.module('Pundit2.TripleComposer')
                                 type: 'date',
                                 datatype: triples[i].object.datatype,
                                 value: triples[i].object.value
-                            }
+                            };
                             state[name].statements[i].scope.setObject(newItem);
                         } else {
                             state[name].statements[i].scope.setObject(triples[i].object.value);
@@ -1122,7 +1122,7 @@ angular.module('Pundit2.TripleComposer')
                 type: 'literal',
                 datatype: objType,
                 value: item
-            }
+            };
         } else {
             // standard item
             return {

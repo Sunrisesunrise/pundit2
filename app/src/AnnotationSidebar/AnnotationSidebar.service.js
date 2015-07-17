@@ -15,6 +15,7 @@ angular.module('Pundit2.AnnotationSidebar')
      * also contains filters that can be used to show or hide annotations.
      */
 
+
     /**
      * @module punditConfig
      * @ngdoc property

@@ -96,7 +96,7 @@ angular.module('Pundit2.Annotators')
         }
 
         return pageHandler.createItemFromPage();
-    }
+    };
 
 
     pageHandler.log('Component up and running');

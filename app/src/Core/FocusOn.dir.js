@@ -11,12 +11,12 @@ angular.module('Pundit2.Core')
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
-            element.bind("blur", function(e) {
+            element.bind("blur", function() {
                 $timeout(function() {
                     scope.$apply(attrs.focusOnChange + "=false");
                 }, 0);
             });
-            element.bind("focus", function(e) {
+            element.bind("focus", function() {
                 $timeout(function() {
                     scope.$apply(attrs.focusOn);
                     scope.$apply(attrs.focusOnChange + "=true");
@@ -29,5 +29,5 @@ angular.module('Pundit2.Core')
             });
 
         }
-    }
+    };
 });
