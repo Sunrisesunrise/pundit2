@@ -315,6 +315,10 @@ angular.module('Pundit2.Communication')
             annData = data.metadata[ann.uri],
             item;
 
+        var bodyUri = annData[NameSpace.annotation.hasBody][0].value;
+        if (typeof ann.graph[bodyUri] !== 'undefined') {
+            ann.graph = ann.graph[bodyUri];
+        }
         // Those properties are a single value inside an array, read them
         // one by one by using the correct URI taken from the NameSpace,
         // doing some sanity checks
@@ -356,7 +360,7 @@ angular.module('Pundit2.Communication')
         // involved too
         ann.entities = [];
         ann.predicates = [];
-        for (var s in data.graph) {
+        for (var s in ann.graph) {
 
             if (ann.entities.indexOf(s) === -1) {
                 ann.entities.push(s);
@@ -366,7 +370,7 @@ angular.module('Pundit2.Communication')
                 }
             }
 
-            for (var p in data.graph[s]) {
+            for (var p in ann.graph[s]) {
 
                 if (ann.entities.indexOf(p) === -1) {
                     item = ItemsExchange.getItemByUri(p);
@@ -378,8 +382,8 @@ angular.module('Pundit2.Communication')
                     }
                 }
 
-                for (var o in data.graph[s][p]) {
-                    var object = data.graph[s][p][o];
+                for (var o in ann.graph[s][p]) {
+                    var object = ann.graph[s][p][o];
                     if (object.type === "uri" && ann.entities.indexOf(object.value) === -1) {
                         ann.entities.push(object.value);
                         item = ItemsExchange.getItemByUri(object.value);
