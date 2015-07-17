@@ -335,7 +335,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         } else if (generalItemsContainer.isPredicatesType(type)) {
             return ItemsExchange.getItemsByContainer(Config.modules.Client.relationsContainer);
         } else if (generalItemsContainer.isMyItemsType(type) || generalItemsContainer.isPageItemsType(type)) {
-            var ContainerManager = getManager(type);
+            var ContainerManager = generalItemsContainer.getManager(type);
             ItemsExchange.getItemsByContainer(ContainerManager.options.container);
         }
 
