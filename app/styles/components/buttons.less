@@ -16,7 +16,7 @@
     padding: 0 10px;
 
     /* Gradient bg with mixin */
-    #gradient > .vertical(lighten(@color-button-bg, 2); darken(@color-button-bg, 2)); // It's a Bootstrap mixin
+    #gradient > .vertical(lighten(@color-button-bg, 1); darken(@color-button-bg, 1)); // It's a Bootstrap mixin
     background-color: #fff;
     border: 0;
 
@@ -33,7 +33,7 @@
     &:focus,
     &.focus {
         /* Gradient bg with mixin */
-        #gradient > .vertical(darken(lighten(@color-button-bg, 2), 5); darken(darken(@color-button-bg, 2), 5));
+        #gradient > .vertical(darken(lighten(@color-button-bg, 1), 5); darken(darken(@color-button-bg, 1), 5));
     }
 
     &:active,
@@ -48,8 +48,14 @@
         color: fade(@color-button-text-dark, 50%);
         pointer-events: none; // Future-proof disabling of clicks
         /* Gradient bg with mixin */
-        #gradient > .vertical(fade(lighten(@color-button-bg, 2), 40%); fade(darken(@color-button-bg, 2), 40%));
+        #gradient > .vertical(fade(lighten(@color-button-bg, 1), 40%); fade(darken(@color-button-bg, 1), 40%));
     }
+}
+
+/* Smaller buttons */
+.pnd-btn-small {
+    height: 22px;
+    font-size: 11px;
 }
 
 
@@ -60,7 +66,7 @@
 /* Usually green button */
 .pnd-btn-calltoaction {
     /* Gradient bg with mixin */
-    #gradient > .vertical(lighten(@color-button-bg-cta, 2); darken(@color-button-bg-cta, 2));
+    #gradient > .vertical(lighten(@color-button-bg-cta, 1); darken(@color-button-bg-cta, 1));
     color: @color-button-text-light;
     .text-dark-emboss();
 
@@ -68,7 +74,7 @@
     &:focus,
     &.focus {
         /* Gradient bg with mixin */
-        #gradient > .vertical(darken(lighten(@color-button-bg-cta, 2), 5); darken(darken(@color-button-bg-cta, 2), 5));
+        #gradient > .vertical(darken(lighten(@color-button-bg-cta, 1), 5); darken(darken(@color-button-bg-cta, 1), 5));
     }
 
     &.disabled,
@@ -77,7 +83,7 @@
         color: fade(@color-button-text-light, 60%);
         text-shadow: none;
         /* Gradient bg with mixin */
-        #gradient > .vertical(fade(lighten(@color-button-bg-cta, 2), 40%); fade(darken(@color-button-bg-cta, 2), 40%));
+        #gradient > .vertical(fade(lighten(@color-button-bg-cta, 1), 40%); fade(darken(@color-button-bg-cta, 1), 40%));
     }
 
 }
@@ -97,7 +103,7 @@
     &:hover,
     &:focus,
     &.focus {
-        #gradient > .vertical(darken(lighten(@subject-color, 2), 5); darken(darken(@subject-color, 2), 5));
+        #gradient > .vertical(darken(lighten(@subject-color, 1), 5); darken(darken(@subject-color, 1), 5));
     }
 
     &.disabled,
@@ -105,7 +111,7 @@
     fieldset[disabled] & {
         color: fade(@color-button-text-light, 60%);
         text-shadow: none;
-        #gradient > .vertical(fade(lighten(@subject-color, 2), 40%); fade(darken(@subject-color, 2), 40%));
+        #gradient > .vertical(fade(lighten(@subject-color, 1), 40%); fade(darken(@subject-color, 1), 40%));
     }
 
 }
@@ -119,7 +125,7 @@
     &:hover,
     &:focus,
     &.focus {
-        #gradient > .vertical(darken(lighten(@predicate-color, 2), 5); darken(darken(@predicate-color, 2), 5));
+        #gradient > .vertical(darken(lighten(@predicate-color, 1), 5); darken(darken(@predicate-color, 1), 5));
     }
 
     &.disabled,
@@ -127,7 +133,7 @@
     fieldset[disabled] & {
         color: fade(@color-button-text-light, 60%);
         text-shadow: none;
-        #gradient > .vertical(fade(lighten(@predicate-color, 2), 40%); fade(darken(@predicate-color, 2), 40%));
+        #gradient > .vertical(fade(lighten(@predicate-color, 1), 40%); fade(darken(@predicate-color, 1), 40%));
     }
 
 }
@@ -141,7 +147,7 @@
     &:hover,
     &:focus,
     &.focus {
-        #gradient > .vertical(darken(lighten(@object-color, 2), 5); darken(darken(@object-color, 2), 5));
+        #gradient > .vertical(darken(lighten(@object-color, 1), 5); darken(darken(@object-color, 1), 5));
     }
 
     &.disabled,
@@ -149,7 +155,7 @@
     fieldset[disabled] & {
         color: fade(@color-button-text-light, 60%);
         text-shadow: none;
-        #gradient > .vertical(fade(lighten(@object-color, 2), 40%); fade(darken(@object-color, 2), 40%));
+        #gradient > .vertical(fade(lighten(@object-color, 1), 40%); fade(darken(@object-color, 1), 40%));
     }
 }
 

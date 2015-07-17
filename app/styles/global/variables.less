@@ -8,6 +8,13 @@
 
 
 // ------------------------------------ //
+// #FONT
+// ------------------------------------ //
+// @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+// @import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic);
+@font: "Lucida Grande", Helvetica, Verdana, Arial, sans-serif; // "'Open Sans', sans-serif; // 'Lato', sans-serif;
+
+// ------------------------------------ //
 // #COLORS
 // ------------------------------------ //
 // Text colors
@@ -37,8 +44,8 @@
 @gray-extra-lightest: lighten(#000, 98%); // It's obvious some crazy guys are working on this project
 
 // Annotations in the sidebar
-@color-annotation-header: #bababa; // @subject-color;
-@color-annotation-broken-header: @predicate-color;
+@color-annotation-header: #8F999E; // @subject-color; // #aaaaaa; // @subject-color;
+@color-annotation-broken-header: #FF643F; // @predicate-color;
 @color-annotation-header-text: #FFF;
 @color-annotation-sidebar-bg: #555;
 
@@ -49,6 +56,11 @@
 @predicate-color-text: lighten(@predicate-color, 25);
 @object-color: #0084c8;
 @object-color-text: desaturate(lighten(@object-color, 27), 30);
+
+// Toolbar
+@color-toolbar-bg: #333333;
+@color-toolbar-text: #eee;
+@color-toolbar-button: #3c3c3c;
 
 // Login popover colors
 @color-login-popover-background: #FFF;
@@ -62,8 +74,8 @@
 // ------------------------------------ //
 // #INLINE-CONSOLIDATION
 // ------------------------------------ //
-@text-fragment-color: fade(#f2dd5f, 80%); // Original from Sione Fonda #f8cd48; // rgba(255,255,0,.32); // #f8cd48;
-@text-fragment-color-hover: darken(@text-fragment-color, 5); // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
+@text-fragment-color: fade(#f8d420, 45%); // Original from Simone Fonda #f8cd48; // rgba(255,255,0,.32); // #f8cd48;
+@text-fragment-color-hover: fade(#f8d420, 100%); // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
 
 
 // ------------------------------------ //
@@ -113,7 +125,6 @@
 // Styles defining single annotations as shown in the sidebar
 @annotation-header-height: 24px;
 @annotation-header-text-shadow: 0 1px 0 rgba(0, 0, 0, .15);
-@annotation-meta-text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
 
 
 // ------------------------------------ //

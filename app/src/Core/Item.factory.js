@@ -69,9 +69,9 @@ angular.module('Pundit2.Core')
      * Icon used for web page item.
      *
      * Default value:
-     * <pre> iconWebPage: 'pnd-icon-file-text' </pre>
+     * <pre> iconWebPage: 'pnd-icon-file' </pre>
      */
-    iconWebPage: 'pnd-icon pnd-icon-file-text',
+    iconWebPage: 'pnd-icon pnd-icon-file',
 
     /**
      * @module punditConfig
