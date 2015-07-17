@@ -193,7 +193,6 @@ This should be the case for the formats JPEG, GIF and PNG.
 A content provider is strongly encouraged to provide content in a compliant HTML form in order to ensure the project
 can make the best use of it. By using special HTML tags within the provided content,
 Pundit can attach and display annotations at the content level rather than at the page where it is displayed in.
-<a href="http://www.thepund.it/documentation/play-nice-with-pundit/" target="_blank">See this (BROKEN LINK) link</a>.
 
 The HTML content can include a formatted text, as in the case of the Wittgenstein Brown Book
 (contents that we are currently experimenting with).
@@ -201,7 +200,6 @@ An example can be <a href="http://www.wittgensteinsourcevps.org/Ms-139a,1r[2]et1
 
 It could include an image embedded in HTML, as in the following example:
 
-[BROKEN LINK](http://furioso-dev.netseven.it/index.php/illustrazione/img/47.html)
 
     <html>
         <head/>
