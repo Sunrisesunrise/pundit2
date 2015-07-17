@@ -122,7 +122,7 @@
                                 ng-disabled="originalUrlCheck">
                         </div>
                     </div>
-                    <button class="btn btn-info btn-xs pnd-btn-full"
+                    <button class="pnd-btn"
                             ng-disabled="originalUrlCheck"
                             ng-show="conf.LODToolSearchURL"
                             ng-click="searchOnResourcePanel($event, 'original-url')">
@@ -133,7 +133,7 @@
                 <!-- Search and copy from LOD-->
                 <div class="kee-new-search-and-copy"
                      ng-show="conf.fromLODTools && conf.LODToolSearchAndCopy">
-                    <button class="btn btn-info btn-xs pnd-btn-full"
+                    <button class="pnd-btn"
                             ng-click="searchOnResourcePanel($event, 'copy-from-lod')">
                         Search and copy from LOD
                     </button>
@@ -233,13 +233,13 @@
                 <!-- End Types -->
                 <button
                         type="button"
-                        class="btn btn-info btn-xs pnd-btn-half"
+                        class="pnd-btn pnd-btn-small"
                         ng-click="activeAllTypes()">
                     Select all types
                 </button>
                 <button
                         type="button"
-                        class="btn btn-info btn-xs pnd-btn-half"
+                        class="pnd-btn pnd-btn-small"
                         ng-click="disableAllTypes()">
                     Deselect all types
                 </button>
@@ -308,7 +308,7 @@
             <div class="kee-error-more-info-content-footer small-modal-footer">
                 <button
                         type="button"
-                        class="btn btn-xs btn-info pnd-btn-full"
+                        class="pnd-btn"
                         ng-click="toggleErrorDetailsClick()">
                     Close
                 </button>
@@ -322,21 +322,19 @@
     <div class="kee-footer">
         <button 
             type="button" 
-            class="btn btn-xs btn-success pnd-btn-full"
+            class="pnd-btn pnd-btn-calltoaction"
             ng-click="save()">
                 <span ng-if="!editMode">Save and add</span>
                 <span ng-if="editMode">Save</span>
-        </button>
-        <button 
+        </button><button
             type="button" 
-            class="btn btn-xs btn-info pnd-btn-full"
+            class="pnd-btn"
             ng-click="closeKeeModal()">
                 Close
-        </button>
-        <button 
+        </button><button
             ng-hide="editMode" 
             type="button" 
-            class="btn btn-xs btn-info pnd-btn-full"
+            class="pnd-btn"
             ng-click="clearForm()">
                 Clear
         </button>
