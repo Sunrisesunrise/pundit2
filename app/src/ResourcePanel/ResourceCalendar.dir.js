@@ -1,3 +1,5 @@
+/*global moment*/
+
 angular.module('Pundit2.ResourcePanel')
 
 .directive('resourceCalendar', function(NameSpace) {
@@ -7,7 +9,7 @@ angular.module('Pundit2.ResourcePanel')
             model: '=date'
         },
         templateUrl: "src/ResourcePanel/resourceCalendar.dir.tmpl.html",
-        link: function(scope, element, attrs) {
+        link: function(scope) {
 
             scope.activeFocus = false;
             scope.inputDate = {
@@ -109,9 +111,9 @@ angular.module('Pundit2.ResourcePanel')
             var updateModel = function() {
                 var currentDate = scope.currentDate,
                     momentDate = moment(currentDate),
-                    year = momentDate.year();
-                month = momentDate.format('MM');
-                day = momentDate.format('GG'),
+                    year = momentDate.year(),
+                    month = momentDate.format('MM'),
+                    day = momentDate.format('GG'),
                     time = momentDate.format('HH:mm');
 
                 if (currentDate instanceof Date) {
@@ -156,16 +158,16 @@ angular.module('Pundit2.ResourcePanel')
                         if (scope.focus === 'year') {
                             scope.switchFocus('month');
                         } else if (scope.focus === 'month') {
-                            scope.switchFocus('day')
+                            scope.switchFocus('day');
                         }
                         break;
                     case 'time':
                         if (scope.focus === 'year') {
                             scope.switchFocus('month');
                         } else if (scope.focus === 'month') {
-                            scope.switchFocus('day')
+                            scope.switchFocus('day');
                         } else if (scope.focus === 'day') {
-                            scope.switchFocus('time')
+                            scope.switchFocus('time');
                         }
                         break;
                 }
@@ -256,7 +258,7 @@ angular.module('Pundit2.ResourcePanel')
                         } else if (scope.inputDate.month === ''){
                             scope.focus = 'month';
                         } else {
-                            scope.focus = 'day'
+                            scope.focus = 'day';
                         }
                         break;
                     case 'time':

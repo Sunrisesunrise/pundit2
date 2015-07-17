@@ -156,7 +156,7 @@ angular.module('Pundit2.ResourcePanel')
         }
 
         $scope.showUseFullPageButton = res;
-    }
+    };
     initUseFullPageButton();
 
     $scope.useFullPage = function() {
