@@ -4,7 +4,7 @@
         <a role="menuitem" tabindex="-1" href="javascript:void(0)" ng-if="!item.divider && item.click" ng-click="$eval(item.click);$hide()">
         <span ng-if="item.visibility == 'private'" class="pnd-icon pnd-icon-lock"></span>
         <span ng-if="item.visibility == 'public'" class="pnd-icon pnd-icon-group"></span>
-        <span ng-if="item.currentNotebook" class="pnd-icon pnd-icon-pencil-square"></span>
+        <span ng-if="item.currentNotebook" class="pnd-icon pnd-icon-pencil"></span>
         {{item.text}}</a>
     </li>
 </ul>

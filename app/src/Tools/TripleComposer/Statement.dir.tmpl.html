@@ -38,7 +38,7 @@
                                 ng-if="!templateMode && !subjectFixed"
                                 title="delete"
                                 ng-click="wipeSubject()">
-                            <span class="pnd-icon pnd-icon-trash-o"></span>
+                            <span class="pnd-icon pnd-icon-trash"></span>
                         </button>
                     </div>
                     <!-- <span>
@@ -80,7 +80,7 @@
                                 ng-if="!predicateFixed"
                                 title="delete"
                                 ng-click="wipePredicate()">
-                            <span class="pnd-icon pnd-icon-trash-o"></span>
+                            <span class="pnd-icon pnd-icon-trash"></span>
                         </button>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                                 ng-if="canBeObjectDate"
                                 ng-click="onClickObjectCalendar($event)"
                                 title="calendar">
-                            <span class="pnd-icon pnd-icon-table"></span>
+                            <span class="pnd-icon pnd-icon-calendar"></span>
                         </button>
                         <!--Pen Icon-->
                         <button
@@ -138,8 +138,17 @@
                         class="pnd-statement-label"
                         ng-mouseover="onObjectMouseOver()" 
                         ng-mouseleave="onItemMouseOut()"
-                        ng-click="onClickObject($event)">
+                        ng-click="onClickObject($event)"
+                        ng-show="!dateWithTime">
                         {{objectLabel}}
+                    </span>
+                    <span 
+                        class="pnd-statement-label"
+                        ng-mouseover="onObjectMouseOver()" 
+                        ng-mouseleave="onItemMouseOut()"
+                        ng-click="onClickObject($event)"
+                        ng-show="dateWithTime">
+                        {{objectLabel | amDateFormat:'YYYY-MM-DD  h:mm'}}
                     </span>
 
                     <div 
@@ -150,7 +159,7 @@
                                 ng-if="!objectFixed"
                                 title="delete"
                                 ng-click="wipeObject()">
-                            <span class="pnd-icon pnd-icon-trash-o"></span>
+                            <span class="pnd-icon pnd-icon-trash"></span>
                         </button>
                     </div>
                 </div>
@@ -168,7 +177,7 @@
             ng-click="showDropdown($event)" 
             title="Triple menu"
             ng-disabled="templateMode">
-                <span class="pnd-icon pnd-icon-bars"></span>
+                <span class="pnd-icon pnd-icon-dots"></span>
         </button>
     </div>
 </div>

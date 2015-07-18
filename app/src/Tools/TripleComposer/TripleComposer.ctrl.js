@@ -58,7 +58,7 @@ angular.module('Pundit2.TripleComposer')
 
     var loadIcon = "pnd-icon-refresh pnd-icon-spin",
         successIcon = "pnd-icon-check-circle",
-        warnIcon = "pnd-icon-exclamation-circle";
+        warnIcon = "pnd-icon-exclamation";
 
     var loadMessageClass = "pnd-message",
         successMessageClass = "pnd-message-success",

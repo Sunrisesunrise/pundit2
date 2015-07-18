@@ -33,7 +33,7 @@
                     </button>
                     <button ng-show="annotationSidebar.needToFilter() && !isFiltersShowed"
                         class="btn btn-link pnd-annotation-sidebar-btn-remove-filters" ng-click="annotationSidebar.resetFilters()">
-                           <span class="pnd-icon pnd-icon-times"></span> Remove all filters
+                           <span class="pnd-icon pnd-icon-close"></span> Remove all filters
                     </button>
                 </div>
 
@@ -272,8 +272,10 @@
 
         <!-- Loading -->
         <div ng-show="isLoading" class="pnd-saving-content" ng-show="isAnnotationSidebarExpanded">
-            <span class="pnd-icon pnd-icon-refresh pnd-icon-spin pnd-icon-2x"></span>
-            <span class="pnd-message">Loading</span>
+            <div>
+                <span class="pnd-icon pnd-icon-refresh pnd-icon-spin pnd-icon-2x"></span>
+                <span class="pnd-message">Loading</span>
+            </div>
         </div>
 
         <!-- List of annotations -->

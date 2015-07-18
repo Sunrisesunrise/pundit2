@@ -23,6 +23,8 @@ angular.module('Pundit2.TripleComposer')
     // fixed by template
     $scope.objectFixed = false;
 
+    $scope.dateWithTime = false;
+
     $scope.canBeObjectDate = true;
     $scope.canBeObjectLiteral = true;
 
@@ -204,6 +206,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.objectFound = false;
         $scope.objectLiteral = false;
         $scope.objectDate = false;
+        $scope.dateWithTime = false;
         $scope.objectFixed = false;
         triple.object = null;
         triple.objType = null;
@@ -351,6 +354,10 @@ angular.module('Pundit2.TripleComposer')
             $scope.objectLabel = triple.object;
             $scope.objectTypeLabel = triple.objType;
             $scope.objectDate = true;
+
+            if (typeof(item.datatype) !== 'undefined' && item.datatype.indexOf(NameSpace.dateTime) !== -1) {
+                $scope.dateWithTime = true;
+            }
         } else {
             // standard item
             $scope.objectLabel = item.label;

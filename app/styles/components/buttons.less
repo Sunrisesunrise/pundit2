@@ -4,53 +4,159 @@
  * Style for custom buttons
  */
 
-
 /* ------------------------------------ *\
-   #BUTTONS-CUSTOM-HEIGHTS
+   #PUNDIT-BUTTON
 \* ------------------------------------ */
 
-/* Higher button used in panels and resource panel's footer */
-.pnd-btn-full {
+/* Default button */
+.pnd-btn {
+    display: inline-block;
     height: 29px;
+    margin: 0;
     padding: 0 10px;
+
+    /* Gradient bg with mixin */
+    #gradient > .vertical(lighten(@color-button-bg, 1); darken(@color-button-bg, 1)); // It's a Bootstrap mixin
+    background-color: #fff;
     border: 0;
-}
 
-/* Smaller button */
-.pnd-btn-half {
-    height: 21px; // It was 20px
-    padding: 0 10px;
-    border: 0;
-}
+    color: @color-button-text-dark;
+    .text-white-emboss();
+    font-size: 12px;
+    font-weight: @btn-font-weight;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    cursor: pointer;
 
+    &:hover,
+    &:focus,
+    &.focus {
+        /* Gradient bg with mixin */
+        #gradient > .vertical(darken(lighten(@color-button-bg, 1), 5); darken(darken(@color-button-bg, 1), 5));
+    }
 
-/* ------------------------------------ *\
-   #DISABLED BUTTONS
-\* ------------------------------------ */
-.btn {
-    /* Custom opacity for disabled buttons */
+    &:active,
+    &.active {
+        outline: 0;
+    }
+
     &.disabled,
-    &[disabled] {
-        .opacity(.5);
+    &[disabled],
+    fieldset[disabled] & {
+        cursor: @cursor-disabled;
+        color: fade(@color-button-text-dark, 50%);
+        pointer-events: none; // Future-proof disabling of clicks
+        /* Gradient bg with mixin */
+        #gradient > .vertical(fade(lighten(@color-button-bg, 1), 40%); fade(darken(@color-button-bg, 1), 40%));
     }
 }
 
+/* Smaller buttons */
+.pnd-btn-small {
+    height: 22px;
+    font-size: 11px;
+}
+
 
 /* ------------------------------------ *\
-   #SUBJECT-PREDICATE-OBJECT-COLORS
+   #CALL-TO-ACTION-BUTTON
 \* ------------------------------------ */
 
-/* Custom colors for buttons reffering to subject, predicate, object */
-.btn-subject {
-    .button-variant(#ffffff; @subject-color; @subject-color);
+/* Usually green button */
+.pnd-btn-calltoaction {
+    /* Gradient bg with mixin */
+    #gradient > .vertical(lighten(@color-button-bg-cta, 1); darken(@color-button-bg-cta, 1));
+    color: @color-button-text-light;
+    .text-dark-emboss();
+
+    &:hover,
+    &:focus,
+    &.focus {
+        /* Gradient bg with mixin */
+        #gradient > .vertical(darken(lighten(@color-button-bg-cta, 1), 5); darken(darken(@color-button-bg-cta, 1), 5));
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 60%);
+        text-shadow: none;
+        /* Gradient bg with mixin */
+        #gradient > .vertical(fade(lighten(@color-button-bg-cta, 1), 40%); fade(darken(@color-button-bg-cta, 1), 40%));
+    }
+
 }
 
-.btn-predicate {
-    .button-variant(#ffffff; @predicate-color; @predicate-color);
+
+/* ------------------------------------ *\
+   #SEMANTIC-BUTTONS
+\* ------------------------------------ */
+/* Buttons with custom colors for Subject, Object, Predicate */
+
+/* Subject button */
+.pnd-btn-subject {
+    #gradient > .vertical(lighten(@subject-color, 2); darken(@subject-color, 2));
+    color: @color-button-text-light;
+    .text-dark-emboss();
+
+    &:hover,
+    &:focus,
+    &.focus {
+        #gradient > .vertical(darken(lighten(@subject-color, 1), 5); darken(darken(@subject-color, 1), 5));
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 60%);
+        text-shadow: none;
+        #gradient > .vertical(fade(lighten(@subject-color, 1), 40%); fade(darken(@subject-color, 1), 40%));
+    }
+
 }
 
-.btn-object {
-    .button-variant(#ffffff; @object-color; @object-color);
+/* Predicate button */
+.pnd-btn-predicate {
+    #gradient > .vertical(lighten(@predicate-color, 2); darken(@predicate-color, 2));
+    color: @color-button-text-light;
+    .text-dark-emboss();
+
+    &:hover,
+    &:focus,
+    &.focus {
+        #gradient > .vertical(darken(lighten(@predicate-color, 1), 5); darken(darken(@predicate-color, 1), 5));
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 60%);
+        text-shadow: none;
+        #gradient > .vertical(fade(lighten(@predicate-color, 1), 40%); fade(darken(@predicate-color, 1), 40%));
+    }
+
+}
+
+/* Object button */
+.pnd-btn-object {
+    #gradient > .vertical(lighten(@object-color, 2); darken(@object-color, 2));
+    color: @color-button-text-light;
+    .text-dark-emboss();
+
+    &:hover,
+    &:focus,
+    &.focus {
+        #gradient > .vertical(darken(lighten(@object-color, 1), 5); darken(darken(@object-color, 1), 5));
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 60%);
+        text-shadow: none;
+        #gradient > .vertical(fade(lighten(@object-color, 1), 40%); fade(darken(@object-color, 1), 40%));
+    }
 }
 
 

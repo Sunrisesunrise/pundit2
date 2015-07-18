@@ -15,6 +15,7 @@ angular.module('Pundit2.AnnotationSidebar')
      * also contains filters that can be used to show or hide annotations.
      */
 
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -176,9 +177,9 @@ angular.module('Pundit2.AnnotationSidebar')
      * Icon shown in the search input when it has some content
      *
      * Default value:
-     * <pre> inputIconClear: 'pnd-icon-times' </pre>
+     * <pre> inputIconClear: 'pnd-icon-close' </pre>
      */
-    inputIconClear: 'pnd-icon-times',
+    inputIconClear: 'pnd-icon-close',
 
     /**
      * @module punditConfig

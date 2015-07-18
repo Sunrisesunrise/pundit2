@@ -94,7 +94,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     var generalItemsContainer = new BaseComponent('GeneralItemsContainer', GENERALITEMSCONTAINER);
 
-    var MY_ITEMS_TYPE = generalItemsContainer.options.myItems;
+    var MY_ITEMS_TYPE = generalItemsContainer.options.myItemsType;
     var PAGE_ITEMS_TYPE = generalItemsContainer.options.pageItemsType;
     var VOCABULARIES_TYPE = generalItemsContainer.options.vocabulariesType;
     var MY_NOTEBOOKS_TYPE = generalItemsContainer.options.myNotebooksType;
@@ -285,25 +285,28 @@ angular.module('Pundit2.GeneralItemsContainer')
             title = 'Remove from my items';
             text = 'Remove';
             action = 'remove';
+            btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isPageItemsType(type)) {
             title = 'Add to myItems';
             text = 'Add to myItems';
             action = 'add';
+            btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isVocabulariesType(type)) {
             title = 'Add to myItems';
             text = 'Add to myItems';
             action = 'add';
             requireLoggedUser = false;
+            btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isMyNotebooksType(type)) {
             title = 'Create new notebook';
             text = 'Create new notebook';
             requireLoggedUser = false;
-            btnClass = 'btn btn-xs btn-success pnd-btn-full my-notebooks-btn-new';
+            btnClass = 'pnd-btn pnd-btn-calltoaction';
         } else if (generalItemsContainer.isPredicatesType(type)) {
             title = 'Use as predicate';
             text = 'Set predicate';
             requireLoggedUser = false;
-            btnClass = 'pnd-triplecomposer-cancel btn btn-predicate btn-xs pnd-btn-full';
+            btnClass = 'pnd-btn pnd-btn-predicate';
         }
 
         var actionButton = {
@@ -332,7 +335,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         } else if (generalItemsContainer.isPredicatesType(type)) {
             return ItemsExchange.getItemsByContainer(Config.modules.Client.relationsContainer);
         } else if (generalItemsContainer.isMyItemsType(type) || generalItemsContainer.isPageItemsType(type)) {
-            var ContainerManager = getManager(type);
+            var ContainerManager = generalItemsContainer.getManager(type);
             ItemsExchange.getItemsByContainer(ContainerManager.options.container);
         }
 
