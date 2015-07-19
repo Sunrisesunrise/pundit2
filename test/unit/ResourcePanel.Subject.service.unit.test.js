@@ -171,7 +171,7 @@ describe('Subject Popover Resource Panel service', function() {
         // get login
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
 
-        MyPundit.login();
+        MyPundit.oldLogin();
 
         $rootScope.$digest();
         $httpBackend.flush();
@@ -301,7 +301,7 @@ describe('Subject Popover Resource Panel service', function() {
         // get login
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
 
-        MyPundit.login();
+        MyPundit.oldLogin();
 
         $rootScope.$digest();
         $httpBackend.flush();
@@ -377,7 +377,7 @@ describe('Subject Popover Resource Panel service', function() {
         // get login
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
 
-        MyPundit.login();
+        MyPundit.oldLogin();
 
         $rootScope.$digest();
         $httpBackend.flush();
@@ -438,7 +438,7 @@ describe('Subject Popover Resource Panel service', function() {
     it("should load only fragment text items", function() {
         // get login
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
-        MyPundit.login();
+        MyPundit.oldLogin();
         $rootScope.$digest();
         $httpBackend.flush();
 
