@@ -708,14 +708,21 @@ angular.module('Pundit2.ResourcePanel')
      */
     resourcePanel.showPopoverCalendar = function(date, target) {
         var content = {};
-        content.value = date.value;
-        content.datatype = date.datatype;
+
+        if (angular.isObject(date) === false) {
+            content.value = '';
+            content.datatype = NameSpace.dateTime;
+        } else {
+            content.value = date.value;
+            content.datatype = date.datatype;
+        }
+
         // if no popover is shown, just show it
         if (state.popover === null) {
-            state.popover = initPopover(content, target, "", 'calendar');
+            state.popover = initPopover(content, target, '', 'calendar');
             state.popover.$promise.then(function() {
                 show();
-                if (date.value === '') {
+                if (content.value === '') {
                     setFocus('input.pnd-resource-calendar-input-year');
                 }
 
@@ -727,10 +734,10 @@ angular.module('Pundit2.ResourcePanel')
         // if click a different popover, hide the shown popover and show the clicked one
         else if (state.popover !== null && state.popover.clickTarget !== target) {
             hide();
-            state.popover = initPopover("", target, "", 'calendar');
+            state.popover = initPopover('', target, '', 'calendar');
             state.popover.$promise.then(function() {
                 show();
-                if (date.value === '') {
+                if (content.value === '') {
                     setFocus('input.pnd-resource-calendar-input-year');
                 }
 
