@@ -153,7 +153,7 @@ describe("Client interaction when user is logged in", function() {
         // open sidebar by click on annotation icon
         p.findElement(protractor.By.css('annotation-sidebar annotation-details[id=annid123]')).click();
         // open triple composer by click on edit button
-        p.findElement(protractor.By.css('annotation-sidebar annotation-details[id=annid123] .pnd-annotation-details-footer button.btn-success')).click();
+        p.findElement(protractor.By.css('annotation-sidebar annotation-details[id=annid123] .pnd-annotation-details-footer button.pnd-edit')).click();
         
         // now triple composer show annotation and allow to modify it
 
@@ -179,6 +179,7 @@ describe("Client interaction when user is logged in", function() {
             expect(pred.length).toBe(1);
             expect(pred[0].getText()).toEqual("has comment (free text)");
         });
+
         // the triple should be have the expected object
         p.findElements(protractor.By.css("statement .pnd-statement-object .pnd-statement-label")).then(function(obj) {
             expect(obj.length).toBe(1);
@@ -190,7 +191,7 @@ describe("Client interaction when user is logged in", function() {
         // open sidebar by click on annotation icon
         p.findElement(protractor.By.css('annotation-sidebar annotation-details[id=annid123]')).click();
         // should show confirm modal when click delete
-        p.findElement(protractor.By.css('annotation-sidebar annotation-details[id=annid123] .pnd-annotation-details-footer button.btn-info')).click();
+        p.findElement(protractor.By.css('annotation-sidebar annotation-details[id=annid123] .pnd-annotation-details-footer button.pnd-delete')).click();
         // check if info modal exist
         p.findElements(protractor.By.css('.pnd-confirm-modal-container')).then(function(m){
             expect(m.length).toBe(1);
@@ -315,7 +316,7 @@ describe("Client interaction when user is logged in", function() {
     //     p.findElement(protractor.By.css("dashboard dashboard-panel .pnd-tab-header li [data-index='1']")).click();
     //     // mouseover on item
     //     var item = p.findElement(protractor.By.css("dashboard dashboard-panel .pnd-tab-content item")),
-    //         menuBtn = p.findElement(protractor.By.css("dashboard dashboard-panel .pnd-tab-content item .pnd-icon-bars"));
+    //         menuBtn = p.findElement(protractor.By.css("dashboard dashboard-panel .pnd-tab-content item .pnd-icon-dots"));
     //     p.actions().mouseMove(item).perform();
     //     // wait animation
     //     p.sleep(500);
@@ -497,12 +498,12 @@ describe("Client interaction when user is logged in", function() {
             tabs[4].click();
         });
         // move on notebook item
-        var item = p.findElement(protractor.By.css("dashboard-panel[paneltitle=lists] .pnd-tab-content > div.active general-items-container[type=myNotebooks] item-notebook .pnd-item"));
+        var item = p.findElement(protractor.By.css("dashboard-panel[paneltitle=lists] .pnd-tab-content > div.active general-items-container[type=myNotebooks] item .pnd-item"));
         p.actions().mouseMove(item).perform();
         // wait animation
         p.sleep(500);
         // open ctx menu
-        p.findElements(protractor.By.css("dashboard-panel[paneltitle=lists] .pnd-tab-content > div.active general-items-container[type=myNotebooks] item-notebook .pnd-item-buttons")).then(function(btns){
+        p.findElements(protractor.By.css("dashboard-panel[paneltitle=lists] .pnd-tab-content > div.active general-items-container[type=myNotebooks] item .pnd-item-buttons")).then(function(btns){
             btns[0].click();
         });
         // edit notebook
