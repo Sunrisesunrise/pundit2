@@ -373,7 +373,7 @@ angular.module('Pundit2.Core')
             itemBaseType = 'target';
 
         for (var i in target[NameSpace.rdf.type]) {
-            values.type.push(target[NameSpace.rdf.type][i].value)
+            values.type.push(target[NameSpace.rdf.type][i].value);
             if (target[NameSpace.rdf.type][i].value === NameSpace.types.page) {
                 itemBaseType = NameSpace.types.page;
                 // Do not break even if it's been discovered it's a webpage.
@@ -417,22 +417,21 @@ angular.module('Pundit2.Core')
             return null;
         }
 
-        var item = ItemsExchange.getItemByUri(uri);
-        if (typeof item !== 'undefined') {
-            if (forceAdd && !item.isProperty()) {
-                ItemsExchange.addItemToContainer(item, PageItemsContainer.options.container);
-            }
-            return null;
-        }
-
         var item = items[uri],
             values = {
                 uri: uri,
                 type: []
             };
 
+        if (typeof ItemsExchange.getItemByUri(uri) !== 'undefined') {
+            if (forceAdd && !item.isProperty()) {
+                ItemsExchange.addItemToContainer(item, PageItemsContainer.options.container);
+            }
+            return null;
+        }
+
         for (var i in item[NameSpace.rdf.type]) {
-            values.type.push(item[NameSpace.rdf.type][i].value)
+            values.type.push(item[NameSpace.rdf.type][i].value);
             if (item[NameSpace.rdf.type][i].value === NameSpace.rdf.property) {
                 values.isAnnotationProperty = true;
             }
