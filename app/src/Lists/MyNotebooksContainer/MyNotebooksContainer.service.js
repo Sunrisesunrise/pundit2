@@ -182,7 +182,7 @@ angular.module('Pundit2.MyNotebooksContainer')
             // item can belong to more than one annotation or to my items
             // this function use cache to skip real http calls
             // all the informations is cache at initialization time
-            AnnotationsCommunication.getAnnotations();
+            AnnotationsCommunication.getAnnotations(true);
 
             $timeout(function() {
                 confirmModal.hide();
