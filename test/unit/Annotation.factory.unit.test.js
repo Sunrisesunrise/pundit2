@@ -171,12 +171,11 @@ describe('Annotation', function() {
             var currentMeta = testAnnotations.simple2.metadata[metaUri];
             var isIncludedInUri = currentMeta[NameSpace.annotation.isIncludedIn][0].value;
             var notebookId = isIncludedInUri.match(/[a-z0-9]*$/)[0];
-            
-            var targetValue = currentMeta[NameSpace.annotation.target][0].value;
+            var targetValue = currentMeta[NameSpace.annotation.hasTarget][0].value;
 
             expect(ann.uri).toBe(Object.keys(testAnnotations.simple2.metadata)[0]);
             expect(ann.isIncludedIn).toEqual(notebookId);
-            expect(ann.target[0]).toEqual(targetValue);
+            expect(ann.hasTarget).toEqual(targetValue);
         });
         promise.then(function(ret) {
             ann = ret;
