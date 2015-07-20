@@ -223,7 +223,7 @@ describe('MyPundit service', function() {
 
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userNotLogged);
 
-        var promise = MyPundit.login();
+        var promise = MyPundit.oldLogin();
 
         // wait for promise....
         waitsFor(function() { return typeof(promiseValue) !== 'undefined'; }, 2000);
@@ -331,7 +331,7 @@ describe('MyPundit service', function() {
 
 		$httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
 
-		var promise = MyPundit.login();
+		var promise = MyPundit.oldLogin();
 
 		// wait for promise....
 		waitsFor(function() { return typeof(promiseValue) !== 'undefined'; }, 2000);
@@ -369,7 +369,7 @@ describe('MyPundit service', function() {
 
         var serverError = false;
 
-        var loginPromise = MyPundit.login();
+        var loginPromise = MyPundit.oldLogin();
 
         loginPromise.then(function() {
             //if everything is ok do nothing
@@ -393,7 +393,7 @@ describe('MyPundit service', function() {
             .expectGET(NameSpace.get('asUsersCurrent'))
             .respond(userNotLogged);
 
-        MyPundit.login();
+        MyPundit.oldLogin();
 
         //start polling
 

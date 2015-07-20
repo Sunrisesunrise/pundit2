@@ -357,6 +357,8 @@ angular.module('Pundit2.TripleComposer')
 
             if (typeof(item.datatype) !== 'undefined' && item.datatype.indexOf(NameSpace.dateTime) !== -1) {
                 $scope.dateWithTime = true;
+            } else {
+                $scope.dateWithTime = false;
             }
         } else {
             // standard item

@@ -139,7 +139,7 @@
                         ng-mouseover="onObjectMouseOver()" 
                         ng-mouseleave="onItemMouseOut()"
                         ng-click="onClickObject($event)"
-                        ng-show="!dateWithTime">
+                        ng-if="!dateWithTime">
                         {{objectLabel}}
                     </span>
                     <span 
@@ -147,7 +147,7 @@
                         ng-mouseover="onObjectMouseOver()" 
                         ng-mouseleave="onItemMouseOut()"
                         ng-click="onClickObject($event)"
-                        ng-show="dateWithTime">
+                        ng-if="dateWithTime">
                         {{objectLabel | amDateFormat:'YYYY-MM-DD  h:mm'}}
                     </span>
 

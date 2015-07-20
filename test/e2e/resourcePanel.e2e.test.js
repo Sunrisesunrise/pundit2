@@ -57,7 +57,7 @@ describe("ResourcePanel interaction", function() {
           expect(disabled.length).toBe(0);
         });
 
-        p.findElement(protractor.By.css('.pnd-resource-panel-popover .pnd-vertical-tab-footer-content button.btn-success')).click();
+        p.findElement(protractor.By.css('.pnd-resource-panel-popover .pnd-vertical-tab-footer-content button.pnd-use')).click();
 
         p.findElement(protractor.By.css('span[id="test5"]')).then(function(span) {
           expect(span.getText()).toBeDefined();

@@ -113,7 +113,7 @@ angular.module('Pundit2.ResourcePanel')
                     momentDate = moment(currentDate),
                     year = momentDate.year(),
                     month = momentDate.format('MM'),
-                    day = momentDate.format('GG'),
+                    day = momentDate.format('DD'),
                     time = momentDate.format('HH:mm');
 
                 if (currentDate instanceof Date) {
