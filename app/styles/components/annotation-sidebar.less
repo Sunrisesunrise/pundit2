@@ -43,6 +43,7 @@
     color: #FFF;
 }
 
+/* Overlay shown while annotations re loaded */
 .pnd-saving-content {
     text-align: center;
     position: fixed;
@@ -52,14 +53,25 @@
     width: @annotation-sidebar-exp-width;
     top: @toolbar-height;
     bottom: 0;
-    // padding-top: 40px;
     color: @gray-lighter;
-    // -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
-    // filter: alpha(opacity=85);
-    // opacity: 0.85;
 
+    /* This pseudo element is neede to vertically align the loader inside a position fixed element */
+    &:before {
+        content: '';
+        display: block;
+        position: relative;
+        vertical-align: top;
+        height: 100%;
+    }
+
+    /* Contains the loader and text */
     div {
-        margin-top: 100%;
+        display: block;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        margin: -20px auto 0;
     }
 
     .pnd-icon {
