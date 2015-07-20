@@ -2,10 +2,9 @@ angular.module('Pundit2.Model')
 
 .constant('MODELHANDLERDEFAULTS', {})
 
-.service('ModelHandler', function(BaseComponent, Config, MODELHANDLERDEFAULTS, Item, ItemsExchange, TypesHelper) {
+.service('ModelHandler', function(BaseComponent, MODELHANDLERDEFAULTS, Item, ItemsExchange, TypesHelper) {
 
     var modelHandler = new BaseComponent("ModelHandler", MODELHANDLERDEFAULTS);
-    var annotationServerVersion = Config.annotationServerVersion;
 
     // forceAdd - annotation items and target might be already present
     // in ItemsExchange but "pageItems" container has been already removed, so
@@ -20,21 +19,19 @@ angular.module('Pundit2.Model')
             return false;
         }
 
-        var currentSelector;
-
         // Add types from data
         for (var t in data.type) {
             TypesHelper.addFromAnnotationRdf(t, data.type);
         }
 
         // Add items from data.items
-        for (var uri in data.items) {
-            Item.createFromItems(uri, data.items, forceAdd);
+        for (var itemUri in data.items) {
+            Item.createFromItems(itemUri, data.items, forceAdd);
         }
 
         // Add items from data.target
-        for (var uri in data.target) {
-            Item.createFromTarget(uri, data.target, forceAdd);
+        for (var targetUri in data.target) {
+            Item.createFromTarget(targetUri, data.target, forceAdd);
         }
 
     };

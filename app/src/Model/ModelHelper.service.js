@@ -122,7 +122,7 @@ angular.module('Pundit2.Model')
 
         // add predicate types and its label
         addTypeElem(triple.predicate.type, types);
-    }
+    };
 
     var addTargetElem = function(el, res, flat, types) {
         var triple = el.scope.get(),
@@ -192,9 +192,9 @@ angular.module('Pundit2.Model')
 
                     // type
                     target[NameSpace.rdf.type] = [];
-                    for (var i in statementPart.type) {
+                    for (var j in statementPart.type) {
                         target[NameSpace.rdf.type].push({
-                            'value': statementPart.type[i],
+                            'value': statementPart.type[j],
                             'type': 'uri'
                         });
                     }
@@ -287,7 +287,7 @@ angular.module('Pundit2.Model')
                 type: 'literal',
                 datatype: objType,
                 value: item
-            }
+            };
         } else {
             // standard item
             return {
@@ -369,7 +369,7 @@ angular.module('Pundit2.Model')
         return {
             error: error,
             errorMessage: errorMessage
-        }
+        };
     };
 
     modelHelper.hasError = function() {
