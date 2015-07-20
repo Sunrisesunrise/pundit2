@@ -333,9 +333,9 @@ angular.module('Pundit2.Communication')
         }
 
         // In v2 version creator and date are saved with a different uri
-        ann['created'] = ann['annotatedAt'];
-        ann['creator'] = ann['annotatedBy'];
-        ann['creatorName'] = annData[ns['annotatedBy']][1].value;
+        ann.created = ann.annotatedAt;
+        ann.creator = ann.annotatedBy;
+        ann.creatorName = annData[ns.annotatedBy][1].value;
 
         // .isIncludedIn is an URI, get out the id too
         if (ns.isIncludedIn in annData) {

@@ -321,8 +321,7 @@ angular.module('Pundit2.Communication')
     // TODO : safety check if we get an error in one of the two http calls
     annotationsCommunication.editAnnotation = function(annID, graph, items, flatTargets, targets, types) {
 
-        var completed = 0,
-            promise = $q.defer();
+        var promise = $q.defer();
 
         if (MyPundit.isUserLogged()) {
 
@@ -343,6 +342,8 @@ angular.module('Pundit2.Communication')
     };
 
     var updateAnnotationV1 = function(promise, annID, graph, items, targets) {
+        var completed = 0;
+
         $http({
             headers: {
                 'Content-Type': 'application/json'
@@ -432,7 +433,7 @@ angular.module('Pundit2.Communication')
             },
             withCredentials: true,
             data: postData
-        }).success(function(data) {
+        }).success(function() {
             // TODO if is rejected ???
             AnnotationsExchange.getAnnotationById(annID).update().then(function() {
                 Consolidation.consolidateAll();
@@ -448,7 +449,7 @@ angular.module('Pundit2.Communication')
             setLoading(false);
             promise.reject();
         });
-    }
+    };
 
     return annotationsCommunication;
 });

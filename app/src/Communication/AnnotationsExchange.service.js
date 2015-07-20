@@ -17,6 +17,7 @@ angular.module('Pundit2.Communication')
     // Returns a promise which gets resolved by an array of IDS of the annotations found.
     // If the user is logged in, the authenticated API is called, otherwise
     annotationExchange.searchByUri = function(uris) {
+        var id;
 
         if (!angular.isArray(uris)) {
             uris = [uris];
@@ -55,16 +56,14 @@ angular.module('Pundit2.Communication')
             var ids = [];
             if (data.hasOwnProperty('AnnotationIDs')) {
                 for (var i in data.AnnotationIDs) {
-                    var annURI = data.AnnotationIDs[i];
-                    var id = annURI.match(/[a-z0-9]*$/);
+                    id = data.AnnotationIDs[i].match(/[a-z0-9]*$/);
                     if (id !== null) {
                         ids.push(id[0]);
                     }
                 }
-            }
-            else {
+            } else {
                 for (var annURI in data) {
-                    var id = annURI.match(/[a-z0-9]*$/);
+                    id = annURI.match(/[a-z0-9]*$/);
                     if (id !== null) {
                         ids.push(id[0]);
                     }
