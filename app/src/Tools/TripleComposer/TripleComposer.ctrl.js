@@ -254,14 +254,6 @@ angular.module('Pundit2.TripleComposer')
         TripleComposer.reset($scope.name);
     };
 
-    $scope.testSaveAnnotation = function() {
-        var statements = TripleComposer.getStatements($scope.name);
-        ModelHelper.buildGraph(statements);
-        ModelHelper.buildItems(statements);
-
-        console.log(ModelHelper.buildAllData(statements));
-    };
-
     $scope.saveAnnotation = function() {
 
         var promise = $q.defer();
