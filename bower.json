@@ -1,16 +1,16 @@
 {
     "dependencies": {
-        "angular": "~1.4.1",
-        "angular-resource": "~1.4.1",
-        "angular-route": "~1.4.1",
-        "angular-mocks": "~1.4.1",
-        "angular-sanitize": "~1.4.1",
-        "angular-animate": "~1.4.1",
+        "angular": "~1.4.3",
+        "angular-resource": "~1.4.3",
+        "angular-route": "~1.4.3",
+        "angular-mocks": "~1.4.3",
+        "angular-sanitize": "~1.4.3",
+        "angular-animate": "~1.4.3",
         "angular-strap": "~2.2.4",
         "bootstrap": "3.x.x",
         "jquery": "2.x.x",
-        "angular-cookies": "~1.4.1",
-        "angular-touch": "~1.4.1",
+        "angular-cookies": "~1.4.3",
+        "angular-touch": "~1.4.3",
         "lunr.js": "0.4.3",
         "google-code-prettify": "1.0.1",
         "angular-datepicker": "~1.0.11",
@@ -18,7 +18,7 @@
     },
     "devDependencies": {},
     "resolutions": {
-        "angular": "~1.4.1"
+        "angular": "~1.4.3"
     },
     "name": "pundit2",
     "version": "0.0.1"
