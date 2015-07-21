@@ -55,7 +55,7 @@ angular.module('Pundit2.ContextualMenu')
 
     // create div anchor (the element bound with angular strap menu reference)
     angular.element("[data-ng-app='Pundit2']")
-        .prepend("<div class='pnd-dropdown-contextual-menu-anchor' style='position: absolute; left: -500px; top: -500px;'><div>");
+        .prepend("<div class='pnd-dropdown-contextual-menu-anchor' style='position: absolute; left: 0px; top: 0px;'><div>");
 
     state.anchor = angular.element('.pnd-dropdown-contextual-menu-anchor');
 
@@ -218,6 +218,10 @@ angular.module('Pundit2.ContextualMenu')
             state.menu = null;
         }
 
+        if (state.mockMenu !== null) {
+            state.mockMenu.hide();
+        }
+
         if (state.menuElements.length === 0) {
             contextualMenu.err('Cannot show a contextual menu without any element!!');
             return;
@@ -233,6 +237,7 @@ angular.module('Pundit2.ContextualMenu')
         state.menuResource = resource;
         state.menuType = type;
         state.content = contextualMenu.buildContent();
+        mockOptions.scope.content = state.content;
 
         if (state.content.length === 0) {
             contextualMenu.err('Tried to show menu for type ' + type + ' without any content (buildContent fail)');
@@ -241,6 +246,7 @@ angular.module('Pundit2.ContextualMenu')
 
         contextualMenu.log('Showing menu for type=' + type + ' at ' + x + ',' + y);
 
+        state.anchor.css('left', x).css('top', y);
         // state var
         state.lastX = x;
         state.lastY = y;
@@ -446,8 +452,10 @@ angular.module('Pundit2.ContextualMenu')
 
     // used in example (define where to show the submenu)
     contextualMenu.getSubMenuPlacement = function() {
-        var i = realOptions.placement.indexOf('-'),
-            place = realOptions.placement.substring(i + 1);
+        var options = mockOptions;
+        //options = realOptions;
+        var i = options.placement.indexOf('-'),
+            place = options.placement.substring(i + 1);
 
         if (place === 'right') {
             return 'left';

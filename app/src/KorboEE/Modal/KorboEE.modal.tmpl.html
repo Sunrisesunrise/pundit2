@@ -5,10 +5,12 @@
     <div class="modal-dialog">
         <div class="modal-content kee-modal-content">
             <div class="modal-body kee-modal-body">
-                <div ng-model="korboModalTabs.activeTab"
+
+                <!--<div ng-model="korboModalTabs.activeTab"
                      data-template="src/KorboEE/Modal/KorboEE.modal.tabs.tmpl.html"
                      bs-tabs="korboModalTabs">
-                </div>
+                </div>-->
+                <div ng-include="'src/KorboEE/New/KorboEE.new.tmpl.html'"></div>
             </div>
         </div>
     </div>

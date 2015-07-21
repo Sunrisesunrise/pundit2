@@ -41,7 +41,8 @@ angular.module('KorboEE')
         container: "[data-ng-app='Pundit2']",
         template: 'src/KorboEE/Modal/KorboEE.modal.tmpl.html',
         show: false,
-        backdrop: 'static',
+        //backdrop: 'static',
+        backdropAnimation: 'static',
         scope: KeeModalScope,
         keyboard: false
     });

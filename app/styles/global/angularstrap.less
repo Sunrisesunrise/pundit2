@@ -32,8 +32,9 @@ body .modal-backdrop {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: @zindex-pnd-modal-background; // This is a bad patch
+    z-index: @zindex-pnd-modal-background !important; // This is a bad patch
     background-color: @modal-backdrop-bg;
+    opacity: .5 !important; // This is a bad patch
     // Fade for backdrop
 
     &.fade {

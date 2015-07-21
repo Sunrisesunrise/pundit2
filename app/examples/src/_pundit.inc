@@ -192,3 +192,11 @@
     <script src="../src/KorboEE/Search/KorboEE.search.ctrl.js"></script>
 
     <!-- endbuild -->
+
+    <script>
+        angular.module('Pundit2').config(['$controllerProvider', function($controllerProvider) {
+          // this option might be handy for migrating old apps, but please don't use it
+          // in new ones!
+          $controllerProvider.allowGlobals();
+        }]);
+    </script>

@@ -43,7 +43,7 @@ exports.config = {
     // Depending on where you're running the tests, you might need a different baseUrl
     // baseUrl: 'http://openpal.simone.local:9999/',
     baseUrl: 'http://localhost:9999/',
-    rootElement: 'div',
+    rootElement: '.pundit2',
 
     jasmineNodeOpts: {
         onComplete: null,

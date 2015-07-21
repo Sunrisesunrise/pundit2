@@ -816,6 +816,21 @@ angular.module('KorboEE')
                         // fire save callback
                         api.fireOnSave(obj);
 
+                        if (typeof resourcePanelLastPromiseData !== 'undefined' &&
+                            typeof resourcePanelLastPromiseData.data !== 'undefined' &&
+                            typeof resourcePanelLastPromiseData.method !== 'undefined') {
+                            var itemFotTC = new Item(res, {
+                                label : $scope.tabs[0].label,
+                                type : newTypes,
+                                image : $scope.imageUrl,
+                                description : $scope.tabs[0].description,
+                                language : $scope.conf.defaultLanguage,
+                                uri : res
+                            });
+                            resourcePanelLastPromiseData.method(itemFotTC);
+                        }
+
+
                         /*
                         // Deprecating.
                         if (typeof resourcePanelLastPromise !== 'undefined') {
