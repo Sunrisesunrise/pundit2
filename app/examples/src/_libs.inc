@@ -12,6 +12,7 @@
     <script src="../../bower_components/angular-mocks/angular-mocks.js" type="text/javascript" charset="utf-8"></script>
     <script src="../../bower_components/angular-strap/dist/angular-strap.js" type="text/javascript" charset="utf-8"></script>
     <script src="../../bower_components/angular-strap/dist/angular-strap.tpl.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../bower_components/angular-md5/angular-md5.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="../../bower_components/moment/min/moment.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="../../bower_components/angular-moment/angular-moment.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="../../bower_components/angular-datepicker/dist/index.min.js" type="text/javascript" charset="utf-8"></script>

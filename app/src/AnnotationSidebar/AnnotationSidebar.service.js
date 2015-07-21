@@ -568,7 +568,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         for (var subject in graph) {
             currentItem = ItemsExchange.getItemByUri(subject);
-            if (currentItem.isTextFragment() || currentItem.isImageFragment() || currentItem.isImage() || currentItem.isWebPage()) {
+            if (currentItem && currentItem.isTextFragment() || currentItem.isImageFragment() || currentItem.isImage() || currentItem.isWebPage()) {
                 if (Consolidation.isConsolidated(currentItem)) {
                     return subject;
                 }
@@ -583,7 +583,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
                     if (objectType === 'uri') {
                         currentItem = ItemsExchange.getItemByUri(objectValue);
-                        if (currentItem.isTextFragment() || currentItem.isImageFragment() || currentItem.isImage() || currentItem.isWebPage()) {
+                        if (currentItem && currentItem.isTextFragment() || currentItem.isImageFragment() || currentItem.isImage() || currentItem.isWebPage()) {
                             if (Consolidation.isConsolidated(currentItem)) {
                                 return objectValue;
                             }
@@ -785,7 +785,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     if (typeof(elementsList.entities[entUri]) === 'undefined') {
                         elementsList.entities[entUri] = {
                             uri: entUri,
-                            label: annotation.items[entUri].label,
+                            label: annotation.items[entUri].label, // TODO add check ?
                             active: false,
                             count: 0
                         };

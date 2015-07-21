@@ -6,14 +6,21 @@ angular.module('Pundit2.Communication')
     //loadMultipleAnnotationsRequireCredentials: false
 })
 
-.service('AnnotationsCommunication', function(BaseComponent, EventDispatcher, NameSpace, Consolidation, MyPundit,
-                                              AnnotationsExchange, Annotation, NotebookExchange, Notebook, ItemsExchange, Config, XpointersHelper,
-                                              $http, $q, $rootScope, ANNOTATIONSCOMMUNICATIONDEFAULTS) {
+.service('AnnotationsCommunication', function(BaseComponent, EventDispatcher, NameSpace, Consolidation, MyPundit, ModelHelper,
+    AnnotationsExchange, Annotation, NotebookExchange, Notebook, ItemsExchange, Config, XpointersHelper, ModelHandler,
+    $http, $q, $rootScope, ANNOTATIONSCOMMUNICATIONDEFAULTS) {
 
     var annotationsCommunication = new BaseComponent("AnnotationsCommunication", ANNOTATIONSCOMMUNICATIONDEFAULTS);
 
+    var annotationServerVersion = Config.annotationServerVersion;
     var setLoading = function(state) {
         EventDispatcher.sendEvent('AnnotationsCommunication.loading', state);
+    };
+
+    var makeTargetsAndItems = function(data, forceAddToContainer) {
+        if (annotationServerVersion === 'v2')  {
+            ModelHandler.makeTargetsAndItems(data, forceAddToContainer);
+        }
     };
 
     // get all annotations of the page from the server
@@ -21,7 +28,11 @@ angular.module('Pundit2.Communication')
     // add items to page items inside itemsExchange
     // add notebooks to notebooksExchange
     // than consilidate all items
-    annotationsCommunication.getAnnotations = function() {
+    //
+    // forceAddToContainer - annotation items and target might be already present
+    // in ItemsExchange but "pageItems" container has been already removed, so
+    // it's necessary to add again items to container.
+    annotationsCommunication.getAnnotations = function(forceAddToContainer) {
         var promise = $q.defer();
 
         if (annotationsCommunication.options.preventDownload) {
@@ -32,7 +43,7 @@ angular.module('Pundit2.Communication')
         setLoading(true);
 
         var uris = Consolidation.getAvailableTargets(),
-        annPromise = AnnotationsExchange.searchByUri(uris);
+            annPromise = AnnotationsExchange.searchByUri(uris);
 
         annotationsCommunication.log('Getting annotations for available targets', uris);
 
@@ -98,9 +109,13 @@ angular.module('Pundit2.Communication')
                 //    httpObject.url =  NameSpace.get('asAnnMult');
                 //}
                 $http(httpObject).success(function(data) {
-                    var num = Object.keys(data).length;
-                    for (var annId in data) {
-                        var a = new Annotation(annId, false, data[annId]);
+                    var parsedData = ModelHelper.parseAnnotations(data);
+                    var num = Object.keys(parsedData).length;
+
+                    makeTargetsAndItems(data, forceAddToContainer);
+
+                    for (var annId in parsedData) {
+                        var a = new Annotation(annId, false, parsedData[annId]);
                         a.then(function(ann) {
                             var notebookID = ann.isIncludedIn;
                             if (typeof(NotebookExchange.getNotebookById(notebookID)) === 'undefined') {
@@ -121,7 +136,7 @@ angular.module('Pundit2.Communication')
                             }
                         });
                     }
-                }).error(function(/*data, statusCode*/) {
+                }).error(function( /*data, statusCode*/ ) {
                     setLoading(false);
                 });
             }
@@ -167,7 +182,7 @@ angular.module('Pundit2.Communication')
                 EventDispatcher.sendEvent('AnnotationsCommunication.annotationDeleted', annID);
 
                 // reload all annotation
-                annotationsCommunication.getAnnotations().then(function() {
+                annotationsCommunication.getAnnotations(true).then(function() {
                     promise.resolve(annID);
                 }, function() {
                     promise.reject("Error during getAnnotations after a delete of: " + annID);
@@ -186,8 +201,7 @@ angular.module('Pundit2.Communication')
         return promise.promise;
     };
 
-    annotationsCommunication.saveAnnotation = function(graph, items, targets, templateID, skipConsolidation) {
-
+    annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, skipConsolidation, postDataTargets, types) {
         // var completed = 0;
         var promise = $q.defer();
 
@@ -217,6 +231,12 @@ angular.module('Pundit2.Communication')
                 graph: graph,
                 items: items
             };
+            if (typeof postDataTargets !== 'undefined') {
+                postData.target = postDataTargets;
+            }
+            if (annotationServerVersion === 'v2') {
+                postData.type = types;
+            }
             if (typeof(templateID) !== 'undefined') {
                 postData.metadata = {
                     template: templateID
@@ -231,7 +251,7 @@ angular.module('Pundit2.Communication')
                 url: NameSpace.get('asNBCurrent'),
                 params: {
                     context: angular.toJson({
-                        targets: targets,
+                        targets: flatTargets,
                         pageContext: XpointersHelper.getSafePageContext()
                     })
                 },
@@ -299,76 +319,18 @@ angular.module('Pundit2.Communication')
 
     // this API not work correctly sometimese save correctly the items sometimes not save correctly
     // TODO : safety check if we get an error in one of the two http calls
-    annotationsCommunication.editAnnotation = function(annID, graph, items, targets) {
+    annotationsCommunication.editAnnotation = function(annID, graph, items, flatTargets, targets, types) {
 
-        var completed = 0,
-        promise = $q.defer();
+        var promise = $q.defer();
 
         if (MyPundit.isUserLogged()) {
 
-            setLoading(true);
-
-            $http({
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                method: 'PUT',
-                url: NameSpace.get('asAnnContent', {
-                    id: annID
-                }),
-                params: {
-                    context: angular.toJson({
-                        targets: targets,
-                        pageContext: XpointersHelper.getSafePageContext()
-                    })
-                },
-                withCredentials: true,
-                data: {
-                    "graph": graph
-                }
-            }).success(function() {
-                if (completed > 0) {
-                    AnnotationsExchange.getAnnotationById(annID).update().then(function() {
-                        Consolidation.consolidateAll();
-                        EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
-                        setLoading(false);
-                        promise.resolve();
-                    });
-                }
-                completed++;
-                annotationsCommunication.log("Graph correctly updated: " + annID);
-            }).error(function() {
-                setLoading(false);
-                promise.reject();
-                annotationsCommunication.log("Error during graph editing of " + annID);
-            });
-
-            $http({
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                method: 'PUT',
-                url: NameSpace.get('asAnnItems', {
-                    id: annID
-                }),
-                withCredentials: true,
-                data: items
-            }).success(function() {
-                if (completed > 0) {
-                    AnnotationsExchange.getAnnotationById(annID).update().then(function() {
-                        Consolidation.consolidateAll();
-                        EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
-                        setLoading(false);
-                        promise.resolve();
-                    });
-                }
-                completed++;
-                annotationsCommunication.log("Items correctly updated: " + annID);
-            }).error(function() {
-                setLoading(false);
-                promise.reject();
-                annotationsCommunication.log("Error during items editing of " + annID);
-            });
+            if (Config.annotationServerVersion === 'v1') {
+                updateAnnotationV1(promise, annID, graph, items, flatTargets);
+            }
+            else {
+                updateAnnotationV2(promise, annID, graph, items, flatTargets, targets, types);
+            }
 
         } else {
             annotationsCommunication.log("Error impossible to edit annotation: " + annID + " you are not logged");
@@ -377,6 +339,116 @@ angular.module('Pundit2.Communication')
 
         return promise.promise;
 
+    };
+
+    var updateAnnotationV1 = function(promise, annID, graph, items, targets) {
+        var completed = 0;
+
+        $http({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'PUT',
+            url: NameSpace.get('asAnnContent', {
+                id: annID
+            }),
+            params: {
+                context: angular.toJson({
+                    targets: targets,
+                    pageContext: XpointersHelper.getSafePageContext()
+                })
+            },
+            withCredentials: true,
+            data: {
+                "graph": graph
+            }
+        }).success(function() {
+            if (completed > 0) {
+                AnnotationsExchange.getAnnotationById(annID).update().then(function() {
+                    Consolidation.consolidateAll();
+                    EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
+                    setLoading(false);
+                    promise.resolve();
+                });
+            }
+            completed++;
+            annotationsCommunication.log("Graph correctly updated: " + annID);
+        }).error(function() {
+            setLoading(false);
+            promise.reject();
+            annotationsCommunication.log("Error during graph editing of " + annID);
+        });
+
+        $http({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'PUT',
+            url: NameSpace.get('asAnnItems', {
+                id: annID
+            }),
+            withCredentials: true,
+            data: items
+        }).success(function() {
+            if (completed > 0) {
+                AnnotationsExchange.getAnnotationById(annID).update().then(function() {
+                    Consolidation.consolidateAll();
+                    EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
+                    setLoading(false);
+                    promise.resolve();
+                });
+            }
+            completed++;
+            annotationsCommunication.log("Items correctly updated: " + annID);
+        }).error(function() {
+            setLoading(false);
+            promise.reject();
+            annotationsCommunication.log("Error during items editing of " + annID);
+        });
+    };
+
+    var updateAnnotationV2 = function(promise, annID, graph, items, flatTargets, targets, types) {
+        setLoading(true);
+
+        var postData = {
+            graph: graph,
+            items: items,
+            type: types,
+            target: targets
+        };
+
+        $http({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'PUT',
+            url: NameSpace.get('asAnn', {
+                id: annID
+            }),
+            params: {
+                context: angular.toJson({
+                    targets: flatTargets,
+                    pageContext: XpointersHelper.getSafePageContext()
+                })
+            },
+            withCredentials: true,
+            data: postData
+        }).success(function() {
+            // TODO if is rejected ???
+            AnnotationsExchange.getAnnotationById(annID).update().then(function() {
+                Consolidation.consolidateAll();
+                EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
+                setLoading(false);
+                promise.resolve();
+            });
+            annotationsCommunication.log("Items correctly updated: " + annID);
+
+        }).error(function(msg) {
+            // TODO
+            annotationsCommunication.log("Error: impossible to update annotation", msg);
+            setLoading(false);
+            promise.reject();
+        });
     };
 
     return annotationsCommunication;

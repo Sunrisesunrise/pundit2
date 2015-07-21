@@ -1,7 +1,7 @@
 angular.module('Pundit2.TripleComposer')
 
 .controller('TripleComposerCtrl', function($rootScope, $scope, $http, $q, $timeout, NameSpace, EventDispatcher,
-    MyPundit, Toolbar, TripleComposer, AnnotationsCommunication, AnnotationsExchange, TemplatesExchange, Analytics) {
+    MyPundit, Toolbar, TripleComposer, AnnotationsCommunication, AnnotationsExchange, TemplatesExchange, Analytics, ModelHelper) {
 
     if (typeof $scope.name === 'undefined') {
         $scope.name = "triplecomposer-" + Math.floor((new Date()).getTime() / 100 * (Math.random() * 100) + 1);
@@ -142,11 +142,16 @@ angular.module('Pundit2.TripleComposer')
             var savePromise = initSavingProcess();
             angular.element('.pnd-triplecomposer-cancel').addClass('disabled');
 
+            var statements = TripleComposer.getStatements($scope.name);
+            var modelData = ModelHelper.buildAllData(statements);
+
             AnnotationsCommunication.editAnnotation(
                 annID,
-                TripleComposer.buildGraph($scope.name),
-                TripleComposer.buildItems($scope.name),
-                TripleComposer.buildTargets($scope.name)
+                modelData.graph,
+                modelData.items,
+                modelData.flatTargets,
+                modelData.target,
+                modelData.type
             ).then(function() {
                 stopSavingProcess(
                     savePromise,
@@ -249,6 +254,14 @@ angular.module('Pundit2.TripleComposer')
         TripleComposer.reset($scope.name);
     };
 
+    $scope.testSaveAnnotation = function() {
+        var statements = TripleComposer.getStatements($scope.name);
+        ModelHelper.buildGraph(statements);
+        ModelHelper.buildItems(statements);
+
+        console.log(ModelHelper.buildAllData(statements));
+    };
+
     $scope.saveAnnotation = function() {
 
         var promise = $q.defer();
@@ -273,18 +286,30 @@ angular.module('Pundit2.TripleComposer')
 
                 var savePromise = initSavingProcess();
 
+                var statements = TripleComposer.getStatements($scope.name);
+                var modelData = ModelHelper.buildAllData(statements);
+
                 var httpPromise;
                 if ($scope.templateMode) {
                     httpPromise = AnnotationsCommunication.saveAnnotation(
-                        TripleComposer.buildGraph($scope.name),
-                        TripleComposer.buildItems($scope.name),
-                        TripleComposer.buildTargets($scope.name),
-                        TemplatesExchange.getCurrent().id);
+                        modelData.graph,
+                        modelData.items,
+                        modelData.flatTargets,
+                        TemplatesExchange.getCurrent().id,
+                        undefined,
+                        modelData.target, // Can be undefined if ModelHelper is acting in mode1
+                        modelData.type
+                    );
                 } else {
                     httpPromise = AnnotationsCommunication.saveAnnotation(
-                        TripleComposer.buildGraph($scope.name),
-                        TripleComposer.buildItems($scope.name),
-                        TripleComposer.buildTargets($scope.name));
+                        modelData.graph,
+                        modelData.items,
+                        modelData.flatTargets,
+                        undefined, // templateID
+                        undefined, // skipConsolidation
+                        modelData.target, // Can be undefined if ModelHelper is acting in mode1
+                        modelData.type
+                    );
                 }
 
                 httpPromise.then(function() {

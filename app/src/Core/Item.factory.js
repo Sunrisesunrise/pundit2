@@ -88,6 +88,21 @@ angular.module('Pundit2.Core')
      */
     iconEntity: 'pnd-icon pnd-icon-code-fork',
 
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Item.container
+     *
+     * @description
+     * `string`
+     *
+     * Name of the container used to store the page items in the itemsExchange
+     *
+     * Default value:
+     * <pre> container: 'pageItems' </pre>
+     */
+    container: 'pageItems',
+
     classDefault: 'pnd-item-default',
     classImage: 'pnd-item-image',
     classText: 'pnd-item-text',
@@ -95,16 +110,28 @@ angular.module('Pundit2.Core')
     classEntity: 'pnd-item-entity'
 })
 
-.factory('Item', function(BaseComponent, NameSpace, Utils, ItemsExchange, ITEMDEFAULTS) {
-    var itemComponent = new BaseComponent("Item", ITEMDEFAULTS);
+.factory('Item', function(BaseComponent, Config, NameSpace, Utils, ItemsExchange, md5, ITEMDEFAULTS) {
+    var itemComponent = new BaseComponent('Item', ITEMDEFAULTS);
+
+    var annotationServerVersion = Config.annotationServerVersion;
 
     var ItemFactory = function(uri, values) {
         // To create a new Item at least a URI is needed
-        if (typeof(uri) === "undefined") {
-            itemComponent.err("Can't create an item without an URI");
+        if (typeof(uri) === 'undefined') {
+            itemComponent.err('Can\'t create an item without an URI');
             return;
         }
-        this.uri = uri;
+
+        if (annotationServerVersion === 'v2' && uri.indexOf('#xpointer(') !== -1) {
+            this.uri = 'http://purl.org/pundit/local/target/' + md5.createHash(uri);
+            if (angular.isObject(values)) {
+                values.uri = this.uri;
+            }
+            this.xpointer = uri;
+        } else {
+            this.uri = uri;
+        }
+
         this.type = [];
         this.label = 'default item label';
 
@@ -115,6 +142,13 @@ angular.module('Pundit2.Core')
 
         // Add it to the exchange, ready to be .. whatever will be.
         ItemsExchange.addItem(this);
+    };
+
+    ItemFactory.prototype.isTarget = function() {
+        return this.isTextFragment() ||
+            this.isImage() ||
+            this.isImageFragment() ||
+            this.isWebPage();
     };
 
     ItemFactory.prototype.isProperty = function() {
@@ -154,7 +188,7 @@ angular.module('Pundit2.Core')
 
 
         // Cant find any rdf for this item?? Where is it?!1?
-        if (typeof(itemRDF) === "undefined") {
+        if (typeof(itemRDF) === 'undefined') {
             itemComponent.log('Error? No RDF for this item? ', this.uri);
             return;
         }
@@ -216,7 +250,7 @@ angular.module('Pundit2.Core')
 
         // TODO: more special cases, named content, webpage, video fragment, other selectors?
 
-        itemComponent.log("Created new item from annotation RDF: "+ this.label);
+        itemComponent.log('Created new item from annotation RDF: ' + this.label);
     };
 
     ItemFactory.prototype.toRdf = function() {
@@ -324,6 +358,111 @@ angular.module('Pundit2.Core')
         }
 
         return itemComponent.options.classDefault;
+    };
+
+    ItemFactory.prototype.getXPointer = function() {
+        return typeof(this.xpointer) !== 'undefined' ? this.xpointer : this.uri;
+    };
+
+    ItemFactory.createFromTarget = function(uri, targets, forceAdd) {
+        if (typeof forceAdd === 'undefined') {
+            forceAdd = false;
+        }
+        if (typeof targets[uri] === 'undefined') {
+            return null;
+        }
+
+        var item = ItemsExchange.getItemByUri(uri);
+        if (typeof item !== 'undefined') {
+            if (forceAdd && !item.isProperty()) {
+                ItemsExchange.addItemToContainer(item, itemComponent.options.container);
+            }
+            return null;
+        }
+
+        var target = targets[uri],
+            values = {
+                uri: uri,
+                type: []
+            },
+            itemBaseType = 'target';
+
+        for (var i in target[NameSpace.rdf.type]) {
+            values.type.push(target[NameSpace.rdf.type][i].value);
+            if (target[NameSpace.rdf.type][i].value === NameSpace.types.page) {
+                itemBaseType = NameSpace.types.page;
+                // Do not break even if it's been discovered it's a webpage.
+                //break;
+            }
+            if (target[NameSpace.rdf.type][i].value === NameSpace.target.fragmentSelector) {
+                itemBaseType = NameSpace.target.fragmentSelector;
+                // No need to create item if it's a fragment Selector.
+                return null;
+            }
+        }
+
+        switch (itemBaseType) {
+            case NameSpace.types.page: //WebPage.
+                values.label = target[NameSpace.rdfs.label][0].value;
+                break;
+            case 'target':
+                var selector = targets[target[NameSpace.target.hasSelector][0].value];
+                if (typeof target[NameSpace.item.isPartOf] !== 'undefined') {
+                    values[NameSpace.item.isPartOf] = target[NameSpace.item.isPartOf][0].value;
+                }
+                values[NameSpace.target.hasScope] = target[NameSpace.target.hasScope][0].value;
+                values[NameSpace.target.hasSource] = target[NameSpace.target.hasSource][0].value;
+                values.xpointer = selector[NameSpace.rdf.value][0].value;
+                values.label = selector[NameSpace.rdfs.label][0].value;
+                values.description = values.label;
+                break;
+        }
+
+        item = new ItemFactory(uri, values);
+        ItemsExchange.addItemToContainer(item, itemComponent.options.container);
+
+        return item;
+    };
+
+    ItemFactory.createFromItems = function(uri, items, forceAdd) {
+        if (typeof forceAdd === 'undefined') {
+            forceAdd = false;
+        }
+        if (typeof items[uri] === 'undefined') {
+            return null;
+        }
+
+        var item = items[uri],
+            tempItem = ItemsExchange.getItemByUri(uri),
+            values = {
+                uri: uri,
+                type: []
+            };
+
+        if (typeof tempItem !== 'undefined') {
+            if (forceAdd && !tempItem.isProperty()) {
+                ItemsExchange.addItemToContainer(tempItem, itemComponent.options.container);
+            }
+            return null;
+        }
+
+        for (var i in item[NameSpace.rdf.type]) {
+            values.type.push(item[NameSpace.rdf.type][i].value);
+            if (item[NameSpace.rdf.type][i].value === NameSpace.rdf.property) {
+                values.isAnnotationProperty = true;
+            }
+        }
+
+        item = new ItemFactory(uri, values);
+        item.fromAnnotationRdf(items);
+
+
+        if (!item.isProperty()) {
+            ItemsExchange.addItemToContainer(item, itemComponent.options.container);
+        }
+
+
+        return item;
     };
 
     itemComponent.log('Component up and running');

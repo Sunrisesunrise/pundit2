@@ -13,12 +13,14 @@ module.exports = function(config) {
             'bower_components/moment/min/moment.min.js',
             'bower_components/angular-moment/angular-moment.min.js',
             'bower_components/angular-datepicker/dist/index.min.js',
+            'bower_components/angular-md5/angular-md5.min.js',
 
             // Load the module declaration before the module utilization, or karma
             // will screw up :|
             'app/src/pundit2.js',
             'app/src/templates.js',
             'app/src/Core/Core.js',
+            'app/src/Model/Model.js',
             'app/src/AlertSystem/AlertSystem.js',
             'app/src/AnnotationSidebar/AnnotationSidebar.js',
             'app/src/Annomatic/Annomatic.js',

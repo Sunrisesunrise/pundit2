@@ -92,6 +92,21 @@ angular.module('Pundit2.Core')
     /**
      * @module punditConfig
      * @ngdoc object
+     * @name annotationServerVersion
+     * @description
+     * `string`
+     * Pundit server version
+     *
+     * Default:
+     * <pre>
+     * annotationServerVersion: 'v1'
+     * </pre>
+     */
+    annotationServerVersion: 'v1',
+
+    /**
+     * @module punditConfig
+     * @ngdoc object
      * @name annotationServerCallsNeedLoggedUser
      * @description
      * `boolean`

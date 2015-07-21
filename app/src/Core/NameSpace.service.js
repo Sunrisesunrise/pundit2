@@ -1,14 +1,15 @@
-angular.module("Pundit2.Core")
+angular.module('Pundit2.Core')
 
-.service("NameSpace", function(BaseComponent, Config, $interpolate, $window) {
-    var ns = new BaseComponent("NameSpace"),
-        _rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-        _rdfs = "http://www.w3.org/2000/01/rdf-schema#",
-        _dce = "http://purl.org/dc/elements/1.1/",
-        _dct = "http://purl.org/dc/terms/",
-        _pnd = "http://purl.org/pundit/ont/ao#",
-        _skos = "http://www.w3.org/2004/02/skos/core#",
-        _xsd = "http://www.w3.org/2001/XMLSchema#";
+.service('NameSpace', function(BaseComponent, Config, $interpolate, $window) {
+    var ns = new BaseComponent('NameSpace'),
+        _rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        _rdfs = 'http://www.w3.org/2000/01/rdf-schema#',
+        _dce = 'http://purl.org/dc/elements/1.1/',
+        _dct = 'http://purl.org/dc/terms/',
+        _pnd = 'http://purl.org/pundit/ont/ao#',
+        _skos = 'http://www.w3.org/2004/02/skos/core#',
+        _oa = 'http://www.openannotation.org/ns/',
+        _xsd = 'http://www.w3.org/2001/XMLSchema#';
 
     $window.PUNDIT.ns = ns;
 
@@ -18,24 +19,36 @@ angular.module("Pundit2.Core")
 
     // RDF namespace uris
     ns.rdf = {};
-    ns.rdf.type = _rdf + "type";
-    ns.rdf.value = _rdf + "value";
-    ns.rdf.property = _rdf + "Property";
+    ns.rdf.type = _rdf + 'type';
+    ns.rdf.value = _rdf + 'value';
+    ns.rdf.property = _rdf + 'Property';
 
     // RDFS namespace uris
     ns.rdfs = {};
-    ns.rdfs.label = _rdfs + "label";
-    ns.rdfs.comment = _rdfs + "comment";
-    ns.rdfs.resource = _rdfs + "Resource";
-    ns.rdfs.literal = _rdfs + "Literal";
-    ns.rdfs.seeAlso = _rdfs + "seeAlso";
+    ns.rdfs.label = _rdfs + 'label';
+    ns.rdfs.comment = _rdfs + 'comment';
+    ns.rdfs.resource = _rdfs + 'Resource';
+    ns.rdfs.literal = _rdfs + 'Literal';
+    ns.rdfs.seeAlso = _rdfs + 'seeAlso';
 
-    ns.gYear = _xsd + "gYear";
-    ns.gYearMonth = _xsd + "gYearMonth";
-    ns.date = _xsd + "date";
-    ns.dateTime = _xsd + "dateTime";
+    ns.gYear = _xsd + 'gYear';
+    ns.gYearMonth = _xsd + 'gYearMonth';
+    ns.date = _xsd + 'date';
+    ns.dateTime = _xsd + 'dateTime';
 
-    ns.string = _xsd + "string";
+    ns.target = {
+        conformsTo: _dct + 'conformsTo',
+        fragmentSelector: _oa + 'FragmentSelector',
+        specificResource: _oa + 'SpecificResource',
+        hasScope: _oa + 'hasScope',
+        hasSource: _oa + 'hasSource',
+        hasSelector: _oa + 'hasSelector'
+            /* ns.rdf.type */
+            /* ns.rdf.value */
+            /* ns.rdfs.label */
+    };
+
+    ns.string = _xsd + 'string';
 
     // Item properties
     ns.item = {
@@ -43,13 +56,13 @@ angular.module("Pundit2.Core")
         label: ns.rdfs.label,
 
         // Alternative labels
-        altLabel: _skos + "altLabel",
+        altLabel: _skos + 'altLabel',
 
         // Long description or content of a text fragment
-        description: _dce + "description",
+        description: _dce + 'description',
 
         // Image contained in the text fragment, or associated with the item
-        image: "http://xmlns.com/foaf/0.1/depiction",
+        image: 'http://xmlns.com/foaf/0.1/depiction',
 
         // TODO: the items have an rdfType field which contains the types, call
         //       this rdfTypes as well?
@@ -57,14 +70,14 @@ angular.module("Pundit2.Core")
         type: ns.rdf.type,
 
         // Web URL where the item has been created
-        pageContext: _pnd + "hasPageContext",
+        pageContext: _pnd + 'hasPageContext',
 
         // Closest named content or container for this item
-        isPartOf: _dct + "isPartOf",
+        isPartOf: _dct + 'isPartOf',
 
-        selector: "http://www.w3.org/ns/openannotation/core/hasSelector",
+        selector: 'http://www.w3.org/ns/openannotation/core/hasSelector',
 
-        parentItemXP: _pnd + "parentItemXP"
+        parentItemXP: _pnd + 'parentItemXP'
     };
 
     // Notebook properties
@@ -73,20 +86,20 @@ angular.module("Pundit2.Core")
         label: ns.rdfs.label,
 
         // Can be public or private
-        visibility: "http://open.vocab.org/terms/visibility",
+        visibility: 'http://open.vocab.org/terms/visibility',
 
-        created: _dct + "created",
+        created: _dct + 'created',
 
-        creator: _dct + "creator",
+        creator: _dct + 'creator',
 
         // Name of the creator and owner of the notebook
-        creatorName: _dce + "creator",
+        creatorName: _dce + 'creator',
 
         //Notebook's id
-        id: _pnd + "id",
+        id: _pnd + 'id',
 
         // Annotations this notebook includes
-        includes: _pnd + "includes",
+        includes: _pnd + 'includes',
 
         //Rdf type of the notebook, see rdf_type
         type: ns.rdf.type
@@ -94,76 +107,81 @@ angular.module("Pundit2.Core")
 
     // TODO: doc
     ns.annotation = {
-        creatorName: _dce + "creator",
-        created: _dct + "created",
-        creator: _dct + "creator",
-        modified: _dct + "modified",
-        pageContext: _pnd + "hasPageContext",
-        target: "http://www.openannotation.org/ns/hasTarget",
-        isIncludedIn: _pnd + "isIncludedIn",
-        hasTemplate: _pnd + "hasTemplate"
+        creatorName: _dce + 'creator',
+        created: _dct + 'created',
+        creator: _dct + 'creator',
+        modified: _dct + 'modified',
+        pageContext: _pnd + 'hasPageContext',
+        hasTarget: _oa + 'hasTarget',
+        hasBody: _oa + 'hasBody',
+        isIncludedIn: _pnd + 'isIncludedIn',
+        motivatedBy: _oa + 'motivatedBy',
+        hasTemplate: _pnd + 'hasTemplate',
+        annotatedBy: _oa + 'annotatedBy',
+        annotatedAt: _oa + 'annotatedAt'
+
     };
 
     // TODO: move to Consolidation.options ??
     // Consolidation use this to know what items are consolidable
     ns.fragments = {
-        imagePart: _pnd + "fragment-image",
-        text: _pnd + "fragment-text"
+        imagePart: _pnd + 'fragment-image',
+        text: _pnd + 'fragment-text'
     };
 
     // Notable item types: page, full image, named content
     // TODO: do we need more? Other components might want to add&read stuff here?
     ns.types = {
-        page: "http://schema.org/WebPage",
-        image: "http://xmlns.com/foaf/0.1/Image",
-        named: _pnd + "named-content"
+        page: 'http://schema.org/WebPage',
+        image: 'http://xmlns.com/foaf/0.1/Image',
+        named: _pnd + 'named-content'
     };
 
     // Our types labels, will be read by the TypesHelper
     ns.typesLabels = {};
-    ns.typesLabels[ns.fragments.imagePart] = "Image fragment";
-    ns.typesLabels[ns.fragments.text] = "Text fragment";
-    ns.typesLabels[ns.types.page] = "Web page";
-    ns.typesLabels[ns.types.image] = "Image";
-    ns.typesLabels[ns.types.named] = "Named content";
+    ns.typesLabels[ns.fragments.imagePart] = 'Image fragment';
+    ns.typesLabels[ns.fragments.text] = 'Text fragment';
+    ns.typesLabels[ns.types.page] = 'Web page';
+    ns.typesLabels[ns.types.image] = 'Image';
+    ns.typesLabels[ns.types.named] = 'Named content';
 
 
     ns.selectors = {
-        baseURI: "http://purl.org/pundit/selector/",
-        polygonType: "http://purl.org/pundit/ont/ao#selector-polygon",
-        rectangleType: "http://purl.org/pundit/ont/ao#selector-rectangle"
+        baseURI: 'http://purl.org/pundit/selector/',
+        polygonType: 'http://purl.org/pundit/ont/ao#selector-polygon',
+        rectangleType: 'http://purl.org/pundit/ont/ao#selector-rectangle'
     };
 
-    ns.fragmentBaseUri = "http://purl.org/pundit/fragment/";
+    ns.fragmentBaseUri = 'http://purl.org/pundit/fragment/';
 
     // Annotation server API
     ns.as = Config.annotationServerBaseURL;
 
-    ns.asUsers = ns.as + "api/users/";
-    ns.asUsersCurrent = ns.as + "api/users/current";
-    ns.asUsersLogout = ns.as + "api/users/logout";
+    ns.asUsers = ns.as + 'api/users/';
+    ns.asUsersCurrent = ns.as + 'api/users/current';
+    ns.asUsersLogout = ns.as + 'api/users/logout';
 
-    ns.asNB = ns.as + "api/notebooks";
-    ns.asNBEditMeta = ns.as + "api/notebooks/{{id}}";
-    ns.asNBOwned = ns.as + "api/notebooks/owned";
-    ns.asNBCurrent = ns.as + "api/notebooks/current";
-    ns.asNBPrivate = ns.as + "api/notebooks/private/{{id}}";
-    ns.asNBPublic = ns.as + "api/notebooks/public/{{id}}";
-    ns.asNBMeta = ns.as + "api/notebooks/{{id}}/metadata";
-    ns.asOpen = ns.as + "api/open/";
-    ns.asOpenNBMeta = ns.as + "api/open/notebooks/{{id}}/metadata";
-    ns.asOpenNBAnnMeta = ns.as + "api/open/notebooks/{{id}}/annotations/metadata";
+    ns.asNB = ns.as + 'api/notebooks';
+    ns.asNBEditMeta = ns.as + 'api/notebooks/{{id}}';
+    ns.asNBOwned = ns.as + 'api/notebooks/owned';
+    ns.asNBCurrent = ns.as + 'api/notebooks/current';
+    ns.asNBPrivate = ns.as + 'api/notebooks/private/{{id}}';
+    ns.asNBPublic = ns.as + 'api/notebooks/public/{{id}}';
+    ns.asNBMeta = ns.as + 'api/notebooks/{{id}}/metadata';
+    ns.asOpen = ns.as + 'api/open/';
+    ns.asOpenNBMeta = ns.as + 'api/open/notebooks/{{id}}/metadata';
+    ns.asOpenNBAnnMeta = ns.as + 'api/open/notebooks/{{id}}/annotations/metadata';
 
-    ns.asAnnMetaSearch = ns.as + "api/annotations/metadata/search";
-    ns.asOpenAnnMetaSearch = ns.as + "api/open/metadata/search";
-    ns.asAnnMult = ns.as + "api/annotations/multiple";
-    ns.asOpenAnnMult = ns.as + "api/open/annotations/multiple";
-    ns.asAnn = ns.as + "api/annotations/{{id}}";
-    ns.asOpenAnn = ns.as + "api/open/annotations/{{id}}";
-    ns.asAnnContent = ns.as + "api/annotations/{{id}}/content";
-    ns.asAnnItems = ns.as + "api/annotations/{{id}}/items";
+    ns.asAnnMetaSearch = ns.as + 'api/annotations/metadata/search';
+    ns.asOpenAnnMetaSearch = ns.as + 'api/open/metadata/search';
+    ns.asAnnMult = ns.as + 'api/annotations/multiple';
+    ns.asOpenAnnMult = ns.as + 'api/open/annotations/multiple';
+    ns.asAnn = ns.as + 'api/annotations/{{id}}';
+    ns.asOpenAnn = ns.as + 'api/open/annotations/{{id}}';
+    ns.asAnnContent = ns.as + 'api/annotations/{{id}}/content';
+    ns.asAnnItems = ns.as + 'api/annotations/{{id}}/items';
 
-    ns.asPref = ns.as + "api/services/preferences/{{key}}";
+    ns.asPref = ns.as + 'api/services/preferences/{{key}}';
 
 
     // Gets a key of the namespace, interpolating variables if needed
@@ -171,13 +189,13 @@ angular.module("Pundit2.Core")
 
         // If it's not a string, it's nothing we can return (this
         // blocks the user from asking options or other weird stuff)
-        if (typeof(ns[key]) !== "string") {
-            ns.err("get() cant find key " + key);
+        if (typeof(ns[key]) !== 'string') {
+            ns.err('get() cant find key ' + key);
             return;
         }
 
         // No context, use an empty one
-        if (typeof(context) === "undefined") {
+        if (typeof(context) === 'undefined') {
             context = {};
         }
 
@@ -192,7 +210,7 @@ angular.module("Pundit2.Core")
                 contextVariables++;
             }
             if (variables.length > contextVariables) {
-                ns.err("Context variables mismatch! Expecting " + variables.join(", ") + " instead got " + JSON.stringify(context));
+                ns.err('Context variables mismatch! Expecting ' + variables.join(', ') + ' instead got ' + JSON.stringify(context));
                 return;
             }
         }
@@ -200,6 +218,6 @@ angular.module("Pundit2.Core")
         return $interpolate(str)(context);
     };
 
-    ns.log("NameSpace up and running");
+    ns.log('NameSpace up and running');
     return ns;
 });

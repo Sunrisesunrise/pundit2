@@ -1061,6 +1061,7 @@ angular.module('Pundit2.Annomatic')
         var graph = buildGraph(uri, annomatic.options.property, objUri);
         var targets = buildTargets(uri, annomatic.options.property, objUri);
 
+        // TODO add support v2
         AnnotationsCommunication.saveAnnotation(graph, items, targets, undefined, true).then(function(annId) {
             annomatic.ann.savedById.push(annId);
             annomatic.ann.savedByNum.push(num);

@@ -1,10 +1,11 @@
 angular.module('Pundit2.Communication')
 
-.factory('Annotation', function(BaseComponent, NameSpace, Utils, Item, TypesHelper, Analytics,
-    AnnotationsExchange, Consolidation, MyPundit, ItemsExchange, PageItemsContainer,
+.factory('Annotation', function(BaseComponent, Config, NameSpace, Utils, Item, TypesHelper, Analytics,
+    AnnotationsExchange, Consolidation, MyPundit, ItemsExchange, PageItemsContainer, ModelHandler,
     $http, $q) {
 
     var annotationComponent = new BaseComponent("Annotation");
+    var annotationServerVersion = Config.annotationServerVersion;
 
     // Creates a new Annotation instance. If an id is passed in
     // then the annotation is loaded, otherwise a new annotation
@@ -17,10 +18,13 @@ angular.module('Pundit2.Communication')
         if (typeof(id) !== "undefined") {
             this.id = id;
             if (typeof loadedData !== 'undefined') {
-                readAnnotationData(this, loadedData);
+                if (annotationServerVersion === 'v1') {
+                    readAnnotationData(this, loadedData);
+                } else {
+                    readAnnotationMetadataAndGraph(this, loadedData);
+                }
                 this._q.resolve(this);
-            }
-            else {
+            } else {
                 this.load(useCache);
             }
         } else {
@@ -54,7 +58,16 @@ angular.module('Pundit2.Communication')
         }).success(function(data) {
 
             // update info
-            readAnnotationData(self, data);
+            if (annotationServerVersion === 'v1') {
+                readAnnotationData(self, data);
+            } else {
+                ModelHandler.makeTargetsAndItems(data, true);
+                var parsedData = {
+                    metadata: data.metadata,
+                    graph: data.graph[self.hasBody]
+                };
+                readAnnotationMetadataAndGraph(self, parsedData);
+            }
 
             promise.resolve();
             annotationComponent.log("Retrieved annotation " + self.id + " metadata");
@@ -90,7 +103,12 @@ angular.module('Pundit2.Communication')
 
         }).success(function(data) {
 
-            readAnnotationData(self, data);
+            if (annotationServerVersion === 'v1') {
+                readAnnotationData(self, data);
+            } else {
+                ModelHandler.makeTargetsAndItems(data, true);
+                readAnnotationMetadataAndGraph(self, data);
+            }
 
             // TODO: if ret, resolve() .. otherwise reject()?
             // TODO: the annotation might be corrupted (no items? no something..)
@@ -132,7 +150,6 @@ angular.module('Pundit2.Communication')
 
     // Returns true if the annotation has been parsed correctly and entirely
     var readAnnotationData = function(ann, data) {
-
         // Data _must_ contain .graph, .metadata and .items .. and be defined.
         if (typeof(data) === "undefined" ||
             typeof(data.graph) === "undefined" ||
@@ -269,6 +286,115 @@ angular.module('Pundit2.Communication')
         } // for uri in ann.items
 
     }; // readAnnotationData()
+
+    var readAnnotationMetadataAndGraph = function(ann, data) {
+        // Data _must_ contain .graph, .metadata and .items .. and be defined.
+        if (typeof(data) === "undefined" ||
+            typeof(data.graph) === "undefined" ||
+            typeof(data.metadata) === "undefined") {
+            annotationComponent.err('Malformed annotation id=' + ann.id + ': ', data);
+            return false;
+        }
+
+        ann.items = {};
+        ann.graph = angular.copy(data.graph);
+
+        // For some weird reason, the first level of the object is
+        // is the annotation's URI
+        for (var i in data.metadata) {
+            ann.uri = i;
+        }
+
+        // if there wasnt that first level ... not good news.
+        if (typeof(ann.uri) === "undefined") {
+            annotationComponent.err('Malformed annotation id=' + ann.id + ', wrong metadata: ', data);
+            return false;
+        }
+
+        var ns = NameSpace.annotation,
+            annData = data.metadata[ann.uri],
+            item;
+
+        var bodyUri = annData[NameSpace.annotation.hasBody][0].value;
+        if (typeof ann.graph[bodyUri] !== 'undefined') {
+            ann.graph = ann.graph[bodyUri];
+        }
+        // Those properties are a single value inside an array, read them
+        // one by one by using the correct URI taken from the NameSpace,
+        // doing some sanity checks
+        for (var property in ns) {
+            var propertyURI = ns[property];
+
+            if (propertyURI in annData) {
+                ann[property] = annData[propertyURI][0].value;
+            } else {
+                ann[property] = '';
+            }
+        }
+
+        // In v2 version creator and date are saved with a different uri
+        ann.created = ann.annotatedAt;
+        ann.creator = ann.annotatedBy;
+        ann.creatorName = annData[ns.annotatedBy][1].value;
+
+        // .isIncludedIn is an URI, get out the id too
+        if (ns.isIncludedIn in annData) {
+            ann.isIncludedInUri = annData[ns.isIncludedIn][0].value;
+            var isIncludedIn = ann.isIncludedInUri.match(/[a-z0-9]*$/);
+            if (isIncludedIn !== null) {
+                ann.isIncludedIn = isIncludedIn[0];
+            }
+        }
+
+        // .target is always an array
+        if (ns.target in annData) {
+            ann.target = [];
+
+            for (var t = 0; t < annData[ns.target].length; t++) {
+                ann.target.push(annData[ns.target][t].value);
+            }
+        }
+
+        // Extract all of the entities and items involved in this annotation:
+        // subjects and objects which are NOT literals. Extract all of the predicates
+        // involved too
+        ann.entities = [];
+        ann.predicates = [];
+        for (var s in ann.graph) {
+
+            if (ann.entities.indexOf(s) === -1) {
+                ann.entities.push(s);
+                item = ItemsExchange.getItemByUri(s);
+                if (typeof(item) !== 'undefined') {
+                    ann.items[s] = item;
+                }
+            }
+
+            for (var p in ann.graph[s]) {
+
+                if (ann.entities.indexOf(p) === -1) {
+                    item = ItemsExchange.getItemByUri(p);
+                    if (typeof(item) !== 'undefined') {
+                        ann.items[p] = item;
+                    }
+                    if (ann.predicates.indexOf(p) === -1) {
+                        ann.predicates.push(p);
+                    }
+                }
+
+                for (var o in ann.graph[s][p]) {
+                    var object = ann.graph[s][p][o];
+                    if (object.type === "uri" && ann.entities.indexOf(object.value) === -1) {
+                        ann.entities.push(object.value);
+                        item = ItemsExchange.getItemByUri(object.value);
+                        if (typeof(item) !== 'undefined') {
+                            ann.items[object.value] = item;
+                        }
+                    }
+                } // for o (objects)
+            } // for p (predicates)
+        } // for s (subjects)
+    };
 
     // Returns a promise associated with an annotation. The user will
     // get the annotation using .then(success, error). The annotation

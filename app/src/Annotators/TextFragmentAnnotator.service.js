@@ -114,11 +114,11 @@ angular.module('Pundit2.Annotators')
         } else if (item.type.indexOf(tfa.type) === -1) {
             tfa.log("Item not valid: not a " + tfa.type);
             return false;
-        } else if (!XpointersHelper.isValidXpointerURI(item.uri)) {
-            tfa.log("Item not valid: not a valid xpointer uri: " + item.uri);
+        } else if (!XpointersHelper.isValidXpointerURI(item.getXPointer())) {
+            tfa.log("Item not valid: not a valid xpointer uri: " + item.getXPointer());
             return false;
-        } else if (!XpointersHelper.isValidXpointer(item.uri)) {
-            tfa.log("Item not valid: not consolidable on this page: " + item.uri);
+        } else if (!XpointersHelper.isValidXpointer(item.getXPointer())) {
+            tfa.log("Item not valid: not consolidable on this page: " + item.getXPointer());
             return false;
         }
 
@@ -155,9 +155,13 @@ angular.module('Pundit2.Annotators')
         fragmentIds = {};
         fragmentById = {};
 
+        var tempFragmentIds = {};
+
         for (var uri in items) {
-            xpointers.push(uri);
+            var itemXPointer = items[uri].getXPointer();
+            xpointers.push(itemXPointer);
             fragmentIds[uri] = ["fr-" + i];
+            tempFragmentIds[itemXPointer] = ["fr-" + i];
             fragmentById["fr-" + i] = {
                 uri: uri,
                 bits: [],
@@ -170,7 +174,7 @@ angular.module('Pundit2.Annotators')
             sorted = XpointersHelper.splitAndSortXPaths(xpaths),
             // After splitting and sorting each bit has a list of fragment ids it belongs to.
             // Instead of using classes, these ids will be saved in a node attribute.
-            xpathsFragmentIds = XpointersHelper.getClassesForXpaths(xpointers, sorted, xpaths, fragmentIds);
+            xpathsFragmentIds = XpointersHelper.getClassesForXpaths(xpointers, sorted, xpaths, tempFragmentIds);
 
         XpointersHelper.updateDOM(sorted, XpointersHelper.options.wrapNodeClass, xpathsFragmentIds);
 
