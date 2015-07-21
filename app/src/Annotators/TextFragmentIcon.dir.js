@@ -23,7 +23,7 @@ angular.module('Pundit2.Annotators')
 
                 // To see what kind of item is it, check which container it belongs to
                 var piContainer = Config.modules.PageItemsContainer.container,
-                    miContainer = Config.modules.MyItems.container;
+                    miContainer = Config.modules.MyItemsContainer.container;
 
                 if (ItemsExchange.isItemInContainer(scope.item, miContainer) &&
                     !ItemsExchange.isItemInContainer(scope.item, piContainer)) {

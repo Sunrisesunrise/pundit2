@@ -69,9 +69,9 @@ angular.module('Pundit2.Toolbar')
         MyPundit.closeLoginPopover();
     };
 
-    $scope.login = function(trackingLoginName, event) {
+    $scope.login = function(trackingLoginName) {
         ResourcePanel.hide();
-        MyPundit.popoverLogin(event, 'login');
+        MyPundit.login();
         Analytics.track('buttons', 'click', trackingLoginName);
         return;
 
@@ -265,10 +265,7 @@ angular.module('Pundit2.Toolbar')
 
     $scope.isAnnomaticRunning = false;
 
-    $scope.canUsePageAsSubject = function() {
-        var item = PageHandler.createItemFromPage();
-        return TripleComposer.canAddItemAsSubject(item);
-    };
+    $scope.canUsePageAsSubject = true;
 
     // Watch Annomatic status
     $scope.$watch(function() {
@@ -499,6 +496,16 @@ angular.module('Pundit2.Toolbar')
         $scope.userData = MyPundit.getUserData();
     });
 
+    // Handle changes in triple composer.
+    EventDispatcher.addListeners(['TripleComposer.statementChanged', 'TripleComposer.reset'], function (e) {
+        if (e.name === 'TripleComposer.reset') {
+            $scope.canUsePageAsSubject = true;
+            return;
+        }
+        var item = PageHandler.getPageItem();
+        $scope.canUsePageAsSubject = TripleComposer.canAddItemAsSubject(item);
+    });
+
     // return true if no errors are occured --> status button ok must be visible
     $scope.showStatusButtonOk = function() {
         return !Toolbar.getErrorShown() && !Toolbar.isLoading();
@@ -529,7 +536,10 @@ angular.module('Pundit2.Toolbar')
     };
 
     $scope.annotateWebPage = function() {
-        var item = PageHandler.createItemFromPage();
+        if (!$scope.canUsePageAsSubject) {
+            return;
+        }
+        var item = PageHandler.getPageItem();
         TripleComposer.addToSubject(item);
     };
 
@@ -570,6 +580,7 @@ angular.module('Pundit2.Toolbar')
         if (!$scope.isAnnomaticRunning) {
             ResourcePanel.hide();
             Analytics.track('buttons', 'click', 'toolbar--dashboard--' + (Dashboard.isDashboardVisible() ? 'closed' : 'open'));
+            TripleComposer.closeAfterOpOff();
             Dashboard.toggle();
         }
     };

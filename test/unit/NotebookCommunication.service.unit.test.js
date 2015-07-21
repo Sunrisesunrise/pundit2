@@ -39,7 +39,6 @@ describe('Notebook Communication service', function() {
 
         var name = 'myNotebook';
 
-
         var header = {"Accept":"application/json","Content-Type":"application/json;charset=UTF-8;"};
         var data = {"NotebookName": 'myNotebook'};
         var testId = 'myNbID';
@@ -48,35 +47,43 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
 
         // create a notebook
-        var p = NotebookCommunication.createNotebook(name);
+        var p;
+        MyPundit.oldLogin().then(function(){
+            p = NotebookCommunication.createNotebook(name).then(function(){
 
-        // catch http request for notebook creation
-        $httpBackend
-            .expectPOST(NameSpace.get('asNB'), data, header)
-            .respond({"NotebookID": testId});
+            }, function(msg){
+                // promise should be resolved with error message
+                expect(msg).toBe('some sort of error?');
 
-        // catch http request for get notebook metadata, called by Notebook.factory when a notebook is created
-        $httpBackend
-            .whenGET(NameSpace.get('asNBMeta', {id: testId}))
-            .respond(testNotebooks.myNotebook);
+            });
 
-        // when notebook is created correctly, the promise will be resolved
-        p.then(function(nbID) {
-            expect(nbID).toBe(testId);
-            var notebook = NotebookExchange.getNotebookById(nbID);
-            // new notebook should have the given label...
-            expect(notebook.label).toBe(name);
-            expect(notebook.id).toBe(testId);
-            // ...should be set as public...
-            expect(notebook.visibility).toBe("public");
-            // ... and should not be the current notebook
-            var currentNotebook = NotebookExchange.getCurrentNotebooks();
-            expect(currentNotebook).toBeUndefined();
+            // catch http request for notebook creation
+            $httpBackend
+                .expectPOST(NameSpace.get('asNB'), data, header)
+                .respond({"NotebookID": testId});
+
+            // catch http request for get notebook metadata, called by Notebook.factory when a notebook is created
+            $httpBackend
+                .whenGET(NameSpace.get('asNBMeta', {id: testId}))
+                .respond(testNotebooks.myNotebook);
+
+            // when notebook is created correctly, the promise will be resolved
+            p.then(function(nbID) {
+                expect(nbID).toBe(testId);
+                var notebook = NotebookExchange.getNotebookById(nbID);
+                // new notebook should have the given label...
+                expect(notebook.label).toBe(name);
+                expect(notebook.id).toBe(testId);
+                // ...should be set as public...
+                expect(notebook.visibility).toBe("public");
+                // ... and should not be the current notebook
+                var currentNotebook = NotebookExchange.getCurrentNotebooks();
+                expect(currentNotebook).toBeUndefined();
+            });
+
+            $httpBackend.flush();
+            $rootScope.$digest();
         });
-
-        $httpBackend.flush();
-        $rootScope.$digest();
-
     });
 
     it("should get my notebook", function() {
@@ -119,7 +126,7 @@ describe('Notebook Communication service', function() {
         // var promiseValue;
 
         // get login
-        var promise = MyPundit.login();
+        var promise = MyPundit.oldLogin();
 
         promise.then(function(value){
             expect(value).toBe(true);
@@ -159,7 +166,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenGET(NameSpace.get('asNBCurrent')).respond(currentNotebook);
         $httpBackend.whenGET(NameSpace.get('asOpenNBMeta')).respond({});
 
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             var p = NotebookCommunication.getCurrent();
 
             p.then(function(currID){
@@ -185,7 +192,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenPUT(NameSpace.get('asNBPrivate'), {id: testId}).respond();
         $httpBackend.whenPUT(NameSpace.get('asNBPublic'), {id: testId}).respond();
 
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // create notebook and add to notebook exchange
             new Notebook(testId, true).then(function(){
 
@@ -235,7 +242,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenPUT(NameSpace.get('asNBCurrent'+"/"+testId)).respond();
         $httpBackend.whenGET(NameSpace.get('asNBCurrent')).respond(currentNotebook);
 
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             new Notebook(testId, true).then(function(){
 
                 // get notebook from notebook exchange...
@@ -277,7 +284,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenPUT(NameSpace.get('asNBEditMeta',{id: testId}), data).respond();
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // create a new notebook
             new Notebook(testId, true).then(function(){
 
@@ -314,7 +321,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenDELETE(NameSpace.get('asNB'+"/"+testId)).respond();
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // create a new notebook
             new Notebook(testId, true).then(function(){
 
@@ -397,7 +404,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenDELETE(NameSpace.get('asNB'+"/"+testId)).respond(500, errorMessage);
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // delete the notebook
             NotebookCommunication.deleteNotebook(testId).then(function(){
 
@@ -424,7 +431,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenPUT(NameSpace.get('asNBEditMeta',{id: testId}), data).respond(500, errorMessage);
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // delete the notebook
             NotebookCommunication.setName(testId, data.NotebookName).then(function(){
 
@@ -449,7 +456,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenPUT(NameSpace.get('asNBPrivate'), {id: testId}).respond(500, errorMessage);
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // delete the notebook
             NotebookCommunication.setPrivate(testId).then(function(){
 
@@ -474,7 +481,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenPUT(NameSpace.get('asNBPublic'), {id: testId}).respond(500, errorMessage);
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // delete the notebook
             NotebookCommunication.setPublic(testId).then(function(){
 
@@ -499,7 +506,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenGET(NameSpace.get('asNBCurrent')).respond(500, errorMessage);
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // delete the notebook
             NotebookCommunication.getCurrent().then(function(){
 
@@ -525,7 +532,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenPUT(NameSpace.get('asNBCurrent'+"/"+testId)).respond(500, errorMessage);
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // delete the notebook
             NotebookCommunication.setCurrent(testId).then(function(){
 
@@ -557,7 +564,7 @@ describe('Notebook Communication service', function() {
             .respond(500, errorMessage);
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // delete the notebook
             NotebookCommunication.createNotebook(name).then(function(){
 
@@ -587,7 +594,7 @@ describe('Notebook Communication service', function() {
             .respond({});
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // delete the notebook
             NotebookCommunication.createNotebook(name).then(function(){
 
@@ -611,7 +618,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenGET(NameSpace.get('asNBOwned')).respond(500);
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // delete the notebook
             NotebookCommunication.getMyNotebooks().then(function(){
 
@@ -635,7 +642,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenGET(NameSpace.get('asNBOwned')).respond('');
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // delete the notebook
             NotebookCommunication.getMyNotebooks().then(function(){
 
@@ -659,7 +666,7 @@ describe('Notebook Communication service', function() {
         $httpBackend.whenGET(NameSpace.get('asNBOwned')).respond({});
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // delete the notebook
             NotebookCommunication.getMyNotebooks().then(function(){
 
@@ -688,7 +695,7 @@ describe('Notebook Communication service', function() {
             .respond(500);
 
         // get login
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             // delete the notebook
             NotebookCommunication.getMyNotebooks().then(function(){
 

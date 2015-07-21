@@ -132,31 +132,35 @@ angular.module('Pundit2.ResourcePanel')
         return res;
     };
 
-    $scope.showUseFullPageButton = function() {
+    // Displays usePageButton.
+    $scope.showUseFullPageButton = true;
+    var initUseFullPageButton = function() {
         var res = true;
 
-        var item = PageHandler.createItemFromPage();
+        var item = PageHandler.getPageItem();
         switch ($scope.type) {
             case 'sub':
                 res = TripleComposer.canAddItemAsSubject(item);
                 break;
             case 'pr':
-                return false;
+                res = false;
+                break;
             case 'obj':
                 res = TripleComposer.canAddItemAsObject(item);
                 break;
         }
 
         if (typeof ResourcePanel.overrideFooterExtraButtons !== 'undefined' &&
-            typeof ResourcePanel.overrideFooterExtraButtons.showUseFullPageButton !== 'undefined') {
+        typeof ResourcePanel.overrideFooterExtraButtons.showUseFullPageButton !== 'undefined') {
             res &= ResourcePanel.overrideFooterExtraButtons.showUseFullPageButton;
         }
 
-        return res;
+        $scope.showUseFullPageButton = res;
     };
+    initUseFullPageButton();
 
     $scope.useFullPage = function() {
-        var item = PageHandler.createItemFromPage();
+        var item = PageHandler.getPageItem();
         $scope.select(item);
         $scope.save(item);
     };

@@ -39,9 +39,9 @@ angular.module('Pundit2.Core')
      * Icon used for image item.
      *
      * Default value:
-     * <pre> iconImage: 'pnd-icon pnd-icon-camera' </pre>
+     * <pre> iconImage: 'pnd-icon-picture' </pre>
      */
-    iconImage: 'pnd-icon pnd-icon-camera',
+    iconImage: 'pnd-icon pnd-icon-picture',
 
     /**
      * @module punditConfig
@@ -54,9 +54,9 @@ angular.module('Pundit2.Core')
      * Icon used for text item.
      *
      * Default value:
-     * <pre> iconText: 'pnd-icon pnd-icon-align-center' </pre>
+     * <pre> iconText: 'pnd-icon pnd-icon-txt-fragment' </pre>
      */
-    iconText: 'pnd-icon pnd-icon-align-center',
+    iconText: 'pnd-icon pnd-icon-txt-fragment',
 
     /**
      * @module punditConfig
@@ -69,9 +69,9 @@ angular.module('Pundit2.Core')
      * Icon used for web page item.
      *
      * Default value:
-     * <pre> iconWebPage: 'pnd-icon-file-text' </pre>
+     * <pre> iconWebPage: 'pnd-icon-file' </pre>
      */
-    iconWebPage: 'pnd-icon pnd-icon-file-text',
+    iconWebPage: 'pnd-icon pnd-icon-file',
 
     /**
      * @module punditConfig

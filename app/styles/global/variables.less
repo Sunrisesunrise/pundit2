@@ -8,16 +8,48 @@
 
 
 // ------------------------------------ //
+// #FONT
+// ------------------------------------ //
+// @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+// @import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic);
+@font: "Lucida Grande", Helvetica, Verdana, Arial, sans-serif; // "'Open Sans', sans-serif; // 'Lato', sans-serif;
+
+// ------------------------------------ //
 // #COLORS
 // ------------------------------------ //
+// Text colors
+@color-text: #555;
+@color-text-link: #48bb58; // #39b54a;
+@color-text-link-hover: darken(@color-text-link, 15%);
 
+// Borders
+@color-border-normal: #cacaca;
+@color-border-light: #DDD;
+
+// Backgrounds
+@color-background-base: #FFF;
+@color-background-light: lighten(#000, 96%);
+@color-background-medium: lighten(#000, 90%);
+
+// Buttons
+@color-button-bg-cta: @color-text-link;
+@color-button-bg: @color-background-medium;
+@color-button-text-light: #fff;
+@color-button-text-dark: @color-text;
+
+// Shades of gray
 @gray-soft-dark: lighten(#000, 26%);
 @gray-extra-light: lighten(#000, 80%);
 @gray-extra-lighter: lighten(#000, 90%);
-@gray-extra-lightest: lighten(#000, 98%);
+@gray-extra-lightest: lighten(#000, 98%); // It's obvious some crazy guys are working on this project
 
-@color-toolbar-disabled: lighten(#000, 45%);
+// Annotations in the sidebar
+@color-annotation-header: #8F999E; // @subject-color; // #aaaaaa; // @subject-color;
+@color-annotation-broken-header: #FF643F; // @predicate-color;
+@color-annotation-header-text: #FFF;
+@color-annotation-sidebar-bg: #464b4c;
 
+// Semantic colors
 @subject-color: #54b4e6;
 @subject-color-text: lighten(@subject-color, 27);
 @predicate-color: #febe53;
@@ -25,35 +57,31 @@
 @object-color: #0084c8;
 @object-color-text: desaturate(lighten(@object-color, 27), 30);
 
-// @text-fragment-color: rgba(255,255,10,0.3); // #f8cd48;
-@text-fragment-color: #f8cd48; // #f8cd48;
-
-@color-type-background: @gray-lighter;
+// Toolbar
+@color-toolbar-bg: #333333;
+@color-toolbar-text: #eee;
+@color-toolbar-button: #3c3c3c;
 
 // Login popover colors
 @color-login-popover-background: #FFF;
 @color-login-popover-border: #979797;
 
+// Various
+@color-toolbar-disabled: lighten(#000, 45%);
+@color-type-background: @gray-lighter;
+@color-overlay: rgba(0,0,0,.6);
 
 
-/*
-@btn-subject-color:              #fff;
-@btn-subject-bg:                 @brand-subject;
-@btn-subject-border:             darken(@btn-subject-bg, 5%);
+// ------------------------------------ //
+// #INLINE-CONSOLIDATION
+// ------------------------------------ //
+@text-fragment-color: fade(#f8d420, 45%); // Original from Simone Fonda #f8cd48; // rgba(255,255,0,.32); // #f8cd48;
+@text-fragment-color-hover: fade(#f8d420, 100%); // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
 
-@btn-predicate-color:            #fff;
-@btn-predicate-bg:               @brand-predicate;
-@btn-predicate-border:           darken(@btn-predicate-bg, 5%);
-
-@btn-object-color:               #fff;
-@btn-object-bg:                  @brand-object;
-@btn-object-border:              darken(@btn-object-bg, 5%);
-*/
 
 // ------------------------------------ //
 // #LOGIN-POPOVER
 // ------------------------------------ //
-
 @login-popover-width: 320px;
 @login-popover-height: 560px;
 
@@ -61,7 +89,6 @@
 // ------------------------------------ //
 // #TOOLBAR
 // ------------------------------------ //
-
 @toolbar-height: 30px;
 @toolbar-border-bottom: 1px;
 
@@ -69,25 +96,49 @@
 // ------------------------------------ //
 // #DASHBOARD
 // ------------------------------------ //
-
 @annotation-sidebar-coll-width: 10px;
 @annotation-sidebar-exp-width: 300px;
 @annotation-sidebar-filter-width: 300px;
 
 
 // ------------------------------------ //
-// #ITEM-GEOMETRY
+// #ITEM
 // ------------------------------------ //
 @item-height: 28px;
 
 
 // ------------------------------------ //
-// #TRIPLE-COMPOSER-GEOMETRY
+// #TRIPLE-COMPOSER
 // ------------------------------------ //
-
 @triplecomposer-height: 25px;
 @triplecomposer-padding-inner: 5px;
 @triplecomposer-spacing: 6px;
+
+
+// ------------------------------------ //
+// #ANNOTATIONS-SIDEBAR
+// ------------------------------------ //
+// General variables for the sidebar
+@annotation-sidebar-coll-width: 10px;
+@annotation-sidebar-exp-width: 300px;
+@annotation-sidebar-width: 300px;
+
+// Styles defining single annotations as shown in the sidebar
+@annotation-header-height: 24px;
+@annotation-header-text-shadow: 0 1px 0 rgba(0, 0, 0, .15);
+
+
+// ------------------------------------ //
+// #RESOURCE-PANEL
+// ------------------------------------ //
+@resource-panel-width: 400px;
+@resource-panel-height: 250px;
+
+
+// ------------------------------------ //
+// #CALEDAR-WIDGET
+// ------------------------------------ //
+@calendar-popover-width: 280px;
 
 
 // ------------------------------------ //
@@ -115,14 +166,6 @@
 
 
 // ------------------------------------ //
-// #RESOURCE-PANEL
-// ------------------------------------ //
-@resource-panel-width: 400px;
-@resource-panel-height: 250px;
-
-
-// ------------------------------------ //
 // #ANIMATIONS-VARIABLES
 // ------------------------------------ //
-
 @animation-fast-duration: .15s;

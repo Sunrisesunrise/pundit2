@@ -71,16 +71,32 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> suggestionIconClass: 'pnd-icon-pencil' </pre>
      */
-    suggestionIconClass: "pnd-icon-pencil"
+    suggestionIconClass: "pnd-icon-pencil", 
 
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#TextFragmentAnnotator.addIcon
+     *
+     * @description
+     * `boolean`
+     *
+     * Add or not the icon to the text fragments
+     *
+     * Default value:
+     * <pre> addIcon: 'true' </pre>
+     */
+     addIcon: true
 })
 
 .service('TextFragmentAnnotator', function(TEXTFRAGMENTANNOTATORDEFAULTS, NameSpace, BaseComponent, Consolidation,
-    XpointersHelper, ItemsExchange, Config, TripleComposer, Toolbar, Annomatic,
-    $compile, $rootScope) {
+    XpointersHelper, ItemsExchange, Config, $compile, $rootScope) {
 
     // Create the component and declare what we deal with: text
     var tfa = new BaseComponent('TextFragmentAnnotator', TEXTFRAGMENTANNOTATORDEFAULTS);
+
+    var annomaticIsRunning = false;
+
     tfa.label = "text";
     tfa.type = NameSpace.fragments[tfa.label];
 
@@ -177,7 +193,7 @@ angular.module('Pundit2.Annotators')
                 // TODO: put this name in .options ?
                 directive = "text-fragment-icon";
 
-            if (Annomatic.isRunning()) {
+            if (annomaticIsRunning) {
                 directive = "suggestion-fragment-icon";
             }
 
@@ -189,8 +205,9 @@ angular.module('Pundit2.Annotators')
     // TODO: Move this to XpointersHelper .something() ?
     var activateFragments = function() {
 
-        // TODO: do we want this to be configurable? Or icons are here to stay?
-        placeIcons();
+        if (tfa.options.addIcon) {
+            placeIcons();
+        }
 
         var consolidated = angular.element('.pnd-cons');
         $compile(consolidated)($rootScope);
@@ -378,6 +395,13 @@ angular.module('Pundit2.Annotators')
             tfa.ghostRemoveByUri(uri);
         }
     };
+
+    $rootScope.$on('annomatic-run', function () {
+      annomaticIsRunning = true;
+    });
+    $rootScope.$on('annomatic-stop', function () {
+      annomaticIsRunning = false;
+    });
 
     tfa.log("Component up and running");
     return tfa;

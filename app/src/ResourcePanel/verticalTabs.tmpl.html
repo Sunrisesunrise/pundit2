@@ -117,38 +117,33 @@
             class="pnd-vertical-tab-footer-content" 
             ng-if="showVerticalTabFooterContent">
             <button 
-                class="pnd-resource-panel-use-button btn btn-xs btn-success pnd-btn-full" 
+                class="pnd-resource-panel-use-button pnd-btn pnd-btn-calltoaction pnd-use"
                 ng-class="{'disabled': !isUseActive}" 
                 ng-click="save(itemSelected)">
                 Use
-            </button>
-            <button 
-                class="pnd-resource-panel-copy-button btn btn-xs btn-info pnd-btn-full" 
+            </button><button
+                class="pnd-resource-panel-copy-button pnd-btn"
                 ng-class="{'disabled': !isUseActive}" 
                 ng-show="showUseAndCopyButton()" 
                 ng-click="useAndCopy(itemSelected)">
                 Copy and Use
-            </button>
-            <button 
-                class="pnd-resource-panel-new-button btn btn-xs btn-info pnd-btn-full" 
+            </button><button
+                class="pnd-resource-panel-new-button pnd-btn"
                 ng-class="{'disabled': !isUseActive}" 
                 ng-show="showCopyInEditorButton()" 
                 ng-click="copyInEditor()">
                 Copy in editor
-            </button>
-            <button 
-                class="pnd-resource-panel-new-button btn btn-xs btn-info pnd-btn-full" ng-show="showNewButton()" 
+            </button><button
+                class="pnd-resource-panel-new-button pnd-btn" ng-show="showNewButton()"
                 ng-click="createNew()">
                 Create new
-            </button>
-            <button
-                class="pnd-resource-panel-use-button btn btn-xs btn-info pnd-btn-full"
-                ng-show="showUseFullPageButton()"
+            </button><button
+                class="pnd-resource-panel-use-button pnd-btn"
+                ng-show="showUseFullPageButton"
                 ng-click="useFullPage()">
                 Use web page
-            </button>
-            <button 
-                class="pnd-resource-panel-use-button btn btn-xs btn-info pnd-btn-full" 
+            </button><button
+                class="pnd-resource-panel-use-button pnd-btn"
                 ng-click="cancel()">
                 Cancel
             </button>

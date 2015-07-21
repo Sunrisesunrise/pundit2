@@ -32,18 +32,6 @@ angular.module('Pundit2.ResourcePanel')
     /**
      * @module punditConfig
      * @ngdoc property
-     * @name modules#ResourcePanel.initialCalendarDate
-     *
-     * @description
-     * `number`
-     *
-     * Initial date showing in calendar popover.
-     */
-    initialCalendarDate: '',
-
-    /**
-     * @module punditConfig
-     * @ngdoc property
      * @name modules#ResourcePanel.inputIconSearch
      *
      * @description
@@ -67,9 +55,9 @@ angular.module('Pundit2.ResourcePanel')
      * Icon shown in the search input when it has some content
      *
      * Default value:
-     * <pre> inputIconClear: 'pnd-icon-times' </pre>
+     * <pre> inputIconClear: 'pnd-icon-close' </pre>
      */
-    inputIconClear: 'pnd-icon-times',
+    inputIconClear: 'pnd-icon-close',
 
     /**
      * @module punditConfig
@@ -192,16 +180,13 @@ angular.module('Pundit2.ResourcePanel')
 
             state.popoverOptions.template = 'src/ResourcePanel/popoverCalendar.tmpl.html';
 
-            if (typeof(content.date) === 'undefined' || content.date === '') {
-
-                if (typeof(resourcePanel.options.initialCalendarDate) === 'undefined' || resourcePanel.options.initialCalendarDate === '') {
-                    state.popoverOptions.scope.selectedDate = new Date().toString();
-                } else {
-                    state.popoverOptions.scope.selectedDate = resourcePanel.options.initialCalendarDate;
-                }
-
+            if (content !== '' && typeof(content.value) !== 'undefined' && content.value !== '') {
+                state.popoverOptions.scope.modelDate = {};
+                state.popoverOptions.scope.modelDate.valid = true;
+                state.popoverOptions.scope.modelDate.value = content.value;
+                state.popoverOptions.scope.modelDate.datatype = content.datatype;
             } else {
-                state.popoverOptions.scope.selectedDate = content.date;
+                state.popoverOptions.scope.modelDate = {};
             }
 
             state.popoverOptions.scope.container = "[data-ng-app='Pundit2'] .popover-datepicker .popover-content .form-group";
@@ -214,9 +199,16 @@ angular.module('Pundit2.ResourcePanel')
 
             state.popoverOptions.scope.save = function() {
 
-                state.resourcePromise.resolve(new Date(this.selectedDate));
-                Preview.hideDashboardPreview();
-                hide();
+                if (typeof(this.modelDate) !== 'undefined' && this.modelDate.valid) {
+                    this.modelDate.type = 'date';
+                    state.resourcePromise.resolve(this.modelDate);
+                    Preview.hideDashboardPreview();
+                    hide();
+                }
+
+                // state.resourcePromise.resolve(new Date(this.selectedDate));
+                // Preview.hideDashboardPreview();
+                // hide();
 
                 var eventLabel = 'resourcePanel--' + type;
                 eventLabel += '--save';
@@ -682,7 +674,7 @@ angular.module('Pundit2.ResourcePanel')
         setLabelToSearch(label);
     };
 
-    resourcePanel.addItems = function(label, selectors, triple, caller, offset, limit){
+    resourcePanel.addItems = function(label, selectors, triple, caller, offset, limit) {
         searchOnVocab(label, selectors, triple, caller, offset, limit);
     };
 
@@ -775,19 +767,31 @@ angular.module('Pundit2.ResourcePanel')
      *
      * Popover has two buttons: `Save` that resolve a promise and `Cancel` that close the popover.
      *
-     * @param {date} date Date selected when calendar is shown. If no date is specified, will be show the date set as default in configuration (See {@link #!/api/punditConfig/object/modules#ResourcePanel.initialCalendarDate here} for details).
+     * @param {date} date Date selected when calendar is shown. 
      * @param {DOMElement} target DOM Element where to append the popover
      * @return {Promise} when Save button is clicked, promise will be resolved with the selected date
      *
      */
     resourcePanel.showPopoverCalendar = function(date, target) {
         var content = {};
-        content.date = date;
+
+        if (angular.isObject(date) === false) {
+            content.value = '';
+            content.datatype = NameSpace.dateTime;
+        } else {
+            content.value = date.value;
+            content.datatype = date.datatype;
+        }
+
         // if no popover is shown, just show it
         if (state.popover === null) {
-            state.popover = initPopover(content, target, "", 'calendar');
+            state.popover = initPopover(content, target, '', 'calendar');
             state.popover.$promise.then(function() {
                 show();
+                if (content.value === '') {
+                    setFocus('input.pnd-resource-calendar-input-year');
+                }
+
                 //$datepicker.show;
                 // angular.element('input.pnd-input-calendar')[0].focus();
             });
@@ -796,9 +800,13 @@ angular.module('Pundit2.ResourcePanel')
         // if click a different popover, hide the shown popover and show the clicked one
         else if (state.popover !== null && state.popover.clickTarget !== target) {
             hide();
-            state.popover = initPopover("", target, "", 'calendar');
+            state.popover = initPopover('', target, '', 'calendar');
             state.popover.$promise.then(function() {
                 show();
+                if (content.value === '') {
+                    setFocus('input.pnd-resource-calendar-input-year');
+                }
+
                 //$datepicker.show;
                 // angular.element('input.pnd-input-calendar')[0].focus();
             });

@@ -17,7 +17,7 @@
 }
 
 .kee-modal-body {
-    padding: 0px 0px 0px 0px;
+    padding: 0;
     border-top: 4px solid @gray-light;
 }
 
@@ -103,7 +103,7 @@
 
     .left-inner-icon {
         position: relative;
-        padding: 0px;
+        padding: 0;
 
         input {
             padding-right: 20px;
@@ -113,8 +113,8 @@
         .pnd-icon {
             position: absolute;
             color: @gray-light;
-            right: 0px;
-            top: 0px;
+            right: 0;
+            top: 0;
             padding: 7px;
             -moz-box-sizing: border-box;
             -webkit-box-sizing: border-box;
@@ -211,7 +211,7 @@
 }
 
 .kee-server-messages {
-    padding: 5px 0px 0px 10px;
+    padding: 5px 0 0 10px;
 }
 
 .kee-server-searching {
@@ -334,6 +334,97 @@
 }
 
 
+/* ------------------------------------ *\
+   #AUTOCOMPLETE
+\* ------------------------------------ */
+
+/* Normal forms input fields that work with Korbo.
+   An autocomplete appears allowing to select Korbo entities.
+ */
+
+.left-inner-icon {
+    padding: 0;
+    position: relative;
+
+    input {
+        width: 100% !important;
+        padding-right: 20px;
+        font-weight: normal;
+    }
+
+    .pnd-icon {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 7px;
+
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        color: @gray-light;
+    }
+
+    /*
+    TODO: Not quite sure what this is doing... commented for now...
+    .pnd-icon.pnd-icon-times:hover {
+        color: @brand-success;
+        cursor: pointer;
+    }
+    */
+
+    /* Autocomplete list */
+    /* TODO This list should be completely replaced by the Resource Panel itself */
+    .dropdown-menu li,
+    .dropdown-menu li a {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .kee-autocomplete-list {
+
+        &.list-group {
+            width: 100%;
+
+            .list-group-item {
+                width: 100%;
+
+                .pnd-item {
+
+                    .pnd-item-buttons {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        /* Autocomplete footer */
+        .kee-footer-autocomplete {
+            padding: 8px 10px;
+            margin: 0;
+            clear: both;
+
+            .btn {
+                .pnd-icon {
+                    font-size: 12px;
+                    position: relative;
+                    padding: 0;
+                    color: #fff;
+                }
+            }
+
+            .kee-elem-to-search {
+                font-weight: bold;
+                margin: 0 0 5px 0;
+                display: block;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+}
+
 
 
 
@@ -368,14 +459,14 @@
 /*// TABS ----- //
 
 .nav-tabs {
-    margin: 0px 0px 1px 0px !important;
+    margin: 0 0 1px 0 !important;
 }
 
 // VERTICAL TABS ----- //
 
 .tabs-left > .nav-tabs {
-    margin-bottom: 0px;
-    margin-right: 0px;
+    margin-bottom: 0;
+    margin-right: 0;
 
     & > li {
 
@@ -393,14 +484,14 @@
 // BADGE ----- //
 
 .badge {
-    margin: 0px 0px 0px 5px;
+    margin: 0 0 0 5px;
 }
 
 // ITEM ----- //
 
 .pnd-item {
     // no animation
-    margin-left: 0px;
+    margin-left: 0;
 
     .pnd-item-typeLabel {
         display: none;
@@ -437,7 +528,7 @@
     .left-inner-icon {
         display: inline-block;
         position: relative;
-        padding: 0px;
+        padding: 0;
         margin-left: 5px;
         width: 74%;
 
@@ -449,8 +540,8 @@
         .pnd-icon {
             position: absolute;
             color: @gray-light;
-            right: 0px;
-            top: 0px;
+            right: 0;
+            top: 0;
             padding: 7px;
             -moz-box-sizing: border-box;
             -webkit-box-sizing: border-box;
@@ -480,7 +571,7 @@
     }
 
     .pnd-panel-tab-content-header {
-        margin-top: 0px;
+        margin-top: 0;
         white-space: normal;
         line-height: normal;
     }
@@ -494,7 +585,7 @@
     width: @content-width;
     height: @preview-height;
     float: right;
-    padding: 0px 10px 0px 10px;
+    padding: 0 10px 0 10px;
 
     // TYPES ----- //
 
@@ -527,87 +618,4 @@
 
 
 
-//
-// AUTOCOMPLETE
-// --------------------------------------------------
 
-/*.left-inner-icon {
-    position: relative;
-    padding: 0px;
-
-    input {
-        padding-right: 20px;
-        font-weight: normal;
-        width: 100% !important;
-    }
-
-    .pnd-icon {
-        position: absolute;
-        color: @gray-light;
-        right: 0px;
-        top: 0px;
-        padding: 7px;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-
-    .pnd-icon.pnd-icon-times:hover {
-        color: @brand-success;
-        cursor: pointer;
-    }
-
-    // AUTOCOMPLETE LIST ----- //
-
-    .dropdown-menu li,
-    .dropdown-menu li a {
-        max-width: 100%;
-        width: 100%;
-    }
-
-    .kee-autocomplete-list {
-
-        &.list-group {
-            width: 100%;
-
-            .list-group-item {
-                width: 100%;
-
-                .pnd-item {
-
-                    .pnd-item-buttons {
-                        display: none;
-                    }
-                }
-            }
-        }
-
-        // AUTOCOMPLETE FOOTER  ----- //
-
-        .kee-footer-autocomplete {
-            padding: 8px 10px;
-            margin: 0px;
-            clear: both;
-
-            .btn {
-                .pnd-icon {
-                    font-size: 12px;
-                    position: relative;
-                    padding: 0px;
-                    color: #fff;
-                }
-            }
-
-            .kee-elem-to-search {
-                font-weight: bold;
-                margin: 0px 0px 5px 0px;
-                display: block;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-        }
-    }
-
-}*/
