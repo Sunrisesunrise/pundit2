@@ -282,10 +282,10 @@ angular.module('Pundit2.AnnotationSidebar')
 
     // TODO find alternative to force digest and avoid watch delay on the height change (?)
     currentElement.bind('DOMSubtreeModified', function() {
-        if (typeof($scope.annotation) !== 'undefined' && $scope.annotation.expanded) {
+        if (typeof($scope.annotation) !== 'undefined') {
             if (currentElement.height() !== currentHeight) {
                 currentHeight = currentElement.height();
-                if (currentHeight > 140) {
+                if (currentHeight < 30 || currentHeight > 140) {
                     $rootScope.$$phase || $rootScope.$digest();
                 }
             }
