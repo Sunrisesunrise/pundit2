@@ -226,8 +226,7 @@ angular.module('Pundit2.ResourcePanel')
             };
 
             // initialize a literal popover
-        }
-        else if (type === 'literal') {
+        } else if (type === 'literal') {
 
             state.popoverOptions.template = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
 
@@ -265,8 +264,7 @@ angular.module('Pundit2.ResourcePanel')
             };
 
             // initialize a resource panel popover
-        }
-        else if (type === 'resourcePanel') {
+        } else if (type === 'resourcePanel') {
 
             if (typeof(Config.korbo) !== 'undefined' && Config.korbo.active) {
                 var name = $window[Config.korbo.confName].globalObjectName;
@@ -338,9 +336,9 @@ angular.module('Pundit2.ResourcePanel')
             };
         }
 
-        state.popoverOptions.scope.setActive = function (index, event) {
+        state.popoverOptions.scope.setActive = function(index) {
             state.popoverOptions.scope.active = index;
-        }
+        };
 
         // common for all type of popover
         if (typeof(placement) === 'undefined' || placement === '') {
@@ -396,60 +394,61 @@ angular.module('Pundit2.ResourcePanel')
         return state.popover;
     };
 
-    var initPopover_new = function(content, target, placement, type, contentTabs, tripleElemType) {
-        var posPopMod = 0,
-        valMod = 100;
-        state.popoverOptions.scope.arrowLeft = '-11px';
+    // TODO keep or delete? 
+    // var initPopover_new = function(content, target, placement, type, contentTabs, tripleElemType) {
+    //     var posPopMod = 0,
+    //     valMod = 100;
+    //     state.popoverOptions.scope.arrowLeft = '-11px';
 
-        if (typeof(tripleElemType) !== 'undefined') {
-            if (tripleElemType === 'sub') {
-                posPopMod = valMod + 27;
-                state.popoverOptions.scope.arrowLeft = '-' + valMod - 27 + 'px';
-            } else if (tripleElemType === 'obj') {
-                state.popoverOptions.scope.arrowLeft = valMod + 'px';
-                posPopMod = -valMod;
-            }
-        }
+    //     if (typeof(tripleElemType) !== 'undefined') {
+    //         if (tripleElemType === 'sub') {
+    //             posPopMod = valMod + 27;
+    //             state.popoverOptions.scope.arrowLeft = '-' + valMod - 27 + 'px';
+    //         } else if (tripleElemType === 'obj') {
+    //             state.popoverOptions.scope.arrowLeft = valMod + 'px';
+    //             posPopMod = -valMod;
+    //         }
+    //     }
 
-        switch (type) {
-            case 'literal':
-                state.popoverOptions.template = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
+    //     switch (type) {
+    //         case 'literal':
+    //             state.popoverOptions.template = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
 
-                if (typeof(content.literalText) === 'undefined') {
-                    state.popoverOptions.scope.literalText = '';
-                } else {
-                    state.popoverOptions.scope.literalText = content.literalText;
-                }
+    //             if (typeof(content.literalText) === 'undefined') {
+    //                 state.popoverOptions.scope.literalText = '';
+    //             } else {
+    //                 state.popoverOptions.scope.literalText = content.literalText;
+    //             }
 
-                state.popoverOptions.scope.escapeEvent = function(e) {
-                    if (e.which === 27) {
-                        e.stopPropagation();
-                    }
-                };
+    //             state.popoverOptions.scope.escapeEvent = function(e) {
+    //                 if (e.which === 27) {
+    //                     e.stopPropagation();
+    //                 }
+    //             };
 
-                // handle save a new popoverLiteral
-                state.popoverOptions.scope.save = function() {
-                    state.resourcePromise.resolve(this.literalText);
-                    Preview.hideDashboardPreview();
-                    hide();
+    //             // handle save a new popoverLiteral
+    //             state.popoverOptions.scope.save = function() {
+    //                 state.resourcePromise.resolve(this.literalText);
+    //                 Preview.hideDashboardPreview();
+    //                 hide();
 
-                    var eventLabel = 'resourcePanel--' + type;
-                    eventLabel += '--save';
-                    Analytics.track('buttons', 'click', eventLabel);
-                };
+    //                 var eventLabel = 'resourcePanel--' + type;
+    //                 eventLabel += '--save';
+    //                 Analytics.track('buttons', 'click', eventLabel);
+    //             };
 
-                // close popoverLiteral popover without saving
-                state.popoverOptions.scope.cancel = function() {
-                    Preview.hideDashboardPreview();
-                    hide();
+    //             // close popoverLiteral popover without saving
+    //             state.popoverOptions.scope.cancel = function() {
+    //                 Preview.hideDashboardPreview();
+    //                 hide();
 
-                    var eventLabel = 'resourcePanel--' + type;
-                    eventLabel += '--cancel';
-                    Analytics.track('buttons', 'click', eventLabel);
-                };
-                break;
-        }
-    };
+    //                 var eventLabel = 'resourcePanel--' + type;
+    //                 eventLabel += '--cancel';
+    //                 Analytics.track('buttons', 'click', eventLabel);
+    //             };
+    //             break;
+    //     }
+    // };
 
     var setLabelToSearch = function(val) {
         state.popoverOptions.scope.label = val;
