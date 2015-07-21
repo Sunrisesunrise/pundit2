@@ -63,7 +63,7 @@ angular.module('Pundit2.AnnotationSidebar')
 .service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document,
     BaseComponent, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, TemplatesExchange,
     Consolidation, ContextualMenu, Dashboard, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
-    TypesHelper, Analytics) {
+    TypesHelper, Analytics, NameSpace) {
 
     var annotationDetails = new BaseComponent('AnnotationDetails', ANNOTATIONDETAILSDEFAULTS);
 
@@ -193,6 +193,11 @@ angular.module('Pundit2.AnnotationSidebar')
             if (objectType === 'uri') {
                 results.push(buildItemDetails(objectValue));
             } else {
+                if (typeof list[object].datatype !== 'undefined' &&
+                    list[object].datatype === NameSpace.dateTime) {
+                    objectValue = moment(objectValue).format('YYYY-MM-DD  HH:mm');
+                }
+
                 results.push({
                     uri: null,
                     label: objectValue,
