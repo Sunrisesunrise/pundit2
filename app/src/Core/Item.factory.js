@@ -88,6 +88,21 @@ angular.module('Pundit2.Core')
      */
     iconEntity: 'pnd-icon pnd-icon-code-fork',
 
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Item.container
+     *
+     * @description
+     * `string`
+     *
+     * Name of the container used to store the page items in the itemsExchange
+     *
+     * Default value:
+     * <pre> container: 'pageItems' </pre>
+     */
+    container: 'pageItems',
+
     classDefault: 'pnd-item-default',
     classImage: 'pnd-item-image',
     classText: 'pnd-item-text',
@@ -95,7 +110,7 @@ angular.module('Pundit2.Core')
     classEntity: 'pnd-item-entity'
 })
 
-.factory('Item', function(BaseComponent, Config, NameSpace, Utils, ItemsExchange, PageItemsContainer, md5, ITEMDEFAULTS) {
+.factory('Item', function(BaseComponent, Config, NameSpace, Utils, ItemsExchange, md5, ITEMDEFAULTS) {
     var itemComponent = new BaseComponent('Item', ITEMDEFAULTS);
 
     var annotationServerVersion = Config.annotationServerVersion;
@@ -360,7 +375,7 @@ angular.module('Pundit2.Core')
         var item = ItemsExchange.getItemByUri(uri);
         if (typeof item !== 'undefined') {
             if (forceAdd && !item.isProperty()) {
-                ItemsExchange.addItemToContainer(item, PageItemsContainer.options.container);
+                ItemsExchange.addItemToContainer(item, itemComponent.options.container);
             }
             return null;
         }
@@ -404,7 +419,7 @@ angular.module('Pundit2.Core')
         }
 
         item = new ItemFactory(uri, values);
-        ItemsExchange.addItemToContainer(item, PageItemsContainer.options.container);
+        ItemsExchange.addItemToContainer(item, itemComponent.options.container);
 
         return item;
     };
@@ -418,14 +433,15 @@ angular.module('Pundit2.Core')
         }
 
         var item = items[uri],
+            tempItem = ItemsExchange.getItemByUri(uri),
             values = {
                 uri: uri,
                 type: []
             };
 
-        if (typeof ItemsExchange.getItemByUri(uri) !== 'undefined') {
-            if (forceAdd && !item.isProperty()) {
-                ItemsExchange.addItemToContainer(item, PageItemsContainer.options.container);
+        if (typeof tempItem !== 'undefined') {
+            if (forceAdd && !tempItem.isProperty()) {
+                ItemsExchange.addItemToContainer(tempItem, itemComponent.options.container);
             }
             return null;
         }
@@ -442,7 +458,7 @@ angular.module('Pundit2.Core')
 
 
         if (!item.isProperty()) {
-            ItemsExchange.addItemToContainer(item, PageItemsContainer.options.container);
+            ItemsExchange.addItemToContainer(item, itemComponent.options.container);
         }
 
 
