@@ -88,7 +88,7 @@
                     ng-mouseout="mouseoutItemHandler(item.subject.uri)">
                         <div 
                             class="pnd-annotation-details-item-header" 
-                            ng-click="subInfo = !subInfo; forceUpdate(); trackAnalyticsToggleEvent('subInfo--subject', subInfo)"
+                            ng-click="subInfo = !subInfo; trackAnalyticsToggleEvent('subInfo--subject', subInfo)"
                             ng-class="{'pnd-annotation-details-sub-open': subInfo}">
                             <!-- <span class="{{item.subject.icon}}"></span> -->
                             <div class="pnd-annotation-item-header-text">
@@ -113,7 +113,7 @@
                     ng-init="preInfo = false">
                         <div 
                             class="pnd-annotation-details-item-header" 
-                            ng-click="preInfo = !preInfo; forceUpdate(); trackAnalyticsToggleEvent('subInfo--predicate', preInfo)"
+                            ng-click="preInfo = !preInfo; trackAnalyticsToggleEvent('subInfo--predicate', preInfo)"
                             ng-class="{'pnd-annotation-details-sub-open': preInfo}">
                             <div class="pnd-annotation-item-header-text">
                                 <span class="pnd-icon pnd-icon-circle"></span>
@@ -140,7 +140,7 @@
                         ng-mouseout="mouseoutItemHandler(object.uri)">
                             <div 
                                 class="pnd-annotation-details-item-header" 
-                                ng-click="objInfo = !objInfo; forceUpdate(); trackAnalyticsToggleEvent('subInfo--object', objInfo)"
+                                ng-click="objInfo = !objInfo; trackAnalyticsToggleEvent('subInfo--object', objInfo)"
                                 ng-class="{'pnd-annotation-details-sub-open': objInfo}">
                                 <!-- <span class="{{object.icon}}"></span> -->
                                 <div class="pnd-annotation-item-header-text">

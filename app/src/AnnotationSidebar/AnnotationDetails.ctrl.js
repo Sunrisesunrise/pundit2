@@ -10,7 +10,8 @@ angular.module('Pundit2.AnnotationSidebar')
     var notebookId,
         currentId = $scope.id,
         currentElement = angular.element($element).find('.pnd-annotation-details-wrap'),
-        initialHeight = AnnotationSidebar.options.annotationHeigth;
+        initialHeight = AnnotationSidebar.options.annotationHeigth,
+        currentHeight = initialHeight - 1;
 
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
@@ -100,7 +101,7 @@ angular.module('Pundit2.AnnotationSidebar')
         // if(AnnotationDetails.isAnnotationGhosted(currentId)){
         //     AnnotationDetails.closeViewAndReset();
         // }
-        $scope.metaInfo = false;
+        // $scope.metaInfo = false;
         AnnotationDetails.toggleAnnotationView(currentId);
         if (!$scope.annotation.expanded) {
             AnnotationSidebar.setAllPosition(currentId, initialHeight);
@@ -256,12 +257,6 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
-    $scope.forceUpdate = function() {
-        $timeout(function(){
-            $rootScope.$$phase || $rootScope.$digest();
-        });
-    };
-
     var cancelWatchNotebookName = $scope.$watch(function() {
         return NotebookExchange.getNotebookById(notebookId);
     }, function(nb) {
@@ -280,13 +275,25 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.$watch(function() {
         return AnnotationSidebar.isAnnotationSidebarExpanded();
     }, function(newState, oldState) {
-        if (newState !== oldState && !newState){
+        if (newState !== oldState && !newState) {
             AnnotationDetails.closeViewAndReset();
         }
     });
 
+    // TODO find alternative to force digest and avoid watch delay on the height change (?)
+    currentElement.bind('DOMSubtreeModified', function() {
+        if (typeof($scope.annotation) !== 'undefined' && $scope.annotation.expanded) {
+            if (currentElement.height() !== currentHeight) {
+                currentHeight = currentElement.height();
+                if (currentHeight > 140) {
+                    $rootScope.$$phase || $rootScope.$digest();
+                }
+            }
+        }
+    });
+
     $scope.$watch(function() {
-        return angular.element($element).find('.pnd-annotation-details-wrap').height();
+        return currentElement.height();
     }, function(newHeight, oldHeight) {
         if (typeof($scope.annotation) !== 'undefined') {
             if (newHeight !== oldHeight && $scope.annotation.expanded) {
