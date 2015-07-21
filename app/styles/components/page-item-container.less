@@ -1,36 +1,32 @@
 /**
  * PAGE ITEM CONTAINER
  *
- * Container for list of elements
+ * Container for list of elements.
+ * Structured in: header, main content and footer
  */
 
 
 /* ------------------------------------ *\
    #HEADER
 \* ------------------------------------ */
+/* Top area including the search field */
 
 .pnd-panel-tab-content-header {
+    overflow: hidden;
     min-height: 36px;
-    border-bottom: 1px solid @gray-light;
-    padding: 0 0 0 10px;
     margin: 10px 0 10px 0;
+    padding: 0 0 0 10px;
 
+    border-bottom: 1px solid @gray-light;
     font-weight: bold;
     font-size: 18px;
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
-
-    /*
-    .pnd-icon {
-        font-size: 14px;
-        color: @gray;
-    }
-    */
 
     &.pnd-panel-tab-content-header-no-border {
         min-height: 35px;
         margin-bottom: 0;
+
         border-bottom: 0;
     }
 
@@ -38,12 +34,13 @@
         margin-bottom: 0;
     }
 
-    // Div containing the INPUT for searching inside the panel list
+    /* Div containing the INPUT for searching inside the panel list */
     .pnd-panel-tab-search {
-        position: relative;
         display: inline-block;
         width: 100%;
-        padding-right: 30px;
+        padding-right: 10px;
+
+        position: relative;
 
         input {
             padding-right: 20px;
@@ -51,17 +48,26 @@
         }
 
         .pnd-icon {
-            position: absolute;
-            color: @gray-light;
-            right: 30px; // 12px;
-            top: 0;
             padding: 7px;
             -moz-box-sizing: border-box;
             -webkit-box-sizing: border-box;
             box-sizing: border-box;
 
-            font-size: 14px;
+            position: absolute;
+            top: 0;
+            right: 10px;
+
             color: @gray;
+            font-size: 14px;
+        }
+
+        /* Only search field with options dropdown on the right */
+        &.pnd-has-options {
+            padding-right: 30px;
+
+            .pnd-icon {
+                right: 30px;
+            }
         }
 
         // .pnd-icon-times is configured in *ItemsContainer.service.js defaults with
@@ -72,16 +78,72 @@
         }
     }
 
-    // Icon to activate the dropdown with ordering and page add to myitems
+    /* Icon to activate the options dropdown with ordering and other stuff */
     .pnd-panel-tab-icon {
         position: absolute;
         // Not very elegant solution. The top positioning
         // cannot be relative to .pnd-panel-tab-content-header since there are some overflow
         // problems if we assign position: relative to that element
-        top: 40px;
-        right: 8px;
+        top: 47px;
+        right: 12px;
+
+
     }
 }
+
+
+/* ------------------------------------ *\
+   #SECOND-LEVEL-TABS
+\* ------------------------------------ */
+/* Style for the second level tabs that are found under
+ the search field.
+ These tabs are usually used for filtering the items
+ in the displayed list */
+.pnd-panel-tab-content {
+
+    /* These are the second level tabs, under the search field */
+    .nav-tabs {
+        margin-bottom: 0;
+        margin-right: 0;
+
+        background-color: #fff;
+        border-top: 1px solid @gray-light;
+        border-bottom: 1px solid @gray-light;
+
+        > li {
+            /* Actual tabs (as links) */
+            > a {
+                margin-right: 0;
+                background-color: #fff;
+                border: 0;
+                border-top: 2px solid transparent;
+                border-bottom: 1px solid @gray-light;
+
+                color: @nav-tabs-active-link-hover-color;
+                line-height: @line-height-base;
+
+                &:hover {
+                    background-color: transparent;
+                    border-bottom: 1px solid @gray-light;
+
+                    color: #000;
+                    cursor: pointer;
+                }
+            }
+
+            /* Active state, and its :hover to override normal :hover */
+            &.active > a {
+                &,
+                &:hover,
+                &:focus {
+                    border-top: 2px solid @gray;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
 
 /* ------------------------------------ *\
    #CONTENT
@@ -91,13 +153,13 @@
     overflow-y: auto;
 
     &.pnd-inner-no-tabs {
-        margin: 0; // 0 10px 0 0;
+        margin: 0;
     }
 }
 
 .pnd-inner {
     .pnd-tab-content {
-        margin: 0; // 0 10px 0 0;
+        margin: 0;
         overflow-y: auto;
     }
 }
@@ -117,54 +179,6 @@
     }
 }
 
-/* ------------------------------------ *\
-   #CONTENT-TABS
-\* ------------------------------------ */
-
-.pnd-panel-tab-content {
-
-    // Give the tabs something to sit on
-    .nav-tabs {
-        margin-bottom: 0; // 5px;
-        margin-right: 0;
-        background-color: #fff;
-        border-top: 1px solid @gray-light;
-        border-bottom: 1px solid @gray-light;
-
-        > li {
-
-            // Actual tabs (as links)
-            > a {
-                color: @nav-tabs-active-link-hover-color;
-                margin-right: 0;
-                line-height: @line-height-base;
-                border: 0;
-                border-bottom: 1px solid @gray-light;
-                border-top: 2px solid transparent;
-                background-color: #fff;
-
-                &:hover {
-                    background-color: transparent;
-                    border-bottom: 1px solid @gray-light;
-                    color: #000;
-                    cursor: pointer;
-                }
-            }
-
-            // Active state, and its :hover to override normal :hover
-            &.active > a {
-                &,
-                &:hover,
-                &:focus {
-                    //border-bottom-color: transparent;
-                    border-top: 2px solid @gray;
-                    cursor: pointer;
-                }
-            }
-        }
-    }
-}
-
 
 /* ------------------------------------ *\
    #FOOTER
@@ -172,13 +186,14 @@
 
 .pnd-panel-tab-content-footer {
     display: block;
-    border-top: 1px solid @gray-light;
-    background-color: #fff;
     height: 30px;
     position: absolute;
     bottom: 0;
     right: 7px;
     left: 0;
+
+    background-color: #fff;
+    border-top: 1px solid @color-border-normal;
 
     .btn {
         float: left;

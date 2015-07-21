@@ -2,7 +2,7 @@
 
 <style>
     .pnd-cons {
-        /* background: #fc0; */
+        background: #fc0;
     }
 </style>
 
@@ -10,8 +10,9 @@
     angular.element('body').css('height', '4200px');
 
     var punditConfig = {
+        annotationServerBaseURL: "http://staging.punditbrain.netseven.it:8182/annotationserver/",
         //annotationServerBaseURL: "http://as.thepund.it:8080/annotationserver/",
-        
+
         // vocabularies: ['http://manager.korbo.org/91'],
         // useBasicRelations: false,
         // useTemplates: false,
@@ -65,6 +66,9 @@
             },
             'VocabulariesContainer': {
                 active: true
+            },
+            'ModelHelper': {
+                mode: 'mode2'
             }
         }
     }
@@ -81,7 +85,7 @@
     /* cache key: itwiki:resourceloader:filter:minify-css:7:29fac8f8e3c72fe3be678699f8a6d0c6 */</style>
     <link rel="dns-prefetch" href="//meta.wikimedia.org" />
 
-    <div id="content" class="mw-body pundit-content" about="http://it.wikipedia.org/wiki/Palaia" role="main" style="margin-left: auto;">
+    <div id="content" class="mw-body pundit-content" about="http://it.wikipedia.org/wiki/Palaia-test" role="main" style="margin-left: auto;">
         <a id="top"></a>
 
         <div id="mw-js-message" style="display:none;"></div>

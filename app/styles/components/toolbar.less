@@ -25,6 +25,7 @@ body.pnd-toolbar-active {
 .pnd-toolbar-navbar {
     min-width: 960px;
     z-index: @zindex-pnd-toolbar;
+    background-color: @color-toolbar-bg;
 
     .container-fluid {
         padding-left: 0;
@@ -37,20 +38,25 @@ body.pnd-toolbar-active {
 \* ------------------------------------ */
 .pnd-toolbar-navbar .navbar-nav li {
 
-    /* Normal buttons... now darg gray */
+    /* Normal buttons... now dark gray */
     a {
-        line-height: 1.5;
         height: @toolbar-height - @toolbar-border-bottom;
-        border-right: 1px solid lighten(@navbar-inverse-link-hover-bg, 30);
+
+        background-color: @color-toolbar-button;
+        border-right: 1px solid lighten(@color-toolbar-button, 25);
         border-left: 0;
+
+        color: @color-toolbar-text;
+        line-height: 1.5;
+        .text-dark-emboss();
         transition: none !important; /* Delete any transition */
 
         &:focus {
-            background-color: transparent;
+            background-color: @color-toolbar-button;
         }
 
         &:hover {
-            background-color: @navbar-inverse-link-hover-bg;
+            background-color: lighten(@color-toolbar-button, 8);
         }
     }
 
@@ -65,18 +71,19 @@ body.pnd-toolbar-active {
     &.pnd-toolbar-toggle-button {
 
         &.pnd-toolbar-button-active {
-            background-color: @gray;
-            color: @btn-primary-color;
+            // color: @btn-primary-color;
 
             a {
-                text-shadow: 0 1px 0 rgba(0, 0, 0, .2);
+                background-color: lighten(@color-toolbar-button, 8);
+
+                .text-dark-emboss();
 
                 &:focus {
-                    background-color: @gray;
+                    background-color: lighten(@color-toolbar-button, 8);
                 }
 
                 &:hover {
-                    background-color: darken(@gray, 5);
+                    background-color: lighten(@color-toolbar-button, 8);
                 }
             }
         }
@@ -86,21 +93,22 @@ body.pnd-toolbar-active {
     &.pnd-calltoaction-btn {
 
         a {
-            background-color: @brand-success;
-            border-right: 1px lighten(@brand-success, 30%) solid;
-            text-shadow: 0 1px 0 rgba(0, 0, 0, .1);
+            background-color: @color-button-bg-cta;
+            border-right: 1px solid lighten(@color-toolbar-button, 16);
+            .text-dark-emboss();
 
             &:focus {
-                background-color: @brand-success;
+                background-color: @color-button-bg-cta;
             }
 
             &:hover {
-                background-color: darken(@brand-success, 8);
+                background-color: lighten(@color-button-bg-cta, 5);
             }
         }
     }
 
     /* Triangular right border buttons... now ask the pundit */
+    /* Currently not used */
     &.pnd-triangular-btn {
 
         a {
@@ -139,8 +147,8 @@ body.pnd-toolbar-active {
     }
 
     /* Disabled buttons */
-    .pnd-toolbar-not-active-element {
-        color: @color-toolbar-disabled
+    &.disabled > a, .pnd-toolbar-not-active-element {
+        color: darken(@color-toolbar-text, 30) !important; // Specificity war against bootstrap
     }
 }
 
@@ -152,7 +160,7 @@ body.pnd-toolbar-active {
 /* Buttons on the right */
 .pnd-toolbar-navbar .navbar-right li {
     a {
-        border-left: 1px solid lighten(@navbar-inverse-link-hover-bg, 30);
+        border-left: 1px solid lighten(@color-toolbar-button, 25);
         border-right: 0;
     }
 }
@@ -161,7 +169,7 @@ body.pnd-toolbar-active {
 .pnd-toolbar-navbar .navbar-right li {
     &.pnd-toolbar-template-menu-button {
         a {
-            border-left: 1px solid lighten(@navbar-inverse-link-hover-bg, 13);
+            border-left: 1px solid lighten(@color-toolbar-button, 8);
         }
     }
 }
@@ -170,7 +178,7 @@ body.pnd-toolbar-active {
 .pnd-toolbar-navbar .navbar-nav .pnd-toolbar-error-button {
     a {
         background-color: @brand-warning;
-        border-right: 1px lighten(@brand-warning, 30%) solid;
+        border-right: 1px solid lighten(@color-toolbar-button, 25);
 
         &:hover {
             background-color: darken(@brand-warning, 12%);
@@ -191,6 +199,17 @@ body.pnd-toolbar-active {
         &.pnd-filter-active {
             color: @brand-primary;
         }
+    }
+}
+
+/* First button with Pundit Logo and error icon when necessary */
+.pnd-toolbar-navbar .navbar-nav .pnd-toolbar-status-button-ok {
+    a {
+        padding-top: 4px;
+    }
+
+    .pnd-icon {
+        font-size: 24px;
     }
 }
 

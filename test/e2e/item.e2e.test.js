@@ -56,7 +56,7 @@ describe("Item interaction", function() {
     it("should correctly open item menu", function(){
 
         var item = p.findElement(protractor.By.css("item")),
-            menuBtn = p.findElement(protractor.By.css("item .pnd-icon-bars"));
+            menuBtn = p.findElement(protractor.By.css("item .pnd-icon-dots"));
 
         p.actions().mouseMove(item).perform();
 

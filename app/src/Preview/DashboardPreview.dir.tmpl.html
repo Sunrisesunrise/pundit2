@@ -30,31 +30,25 @@
     <!-- FOOTER -->
 
     <div class="pnd-panel-tab-content-footer" ng-hide="useInKorbo">
-        <!-- Clear Sticky Icon -->
-        <button 
-            class="btn btn-success btn-xs pnd-btn-full pnd-dashboard-preview-clear-sticky-button" 
+        <button
+            class="pnd-btn pnd-dashboard-preview-clear-sticky-button"
             ng-click="clearSticky()" 
             ng-class="{disabled: !isStickyItem()}">
             Clear
-        </button>
-
-        <!-- More info -->
-        <button 
-            class="btn btn-info btn-xs pnd-btn-full pnd-dashboard-preview-more-info-button" 
+        </button><button
+            class="pnd-btn pnd-dashboard-preview-more-info-button"
             ng-if="itemDashboardPreview.isProperty() || itemDashboardPreview.isEntity()" 
             ng-click="openUrl(itemDashboardPreview.uri)" 
             ng-class="{disabled: !isStickyItem()}">
             More info
-        </button>
-        <button
-                class="btn btn-info btn-xs pnd-btn-full pnd-dashboard-preview-more-info-button"
-                ng-if="itemDashboardPreview.isWebPage()"
-                ng-click="openUrl(itemDashboardPreview.uri)"
-                ng-class="{disabled: !isStickyItem()}">
+        </button><button
+            class="pnd-btn"
+            ng-if="itemDashboardPreview.isWebPage()"
+            ng-click="openUrl(itemDashboardPreview.uri)"
+            ng-class="{disabled: !isStickyItem()}">
             Go to page
-        </button>
-        <button 
-            class="btn btn-info btn-xs pnd-btn-full pnd-dashboard-preview-more-info-button" 
+        </button><button
+            class="pnd-btn pnd-dashboard-preview-more-info-button"
             ng-if="isNotebook()" 
             ng-click="openNotebookUrl(itemDashboardPreview.id)" 
             ng-class="{disabled: !isStickyItem()}">

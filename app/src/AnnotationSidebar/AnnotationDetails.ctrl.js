@@ -132,6 +132,8 @@ angular.module('Pundit2.AnnotationSidebar')
         if (!Dashboard.isDashboardVisible()) {
             TripleComposer.closeAfterOp();
             Dashboard.toggle();
+        } else {
+            TripleComposer.closeAfterOpOff();
         }
         EventDispatcher.sendEvent('AnnotationDetails.editAnnotation', TripleComposer.options.clientDashboardTabTitle);
 

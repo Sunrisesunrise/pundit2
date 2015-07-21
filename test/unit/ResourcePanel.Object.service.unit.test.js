@@ -171,7 +171,7 @@ describe('Object Popover Resource Panel service', function() {
         // get login
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
 
-        MyPundit.login();
+        MyPundit.oldLogin();
 
         $rootScope.$digest();
         $httpBackend.flush();
@@ -303,7 +303,7 @@ describe('Object Popover Resource Panel service', function() {
         // get login
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
 
-        MyPundit.login();
+        MyPundit.oldLogin();
 
         $rootScope.$digest();
         $httpBackend.flush();
@@ -455,7 +455,7 @@ describe('Object Popover Resource Panel service', function() {
 
         // get login
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
-        MyPundit.login();
+        MyPundit.oldLogin();
         $rootScope.$digest();
         $httpBackend.flush();
 
@@ -515,7 +515,7 @@ describe('Object Popover Resource Panel service', function() {
 
         // get login
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
-        MyPundit.login();
+        MyPundit.oldLogin();
         $rootScope.$digest();
         $httpBackend.flush();
 

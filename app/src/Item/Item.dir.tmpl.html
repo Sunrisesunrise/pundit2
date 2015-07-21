@@ -12,7 +12,8 @@
             title="Options"
             ng-hide="hideOptions" 
             ng-click="onClickMenu($event)">
-            <span class="pnd-icon pnd-icon-bars"></span>
+            <span class="pnd-icon pnd-icon-dots" ng-if="itemType !== 'notebook'"></span>
+            <span class="pnd-icon pnd-icon-gears" ng-if="itemType === 'notebook'"></span>
         </button>
         <button 
             type="button" 
@@ -26,7 +27,7 @@
         <!-- <span ng-if="isSelect" class="pnd-icon pnd-icon-check"></span> -->
     </div>
 
-    <div class="pnd-item-text">
+    <div class="pnd-item-text" ng-if="itemType !== 'notebook'">
         <span 
             class="pnd-item-typeLabel"
             ng-show="item.type.length > 0">
@@ -35,6 +36,14 @@
         <span class="pnd-item-label">
             {{item.label}}
         </span>
+    </div>
+
+    <div class="pnd-item-text" ng-if="itemType === 'notebook'">
+        <!-- <span class="pnd-item-typeLabel">{{notebook.visibility}}</span> -->
+        <span ng-if="!item.isPublic()" class="pnd-icon pnd-icon-lock"  title="Private"></span>
+        <span ng-if="item.isPublic()" class="pnd-icon pnd-icon-group" title="Public"></span> 
+        <span ng-if="item.isCurrent()" class="pnd-icon pnd-icon-pencil" title="Current"></span>
+        <span class="pnd-item-label">{{item.label}}</span>
     </div>
 
 </div>

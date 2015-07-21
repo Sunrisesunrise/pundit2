@@ -36,6 +36,7 @@
     <script src="../src/Core/TemplatesSelector.service.js"></script>
     <script src="../src/Core/Fp3.service.js"></script>
     <script src="../src/Core/ImageFragmentAnnotatorHelper.service.js"></script>
+    <script src="../src/Core/FocusOn.dir.js"></script>
     <script src="../src/Core/UnlimitedScroll.dir.js"></script>
 
     <script src="../src/Core/Template.factory.js"></script>
@@ -112,8 +113,6 @@
     <script src="../src/Item/Item.js"></script>
     <script src="../src/Item/Item.dir.js"></script>
     <script src="../src/Item/Item.ctrl.js"></script>
-    <script src="../src/Item/ItemNotebook.dir.js"></script>
-    <script src="../src/Item/ItemNotebook.ctrl.js"></script>
 
     <script src="../src/Lists/GeneralItemsContainer/GeneralItemsContainer.js"></script>
     <script src="../src/Lists/GeneralItemsContainer/GeneralItemsContainer.dir.js"></script>
@@ -159,6 +158,7 @@
     <script src="../src/ResourcePanel/CalendarDateFormat.dir.js"></script>
     <script src="../src/ResourcePanel/ResourcePanel.service.js"></script>
     <script src="../src/ResourcePanel/ResourcePanel.ctrl.js"></script>
+    <script src="../src/ResourcePanel/ResourceCalendar.dir.js"></script>
 
     <script src="../src/Tools/NotebookComposer/NotebookComposer.js"></script>
     <script src="../src/Tools/NotebookComposer/NotebookComposer.dir.js"></script>

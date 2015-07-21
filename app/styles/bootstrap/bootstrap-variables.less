@@ -65,9 +65,9 @@
 
 //## Font, line-height, and color for body text, headings, and more.
 
-@font-family-sans-serif:  "Lucida Grande", Tahoma, Verdana, Arial, sans-serif;
+@font-family-sans-serif:  @font; // "Lucida Grande", Tahoma, Verdana, Arial, sans-serif;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
-@font-family-monospace:   "Lucida Console", Monaco, monospace;
+@font-family-monospace:   @font; // "Lucida Console", Monaco, monospace;
 @font-family-base:        @font-family-sans-serif;
 
 @font-size-base:          12px;
@@ -558,7 +558,7 @@
 //** Popover body background color
 @popover-bg:                          #fff;
 //** Popover maximum width
-@popover-max-width:                   276px;
+@popover-max-width:                   300px;
 //** Popover border color
 @popover-border-color:                rgba(0,0,0,.2);
 //** Popover fallback border color

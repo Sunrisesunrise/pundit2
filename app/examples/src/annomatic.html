@@ -4,12 +4,13 @@
     var punditConfig = {
         modules: {
             'Annomatic': {
-                debug: true
+                debug: true,
+                active: true
             }
         }
     };
     var AnnomaticDemoCtrl = function($rootScope, $scope, 
-                                             Annomatic) {
+                                             Annomatic, MyItemsContainer, TextFragmentAnnotator) {
         Annomatic.run();
     }
 

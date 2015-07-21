@@ -5,7 +5,7 @@
     <div ng-if="(isMyNotebooks || isPredicates)">
     <!-- HEADER for myNotebooks and Predicates-->
         <div class="pnd-panel-tab-content-header pnd-panel-tab-content-header-border">
-            <div class="left-inner-icon pnd-panel-tab-search">
+            <div class="left-inner-icon pnd-panel-tab-search pnd-has-options">
                 <span
                         class="pnd-icon {{search.icon}}"
                         ng-click="search.term = ''"></span>
@@ -35,11 +35,12 @@
                 <li
                         class="list-group-item"
                         ng-repeat="item in displayedItems | orderBy:getOrderProperty:reverse">
-                    <item-notebook ng-if="isMyNotebooks"
-                                   nid="{{item.id}}"
-                                   menu-type="{{itemMenuType}}"
-                                   hide-sticky-button="true"
-                                   force-sticky="true"></item-notebook>
+                    <item ng-if="isMyNotebooks"
+                          nid="{{item.id}}"
+                          menu-type="{{itemMenuType}}"
+                          item-type="notebook"
+                          hide-sticky-button="true"
+                          force-sticky="true"></item>
                     <item ng-if="isPredicates"
                           uri="{{item.uri}}"
                           menu-type="{{itemMenuType}}"
@@ -59,21 +60,19 @@
     <div class="pnd-panel-tab-content-footer">
         <button
                 ng-if="!(isMyNotebooks || isPredicates)"
-                class="pnd-triplecomposer-cancel btn btn-subject btn-xs pnd-btn-full"
+                class="pnd-btn pnd-btn-subject"
                 title="Use as subject"
                 ng-disabled="!isUseActive || !canAddItemAsSubject"
                 ng-click="onClickUseSubject()">
             Set subject
-        </button>
-        <button
+        </button><button
                 ng-if="!(isMyNotebooks || isPredicates)"
-                class="pnd-triplecomposer-cancel btn btn-object btn-xs pnd-btn-full"
+                class="pnd-btn pnd-btn-object"
                 title="Use as object"
                 ng-disabled="!isUseActive || !canAddItemAsObject"
                 ng-click="onClickUseObject()">
             Set object
-        </button>
-        <button
+        </button><button
                 class="{{actionButton.btnClass}}"
                 title="{{actionButton.title}}"
                 ng-disabled="isMyNotebooks? false :

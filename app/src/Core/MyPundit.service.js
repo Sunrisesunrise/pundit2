@@ -215,8 +215,22 @@ angular.module('Pundit2.Core')
             loginPromise.resolve(true);
         } else {
             loginStatus = 'loggedOff';
-            myPundit.popoverLogin(null, 'login');
-            // myPundit.openLoginPopUp();
+            myPundit.popoverLogin('login');
+        }
+
+        return loginPromise.promise;
+    };
+
+    // TODO remove it, remove the old login popup and manage popover in unit test 
+    myPundit.oldLogin = function() {
+
+        loginPromise = $q.defer();
+
+        if (myPundit.isUserLogged()) {
+            loginPromise.resolve(true);
+        } else {
+            loginStatus = 'loggedOff';
+            myPundit.openLoginPopUp();
         }
 
         return loginPromise.promise;
@@ -392,7 +406,7 @@ angular.module('Pundit2.Core')
         autoCloseWait: 2,
         autoCloseIntervall: null,
         anchor: undefined,
-        loginSrc: loginServer,//myPundit.options.popoverLoginURL,//'http://dev.thepund.it/connect/index.php',
+        loginSrc: loginServer, //myPundit.options.popoverLoginURL,//'http://dev.thepund.it/connect/index.php',
         options: {
             template: 'src/Core/Templates/login.popover.tmpl.html',
             container: "[data-ng-app='Pundit2']",
@@ -422,14 +436,13 @@ angular.module('Pundit2.Core')
         loginSuccess: function() {
             popoverState.popover.$scope.autoCloseIn = popoverState.autoCloseWait;
             popoverState.popover.$scope.loginSuccess = true;
-            popoverState.autoCloseIntervall = $interval(function(){
+            popoverState.autoCloseIntervall = $interval(function() {
                 var sec = popoverState.popover.$scope.autoCloseIn;
-                sec --;
+                sec--;
                 if (sec < 1) {
                     $interval.cancel(popoverState.autoCloseIntervall);
                     myPundit.closeLoginPopover();
-                }
-                else {
+                } else {
                     popoverState.popover.$scope.autoCloseIn = sec;
                 }
             }, 1000);
@@ -437,32 +450,29 @@ angular.module('Pundit2.Core')
         popover: null
     };
 
+    // TODO add log and error if needed? 
     var popoverLoginPostMessageHandler = function(params) {
         if (typeof params.data !== 'undefined') {
-            if(params.data === 'loginPageLoaded' || params.data === 'pageLoaded') {
+            if (params.data === 'loginPageLoaded' || params.data === 'pageLoaded') {
                 popoverState.popover.$scope.isLoading = false;
                 popoverState.popover.$scope.$digest();
-            }
-            else if(params.data === 'loginCheck') {
+            } else if (params.data === 'loginCheck') {
                 popoverState.popover.$scope.isLoading = true;
                 popoverState.popover.$scope.postLoginPreCheck = true;
                 popoverState.popover.$scope.$digest();
-            }
-            else if(params.data === 'profileSuccessfullyUpdated') {
+            } else if (params.data === 'profileSuccessfullyUpdated') {
                 $timeout(function() {
                     myPundit.closeLoginPopover();
                 }, 2500);
                 myPundit.checkLoggedIn();
-            }
-            else if(params.data === 'userLoggedIn') {
+            } else if (params.data === 'userLoggedIn') {
                 popoverState.popover.$scope.postLoginPreCheck = true;
-                myPundit.checkLoggedIn().then(function(status){
+                myPundit.checkLoggedIn().then(function(status) {
                     popoverState.popover.$scope.isLoading = false;
                     if (status) {
                         popoverState.loginSuccess();
                         loginPromise.resolve(true);
-                    }
-                    else {
+                    } else {
                         popoverState.popover.$scope.loginSomeError = true;
                         //popoverState.popover.$scope.$digest();
                     }
@@ -476,19 +486,22 @@ angular.module('Pundit2.Core')
         }
     };
 
+    // TODO is there a better way? should we use $window? 
     if (window.addEventListener) {
         window.addEventListener("message", popoverLoginPostMessageHandler, false);
-    }
-    else {
+    } else {
         if (window.attachEvent) {
             window.attachEvent("onmessage", popoverLoginPostMessageHandler, false);
         }
     }
 
     // TODO This is not really a popoverLogin but more a popover toggler
-    // TODO Is event used? 
-    myPundit.popoverLogin = function (event, where) {
-        loginPromise = $q.defer();
+    myPundit.popoverLogin = function(where) {
+        if (typeof(loginPromise) === 'undefined') {
+            return;
+            // TODO do you need loginPromise for edit? 
+            // loginPromise = $q.defer();   
+        }
 
         // If there's already a Login popover I close and destroy it
         if (popoverState.popover !== null) {
@@ -503,8 +516,7 @@ angular.module('Pundit2.Core')
         // popoverState.popover = $popover(angular.element(".pnd-toolbar-toggle-button"), popoverState.options);
         if (where === 'login') {
             popoverState.popover = $popover(angular.element(".pnd-toolbar-login-button"), popoverState.options);
-        }
-        else if (where === 'editProfile') {
+        } else if (where === 'editProfile') {
             popoverState.popover = $popover(angular.element(".pnd-toolbar-user-button"), popoverState.options);
         }
 
@@ -512,18 +524,18 @@ angular.module('Pundit2.Core')
         popoverState.popover.$scope.loginSuccess = false;
         popoverState.popover.$scope.loginSomeError = false;
 
-        popoverState.popover.$scope.loadedContent = function () {
-        };
+        // TODO ???
+        // popoverState.popover.$scope.loadedContent = function() {};
 
-        popoverState.popover.$scope.closePopover = function () {
+        popoverState.popover.$scope.closePopover = function() {
             myPundit.closeLoginPopover();
         };
 
-        popoverState.popover.$scope.loginRetry = function () {
+        popoverState.popover.$scope.loginRetry = function() {
             popoverState.renderIFrame();
         };
 
-        popoverState.popover.$promise.then(function () {
+        popoverState.popover.$promise.then(function() {
             popoverState.popover.show();
             popoverState.renderIFrame(where);
         });
@@ -546,14 +558,12 @@ angular.module('Pundit2.Core')
 
     };
 
-    // TODO ASAP Two function editProfile?! and .. who is event?
-
     myPundit.editProfile = function() {
-        myPundit.popoverLogin(event, 'editProfile');
-    };
-
-    myPundit.editProfile = function() {
-        myPundit.popoverLogin(event, 'editProfile');
+        if (!isUserLogged) {
+            myPundit.err('User not logged');
+            return;
+        }
+        myPundit.popoverLogin('editProfile');
     };
 
     return myPundit;
