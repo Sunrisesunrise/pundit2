@@ -1,0 +1,37 @@
+{
+  "name": "Pundit",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Pundit Chrome Extension",
+  "background": {
+    "page": "html/background.html"
+  },
+  "homepage_url": "http://thepund.it",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "browser_action": {
+    "default_icon": "icons/icon19.png",
+    "default_title": "Launch Pundit"
+  },
+  "permissions": [
+    "tabs", "http://*/*", "https://*/*"
+  ],
+  // "content_scripts": [
+  //   {
+  //     "matches": ["<all_urls>"],
+  //     "js": [
+  //       "inject/init.js"
+  //     ],
+  //     "run_at": "document_end"
+  //   }
+  // ],
+  "web_accessible_resources": [
+    "inject/css/fonts/pundit-font.eof", 
+    "inject/css/fonts/pundit-font.svg", 
+    "inject/css/fonts/pundit-font.ttf", 
+    "inject/css/fonts/pundit-font.woff"
+  ]
+}
