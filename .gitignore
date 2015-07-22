@@ -7,6 +7,7 @@
 /coverage/
 
 /app/examples/*.html
+/app/css/temporary.css
 
 .idea
 /app/src/templates.js
