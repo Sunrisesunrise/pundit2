@@ -10,6 +10,7 @@ chrome.browserAction.onClicked.addListener(function(tab, url) {
     executeCSSFromURLInTab(tab, 'inject/css/pundit.css');
     
     executeScriptFromURLInTab(tab, 'inject/extension_conf.js');
+    executeScriptFromURLInTab(tab, 'inject/scripts/libs.js');
     executeScriptFromURLInTab(tab, 'inject/scripts/pundit2.js');
 
     // alert('Client loading ..');
