@@ -46,12 +46,23 @@ module.exports = function(grunt) {
                 files: {
                     '<%= conf.build %>/bm/scripts/pundit-bm.js': ['.tmp/concat/scripts/*.js']
                 }
+            },
+            chrome: {
+                files: {
+                    '<%= conf.build %>/extensions/chrome/inject/scripts/libs.js': ['.tmp/concat/scripts/libs.js'],
+                    '<%= conf.build %>/extensions/chrome/inject/scripts/pundit2.js': ['.tmp/concat/scripts/pundit2.js']
+                }
             }
         },
         cssmin: {
             bookmarklet: {
                 files: {
                     '<%= conf.build %>/bm/css/pundit-bm.css': ['.tmp/concat/css/pundit.css']
+                }
+            },
+            chrome: {
+                files: {
+                    '<%= conf.build %>/extensions/chrome/inject/css/pundit.css': ['.tmp/concat/css/pundit.css']
                 }
             }
         },
@@ -327,6 +338,22 @@ module.exports = function(grunt) {
                         cwd: '<%= conf.app %>/src/',
                         dest: '<%= conf.build %>/bm',
                         src: 'InitBookmarkletFeed.js'
+                    }
+                ]
+            },
+            chrome: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= conf.app %>/extensions/chrome/',
+                        dest: '<%= conf.build %>/extensions/chrome/',
+                        src: '**/*'
+                    },
+                    {
+                        expand: true,
+                        cwd: '<%= conf.app %>/styles/',
+                        dest: '<%= conf.build %>/extensions/chrome/css/',
+                        src: 'img/*'
                     }
                 ]
             },
@@ -650,7 +677,7 @@ module.exports = function(grunt) {
     grunt.registerTask('build', 'Builds a production-ready version of the application',
         ['clean:dist', 'copy:fonts', 'html2js:main', 'html2js:korboee', 'examples', 'useminPrepare', 'less:dist', 'copy:css', 'imagemin',
             'htmlmin', 'concat',  'copy:dist', 'ngmin', 'cssmin', 'uglify',
-            'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet']);
+            'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet', 'copy:chrome']);
 
     grunt.registerTask('dev', 'Live dev workflow: watches app files and reloads the browser automatically',
         ['less:dev', 'copy:fonts', 'imagemin:dev', 'html2js:main', 'html2js:korboee', 'examples', 'connect:livereload', 'open:server', 'watch']);
