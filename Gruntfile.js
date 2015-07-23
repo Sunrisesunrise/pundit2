@@ -351,6 +351,11 @@ module.exports = function(grunt) {
                     cwd: '<%= conf.app %>/styles/',
                     dest: '<%= conf.build %>/extensions/chrome/inject/css/',
                     src: 'img/*'
+                }, {
+                    expand: true,
+                    cwd: '<%= conf.app %>/fonts/pundit-icon-font/',
+                    dest: '<%= conf.build %>/extensions/chrome/inject/css/',
+                    src: 'fonts/*'
                 }]
             },
             css: {
