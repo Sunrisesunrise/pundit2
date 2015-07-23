@@ -31,7 +31,7 @@ module.exports = function(grunt) {
                 }
             }
         },
-        
+
         shell: {
             options: {
                 stdout: true
@@ -40,7 +40,7 @@ module.exports = function(grunt) {
                 command: 'node ./node_modules/protractor/bin/webdriver-manager update'
             }
         },
-        
+
         uglify: {
             bookmarklet: {
                 files: {
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
                 }
             }
         },
-        
+
 
         // Instruct the .html page with custom directives to concat/uglify/cssmin
         // and replace the inclusion directives in the production html files
@@ -99,7 +99,7 @@ module.exports = function(grunt) {
                     ]
                 }]
             },
-            docs:{
+            docs: {
                 files: [{
                     src: ['<%= conf.build %>/docs/*']
                 }]
@@ -173,7 +173,7 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        
+
         html2js: {
             options: {
                 base: '<%= conf.app %>/'
@@ -198,11 +198,28 @@ module.exports = function(grunt) {
             }
         },
 
+        // Replace fonts path for the Chrome extension
+        replace: {
+            chrome: {
+                options: {
+                    patterns: [{
+                        match: /\(fonts/g,
+                        replacement: '(chrome-extension://__MSG_@@extension_id__/inject/css/fonts'
+                    }]
+                },
+                files: [{
+                    expand: true,
+                    flatten: true,
+                    src: ['<%= conf.build %>/extensions/chrome/inject/css/pundit.css'],
+                    dest: '<%= conf.build %>/extensions/chrome/inject/css/'
+                }]
+            }
+        },
+
         // Whatever is not copied by other tasks.. get copied here
         copy: {
             docs: {
-                files: [
-                {
+                files: [{
                     expand: true,
                     cwd: '<%= conf.app %>/../docsAssets/assets',
                     dest: '<%= conf.build %>/docs',
@@ -210,16 +227,14 @@ module.exports = function(grunt) {
                         '*',
                         '**/*'
                     ]
-                },
-                {
+                }, {
                     expand: true,
                     cwd: '<%= conf.app %>/../node_modules/marked/lib/',
                     dest: '<%= conf.build %>/docs/js',
                     src: [
                         'marked.js'
                     ]
-                },
-                {
+                }, {
                     expand: true,
                     cwd: '<%= conf.app %>/../bower_components/',
                     dest: '<%= conf.build %>/docs/js',
@@ -239,8 +254,7 @@ module.exports = function(grunt) {
                 }]
             },
             dist: {
-                files: [
-                {
+                files: [{
                     expand: true,
                     dot: true,
                     cwd: '<%= conf.app %>',
@@ -250,8 +264,7 @@ module.exports = function(grunt) {
                         '.htaccess',
                         'css/fonts/*'
                     ]
-                },
-                {
+                }, {
                     expand: true,
                     cwd: '.tmp/images',
                     dest: '<%= conf.build %>/css/img',
@@ -259,37 +272,30 @@ module.exports = function(grunt) {
                 }]
             },
             prod: {
-                files: [
-                    {
+                files: [{
                         src: '<%= conf.build %>/css/*.pundit.css',
                         dest: '<%= customDir %>/pundit2.css'
 
-                    },
-                    {
+                    }, {
                         src: '<%= conf.build %>/scripts/*.pundit2.js',
                         dest: '<%= customDir %>/pundit2.js'
-                    },
-                    {
+                    }, {
                         src: '<%= conf.build %>/scripts/*.libs.js',
                         dest: '<%= customDir %>/libs.js'
-                    },
-                    {
+                    }, {
                         expand: true,
                         cwd: '<%= conf.build %>/css/',
                         dest: '<%= customDir %>/',
                         src: 'fonts/*'
-                    },
-                    {
+                    }, {
                         expand: true,
                         cwd: '<%= conf.build %>/css/',
                         dest: '<%= customDir %>/',
                         src: 'img/*'
-                    },
-                    {
+                    }, {
                         src: './pundit2_conf.js',
                         dest: '<%= customDir %>/pundit2_conf.js'
-                    },
-                    {
+                    }, {
 
                         expand: true,
                         cwd: '<%= conf.build %>/docs/',
@@ -300,62 +306,52 @@ module.exports = function(grunt) {
                     {
                         src: './korboee_conf.js',
                         dest: '<%= customDir %>/korboee_conf.js'
-                            
-                    }
-                ]
-            },
-            uncompressed: {
-                files: [
-                    {
-                        src: '.tmp/concat/scripts/pundit2.js',
-                        dest: '<%= customDir %>/uncompressed/pundit2.js'
 
                     }
                 ]
             },
+            uncompressed: {
+                files: [{
+                    src: '.tmp/concat/scripts/pundit2.js',
+                    dest: '<%= customDir %>/uncompressed/pundit2.js'
+
+                }]
+            },
             bookmarklet: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= conf.app %>/fonts/pundit-icon-font/',
-                        dest: '<%= conf.build %>/bm/css/',
-                        src: 'fonts/*'
-                    },
-                    {
-                        expand: true,
-                        cwd: '<%= conf.app %>/styles/',
-                        dest: '<%= conf.build %>/bm/css/',
-                        src: 'img/*'
-                    },
-                    {
-                        expand: true,
-                        cwd: '<%= conf.app %>/src/',
-                        dest: '<%= conf.build %>/bm',
-                        src: 'InitBookmarklet.js'
-                    },
-                    {
-                        expand: true,
-                        cwd: '<%= conf.app %>/src/',
-                        dest: '<%= conf.build %>/bm',
-                        src: 'InitBookmarkletFeed.js'
-                    }
-                ]
+                files: [{
+                    expand: true,
+                    cwd: '<%= conf.app %>/fonts/pundit-icon-font/',
+                    dest: '<%= conf.build %>/bm/css/',
+                    src: 'fonts/*'
+                }, {
+                    expand: true,
+                    cwd: '<%= conf.app %>/styles/',
+                    dest: '<%= conf.build %>/bm/css/',
+                    src: 'img/*'
+                }, {
+                    expand: true,
+                    cwd: '<%= conf.app %>/src/',
+                    dest: '<%= conf.build %>/bm',
+                    src: 'InitBookmarklet.js'
+                }, {
+                    expand: true,
+                    cwd: '<%= conf.app %>/src/',
+                    dest: '<%= conf.build %>/bm',
+                    src: 'InitBookmarkletFeed.js'
+                }]
             },
             chrome: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= conf.app %>/extensions/chrome/',
-                        dest: '<%= conf.build %>/extensions/chrome/',
-                        src: '**/*'
-                    },
-                    {
-                        expand: true,
-                        cwd: '<%= conf.app %>/styles/',
-                        dest: '<%= conf.build %>/extensions/chrome/css/',
-                        src: 'img/*'
-                    }
-                ]
+                files: [{
+                    expand: true,
+                    cwd: '<%= conf.app %>/extensions/chrome/',
+                    dest: '<%= conf.build %>/extensions/chrome/',
+                    src: '**/*'
+                }, {
+                    expand: true,
+                    cwd: '<%= conf.app %>/styles/',
+                    dest: '<%= conf.build %>/extensions/chrome/inject/css/',
+                    src: 'img/*'
+                }]
             },
             css: {
                 expand: true,
@@ -364,20 +360,17 @@ module.exports = function(grunt) {
                 src: '{,*/}*.css'
             },
             fonts: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= conf.app %>/fonts/pundit-icon-font/',
-                        dest: '<%= conf.app %>/css/',
-                        src: 'fonts/*'
-                    },
-                    {
-                        expand: true,
-                        cwd: '<%= conf.app %>/fonts/pundit-icon-font/',
-                        dest: '<%= conf.app %>/css/',
-                        src: 'style.css'
-                    }
-                ]
+                files: [{
+                    expand: true,
+                    cwd: '<%= conf.app %>/fonts/pundit-icon-font/',
+                    dest: '<%= conf.app %>/css/',
+                    src: 'fonts/*'
+                }, {
+                    expand: true,
+                    cwd: '<%= conf.app %>/fonts/pundit-icon-font/',
+                    dest: '<%= conf.app %>/css/',
+                    src: 'style.css'
+                }]
             }
         },
 
@@ -488,12 +481,12 @@ module.exports = function(grunt) {
             server: {
                 url: 'http://localhost:<%= connect.options.port %>/app/examples/'
             },
-            
+
             doc: {
                 url: 'http://localhost:<%= connect.options.port %>/build/docs/'
             }
         },
-        
+
         jshint: {
             options: {
                 "reporter": require('jshint-stylish'),
@@ -540,7 +533,7 @@ module.exports = function(grunt) {
                     }
                 },
                 files: {
-                    src: ['Gruntfile.js','test/*.js', 'test/**/*.js']
+                    src: ['Gruntfile.js', 'test/*.js', 'test/**/*.js']
                 }
             },
             app: {
@@ -567,7 +560,7 @@ module.exports = function(grunt) {
                 configFile: './test/karma.conf.js'
             },
             headless: {
-                browsers:  ['PhantomJS']
+                browsers: ['PhantomJS']
             },
             unit: {
                 autoWatch: false,
@@ -607,7 +600,7 @@ module.exports = function(grunt) {
                 }
             }
         },
-        
+
         htmlbuild: {
             options: {
                 parseTag: 'buildexamples'
@@ -639,66 +632,58 @@ module.exports = function(grunt) {
         }
 
     });
-    
-    
+
+
     grunt.registerTask('examples', 'creates examples', ['listExamples', 'htmlbuild:pre', 'htmlbuild:dev']);
-    
+
     grunt.registerTask('listExamples', 'List examples', function() {
         var examples = grunt.file.expand('app/examples/src/*html'),
             examplesLinks = [];
-        
+
         for (var i in examples) {
             var idx = examples[i].lastIndexOf('/'),
-                name = examples[i].substr(idx+1),
-                label = name.substr(0, name.length-5);
-            examplesLinks[i] = "<a href='"+name+"'>"+label+"</a>";
+                name = examples[i].substr(idx + 1),
+                label = name.substr(0, name.length - 5);
+            examplesLinks[i] = "<a href='" + name + "'>" + label + "</a>";
         }
-        
+
         conf.examples = examples;
         conf.examplesLinks = examplesLinks.join(" | ");
     });
-    
+
     grunt.registerTask('dgeni', 'Generate docs via Dgeni.', function() {
         var dgeni = require('dgeni');
         var done = this.async();
-        
+
         dgeni('docsAssets/dgeni.conf.js')
-          .generateDocs()
-          .then(done);
-      });
+            .generateDocs()
+            .then(done);
+    });
 
     grunt.registerTask('doc', 'create documentation', ['clean:docs', 'dgeni', 'copy:docs', 'concat:docApp', 'open:doc']);
 
     grunt.registerTask('docNoOpen', 'create documentation', ['clean:docs', 'dgeni', 'copy:docs', 'concat:docApp']);
 
-    grunt.registerTask('install', 'Installs js (non-node) dependencies like bower etc',
-        ['bower', 'shell:protractorInstall']);
+    grunt.registerTask('install', 'Installs js (non-node) dependencies like bower etc', ['bower', 'shell:protractorInstall']);
 
-    grunt.registerTask('build', 'Builds a production-ready version of the application',
-        ['clean:dist', 'copy:fonts', 'html2js:main', 'html2js:korboee', 'examples', 'useminPrepare', 'less:dist', 'copy:css', 'imagemin',
-            'htmlmin', 'concat',  'copy:dist', 'ngmin', 'cssmin', 'uglify',
-            'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet', 'copy:chrome']);
+    grunt.registerTask('build', 'Builds a production-ready version of the application', ['clean:dist', 'copy:fonts', 'html2js:main', 'html2js:korboee', 'examples', 'useminPrepare', 'less:dist', 'copy:css', 'imagemin',
+        'htmlmin', 'concat', 'copy:dist', 'ngmin', 'cssmin', 'uglify',
+        'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet', 'copy:chrome', 'replace:chrome'
+    ]);
 
-    grunt.registerTask('dev', 'Live dev workflow: watches app files and reloads the browser automatically',
-        ['less:dev', 'copy:fonts', 'imagemin:dev', 'html2js:main', 'html2js:korboee', 'examples', 'connect:livereload', 'open:server', 'watch']);
-    grunt.registerTask('dev:unit', 'Live dev UNIT tests workflow: watches for test files and runs unit tests automatically',
-        ['test:unit', 'watch:unit']);
+    grunt.registerTask('dev', 'Live dev workflow: watches app files and reloads the browser automatically', ['less:dev', 'copy:fonts', 'imagemin:dev', 'html2js:main', 'html2js:korboee', 'examples', 'connect:livereload', 'open:server', 'watch']);
+    grunt.registerTask('dev:unit', 'Live dev UNIT tests workflow: watches for test files and runs unit tests automatically', ['test:unit', 'watch:unit']);
 
-    grunt.registerTask('test', 'Executes unit and e2e tests',
-        ['jshint', 'karma:unit', 'connect:testserver', 'protractor:singlerun']);
-    grunt.registerTask('test:unit', 'Executes unit tests',
-        ['jshint:tests', 'karma:unit']);
-    grunt.registerTask('test:cov', 'Produces test coverage reports',
-        ['karma:unitCoverage']);
-    grunt.registerTask('test:e2e', 'Executes the e2e tests',
-        [/*'jshint',*/ 'connect:testserver', 'protractor:singlerun']);
+    grunt.registerTask('test', 'Executes unit and e2e tests', ['jshint', 'karma:unit', 'connect:testserver', 'protractor:singlerun']);
+    grunt.registerTask('test:unit', 'Executes unit tests', ['jshint:tests', 'karma:unit']);
+    grunt.registerTask('test:cov', 'Produces test coverage reports', ['karma:unitCoverage']);
+    grunt.registerTask('test:e2e', 'Executes the e2e tests', [ /*'jshint',*/ 'connect:testserver', 'protractor:singlerun']);
     grunt.registerTask('test:headless', ['jshint', 'karma:headless']);
 
-    grunt.registerTask('default',
-        ['clean']);
+    grunt.registerTask('default', ['clean']);
 
     grunt.registerTask('prod', 'Take as parameter a path or directory when to copy files ready to be included in the HTML page',
-        function(){
+        function() {
             grunt.task.run('build');
             grunt.task.run('docNoOpen');
             grunt.config.set('customDir', arguments[0]);
@@ -706,7 +691,7 @@ module.exports = function(grunt) {
         });
 
     grunt.registerTask('uncompressedProd', 'Take as parameter a path or directory when to copy files ready to be included in the HTML page',
-        function(){
+        function() {
             grunt.task.run('build');
             grunt.task.run('docNoOpen');
             grunt.config.set('customDir', arguments[0]);
