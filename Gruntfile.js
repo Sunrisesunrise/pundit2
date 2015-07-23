@@ -273,42 +273,45 @@ module.exports = function(grunt) {
             },
             prod: {
                 files: [{
-                        src: '<%= conf.build %>/css/*.pundit.css',
-                        dest: '<%= customDir %>/pundit2.css'
+                    src: '<%= conf.build %>/css/*.pundit.css',
+                    dest: '<%= customDir %>/pundit2.css'
+                }, {
+                    src: '<%= conf.build %>/scripts/*.pundit2.js',
+                    dest: '<%= customDir %>/pundit2.js'
+                }, {
+                    src: '<%= conf.build %>/scripts/*.libs.js',
+                    dest: '<%= customDir %>/libs.js'
+                }, {
+                    expand: true,
+                    cwd: '<%= conf.build %>/css/',
+                    dest: '<%= customDir %>/',
+                    src: 'fonts/*'
+                }, {
+                    expand: true,
+                    cwd: '<%= conf.build %>/css/',
+                    dest: '<%= customDir %>/',
+                    src: 'img/*'
+                }, {
+                    src: './pundit2_conf.js',
+                    dest: '<%= customDir %>/pundit2_conf.js'
+                }, {
+                    expand: true,
+                    cwd: '<%= conf.build %>/docs/',
+                    dest: '<%= customDir %>/docs/',
+                    src: '**/*'
+                }, {
+                    src: './korboee_conf.js',
+                    dest: '<%= customDir %>/korboee_conf.js'
 
-                    }, {
-                        src: '<%= conf.build %>/scripts/*.pundit2.js',
-                        dest: '<%= customDir %>/pundit2.js'
-                    }, {
-                        src: '<%= conf.build %>/scripts/*.libs.js',
-                        dest: '<%= customDir %>/libs.js'
-                    }, {
-                        expand: true,
-                        cwd: '<%= conf.build %>/css/',
-                        dest: '<%= customDir %>/',
-                        src: 'fonts/*'
-                    }, {
-                        expand: true,
-                        cwd: '<%= conf.build %>/css/',
-                        dest: '<%= customDir %>/',
-                        src: 'img/*'
-                    }, {
-                        src: './pundit2_conf.js',
-                        dest: '<%= customDir %>/pundit2_conf.js'
-                    }, {
-
-                        expand: true,
-                        cwd: '<%= conf.build %>/docs/',
-                        dest: '<%= customDir %>/docs/',
-                        src: '**/*'
-                    },
-
-                    {
-                        src: './korboee_conf.js',
-                        dest: '<%= customDir %>/korboee_conf.js'
-
-                    }
-                ]
+                }]
+            },            
+            prod_chrome: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= conf.build %>/extensions/chrome/',
+                    dest: '<%= customDir %>/',
+                    src: '**/*'
+                }]
             },
             uncompressed: {
                 files: [{
@@ -693,6 +696,13 @@ module.exports = function(grunt) {
             grunt.task.run('docNoOpen');
             grunt.config.set('customDir', arguments[0]);
             grunt.task.run('copy:prod');
+        });
+
+    grunt.registerTask('prod_chrome', 'Take as parameter a path or directory when to copy chrome extension files',
+        function() {
+            grunt.task.run('build');
+            grunt.config.set('customDir', arguments[0]);
+            grunt.task.run('copy:prod_chrome');
         });
 
     grunt.registerTask('uncompressedProd', 'Take as parameter a path or directory when to copy files ready to be included in the HTML page',
