@@ -304,7 +304,7 @@ module.exports = function(grunt) {
                     dest: '<%= customDir %>/korboee_conf.js'
 
                 }]
-            },            
+            },
             prod_chrome: {
                 files: [{
                     expand: true,
@@ -458,6 +458,13 @@ module.exports = function(grunt) {
                     '<%= conf.tests %>/**/*.js'
                 ],
                 tasks: ['jshint', 'karma:unit']
+            },
+            chrome: {
+                files: [
+                    '<%= conf.app %>/extensions/chrome/*',
+                    '<%= conf.app %>/extensions/chrome/**/*'
+                ],
+                tasks: ['copy:chrome']
             },
             buildhtml: {
                 files: [
@@ -681,6 +688,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('dev', 'Live dev workflow: watches app files and reloads the browser automatically', ['less:dev', 'copy:fonts', 'imagemin:dev', 'html2js:main', 'html2js:korboee', 'examples', 'connect:livereload', 'open:server', 'watch']);
     grunt.registerTask('dev:unit', 'Live dev UNIT tests workflow: watches for test files and runs unit tests automatically', ['test:unit', 'watch:unit']);
+    grunt.registerTask('dev:chrome', 'Live dev Chrome', ['watch:chrome']);
 
     grunt.registerTask('test', 'Executes unit and e2e tests', ['jshint', 'karma:unit', 'connect:testserver', 'protractor:singlerun']);
     grunt.registerTask('test:unit', 'Executes unit tests', ['jshint:tests', 'karma:unit']);
