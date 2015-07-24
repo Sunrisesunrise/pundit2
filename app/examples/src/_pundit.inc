@@ -32,8 +32,6 @@
     <script src="../src/Core/PUNDITDEFAULTCONF.constant.js"></script>
     <script src="../src/Core/MyPundit.service.js"></script>
     <script src="../src/Core/Analytics.service.js"></script>
-    <script src="../src/Core/PredicateSelector.service.js"></script>
-    <script src="../src/Core/TemplatesSelector.service.js"></script>
     <script src="../src/Core/Fp3.service.js"></script>
     <script src="../src/Core/ImageFragmentAnnotatorHelper.service.js"></script>
     <script src="../src/Core/BrokenHelper.service.js"></script>
@@ -170,6 +168,8 @@
     <script src="../src/Tools/NotebookComposer/NotebookComposer.service.js"></script>
 
     <script src="../src/Vocabularies/Vocabularies.js"></script>
+    <script src="../src/Vocabularies/PredicateSelector.service.js"></script>
+    <script src="../src/Vocabularies/TemplatesSelector.service.js"></script>
     <script src="../src/Vocabularies/FreebaseSelector.factory.js"></script>
     <script src="../src/Vocabularies/MurucaSelector.factory.js"></script>
     <script src="../src/Vocabularies/KorboBasketSelector.factory.js"></script>
