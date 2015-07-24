@@ -5,17 +5,17 @@
             <ul class="nav navbar-nav pnd-toolbar-navbar-left">
                 
                 <!-- Error button -->
-                <li ng-show="showStatusButtonError()" class="pnd-toolbar-error-button">
+                <li ng-show="showStatusButtonError()" class="pnd-toolbar-error-button pnd-toolbar-first-button">
                     <a href="javascript:void(0)" template="{{dropdownTemplate}}" bs-dropdown="errorMessageDropdown"><span class="pnd-icon pnd-icon-exclamation"></span></a>
                 </li>
                 
                 <!-- OK button -->
-                <li ng-show="showStatusButtonOk()" class="pnd-toolbar-status-button-ok">
+                <li ng-show="showStatusButtonOk()" class="pnd-toolbar-status-button-ok pnd-toolbar-first-button">
                     <a href="javascript:void(0)" template="{{dropdownTemplate}}" bs-dropdown="infoDropdown"><span class="pnd-icon pnd-icon-logo-1"></span></a>
                 </li>
 
                 <!-- Loading button -->
-                <li ng-show="showStatusButtonLoading()" class="pnd-toolbar-loading-button">
+                <li ng-show="showStatusButtonLoading()" class="pnd-toolbar-loading-button pnd-toolbar-first-button">
                     <a href="javascript:void(0)" template="{{dropdownTemplate}}" bs-dropdown="infoDropdown">
                         <!-- <span></span> -->
                         <span class="pnd-icon pnd-icon-refresh pnd-icon-spin"></span>
@@ -25,7 +25,7 @@
                 <!-- Login button -->
                 <li ng-show="showLogin()" class="pnd-toolbar-login-button pnd-toolbar-button-active pnd-calltoaction-btn">
                     <!-- <a href="javascript:void(0)" template="{{dropdownTemplate}}" bs-dropdown="userNotLoggedDropdown"><span>Login</span></a> -->
-                    <a href="javascript:void(0)" ng-click="loginButtonClick($event)"><span>Login</span></a>
+                    <a href="javascript:void(0)" ng-click="loginButtonClick($event)"><span>Log in</span></a>
                 </li>
                 
                 <!-- User button -->

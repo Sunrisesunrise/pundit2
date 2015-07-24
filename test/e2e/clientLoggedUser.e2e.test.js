@@ -453,7 +453,7 @@ describe("Client interaction when user is logged in", function() {
         });
     });
 
-    it("should correctly show item preview when mouseover on triple composer items", function(){
+    iit("should correctly show item preview when mouseover on triple composer items", function(){
 
         p.driver.manage().window().setSize(1200, 960);
 
@@ -476,7 +476,7 @@ describe("Client interaction when user is logged in", function() {
         });
         // check type
         p.findElement(protractor.By.css("item-preview .pnd-preview-single-type")).getText().then(function(text) {
-            expect(text).toBe("Text fragment");
+            expect(text).toBe("TEXT FRAGMENT");
         });
 
     });
