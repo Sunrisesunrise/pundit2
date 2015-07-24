@@ -14,15 +14,15 @@ describe("Item interaction", function() {
         });
 
         p.findElements(protractor.By.css(".pnd-item-buttons button")).then(function(buttons) {
-            expect(buttons.length).toBe(2);
+            expect(buttons.length).toBe(1);
         });
 
         p.findElements(protractor.By.css(".pnd-item-text span")).then(function(texts) {
             expect(texts.length).toBe(2);
         });
 
-        p.findElement(protractor.By.css(".pnd-item-typeLabel")).then(function(label) {
-            expect(label.getText()).toEqual("Text fragment");
+        p.findElement(protractor.By.css(".pnd-type")).then(function(label) {
+            expect(label.getText()).toEqual("TEXT FRAGMENT");
         });
 
         p.findElement(protractor.By.css(".pnd-item-label")).then(function(label) {

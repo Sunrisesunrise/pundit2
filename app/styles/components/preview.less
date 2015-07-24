@@ -50,21 +50,15 @@
     overflow: hidden;
     position: relative;
 
-    .pnd-icon {
+    .pnd-icon.pnd-type {
         padding: 4px 6px;
 
         position: absolute;
         right: 5px;
         top: 10px;
-        // background-color: @color-type-background;
-        /* Gradient bg with mixin */
-        #gradient > .vertical(fade(lighten(@color-type-background, 1), 40%); fade(darken(@color-type-background, 1), 40%));
-        border-left: 2px solid #fff;
-        border-radius: @type-border-radius;
 
         font-size: 14px;
         cursor: pointer;
-        .text-white-emboss();
     }
 
     ul {
@@ -72,25 +66,8 @@
         margin: 0 14px 0 0;
         list-style: none;
 
-        li {
+        li.pnd-type {
             float: left;
-            overflow: hidden;
-            margin: 0 3px 3px 0;
-            padding: 3px 6px;
-
-            // background-color: @color-type-background;
-            /* Gradient bg with mixin */
-            #gradient > .vertical(fade(lighten(@color-type-background, 1), 40%); fade(darken(@color-type-background, 1), 40%));
-            border-radius: @type-border-radius;
-            /* border: 1px solid rgb(234, 234, 234); */
-
-            color: @color-type-text;
-            list-style: none;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            font-size: 10px;
-            text-transform: uppercase;
-            .text-white-emboss();
         }
     }
 }

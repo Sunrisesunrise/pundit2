@@ -64,7 +64,7 @@ angular.module('Pundit2.Preview')
     });
 
     $scope.$watch(function() {
-        return currentElement.find('li.pnd-preview-single-type').css('width');
+        return currentElement.find('li.pnd-type').css('width');
     }, function() {
         var liList;
 

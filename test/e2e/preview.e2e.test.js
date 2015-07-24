@@ -121,7 +121,7 @@ describe("Preview interaction", function() {
             });
 
             //pnd-preview-item-types-ul
-            p.findElement(protractor.By.css('.pnd-preview-item-types-ul li.pnd-preview-single-type')).then(function(type) {
+            p.findElement(protractor.By.css('.pnd-preview-item-types-ul li.pnd-type')).then(function(type) {
                 expect(type.getText()).toBe('PROPERTY');
             });
 
