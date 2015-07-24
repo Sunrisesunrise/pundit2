@@ -450,5 +450,27 @@ angular.module('Pundit2.Communication')
 
     };
 
+    annotationsCommunication.setAnnotationsBroken = function(annotationsId, broken) {
+        var nsKey = 'asAnnBroken';
+        var listId = annotationsId.join(';');
+        var addValue = '?add=' + broken;
+        var httpObject = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'text/plain'
+            },
+            method: 'PUT',
+            url: NameSpace.get(nsKey) + addValue,
+            withCredentials: true,
+            data: listId
+        };
+
+        $http(httpObject).success(function() {
+            annotationsCommunication.log("Annotations " + listId + " set broken: " + broken);
+        }).error(function() {
+            annotationsCommunication.log("Error during setting annotations broken");
+        });
+    };
+
     return annotationsCommunication;
 });
