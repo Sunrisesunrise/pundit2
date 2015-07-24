@@ -453,7 +453,7 @@ describe("Client interaction when user is logged in", function() {
         });
     });
 
-    iit("should correctly show item preview when mouseover on triple composer items", function(){
+    it("should correctly show item preview when mouseover on triple composer items", function(){
 
         p.driver.manage().window().setSize(1200, 960);
 
