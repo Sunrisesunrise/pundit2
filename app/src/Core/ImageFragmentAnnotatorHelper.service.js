@@ -1,6 +1,7 @@
 /*jshint unused: false*/
 
 angular.module('Pundit2.Core')
+// TODO move this service in a better place
 .service('ImageFragmentAnnotatorHelper', function($rootScope, $modal, $window, BaseComponent, EventDispatcher, Config, NameSpace,
     ContextualMenu, XpointersHelper, Item, MyItems, MyPundit, Analytics) {
     
