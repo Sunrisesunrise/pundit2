@@ -118,8 +118,8 @@ angular.module('Pundit2.Core')
         motivatedBy: _oa + 'motivatedBy',
         hasTemplate: _pnd + 'hasTemplate',
         annotatedBy: _oa + 'annotatedBy',
-        annotatedAt: _oa + 'annotatedAt'
-
+        annotatedAt: _oa + 'annotatedAt',
+        isBrokenYet: _pnd + 'isBroken'
     };
 
     // TODO: move to Consolidation.options ??
@@ -180,7 +180,7 @@ angular.module('Pundit2.Core')
     ns.asOpenAnn = ns.as + 'api/open/annotations/{{id}}';
     ns.asAnnContent = ns.as + 'api/annotations/{{id}}/content';
     ns.asAnnItems = ns.as + 'api/annotations/{{id}}/items';
-    ns.asAnnBroken = ns.as + 'api/annotations/annotations/broken';
+    ns.asAnnBroken = ns.as + 'api/annotations/broken';
 
     ns.asPref = ns.as + 'api/services/preferences/{{key}}';
 
