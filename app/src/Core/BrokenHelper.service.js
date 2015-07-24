@@ -1,6 +1,7 @@
 angular.module('Pundit2.Core')
 
 .constant("BROKENHELPERDEFAULTS", {
+    active: true,
     debug: false
 })
 
@@ -43,6 +44,10 @@ angular.module('Pundit2.Core')
     };
 
     brokenHelper.sendQueques = function() {
+        if (brokenHelper.options.active === false) {
+            return;
+        }
+
         if (brokenAnnotationsQueque.length > 0) {
             EventDispatcher.sendEvent('BrokenHelper.sendBroken', brokenAnnotationsQueque).then(function() {
                 brokenHelper.log('Annotations ' + brokenAnnotationsQueque + ' set broken on the server');
