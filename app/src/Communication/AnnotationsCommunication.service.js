@@ -450,7 +450,11 @@ angular.module('Pundit2.Communication')
 
     };
 
-    annotationsCommunication.setAnnotationsBroken = function(annotationsId, broken) {
+    annotationsCommunication.setAnnotationsBroken = function(annotationsId, broken, promise) {
+        if (MyPundit.isUserLogged() === false) {
+            return;
+        }
+
         var nsKey = 'asAnnBroken';
         var listId = annotationsId.join(';');
         var addValue = '?add=' + broken;
@@ -466,11 +470,24 @@ angular.module('Pundit2.Communication')
         };
 
         $http(httpObject).success(function() {
+            if (typeof promise !== 'undefined') {
+                promise.resolve();
+            }
             annotationsCommunication.log("Annotations " + listId + " set broken: " + broken);
         }).error(function() {
+            if (typeof promise !== 'undefined') {
+                promise.reject();
+            }
             annotationsCommunication.log("Error during setting annotations broken");
         });
     };
+
+    EventDispatcher.addListener('BrokenHelper.sendBroken', function(e) {
+        annotationsCommunication.setAnnotationsBroken(e.args, true, e.promise);
+    });    
+    EventDispatcher.addListener('BrokenHelper.sendFixed', function(e) {
+        annotationsCommunication.setAnnotationsBroken(e.args, false, e.promise);
+    });
 
     return annotationsCommunication;
 });
