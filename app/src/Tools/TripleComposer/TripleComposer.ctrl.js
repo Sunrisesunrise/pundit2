@@ -26,6 +26,7 @@ angular.module('Pundit2.TripleComposer')
 
     $scope.headerMessage = "Create new annotation";
 
+    // TODO find a better way to change this state
     $scope.editMode = false;
     $scope.$watch(function() {
         return TripleComposer.isEditMode($scope.name);

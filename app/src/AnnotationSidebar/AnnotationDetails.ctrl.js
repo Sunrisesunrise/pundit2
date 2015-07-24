@@ -129,6 +129,10 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.editAnnotation = function() {
+        if (TripleComposer.isEditMode()) {
+            return;
+        }
+
         TripleComposer.editAnnotation($scope.annotation.id);
         if (!Dashboard.isDashboardVisible()) {
             TripleComposer.closeAfterOp();
