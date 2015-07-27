@@ -209,7 +209,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.dateWithTime = false;
         $scope.objectFixed = false;
         triple.object = null;
-        triple.objType = null;
+        triple.objType = undefined;
         ResourcePanel.hide();
         angular.element('.pnd-triplecomposer-save').addClass('disabled');
         $scope.tripleComposerCtrl.isTripleErasable();
