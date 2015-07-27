@@ -3,9 +3,9 @@
 
     <div class="pnd-preview-item-types">
         <ul class="pnd-preview-item-types-ul">
-            <li class="pnd-preview-single-type" ng-class="{'pnd-is-sticky': isSticky}" ng-repeat="type in item.type">{{getTypeLabel(type)}}</li>
+            <li class="pnd-type" ng-class="{'pnd-is-sticky': isSticky}" ng-repeat="type in item.type">{{getTypeLabel(type)}}</li>
         </ul>
-        <div ng-show="typeHiddenPresent" ng-class="{'pnd-icon-caret-down': typeHidden, 'pnd-icon-caret-up': !typeHidden}" class="pnd-icon" ng-click="showAlltypes()"></div>
+        <div ng-show="typeHiddenPresent" ng-class="{'pnd-icon-caret-down': typeHidden, 'pnd-icon-caret-up': !typeHidden}" class="pnd-icon pnd-type" ng-click="showAlltypes()"></div>
     </div>
 
     <div ng-if="item.isImage()" class="pnd-preview-item-image">

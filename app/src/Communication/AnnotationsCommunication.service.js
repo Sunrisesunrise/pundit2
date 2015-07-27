@@ -3,7 +3,7 @@ angular.module('Pundit2.Communication')
 .constant('ANNOTATIONSCOMMUNICATIONDEFAULTS', {
     preventDownload: false,
     loadMultipleAnnotations: false
-    //loadMultipleAnnotationsRequireCredentials: false
+        //loadMultipleAnnotationsRequireCredentials: false
 })
 
 .service('AnnotationsCommunication', function(BaseComponent, EventDispatcher, NameSpace, Consolidation, MyPundit, ModelHelper,
@@ -21,6 +21,116 @@ angular.module('Pundit2.Communication')
         if (annotationServerVersion === 'v2')  {
             ModelHandler.makeTargetsAndItems(data, forceAddToContainer);
         }
+    };
+
+    var updateAnnotationV1 = function(promise, annID, graph, items, targets) {
+        var completed = 0;
+
+        $http({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'PUT',
+            url: NameSpace.get('asAnnContent', {
+                id: annID
+            }),
+            params: {
+                context: angular.toJson({
+                    targets: targets,
+                    pageContext: XpointersHelper.getSafePageContext()
+                })
+            },
+            withCredentials: true,
+            data: {
+                "graph": graph
+            }
+        }).success(function() {
+            if (completed > 0) {
+                AnnotationsExchange.getAnnotationById(annID).update().then(function() {
+                    Consolidation.consolidateAll();
+                    EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
+                    setLoading(false);
+                    promise.resolve();
+                });
+            }
+            completed++;
+            annotationsCommunication.log("Graph correctly updated: " + annID);
+        }).error(function() {
+            setLoading(false);
+            promise.reject();
+            annotationsCommunication.log("Error during graph editing of " + annID);
+        });
+
+        $http({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'PUT',
+            url: NameSpace.get('asAnnItems', {
+                id: annID
+            }),
+            withCredentials: true,
+            data: items
+        }).success(function() {
+            if (completed > 0) {
+                AnnotationsExchange.getAnnotationById(annID).update().then(function() {
+                    Consolidation.consolidateAll();
+                    EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
+                    setLoading(false);
+                    promise.resolve();
+                });
+            }
+            completed++;
+            annotationsCommunication.log("Items correctly updated: " + annID);
+        }).error(function() {
+            setLoading(false);
+            promise.reject();
+            annotationsCommunication.log("Error during items editing of " + annID);
+        });
+    };
+
+    var updateAnnotationV2 = function(promise, annID, graph, items, flatTargets, targets, types) {
+        setLoading(true);
+
+        var postData = {
+            graph: graph,
+            items: items,
+            type: types,
+            target: targets
+        };
+
+        $http({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'PUT',
+            url: NameSpace.get('asAnn', {
+                id: annID
+            }),
+            params: {
+                context: angular.toJson({
+                    targets: flatTargets,
+                    pageContext: XpointersHelper.getSafePageContext()
+                })
+            },
+            withCredentials: true,
+            data: postData
+        }).success(function() {
+            // TODO if is rejected ???
+            AnnotationsExchange.getAnnotationById(annID).update().then(function() {
+                Consolidation.consolidateAll();
+                EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
+                setLoading(false);
+                promise.resolve();
+            });
+            annotationsCommunication.log("Items correctly updated: " + annID);
+
+        }).error(function(msg) {
+            // TODO
+            annotationsCommunication.log("Error: impossible to update annotation", msg);
+            setLoading(false);
+            promise.reject();
+        });
     };
 
     // get all annotations of the page from the server
@@ -327,8 +437,7 @@ angular.module('Pundit2.Communication')
 
             if (Config.annotationServerVersion === 'v1') {
                 updateAnnotationV1(promise, annID, graph, items, flatTargets);
-            }
-            else {
+            } else {
                 updateAnnotationV2(promise, annID, graph, items, flatTargets, targets, types);
             }
 
@@ -341,115 +450,44 @@ angular.module('Pundit2.Communication')
 
     };
 
-    var updateAnnotationV1 = function(promise, annID, graph, items, targets) {
-        var completed = 0;
+    annotationsCommunication.setAnnotationsBroken = function(annotationsId, broken, promise) {
+        if (MyPundit.isUserLogged() === false) {
+            return;
+        }
 
-        $http({
+        var nsKey = 'asAnnBroken';
+        var listId = annotationsId.join(';');
+        var addValue = '?add=' + broken;
+        var httpObject = {
             headers: {
-                'Content-Type': 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'text/plain'
             },
             method: 'PUT',
-            url: NameSpace.get('asAnnContent', {
-                id: annID
-            }),
-            params: {
-                context: angular.toJson({
-                    targets: targets,
-                    pageContext: XpointersHelper.getSafePageContext()
-                })
-            },
+            url: NameSpace.get(nsKey) + addValue,
             withCredentials: true,
-            data: {
-                "graph": graph
-            }
-        }).success(function() {
-            if (completed > 0) {
-                AnnotationsExchange.getAnnotationById(annID).update().then(function() {
-                    Consolidation.consolidateAll();
-                    EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
-                    setLoading(false);
-                    promise.resolve();
-                });
-            }
-            completed++;
-            annotationsCommunication.log("Graph correctly updated: " + annID);
-        }).error(function() {
-            setLoading(false);
-            promise.reject();
-            annotationsCommunication.log("Error during graph editing of " + annID);
-        });
-
-        $http({
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: 'PUT',
-            url: NameSpace.get('asAnnItems', {
-                id: annID
-            }),
-            withCredentials: true,
-            data: items
-        }).success(function() {
-            if (completed > 0) {
-                AnnotationsExchange.getAnnotationById(annID).update().then(function() {
-                    Consolidation.consolidateAll();
-                    EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
-                    setLoading(false);
-                    promise.resolve();
-                });
-            }
-            completed++;
-            annotationsCommunication.log("Items correctly updated: " + annID);
-        }).error(function() {
-            setLoading(false);
-            promise.reject();
-            annotationsCommunication.log("Error during items editing of " + annID);
-        });
-    };
-
-    var updateAnnotationV2 = function(promise, annID, graph, items, flatTargets, targets, types) {
-        setLoading(true);
-
-        var postData = {
-            graph: graph,
-            items: items,
-            type: types,
-            target: targets
+            data: listId
         };
 
-        $http({
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: 'PUT',
-            url: NameSpace.get('asAnn', {
-                id: annID
-            }),
-            params: {
-                context: angular.toJson({
-                    targets: flatTargets,
-                    pageContext: XpointersHelper.getSafePageContext()
-                })
-            },
-            withCredentials: true,
-            data: postData
-        }).success(function() {
-            // TODO if is rejected ???
-            AnnotationsExchange.getAnnotationById(annID).update().then(function() {
-                Consolidation.consolidateAll();
-                EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
-                setLoading(false);
+        $http(httpObject).success(function() {
+            if (typeof promise !== 'undefined') {
                 promise.resolve();
-            });
-            annotationsCommunication.log("Items correctly updated: " + annID);
-
-        }).error(function(msg) {
-            // TODO
-            annotationsCommunication.log("Error: impossible to update annotation", msg);
-            setLoading(false);
-            promise.reject();
+            }
+            annotationsCommunication.log("Annotations " + listId + " set broken: " + broken);
+        }).error(function() {
+            if (typeof promise !== 'undefined') {
+                promise.reject();
+            }
+            annotationsCommunication.log("Error during setting annotations broken");
         });
     };
+
+    EventDispatcher.addListener('BrokenHelper.sendBroken', function(e) {
+        annotationsCommunication.setAnnotationsBroken(e.args, true, e.promise);
+    });    
+    EventDispatcher.addListener('BrokenHelper.sendFixed', function(e) {
+        annotationsCommunication.setAnnotationsBroken(e.args, false, e.promise);
+    });
 
     return annotationsCommunication;
 });

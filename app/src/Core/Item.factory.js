@@ -408,10 +408,11 @@ angular.module('Pundit2.Core')
             case 'target':
                 var selector = targets[target[NameSpace.target.hasSelector][0].value];
                 if (typeof target[NameSpace.item.isPartOf] !== 'undefined') {
-                    values[NameSpace.item.isPartOf] = target[NameSpace.item.isPartOf][0].value;
+                    values.isPartOf = target[NameSpace.item.isPartOf][0].value;
                 }
-                values[NameSpace.target.hasScope] = target[NameSpace.target.hasScope][0].value;
-                values[NameSpace.target.hasSource] = target[NameSpace.target.hasSource][0].value;
+                values.hasScope = target[NameSpace.target.hasScope][0].value;
+                values.hasSource = target[NameSpace.target.hasSource][0].value;
+                values.pageContext = target[NameSpace.target.hasSource][0].value;
                 values.xpointer = selector[NameSpace.rdf.value][0].value;
                 values.label = selector[NameSpace.rdfs.label][0].value;
                 values.description = values.label;

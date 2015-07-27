@@ -1,4 +1,4 @@
-angular.module('Pundit2.Core')
+angular.module('Pundit2.Vocabularies')
 
 .service('TemplatesSelector', function(BaseComponent, Config, $http, $q,
     Item, Template, ItemsExchange, TemplatesExchange, FreebaseSelector) {

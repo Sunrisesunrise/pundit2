@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.controller('AnnotationDetailsCtrl', function($scope, $rootScope, $element, $modal, $timeout, $window, $timeout,
+.controller('AnnotationDetailsCtrl', function($scope, $rootScope, $element, $modal, $timeout, $window,
     AnnotationSidebar, AnnotationDetails, AnnotationsExchange, AnnotationsCommunication, Config,
     EventDispatcher, NotebookExchange, ItemsExchange, TripleComposer, Dashboard, ImageAnnotator,
     TextFragmentAnnotator, TypesHelper, MyPundit, Consolidation, Status, Analytics) {
@@ -130,19 +130,22 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.editAnnotation = function() {
         if (TripleComposer.isEditMode()) {
-            return;
+            TripleComposer.reset();
         }
 
-        TripleComposer.editAnnotation($scope.annotation.id);
-        if (!Dashboard.isDashboardVisible()) {
-            TripleComposer.closeAfterOp();
-            Dashboard.toggle();
-        } else {
-            TripleComposer.closeAfterOpOff();
-        }
-        EventDispatcher.sendEvent('AnnotationDetails.editAnnotation', TripleComposer.options.clientDashboardTabTitle);
+        // TODO fix tripleComposer.editAnnotation removing watch to add statement and remove this timeout
+        $timeout(function() {
+            TripleComposer.editAnnotation($scope.annotation.id);
+            if (!Dashboard.isDashboardVisible()) {
+                TripleComposer.closeAfterOp();
+                Dashboard.toggle();
+            } else {
+                TripleComposer.closeAfterOpOff();
+            }
+            EventDispatcher.sendEvent('AnnotationDetails.editAnnotation', TripleComposer.options.clientDashboardTabTitle);
 
-        Analytics.track('buttons', 'click', 'annotation--details--edit');
+            Analytics.track('buttons', 'click', 'annotation--details--edit');
+        }, 1);
     };
 
     $scope.isUserToolShowed = function() {

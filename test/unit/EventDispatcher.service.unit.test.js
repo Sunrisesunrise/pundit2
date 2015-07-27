@@ -57,7 +57,7 @@ describe('Event Dispatcher', function() {
         var promiseValue;
 
         EventDispatcher.addListener('EventDispatcher.unit.test', function (e) {
-            e.resolve('promise ok');
+            e.promise.resolve('promise ok');
         });
         expect(EventDispatcher.getListeners().length).toBe(1);
 

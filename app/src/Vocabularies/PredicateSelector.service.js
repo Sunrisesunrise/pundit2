@@ -1,6 +1,6 @@
 /*jshint camelcase: false*/
 
-angular.module('Pundit2.Core')
+angular.module('Pundit2.Vocabularies')
 
 .service('PredicateSelector', function(BaseComponent, Config, $http, $q) {
 

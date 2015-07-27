@@ -273,7 +273,7 @@ angular.module('Pundit2.AnnotationSidebar')
 })
 
 .service('AnnotationSidebar', function(ANNOTATIONSIDEBARDEFAULTS, $rootScope, $filter, $timeout,
-    BaseComponent, EventDispatcher, AnnotationsExchange, Annomatic, Consolidation, Dashboard,
+    BaseComponent, EventDispatcher, AnnotationsExchange, Annomatic, Consolidation, Dashboard, BrokenHelper,
     ItemsExchange, NotebookExchange, TypesHelper, TextFragmentAnnotator, XpointersHelper, Analytics) {
 
     var annotationSidebar = new BaseComponent('AnnotationSidebar', ANNOTATIONSIDEBARDEFAULTS);
@@ -691,9 +691,34 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var setBrokenInfo = function() {
+        var isBroken, isBrokenYet;
+
+        BrokenHelper.resetQueques();
+
         for (var i in state.allAnnotations) {
-            state.allAnnotations[i].broken = state.allAnnotations[i].isBroken();
+            isBroken = state.allAnnotations[i].isBroken();
+            isBrokenYet = state.allAnnotations[i].isBrokenYet;
+            
+            state.allAnnotations[i].broken = isBroken;
+
+            if (typeof(isBrokenYet) === 'string' && isBrokenYet === 'true') {
+                isBrokenYet = true;
+            } else {
+                isBrokenYet = false;
+            }
+
+            // Add fixed annotation to BrokenHelper
+            if (isBrokenYet && !isBroken) {
+                BrokenHelper.addAnnotation(state.allAnnotations[i].id, false);
+            }
+            
+            // Add broken annotation to BrokenHelper
+            if (!isBrokenYet && isBroken) {
+                BrokenHelper.addAnnotation(state.allAnnotations[i].id, true);
+            }
         }
+
+        BrokenHelper.sendQueques();
     };
 
     var setAnnotationInPage = function(annotations) {

@@ -352,7 +352,7 @@ describe("Client interaction when user is logged in", function() {
         // chek item content
         p.findElements(protractor.By.css("dashboard general-items-container[type=myItems] .pnd-panel-tab-content-content .pnd-tab-content > .active li .pnd-item-text")).then(function(items){
             expect(items.length).toBe(1);
-            expect(items[0].getText()).toBe("Text fragment Boccaccio");
+            expect(items[0].getText()).toBe("TEXT FRAGMENT Boccaccio");
         });
     });
 
@@ -453,7 +453,7 @@ describe("Client interaction when user is logged in", function() {
         });
     });
 
-    iit("should correctly show item preview when mouseover on triple composer items", function(){
+    it("should correctly show item preview when mouseover on triple composer items", function(){
 
         p.driver.manage().window().setSize(1200, 960);
 
@@ -475,7 +475,7 @@ describe("Client interaction when user is logged in", function() {
             expect(text).toBe("Dante");
         });
         // check type
-        p.findElement(protractor.By.css("item-preview .pnd-preview-single-type")).getText().then(function(text) {
+        p.findElement(protractor.By.css("item-preview .pnd-type")).getText().then(function(text) {
             expect(text).toBe("TEXT FRAGMENT");
         });
 
