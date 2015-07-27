@@ -130,6 +130,7 @@ angular.module('Pundit2.Model')
 
         // Skip incomplete triple.
         if (triple.subject === null || triple.predicate === null || triple.object === null) {
+            modelHelper.err('Part of triple at null!');
             return;
         }
 
@@ -170,7 +171,6 @@ angular.module('Pundit2.Model')
                             "type": "uri"
                         }];
 
-                        // TODO: ASAP add pageContext in ItemFactory.
                         var context = statementPart.pageContext || statementPart[NameSpace.item.isPartOf];
                         if (context) {
                             // hasScope.
@@ -186,6 +186,7 @@ angular.module('Pundit2.Model')
                         } else {
                             error = true;
                             errorMessage = 'Page context missing! Cannot proceed with annotation build.';
+                            modelHelper.err(errorMessage);
                             return;
                         }
                     }
