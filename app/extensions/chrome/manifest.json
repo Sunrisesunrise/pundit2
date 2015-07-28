@@ -29,9 +29,9 @@
   //   }
   // ],
   "web_accessible_resources": [
-    "inject/css/fonts/pundit-font.eof", 
-    "inject/css/fonts/pundit-font.svg", 
-    "inject/css/fonts/pundit-font.ttf", 
+    "inject/css/fonts/pundit-font.eof",
+    "inject/css/fonts/pundit-font.svg",
+    "inject/css/fonts/pundit-font.ttf",
     "inject/css/fonts/pundit-font.woff"
   ]
 }
