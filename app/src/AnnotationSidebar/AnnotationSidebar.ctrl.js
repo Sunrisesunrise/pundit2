@@ -254,10 +254,6 @@ angular.module('Pundit2.AnnotationSidebar')
             $scope.freeText = '';
         }
         $scope.annotations = AnnotationSidebar.getAllAnnotationsFiltered(currentFilters);
-        console.log('active filter');
-        if (AnnotationSidebar.needToFilter()) {
-            AnnotationSidebar.getFilteredAnnotationsUri();
-        }
     }, true);
 
     // TODO Use EventDispatcher

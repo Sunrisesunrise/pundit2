@@ -880,20 +880,22 @@ angular.module('Pundit2.AnnotationSidebar')
         return results;
     };
 
-    annotationSidebar.getFilteredAnnotationsUri = function() {
-        var tempCheck = ['freeText', 'fromDate', 'toDate', 'broken'];
+    var getFilteredAnnotationsId = function(filters) {
+        var exceptionsCheck = ['freeText', 'fromDate', 'toDate', 'broken'];
 
-        var selectedFilter = annotationSidebar.filters,
-            firstTime = true,
-            results = [];
+        var firstTime = true,
+            temp = [],
+            list = [];
 
-        angular.forEach(selectedFilter, function(filter, key) {
-            if (tempCheck.indexOf(key) !== -1 || filter.expression.length === 0) {
+        var results = [];
+
+        angular.forEach(filters, function(filter, key) {
+            if (exceptionsCheck.indexOf(key) !== -1 || filter.expression.length === 0) {
                 return;
             }
 
-            var temp = [],
-                list = filter.expression;
+            temp = [];
+            list = filter.expression;
 
             for (var i in list) {
                 temp = temp.concat(elementsList[key][list[i]].annotationsList)
@@ -919,9 +921,7 @@ angular.module('Pundit2.AnnotationSidebar')
             });
         }
 
-        // results = intersection(results, )
-        console.log(results);
-        console.log(results.length);
+        annotationSidebar.log('Get ' + results.length + ' filtered annotation id ', results);
         return results;
     };
 
@@ -990,10 +990,27 @@ angular.module('Pundit2.AnnotationSidebar')
         return state.allAnnotations;
     };
 
-
-
     // Get the array just of the filtered annotations
     annotationSidebar.getAllAnnotationsFiltered = function(filters) {
+        getFilteredAnnotationsId(filters);
+        /*var filteredIds = getFilteredAnnotationsId(filters),
+            filteredA = [];
+
+        state.allAnnotations.map(function(e) {
+            if (filteredIds.indexOf(e.id) !== -1)
+                filteredA.push(e);
+        });
+        
+        state.filteredAnnotations = filteredA;
+
+
+        setAnnotationInPage(state.filteredAnnotations);
+        setAnnotationsPosition();
+        // filtersCount(state.filteredAnnotations, 'partial'); 
+
+        return state.filteredAnnotations;*/
+
+
         var filteredAnnotationsObj = {};
         // var removedFilters = [];
         var currentFilterObjExpression;
