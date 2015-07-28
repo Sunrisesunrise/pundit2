@@ -3,22 +3,69 @@
  *  the toolbar icon in Chrome
  */
 
+var tabs = {},
+    injections = {};
 
-chrome.browserAction.onClicked.addListener(function(tab, url) {
-
-    // chrome.browserAction.setIcon({
-    //     path: {
-    //         19: chrome.extension.getURL("icons/close-icon19.png")
-    //     }
-    // }) 
-
+var init = function(tab) {
+    // Add Pundit element to DOM
     executeScriptFromURLInTab(tab, 'inject/init.js');
 
-
+    // Run the css
     executeCSSFromURLInTab(tab, 'inject/css/pundit.css');
 
+    // Run the JavaScript with a specific configuration
     executeScriptFromURLInTab(tab, 'inject/extension_conf.js');
     executeScriptFromURLInTab(tab, 'inject/scripts/libs.js');
     executeScriptFromURLInTab(tab, 'inject/scripts/pundit2.js');
+};
 
-});
+var turnOn = function(tab) {
+    tabs[tab.id] = tab;
+    chrome.browserAction.setIcon({
+        path: chrome.extension.getURL("icons/close-icon19.png"),
+        tabId: tab.id
+    });
+};
+
+var turnOff = function(tab) {
+    for (var id in tabs) {
+        if (id == tab.id) {
+            delete tabs[id];
+        }
+    }
+
+    chrome.browserAction.setIcon({
+        path: chrome.extension.getURL("icons/icon19.png"),
+        tabId: tab.id
+    });
+};
+
+var switchPundit = function(tab) {
+    console.log(tab.id);
+    if (!tabs[tab.id]) {
+        turnOn(tab);
+    } else {
+        // turnOff(tab);
+    }
+
+    if (injections[tab.id]) {
+        console.log('Scripts still loaded');
+        return;
+    } else {
+        injections[tab.id] = true;
+    }
+
+    init(tab);
+};
+
+var updateLocation = function(tabId, changeInfo, tab) {
+    if (injections[tabId]) {
+        turnOn(tab);
+        init(tab);
+    }
+};
+
+// Browser actions
+chrome.browserAction.onClicked.addListener(switchPundit);
+
+chrome.tabs.onUpdated.addListener(updateLocation);
