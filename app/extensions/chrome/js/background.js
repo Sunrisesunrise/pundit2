@@ -41,7 +41,7 @@ var turnOff = function(tab) {
 };
 
 var switchPundit = function(tab) {
-    console.log(tab.id);
+    var doInit = true;
 
     if (!injections[tab.id]) {
         injections[tab.id] = {};
@@ -51,25 +51,27 @@ var switchPundit = function(tab) {
         turnOn(tab);
         if (injections[tab.id].refresh) {
             chrome.tabs.reload(tab.id);
-            return;
+            doInit = false;
         }
     } else {
         executeScriptFromURLInTab(tab, 'inject/quit.js');
         injections[tab.id].refresh = true;
         turnOff(tab);
-        return;
+        doInit = false;
     }
 
-    init(tab);
+    if (doInit) {
+        init(tab);
+    }
 };
 
 var updateLocation = function(tabId, changeInfo, tab) {
     if (tabs[tabId]) {
         turnOn(tab);
         init(tab);
-        if (injections[tab.id]) {
-            injections[tab.id].refresh = false;
-        }
+    }
+    if (injections[tab.id]) {
+        injections[tab.id].refresh = false;
     }
 };
 
