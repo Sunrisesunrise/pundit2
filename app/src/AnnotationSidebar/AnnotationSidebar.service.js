@@ -694,7 +694,7 @@ angular.module('Pundit2.AnnotationSidebar')
         var isBroken, isBrokenYet;
 
         elementsList.broken['uri:broken'] = {
-            annotationsList: []
+            annotationsList: {}
         };
 
         BrokenHelper.resetQueques();
@@ -723,7 +723,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
             // Update elementList
             if (isBroken) {
-                elementsList.broken['uri:broken'].annotationsList.push(state.allAnnotations[i].id);
+                elementsList.broken['uri:broken'].annotationsList[state.allAnnotations[i].id] = state.allAnnotations[i];
             }
         }
 
@@ -760,10 +760,10 @@ angular.module('Pundit2.AnnotationSidebar')
                     label: annotation.creatorName,
                     active: false,
                     count: 0,
-                    annotationsList: []
+                    annotationsList: {}
                 };
             }
-            elementsList.authors[annotation.creator].annotationsList.push(annotation.id);
+            elementsList.authors[annotation.creator].annotationsList[annotation.id] = annotation;
 
             // Annotation date
             if (elementsList.annotationsDate.indexOf(annotation.created) === -1) {
@@ -791,10 +791,10 @@ angular.module('Pundit2.AnnotationSidebar')
                     notebookId: notebookId,
                     active: false,
                     count: 0,
-                    annotationsList: []
+                    annotationsList: {}
                 };
             }
-            elementsList.notebooks[notebookUri].annotationsList.push(annotation.id);
+            elementsList.notebooks[notebookUri].annotationsList[annotation.id] = annotation;
 
 
             // Predicates
@@ -809,10 +809,10 @@ angular.module('Pundit2.AnnotationSidebar')
                             label: annotation.items[predicateUri].label,
                             active: false,
                             count: 0,
-                            annotationsList: []
+                            annotationsList: {}
                         };
                     }
-                    elementsList.predicates[predicateUri].annotationsList.push(annotation.id);
+                    elementsList.predicates[predicateUri].annotationsList[annotation.id] = annotation;
                 }
             });
 
@@ -829,10 +829,10 @@ angular.module('Pundit2.AnnotationSidebar')
                             label: annotation.items[entUri].label, // TODO add check ?
                             active: false,
                             count: 0,
-                            annotationsList: []
+                            annotationsList: {}
                         };
                     }
-                    elementsList.entities[entUri].annotationsList.push(annotation.id);
+                    elementsList.entities[entUri].annotationsList[annotation.id] = annotation;
                 }
             });
 
@@ -849,10 +849,10 @@ angular.module('Pundit2.AnnotationSidebar')
                                 label: TypesHelper.getLabel(typeUri),
                                 active: false,
                                 count: 0,
-                                annotationsList: []
+                                annotationsList: {}
                             };
                         }
-                        elementsList.types[typeUri].annotationsList.push(annotation.id);
+                        elementsList.types[typeUri].annotationsList[annotation.id] = annotation;
                     }
                 });
             });
@@ -861,18 +861,18 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var intersection = function(a, b) {
-        var results = [];
-        // TODO this if suggest a future use with set data structure
-        if (a.length < b.length) {
+        var results = {};
+
+        if (Object.keys(a).length < Object.keys(b).length) {
             for (var i in a) {
-                if (b.indexOf(a[i]) !== -1) {
-                    results.push(a[i]);
+                if (typeof b[i] !== 'undefined') {
+                    results[i] = a[i];
                 }
             }
         } else {
             for (var j in b) {
-                if (a.indexOf(b[j]) !== -1) {
-                    results.push(b[j]);
+                if (typeof a[j] !== 'undefined') {
+                    results[j] = b[j];
                 }
             }
         }
@@ -884,7 +884,7 @@ angular.module('Pundit2.AnnotationSidebar')
         var exceptionsCheck = ['freeText', 'fromDate', 'toDate', 'broken'];
 
         var firstTime = true,
-            temp = [],
+            temp = {},
             list = [];
 
         var results = [];
@@ -894,11 +894,11 @@ angular.module('Pundit2.AnnotationSidebar')
                 return;
             }
 
-            temp = [];
+            temp = {};
             list = filter.expression;
 
             for (var i in list) {
-                temp = temp.concat(elementsList[key][list[i]].annotationsList)
+                angular.extend(temp, elementsList[key][list[i]].annotationsList);
             }
 
             if (firstTime) {
@@ -913,15 +913,13 @@ angular.module('Pundit2.AnnotationSidebar')
             var brokenList = elementsList.broken['uri:broken'].annotationsList,
                 currentIndex;
             angular.forEach(brokenList, function(annotation) {
-                currentIndex = results.indexOf(annotation);
-                if (currentIndex !== -1) {
-                    results.splice(currentIndex, 1);
+                if (typeof results[annotation.id] !== 'undefined') {
+                    delete results[annotation.id];
                 }
-
             });
         }
 
-        annotationSidebar.log('Get ' + results.length + ' filtered annotation id ', results);
+        annotationSidebar.log('Get ' + Object.keys(results).length + ' filtered annotation id ', results);
         return results;
     };
 
