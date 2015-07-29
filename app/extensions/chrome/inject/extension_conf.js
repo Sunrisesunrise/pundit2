@@ -7,5 +7,5 @@ var punditConfig = {
         }
     },
     templates: [],
-    debugAllModules: false
+    debugAllModules: true
 }

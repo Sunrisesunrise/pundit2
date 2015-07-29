@@ -2,7 +2,7 @@ angular.module('Pundit2.Core')
 
 .constant('CONSOLIDATIONDEFAULTS', {})
 
-.service('Consolidation', function($rootScope, $location, CONSOLIDATIONDEFAULTS, BaseComponent, EventDispatcher, NameSpace, Config,
+.service('Consolidation', function($rootScope, $location, $window, CONSOLIDATIONDEFAULTS, BaseComponent, EventDispatcher, NameSpace, Config,
     Item, ItemsExchange, XpointersHelper) {
 
     var cc = new BaseComponent('Consolidation', CONSOLIDATIONDEFAULTS),
@@ -189,6 +189,8 @@ angular.module('Pundit2.Core')
 
         return ret;
     };
+
+    $window.punditConolidationWipe = cc.wipe;
 
     return cc;
 });

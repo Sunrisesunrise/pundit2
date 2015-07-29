@@ -42,26 +42,34 @@ var turnOff = function(tab) {
 
 var switchPundit = function(tab) {
     console.log(tab.id);
-    if (!tabs[tab.id]) {
-        turnOn(tab);
-    } else {
-        // turnOff(tab);
+
+    if (!injections[tab.id]) {
+        injections[tab.id] = {};
     }
 
-    if (injections[tab.id]) {
-        console.log('Scripts still loaded');
-        return;
+    if (!tabs[tab.id]) {
+        turnOn(tab);
+        if (injections[tab.id].refresh) {
+            chrome.tabs.reload(tab.id);
+            return;
+        }
     } else {
-        injections[tab.id] = true;
+        executeScriptFromURLInTab(tab, 'inject/quit.js');
+        injections[tab.id].refresh = true;
+        turnOff(tab);
+        return;
     }
 
     init(tab);
 };
 
 var updateLocation = function(tabId, changeInfo, tab) {
-    if (injections[tabId]) {
+    if (tabs[tabId]) {
         turnOn(tab);
         init(tab);
+        if (injections[tab.id]) {
+            injections[tab.id].refresh = false;
+        }
     }
 };
 

@@ -6,6 +6,8 @@ var b = document.getElementsByTagName('body')[0],
 
 bodyStyle[cssTransform] = 'translateY(' + 30 + ')';
 
-div.setAttribute('data-ng-app', "Pundit2");
-div.setAttribute('id', "pundit2");
-b.appendChild(div);
+if (document.getElementById('pundit2') === null) {
+    div.setAttribute('data-ng-app', "Pundit2");
+    div.setAttribute('id', "pundit2");
+    b.appendChild(div);
+}
