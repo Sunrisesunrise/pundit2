@@ -299,6 +299,8 @@ angular.module('Pundit2.AnnotationSidebar')
         broken: {}
     };
 
+    var annotationsByDate = [];
+
     // TODO: take startPosition from element in sidebar
     // TODO: take toolbar height from service
     var startPosition = annotationSidebar.options.startTop;
@@ -360,6 +362,14 @@ angular.module('Pundit2.AnnotationSidebar')
 
     annotationSidebar.filtersCount = {};
     annotationSidebar.annotationPositionReal = {};
+
+    var sortByKey = function(array, key) {
+        return array.sort(function(a, b) {
+            var x = a[key];
+            var y = b[key];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
+    };
 
     var filterCountIncrement = function(uri) {
         if (typeof(annotationSidebar.filtersCount[uri]) === 'undefined') {
@@ -721,7 +731,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 BrokenHelper.addAnnotation(state.allAnnotations[i].id, true);
             }
 
-            // Update elementList
+            // Update elementsList
             if (isBroken) {
                 elementsList.broken['uri:broken'].annotationsList[state.allAnnotations[i].id] = state.allAnnotations[i];
             }
@@ -752,6 +762,8 @@ angular.module('Pundit2.AnnotationSidebar')
         angular.forEach(annotations, function(annotation) {
 
             var uriList = {};
+
+            annotationsByDate.push({date: annotation.created, annotation: annotation});
 
             // Annotation authors
             if (typeof(elementsList.authors[annotation.creator]) === 'undefined') {
@@ -857,7 +869,9 @@ angular.module('Pundit2.AnnotationSidebar')
                 });
             });
         });
-        filtersCount(annotations);
+
+        annotationsByDate = sortByKey(annotationsByDate, 'date');
+        // filtersCount(annotations);
     };
 
     var intersection = function(a, b) {
@@ -878,6 +892,24 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         return results;
+    };
+
+    var updatePartialCounters = function(annotations, filters) {
+        var exceptionsCheck = ['annotationsDate', 'broken'];
+
+        angular.forEach(filters, function(filter, key) {
+            if (exceptionsCheck.indexOf(key) !== -1) {
+                return;
+            }
+
+            for (var i in filter) {
+                var nAnnotations = Object.keys(intersection(elementsList[key][i].annotationsList, annotations)).length;
+                elementsList[key][i].partial = nAnnotations;
+                console.log(elementsList[key][i]);
+            }
+        })
+
+        annotationSidebar.log('Updated elementsList with partial counting ', elementsList);
     };
 
     var getFilteredAnnotationsId = function(filters) {
@@ -918,6 +950,8 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
             });
         }
+
+        updatePartialCounters(results, elementsList);
 
         annotationSidebar.log('Get ' + Object.keys(results).length + ' filtered annotation id ', results);
         return results;
@@ -1045,13 +1079,13 @@ angular.module('Pundit2.AnnotationSidebar')
             return results;
         };
 
-        filtersCountPartial(state.filteredAnnotations, 'none', false);
+        // filtersCountPartial(state.filteredAnnotations, 'none', false);
 
-        var filteredAnnotationsObjPartial = {};
-        for (var filterName in filteredAnnotationsObj) {
-            filteredAnnotationsObjPartial[filterName] = sum(filteredAnnotationsObj, filterName, angular.copy(state.allAnnotations));
-            filtersCountPartial(filteredAnnotationsObjPartial[filterName], filterName, true);
-        }
+        // var filteredAnnotationsObjPartial = {};
+        // for (var filterName in filteredAnnotationsObj) {
+        //     filteredAnnotationsObjPartial[filterName] = sum(filteredAnnotationsObj, filterName, angular.copy(state.allAnnotations));
+        //     filtersCountPartial(filteredAnnotationsObjPartial[filterName], filterName, true);
+        // }
 
         setAnnotationInPage(state.filteredAnnotations);
         setAnnotationsPosition();
