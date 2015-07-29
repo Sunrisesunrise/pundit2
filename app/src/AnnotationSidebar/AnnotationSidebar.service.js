@@ -894,6 +894,43 @@ angular.module('Pundit2.AnnotationSidebar')
         return results;
     };
 
+    var multipleIntersection = function(arrObj) {
+        var firstTime = true;
+        var results = {};
+
+        for (var i in arrObj) {
+            if (firstTime) {
+                results = i;
+                firstTime = false;
+            } else {
+                results = intersection(results, i);
+            }
+        }
+
+        return results;
+    };
+
+    var foo = function(filters) {
+        var exceptionsCheck = ['freeText', 'fromDate', 'toDate', 'broken'];
+        var results = {},
+            list = [];
+
+        angular.forEach(filters, function(filter, key) {
+            if (exceptionsCheck.indexOf(key) !== -1 || filter.expression.length === 0) {
+                return;
+            }
+
+            list = filter.expression;
+
+            for (var i in list) {
+                angular.extend(results, elementsList[key][list[i]].annotationsList);
+            }
+        });
+
+        console.log('union? ', results);
+        return results;
+    };
+
     var updatePartialCounters = function(annotations, filters) {
         var exceptionsCheck = ['annotationsDate', 'broken'];
 
@@ -951,7 +988,7 @@ angular.module('Pundit2.AnnotationSidebar')
             });
         }
 
-        updatePartialCounters(results, elementsList);
+        updatePartialCounters(results, elementsList); foo(filters);
 
         annotationSidebar.log('Get ' + Object.keys(results).length + ' filtered annotation id ', results);
         return results;
