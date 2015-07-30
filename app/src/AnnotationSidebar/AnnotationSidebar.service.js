@@ -763,7 +763,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
             var uriList = {};
 
-            annotationsByDate.push({date: annotation.created, annotation: annotation});
+            annotationsByDate.push(annotation);
 
             // Annotation authors
             if (typeof(elementsList.authors[annotation.creator]) === 'undefined') {
@@ -870,7 +870,7 @@ angular.module('Pundit2.AnnotationSidebar')
             });
         });
 
-        annotationsByDate = sortByKey(annotationsByDate, 'date');
+        annotationsByDate = sortByKey(annotationsByDate, 'created');
         // filtersCount(annotations);
     };
 
