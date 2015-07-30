@@ -12,6 +12,10 @@
     #gradient > .vertical(lighten(@color-background-medium, 1); darken(@color-background-medium, 1)); // It's a Bootstrap mixin
 }
 
+.vertical-gradient(@color: #aaa, @range: 2) {
+    #gradient > .vertical(lighten(@color, @range); darken(@color, @range)); // It's a Bootstrap mixin
+}
+
 .text-white-emboss(@fade: .75) {
     text-shadow: 0 1px 0 rgba(255,255,255,@fade);
 }
