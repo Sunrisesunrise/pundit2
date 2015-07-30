@@ -874,6 +874,60 @@ angular.module('Pundit2.AnnotationSidebar')
         // filtersCount(annotations);
     };
 
+    var findIndex = function(val, start, end) {
+        var index = (start + end) / 2;
+        index = parseInt(index, 10);
+
+        if (start === end - 1) {
+            return start;
+        }
+
+        if (annotationsByDate[index].created === val) {
+            return index;
+        } else if (annotationsByDate[index].created < val) {
+            start = index;
+        } else {
+            end = index;
+        }
+
+        return findIndex(val, start, end);
+    };
+
+    var filterAnnotationsByDate = function(dateFrom, dateTo) {
+        var results = {};
+
+        if (annotationsByDate.length === 0) {
+            return results;
+        }
+
+        if (typeof dateFrom === 'undefined' || dateFrom === '') {
+            dateFrom = annotationsByDate[0].created;
+        } else {
+            dateFrom = dateFrom + 'T00:00:00';
+        }
+
+        if (typeof dateTo === 'undefined' || dateTo === '') {
+            dateTo = annotationsByDate[annotationsByDate.length - 1].created;
+        } else {
+            dateTo = dateTo + 'T23:59:59';
+        }
+
+        if (dateFrom > dateTo || (dateFrom === '' && dateTo === '')) {
+            return results;
+        }
+
+        annotationSidebar.log('DateFrom ' + dateFrom + ' DateTo ' + dateTo);
+
+        var annStartIndex = findIndex(dateFrom, 0, annotationsByDate.length);
+        var annEndIndex = findIndex(dateTo, annStartIndex, annotationsByDate.length);
+
+        for (var i = annStartIndex; i < annEndIndex; i++) {
+            results[annotationsByDate[i].id] = annotationsByDate[i];
+        }
+
+        return results;
+    };
+
     var intersection = function(a, b) {
         var results = {};
 
@@ -894,41 +948,45 @@ angular.module('Pundit2.AnnotationSidebar')
         return results;
     };
 
-    var multipleIntersection = function(arrObj) {
+    var multipleIntersection = function(obj) {
         var firstTime = true;
         var results = {};
 
-        for (var i in arrObj) {
-            if (firstTime) {
-                results = i;
-                firstTime = false;
-            } else {
-                results = intersection(results, i);
+        for (var i in obj) {
+            if (Object.keys(obj[i]).length > 0) {
+                if (firstTime) {
+                    results = obj[i];
+                    firstTime = false;
+                } else {
+                    results = intersection(results, obj[i]);
+                }
             }
         }
 
         return results;
     };
 
-    var foo = function(filters) {
-        var exceptionsCheck = ['freeText', 'fromDate', 'toDate', 'broken'];
-        var results = {},
-            list = [];
+    var removeBroken = function(list) {
+        if (annotationSidebar.filters.broken.expression === 'hideBroken') {
+            var brokenList = elementsList.broken['uri:broken'].annotationsList,
+                currentIndex;
+            angular.forEach(brokenList, function(annotation) {
+                if (typeof list[annotation.id] !== 'undefined') {
+                    delete list[annotation.id];
+                }
+            });
+        }
 
-        angular.forEach(filters, function(filter, key) {
-            if (exceptionsCheck.indexOf(key) !== -1 || filter.expression.length === 0) {
-                return;
-            }
+        return list;
+    };
 
-            list = filter.expression;
+    var getAnnotationsOfSpecificFilter = function(filterKey, activeItems) {
+        var results = {};
+        for (var i in activeItems) {
+            angular.extend(results, elementsList[filterKey][activeItems[i]].annotationsList);
+        }
 
-            for (var i in list) {
-                angular.extend(results, elementsList[key][list[i]].annotationsList);
-            }
-        });
-
-        console.log('union? ', results);
-        return results;
+        return removeBroken(results);
     };
 
     var updatePartialCounters = function(annotations, filters) {
@@ -942,11 +1000,41 @@ angular.module('Pundit2.AnnotationSidebar')
             for (var i in filter) {
                 var nAnnotations = Object.keys(intersection(elementsList[key][i].annotationsList, annotations)).length;
                 elementsList[key][i].partial = nAnnotations;
-                console.log(elementsList[key][i]);
             }
         })
 
         annotationSidebar.log('Updated elementsList with partial counting ', elementsList);
+    };
+
+    var isFilterUriActive = function(filter, uri) {
+        var res = annotationSidebar.filters[filter].expression.indexOf(uri);
+        return res !== -1;
+    };
+
+    var newUpdatePartialCounters = function(filtersList, subFilters, totalFiltered) {
+        var exceptionsCheck = ['annotationsDate', 'broken'];
+        var tempI;
+
+        angular.forEach(filtersList, function(filter, key) {
+            if (exceptionsCheck.indexOf(key) !== -1) {
+                return;
+            }
+
+            for (var i in filter) {
+                if (!isFilterUriActive(key, filter[i].uri)) {
+                    tempI = angular.copy(subFilters[key]);
+                    subFilters[key] = getAnnotationsOfSpecificFilter(key, [filter[i].uri]);
+                    elementsList[key][i].partial = Object.keys(multipleIntersection(subFilters)).length;
+                    subFilters[key] = tempI;
+                } else {
+                    elementsList[key][i].partial = Object.keys(intersection(elementsList[key][i].annotationsList, totalFiltered)).length;
+                }
+            }
+
+
+        });
+
+        // annotationSidebar.log('Updated elementsList with partial counting ', elementsList);
     };
 
     var getFilteredAnnotationsId = function(filters) {
@@ -954,43 +1042,35 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var firstTime = true,
             temp = {},
-            list = [];
+            list = [],
+            subFilters = {},
+            currentAnnotationsList;
 
-        var results = [];
+        var results = {};
 
         angular.forEach(filters, function(filter, key) {
             if (exceptionsCheck.indexOf(key) !== -1 || filter.expression.length === 0) {
+                if (exceptionsCheck.indexOf(key) === -1) {
+                    subFilters[key] = {};
+                }
                 return;
             }
 
-            temp = {};
             list = filter.expression;
+            currentAnnotationsList = getAnnotationsOfSpecificFilter(key, list);
 
-            for (var i in list) {
-                angular.extend(temp, elementsList[key][list[i]].annotationsList);
-            }
-
-            if (firstTime) {
-                results = temp;
-                firstTime = false;
-            } else {
-                results = intersection(results, temp);
-            }
+            subFilters[key] = currentAnnotationsList;
         });
 
-        if (annotationSidebar.filters.broken.expression === 'hideBroken') {
-            var brokenList = elementsList.broken['uri:broken'].annotationsList,
-                currentIndex;
-            angular.forEach(brokenList, function(annotation) {
-                if (typeof results[annotation.id] !== 'undefined') {
-                    delete results[annotation.id];
-                }
-            });
-        }
+        subFilters['date'] = filterAnnotationsByDate(filters['fromDate'].expression, filters['toDate'].expression);
 
-        updatePartialCounters(results, elementsList); foo(filters);
+        results = multipleIntersection(subFilters);
+        results = removeBroken(results);
 
-        annotationSidebar.log('Get ' + Object.keys(results).length + ' filtered annotation id ', results);
+        newUpdatePartialCounters(elementsList, subFilters, results);
+
+        // console.log (Object.keys(results).length + ' multi result ', results);
+
         return results;
     };
 
