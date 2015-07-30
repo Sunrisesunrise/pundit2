@@ -205,10 +205,13 @@ angular.module('Pundit2.AnnotationSidebar')
         return AnnotationSidebar.getAllAnnotations();
     }, function(currentAnnotations) {
         $scope.allAnnotations = currentAnnotations;
+        $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
         if (AnnotationSidebar.needToFilter()) {
             $scope.annotations = AnnotationSidebar.getAllAnnotationsFiltered(AnnotationSidebar.filters);
+            $scope.annotationsLength = Object.keys($scope.annotations).length;
         } else {
             $scope.annotations = currentAnnotations;
+            $scope.annotationsLength = Object.keys($scope.annotations).length;
         }
     });
 
@@ -254,6 +257,7 @@ angular.module('Pundit2.AnnotationSidebar')
             $scope.freeText = '';
         }
         $scope.annotations = AnnotationSidebar.getAllAnnotationsFiltered(currentFilters);
+        $scope.annotationsLength = Object.keys($scope.annotations).length;
     }, true);
 
     // TODO Use EventDispatcher
