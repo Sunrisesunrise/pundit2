@@ -845,85 +845,65 @@ angular.module('Pundit2.AnnotationSidebar')
         return removeBroken(results);
     };
 
-    var updatePartialCounters = function(annotations, filters) {
-        var exceptionsCheck = ['annotationsDate', 'broken'];
-
-        angular.forEach(filters, function(filter, key) {
-            if (exceptionsCheck.indexOf(key) !== -1) {
-                return;
-            }
-
-            for (var i in filter) {
-                var nAnnotations = Object.keys(intersection(elementsList[key][i].annotationsList, annotations)).length;
-                elementsList[key][i].partial = nAnnotations;
-            }
-        })
-
-        annotationSidebar.log('Updated elementsList with partial counting ', elementsList);
-    };
-
     var isFilterUriActive = function(filter, uri) {
         var res = annotationSidebar.filters[filter].expression.indexOf(uri);
         return res !== -1;
     };
 
-    var newUpdatePartialCounters = function(filtersList, subFilters, totalFiltered) {
+    var updatePartialFiltersCount = function(activeFilters, filteredAnnotations, subFiltersSet) {
         var exceptionsCheck = ['annotationsDate', 'broken'];
         var tempI;
 
-        angular.forEach(filtersList, function(filter, key) {
+        angular.forEach(activeFilters, function(filter, key) {
             if (exceptionsCheck.indexOf(key) !== -1) {
                 return;
             }
 
             for (var i in filter) {
                 if (!isFilterUriActive(key, filter[i].uri)) {
-                    tempI = angular.copy(subFilters[key]);
-                    subFilters[key] = getAnnotationsOfSpecificFilter(key, [filter[i].uri]);
-                    elementsList[key][i].partial = Object.keys(multipleIntersection(subFilters)).length;
-                    subFilters[key] = tempI;
+                    tempI = angular.copy(subFiltersSet[key]);
+                    subFiltersSet[key] = getAnnotationsOfSpecificFilter(key, [filter[i].uri]);
+                    elementsList[key][i].partial = Object.keys(multipleIntersection(subFiltersSet)).length;
+                    subFiltersSet[key] = tempI;
                 } else {
-                    elementsList[key][i].partial = Object.keys(intersection(elementsList[key][i].annotationsList, totalFiltered)).length;
+                    elementsList[key][i].partial = Object.keys(intersection(elementsList[key][i].annotationsList, filteredAnnotations)).length;
                 }
             }
         });
 
-        // annotationSidebar.log('Updated elementsList with partial counting ', elementsList);
+        annotationSidebar.log('Updated elementsList with partial counting ', elementsList);
     };
 
-    var getFilteredAnnotationsId = function(filters) {
+    var getFilteredAnnotations = function(activeFilters, globalFilters) {
         var exceptionsCheck = ['freeText', 'fromDate', 'toDate', 'broken'];
 
         var firstTime = true,
-            temp = {},
             list = [],
-            subFilters = {},
-            currentAnnotationsList;
+            temp = {},
+            subFiltersSet = {};
 
         var results = {};
 
-        angular.forEach(filters, function(filter, key) {
+        angular.forEach(activeFilters, function(filter, key) {
             if (exceptionsCheck.indexOf(key) !== -1 || filter.expression.length === 0) {
                 if (exceptionsCheck.indexOf(key) === -1) {
-                    subFilters[key] = {};
+                    subFiltersSet[key] = {};
                 }
                 return;
             }
 
             list = filter.expression;
-            currentAnnotationsList = getAnnotationsOfSpecificFilter(key, list);
-
-            subFilters[key] = currentAnnotationsList;
+            subFiltersSet[key] = getAnnotationsOfSpecificFilter(key, list);
         });
 
-        subFilters['date'] = filterAnnotationsByDate(filters['fromDate'].expression, filters['toDate'].expression);
+        subFiltersSet['date'] = filterAnnotationsByDate(activeFilters['fromDate'].expression, activeFilters['toDate'].expression);
 
-        results = multipleIntersection(subFilters);
+        results = multipleIntersection(subFiltersSet);
         results = removeBroken(results);
 
-        newUpdatePartialCounters(elementsList, subFilters, results);
+        updatePartialFiltersCount(globalFilters, results, subFiltersSet);
 
-        // console.log (Object.keys(results).length + ' multi result ', results);
+        annotationSidebar.log(Object.keys(results).length + ' multi result ', results);
 
         return results;
     };
@@ -993,10 +973,10 @@ angular.module('Pundit2.AnnotationSidebar')
         return state.allAnnotations;
     };
 
-    // Get the array just of the filtered annotations
+    // Get the object of filtered annotations
     annotationSidebar.getAllAnnotationsFiltered = function(filters) {
         if (annotationSidebar.needToFilter()) {
-            state.filteredAnnotations = getFilteredAnnotationsId(filters);
+            state.filteredAnnotations = getFilteredAnnotations(filters, elementsList);
         } else {
             state.filteredAnnotations = state.allAnnotations;
         }
