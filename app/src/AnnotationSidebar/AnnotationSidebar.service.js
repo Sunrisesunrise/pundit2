@@ -300,6 +300,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var annotationsByDate = [];
+    var annotationsByLabel = [];
 
     // TODO: take startPosition from element in sidebar
     // TODO: take toolbar height from service
@@ -363,13 +364,22 @@ angular.module('Pundit2.AnnotationSidebar')
     annotationSidebar.filtersCount = {};
     annotationSidebar.annotationPositionReal = {};
 
+    // sort on key values
+    // function keysrt(key) {
+    //     return function(a, b) {
+    //         if (a[key] > b[key]) return 1;
+    //         if (a[key] < b[key]) return -1;
+    //         return 0;
+    //     }
+    // }
+
     var sortByKey = function(array, key) {
-        return array.sort(function(a, b) {
-            var x = a[key];
-            var y = b[key];
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-        });
-    };
+            return array.sort(function(a, b) {
+                var x = a[key];
+                var y = b[key];
+                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+            });
+        };
 
     var orderAndSetPos = function(optId, optHeight) {
         var pos;
@@ -594,6 +604,7 @@ angular.module('Pundit2.AnnotationSidebar')
     // Updates the list of filters when new annotations comes
     var setFilterElements = function(annotations) {
         var isBroken, isBrokenYet;
+        var annotationsByLabelTemp = {};
 
         annotationSidebar.filtersCount = {};
 
@@ -722,29 +733,71 @@ angular.module('Pundit2.AnnotationSidebar')
                     }
                 });
             });
+
+            // FreeText 
+            for (var i in annotation.items) {
+                var label = annotation.items[i].label;
+                label = label.toLowerCase();
+                if (typeof annotationsByLabelTemp[label] === 'undefined') {
+                    annotationsByLabelTemp[label] = {};
+                }
+                annotationsByLabelTemp[label][annotation.id] = annotation;
+            }
+            for (var subject in annotation.graph) {
+                for (var predicate in annotation.graph[subject]) {
+                    for (var object in annotation.graph[subject][predicate]) {
+                        var currentObject = annotation.graph[subject][predicate][object];
+                        if (currentObject.type === 'literal') {
+                            var literal = currentObject.value;
+                            literal = literal.toLowerCase();
+
+                            if (typeof annotationsByLabelTemp[literal] === 'undefined') {
+                                annotationsByLabelTemp[literal] = {};
+                            }
+                            annotationsByLabelTemp[literal][annotation.id] = annotation;
+                        }
+                    }
+                }
+            }
+
         });
 
+        for (var i in annotationsByLabelTemp) {
+            annotationsByLabel.push({
+                'label': i,
+                'annotationsList': annotationsByLabelTemp[i]
+            });
+        };
+
         BrokenHelper.sendQueques();
+
+        // annotationsByLabel = annotationsByLabel.sort(keysrt('label'));
+        // annotationsByDate = annotationsByDate.sort(keysrt('created'));
+        annotationsByLabel = sortByKey(annotationsByLabel, 'label');
         annotationsByDate = sortByKey(annotationsByDate, 'created');
     };
 
-    var findIndex = function(val, start, end) {
+    var findIndex = function(val, start, end, data, key) {
         var index = (start + end) / 2;
         index = parseInt(index, 10);
 
         if (start === end - 1) {
-            return start;
+            if (data[start][key] === val) {
+                return start;
+            } else {
+                return -1;
+            }
         }
 
-        if (annotationsByDate[index].created === val) {
+        if (data[index][key] === val) {
             return index;
-        } else if (annotationsByDate[index].created < val) {
+        } else if (data[index][key] < val) {
             start = index;
         } else {
             end = index;
         }
 
-        return findIndex(val, start, end);
+        return findIndex(val, start, end, data, key);
     };
 
     var filterAnnotationsByDate = function(dateFrom, dateTo) {
@@ -754,9 +807,9 @@ angular.module('Pundit2.AnnotationSidebar')
             return results;
         }
 
-        if (dateFrom > dateTo || 
-            ((dateFrom === '' || typeof dateFrom === 'undefined') && 
-            (dateTo === '' || typeof dateTo === 'undefined'))) {
+        if (dateFrom > dateTo ||
+            ((dateFrom === '' || typeof dateFrom === 'undefined') &&
+                (dateTo === '' || typeof dateTo === 'undefined'))) {
             return results;
         }
 
@@ -772,8 +825,8 @@ angular.module('Pundit2.AnnotationSidebar')
             dateTo = dateTo + 'T23:59:59';
         }
 
-        var annStartIndex = findIndex(dateFrom, 0, annotationsByDate.length);
-        var annEndIndex = findIndex(dateTo, annStartIndex, annotationsByDate.length);
+        var annStartIndex = findIndex(dateFrom, 0, annotationsByDate.length, annotationsByDate, 'created');
+        var annEndIndex = findIndex(dateTo, annStartIndex, annotationsByDate.length, annotationsByDate, 'created');
 
         for (var i = annStartIndex; i < annEndIndex; i++) {
             results[annotationsByDate[i].id] = annotationsByDate[i];
@@ -845,6 +898,16 @@ angular.module('Pundit2.AnnotationSidebar')
         return removeBroken(results);
     };
 
+    var getAnnotationsByLabel = function(label) {
+        var index = findIndex(label, 0, annotationsByLabel.length, annotationsByLabel, 'label');
+
+        if (index === -1) {
+            return {};
+        } else {
+            return annotationsByLabel[index].annotationsList;
+        }
+    };
+
     var isFilterUriActive = function(filter, uri) {
         var res = annotationSidebar.filters[filter].expression.indexOf(uri);
         return res !== -1;
@@ -899,7 +962,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
             list = filter.expression;
             currentAnnotationsList = getAnnotationsOfSpecificFilter(key, list);
-            
+
             subFiltersSet[key] = currentAnnotationsList;
 
             if (list.length > 0) {
@@ -907,10 +970,14 @@ angular.module('Pundit2.AnnotationSidebar')
             }
         });
 
-        subFiltersSet['date'] = filterAnnotationsByDate(activeFilters['fromDate'].expression, activeFilters['toDate'].expression);
-
         if (activeFilters['fromDate'].expression !== '' || activeFilters['toDate'].expression !== '') {
+            subFiltersSet['date'] = filterAnnotationsByDate(activeFilters['fromDate'].expression, activeFilters['toDate'].expression);
             atLeastOneActiveFilter = true;
+        }
+
+        if (activeFilters['freeText'].expression !== '') {
+            atLeastOneActiveFilter = true;
+            subFiltersSet['freeText'] = getAnnotationsByLabel(activeFilters['freeText'].expression);
         }
 
         results = atLeastOneActiveFilter ? multipleIntersection(subFiltersSet) : angular.extend({}, state.allAnnotations);
