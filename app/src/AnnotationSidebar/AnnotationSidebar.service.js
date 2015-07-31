@@ -374,12 +374,12 @@ angular.module('Pundit2.AnnotationSidebar')
     // }
 
     var sortByKey = function(array, key) {
-            return array.sort(function(a, b) {
-                var x = a[key];
-                var y = b[key];
-                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-            });
-        };
+        return array.sort(function(a, b) {
+            var x = a[key];
+            var y = b[key];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
+    };
 
     var orderAndSetPos = function(optId, optHeight) {
         var pos;
@@ -735,13 +735,12 @@ angular.module('Pundit2.AnnotationSidebar')
             });
 
             // FreeText 
+            annotation.allLabels = [];
+
             for (var i in annotation.items) {
                 var label = annotation.items[i].label;
                 label = label.toLowerCase();
-                if (typeof annotationsByLabelTemp[label] === 'undefined') {
-                    annotationsByLabelTemp[label] = {};
-                }
-                annotationsByLabelTemp[label][annotation.id] = annotation;
+                annotation.allLabels.push(label);
             }
             for (var subject in annotation.graph) {
                 for (var predicate in annotation.graph[subject]) {
@@ -750,11 +749,7 @@ angular.module('Pundit2.AnnotationSidebar')
                         if (currentObject.type === 'literal') {
                             var literal = currentObject.value;
                             literal = literal.toLowerCase();
-
-                            if (typeof annotationsByLabelTemp[literal] === 'undefined') {
-                                annotationsByLabelTemp[literal] = {};
-                            }
-                            annotationsByLabelTemp[literal][annotation.id] = annotation;
+                            annotation.allLabels.push(literal);
                         }
                     }
                 }
@@ -762,18 +757,18 @@ angular.module('Pundit2.AnnotationSidebar')
 
         });
 
-        for (var i in annotationsByLabelTemp) {
-            annotationsByLabel.push({
-                'label': i,
-                'annotationsList': annotationsByLabelTemp[i]
-            });
-        };
+        // for (var i in annotationsByLabelTemp) {
+        //     annotationsByLabel.push({
+        //         'label': i,
+        //         'annotationsList': annotationsByLabelTemp[i]
+        //     });
+        // };
 
         BrokenHelper.sendQueques();
 
         // annotationsByLabel = annotationsByLabel.sort(keysrt('label'));
         // annotationsByDate = annotationsByDate.sort(keysrt('created'));
-        annotationsByLabel = sortByKey(annotationsByLabel, 'label');
+        // annotationsByLabel = sortByKey(annotationsByLabel, 'label');
         annotationsByDate = sortByKey(annotationsByDate, 'created');
     };
 
@@ -874,11 +869,10 @@ angular.module('Pundit2.AnnotationSidebar')
 
         return results;
     };
-
+    
     var removeBroken = function(list) {
         if (annotationSidebar.filters.broken.expression === 'hideBroken') {
-            var brokenList = elementsList.broken['uri:broken'].annotationsList,
-                currentIndex;
+            var brokenList = elementsList.broken['uri:broken'].annotationsList;
             angular.forEach(brokenList, function(annotation) {
                 if (typeof list[annotation.id] !== 'undefined') {
                     delete list[annotation.id];
@@ -895,17 +889,32 @@ angular.module('Pundit2.AnnotationSidebar')
             angular.extend(results, elementsList[filterKey][activeItems[i]].annotationsList);
         }
 
+        // TODO intersect with filtered by label? 
         return removeBroken(results);
     };
 
-    var getAnnotationsByLabel = function(label) {
-        var index = findIndex(label, 0, annotationsByLabel.length, annotationsByLabel, 'label');
-
-        if (index === -1) {
-            return {};
-        } else {
-            return annotationsByLabel[index].annotationsList;
+    var filterAnnotationsByLabel = function(label, annotationsList) {
+        if (label === '') {
+            return annotationsList;
         }
+
+        var str = label.toLowerCase().replace(/\s+/g, ' '),
+            strParts = str.split(' '),
+            reg = new RegExp(strParts.join('.*'));
+
+        var results = {};
+
+        angular.forEach(annotationsList, function(annotation) {
+            for (var i in annotation.allLabels) {
+                if (annotation.allLabels[i].toLowerCase().match(reg) !== null) {
+                    results[annotation.id] = annotation;
+                    return;
+                }
+
+            }
+        });
+
+        return results;
     };
 
     var isFilterUriActive = function(filter, uri) {
@@ -916,7 +925,6 @@ angular.module('Pundit2.AnnotationSidebar')
     var updatePartialFiltersCount = function(activeFilters, filteredAnnotations, subFiltersSet) {
         var exceptionsCheck = ['annotationsDate', 'broken'];
         var subFiltersSetCopy = {};
-        var tempI;
 
         angular.forEach(activeFilters, function(filter, key) {
             if (exceptionsCheck.indexOf(key) !== -1) {
@@ -928,7 +936,9 @@ angular.module('Pundit2.AnnotationSidebar')
                     for (var j in subFiltersSet) {
                         subFiltersSetCopy[j] = subFiltersSet[j];
                     }
+
                     subFiltersSetCopy[key] = getAnnotationsOfSpecificFilter(key, [filter[i].uri]);
+
                     elementsList[key][i].partial = Object.keys(multipleIntersection(subFiltersSetCopy)).length;
                 } else {
                     elementsList[key][i].partial = Object.keys(intersection(elementsList[key][i].annotationsList, filteredAnnotations)).length;
@@ -975,13 +985,13 @@ angular.module('Pundit2.AnnotationSidebar')
             atLeastOneActiveFilter = true;
         }
 
-        if (activeFilters['freeText'].expression !== '') {
-            atLeastOneActiveFilter = true;
-            subFiltersSet['freeText'] = getAnnotationsByLabel(activeFilters['freeText'].expression);
-        }
+        // if (activeFilters['freeText'].expression !== '') {
+        //     freeTextActiveFilter = true;
+        // }
 
         results = atLeastOneActiveFilter ? multipleIntersection(subFiltersSet) : angular.extend({}, state.allAnnotations);
         results = removeBroken(results);
+        // results = filterAnnotationsByLabel(activeFilters['freeText'].expression, results);
 
         angular.forEach(subFiltersSet, function(filter, key) {
             filter = intersection(filter, results);
