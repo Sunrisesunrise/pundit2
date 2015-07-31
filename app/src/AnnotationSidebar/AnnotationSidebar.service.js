@@ -757,42 +757,29 @@ angular.module('Pundit2.AnnotationSidebar')
 
         });
 
-        // for (var i in annotationsByLabelTemp) {
-        //     annotationsByLabel.push({
-        //         'label': i,
-        //         'annotationsList': annotationsByLabelTemp[i]
-        //     });
-        // };
-
         BrokenHelper.sendQueques();
 
-        // annotationsByLabel = annotationsByLabel.sort(keysrt('label'));
-        // annotationsByDate = annotationsByDate.sort(keysrt('created'));
-        // annotationsByLabel = sortByKey(annotationsByLabel, 'label');
+        annotationsByLabel = sortByKey(annotationsByLabel, 'label');
         annotationsByDate = sortByKey(annotationsByDate, 'created');
     };
 
-    var findIndex = function(val, start, end, data, key) {
+    var findIndex = function(val, start, end) {
         var index = (start + end) / 2;
         index = parseInt(index, 10);
 
         if (start === end - 1) {
-            if (data[start][key] === val) {
-                return start;
-            } else {
-                return -1;
-            }
+            return start;
         }
 
-        if (data[index][key] === val) {
+        if (annotationsByDate[index].created === val) {
             return index;
-        } else if (data[index][key] < val) {
+        } else if (annotationsByDate[index].created < val) {
             start = index;
         } else {
             end = index;
         }
 
-        return findIndex(val, start, end, data, key);
+        return findIndex(val, start, end);
     };
 
     var filterAnnotationsByDate = function(dateFrom, dateTo) {
@@ -802,9 +789,8 @@ angular.module('Pundit2.AnnotationSidebar')
             return results;
         }
 
-        if (dateFrom > dateTo ||
-            ((dateFrom === '' || typeof dateFrom === 'undefined') &&
-                (dateTo === '' || typeof dateTo === 'undefined'))) {
+        if ((dateFrom === '' || typeof dateFrom === 'undefined') &&
+                (dateTo === '' || typeof dateTo === 'undefined')) {
             return results;
         }
 
@@ -818,6 +804,10 @@ angular.module('Pundit2.AnnotationSidebar')
             dateTo = annotationsByDate[annotationsByDate.length - 1].created;
         } else {
             dateTo = dateTo + 'T23:59:59';
+        }
+
+        if (dateFrom > dateTo) {
+            return results;
         }
 
         var annStartIndex = findIndex(dateFrom, 0, annotationsByDate.length, annotationsByDate, 'created');
@@ -869,7 +859,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         return results;
     };
-    
+
     var removeBroken = function(list) {
         if (annotationSidebar.filters.broken.expression === 'hideBroken') {
             var brokenList = elementsList.broken['uri:broken'].annotationsList;
