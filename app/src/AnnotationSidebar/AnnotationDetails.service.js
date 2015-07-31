@@ -352,6 +352,8 @@ angular.module('Pundit2.AnnotationSidebar')
                     color: currentColor,
                     hasTemplate: template
                 };
+            } else {
+                state.annotations[currentId].expanded = expandedState;
             }
         }
     };
