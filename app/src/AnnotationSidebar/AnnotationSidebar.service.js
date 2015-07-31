@@ -771,9 +771,11 @@ angular.module('Pundit2.AnnotationSidebar')
                     uri: annotation.creator,
                     label: annotation.creatorName,
                     active: false,
-                    count: 0,
+                    partial: 1,
                     annotationsList: {}
                 };
+            } else {
+                elementsList.authors[annotation.creator].partial++;
             }
             elementsList.authors[annotation.creator].annotationsList[annotation.id] = annotation;
 
@@ -802,9 +804,11 @@ angular.module('Pundit2.AnnotationSidebar')
                     label: notebookName,
                     notebookId: notebookId,
                     active: false,
-                    count: 0,
+                    partial: 1,
                     annotationsList: {}
                 };
+            } else {
+                elementsList.notebooks[notebookUri].partial++;
             }
             elementsList.notebooks[notebookUri].annotationsList[annotation.id] = annotation;
 
@@ -820,9 +824,11 @@ angular.module('Pundit2.AnnotationSidebar')
                             uri: predicateUri,
                             label: annotation.items[predicateUri].label,
                             active: false,
-                            count: 0,
+                            partial: 1,
                             annotationsList: {}
                         };
+                    } else {
+                        elementsList.predicates[predicateUri].partial++;
                     }
                     elementsList.predicates[predicateUri].annotationsList[annotation.id] = annotation;
                 }
@@ -840,9 +846,11 @@ angular.module('Pundit2.AnnotationSidebar')
                             uri: entUri,
                             label: annotation.items[entUri].label, // TODO add check ?
                             active: false,
-                            count: 0,
+                            partial: 1,
                             annotationsList: {}
                         };
+                    } else {
+                        elementsList.entities[entUri].partial++;
                     }
                     elementsList.entities[entUri].annotationsList[annotation.id] = annotation;
                 }
@@ -860,9 +868,11 @@ angular.module('Pundit2.AnnotationSidebar')
                                 uri: typeUri,
                                 label: TypesHelper.getLabel(typeUri),
                                 active: false,
-                                count: 0,
+                                partial: 1,
                                 annotationsList: {}
                             };
+                        } else {
+                            elementsList.types[typeUri].partial++;
                         }
                         elementsList.types[typeUri].annotationsList[annotation.id] = annotation;
                     }
@@ -1033,31 +1043,6 @@ angular.module('Pundit2.AnnotationSidebar')
         });
 
         // annotationSidebar.log('Updated elementsList with partial counting ', elementsList);
-    };
-
-    var getSubFilters = function() {
-        var exceptionsCheck = ['freeText', 'fromDate', 'toDate', 'broken'],
-            filters = annotationSidebar.filters;
-            subFilters = {},
-            list = [];
-
-        var results = {};
-
-        angular.forEach(filters, function(filter, key) {
-            if (exceptionsCheck.indexOf(key) !== -1 || filter.expression.length === 0) {
-                if (exceptionsCheck.indexOf(key) === -1) {
-                    subFilters[key] = {};
-                }
-                return;
-            }
-
-            list = filter.expression;
-            subFilters[key] = getAnnotationsOfSpecificFilter(key, list);
-        });
-
-        subFilters['date'] = filterAnnotationsByDate(filters['fromDate'].expression, filters['toDate'].expression);
-
-        return results;
     };
 
     var getFilteredAnnotationsId = function(filters) {
@@ -1299,7 +1284,6 @@ angular.module('Pundit2.AnnotationSidebar')
         state.allAnnotations = angular.copy(annotations);
         setBrokenInfo();
         setFilterElements(state.allAnnotations);
-        // newUpdatePartialCounters(elementsList, getSubFilters(), state.allAnnotations);
         setAnnotationsPosition();
     });
 
