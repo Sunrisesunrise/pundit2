@@ -878,6 +878,7 @@ angular.module('Pundit2.AnnotationSidebar')
         var exceptionsCheck = ['freeText', 'fromDate', 'toDate', 'broken'];
 
         var firstTime = true,
+            atLeastOneActiveFilter = false,
             list = [],
             temp = {},
             subFiltersSet = {};
@@ -894,11 +895,19 @@ angular.module('Pundit2.AnnotationSidebar')
 
             list = filter.expression;
             subFiltersSet[key] = getAnnotationsOfSpecificFilter(key, list);
+
+            if (list.length > 0) {
+                atLeastOneActiveFilter = true;
+            }
         });
 
         subFiltersSet['date'] = filterAnnotationsByDate(activeFilters['fromDate'].expression, activeFilters['toDate'].expression);
 
-        results = multipleIntersection(subFiltersSet);
+        if (activeFilters['fromDate'].expression !== '' || activeFilters['toDate'].expression !== '') {
+            atLeastOneActiveFilter = true;
+        }
+
+        results = atLeastOneActiveFilter ? multipleIntersection(subFiltersSet) : angular.copy(state.allAnnotations);
         results = removeBroken(results);
 
         updatePartialFiltersCount(globalFilters, results, subFiltersSet);
@@ -975,11 +984,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     // Get the object of filtered annotations
     annotationSidebar.getAllAnnotationsFiltered = function(filters) {
-        if (annotationSidebar.needToFilter()) {
-            state.filteredAnnotations = getFilteredAnnotations(filters, elementsList);
-        } else {
-            state.filteredAnnotations = state.allAnnotations;
-        }
+        state.filteredAnnotations = getFilteredAnnotations(filters, elementsList);
 
         setAnnotationInPage(state.filteredAnnotations);
         setAnnotationsPosition();
