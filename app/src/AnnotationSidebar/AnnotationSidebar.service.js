@@ -852,6 +852,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     var updatePartialFiltersCount = function(activeFilters, filteredAnnotations, subFiltersSet) {
         var exceptionsCheck = ['annotationsDate', 'broken'];
+        var subFiltersSetCopy = {};
         var tempI;
 
         angular.forEach(activeFilters, function(filter, key) {
@@ -861,10 +862,11 @@ angular.module('Pundit2.AnnotationSidebar')
 
             for (var i in filter) {
                 if (!isFilterUriActive(key, filter[i].uri)) {
-                    tempI = angular.copy(subFiltersSet[key]);
-                    subFiltersSet[key] = getAnnotationsOfSpecificFilter(key, [filter[i].uri]);
-                    elementsList[key][i].partial = Object.keys(multipleIntersection(subFiltersSet)).length;
-                    subFiltersSet[key] = tempI;
+                    for (var j in subFiltersSet) {
+                        subFiltersSetCopy[j] = subFiltersSet[j];
+                    }
+                    subFiltersSetCopy[key] = getAnnotationsOfSpecificFilter(key, [filter[i].uri]);
+                    elementsList[key][i].partial = Object.keys(multipleIntersection(subFiltersSetCopy)).length;
                 } else {
                     elementsList[key][i].partial = Object.keys(intersection(elementsList[key][i].annotationsList, filteredAnnotations)).length;
                 }
@@ -881,8 +883,10 @@ angular.module('Pundit2.AnnotationSidebar')
             atLeastOneActiveFilter = false,
             list = [],
             temp = {},
-            subFiltersSet = {};
+            subFiltersSet = {},
+            currentAnnotationsList;
 
+        var activeAnnotations = Object.keys(state.filteredAnnotations).length === 0 ? state.allAnnotations : state.filteredAnnotations;
         var results = {};
 
         angular.forEach(activeFilters, function(filter, key) {
@@ -894,7 +898,9 @@ angular.module('Pundit2.AnnotationSidebar')
             }
 
             list = filter.expression;
-            subFiltersSet[key] = getAnnotationsOfSpecificFilter(key, list);
+            currentAnnotationsList = getAnnotationsOfSpecificFilter(key, list);
+            
+            subFiltersSet[key] = currentAnnotationsList;
 
             if (list.length > 0) {
                 atLeastOneActiveFilter = true;
@@ -907,8 +913,12 @@ angular.module('Pundit2.AnnotationSidebar')
             atLeastOneActiveFilter = true;
         }
 
-        results = atLeastOneActiveFilter ? multipleIntersection(subFiltersSet) : angular.copy(state.allAnnotations);
+        results = atLeastOneActiveFilter ? multipleIntersection(subFiltersSet) : angular.extend({}, state.allAnnotations);
         results = removeBroken(results);
+
+        angular.forEach(subFiltersSet, function(filter, key) {
+            filter = intersection(filter, results);
+        });
 
         updatePartialFiltersCount(globalFilters, results, subFiltersSet);
 
