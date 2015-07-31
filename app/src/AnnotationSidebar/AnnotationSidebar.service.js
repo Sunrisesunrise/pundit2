@@ -371,158 +371,6 @@ angular.module('Pundit2.AnnotationSidebar')
         });
     };
 
-    var filterCountIncrement = function(uri) {
-        if (typeof(annotationSidebar.filtersCount[uri]) === 'undefined') {
-            annotationSidebar.filtersCount[uri] = 1;
-        } else {
-            annotationSidebar.filtersCount[uri]++;
-        }
-        return annotationSidebar.filtersCount[uri];
-    };
-
-    var filtersCount = function(annotations) {
-
-        annotationSidebar.filtersCount = {};
-
-        angular.forEach(elementsList, function(element) {
-            for (var key in element) {
-                if (typeof(element[key]) !== 'undefined') {
-                    element[key].count = 0;
-                    element[key].partial = 0;
-                }
-            }
-        });
-
-        angular.forEach(annotations, function(annotation) {
-
-            var uriList = {};
-            var tempCount;
-
-            // Annotation authors
-            tempCount = filterCountIncrement(annotation.creator);
-            elementsList.authors[annotation.creator].count = tempCount;
-            elementsList.authors[annotation.creator].partial = tempCount;
-
-            // Notebooks
-            tempCount = filterCountIncrement(annotation.isIncludedIn);
-            elementsList.notebooks[annotation.isIncludedInUri].count = tempCount;
-            elementsList.notebooks[annotation.isIncludedInUri].partial = tempCount;
-
-            // Predicates
-            angular.forEach(annotation.predicates, function(predicateUri) {
-                if (typeof(uriList[predicateUri]) === 'undefined') {
-                    uriList[predicateUri] = {
-                        uri: predicateUri
-                    };
-                    tempCount = filterCountIncrement(predicateUri);
-                    elementsList.predicates[predicateUri].count = tempCount;
-                    elementsList.predicates[predicateUri].partial = tempCount;
-                }
-            });
-
-            // Entities
-            angular.forEach(annotation.entities, function(entUri) {
-                if (typeof(uriList[entUri]) === 'undefined') {
-                    uriList[entUri] = {
-                        uri: entUri
-                    };
-                    tempCount = filterCountIncrement(entUri);
-                    elementsList.entities[entUri].count = tempCount;
-                    elementsList.entities[entUri].partial = tempCount;
-                }
-            });
-
-            // Types
-            angular.forEach(annotation.items, function(singleItem) {
-                angular.forEach(singleItem.type, function(typeUri) {
-                    if (typeof(uriList[typeUri]) === 'undefined') {
-                        uriList[typeUri] = {
-                            uri: typeUri
-                        };
-                        tempCount = filterCountIncrement(typeUri);
-                        elementsList.types[typeUri].count = tempCount;
-                        elementsList.types[typeUri].partial = tempCount;
-                    }
-                });
-            });
-        });
-    };
-
-    var filtersCountPartial = function(annotations, elementName, overwrite) {
-        annotationSidebar.filtersCount = {};
-
-        if (overwrite) {
-            for (var key in elementsList[elementName]) {
-                if (typeof(elementsList[elementName][key]) !== 'undefined') {
-                    elementsList[elementName][key].partial = 0;
-                }
-            }
-        } else {
-            for (var name in elementsList) {
-                if (name !== elementName) {
-                    for (var key2 in elementsList[name]) {
-                        if (typeof(elementsList[name][key2]) !== 'undefined') {
-                            elementsList[name][key2].partial = 0;
-                        }
-                    }
-                }
-            }
-        }
-
-        angular.forEach(annotations, function(annotation) {
-
-            var uriList = {};
-
-            // Annotation authors
-            if ((elementName !== 'authors' && !overwrite) || (elementName === 'authors' && overwrite)) {
-                elementsList.authors[annotation.creator].partial = filterCountIncrement(annotation.creator);
-            }
-
-            // Notebooks
-            if ((elementName !== 'notebooks' && !overwrite) || (elementName === 'notebooks' && overwrite)) {
-                elementsList.notebooks[annotation.isIncludedInUri].partial = filterCountIncrement(annotation.isIncludedIn);
-            }
-
-            // Predicates
-            if ((elementName !== 'predicates' && !overwrite) || (elementName === 'predicates' && overwrite)) {
-                angular.forEach(annotation.predicates, function(predicateUri) {
-                    if (typeof(uriList[predicateUri]) === 'undefined') {
-                        uriList[predicateUri] = {
-                            uri: predicateUri
-                        };
-                        elementsList.predicates[predicateUri].partial = filterCountIncrement(predicateUri);
-                    }
-                });
-            }
-
-            // Entities
-            if ((elementName !== 'entities' && !overwrite) || (elementName === 'entities' && overwrite)) {
-                angular.forEach(annotation.entities, function(entUri) {
-                    if (typeof(uriList[entUri]) === 'undefined') {
-                        uriList[entUri] = {
-                            uri: entUri
-                        };
-                        elementsList.entities[entUri].partial = filterCountIncrement(entUri);
-                    }
-                });
-            }
-
-            // Types
-            if ((elementName !== 'types' && !overwrite) || (elementName === 'types' && overwrite)) {
-                angular.forEach(annotation.items, function(singleItem) {
-                    angular.forEach(singleItem.type, function(typeUri) {
-                        if (typeof(uriList[typeUri]) === 'undefined') {
-                            uriList[typeUri] = {
-                                uri: typeUri
-                            };
-                            elementsList.types[typeUri].partial = filterCountIncrement(typeUri);
-                        }
-                    });
-                });
-            }
-        });
-    };
-
     var orderAndSetPos = function(optId, optHeight) {
         var pos;
         var currentTop,
@@ -700,46 +548,6 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
-    var setBrokenInfo = function() {
-        var isBroken, isBrokenYet;
-
-        elementsList.broken['uri:broken'] = {
-            annotationsList: {}
-        };
-
-        BrokenHelper.resetQueques();
-
-        for (var i in state.allAnnotations) {
-            isBroken = state.allAnnotations[i].isBroken();
-            isBrokenYet = state.allAnnotations[i].isBrokenYet;
-
-            state.allAnnotations[i].broken = isBroken;
-
-            if (typeof(isBrokenYet) === 'string' && isBrokenYet === 'true') {
-                isBrokenYet = true;
-            } else {
-                isBrokenYet = false;
-            }
-
-            // Add fixed annotation to BrokenHelper
-            if (isBrokenYet && !isBroken) {
-                BrokenHelper.addAnnotation(state.allAnnotations[i].id, false);
-            }
-
-            // Add broken annotation to BrokenHelper
-            if (!isBrokenYet && isBroken) {
-                BrokenHelper.addAnnotation(state.allAnnotations[i].id, true);
-            }
-
-            // Update elementsList
-            if (isBroken) {
-                elementsList.broken['uri:broken'].annotationsList[state.allAnnotations[i].id] = state.allAnnotations[i];
-            }
-        }
-
-        BrokenHelper.sendQueques();
-    };
-
     var setAnnotationInPage = function(annotations) {
         var currentItem;
         TextFragmentAnnotator.hideAll();
@@ -755,15 +563,51 @@ angular.module('Pundit2.AnnotationSidebar')
         });
     };
 
+    var setBrokenInfo = function(annotation) {
+        isBroken = annotation.isBroken();
+        isBrokenYet = annotation.isBrokenYet;
+
+        annotation.broken = isBroken;
+
+        if (typeof(isBrokenYet) === 'string' && isBrokenYet === 'true') {
+            isBrokenYet = true;
+        } else {
+            isBrokenYet = false;
+        }
+
+        // Add fixed annotation to BrokenHelper
+        if (isBrokenYet && !isBroken) {
+            BrokenHelper.addAnnotation(annotation.id, false);
+        }
+
+        // Add broken annotation to BrokenHelper
+        if (!isBrokenYet && isBroken) {
+            BrokenHelper.addAnnotation(annotation.id, true);
+        }
+
+        // Update elementsList
+        if (isBroken) {
+            elementsList.broken['uri:broken'].annotationsList[annotation.id] = annotation;
+        }
+    };
+
     // Updates the list of filters when new annotations comes
     var setFilterElements = function(annotations) {
+        var isBroken, isBrokenYet;
+
         annotationSidebar.filtersCount = {};
+
+        elementsList.broken['uri:broken'] = {
+            annotationsList: {}
+        };
+        BrokenHelper.resetQueques();
 
         angular.forEach(annotations, function(annotation) {
 
             var uriList = {};
 
             annotationsByDate.push(annotation);
+            setBrokenInfo(annotation);
 
             // Annotation authors
             if (typeof(elementsList.authors[annotation.creator]) === 'undefined') {
@@ -880,8 +724,8 @@ angular.module('Pundit2.AnnotationSidebar')
             });
         });
 
+        BrokenHelper.sendQueques();
         annotationsByDate = sortByKey(annotationsByDate, 'created');
-        // filtersCount(annotations);
     };
 
     var findIndex = function(val, start, end) {
@@ -910,6 +754,12 @@ angular.module('Pundit2.AnnotationSidebar')
             return results;
         }
 
+        if (dateFrom > dateTo || 
+            ((dateFrom === '' || typeof dateFrom === 'undefined') && 
+            (dateTo === '' || typeof dateTo === 'undefined'))) {
+            return results;
+        }
+
         if (typeof dateFrom === 'undefined' || dateFrom === '') {
             dateFrom = annotationsByDate[0].created;
         } else {
@@ -922,18 +772,14 @@ angular.module('Pundit2.AnnotationSidebar')
             dateTo = dateTo + 'T23:59:59';
         }
 
-        if (dateFrom > dateTo || (dateFrom === '' && dateTo === '')) {
-            return results;
-        }
-
-        annotationSidebar.log('DateFrom ' + dateFrom + ' DateTo ' + dateTo);
-
         var annStartIndex = findIndex(dateFrom, 0, annotationsByDate.length);
         var annEndIndex = findIndex(dateTo, annStartIndex, annotationsByDate.length);
 
         for (var i = annStartIndex; i < annEndIndex; i++) {
             results[annotationsByDate[i].id] = annotationsByDate[i];
         }
+
+        annotationSidebar.log('DateFrom ' + dateFrom + ' DateTo ' + dateTo);
 
         return results;
     };
@@ -1282,7 +1128,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var annotations = AnnotationsExchange.getAnnotationsList();
         state.allAnnotations = angular.copy(annotations);
-        setBrokenInfo();
         setFilterElements(state.allAnnotations);
         setAnnotationsPosition();
     });
