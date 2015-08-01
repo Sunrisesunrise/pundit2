@@ -879,8 +879,7 @@ angular.module('Pundit2.AnnotationSidebar')
             angular.extend(results, elementsList[filterKey][activeItems[i]].annotationsList);
         }
 
-        // TODO intersect with filtered by label? 
-        return removeBroken(results);
+        return results;
     };
 
     var filterAnnotationsByLabel = function(label, annotationsList) {
@@ -975,18 +974,22 @@ angular.module('Pundit2.AnnotationSidebar')
             atLeastOneActiveFilter = true;
         }
 
-        // if (activeFilters['freeText'].expression !== '') {
-        //     freeTextActiveFilter = true;
-        // }
+        // TODO It could be optimized filtering on the results, but it needs update subFiltersSet in updatePartial
+        if (activeFilters['freeText'].expression !== '') {
+            atLeastOneActiveFilter = true;
+            subFiltersSet['freeText'] = filterAnnotationsByLabel(activeFilters['freeText'].expression, angular.extend({}, state.allAnnotations));
+        }
 
-        results = atLeastOneActiveFilter ? multipleIntersection(subFiltersSet) : angular.extend({}, state.allAnnotations);
-        results = removeBroken(results);
-        // results = filterAnnotationsByLabel(activeFilters['freeText'].expression, results);
+        if (annotationSidebar.filters.broken.expression === 'hideBroken') {
+            atLeastOneActiveFilter = true;
+            subFiltersSet['broken'] = removeBroken(angular.extend({}, state.allAnnotations));
+        }
 
         angular.forEach(subFiltersSet, function(filter, key) {
             filter = intersection(filter, results);
         });
 
+        results = atLeastOneActiveFilter ? multipleIntersection(subFiltersSet) : angular.extend({}, state.allAnnotations);
         updatePartialFiltersCount(globalFilters, results, subFiltersSet);
 
         annotationSidebar.log(Object.keys(results).length + ' multi result ', results);
