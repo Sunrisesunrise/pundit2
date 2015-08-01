@@ -308,6 +308,8 @@ angular.module('Pundit2.AnnotationSidebar')
     var toolbarHeight = 30;
     var annotationPosition = [];
 
+    var tempBrokenList = {};
+
     // var timeoutPromise;
 
     annotationSidebar.minHeightRequired = startPosition;
@@ -597,8 +599,19 @@ angular.module('Pundit2.AnnotationSidebar')
 
         // Update elementsList
         if (isBroken) {
-            elementsList.broken['uri:broken'].annotationsList[annotation.id] = annotation;
+            tempBrokenList[annotation.id] = annotation;
+            // elementsList.broken['uri:broken'].annotationsList[annotation.id] = annotation;
         }
+    };
+
+    var removeBroken = function(list, brokenList) {
+        angular.forEach(brokenList, function(annotation) {
+            if (typeof list[annotation.id] !== 'undefined') {
+                delete list[annotation.id];
+            }
+        });
+
+        return list;
     };
 
     // Updates the list of filters when new annotations comes
@@ -759,6 +772,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
         BrokenHelper.sendQueques();
 
+        elementsList.broken['uri:broken'].annotationsList = removeBroken(angular.extend({}, state.allAnnotations), tempBrokenList);;
+
         annotationsByLabel = sortByKey(annotationsByLabel, 'label');
         annotationsByDate = sortByKey(annotationsByDate, 'created');
     };
@@ -790,7 +805,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         if ((dateFrom === '' || typeof dateFrom === 'undefined') &&
-                (dateTo === '' || typeof dateTo === 'undefined')) {
+            (dateTo === '' || typeof dateTo === 'undefined')) {
             return results;
         }
 
@@ -860,19 +875,6 @@ angular.module('Pundit2.AnnotationSidebar')
         return results;
     };
 
-    var removeBroken = function(list) {
-        if (annotationSidebar.filters.broken.expression === 'hideBroken') {
-            var brokenList = elementsList.broken['uri:broken'].annotationsList;
-            angular.forEach(brokenList, function(annotation) {
-                if (typeof list[annotation.id] !== 'undefined') {
-                    delete list[annotation.id];
-                }
-            });
-        }
-
-        return list;
-    };
-
     var getAnnotationsOfSpecificFilter = function(filterKey, activeItems) {
         var results = {};
         for (var i in activeItems) {
@@ -911,22 +913,22 @@ angular.module('Pundit2.AnnotationSidebar')
         return res !== -1;
     };
 
-    var updatePartialFiltersCount = function(activeFilters, filteredAnnotations, subFiltersSet) {
-        var exceptionsCheck = ['annotationsDate', 'broken'];
+    var updatePartialFiltersCount = function(globalFilters, filteredAnnotations, subFiltersSet) {
+        var exceptionsCheck = ['annotationsDate'];
         var subFiltersSetCopy = {};
 
-        angular.forEach(activeFilters, function(filter, key) {
+        angular.forEach(globalFilters, function(filter, key) {
             if (exceptionsCheck.indexOf(key) !== -1) {
                 return;
             }
 
             for (var i in filter) {
-                if (!isFilterUriActive(key, filter[i].uri)) {
+                if (!isFilterUriActive(key, i)) {
                     for (var j in subFiltersSet) {
                         subFiltersSetCopy[j] = subFiltersSet[j];
                     }
 
-                    subFiltersSetCopy[key] = getAnnotationsOfSpecificFilter(key, [filter[i].uri]);
+                    subFiltersSetCopy[key] = getAnnotationsOfSpecificFilter(key, [i]);
 
                     elementsList[key][i].partial = Object.keys(multipleIntersection(subFiltersSetCopy)).length;
                 } else {
@@ -969,20 +971,19 @@ angular.module('Pundit2.AnnotationSidebar')
             }
         });
 
+        if (annotationSidebar.filters.broken.expression === 'hideBroken') {
+            atLeastOneActiveFilter = true;
+            subFiltersSet['broken'] = elementsList.broken['uri:broken'].annotationsList;
+        }
+
         if (activeFilters['fromDate'].expression !== '' || activeFilters['toDate'].expression !== '') {
             subFiltersSet['date'] = filterAnnotationsByDate(activeFilters['fromDate'].expression, activeFilters['toDate'].expression);
             atLeastOneActiveFilter = true;
         }
 
-        // TODO It could be optimized filtering on the results, but it needs update subFiltersSet in updatePartial
         if (activeFilters['freeText'].expression !== '') {
             atLeastOneActiveFilter = true;
-            subFiltersSet['freeText'] = filterAnnotationsByLabel(activeFilters['freeText'].expression, angular.extend({}, state.allAnnotations));
-        }
-
-        if (annotationSidebar.filters.broken.expression === 'hideBroken') {
-            atLeastOneActiveFilter = true;
-            subFiltersSet['broken'] = removeBroken(angular.extend({}, state.allAnnotations));
+            subFiltersSet['freeText'] = filterAnnotationsByLabel(activeFilters['freeText'].expression, state.allAnnotations);
         }
 
         angular.forEach(subFiltersSet, function(filter, key) {
