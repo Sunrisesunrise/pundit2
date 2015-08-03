@@ -497,10 +497,9 @@ angular.module('Pundit2.Core')
 
     // TODO This is not really a popoverLogin but more a popover toggler
     myPundit.popoverLogin = function(where) {
-        if (typeof(loginPromise) === 'undefined') {
+        if (typeof(loginPromise) === 'undefined' && where !== 'editProfile') {
             return;
-            // TODO do you need loginPromise for edit? 
-            // loginPromise = $q.defer();   
+            // loginPromise = $q.defer();
         }
 
         // If there's already a Login popover I close and destroy it

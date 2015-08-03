@@ -1,0 +1,6 @@
+body .pnd-wrp .pnd-icon-spin {
+  -webkit-animation: none;
+  -moz-animation: none;
+  -o-animation: none;
+  animation: none;
+}
