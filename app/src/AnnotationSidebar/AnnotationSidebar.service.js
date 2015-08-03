@@ -986,10 +986,6 @@ angular.module('Pundit2.AnnotationSidebar')
             subFiltersSet['freeText'] = filterAnnotationsByLabel(activeFilters['freeText'].expression, state.allAnnotations);
         }
 
-        angular.forEach(subFiltersSet, function(filter, key) {
-            filter = intersection(filter, results);
-        });
-
         results = atLeastOneActiveFilter ? multipleIntersection(subFiltersSet) : angular.extend({}, state.allAnnotations);
         updatePartialFiltersCount(globalFilters, results, subFiltersSet);
 
