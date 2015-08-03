@@ -875,6 +875,29 @@ angular.module('Pundit2.AnnotationSidebar')
         return results;
     };
 
+    var filterProjection = function(filtersSet, annotations) {
+        var results = {},
+            tempSet = {},
+            subAnnotationsSet = {};
+
+        angular.forEach(filtersSet, function(subfilter, key) {
+            tempSet = angular.extend({}, filtersSet);
+            delete tempSet[key];
+
+            subAnnotationsSet = angular.extend({}, annotations);
+
+            for (var kk in tempSet) {
+                if (Object.keys(tempSet[kk]).length > 0) {
+                    subAnnotationsSet = intersection(subAnnotationsSet, tempSet[kk]);
+                }
+            }
+
+            results = angular.extend(results, subAnnotationsSet);
+        });
+
+        return results;
+    };
+
     var getAnnotationsOfSpecificFilter = function(filterKey, activeItems) {
         var results = {};
         for (var i in activeItems) {
@@ -983,7 +1006,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if (activeFilters['freeText'].expression !== '') {
             atLeastOneActiveFilter = true;
-            subFiltersSet['freeText'] = filterAnnotationsByLabel(activeFilters['freeText'].expression, state.allAnnotations);
+            subFiltersSet['freeText'] = filterAnnotationsByLabel(activeFilters['freeText'].expression, filterProjection(subFiltersSet, state.allAnnotations));
         }
 
         results = atLeastOneActiveFilter ? multipleIntersection(subFiltersSet) : angular.extend({}, state.allAnnotations);
