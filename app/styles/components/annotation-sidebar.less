@@ -56,6 +56,10 @@
     box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.20);
 }
 
+.pnd-dashboard-expanded .pnd-annotation-sidebar-header {
+    // TODO Set a different top positioning when the dashboard is open (we should probably do this via js)
+}
+
 
 /* ------------------------------------ *\
    #FILTERS
@@ -82,12 +86,13 @@
         right: 11px;
         top: 10px;
         padding: 7px;
+        cursor: pointer;
     }
 }
 
 /* Overlay behind active filters */
 .pnd-annotation-details-opacity {
-    background-color: rgba(0,0,0,.4);
+    background-color: rgba(0,0,0,.6);
     position: absolute;
     top: 32px;
     bottom: 0;
@@ -96,6 +101,149 @@
     z-index: 2;
 }
 
+.pnd-annotation-sidebar-filters-list {
+    // background-color: rgba(255,255,255,.95);
+    #gradient > .horizontal-three-colors(darken(rgba(255,255,255,.95), 5); rgba(255,255,255,.95); 1%; rgba(255,255,255,.95));
+    text-align: left;
+
+    /* Each filter parameter */
+    .pnd-annotation-sidebar-filter {
+        border-top: 1px solid @color-border-normal;
+        width: @annotation-sidebar-exp-width;
+
+        /* Displays the name of the parameter and caret icon */
+        .pnd-panel {
+            font-weight: bold;
+            padding: 6px 0;
+            cursor: pointer;
+
+            .pnd-annotation-sidebar-filter-label {
+                width: @annotation-sidebar-exp-width - 24;
+                display: inline-block;
+                padding-left: 10px;
+            }
+
+            .pnd-annotation-sidebar-filter-label + .pnd-icon {
+                width: 24px;
+                opacity: .3;
+            }
+        }
+    }
+
+    /* Filter for broken annotations */
+    .pnd-annotation-sidebar-filter-broken {
+        padding: 6px 6px 6px 10px;
+        border-top: 1px solid @color-border-normal;
+        width: @annotation-sidebar-exp-width;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    /* Content of the filter when it is open */
+    .pnd-annotation-sidebar-filter-show {
+
+        .pnd-annotation-sidebar-filter-input {
+            padding: 0 10px;
+
+            &.pnd-annotation-sidebar-current-filter-active {
+                display: block;
+            }
+        }
+
+        input {
+            margin: 0 0 10px 0;
+            padding-right: 24px;
+        }
+
+        .pnd-icon {
+            top: 0;
+        }
+
+        .pnd-annotation-sidebar-filter-element {
+            border-bottom: 1px solid @color-border-light;
+
+            &:last-child {
+                //padding-bottom: 5px;
+            }
+        }
+    }
+
+    /* Single filter element to select */
+    .pnd-annotation-sidebar-filter-element {
+        margin: 5px 10px 5px 15px;
+        padding-bottom: 5px;
+        font-size: 11px;
+        cursor: pointer;
+
+        &.pnd-annotation-sidebar-current-filter-active {
+            display: block;
+        }
+
+        &.pnd-annotation-sidebar-current-filter-empt-red {
+            color: @color-text-error;
+            display: block;
+        }
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        &:last-child {
+            // padding-bottom: 0;
+            border-bottom: 0;
+        }
+    }
+
+    /* Scrolling area with max height */
+    .pnd-sidebar-filter-scroll {
+        max-height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /* Hidden elements when the filter is closed */
+    // TODO What about wrapping all elements that are shown in a single div?
+    .pnd-annotation-sidebar-filter-label {
+        display: none;
+    }
+
+    .pnd-annotation-sidebar-filter-input {
+        display: none;
+    }
+
+    .pnd-annotation-sidebar-filter-element {
+        display: none;
+    }
+
+    /* Shown elements */
+    .pnd-annotation-sidebar-filter-show .pnd-annotation-sidebar-filter-element {
+        display: block;
+    }
+
+    .pnd-annotation-sidebar-filter-show  .pnd-annotation-sidebar-filter-input {
+        display: block;
+    }
+
+    .pnd-annotation-sidebar-filter-show  .pnd-annotation-sidebar-filter-label {
+        display: block;
+    }
+}
+
+/* Date set by the user */
+.pnd-annotation-sidebar-filter-date {
+    display: none;
+    padding: 0 10px 10px 10px;
+    font-size: 11px;
+}
+
+.pnd-annotation-sidebar-filter-show  .pnd-annotation-sidebar-filter-date {
+    display: inline-block;
+}
+
+/* Footer of filters section */
+.pnd-annotation-footer-sidebar-filter {
+    border-top: 1px solid @color-border-normal;
+}
 
 /* ------------------------------------ *\
    #ANNOMATIC
@@ -146,7 +294,7 @@
 
 
 /* ------------------------------------ *\
-   #BUTTONS
+   #TRASH
 \* ------------------------------------ */
 
 /*.pnd-annotation-sidebar-content {
@@ -198,139 +346,7 @@
     }
 }*/
 
-.pnd-annotation-sidebar-filters-list {
-    background-color: rgba(255,255,255,.9);
-    text-align: left;
 
-    /* Each filter parameter */
-    .pnd-annotation-sidebar-filter {
-        padding: 0 10px;
-        border-top: 1px solid @color-border-light;
-        width: @annotation-sidebar-width;
-
-        /* Displays name of the parameter and caret icon */
-        .pnd-panel {
-            // font-weight: bold;
-            padding: 6px 10px 6px 10px;
-            // margin: 0 -10px;
-            cursor: pointer;
-
-            &:hover {
-                // background-color: @gray-lighter;
-
-                &:after {
-                    // color: @brand-success;
-                }
-            }
-
-            /* Toggle icon */
-            /*
-            &:after {
-                content: "\f0dd";
-                font-family: 'pundit-font';
-                display: inline-block;
-                float: right;
-            }
-            */
-        }
-    }
-
-    /* Filter for broken annotations */
-    .pnd-annotation-sidebar-filter-broken {
-        padding: 6px 6px 6px 10px;
-        border-top: 1px solid @gray-extra-light;
-        width: @annotation-sidebar-width;
-        font-weight: bold;
-        cursor: pointer;
-
-        &:hover {
-            background-color: @gray-lighter;
-        }
-
-        &:after {
-            content: "\f06a";
-            font-family: 'pundit-font';
-            display: inline-block;
-            float: right;
-            color: @brand-warning;
-        }
-    }
-
-    /*
-    .pnd-annotation-footer-sidebar-filter {
-        padding: 5px;
-        border-top: 1px solid @gray-extra-light;
-        text-align: center;
-    }
-    */
-
-
-
-    .pnd-annotation-sidebar-filter-show .pnd-panel {
-
-        &:after {
-            content: "\f0d8";
-            font-family: 'pundit-font';
-            display: inline-block;
-            float: right;
-        }
-    }
-
-    .pnd-annotation-sidebar-filter-show .pnd-annotation-sidebar-filter-element {
-        display: block;
-
-    }
-
-    .pnd-annotation-sidebar-filter-show .pnd-annotation-sidebar-filter-input {
-        display: block;
-
-        input {
-            margin: 10px 0;
-        }
-    }
-
-    .pnd-annotation-sidebar-filter-show .pnd-annotation-sidebar-filter-label {
-        display: none;
-
-    }
-
-    .pnd-annotation-sidebar-filter-element {
-        display: none;
-        margin: 0 0 6px 0;
-        cursor: pointer;
-
-        &.pnd-annotation-sidebar-current-filter-active {
-            color: @brand-success;
-            font-weight: bold;
-            display: block;
-        }
-
-        &.pnd-annotation-sidebar-current-filter-empt-red {
-            color: @brand-warning;
-            font-weight: bold;
-            display: block;
-        }
-    }
-
-    .pnd-annotation-sidebar-filter-label {
-        display: block;
-    }
-
-    .pnd-annotation-sidebar-filter-input {
-        display: none;
-
-        &.pnd-annotation-sidebar-current-filter-active {
-            display: block;
-        }
-    }
-
-    .pnd-sidebar-filter-scroll {
-        max-height: 300px;
-        margin-right: -10px;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-}
 
 
 /* ------------------------------------ *\
@@ -341,7 +357,7 @@
 .pnd-annotation-item-header-text {
     display: inline-block;
     overflow: hidden;
-    width: @annotation-sidebar-width - 24;
+    width: @annotation-sidebar-exp-width - 24;
     vertical-align: top;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -360,6 +376,7 @@
     height: 24px;
     width: 24px;
     padding: 0 8px;
+    opacity: .5;
 }
 
 /* Wraps whole single annotation */
@@ -372,7 +389,7 @@
         vertical-align: middle;
         line-height: @annotation-header-height;
         height: @annotation-header-height;
-        width: @annotation-sidebar-width;
+        width: @annotation-sidebar-exp-width;
         background-color: @color-annotation-header;
         // #gradient > .horizontal-three-colors(darken(@color-annotation-header, 5); @color-annotation-header; 1%; @color-annotation-header);
         color: @color-annotation-header-text;
@@ -418,7 +435,7 @@
         /* Caret */
         .btn {
             color: #fff;
-            .text-dark-emboss();
+            // .text-dark-emboss();
 
             &:hover,
             &:active,
@@ -497,13 +514,13 @@
     /* Annotation content */
     /* Content of the annotation: metadata and triples */
     .pnd-annotation-details-container {
-        width: @annotation-sidebar-width;
+        width: @annotation-sidebar-exp-width;
         background-color: #fff;
         // #gradient > .horizontal-three-colors(#e8e8e8; #fff; 2%; #fff);
 
         /* Meta toggle */
         .pnd-annotation-details-meta {
-            width: @annotation-sidebar-width;
+            width: @annotation-sidebar-exp-width;
             background-color: @gray-lighter;
             // #gradient > .horizontal-three-colors(#e3e3e3; @gray-lighter; 2%; @gray-lighter);
             border-bottom: 1px solid @color-border-light;
@@ -585,7 +602,7 @@
                 .pnd-annotation-details-predicate,
                 .pnd-annotation-details-object {
                     background-color: transparent;
-                    width: @annotation-sidebar-width;
+                    width: @annotation-sidebar-exp-width;
 
                     .pnd-sub-info {
                         padding: 0;

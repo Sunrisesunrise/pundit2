@@ -27,7 +27,7 @@
                     </button>
                 </div>
 
-                <!-- Buttons to show and reset filters -->
+                <!-- Button to show filters -->
                 <div class="pnd-annotation-sidebar-filter-content" ng-show="isAnnotationsPanelActive()">
                     <div ng-class="{'pnd-btn-sidebar-full': !annotationSidebar.needToFilter()}">
 
@@ -35,17 +35,29 @@
                             ng-click="annotationSidebar.toggleFiltersContent()"
                             ng-show="!isFiltersShowed"
                             class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-show-filter">
-                                Show filters ({{annotations.length}}/{{allAnnotations.length}})
+                                Annotations filters ({{annotations.length}}/{{allAnnotations.length}})
                                 <span class="pnd-icon-caret-down"></span>
-                        </button><button
+                        </button><!--<button
                             ng-click="annotationSidebar.resetFilters()"
                             ng-show="!isFiltersShowed"
                             class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-remove-filters"
                             ng-disabled="!annotationSidebar.needToFilter()">
                                Reset filters
-                        </button>
+                        </button>-->
 
                     </div>
+
+                    <!-- Button to close filters -->
+                    <div ng-show="isFiltersShowed">
+                        <button
+                                ng-click="annotationSidebar.toggleFiltersContent()"
+                                type="button"
+                                class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-close-filters">
+                            Annotations filters ({{annotations.length}}/{{allAnnotations.length}})
+                            <span class="pnd-icon-caret-up"></span>
+                        </button>
+                    </div>
+
 
                     <div class="pnd-annotation-sidebar-filters-list" ng-show="isFiltersShowed">
                     <!-- buttons -->
@@ -64,7 +76,8 @@
                         <!-- Authors -->
                         <div class="pnd-annotation-sidebar-filter">
                             <div class="pnd-panel" ng-click = "toggleFilterList($event, 'authors')">
-                                Annotation author
+                                <div class="pnd-annotation-sidebar-filter-label">Annotation author</div>
+                                <span class="pnd-icon pnd-icon-caret-down"></span>
                             </div>
                             <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
                                 <span
@@ -92,7 +105,8 @@
                         <!-- Notebooks -->
                         <div class="pnd-annotation-sidebar-filter">
                             <div class="pnd-panel" ng-click = "toggleFilterList($event, 'notebooks')">
-                                Notebooks
+                                <div class="pnd-annotation-sidebar-filter-label">Notebook</div>
+                                <span class="pnd-icon pnd-icon-caret-down"></span>
                             </div>
                             <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
                                 <span
@@ -120,7 +134,8 @@
                         <!-- Types -->
                         <div class="pnd-annotation-sidebar-filter">
                             <div class="pnd-panel" ng-click = "toggleFilterList($event, 'types')">
-                                Types
+                                <div class="pnd-annotation-sidebar-filter-label">Entity type</div>
+                                <span class="pnd-icon pnd-icon-caret-down"></span>
                             </div>
                             <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
                                 <span
@@ -148,7 +163,8 @@
                         <div class="pnd-annotation-sidebar-filter">
                             <div class="pnd-panel"
                                 ng-click = "toggleFilterList($event, 'predicates')">
-                                Used predicate
+                                <div class="pnd-annotation-sidebar-filter-label">Used predicate</div>
+                                <span class="pnd-icon pnd-icon-caret-down"></span>
                             </div>
                             <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
                                 <span
@@ -172,9 +188,12 @@
                         </div>
 
                         <!-- Page items -->
+                        <!--
+                        TODO Remove (comment) Page items in the whole ionterface
                         <div class="pnd-annotation-sidebar-filter">
                             <div class="pnd-panel" ng-click = "toggleFilterList($event, 'entities')">
-                                Page items
+                                <div class="pnd-annotation-sidebar-filter-label">Page items</div>
+                                <span class="pnd-icon pnd-icon-caret-down"></span>
                             </div>
                             <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
                                 <span
@@ -198,20 +217,25 @@
                                 </div>
                             </div>
                         </div>
+                        -->
 
                         <!-- Date -->
                         <div class="pnd-annotation-sidebar-filter">
-                            <div class="pnd-panel" ng-click = "toggleFilterList($event, 'date')">Date</div>
-                            <span
-                                ng-show="isFilterLabelShowed(annotationSidebar.filters.fromDate.expression)"
-                                class="pnd-annotation-sidebar-filter-label">
-                                    From: {{annotationSidebar.filters.fromDate.expression}}
-                            </span>
-                            <span
-                                ng-show="isFilterLabelShowed(annotationSidebar.filters.toDate.expression)"
-                                class="pnd-annotation-sidebar-filter-label">
-                                    To: {{annotationSidebar.filters.toDate.expression}}
-                            </span>
+                            <div class="pnd-panel" ng-click = "toggleFilterList($event, 'date')">
+                                <div class="pnd-annotation-sidebar-filter-label">Date</div>
+                                <span class="pnd-icon pnd-icon-caret-down"></span>
+                            </div>
+
+                            <div class="pnd-annotation-sidebar-filter-date">
+                                <span
+                                        ng-show="isFilterLabelShowed(annotationSidebar.filters.fromDate.expression)">
+                                        <strong>From</strong> {{annotationSidebar.filters.fromDate.expression}}
+                                </span>
+                                <span
+                                        ng-show="isFilterLabelShowed(annotationSidebar.filters.toDate.expression)">
+                                        <strong>To</strong> {{annotationSidebar.filters.toDate.expression}}
+                                </span>
+                            </div>
 
                             <div class="pnd-annotation-sidebar-filter-input">
                                 <!-- From Date -->
@@ -263,17 +287,28 @@
                         <div class="pnd-annotation-footer-sidebar-filter">
 
                             <button
+                                    ng-click="annotationSidebar.resetFilters()"
+                                    type="button"
+                                    class="pnd-btn pnd-btn-small pnd-btn-fill-width pnd-annotation-sidebar-btn-remove-filters"
+                                    ng-disabled="!annotationSidebar.needToFilter()">
+                                Reset filters
+                            </button>
+
+
+                            <!--
+                            <button
                                 ng-click="annotationSidebar.toggleFiltersContent()"
                                 type="button"
                                 class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-close-filters">
-                                Hide filters ({{annotations.length}}/{{allAnnotations.length}})
+                                Hide annotations filters ({{annotations.length}}/{{allAnnotations.length}})
+                                <span class="pnd-icon-caret-up"></span>
                             </button><button
                                 ng-click="annotationSidebar.resetFilters()"
                                 type="button"
                                 class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-remove-filters"
                                 ng-disabled="!annotationSidebar.needToFilter()">
                                 Reset filters
-                            </button>
+                            </button>-->
                         </div>
                         <!-- // end buttons -->
                     </div>
