@@ -73,6 +73,19 @@
     & ~ button {
         margin-top: 10px !important;
     }
+
+    /* Buttons that open/close the filters */
+    .pnd-annotation-sidebar-btn-show-filter, .pnd-annotation-sidebar-btn-close-filters {
+        position: relative;
+        text-align: left;
+
+        span {
+            position: absolute;
+            right: 10px;
+            top: 9px;
+            opacity: 0.4;
+        }
+    }
 }
 
 /* Input field for free text search in annotations */
@@ -231,19 +244,20 @@
 
 /* Date set by the user */
 .pnd-annotation-sidebar-filter-date {
-    display: none;
-    padding: 0 10px 10px 10px;
+    padding: 0 10px 0 10px;
     font-size: 11px;
-}
 
-.pnd-annotation-sidebar-filter-show  .pnd-annotation-sidebar-filter-date {
-    display: inline-block;
+    span {
+        margin-bottom: 10px;
+        display: inline-block;
+    }
 }
 
 /* Footer of filters section */
 .pnd-annotation-footer-sidebar-filter {
     border-top: 1px solid @color-border-normal;
 }
+
 
 /* ------------------------------------ *\
    #ANNOMATIC
@@ -291,62 +305,6 @@
         color: #fff !important;
     }
 }
-
-
-/* ------------------------------------ *\
-   #TRASH
-\* ------------------------------------ */
-
-/*.pnd-annotation-sidebar-content {
-
-    button {
-
-        &.pnd-btn-sidebar {
-            color: @nav-tabs-active-link-hover-color;
-            margin: 0;
-            padding: 6px 0;
-            background-color: @gray-dark;
-            width: 50%;
-            color: @gray-light;
-
-            &:hover,
-            &:active,
-            &:focus {
-                background-color: #fff;
-                color: @gray-dark;
-            }
-
-            &.pnd-active {
-                background-color: #fff;
-                color: @gray-dark;
-            }
-        }
-    }
-
-    .pnd-btn-sidebar-full {
-        background-color: #EEEEEE;
-        text-align: center;
-
-        button {
-            width: 100%;
-        }
-    }
-
-    .pnd-annotation-details-opacity {
-        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
-        filter: alpha(opacity=40);
-        opacity: 0.4;
-        background-color: black;
-        position: absolute;
-        top: 32px;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 2;
-    }
-}*/
-
-
 
 
 /* ------------------------------------ *\

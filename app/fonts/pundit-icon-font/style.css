@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'pundit-font';
-	src:url('fonts/pundit-font.eot?i4dy40');
-	src:url('fonts/pundit-font.eot?#iefixi4dy40') format('embedded-opentype'),
-		url('fonts/pundit-font.ttf?i4dy40') format('truetype'),
-		url('fonts/pundit-font.woff?i4dy40') format('woff'),
-		url('fonts/pundit-font.svg?i4dy40#pundit-font') format('svg');
+	src:url('fonts/pundit-font.eot?-y4ryct');
+	src:url('fonts/pundit-font.eot?#iefix-y4ryct') format('embedded-opentype'),
+		url('fonts/pundit-font.ttf?-y4ryct') format('truetype'),
+		url('fonts/pundit-font.woff?-y4ryct') format('woff'),
+		url('fonts/pundit-font.svg?-y4ryct#pundit-font') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -23,6 +23,18 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.pnd-icon-glyphicon-chevron-left:before {
+	content: "\f053";
+}
+.pnd-icon-glyphicon-chevron-right:before {
+	content: "\f054";
+}
+.pnd-icon-glyphicon-chevron-left-2:before {
+	content: "\f104";
+}
+.pnd-icon-glyphicon-chevron-right-2:before {
+	content: "\f105";
+}
 .pnd-icon-arrow-right:before {
 	content: "\e60e";
 }

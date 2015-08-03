@@ -37,14 +37,7 @@
                             class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-show-filter">
                                 Annotations filters ({{annotations.length}}/{{allAnnotations.length}})
                                 <span class="pnd-icon-caret-down"></span>
-                        </button><!--<button
-                            ng-click="annotationSidebar.resetFilters()"
-                            ng-show="!isFiltersShowed"
-                            class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-remove-filters"
-                            ng-disabled="!annotationSidebar.needToFilter()">
-                               Reset filters
-                        </button>-->
-
+                        </button>
                     </div>
 
                     <!-- Button to close filters -->
@@ -230,6 +223,10 @@
                                 <span
                                         ng-show="isFilterLabelShowed(annotationSidebar.filters.fromDate.expression)">
                                         <strong>From</strong> {{annotationSidebar.filters.fromDate.expression}}
+                                </span>
+                                <span
+                                        ng-show="isFilterLabelShowed(annotationSidebar.filters.fromDate.expression) && isFilterLabelShowed(annotationSidebar.filters.toDate.expression)">
+                                     -
                                 </span>
                                 <span
                                         ng-show="isFilterLabelShowed(annotationSidebar.filters.toDate.expression)">
