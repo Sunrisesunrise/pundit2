@@ -24,6 +24,8 @@ body.pnd-toolbar-active {
     min-width: 960px;
     z-index: @zindex-pnd-toolbar;
     background-color: @color-toolbar-bg;
+    box-shadow: 0 1px 1px rgba(0,0,0,.1);
+    border-bottom-width: @toolbar-border-bottom;
 
     .container-fluid {
         padding-left: 0;
@@ -40,7 +42,7 @@ body.pnd-toolbar-active {
     a {
         height: @toolbar-height - @toolbar-border-bottom;
 
-        background-color: @color-toolbar-button;
+        background-color: @color-toolbar-bg; // @color-toolbar-button;
         border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 25);
         border-left: 0;
 
@@ -50,11 +52,11 @@ body.pnd-toolbar-active {
         transition: none !important; /* Delete any transition */
 
         &:focus {
-            background-color: @color-toolbar-button;
+            background-color: @color-toolbar-bg; // @color-toolbar-button;
         }
 
         &:hover {
-            background-color: lighten(@color-toolbar-button, 8);
+            background-color: lighten(@color-toolbar-button, 10);
         }
     }
 
@@ -65,22 +67,22 @@ body.pnd-toolbar-active {
         vertical-align: text-bottom;
     }
 
-    /* Toggle buttons like Dashboard and Sidebar */
+    /* Toggle buttons like Dashboard and Sidebar: active state */
     &.pnd-toolbar-toggle-button {
 
         &.pnd-toolbar-button-active {
 
             a {
-                background-color: lighten(@color-toolbar-button, 8);
+                background-color: lighten(@color-toolbar-button, 10);
 
                 .text-dark-emboss();
 
                 &:focus {
-                    background-color: lighten(@color-toolbar-button, 8);
+                    background-color: lighten(@color-toolbar-button, 10);
                 }
 
                 &:hover {
-                    background-color: lighten(@color-toolbar-button, 8);
+                    background-color: lighten(@color-toolbar-button, 10);
                 }
             }
         }
@@ -99,7 +101,7 @@ body.pnd-toolbar-active {
             }
 
             &:hover {
-                background-color: lighten(@color-button-bg-cta, 5);
+                background-color: darken(@color-button-bg-cta, 5);
             }
         }
     }
@@ -150,8 +152,13 @@ body.pnd-toolbar-active {
 
     /* First button on the left (loading, pundit logo, error */
     &.pnd-toolbar-first-button {
-        width: 50px;
+        width: 40px;
         text-align: center;
+
+        a {
+            padding-left: 0;
+            padding-right: 0;
+        }
     }
 }
 
