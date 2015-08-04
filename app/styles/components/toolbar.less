@@ -38,7 +38,7 @@ body.pnd-toolbar-active {
 \* ------------------------------------ */
 .pnd-toolbar-navbar .navbar-nav li {
 
-    /* Normal buttons... now dark gray */
+    /* Normal buttons */
     a {
         height: @toolbar-height - @toolbar-border-bottom;
 
@@ -48,7 +48,7 @@ body.pnd-toolbar-active {
 
         color: @color-toolbar-text;
         line-height: 1.5;
-        .text-dark-emboss();
+        // .text-dark-emboss();
         transition: none !important; /* Delete any transition */
 
         &:focus {
@@ -56,7 +56,7 @@ body.pnd-toolbar-active {
         }
 
         &:hover {
-            background-color: lighten(@color-toolbar-button, 10);
+            background-color: @color-toolbar-button-hover;
         }
     }
 
@@ -73,22 +73,22 @@ body.pnd-toolbar-active {
         &.pnd-toolbar-button-active {
 
             a {
-                background-color: lighten(@color-toolbar-button, 10);
-
+                background-color: @color-toolbar-button-open;
                 .text-dark-emboss();
+                box-shadow: 0 3px 0 @color-toolbar-button-open; /* Covers the toolbar shadow */
 
                 &:focus {
-                    background-color: lighten(@color-toolbar-button, 10);
+                    background-color: @color-toolbar-button-open;
                 }
 
                 &:hover {
-                    background-color: lighten(@color-toolbar-button, 10);
+                    background-color: @color-toolbar-button-open;
                 }
             }
         }
     }
 
-    /* Call to action buttons... now green */
+    /* Call to action buttons */
     &.pnd-calltoaction-btn {
 
         a {
@@ -149,23 +149,34 @@ body.pnd-toolbar-active {
     &.disabled > a, .pnd-toolbar-not-active-element {
         color: darken(@color-toolbar-text, 30) !important; // Specificity war against bootstrap
     }
-
-    /* First button on the left (loading, pundit logo, error */
-    &.pnd-toolbar-first-button {
-        width: 40px;
-        text-align: center;
-
-        a {
-            padding-left: 0;
-            padding-right: 0;
-        }
-    }
 }
 
 
 /* ------------------------------------ *\
    #SPECIAL-BUTTONS-STYLES
 \* ------------------------------------ */
+
+/* First button on the left (loading, pundit logo, error */
+.pnd-toolbar-navbar .pnd-toolbar-first-button {
+    width: 40px;
+    text-align: center;
+
+    a {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    /* First button with Pundit Logo and error icon when necessary */
+    &.pnd-toolbar-status-button-ok {
+        a {
+            padding-top: 4px;
+        }
+
+        .pnd-icon {
+            font-size: 24px;
+        }
+    }
+}
 
 /* Buttons on the right */
 .pnd-toolbar-navbar .navbar-right li {
@@ -212,14 +223,13 @@ body.pnd-toolbar-active {
     }
 }
 
-/* First button with Pundit Logo and error icon when necessary */
-.pnd-toolbar-navbar .navbar-nav .pnd-toolbar-status-button-ok {
+/* Notebook selection button */
+.pnd-toolbar-notebook-menu-button {
     a {
-        padding-top: 4px;
-    }
-
-    .pnd-icon {
-        font-size: 24px;
+        max-width: 230px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 }
 
@@ -228,85 +238,8 @@ body.pnd-toolbar-active {
    #DROPDOWN-MENU
 \* ------------------------------------ */
 
+//TODO Thid can be moved into contextual-menu.less
 .pnd-toolbar-navbar .navbar-nav li {
-
-    /* General dropdown styles */
-    .dropdown-menu {
-
-        padding: 1px 0 0 0;
-        border: 0;
-
-        li:first-child a {
-            border-top: 0;
-        }
-
-        &.bottom-right {
-            left: auto !important;
-            right: 0 !important;
-        }
-
-        a {
-            height: auto;
-            background-color: @brand-success;
-            color: #fff;
-            padding: 3px 10px;
-            border-top: 1px lighten(@brand-success, 30%) solid;
-            border-right: 0;
-            border-left: 0;
-            max-width: 350px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-
-            &:hover {
-                // background-color: @brand-success;
-            }
-
-            .pnd-icon {
-                margin-right: 6px;
-                margin: 0;
-                width: 18px;
-                display: inline-block;
-                text-align: center;
-            }
-        }
-    }
-
-    /* Notebooks dropdown */
-    .dropdown-menu {
-        .current-notebook a {
-            background-color: darken(@brand-success, 10%) !important;
-        }
-    }
-
-    /* Templates dropdown */
-    &.pnd-toolbar-template-menu-button .dropdown-menu {
-
-        .dropdown-header {
-            background-color: @dropdown-bg;
-        }
-
-        .current-template a {
-            background-color: @dropdown-bg;
-            color: @gray-darker;
-        }
-
-        li a {
-            background-color: @gray-extra-lighter;
-            color: @gray;
-            border-top: 1px solid @gray-extra-light;
-
-            .pnd-icon-check {
-                color: @brand-success;
-            }
-
-            &:hover {
-                background-color: #fff;
-                color: @gray-darker;
-            }
-        }
-    }
-
     /* Error dropdown */
     &.pnd-toolbar-error-button .dropdown-menu {
         border-bottom: 1px lighten(@brand-warning, 30%) solid;

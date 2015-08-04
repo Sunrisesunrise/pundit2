@@ -368,7 +368,7 @@ angular.module('Pundit2.Toolbar')
     });
 
     $scope.userNotebooksDropdown = [{
-        text: 'Please select notebook you want to use',
+        text: 'Please select the notebook you want to use',
         header: true
     }];
 

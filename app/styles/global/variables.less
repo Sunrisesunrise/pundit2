@@ -19,6 +19,7 @@
 // ------------------------------------ //
 // Text colors
 @color-text: #555;
+@color-text-light: #808080;
 @color-text-error: #FF643F;
 @color-text-link: #48bb58; // #39b54a;
 @color-text-link-hover: darken(@color-text-link, 15%);
@@ -63,6 +64,14 @@
 @color-toolbar-bg: #333333;
 @color-toolbar-text: #eee;
 @color-toolbar-button: #3c3c3c;
+@color-toolbar-button-hover: lighten(@color-toolbar-button, 10);
+@color-toolbar-button-open: #999999; // @color-toolbar-button-hover;
+
+// Dropdown
+@color-dropdown-bg: #ffffff;
+@color-dropdown-active: darken(@color-dropdown-bg, 10);
+@color-dropdown-bg-hover: darken(@color-dropdown-bg, 3);
+@color-dropdown-text: @color-text;
 
 // Login popover colors
 @color-login-popover-background: #FFF;
