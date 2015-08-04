@@ -1,7 +1,7 @@
 angular.module('Pundit2.Core')
 
 .constant("BROKENHELPERDEFAULTS", {
-    active: true,
+    active: false,
     debug: false
 })
 
