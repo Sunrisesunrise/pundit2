@@ -1186,7 +1186,7 @@ angular.module('Pundit2.AnnotationSidebar')
         annotationSidebar.log('Update annotations in sidebar');
 
         var annotations = AnnotationsExchange.getAnnotationsList();
-        state.allAnnotations = angular.copy(annotations);
+        state.allAnnotations = angular.extend({}, annotations);
         setFilterElements(state.allAnnotations);
         setAnnotationsPosition();
     });

@@ -8,7 +8,7 @@ angular.module('Pundit2.Core')
 
     var BaseComponent = function(name, options) {
         this.name = name;
-        this.options = angular.copy(BASECOMPONENTDEFAULTS);
+        this.options = angular.extend({}, BASECOMPONENTDEFAULTS);
 
         // Extend the very basic defaults with given options
         if (typeof(options) !== "undefined") {

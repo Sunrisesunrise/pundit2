@@ -160,7 +160,7 @@ angular.module('Pundit2.Communication')
         }
 
         ann.items = {};
-        ann.graph = angular.copy(data.graph);
+        ann.graph = angular.extend({}, data.graph);
 
         // For some weird reason, the first level of the object is
         // is the annotation's URI
@@ -297,7 +297,7 @@ angular.module('Pundit2.Communication')
         }
 
         ann.items = {};
-        ann.graph = angular.copy(data.graph);
+        ann.graph = angular.extend({}, data.graph);
 
         // For some weird reason, the first level of the object is
         // is the annotation's URI

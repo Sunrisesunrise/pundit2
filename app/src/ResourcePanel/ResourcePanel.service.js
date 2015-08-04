@@ -293,7 +293,7 @@ angular.module('Pundit2.ResourcePanel')
 
             state.popoverOptions.template = 'src/ResourcePanel/popoverResourcePanel.tmpl.html';
 
-            state.popoverOptions.scope.originalContent = angular.copy(content);
+            state.popoverOptions.scope.originalContent = angular.extend({}, content);
             state.popoverOptions.scope.type = content.type;
             state.popoverOptions.scope.triple = content.triple;
             state.popoverOptions.scope.pageItems = content.pageItems;
