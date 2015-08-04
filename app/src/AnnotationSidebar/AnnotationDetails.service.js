@@ -246,7 +246,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationDetails.getAnnotationDetails = function(currentId) {
-        if (currentId in state.annotations) {
+        if (typeof state.annotations[currentId] !== 'undefined') {
             return state.annotations[currentId];
         }
     };
@@ -365,6 +365,12 @@ angular.module('Pundit2.AnnotationSidebar')
             }
         }
     };
+    
+    EventDispatcher.addListener('AnnotationSidebar.filteredAnnotationsUpdate', function() {
+        for (var id in state.annotations) {
+            state.annotations[id].expanded = state.defaultExpanded;
+        }
+    });
 
     EventDispatcher.addListeners(['AnnotationsCommunication.saveAnnotation', 'AnnotationsCommunication.editAnnotation'], function(e) {
         annotationDetails.log('Update annotation');
@@ -402,12 +408,6 @@ angular.module('Pundit2.AnnotationSidebar')
     EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
         state.isUserLogged = e.args;
         state.userData = MyPundit.getUserData();
-    });
-
-    EventDispatcher.addListener('AnnotationSidebar.filteredAnnotationsUpdate', function() {
-        for (var id in state.annotations) {
-            state.annotations[id].expanded = state.defaultExpanded;
-        }
     });
 
     $document.on('mousedown', function(downEvt) {

@@ -374,6 +374,20 @@ angular.module('Pundit2.AnnotationSidebar')
     //     }
     // }
 
+
+    // TODO add single filter add to elementsList
+    var resetElementsList = function() {
+        for (var i in elementsList) {
+            if (angular.isArray(elementsList[i])) {
+                elementsList[i] = [];
+            } else {
+                for (var j in elementsList[i]) {
+                    elementsList[i][j].partial = 0;
+                }
+            }
+        }
+    };
+
     var sortByKey = function(array, key) {
         return array.sort(function(a, b) {
             var x = a[key];
@@ -616,11 +630,13 @@ angular.module('Pundit2.AnnotationSidebar')
         return list;
     };
 
-    // Updates the list of filters when new annotations comes
-    var setFilterElements = function(annotations) {
+    // Updates the list of filters and annotation positions when the consolidation is completed
+    var initializeFiltersAndPositions = function(annotations) {
         var isBroken, isBrokenYet;
         var annotationsByLabelTemp = {};
         var dashboardHeight;
+
+        resetElementsList();
 
         elementsList.broken['uri:broken'] = {
             annotationsList: {}
@@ -763,11 +779,9 @@ angular.module('Pundit2.AnnotationSidebar')
             annotation.allLabels = '';
 
             for (var i in annotation.items) {
-                if (annotation.items[i].isProperty() === false) {
-                    var label = annotation.items[i].label;
-                    label = label.toLowerCase();
-                    annotation.allLabels = annotation.allLabels.concat(' ', label);
-                }
+                var label = annotation.items[i].label;
+                label = label.toLowerCase();
+                annotation.allLabels = annotation.allLabels.concat(' ', label);
             }
             for (var subject in annotation.graph) {
                 for (var predicate in annotation.graph[subject]) {
@@ -1149,8 +1163,6 @@ angular.module('Pundit2.AnnotationSidebar')
         Analytics.track('buttons', 'click', 'sidebar--filters--filtersPanel--' + list + '--' + (elementsList[list][uri].active ? 'active' : 'inactive'));
     };
 
-    // TODO: verificare che l'elemento sia presente fra gli elementi prima
-    // di impostarlo? es. nessuna annotazione con autore X
     annotationSidebar.setFilter = function(filterKey, uriValue) {
         var currentIndex;
         var currentElementInList;
@@ -1203,7 +1215,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var annotations = AnnotationsExchange.getAnnotationsList();
         state.allAnnotations = angular.extend({}, annotations);
-        setFilterElements(state.allAnnotations);
+        initializeFiltersAndPositions(state.allAnnotations);
     });
 
     annotationSidebar.log('Component running');

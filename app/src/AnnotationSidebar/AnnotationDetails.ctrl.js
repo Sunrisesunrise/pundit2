@@ -5,7 +5,9 @@ angular.module('Pundit2.AnnotationSidebar')
     EventDispatcher, NotebookExchange, ItemsExchange, TripleComposer, Dashboard, ImageAnnotator,
     TextFragmentAnnotator, TypesHelper, MyPundit, Consolidation, Status, Analytics) {
 
-    AnnotationDetails.addAnnotationReference($scope);
+    if (AnnotationDetails.getAnnotationDetails($scope.id) === undefined) {
+        AnnotationDetails.addAnnotationReference($scope);
+    }
 
     var notebookId,
         currentId = $scope.id,
