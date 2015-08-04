@@ -368,7 +368,7 @@ angular.module('Pundit2.Communication')
                 withCredentials: true,
                 data: postData
             }).success(function(data) {
-
+                EventDispatcher.sendEvent('AnnotationsCommunication.annotationSaved', data.AnnotationID);
                 // TODO if is rejected ???
                 new Annotation(data.AnnotationID).then(function() {
 

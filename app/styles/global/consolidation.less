@@ -28,6 +28,27 @@
     }
 }
 
+.pnd-cons-temp {
+    background-color: rgba(184, 255, 153, 0.4);
+    // padding: 0.2em 0em;
+    // color: darken(@brand-warning, 25%);
+    // line-height: 1.8em;
+
+    &.pnd-textfragment-highlight {
+        background-color: @text-fragment-color-hover;
+        color: darken(@brand-warning, 35%);
+    }
+
+    &.pnd-textfragment-hidden {
+        background-color: inherit;
+        color: inherit;
+    }
+
+    &.pnd-textfragment-ghosted {
+        opacity: 0.6;
+    }
+}
+
 .pnd-text-fragment-icon {
     display: inline-block;
     margin-left: 0.1em;
