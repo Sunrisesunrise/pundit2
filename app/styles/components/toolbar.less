@@ -75,7 +75,6 @@ body.pnd-toolbar-active {
             a {
                 background-color: @color-toolbar-button-open;
                 .text-dark-emboss();
-                box-shadow: 0 3px 0 @color-toolbar-button-open; /* Covers the toolbar shadow */
 
                 &:focus {
                     background-color: @color-toolbar-button-open;
@@ -175,6 +174,13 @@ body.pnd-toolbar-active {
         .pnd-icon {
             font-size: 24px;
         }
+    }
+}
+
+/* Dashboard button */
+.pnd-toolbar-dashboard-toogle-button {
+    &.pnd-toolbar-button-active a {
+        box-shadow: 0 3px 0 @color-toolbar-button-open; /* Covers the toolbar shadow */
     }
 }
 
