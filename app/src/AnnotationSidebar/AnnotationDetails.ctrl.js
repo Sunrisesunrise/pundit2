@@ -283,19 +283,7 @@ angular.module('Pundit2.AnnotationSidebar')
         return AnnotationSidebar.isAnnotationSidebarExpanded();
     }, function(newState, oldState) {
         if (newState !== oldState && !newState) {
-            AnnotationDetails.closeViewAndReset();
-        }
-    });
-
-    // TODO find alternative to force digest and avoid watch delay on the height change (?)
-    currentElement.bind('DOMSubtreeModified', function() {
-        if (typeof($scope.annotation) !== 'undefined') {
-            if (currentElement.height() !== currentHeight) {
-                currentHeight = currentElement.height();
-                if (currentHeight < 30 || currentHeight > 140) {
-                    $rootScope.$$phase || $rootScope.$digest();
-                }
-            }
+            AnnotationDetails.closeAnnotationView(currentId);
         }
     });
 
@@ -305,6 +293,18 @@ angular.module('Pundit2.AnnotationSidebar')
         if (typeof($scope.annotation) !== 'undefined') {
             if (newHeight !== oldHeight && $scope.annotation.expanded) {
                 AnnotationSidebar.setAllPosition(currentId, newHeight);
+            }
+        }
+    });    
+
+    // TODO find alternative to force digest and avoid watch delay on the height change (?)
+    currentElement.bind('DOMSubtreeModified', function() {
+        if (typeof($scope.annotation) !== 'undefined') {
+            if (currentElement.height() !== currentHeight) {
+                currentHeight = currentElement.height();
+                if (currentHeight < 30 || currentHeight > 140) {
+                    $rootScope.$$phase || $rootScope.$digest();
+                }
             }
         }
     });

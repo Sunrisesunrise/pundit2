@@ -301,6 +301,14 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
+    annotationDetails.closeAnnotationView = function(currentId) {
+        if (typeof(state.annotations[currentId]) !== 'undefined') {
+            state.annotations[currentId].expanded = false;
+        } else {
+            annotationDetails.log("Cannot find this annotation: id -> " + currentId);
+        }
+    };
+
     annotationDetails.toggleAnnotationView = function(currentId) {
         annotationDetails.closeAllAnnotationView(currentId);
         state.annotations[currentId].expanded = !state.annotations[currentId].expanded;
@@ -394,6 +402,12 @@ angular.module('Pundit2.AnnotationSidebar')
     EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
         state.isUserLogged = e.args;
         state.userData = MyPundit.getUserData();
+    });
+
+    EventDispatcher.addListener('AnnotationSidebar.filteredAnnotationsUpdate', function() {
+        for (var id in state.annotations) {
+            state.annotations[id].expanded = state.defaultExpanded;
+        }
     });
 
     $document.on('mousedown', function(downEvt) {

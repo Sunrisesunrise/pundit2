@@ -986,6 +986,8 @@ angular.module('Pundit2.AnnotationSidebar')
         results = atLeastOneActiveFilter ? multipleIntersection(subFiltersSet) : angular.extend({}, state.allAnnotations);
         updatePartialFiltersCount(globalFilters, results, subFiltersSet);
 
+        EventDispatcher.sendEvent('AnnotationSidebar.filteredAnnotationsUpdate');
+
         annotationSidebar.log(Object.keys(results).length + ' multi result ', results);
 
         return results;
