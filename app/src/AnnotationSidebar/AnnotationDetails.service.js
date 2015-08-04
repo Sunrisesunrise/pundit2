@@ -75,6 +75,8 @@ angular.module('Pundit2.AnnotationSidebar')
         userData: {}
     };
 
+    var forceSkip = '';
+
     ContextualMenu.addAction({
         type: [
             TextFragmentAnnotator.options.cMenuType,
@@ -343,7 +345,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 currentColor = template.hasColor;
             }
 
-            if (typeof(state.annotations[currentId]) === 'undefined' || typeof(force) !== 'undefined') {
+            if (typeof(state.annotations[currentId]) === 'undefined') {
                 state.annotations[currentId] = {
                     id: currentId,
                     creator: currentAnnotation.creator,
@@ -362,13 +364,31 @@ angular.module('Pundit2.AnnotationSidebar')
                 };
             } else {
                 state.annotations[currentId].expanded = expandedState;
+
+                if (typeof(force) !== 'undefined' && force) {
+                    state.annotations[currentId].created = currentAnnotation.created;
+                    state.annotations[currentId].created = currentAnnotation.created;
+                    state.annotations[currentId].notebookId = currentAnnotation.isIncludedIn;
+                    state.annotations[currentId].scopeReference = scope;
+                    state.annotations[currentId].mainItem = buildMainItem(currentAnnotation);
+                    state.annotations[currentId].itemsArray = buildItemsArray(currentAnnotation);
+                    state.annotations[currentId].itemsUriArray = buildItemsUriArray(currentAnnotation);
+                    state.annotations[currentId].broken = isBroken;
+                    state.annotations[currentId].ghosted = false;
+                    state.annotations[currentId].expanded = true;
+                }
             }
         }
     };
-    
+
     EventDispatcher.addListener('AnnotationSidebar.filteredAnnotationsUpdate', function() {
         for (var id in state.annotations) {
-            state.annotations[id].expanded = state.defaultExpanded;
+            if (id !== forceSkip) {
+                state.annotations[id].expanded = state.defaultExpanded;
+            } else {
+                state.annotations[id].expanded = true;
+                forceSkip = '';
+            }
         }
     });
 
@@ -388,6 +408,9 @@ angular.module('Pundit2.AnnotationSidebar')
             };
             if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
                 AnnotationSidebar.toggle();
+            }
+            if (AnnotationSidebar.needToFilter()) {
+                forceSkip = annotationId;
             }
             annotationDetails.closeAllAnnotationView(annotationId);
             annotationDetails.addAnnotationReference(targetAnnotation, true);
