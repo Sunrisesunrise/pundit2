@@ -440,7 +440,7 @@ angular.module('Pundit2.AnnotationSidebar')
             currentItem = ItemsExchange.getItemByUri(subject);
             if (currentItem && currentItem.isTextFragment() || currentItem.isImageFragment() || currentItem.isImage() || currentItem.isWebPage()) {
                 if (Consolidation.isConsolidated(currentItem)) {
-                    return subject;
+                    return currentItem;
                 }
             }
 
@@ -455,7 +455,7 @@ angular.module('Pundit2.AnnotationSidebar')
                         currentItem = ItemsExchange.getItemByUri(objectValue);
                         if (currentItem && currentItem.isTextFragment() || currentItem.isImageFragment() || currentItem.isImage() || currentItem.isWebPage()) {
                             if (Consolidation.isConsolidated(currentItem)) {
-                                return objectValue;
+                                return currentItem;
                             }
                         }
                     }
@@ -486,16 +486,14 @@ angular.module('Pundit2.AnnotationSidebar')
             }
 
             angular.forEach(annotations, function(annotation) {
-                // var graph = annotation.graph;
                 var firstValidUri;
                 var currentItem;
-                // var currentId;
 
                 var currentFragment;
 
-                firstValidUri = findFirstConsolidateItem(annotation);
+                firstValid = annotation.firstConsolidableItem;
 
-                if (typeof(firstValidUri) === 'undefined') {
+                if (typeof(firstValid) === 'undefined') {
                     annotationHeigth = annotationSidebar.options.annotationHeigth;
                     if (optCheck && optId === annotation.id) {
                         annotationHeigth = optHeight;
@@ -509,11 +507,11 @@ angular.module('Pundit2.AnnotationSidebar')
                     });
                 } else {
                     var top, imgRef, fragRef, xpathTemp;
-                    currentItem = ItemsExchange.getItemByUri(firstValidUri);
+                    currentItem = firstValid;
 
                     if (currentItem.isTextFragment()) {
                         top = -1;
-                        currentFragment = TextFragmentAnnotator.getFragmentIdByUri(firstValidUri);
+                        currentFragment = TextFragmentAnnotator.getFragmentIdByUri(firstValid.uri);
                         fragRef = angular.element('.' + currentFragment);
 
                         if (typeof(currentFragment) !== 'undefined' && typeof(fragRef.offset()) !== 'undefined') {
@@ -629,6 +627,8 @@ angular.module('Pundit2.AnnotationSidebar')
         angular.forEach(annotations, function(annotation) {
 
             var uriList = {};
+
+            annotation.firstConsolidableItem = findFirstConsolidateItem(annotation);
 
             annotationsByDate.push(annotation);
             setBrokenInfo(annotation);
