@@ -66,9 +66,9 @@
 
                         <!-- Authors -->
                         <div class="pnd-annotation-sidebar-filter">
-                            <div class="pnd-panel" ng-click = "toggleFilterList($event, 'authors')">
+                            <div class="pnd-panel" ng-click="toggleFilterList($event, 'authors')">
                                 <div class="pnd-annotation-sidebar-filter-label">Annotation author</div>
-                                <span class="pnd-icon pnd-icon-caret-down"></span>
+                                <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'authors']"></span>
                             </div>
                             <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
                                 <span
@@ -95,9 +95,9 @@
 
                         <!-- Notebooks -->
                         <div class="pnd-annotation-sidebar-filter">
-                            <div class="pnd-panel" ng-click = "toggleFilterList($event, 'notebooks')">
+                            <div class="pnd-panel" ng-click="toggleFilterList($event, 'notebooks')">
                                 <div class="pnd-annotation-sidebar-filter-label">Notebook</div>
-                                <span class="pnd-icon pnd-icon-caret-down"></span>
+                                <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'notebooks']"></span>
                             </div>
                             <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
                                 <span
@@ -124,9 +124,9 @@
 
                         <!-- Types -->
                         <div class="pnd-annotation-sidebar-filter">
-                            <div class="pnd-panel" ng-click = "toggleFilterList($event, 'types')">
+                            <div class="pnd-panel" ng-click="toggleFilterList($event, 'types')">
                                 <div class="pnd-annotation-sidebar-filter-label">Entity type</div>
-                                <span class="pnd-icon pnd-icon-caret-down"></span>
+                                <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'types']"></span>
                             </div>
                             <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
                                 <span
@@ -153,9 +153,9 @@
                         <!-- Used predicate -->
                         <div class="pnd-annotation-sidebar-filter">
                             <div class="pnd-panel"
-                                ng-click = "toggleFilterList($event, 'predicates')">
+                                ng-click="toggleFilterList($event, 'predicates')">
                                 <div class="pnd-annotation-sidebar-filter-label">Used predicate</div>
-                                <span class="pnd-icon pnd-icon-caret-down"></span>
+                                <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'predicates']"></span>
                             </div>
                             <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
                                 <span
@@ -182,9 +182,9 @@
                         <!--
                         TODO Remove (comment) Page items in the whole ionterface
                         <div class="pnd-annotation-sidebar-filter">
-                            <div class="pnd-panel" ng-click = "toggleFilterList($event, 'entities')">
+                            <div class="pnd-panel" ng-click="toggleFilterList($event, 'entities')">
                                 <div class="pnd-annotation-sidebar-filter-label">Page items</div>
-                                <span class="pnd-icon pnd-icon-caret-down"></span>
+                                <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'entities']"></span>
                             </div>
                             <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
                                 <span
@@ -212,9 +212,9 @@
 
                         <!-- Date -->
                         <div class="pnd-annotation-sidebar-filter">
-                            <div class="pnd-panel" ng-click = "toggleFilterList($event, 'date')">
+                            <div class="pnd-panel" ng-click="toggleFilterList($event, 'date')">
                                 <div class="pnd-annotation-sidebar-filter-label">Date</div>
-                                <span class="pnd-icon pnd-icon-caret-down"></span>
+                                <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'date']"></span>
                             </div>
 
                             <div class="pnd-annotation-sidebar-filter-date">
