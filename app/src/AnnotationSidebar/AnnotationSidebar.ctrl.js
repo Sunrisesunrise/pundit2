@@ -273,6 +273,7 @@ angular.module('Pundit2.AnnotationSidebar')
     }, function(dashboardHeight) {
         state.newMarginTopSidebar = state.toolbarHeight + dashboardHeight;
         container.css('margin-top', state.newMarginTopSidebar + 'px');
+        header.css('top', state.newMarginTopSidebar + 'px');
     });
     $scope.$watch(function() {
         return Dashboard.isDashboardVisible();
