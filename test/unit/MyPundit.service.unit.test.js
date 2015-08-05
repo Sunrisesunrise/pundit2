@@ -28,11 +28,13 @@ describe('MyPundit service', function() {
         email: "mario@rossi.it",
         loginServer: "http:\/\/demo-cloud.as.thepund.it:8080\/annotationserver\/login.jsp"
     };
-    
-    beforeEach(module(
-        'src/Core/Templates/login.modal.tmpl.html'
-    ));
-    
+
+    var addLoginAnchorButton = function() {
+        var elem = angular.element('<button class="pnd-toolbar-login-button">login</button>');
+        angular.element('body').append(elem);
+        return elem;
+    };
+
     beforeEach(module('Pundit2'));
 
     beforeEach(inject(function($injector, _$rootScope_, _$httpBackend_, _$timeout_, _$q_, _$modal_, _$document_, _MYPUNDITDEFAULTS_, _$log_){
@@ -217,30 +219,106 @@ describe('MyPundit service', function() {
 
 	});
 
-    it("should set loginStatus = loggedOff and open the modal if user is not logged in and login() is executed", function() {
-
+    iit("should set loginStatus = loggedOff and open the modal if user is not logged in and login() is executed", function() {
+        addLoginAnchorButton();
         var promiseValue;
-
+        //expect(true).toBe(true);
+        //return;
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userNotLogged);
+        $httpBackend.whenGET('http://demo-cloud.oauth.thepund.it/pundit_login/').respond('pagina login');
 
-        var promise = MyPundit.oldLogin();
 
-        // wait for promise....
-        waitsFor(function() { return typeof(promiseValue) !== 'undefined'; }, 2000);
 
-        // promise should be return false
-        runs(function() {
-            expect(promiseValue).toBe(false);
-        });
+        //var promise = MyPundit.oldLogin();
+        console.log("pre login");
+        var promise = MyPundit.login();
+        console.log("post login");
+        console.log(window.location.href);
 
         // loginPromise should be resolved as false when login popup is closed
         promise.then(function(value) {
             promiseValue = value;
+            console.log("promise resolved ");
+            console.log(value);
+            expect(promiseValue).toBe(false);
         });
 
-        $rootScope.$digest();
-        $httpBackend.flush();
-        $timeout.flush();
+
+
+        //// wait for promise....
+        //waitsFor(function() {
+        //    console.log("waits");
+        //    window.postMessage(
+        //        'userLoggedIn',
+        //        'http://localhost:9876'
+        //    );
+        //    //return typeof(promiseValue) !== 'undefined';
+        //    $httpBackend.flush();
+        //    //return true;
+        //}, 10000);
+//
+        //// promise should be return false
+        //runs(function() {
+        //    //expect(promiseValue).toBe(false);
+        //});//
+
+        var flag0 = false;
+        var flag1 = false;
+        var flag2 = false;
+
+        setTimeout(function() {
+            console.log("flag 0 => true");
+            flag0 = true;
+        }, 1000);
+        setTimeout(function() {
+            console.log("flag 1 => true");
+            flag1 = true;
+        }, 2000);
+        setTimeout(function() {
+            console.log("flag 2 => true");
+            flag2 = true;
+        }, 3000);
+
+        waitsFor(function() {
+            if (flag0) {
+                console.log("flag0:" + flag0);
+                $rootScope.$digest();
+            }
+            return flag0;
+        });
+
+        waitsFor(
+            function() {
+                if (flag1) {
+                    console.log("flag1:" + flag1);
+                    // flush iframe page
+                    //$httpBackend.flush();
+                    console.log("prima post message");
+                    window.postMessage(
+                        'userLoggedIn',
+                        'http://localhost:9876'
+                    );
+                    console.log("dopo post message");
+                }
+                return flag1;
+            }
+        );
+
+        waitsFor(
+            function() {
+                if (flag2) {
+                    console.log("flag2:" + flag2);
+                    $httpBackend.flush();
+                }
+                return flag2;
+            }
+        );
+
+
+
+        //$rootScope.$digest();
+        //$httpBackend.flush();
+        //$timeout.flush();
 
     });
     
