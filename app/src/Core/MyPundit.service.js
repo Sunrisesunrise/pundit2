@@ -12,6 +12,7 @@ angular.module('Pundit2.Core')
      * Configuration for MyPundit module
      */
 
+    // DA CANCELLARE
     /**
      * @module punditConfig
      * @ngdoc property
@@ -29,6 +30,7 @@ angular.module('Pundit2.Core')
      */
     loginPollTimerMS: 1000,
 
+    // DA CANCELLARE
     /**
      * @module punditConfig
      * @ngdoc property
@@ -153,6 +155,7 @@ angular.module('Pundit2.Core')
      *
      */
     myPundit.checkLoggedIn = function() {
+        console.log("checkLoggedIn");
 
         var promise = $q.defer(),
             httpCall;
@@ -166,6 +169,7 @@ angular.module('Pundit2.Core')
             withCredentials: true
 
         }).success(function(data) {
+            console.log("checkLoggedIn success");
             loginServer = data.loginServer;
             editProfile = data.editProfile;
             // user is not logged in
@@ -183,6 +187,7 @@ angular.module('Pundit2.Core')
             }
 
         }).error(function() {
+            console.log("checkLoggedIn ERROR");
             myPundit.err('Server error');
             promise.reject('check logged in promise error');
         });
@@ -208,7 +213,7 @@ angular.module('Pundit2.Core')
      *
      */
     myPundit.login = function() {
-
+        console.log("myPundit.login");
         loginPromise = $q.defer();
 
         if (myPundit.isUserLogged()) {
@@ -359,13 +364,15 @@ angular.module('Pundit2.Core')
 
     // MODAL HANDLER
 
-    var loginModal = $modal({
-        container: "[data-ng-app='Pundit2']",
-        template: 'src/Core/Templates/login.modal.tmpl.html',
-        show: false,
-        backdrop: 'static'
-    });
+    // DA CANCELLARE
+    //var loginModal = $modal({
+    //    container: "[data-ng-app='Pundit2']",
+    //    template: 'src/Core/Templates/login.modal.tmpl.html',
+    //    show: false,
+    //    backdrop: 'static'
+    //});
 
+    // DA CANCELLARE////
     /**
      * @ngdoc method
      * @name MyPundit#closeLoginModal
@@ -378,11 +385,12 @@ angular.module('Pundit2.Core')
      * Login promise will not be resolved
      *
      */
-    myPundit.closeLoginModal = function() {
-        loginModal.hide();
-        $timeout.cancel(loginPollTimer);
-    };
+    //myPundit.closeLoginModal = function() {
+    //    loginModal.hide();
+    //    $timeout.cancel(loginPollTimer);
+    //};
 
+    // DA CANCELLARE
     // close modal, cancel timeout and resolve loginPromise
     /**
      * @ngdoc method
@@ -396,11 +404,11 @@ angular.module('Pundit2.Core')
      * In this case, authentication process will be interrupted and login promise will be resolved as true
      *
      */
-    myPundit.cancelLoginModal = function() {
-        loginModal.hide();
-        loginPromise.resolve(false);
-        $timeout.cancel(loginPollTimer);
-    };
+    //myPundit.cancelLoginModal = function() {
+    //    loginModal.hide();
+    //    loginPromise.resolve(false);
+    //    $timeout.cancel(loginPollTimer);
+    //};
 
     var popoverState = {
         autoCloseWait: 2,
@@ -416,6 +424,7 @@ angular.module('Pundit2.Core')
             trigger: 'manual'
         },
         renderIFrame: function(where) {
+            console.log("renderIFrame");
             var iframeSrc = '';
             switch (where) {
                 case 'login':
@@ -452,6 +461,8 @@ angular.module('Pundit2.Core')
 
     // TODO add log and error if needed? 
     var popoverLoginPostMessageHandler = function(params) {
+        console.log("popoverLoginPostMessageHandler");
+        console.log(JSON.stringify(params));
         if (typeof params.data !== 'undefined') {
             if (params.data === 'loginPageLoaded' || params.data === 'pageLoaded') {
                 popoverState.popover.$scope.isLoading = false;
@@ -466,21 +477,27 @@ angular.module('Pundit2.Core')
                 }, 2500);
                 myPundit.checkLoggedIn();
             } else if (params.data === 'userLoggedIn') {
+                console.log("111");
                 popoverState.popover.$scope.postLoginPreCheck = true;
                 myPundit.checkLoggedIn().then(function(status) {
+                    console.log("111-pr");
                     popoverState.popover.$scope.isLoading = false;
                     if (status) {
                         popoverState.loginSuccess();
                         loginPromise.resolve(true);
+                        console.log("111-si");
                     } else {
                         popoverState.popover.$scope.loginSomeError = true;
                         //popoverState.popover.$scope.$digest();
+                        loginPromise.resolve(false);
+                        console.log("111-no");
                     }
                 }, function() {
                     popoverState.popover.$scope.isLoading = false;
                     popoverState.popover.$scope.loginSomeError = true;
                     //popoverState.popover.$scope.$digest();
                     //popoverState.loginSuccess();
+                    console.log("111-err");
                 });
             }
         }
@@ -497,6 +514,7 @@ angular.module('Pundit2.Core')
 
     // TODO This is not really a popoverLogin but more a popover toggler
     myPundit.popoverLogin = function(where) {
+        console.log("myPundit.popoverLogin");
         if (typeof(loginPromise) === 'undefined' && where !== 'editProfile') {
             return;
             // loginPromise = $q.defer();
@@ -535,6 +553,7 @@ angular.module('Pundit2.Core')
         };
 
         popoverState.popover.$promise.then(function() {
+            console.log("popoverState.popover.$promise resolved");
             popoverState.popover.show();
             popoverState.renderIFrame(where);
         });
