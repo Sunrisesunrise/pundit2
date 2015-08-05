@@ -9,6 +9,7 @@ angular.module('Pundit2.AnnotationSidebar')
     // var html = angular.element('html');
     var body = angular.element('body');
     var container = angular.element('.pnd-annotation-sidebar-container');
+    var header = angular.element('.pnd-annotation-sidebar-header');
     // var content = angular.element('.pnd-annotation-sidebar-content');
 
     var toolbarHeight = parseInt(angular.element('toolbar nav').css('height'), 10);
@@ -279,8 +280,10 @@ angular.module('Pundit2.AnnotationSidebar')
         if (dashboardVisibility) {
             state.newMarginTopSidebar = state.toolbarHeight + Dashboard.getContainerHeight();
             container.css('margin-top', state.newMarginTopSidebar + 'px');
+            header.css('top', state.newMarginTopSidebar + 'px');
         } else {
             container.css('margin-top', state.toolbarHeight + 'px');
+            header.css('top', state.toolbarHeight + 'px');
         }
     });
 
