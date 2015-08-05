@@ -23,7 +23,7 @@
                             }"
                             class="pnd-btn pnd-btn-sidebar pnd-btn-fill-width"
                             ng-disabled="isLoading || isAnnotationsPanelActive()">
-                        Annotations ({{annotations.length}}/{{allAnnotations.length}})
+                        Annotations ({{annotationsLength}}/{{allAnnotationsLength}})
                     </button>
                 </div>
 
@@ -35,7 +35,7 @@
                             ng-click="annotationSidebar.toggleFiltersContent()"
                             ng-show="!isFiltersShowed"
                             class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-show-filter">
-                                Annotations filters ({{annotations.length}}/{{allAnnotations.length}})
+                                Annotations filters ({{annotationsLength}}/{{allAnnotationsLength}})
                                 <span class="pnd-icon-caret-down"></span>
                         </button>
                     </div>
@@ -46,7 +46,7 @@
                                 ng-click="annotationSidebar.toggleFiltersContent()"
                                 type="button"
                                 class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-close-filters">
-                            Annotations filters ({{annotations.length}}/{{allAnnotations.length}})
+                            Annotations filters ({{annotationsLength}}/{{allAnnotationsLength}})
                             <span class="pnd-icon-caret-up"></span>
                         </button>
                     </div>
@@ -179,9 +179,7 @@
                         </div>
 
                         <!-- Page items -->
-                        <!--
-                        TODO Remove (comment) Page items in the whole ionterface
-                        <div class="pnd-annotation-sidebar-filter">
+                        <div class="pnd-annotation-sidebar-filter" ng-if="annotationSidebar.isEntitesActive">
                             <div class="pnd-panel" ng-click="toggleFilterList($event, 'entities')">
                                 <div class="pnd-annotation-sidebar-filter-label">Page items</div>
                                 <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'entities']"></span>
@@ -208,7 +206,6 @@
                                 </div>
                             </div>
                         </div>
-                        -->
 
                         <!-- Date -->
                         <div class="pnd-annotation-sidebar-filter">

@@ -273,8 +273,9 @@ angular.module('Pundit2.AnnotationSidebar')
 })
 
 .service('AnnotationSidebar', function(ANNOTATIONSIDEBARDEFAULTS, $rootScope, $filter, $timeout,
-    BaseComponent, EventDispatcher, AnnotationsExchange, Annomatic, Consolidation, Dashboard, BrokenHelper,
-    ItemsExchange, NotebookExchange, TypesHelper, TextFragmentAnnotator, XpointersHelper, Analytics) {
+    BaseComponent, EventDispatcher, AnnotationsExchange, Annomatic, Consolidation, Dashboard, 
+    BrokenHelper, ItemsExchange, NotebookExchange, TypesHelper, TextFragmentAnnotator, 
+    PageItemsContainer, XpointersHelper, Analytics) {
 
     var annotationSidebar = new BaseComponent('AnnotationSidebar', ANNOTATIONSIDEBARDEFAULTS);
 
@@ -293,7 +294,6 @@ angular.module('Pundit2.AnnotationSidebar')
         annotationsDate: [],
         authors: {},
         notebooks: {},
-        entities: {},
         predicates: {},
         types: {},
         broken: {}
@@ -310,7 +310,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     var tempBrokenList = {};
 
-    // var timeoutPromise;
+    var isEntitiesActive = annotationSidebar.isEntitesActive = PageItemsContainer.options.active;
 
     annotationSidebar.minHeightRequired = startPosition;
 
@@ -346,11 +346,6 @@ angular.module('Pundit2.AnnotationSidebar')
             filterLabel: 'Predicates',
             expression: []
         },
-        entities: {
-            filterName: 'entities',
-            filterLabel: 'Entities',
-            expression: []
-        },
         types: {
             filterName: 'types',
             filterLabel: 'Types',
@@ -362,6 +357,15 @@ angular.module('Pundit2.AnnotationSidebar')
             expression: ''
         }
     };
+
+    if (isEntitiesActive) {
+        elementsList.entities = {};
+        annotationSidebar.filters.entities = {
+            filterName: 'entities',
+            filterLabel: 'Entities',
+            expression: []
+        };
+    }
 
     annotationSidebar.annotationPositionReal = {};
 
@@ -730,27 +734,28 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
             });
 
-
             // Entities
-            angular.forEach(annotation.entities, function(entUri) {
-                if (typeof(uriList[entUri]) === 'undefined') {
-                    uriList[entUri] = {
-                        uri: entUri
-                    };
-                    if (typeof(elementsList.entities[entUri]) === 'undefined') {
-                        elementsList.entities[entUri] = {
-                            uri: entUri,
-                            label: annotation.items[entUri].label, // TODO add check ?
-                            active: false,
-                            partial: 1,
-                            annotationsList: {}
+            if (isEntitiesActive) {
+                angular.forEach(annotation.entities, function(entUri) {
+                    if (typeof(uriList[entUri]) === 'undefined') {
+                        uriList[entUri] = {
+                            uri: entUri
                         };
-                    } else {
-                        elementsList.entities[entUri].partial++;
+                        if (typeof(elementsList.entities[entUri]) === 'undefined') {
+                            elementsList.entities[entUri] = {
+                                uri: entUri,
+                                label: annotation.items[entUri].label, // TODO add check ?
+                                active: false,
+                                partial: 1,
+                                annotationsList: {}
+                            };
+                        } else {
+                            elementsList.entities[entUri].partial++;
+                        }
+                        elementsList.entities[entUri].annotationsList[annotation.id] = annotation;
                     }
-                    elementsList.entities[entUri].annotationsList[annotation.id] = annotation;
-                }
-            });
+                });
+            }
 
             // Types
             angular.forEach(annotation.items, function(singleItem) {
