@@ -72,7 +72,7 @@ angular.module('Pundit2.ResourcePanel')
      * Default value:
      * <pre> pageItemsEnabled: true </pre>
      */
-    pageItemsEnabled: true,
+    pageItemsEnabled: false,
 
     /**
      * @module punditConfig
