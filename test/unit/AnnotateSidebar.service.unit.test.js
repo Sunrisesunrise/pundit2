@@ -142,7 +142,7 @@ describe('AnnotationSidebar service', function() {
     it('should sidebar get annotation after consolidation-completed event', function(){
         EventDispatcher.sendEvent('Consolidation.consolidateAll');
         myAnnotation = AnnotationSidebar.getAllAnnotations();
-        expect(myAnnotation.length).toEqual(1);
+        expect(Object.keys(myAnnotation).length).toEqual(1);
     });
 
     it('should filter be applied to the list of filtered annotations', function(){
@@ -150,7 +150,7 @@ describe('AnnotationSidebar service', function() {
         var currentFilters = AnnotationSidebar.filters;
         var myAnnotationFiltered = AnnotationSidebar.getAllAnnotationsFiltered(currentFilters);
 
-        expect(myAnnotationFiltered.length).toEqual(0);
+        expect(Object.keys(myAnnotationFiltered).length).toEqual(0);
     });
 
     it('should service know if some filters are active', function(){
