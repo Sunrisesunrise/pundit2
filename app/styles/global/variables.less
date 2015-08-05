@@ -63,8 +63,8 @@
 // Toolbar
 @color-toolbar-bg: #333333;
 @color-toolbar-text: #eee;
-@color-toolbar-button: #3c3c3c;
-@color-toolbar-button-hover: lighten(@color-toolbar-button, 10);
+@color-toolbar-button: lighten(@color-toolbar-bg, 3);
+@color-toolbar-button-hover: lighten(@color-toolbar-button, 8);
 @color-toolbar-button-open: #999999; // @color-toolbar-button-hover;
 
 // Dropdown
@@ -162,12 +162,13 @@
 // ------------------------------------ //
 // #TABS
 // ------------------------------------ //
-@tab-bg-color: #999999;
+@tab-bg-color: transparent;
 @tab-text-color: @color-text;
-@tab-bg-hover-color: #eeeeee;
+@tab-bg-hover-color: #dddddd;
 @tab-text-hover-color: @color-text;
 @tab-bg-active-color: #FFFFFF;
 @tab-text-active-color: @color-text;
+@tab-border-radius: 1px;
 
 
 // ------------------------------------ //
