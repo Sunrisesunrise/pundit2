@@ -14,13 +14,9 @@
     height: 29px;
     margin: 0;
     padding: 0 10px;
-
-    /* Gradient bg with mixin */
-    #gradient > .vertical(lighten(@color-button-bg, 1); darken(@color-button-bg, 1)); // It's a Bootstrap mixin
-    background-color: #fff;
+    .vertical-gradient(@color-button-bg, @button-gradient-level);
     border: 0;
     outline: 0;
-
     color: @color-button-text-dark;
     .text-white-emboss();
     font-size: 12px;
@@ -33,8 +29,7 @@
     &:hover,
     &:focus,
     &.focus {
-        /* Gradient bg with mixin */
-        #gradient > .vertical(darken(lighten(@color-button-bg, 1), 5); darken(darken(@color-button-bg, 1), 5));
+        .vertical-gradient(darken(@color-button-bg, 5), @button-gradient-level);
     }
 
     &:active,
@@ -48,8 +43,7 @@
         cursor: @cursor-disabled;
         color: fade(@color-button-text-dark, 50%);
         pointer-events: none; // Future-proof disabling of clicks
-        /* Gradient bg with mixin */
-        #gradient > .vertical(fade(lighten(@color-button-bg, 1), 40%); fade(darken(@color-button-bg, 1), 40%));
+        .vertical-gradient(lighten(@color-button-bg, 20), @button-gradient-level);
     }
 }
 
@@ -57,6 +51,7 @@
 .pnd-btn-small {
     height: 22px;
     font-size: 11px;
+    padding-bottom: 2px;
 }
 
 
@@ -66,16 +61,14 @@
 
 /* Usually green button */
 .pnd-btn-calltoaction {
-    /* Gradient bg with mixin */
-    #gradient > .vertical(lighten(@color-button-bg-cta, 1); darken(@color-button-bg-cta, 1));
+    .vertical-gradient(@color-button-bg-cta, @button-gradient-level);
     color: @color-button-text-light;
     .text-dark-emboss();
 
     &:hover,
     &:focus,
     &.focus {
-        /* Gradient bg with mixin */
-        #gradient > .vertical(darken(lighten(@color-button-bg-cta, 1), 5); darken(darken(@color-button-bg-cta, 1), 5));
+        .vertical-gradient(darken(@color-button-bg-cta, 5), @button-gradient-level);
     }
 
     &.disabled,
@@ -83,10 +76,33 @@
     fieldset[disabled] & {
         color: fade(@color-button-text-light, 60%);
         text-shadow: none;
-        /* Gradient bg with mixin */
-        #gradient > .vertical(fade(lighten(@color-button-bg-cta, 1), 40%); fade(darken(@color-button-bg-cta, 1), 40%));
+        .vertical-gradient(lighten(@color-button-bg-cta, 20), @button-gradient-level);
+    }
+}
+
+
+/* ------------------------------------ *\
+   #DARK
+\* ------------------------------------ */
+
+.pnd-btn-dark {
+    .vertical-gradient(@color-button-bg-dark, @button-gradient-level);
+    color: @color-button-text-light;
+    .text-dark-emboss();
+
+    &:hover,
+    &:focus,
+    &.focus {
+        .vertical-gradient(darken(@color-button-bg-dark, 5), @button-gradient-level);
     }
 
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 20%);
+        text-shadow: none;
+        .vertical-gradient(darken(@color-button-bg-dark, 7), @button-gradient-level);
+    }
 }
 
 /* ------------------------------------ *\
@@ -123,14 +139,14 @@
 
 /* Subject button */
 .pnd-btn-subject {
-    #gradient > .vertical(lighten(@subject-color, 2); darken(@subject-color, 2));
+    .vertical-gradient(@subject-color, @button-gradient-level);
     color: @color-button-text-light;
     .text-dark-emboss();
 
     &:hover,
     &:focus,
     &.focus {
-        #gradient > .vertical(darken(lighten(@subject-color, 1), 5); darken(darken(@subject-color, 1), 5));
+        .vertical-gradient(darken(@subject-color, 5), @button-gradient-level);
     }
 
     &.disabled,
@@ -138,21 +154,21 @@
     fieldset[disabled] & {
         color: fade(@color-button-text-light, 60%);
         text-shadow: none;
-        #gradient > .vertical(fade(lighten(@subject-color, 1), 40%); fade(darken(@subject-color, 1), 40%));
+        .vertical-gradient(lighten(@subject-color, 20), @button-gradient-level);
     }
 
 }
 
 /* Predicate button */
 .pnd-btn-predicate {
-    #gradient > .vertical(lighten(@predicate-color, 2); darken(@predicate-color, 2));
+    .vertical-gradient(@predicate-color, @button-gradient-level);
     color: @color-button-text-light;
     .text-dark-emboss();
 
     &:hover,
     &:focus,
     &.focus {
-        #gradient > .vertical(darken(lighten(@predicate-color, 1), 5); darken(darken(@predicate-color, 1), 5));
+        .vertical-gradient(darken(@predicate-color, 5), @button-gradient-level);
     }
 
     &.disabled,
@@ -160,21 +176,21 @@
     fieldset[disabled] & {
         color: fade(@color-button-text-light, 60%);
         text-shadow: none;
-        #gradient > .vertical(fade(lighten(@predicate-color, 1), 40%); fade(darken(@predicate-color, 1), 40%));
+        .vertical-gradient(lighten(@predicate-color, 20), @button-gradient-level);
     }
 
 }
 
 /* Object button */
 .pnd-btn-object {
-    #gradient > .vertical(lighten(@object-color, 2); darken(@object-color, 2));
+    .vertical-gradient(@object-color, @button-gradient-level);
     color: @color-button-text-light;
     .text-dark-emboss();
 
     &:hover,
     &:focus,
     &.focus {
-        #gradient > .vertical(darken(lighten(@object-color, 1), 5); darken(darken(@object-color, 1), 5));
+        .vertical-gradient(darken(@object-color, 5), @button-gradient-level);
     }
 
     &.disabled,
@@ -182,7 +198,7 @@
     fieldset[disabled] & {
         color: fade(@color-button-text-light, 60%);
         text-shadow: none;
-        #gradient > .vertical(fade(lighten(@object-color, 1), 40%); fade(darken(@object-color, 1), 40%));
+        .vertical-gradient(lighten(@object-color, 20), @button-gradient-level);
     }
 }
 

@@ -4,26 +4,64 @@
  * Style of dropdowns or contextual menu
  */
 
-.pnd-dropdown-contextual-menu {
+.pnd-dropdown-contextual-menu.dropdown-menu {
+    padding: 0;
+    overflow: hidden;
+    z-index: @zindex-pnd-contextual-menu;
+    border: 1px solid  @color-border-normal;
+    border-radius: @dropdown-round-corners;
+    font-size: 12px;
 
-    &.dropdown-menu {
-        z-index: @zindex-pnd-contextual-menu;
-        // padding: 0px; // Already defined in bootstrap-theme-less
-        border: 1px solid  @gray-extra-light;
-        font-size: 12px;
-        border-radius: 0;
+    .divider {
+        height: 2px;
+        margin: 0;
+    }
 
-        .divider {
-            height: 2px;
-            margin: 0;
+    li a {
+        height: auto;
+        max-width: 350px;
+        padding: 5px 10px;
+        overflow: hidden;
+
+        border-top: 1px solid @color-border-light; // 1px lighten(@brand-success, 30%) solid;
+        border-right: 0;
+        border-left: 0;
+        background-color: @color-dropdown-bg; // @brand-success;
+
+        color: @color-dropdown-text; // #fff;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        &:hover {
+            background-color: @color-dropdown-bg-hover;
         }
 
-        li:first-child a {
-            border-top: 0;
+        .pnd-icon {
+            display: inline-block;
+            width: 18px;
+            margin: 0 6px 0 0;
+            text-align: center;
         }
+    }
 
-        .dropdown-header {
-            color: @gray-extra-light;
+    li:first-child a {
+        border-top: 0;
+    }
+
+    /* Selected or active element */
+    li.active a {
+        background-color: @color-dropdown-active;
+
+        &:hover,
+        &:focus {
+            color: @color-dropdown-text; // #fff;
+            text-decoration: none;
+            outline: 0;
         }
+    }
+
+    .dropdown-header {
+        padding: 15px;
+        color: @color-text-light;
     }
 }

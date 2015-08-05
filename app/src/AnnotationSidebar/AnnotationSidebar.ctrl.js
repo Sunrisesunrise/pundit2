@@ -9,6 +9,7 @@ angular.module('Pundit2.AnnotationSidebar')
     // var html = angular.element('html');
     var body = angular.element('body');
     var container = angular.element('.pnd-annotation-sidebar-container');
+    var header = angular.element('.pnd-annotation-sidebar-header');
     // var content = angular.element('.pnd-annotation-sidebar-content');
 
     var toolbarHeight = parseInt(angular.element('toolbar nav').css('height'), 10);
@@ -34,6 +35,8 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.isAnnotationSidebarExpanded = AnnotationSidebar.options.isAnnotationSidebarExpanded;
     $scope.isLoadingData = false;
     $scope.isLoading = false;
+
+    $scope.filterTypeExpanded = '';
 
     $scope.fromMinDate = new Date();
     $scope.toMinDate = new Date();
@@ -111,9 +114,10 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
-    $scope.toggleFilterList = function(event, trackingFilterLabel) {
-        var previousElement = angular.element('.pnd-annotation-sidebar-filter-show');
-        var currentElement = angular.element(event.target.parentElement);
+    $scope.toggleFilterList = function(event, filterType) {
+        var pndFilterShowClass = 'pnd-annotation-sidebar-filter-show';
+        var previousElement = angular.element('.' +pndFilterShowClass);
+        var currentElement = angular.element(event.target.parentElement.parentElement);
 
         $scope.searchAuthors = '';
         $scope.searchNotebooks = '';
@@ -122,13 +126,19 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.searchEntities = '';
 
         // Close all filter list and toggle the current
-        previousElement.not(currentElement).removeClass('pnd-annotation-sidebar-filter-show');
-        currentElement.toggleClass('pnd-annotation-sidebar-filter-show');
+        previousElement.not(currentElement).removeClass(pndFilterShowClass);
+        currentElement.toggleClass(pndFilterShowClass);
 
-        if (typeof trackingFilterLabel === 'undefined') {
-            trackingFilterLabel = angular.element(event.target).text().trim();
+        if (currentElement.hasClass(pndFilterShowClass)) {
+            $scope.filterTypeExpanded = filterType;
+        } else {
+            $scope.filterTypeExpanded = '';
         }
-        Analytics.track('buttons', 'click', 'sidebar--filters--filtersPanel--' + trackingFilterLabel);
+
+        if (typeof filterType === 'undefined') {
+            filterType = angular.element(event.target).text().trim();
+        }
+        Analytics.track('buttons', 'click', 'sidebar--filters--filtersPanel--' + filterType);
     };
 
     $scope.toggleFilter = function(currentFilter, currentUri) {
@@ -274,8 +284,10 @@ angular.module('Pundit2.AnnotationSidebar')
         if (dashboardVisibility) {
             state.newMarginTopSidebar = state.toolbarHeight + Dashboard.getContainerHeight();
             container.css('margin-top', state.newMarginTopSidebar + 'px');
+            header.css('top', state.newMarginTopSidebar + 'px');
         } else {
             container.css('margin-top', state.toolbarHeight + 'px');
+            header.css('top', state.toolbarHeight + 'px');
         }
     });
 

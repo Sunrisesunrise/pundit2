@@ -66,7 +66,7 @@ angular.module('Pundit2.AnnotationSidebar')
     // open modal
     var openConfirmModal = function() {
         // promise is needed to open modal when template is ready
-        modalScope.notifyMessage = 'Are you sure you want to delete this annotation? After you can no longer recover.';
+        modalScope.notifyMessage = 'Are you sure you want to delete this annotation? Please be aware that deleted annotations cannot be recovered.';
         confirmModal.$promise.then(confirmModal.show);
     };
 

@@ -297,10 +297,10 @@ angular.module('Pundit2.Toolbar')
     $scope.errorMessageDropdown = Toolbar.getErrorMessageDropdown();
 
     $scope.userNotLoggedDropdown = [{
-        text: 'Please sign in to use Pundit',
+        text: 'Please log in to select the notebook to store your annotations',
         header: true
     }, {
-        text: 'Sign in',
+        text: 'Log in',
         click: $scope.myNoteboockSigninClick
     }];
 
@@ -368,7 +368,7 @@ angular.module('Pundit2.Toolbar')
     });
 
     $scope.userNotebooksDropdown = [{
-        text: 'Please select notebook you want to use',
+        text: 'Please select the notebook you want to use',
         header: true
     }];
 

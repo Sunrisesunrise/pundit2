@@ -28,32 +28,32 @@
     </div>
     <div class="pnd-annotation-details-container" ng-if="annotation.expanded">
         <div class="pnd-annotation-details-content">
-        
-            <!-- meta -->
-            <div class="pnd-annotation-details-meta" ng-init="meta = false">
-                    <div class="pnd-annotation-details-item-header" 
-                        ng-click="meta = !meta; trackAnalyticsToggleEvent('meta', meta)"
-                        ng-class="{'pnd-annotation-details-sub-open': meta}">
-                        <div class="pnd-annotation-item-header-text">
-                            <span class="pnd-icon pnd-icon-info-circle"></span>
-                            <span>Annotation's info</span>
-                        </div>
-                        <button type="button" class="btn btn-link pull-right">
-                            <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[meta]"></span>
-                        </button>
-                    </div>
 
-                    <div ng-show="meta" class="pnd-sub-info">
+            <!-- Meta -->
+            <div class="pnd-annotation-details-meta" ng-init="meta = false">
+                <div class="pnd-annotation-details-item-header"
+                     ng-click="meta = !meta; trackAnalyticsToggleEvent('meta', meta)"
+                     ng-class="{'pnd-annotation-details-sub-open': meta}">
+                    <div class="pnd-annotation-item-header-text">
+                        <span class="pnd-icon pnd-icon-info-circle"></span>
+                        <span>Annotation's info</span>
+                    </div>
+                    <button type="button" class="btn btn-link pull-right">
+                        <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[meta]"></span>
+                    </button>
+                </div>
+
+                <div ng-show="meta" class="pnd-sub-info">
                         <span ng-if="meta">
                             <div class="pnd-annotation-details-info-author">
                                 <strong>Author:</strong> {{annotation.creatorName}}
                             </div>
                             <div class="pnd-annotation-details-info-date">
                                 <strong>Date:</strong> {{annotation.created | date : 'MMM d, y H:mm a'}}
-                            </div>       
+                            </div>
                             <div class="pnd-annotation-details-info-notebook">
-                                <strong>Notebook:</strong> 
-                                <a href="{{askLink}}{{annotation.notebookId}}" 
+                                <strong>Notebook:</strong>
+                                <a href="{{askLink}}{{annotation.notebookId}}"
                                    target="_blank"
                                    ng-click="trackAnalyticsEvent('meta--notebook')"
                                    ng-show="notebookLink">
@@ -67,20 +67,22 @@
                                 <strong>Annotation ID:</strong> {{annotation.id}}
                             </div>
                             <div ng-show="lodLive">
-                                <strong>Graph:</strong> 
-                                <a href="{{openGraph}}" 
+                                <strong>Graph:</strong>
+                                <a href="{{openGraph}}"
                                    target="_blank"
                                    ng-click="trackAnalyticsEvent('meta--graph')">
                                     open graph of the annotation
                                 </a>
-                            </div>  
+                            </div>
                         </span>
-                    </div>
-             </div>
-        
+                </div>
+            </div>
+            <!-- // END Meta -->
+
+            <!-- Triples -->
             <div class="pnd-annotation-details-item" ng-repeat="item in annotation.itemsArray">
        
-            <!-- subject -->
+                <!-- Subject -->
                 <div 
                     class="pnd-annotation-details-subject" 
                     ng-init="subInfo = false"
@@ -106,8 +108,9 @@
                             </span>
                         </div>
                 </div>
-             <!-- // end subject -->
-             <!-- predicate -->
+                <!-- // END Subject -->
+
+                <!-- Predicate -->
                 <div 
                     class="pnd-annotation-details-predicate" 
                     ng-init="preInfo = false">
@@ -130,8 +133,9 @@
                             </span>
                         </div>
                 </div>
-             <!-- // end predicate -->
-             <!-- // object -->
+                <!-- // END Predicate -->
+
+                <!-- Object -->
                 <div ng-repeat="object in item.objects">
                     <div 
                         class="pnd-annotation-details-object"
@@ -174,10 +178,14 @@
                             </div>
                     </div>
                 </div>
-             <!-- // end object -->
+                <!-- // END Object -->
+
             </div>
+            <!-- // END Triples -->
+
         </div>
-        <!-- footer -->
+
+        <!-- Footer -->
         <div class="pnd-annotation-details-footer" ng-show="isUserToolShowed()">
             <button 
                 type="button" 
@@ -190,6 +198,7 @@
                 ng-click="deleteAnnotation()"
                 ng-disable="isLoading">Delete</button>
         </div>
-        <!-- // end footer -->
+        <!-- // END Footer -->
+
     </div>
 </div>

@@ -2,259 +2,310 @@
     <!-- <div class="pnd-annotation-sidebar-content" ng-show="isAnnotationSidebarExpanded"> -->
     <div class="pnd-annotation-sidebar-content">
 
+
         <div class="pnd-annotation-sidebar-content-exp" ng-show="isAnnotationSidebarExpanded">
-            <div class="pnd-annotation-sidebar-modes-buttons">
-                <button type="button"
-                        class="btn pnd-btn-sidebar pnd-btn-fill-width"
-                        ng-class="{'pnd-active': isSuggestionsPanelActive()}"
-                        ng-click="activateSuggestionsPanel()"
-                        ng-if="isAnnomaticActive"
-                        ng-disabled="isLoadingData || isLoading">
-                    Suggestions
-                </button><button type="button"
-                        ng-click="activateAnnotationsPanel()"
-                        ng-class="{
-                            'pnd-active': isAnnotationsPanelActive()
-                        }"
-                        class="btn pnd-btn-sidebar pnd-btn-fill-width"
-                        ng-disabled="isLoading">
-                    Annotations <span ng-show="isAnnotationsPanelActive()">({{annotations.length}}/{{allAnnotations.length}})</span>
-                </button>
-            </div>
 
-            <div class="pnd-annotation-sidebar-filter-content" ng-show="isAnnotationsPanelActive()">
+            <div class="pnd-annotation-sidebar-header">
 
-                <div ng-class="{'pnd-btn-sidebar-full': !annotationSidebar.needToFilter()}">
-                    <button
-                        ng-click="annotationSidebar.toggleFiltersContent()"
-                        ng-show="!isFiltersShowed"
-                        class="btn btn-link pnd-annotation-sidebar-btn-show-filter">
-                            <span class="pnd-icon pnd-icon-filter"></span> Show filters
-                    </button>
-                    <button ng-show="annotationSidebar.needToFilter() && !isFiltersShowed"
-                        class="btn btn-link pnd-annotation-sidebar-btn-remove-filters" ng-click="annotationSidebar.resetFilters()">
-                           <span class="pnd-icon pnd-icon-close"></span> Remove all filters
+                <!-- Buttons Anno-o-matic and annotations -->
+                <div ng-if="isAnnomaticActive"
+                     class="pnd-annotation-sidebar-modes-buttons">
+                    <button type="button"
+                            class="pnd-btn pnd-btn-sidebar pnd-btn-fill-width"
+                            ng-class="{'pnd-active': isSuggestionsPanelActive()}"
+                            ng-click="activateSuggestionsPanel()"
+                            ng-disabled="isLoadingData || isLoading || isSuggestionsPanelActive()">
+                        Suggestions
+                    </button><button type="button"
+                            ng-click="activateAnnotationsPanel()"
+                            ng-class="{
+                                'pnd-active': isAnnotationsPanelActive()
+                            }"
+                            class="pnd-btn pnd-btn-sidebar pnd-btn-fill-width"
+                            ng-disabled="isLoading || isAnnotationsPanelActive()">
+                        Annotations ({{annotations.length}}/{{allAnnotations.length}})
                     </button>
                 </div>
 
-                <div class="pnd-annotation-sidebar-filters-list" ng-show="isFiltersShowed">
-                <!-- buttons -->
-                <!-- // end buttons -->
-                    
+                <!-- Button to show filters -->
+                <div class="pnd-annotation-sidebar-filter-content" ng-show="isAnnotationsPanelActive()">
+                    <div ng-class="{'pnd-btn-sidebar-full': !annotationSidebar.needToFilter()}">
 
-                    <!-- Free text -->
-                    <div class="pnd-annotation-sidebar-filter-input-contains">
-                        <span 
-                            class="pnd-icon" 
-                            ng-class="setSearchIcon(annotationSidebar.filters.freeText.expression)" 
-                            ng-click="freeText = ''; updateSearch(freeText)"></span>
-                        <input class="form-control" ng-model="freeText" ng-change="updateSearch(freeText)" placeholder="Contains">
+                        <button
+                            ng-click="annotationSidebar.toggleFiltersContent()"
+                            ng-show="!isFiltersShowed"
+                            class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-show-filter">
+                                Annotations filters ({{annotations.length}}/{{allAnnotations.length}})
+                                <span class="pnd-icon-caret-down"></span>
+                        </button>
                     </div>
 
-                    <!-- Authors -->
-                    <div class="pnd-annotation-sidebar-filter">
-                        <div class="pnd-panel" ng-click = "toggleFilterList($event, 'authors')">
-                            Annotation author
-                        </div>
-                        <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
-                        	<span 
-                                class="pnd-icon" 
-                                ng-class="setFilterIcon(searchAuthors.label)" 
-                                ng-click="searchAuthors.label = ''"></span>
-                            <input class="form-control" ng-model="searchAuthors.label" placeholder="Filter">
-                        </div>
-                        <div class="pnd-sidebar-filter-scroll">
-    	                    <div 
-    	                        ng-repeat="elem in filters.authors | orderObjectBy:'partial':'dsc' | filter:searchAuthors" 
-    	                        ng-class="{'pnd-annotation-sidebar-current-filter-active': elem.active && elem.partial !== 0, 'pnd-annotation-sidebar-current-filter-empt-red': elem.active && elem.partial === 0}"
-    	                        class="pnd-annotation-sidebar-filter-element">
-    	                            <div 
-    	                                class="pnd-annotation-sidebar-filter-element-label"
-    	                                ng-click="toggleFilter('authors', elem.uri)">
-    	                                    <span class="pnd-icon pnd-icon-check"
-    	                                        ng-show="elem.active"></span>
-    	                                    {{elem.label}} ({{elem.partial}})
-    	                            </div>
-    	                    </div>
-                        </div>
+                    <!-- Button to close filters -->
+                    <div ng-show="isFiltersShowed">
+                        <button
+                                ng-click="annotationSidebar.toggleFiltersContent()"
+                                type="button"
+                                class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-close-filters">
+                            Annotations filters ({{annotations.length}}/{{allAnnotations.length}})
+                            <span class="pnd-icon-caret-up"></span>
+                        </button>
                     </div>
 
-                    <!-- Notebooks -->
-                    <div class="pnd-annotation-sidebar-filter">
-                        <div class="pnd-panel" ng-click = "toggleFilterList($event, 'notebooks')">
-                            Notebooks
-                        </div>
-                        <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
-                            <span 
+                    <div class="pnd-annotation-sidebar-filters-list" ng-show="isFiltersShowed">
+                    <!-- buttons -->
+                    <!-- // end buttons -->
+
+                        <!-- Free text -->
+                        <div class="pnd-annotation-sidebar-filter-input-contains">
+                            <span
                                 class="pnd-icon"
-                                ng-class="setFilterIcon(searchNotebooks.label)" 
-                                ng-click="searchNotebooks.label = ''"></span>
-                            <input class="form-control" ng-model="searchNotebooks.label" placeholder="Filter">
+                                ng-class="setSearchIcon(annotationSidebar.filters.freeText.expression)"
+                                ng-click="freeText = ''; updateSearch(freeText)"></span>
+                            <input class="form-control" ng-model="freeText" ng-change="updateSearch(freeText)" placeholder="Contains">
                         </div>
-                        <div class="pnd-sidebar-filter-scroll">
-                            <div 
-                                ng-repeat="elem in filters.notebooks | orderObjectBy:'partial':'dsc' | filter:searchNotebooks" 
+
+                        <!-- Authors -->
+                        <div class="pnd-annotation-sidebar-filter">
+                            <div class="pnd-panel" ng-click="toggleFilterList($event, 'authors')">
+                                <div class="pnd-annotation-sidebar-filter-label">Annotation author</div>
+                                <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'authors']"></span>
+                            </div>
+                            <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
+                                <span
+                                    class="pnd-icon"
+                                    ng-class="setFilterIcon(searchAuthors.label)"
+                                    ng-click="searchAuthors.label = ''"></span>
+                                <input class="form-control" ng-model="searchAuthors.label" placeholder="Filter">
+                            </div>
+                            <div class="pnd-sidebar-filter-scroll">
+                                <div
+                                    ng-repeat="elem in filters.authors | orderObjectBy:'partial':'dsc' | filter:searchAuthors"
+                                    ng-class="{'pnd-annotation-sidebar-current-filter-active': elem.active && elem.partial !== 0, 'pnd-annotation-sidebar-current-filter-empt-red': elem.active && elem.partial === 0}"
+                                    class="pnd-annotation-sidebar-filter-element">
+                                        <div
+                                            class="pnd-annotation-sidebar-filter-element-label"
+                                            ng-click="toggleFilter('authors', elem.uri)">
+                                                <span class="pnd-icon pnd-icon-check"
+                                                    ng-show="elem.active"></span>
+                                                {{elem.label}} ({{elem.partial}})
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notebooks -->
+                        <div class="pnd-annotation-sidebar-filter">
+                            <div class="pnd-panel" ng-click="toggleFilterList($event, 'notebooks')">
+                                <div class="pnd-annotation-sidebar-filter-label">Notebook</div>
+                                <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'notebooks']"></span>
+                            </div>
+                            <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
+                                <span
+                                    class="pnd-icon"
+                                    ng-class="setFilterIcon(searchNotebooks.label)"
+                                    ng-click="searchNotebooks.label = ''"></span>
+                                <input class="form-control" ng-model="searchNotebooks.label" placeholder="Filter">
+                            </div>
+                            <div class="pnd-sidebar-filter-scroll">
+                                <div
+                                    ng-repeat="elem in filters.notebooks | orderObjectBy:'partial':'dsc' | filter:searchNotebooks"
+                                    ng-class="{'pnd-annotation-sidebar-current-filter-active': elem.active && elem.partial !== 0, 'pnd-annotation-sidebar-current-filter-empt-red': elem.active && elem.partial === 0}"
+                                    class="pnd-annotation-sidebar-filter-element">
+                                        <div
+                                            class="pnd-annotation-sidebar-filter-element-label"
+                                            ng-click="toggleFilter('notebooks', elem.uri)">
+                                                <span class="pnd-icon pnd-icon-check"
+                                                    ng-show="elem.active"></span>
+                                                {{elem.label}} ({{elem.partial}})
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Types -->
+                        <div class="pnd-annotation-sidebar-filter">
+                            <div class="pnd-panel" ng-click="toggleFilterList($event, 'types')">
+                                <div class="pnd-annotation-sidebar-filter-label">Entity type</div>
+                                <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'types']"></span>
+                            </div>
+                            <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
+                                <span
+                                    class="pnd-icon"
+                                    ng-class="setFilterIcon(searchTypes.label)"
+                                    ng-click="searchTypes.label = ''"></span>
+                                <input class="form-control" ng-model="searchTypes.label" placeholder="Filter">
+                            </div>
+                            <div class="pnd-sidebar-filter-scroll">
+                                <div ng-repeat="elem in filters.types | orderObjectBy:'partial':'dsc' | filter:searchTypes"
+                                    ng-class="{'pnd-annotation-sidebar-current-filter-active': elem.active && elem.partial !== 0, 'pnd-annotation-sidebar-current-filter-empt-red': elem.active && elem.partial === 0}"
+                                    class="pnd-annotation-sidebar-filter-element">
+                                        <div
+                                            class="pnd-annotation-sidebar-filter-element-label"
+                                            ng-click="toggleFilter('types', elem.uri)">
+                                                <span class="pnd-icon pnd-icon-check"
+                                                      ng-show="elem.active"></span>
+                                            {{elem.label}} ({{elem.partial}})
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Used predicate -->
+                        <div class="pnd-annotation-sidebar-filter">
+                            <div class="pnd-panel"
+                                ng-click="toggleFilterList($event, 'predicates')">
+                                <div class="pnd-annotation-sidebar-filter-label">Used predicate</div>
+                                <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'predicates']"></span>
+                            </div>
+                            <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
+                                <span
+                                    class="pnd-icon"
+                                    ng-class="setFilterIcon(searchPredicates.label)"
+                                    ng-click="searchPredicates.label = ''"></span>
+                                <input class="form-control" ng-model="searchPredicates.label" placeholder="Filter">
+                            </div>
+                            <div
+                                ng-repeat="elem in filters.predicates | orderObjectBy:'partial':'dsc' | filter:searchPredicates"
                                 ng-class="{'pnd-annotation-sidebar-current-filter-active': elem.active && elem.partial !== 0, 'pnd-annotation-sidebar-current-filter-empt-red': elem.active && elem.partial === 0}"
                                 class="pnd-annotation-sidebar-filter-element">
-                                    <div 
+                                    <div
                                         class="pnd-annotation-sidebar-filter-element-label"
-                                        ng-click="toggleFilter('notebooks', elem.uri)">
+                                        ng-click="toggleFilter('predicates', elem.uri)">
                                             <span class="pnd-icon pnd-icon-check"
-                                                ng-show="elem.active"></span>
-                                            {{elem.label}} ({{elem.partial}})
+                                                  ng-show="elem.active"></span>
+                                        {{elem.label}} ({{elem.partial}})
                                     </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Types -->
-                    <div class="pnd-annotation-sidebar-filter">
-                        <div class="pnd-panel" ng-click = "toggleFilterList($event, 'types')">
-                            Types
+                        <!-- Page items -->
+                        <!--
+                        TODO Remove (comment) Page items in the whole ionterface
+                        <div class="pnd-annotation-sidebar-filter">
+                            <div class="pnd-panel" ng-click="toggleFilterList($event, 'entities')">
+                                <div class="pnd-annotation-sidebar-filter-label">Page items</div>
+                                <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'entities']"></span>
+                            </div>
+                            <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
+                                <span
+                                    class="pnd-icon"
+                                    ng-class="setFilterIcon(searchEntities.label)"
+                                    ng-click="searchEntities.label = ''"></span>
+                                <input class="form-control" ng-model="searchEntities.label" placeholder="Filter">
+                            </div>
+                            <div class="pnd-sidebar-filter-scroll">
+                                <div
+                                    ng-repeat="elem in filters.entities | orderObjectBy:'partial':'dsc' | filter:searchEntities"
+                                    ng-class="{'pnd-annotation-sidebar-current-filter-active': elem.active && elem.partial !== 0, 'pnd-annotation-sidebar-current-filter-empt-red': elem.active && elem.partial === 0}"
+                                    class="pnd-annotation-sidebar-filter-element">
+                                        <div
+                                            class="pnd-annotation-sidebar-filter-element-label"
+                                            ng-click="toggleFilter('entities', elem.uri)">
+                                                <span class="pnd-icon pnd-icon-check"
+                                                      ng-show="elem.active"></span>
+                                            {{elem.label}} ({{elem.partial}})
+                                        </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
-                            <span
-                                class="pnd-icon"
-                                ng-class="setFilterIcon(searchTypes.label)" 
-                                ng-click="searchTypes.label = ''"></span>
-                            <input class="form-control" ng-model="searchTypes.label" placeholder="Filter">
-                        </div>
-                        <div class="pnd-sidebar-filter-scroll">
-    	                    <div ng-repeat="elem in filters.types | orderObjectBy:'partial':'dsc' | filter:searchTypes" 
-    	                        ng-class="{'pnd-annotation-sidebar-current-filter-active': elem.active && elem.partial !== 0, 'pnd-annotation-sidebar-current-filter-empt-red': elem.active && elem.partial === 0}"
-    	                        class="pnd-annotation-sidebar-filter-element">
-    	                            <div 
-    	                                class="pnd-annotation-sidebar-filter-element-label"
-    	                                ng-click="toggleFilter('types', elem.uri)">
-    	                                    <span class="pnd-icon pnd-icon-check"
-    	                                          ng-show="elem.active"></span>
-    	                                {{elem.label}} ({{elem.partial}})
-    	                            </div>
-    	                    </div>
-                        </div>
-                    </div>
+                        -->
 
-                    <!-- Used predicate -->
-                    <div class="pnd-annotation-sidebar-filter">
-                        <div class="pnd-panel" 
-                            ng-click = "toggleFilterList($event, 'predicates')">
-                            Used predicate
-                        </div>
-                        <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
-                        	<span
-                                class="pnd-icon"
-                                ng-class="setFilterIcon(searchPredicates.label)" 
-                                ng-click="searchPredicates.label = ''"></span>
-                            <input class="form-control" ng-model="searchPredicates.label" placeholder="Filter">
-                        </div>
-                        <div 
-                            ng-repeat="elem in filters.predicates | orderObjectBy:'partial':'dsc' | filter:searchPredicates" 
-                            ng-class="{'pnd-annotation-sidebar-current-filter-active': elem.active && elem.partial !== 0, 'pnd-annotation-sidebar-current-filter-empt-red': elem.active && elem.partial === 0}"
-                            class="pnd-annotation-sidebar-filter-element">
-                                <div 
-                                    class="pnd-annotation-sidebar-filter-element-label"
-                                    ng-click="toggleFilter('predicates', elem.uri)">
-                                        <span class="pnd-icon pnd-icon-check"
-                                              ng-show="elem.active"></span>
-                                    {{elem.label}} ({{elem.partial}})
+                        <!-- Date -->
+                        <div class="pnd-annotation-sidebar-filter">
+                            <div class="pnd-panel" ng-click="toggleFilterList($event, 'date')">
+                                <div class="pnd-annotation-sidebar-filter-label">Date</div>
+                                <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'date']"></span>
+                            </div>
+
+                            <div class="pnd-annotation-sidebar-filter-date">
+                                <span
+                                        ng-show="isFilterLabelShowed(annotationSidebar.filters.fromDate.expression)">
+                                        <strong>From</strong> {{annotationSidebar.filters.fromDate.expression}}
+                                </span>
+                                <span
+                                        ng-show="isFilterLabelShowed(annotationSidebar.filters.fromDate.expression) && isFilterLabelShowed(annotationSidebar.filters.toDate.expression)">
+                                     -
+                                </span>
+                                <span
+                                        ng-show="isFilterLabelShowed(annotationSidebar.filters.toDate.expression)">
+                                        <strong>To</strong> {{annotationSidebar.filters.toDate.expression}}
+                                </span>
+                            </div>
+
+                            <div class="pnd-annotation-sidebar-filter-input">
+                                <!-- From Date -->
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    ng-model="annotationSidebar.filters.fromDate.expression"
+                                    data-min-date="{{fromMinDate}}"
+                                    data-max-date="{{fromMaxDate}}"
+                                    placeholder="From"
+                                    data-autoclose="1"
+                                    data-date-type="string"
+                                    data-date-format="yyyy-MM-dd"
+                                    bs-datepicker
+                                >
+
+                                <!-- To Date -->
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    ng-model="annotationSidebar.filters.toDate.expression"
+                                    data-min-date="{{toMinDate}}"
+                                    data-max-date="{{toMaxDate}}"
+                                    placeholder="To"
+                                    data-autoclose="1"
+                                    data-date-type="string"
+                                    data-date-format="yyyy-MM-dd"
+                                    bs-datepicker
+                                >
                                 </div>
                         </div>
-                    </div>
 
-                    <!-- Page items -->
-                    <div class="pnd-annotation-sidebar-filter">
-                        <div class="pnd-panel" ng-click = "toggleFilterList($event, 'entities')">
-                            Page items
+                        <!-- Broken -->
+                        <div
+                            class="pnd-annotation-sidebar-filter-broken"
+                            ng-class="{'pnd-annotation-sidebar-current-filter-active': annotationSidebar.filters.broken.expression.length>0}"
+                            ng-click="toggleBrokenAnnotations()">
+                            <span
+                                ng-show="annotationSidebar.filters.broken.expression.length>0">
+                                    Show broken annotations
+                            </span>
+                            <span
+                                ng-show="annotationSidebar.filters.broken.expression.length == 0">
+                                    Hide broken annotations
+                            </span>
                         </div>
-                        <div class="pnd-annotation-sidebar-filter-input pnd-annotation-sidebar-filter-search">
-                        	<span
-                                class="pnd-icon"
-                                ng-class="setFilterIcon(searchEntities.label)" 
-                                ng-click="searchEntities.label = ''"></span>
-                            <input class="form-control" ng-model="searchEntities.label" placeholder="Filter">
+
+                        <!-- buttons -->
+                        <div class="pnd-annotation-footer-sidebar-filter">
+
+                            <button
+                                    ng-click="annotationSidebar.resetFilters()"
+                                    type="button"
+                                    class="pnd-btn pnd-btn-small pnd-btn-fill-width pnd-annotation-sidebar-btn-remove-filters"
+                                    ng-disabled="!annotationSidebar.needToFilter()">
+                                Reset filters
+                            </button>
+
+                            <!--
+                            <button
+                                ng-click="annotationSidebar.toggleFiltersContent()"
+                                type="button"
+                                class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-close-filters">
+                                Hide annotations filters ({{annotations.length}}/{{allAnnotations.length}})
+                                <span class="pnd-icon-caret-up"></span>
+                            </button><button
+                                ng-click="annotationSidebar.resetFilters()"
+                                type="button"
+                                class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-remove-filters"
+                                ng-disabled="!annotationSidebar.needToFilter()">
+                                Reset filters
+                            </button>-->
                         </div>
-                        <div class="pnd-sidebar-filter-scroll">
-    	                    <div 
-    	                        ng-repeat="elem in filters.entities | orderObjectBy:'partial':'dsc' | filter:searchEntities" 
-    	                        ng-class="{'pnd-annotation-sidebar-current-filter-active': elem.active && elem.partial !== 0, 'pnd-annotation-sidebar-current-filter-empt-red': elem.active && elem.partial === 0}"
-    	                        class="pnd-annotation-sidebar-filter-element">
-    	                            <div 
-    	                                class="pnd-annotation-sidebar-filter-element-label"
-    	                                ng-click="toggleFilter('entities', elem.uri)">
-    	                                    <span class="pnd-icon pnd-icon-check"
-    	                                          ng-show="elem.active"></span>
-    	                                {{elem.label}} ({{elem.partial}})
-    	                            </div>
-    	                    </div>
-                        </div>
+                        <!-- // end buttons -->
                     </div>
-
-                    <!-- Date -->
-                    <div class="pnd-annotation-sidebar-filter">
-                        <div class="pnd-panel" ng-click = "toggleFilterList($event, 'date')">Date</div>
-                        <span 
-                            ng-show="isFilterLabelShowed(annotationSidebar.filters.fromDate.expression)"
-                            class="pnd-annotation-sidebar-filter-label">
-                                From: {{annotationSidebar.filters.fromDate.expression}}
-                        </span>
-                        <span 
-                            ng-show="isFilterLabelShowed(annotationSidebar.filters.toDate.expression)"
-                            class="pnd-annotation-sidebar-filter-label">
-                                To: {{annotationSidebar.filters.toDate.expression}}
-                        </span>
-
-                        <div class="pnd-annotation-sidebar-filter-input">
-                            <!-- From Date -->
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                ng-model="annotationSidebar.filters.fromDate.expression" 
-                                data-min-date="{{fromMinDate}}" 
-                                data-max-date="{{fromMaxDate}}" 
-                                placeholder="From" 
-                                data-autoclose="1" 
-                                data-date-type="string" 
-                                data-date-format="yyyy-MM-dd" 
-                                bs-datepicker
-                            >
-
-                            <!-- To Date -->
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                ng-model="annotationSidebar.filters.toDate.expression" 
-                                data-min-date="{{toMinDate}}" 
-                                data-max-date="{{toMaxDate}}" 
-                                placeholder="To" 
-                                data-autoclose="1" 
-                                data-date-type="string" 
-                                data-date-format="yyyy-MM-dd" 
-                                bs-datepicker
-                            >
-                            </div>
-                    </div>
-                    
-                    <!-- Broken -->
-					<div 
-                        class="pnd-annotation-sidebar-filter-broken"
-                        ng-class="{'pnd-annotation-sidebar-current-filter-active': annotationSidebar.filters.broken.expression.length>0}" 
-                        ng-click="toggleBrokenAnnotations()">
-    					<span 
-                            ng-show="annotationSidebar.filters.broken.expression.length>0">
-                                Show broken annotations
-                        </span>
-    					<span 
-                            ng-show="annotationSidebar.filters.broken.expression.length == 0">
-                                Hide broken annotations
-                        </span>
-					</div>
-
-                    <!-- buttons -->
-                    <div class="pnd-annotation-footer-sidebar-filter">
-    	                <button type="button" class="btn btn-xs btn-success pnd-annotation-sidebar-btn-close-filters" ng-click="annotationSidebar.toggleFiltersContent()">Hide filters</button>
-    	                <button type="button" class="btn btn-xs btn-success pnd-annotation-sidebar-btn-remove-filters" ng-click="annotationSidebar.resetFilters()">Remove all filters</button>
-                    </div>
-                    <!-- // end buttons -->
                 </div>
             </div>
 
