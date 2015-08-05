@@ -912,7 +912,9 @@ angular.module('Pundit2.AnnotationSidebar')
     var getAnnotationsOfSpecificFilter = function(filterKey, activeItems) {
         var results = {};
         for (var i in activeItems) {
-            angular.extend(results, elementsList[filterKey][activeItems[i]].annotationsList);
+            if (typeof elementsList[filterKey][activeItems[i]] !== 'undefined') {
+                angular.extend(results, elementsList[filterKey][activeItems[i]].annotationsList);
+            }
         }
 
         return results;

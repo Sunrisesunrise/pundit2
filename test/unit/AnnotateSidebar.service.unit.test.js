@@ -145,8 +145,6 @@ describe('AnnotationSidebar service', function() {
         expect(myAnnotation.length).toEqual(1);
     });
 
-    // TODO: testare singolarmente le funzioni per la creazione e il conteggio dei filtri
-
     it('should filter be applied to the list of filtered annotations', function(){
         AnnotationSidebar.filters['authors'].expression.push('http://fakeuri.it/test');
         var currentFilters = AnnotationSidebar.filters;
