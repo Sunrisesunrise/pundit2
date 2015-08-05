@@ -219,69 +219,39 @@ describe('MyPundit service', function() {
 
 	});
 
-    iit("should set loginStatus = loggedOff and open the modal if user is not logged in and login() is executed", function() {
-        addLoginAnchorButton();
+    it("should set loginStatus = loggedOff and open the modal if user is not logged in and login() is executed", function() {
         var promiseValue;
-        //expect(true).toBe(true);
-        //return;
+        
+        addLoginAnchorButton();
+
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userNotLogged);
         $httpBackend.whenGET('http://demo-cloud.oauth.thepund.it/pundit_login/').respond('pagina login');
 
-
-
-        //var promise = MyPundit.oldLogin();
-        console.log("pre login");
         var promise = MyPundit.login();
-        console.log("post login");
-        console.log(window.location.href);
 
-        // loginPromise should be resolved as false when login popup is closed
-        promise.then(function(value) {
-            promiseValue = value;
-            console.log("promise resolved ");
-            console.log(value);
-            expect(promiseValue).toBe(false);
-        });
-
-
-
-        //// wait for promise....
-        //waitsFor(function() {
-        //    console.log("waits");
-        //    window.postMessage(
-        //        'userLoggedIn',
-        //        'http://localhost:9876'
-        //    );
-        //    //return typeof(promiseValue) !== 'undefined';
-        //    $httpBackend.flush();
-        //    //return true;
-        //}, 10000);
-//
-        //// promise should be return false
-        //runs(function() {
-        //    //expect(promiseValue).toBe(false);
-        //});//
-
+        // TODO explore better ways to do it
         var flag0 = false;
         var flag1 = false;
         var flag2 = false;
 
+        // loginPromise should be resolved as false when login popup is closed
+        promise.then(function(value) {
+            promiseValue = value;
+            expect(promiseValue).toBe(false);
+        });
+
         setTimeout(function() {
-            console.log("flag 0 => true");
             flag0 = true;
         }, 1000);
         setTimeout(function() {
-            console.log("flag 1 => true");
             flag1 = true;
         }, 2000);
         setTimeout(function() {
-            console.log("flag 2 => true");
             flag2 = true;
         }, 3000);
 
         waitsFor(function() {
             if (flag0) {
-                console.log("flag0:" + flag0);
                 $rootScope.$digest();
             }
             return flag0;
@@ -290,15 +260,10 @@ describe('MyPundit service', function() {
         waitsFor(
             function() {
                 if (flag1) {
-                    console.log("flag1:" + flag1);
-                    // flush iframe page
-                    //$httpBackend.flush();
-                    console.log("prima post message");
                     window.postMessage(
                         'userLoggedIn',
                         'http://localhost:9876'
                     );
-                    console.log("dopo post message");
                 }
                 return flag1;
             }
@@ -307,19 +272,11 @@ describe('MyPundit service', function() {
         waitsFor(
             function() {
                 if (flag2) {
-                    console.log("flag2:" + flag2);
                     $httpBackend.flush();
                 }
                 return flag2;
             }
         );
-
-
-
-        //$rootScope.$digest();
-        //$httpBackend.flush();
-        //$timeout.flush();
-
     });
     
 	it("should correctly get logout when user is logged in", function() {
@@ -409,6 +366,7 @@ describe('MyPundit service', function() {
 
 		$httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
 
+        // TODO use new login
 		var promise = MyPundit.oldLogin();
 
 		// wait for promise....
@@ -447,6 +405,7 @@ describe('MyPundit service', function() {
 
         var serverError = false;
 
+        // TODO use new login
         var loginPromise = MyPundit.oldLogin();
 
         loginPromise.then(function() {
@@ -471,6 +430,7 @@ describe('MyPundit service', function() {
             .expectGET(NameSpace.get('asUsersCurrent'))
             .respond(userNotLogged);
 
+        // TODO use new login
         MyPundit.oldLogin();
 
         //start polling
