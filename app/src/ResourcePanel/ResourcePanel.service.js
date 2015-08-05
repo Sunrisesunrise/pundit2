@@ -755,6 +755,7 @@ angular.module('Pundit2.ResourcePanel')
             });
         }
 
+        resourcePanel.openBy = target;
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;
     };
@@ -799,7 +800,6 @@ angular.module('Pundit2.ResourcePanel')
                 // angular.element('input.pnd-input-calendar')[0].focus();
             });
         }
-
         // if click a different popover, hide the shown popover and show the clicked one
         else if (state.popover !== null && state.popover.clickTarget !== target) {
             hide();
@@ -814,6 +814,8 @@ angular.module('Pundit2.ResourcePanel')
                 // angular.element('input.pnd-input-calendar')[0].focus();
             });
         }
+
+        resourcePanel.openBy = target;
 
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;

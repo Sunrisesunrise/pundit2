@@ -441,6 +441,9 @@ angular.module('Pundit2.TripleComposer')
             d.value = '';
         }
 
+        if (!checkOpenResourcePanel(target)) {
+            return;
+        }
         ResourcePanel.hide();
         ResourcePanel.showPopoverCalendar(d, target).then(function(date) {
             if (!date.valid) {
@@ -459,6 +462,9 @@ angular.module('Pundit2.TripleComposer')
             str = triple.object;
         }
 
+        if (!checkOpenResourcePanel(target)) {
+            return;
+        }
         ResourcePanel.hide();
         ResourcePanel.showPopoverLiteral(str, target).then($scope.setObject);
     };
