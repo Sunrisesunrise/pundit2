@@ -154,10 +154,21 @@ angular.module('Pundit2.Annotators')
                 delete temporaryConsolidated[uri];
             }
         }
-
     };
 
-    EventDispatcher.addListeners(['TripleComposer.statementChange', 'TripleComposer.reset'], function(){
+    var addTemporarySelection = function() {
+        if (typeof lastTemporaryConsolidable !== 'undefined') {
+            XpointersHelper.wrapElement(lastTemporaryConsolidable.range.commonAncestorContainer, lastTemporaryConsolidable.range, 'span', "pnd-cons-temp", [lastTemporaryConsolidable.fragmentId]);
+            temporaryConsolidated[lastTemporaryConsolidable.itemUri] = lastTemporaryConsolidable;
+            lastTemporaryConsolidable = undefined;
+        }
+    };
+
+    EventDispatcher.addListeners(['TripleComposer.useAsObject', 'TripleComposer.useAsSubject'], function(){
+        addTemporarySelection();
+    });
+
+    EventDispatcher.addListeners(['TripleComposer.statementChange', 'TripleComposer.statementChanged', 'TripleComposer.reset'], function(){
         checkTemporaryConsolidated();
     });
 
@@ -165,9 +176,11 @@ angular.module('Pundit2.Annotators')
         checkTemporaryConsolidated(true);
     });
 
-    var temporaryConsolidated = {};
+    var lastTemporaryConsolidable,
+        temporaryConsolidated = {};
 
     var mouseUpHandler = function(upEvt) {
+        lastTemporaryConsolidable = undefined;
 
         $document.off('mouseup', mouseUpHandler);
 
@@ -206,15 +219,16 @@ angular.module('Pundit2.Annotators')
         var item = tfh.createItemFromRange(range);
         ItemsExchange.addItemToContainer(item, tfh.options.container);
 
-        var lastTemporaryConsolidable = {
+        lastTemporaryConsolidable = {
             offset: range.endOffset,
             range: range,
             xpointer: item.getXPointer(),
-            fragmentId: 'frt-' + (new Date()).getTime()
+            fragmentId: 'frt-' + (new Date()).getTime(),
+            itemUri: item.uri
         };
 
-        XpointersHelper.wrapElement(range.commonAncestorContainer, range, 'span', "pnd-cons-temp", [lastTemporaryConsolidable.fragmentId]);
-        temporaryConsolidated[item.uri] = lastTemporaryConsolidable;
+        //XpointersHelper.wrapElement(range.commonAncestorContainer, range, 'span', "pnd-cons-temp", [lastTemporaryConsolidable.fragmentId]);
+        //temporaryConsolidated[item.uri] = lastTemporaryConsolidable;
 
         tfh.log('Valid selection ended on document. Text fragment Item produced: ' + item.label);
 

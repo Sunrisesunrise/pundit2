@@ -274,6 +274,7 @@ angular.module('Pundit2.TripleComposer')
                 } else {
                     tripleComposer.addToSubject(item);
                 }
+                EventDispatcher.sendEvent('TripleComposer.useAsSubject', item);
                 trackContextualEvent('useAsSubject');
             }
         });
@@ -295,6 +296,7 @@ angular.module('Pundit2.TripleComposer')
             priority: 100,
             action: function(item) {
                 tripleComposer.addToObject(item);
+                EventDispatcher.sendEvent('TripleComposer.useAsObject', item);
                 trackContextualEvent('useAsObject');
             }
         });
@@ -316,6 +318,7 @@ angular.module('Pundit2.TripleComposer')
             priority: 100,
             action: function(item) {
                 tripleComposer.addToPredicate(item);
+                EventDispatcher.sendEvent('TripleComposer.useAsPredicate', item);
                 trackContextualEvent('useAsPredicate');
             }
         });
