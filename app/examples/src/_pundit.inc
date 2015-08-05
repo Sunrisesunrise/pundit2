@@ -143,8 +143,6 @@
     <script src="../src/Toolbar/Toolbar.dir.js"></script>
     <script src="../src/Toolbar/Toolbar.ctrl.js"></script>
     <script src="../src/Toolbar/Toolbar.service.js"></script>
-    
-    <script src="../src/Core/login.modal.ctrl.js"></script>
 
     <script src="../src/Preview/Preview.js"></script>
     <script src="../src/Preview/Preview.dir.js"></script>
