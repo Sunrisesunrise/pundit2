@@ -273,8 +273,8 @@ angular.module('Pundit2.AnnotationSidebar')
 })
 
 .service('AnnotationSidebar', function(ANNOTATIONSIDEBARDEFAULTS, $rootScope, $filter, $timeout,
-    BaseComponent, EventDispatcher, AnnotationsExchange, Annomatic, Consolidation, Dashboard, 
-    BrokenHelper, ItemsExchange, NotebookExchange, TypesHelper, TextFragmentAnnotator, 
+    BaseComponent, EventDispatcher, AnnotationsExchange, Annomatic, Consolidation, Dashboard,
+    BrokenHelper, ItemsExchange, NotebookExchange, TypesHelper, TextFragmentAnnotator,
     PageItemsContainer, XpointersHelper, Analytics) {
 
     var annotationSidebar = new BaseComponent('AnnotationSidebar', ANNOTATIONSIDEBARDEFAULTS);
@@ -1223,6 +1223,13 @@ angular.module('Pundit2.AnnotationSidebar')
         var annotations = AnnotationsExchange.getAnnotationsList();
         state.allAnnotations = angular.extend({}, annotations);
         initializeFiltersAndPositions(state.allAnnotations);
+    });
+
+    EventDispatcher.addListener('ResizeManager.resize', function() {
+        if (state.isLoading !== false) {
+            setAnnotationsPosition();
+            annotationSidebar.log('Position annotations on resize');
+        }
     });
 
     annotationSidebar.log('Component running');

@@ -153,7 +153,6 @@ angular.module('Pundit2.Core')
      *
      */
     myPundit.checkLoggedIn = function() {
-
         var promise = $q.defer(),
             httpCall;
 
@@ -208,7 +207,6 @@ angular.module('Pundit2.Core')
      *
      */
     myPundit.login = function() {
-
         loginPromise = $q.defer();
 
         if (myPundit.isUserLogged()) {
@@ -357,51 +355,6 @@ angular.module('Pundit2.Core')
         return logoutPromise.promise;
     };
 
-    // MODAL HANDLER
-
-    var loginModal = $modal({
-        container: "[data-ng-app='Pundit2']",
-        template: 'src/Core/Templates/login.modal.tmpl.html',
-        show: false,
-        backdrop: 'static'
-    });
-
-    /**
-     * @ngdoc method
-     * @name MyPundit#closeLoginModal
-     * @module Pundit2.Core
-     * @function
-     *
-     * @description
-     * Close login modal and cancel polling timeout
-     *
-     * Login promise will not be resolved
-     *
-     */
-    myPundit.closeLoginModal = function() {
-        loginModal.hide();
-        $timeout.cancel(loginPollTimer);
-    };
-
-    // close modal, cancel timeout and resolve loginPromise
-    /**
-     * @ngdoc method
-     * @name MyPundit#cancelLoginModal
-     * @module Pundit2.Core
-     * @function
-     *
-     * @description
-     * Close login modal and cancel polling timeout
-     *
-     * In this case, authentication process will be interrupted and login promise will be resolved as true
-     *
-     */
-    myPundit.cancelLoginModal = function() {
-        loginModal.hide();
-        loginPromise.resolve(false);
-        $timeout.cancel(loginPollTimer);
-    };
-
     var popoverState = {
         autoCloseWait: 2,
         autoCloseIntervall: null,
@@ -450,7 +403,6 @@ angular.module('Pundit2.Core')
         popover: null
     };
 
-    // TODO add log and error if needed? 
     var popoverLoginPostMessageHandler = function(params) {
         if (typeof params.data !== 'undefined') {
             if (params.data === 'loginPageLoaded' || params.data === 'pageLoaded') {
@@ -474,13 +426,12 @@ angular.module('Pundit2.Core')
                         loginPromise.resolve(true);
                     } else {
                         popoverState.popover.$scope.loginSomeError = true;
-                        //popoverState.popover.$scope.$digest();
+                        loginPromise.resolve(false);
                     }
                 }, function() {
                     popoverState.popover.$scope.isLoading = false;
                     popoverState.popover.$scope.loginSomeError = true;
-                    //popoverState.popover.$scope.$digest();
-                    //popoverState.loginSuccess();
+                    myPundit.err('popoverLoginPostMessageHandler error');
                 });
             }
         }

@@ -150,6 +150,8 @@ angular.module('Pundit2.ResourcePanel')
         state.popover.destroy();
         state.popover = null;
 
+        resourcePanel.openBy = undefined;
+
         EventDispatcher.sendEvent('ResourcePanel.toggle', false);
     };
 
@@ -667,6 +669,8 @@ angular.module('Pundit2.ResourcePanel')
 
     resourcePanel.overrideFooterExtraButtons = undefined;
 
+    resourcePanel.openBy;
+
     resourcePanel.updateVocabSearch = function(label, triple, caller) {
         var selectors = SelectorsManager.getActiveSelectors();
         searchOnVocab(label, selectors, triple, caller);
@@ -751,6 +755,7 @@ angular.module('Pundit2.ResourcePanel')
             });
         }
 
+        resourcePanel.openBy = target;
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;
     };
@@ -795,7 +800,6 @@ angular.module('Pundit2.ResourcePanel')
                 // angular.element('input.pnd-input-calendar')[0].focus();
             });
         }
-
         // if click a different popover, hide the shown popover and show the clicked one
         else if (state.popover !== null && state.popover.clickTarget !== target) {
             hide();
@@ -810,6 +814,8 @@ angular.module('Pundit2.ResourcePanel')
                 // angular.element('input.pnd-input-calendar')[0].focus();
             });
         }
+
+        resourcePanel.openBy = target;
 
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;
@@ -838,7 +844,6 @@ angular.module('Pundit2.ResourcePanel')
      *
      */
     resourcePanel.showItemsForSubject = function(triple, target, label, overrideFooterExtraButtons) {
-
         resourcePanel.overrideFooterExtraButtons = overrideFooterExtraButtons;
 
         if (typeof(target) === 'undefined') {
@@ -922,6 +927,7 @@ angular.module('Pundit2.ResourcePanel')
 
             showPopoverResourcePanel(target, pageItems, myItems, "", label, 'sub', triple);
         }
+        resourcePanel.openBy = target;
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;
     };
@@ -949,7 +955,6 @@ angular.module('Pundit2.ResourcePanel')
      *
      */
     resourcePanel.showItemsForObject = function(triple, target, label, overrideFooterExtraButtons) {
-
         resourcePanel.overrideFooterExtraButtons = overrideFooterExtraButtons;
 
         if (typeof(target) === 'undefined') {
@@ -1040,6 +1045,8 @@ angular.module('Pundit2.ResourcePanel')
 
                 } // end else predicate !== undefined
 
+                resourcePanel.openBy = target;
+
             } // end if triple !== undefined
 
         }
@@ -1070,7 +1077,6 @@ angular.module('Pundit2.ResourcePanel')
      *
      */
     resourcePanel.showProperties = function(triple, target, label) {
-
         if (typeof(target) === 'undefined') {
             target = state.popover.clickTarget;
         }
@@ -1124,6 +1130,7 @@ angular.module('Pundit2.ResourcePanel')
 
             } // end triple !== undefined
         }
+        resourcePanel.openBy = target;
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;
     };

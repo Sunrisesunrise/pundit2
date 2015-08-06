@@ -42,7 +42,7 @@ body.pnd-toolbar-active {
     a {
         height: @toolbar-height - @toolbar-border-bottom;
 
-        background-color: @color-toolbar-bg; // @color-toolbar-button;
+        background-color: @color-toolbar-button;
         border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 25);
         border-left: 0;
 
@@ -52,7 +52,7 @@ body.pnd-toolbar-active {
         transition: none !important; /* Delete any transition */
 
         &:focus {
-            background-color: @color-toolbar-bg; // @color-toolbar-button;
+            background-color: @color-toolbar-button;
         }
 
         &:hover {
@@ -100,7 +100,7 @@ body.pnd-toolbar-active {
             }
 
             &:hover {
-                background-color: darken(@color-button-bg-cta, 5);
+                background-color: saturate(lighten(@color-button-bg-cta, 5), 10);
             }
         }
     }

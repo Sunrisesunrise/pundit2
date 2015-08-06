@@ -260,6 +260,14 @@ angular.module('Pundit2.TripleComposer')
         EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
+    var checkOpenResourcePanel = function(target) {
+        if (typeof ResourcePanel.openBy !== +'undefined' && ResourcePanel.openBy === target) {
+            ResourcePanel.hide();
+            return false;
+        }
+        return true;
+    }
+
     $scope.onClickSubject = function($event) {
         if ($scope.templateMode) {
             if ($scope.subjectFixed || $scope.subjectFound) {
@@ -270,6 +278,11 @@ angular.module('Pundit2.TripleComposer')
         else if ($scope.subjectFixed) {
             return;
         }
+
+        if (!checkOpenResourcePanel($event.target)) {
+            return;
+        }
+
         ResourcePanel.showItemsForSubject(triple, $event.target).then($scope.setSubject);
 
         // Deprecating.
@@ -321,6 +334,11 @@ angular.module('Pundit2.TripleComposer')
             Preview.setItemDashboardSticky(triple.predicate);
             return;
         }
+
+        if (!checkOpenResourcePanel($event.target)) {
+            return;
+        }
+
         ResourcePanel.showProperties(triple, $event.target).then($scope.setPredicate);
         if ($scope.predicateFound) {
             EventDispatcher.sendEvent('Pundit.changeSelection');
@@ -382,6 +400,10 @@ angular.module('Pundit2.TripleComposer')
             return;
         }
 
+        if (!checkOpenResourcePanel($event.target)) {
+            return;
+        }
+
         if (triple.object === null || (!$scope.objectLiteral && !$scope.objectDate)) {
             ResourcePanel.showItemsForObject(triple, $event.target).then($scope.setObject);
             // Deprecating.
@@ -419,6 +441,9 @@ angular.module('Pundit2.TripleComposer')
             d.value = '';
         }
 
+        if (!checkOpenResourcePanel(target)) {
+            return;
+        }
         ResourcePanel.hide();
         ResourcePanel.showPopoverCalendar(d, target).then(function(date) {
             if (!date.valid) {
@@ -437,6 +462,9 @@ angular.module('Pundit2.TripleComposer')
             str = triple.object;
         }
 
+        if (!checkOpenResourcePanel(target)) {
+            return;
+        }
         ResourcePanel.hide();
         ResourcePanel.showPopoverLiteral(str, target).then($scope.setObject);
     };

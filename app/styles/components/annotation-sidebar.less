@@ -4,8 +4,6 @@
  * Styles related to the sidebar on the right containing the annotations.
  */
 
-/* TODO: Code style review and check if some optimization is possible */
-
 
 /* ------------------------------------ *\
    #MAIN-STYLE
@@ -54,10 +52,6 @@
     width: @annotation-sidebar-exp-width;
     z-index: 3;
     box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.20);
-}
-
-.pnd-dashboard-expanded .pnd-annotation-sidebar-header {
-    // TODO Set a different top positioning when the dashboard is open (we should probably do this via js)
 }
 
 
@@ -132,15 +126,13 @@
             .pnd-annotation-sidebar-filter-label {
                 width: @annotation-sidebar-exp-width - 24;
                 display: inline-block;
-                padding: 6px 0;
-                padding-left: 10px;
+                padding: 6px 0 6px 10px;
             }
 
             .pnd-annotation-sidebar-filter-label + .pnd-icon {
                 width: 24px;
                 opacity: .3;
-                padding: 9px 0;
-                padding-right: 13px;
+                padding: 9px 13px 9px 0;
             }
         }
     }
@@ -176,10 +168,6 @@
 
         .pnd-annotation-sidebar-filter-element {
             border-bottom: 1px solid @color-border-light;
-
-            &:last-child {
-                //padding-bottom: 5px;
-            }
         }
     }
 
@@ -204,7 +192,6 @@
         }
 
         &:last-child {
-            // padding-bottom: 0;
             border-bottom: 0;
         }
     }
@@ -217,7 +204,6 @@
     }
 
     /* Hidden elements when the filter is closed */
-    // TODO What about wrapping all elements that are shown in a single div?
     .pnd-annotation-sidebar-filter-label {
         display: none;
     }
@@ -282,7 +268,7 @@
     bottom: 0;
     color: @gray-lighter;
 
-    /* This pseudo element is neede to vertically align the loader inside a position fixed element */
+    /* This pseudo element is needed to vertically align the loader inside a position fixed element */
     &:before {
         content: '';
         display: block;
@@ -403,72 +389,6 @@
         }
     }
 
-
-    /* Menu (meta, reply, share) */
-/*    .pnd-annotation-details-menu {
-        background-color: lighten(@gray-extra-light, 10%);
-        border-top: 1px solid #fff;
-        border-bottom: 1px solid #fff;
-        overflow: hidden;
-
-        span .btn {
-            float: left;
-            border: 0;
-            color: @gray-dark;
-            background-color: lighten(@gray-extra-light, 10%);
-            line-height: 0;
-            height: 24px;
-            width: 100px;
-            padding: 0 8px;
-            margin-left: 0;
-
-            &:hover {
-                background-color: @gray-extra-lighter;
-                color: @gray-dark;
-            }
-
-            &.pnd-annotation-details-menu-btn-active {
-                background-color: @gray-extra-lighter;
-                color: @gray-dark;
-            }
-        }
-
-        span ~ span .btn {
-            border-left: 1px solid #fff;
-            display: inline !important;
-            border-right: 0;
-        }
-    }*/
-
-
-
-
-    /* Footer, contains buttons and the bottom
-     of the expanded annotation */
-    /*
-    .pnd-annotation-details-footer {
-        overflow: hidden;
-        background-color: #FFF;
-
-        button {
-            display: block;
-            float: left;
-        }
-    }
-    */
-
-
-
-    /* Info - Note */
-    /*
-    .pnd-annotation-details-info {
-        background-color: @gray-extra-lighter;
-        border-bottom: 1px solid @gray-extra-light;
-        padding: 10px;
-    }
-    */
-
-
     /* Annotation content */
     /* Content of the annotation: metadata and triples */
     .pnd-annotation-details-container {
@@ -529,11 +449,6 @@
                     border-bottom: 0;
                 }
 
-                /*
-                & + .pnd-annotation-details-item {
-                    border-top: 2px solid @gray-extra-light;
-                }
-                */
                 .pnd-annotation-details-item-header {
                     line-height: 24px;
                     height: 24px;

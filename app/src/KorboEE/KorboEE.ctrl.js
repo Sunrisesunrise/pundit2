@@ -16,6 +16,9 @@ angular.module('KorboEE')
 
     // when configuration is set, initialize API callbacks
     $scope.$watch('conf', function(){
+        if (typeof $scope.conf === 'undefined') {
+            return;
+        }
 
         if (!$scope.errorGlobalObjName){
             $scope.init = function(){
@@ -194,6 +197,10 @@ angular.module('KorboEE')
 
 
     $scope.autoCompleteSearch = function(viewValue) {
+        if (typeof $scope.conf === 'undefined') {
+            return;
+        }
+
         // var container = "kee-korbo";
         if(viewValue.length >= $scope.conf.labelMinLength){
             $scope.isSearching = true;

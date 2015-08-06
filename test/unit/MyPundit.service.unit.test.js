@@ -28,11 +28,13 @@ describe('MyPundit service', function() {
         email: "mario@rossi.it",
         loginServer: "http:\/\/demo-cloud.as.thepund.it:8080\/annotationserver\/login.jsp"
     };
-    
-    beforeEach(module(
-        'src/Core/Templates/login.modal.tmpl.html'
-    ));
-    
+
+    var addLoginAnchorButton = function() {
+        var elem = angular.element('<button class="pnd-toolbar-login-button">login</button>');
+        angular.element('body').append(elem);
+        return elem;
+    };
+
     beforeEach(module('Pundit2'));
 
     beforeEach(inject(function($injector, _$rootScope_, _$httpBackend_, _$timeout_, _$q_, _$modal_, _$document_, _MYPUNDITDEFAULTS_, _$log_){
@@ -218,30 +220,63 @@ describe('MyPundit service', function() {
 	});
 
     it("should set loginStatus = loggedOff and open the modal if user is not logged in and login() is executed", function() {
-
         var promiseValue;
+        
+        addLoginAnchorButton();
 
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userNotLogged);
+        $httpBackend.whenGET('http://demo-cloud.oauth.thepund.it/pundit_login/').respond('pagina login');
 
-        var promise = MyPundit.oldLogin();
+        var promise = MyPundit.login();
 
-        // wait for promise....
-        waitsFor(function() { return typeof(promiseValue) !== 'undefined'; }, 2000);
-
-        // promise should be return false
-        runs(function() {
-            expect(promiseValue).toBe(false);
-        });
+        // TODO explore better ways to do it
+        var flag0 = false;
+        var flag1 = false;
+        var flag2 = false;
 
         // loginPromise should be resolved as false when login popup is closed
         promise.then(function(value) {
             promiseValue = value;
+            expect(promiseValue).toBe(false);
         });
 
-        $rootScope.$digest();
-        $httpBackend.flush();
-        $timeout.flush();
+        setTimeout(function() {
+            flag0 = true;
+        }, 1000);
+        setTimeout(function() {
+            flag1 = true;
+        }, 2000);
+        setTimeout(function() {
+            flag2 = true;
+        }, 3000);
 
+        waitsFor(function() {
+            if (flag0) {
+                $rootScope.$digest();
+            }
+            return flag0;
+        });
+
+        waitsFor(
+            function() {
+                if (flag1) {
+                    window.postMessage(
+                        'userLoggedIn',
+                        'http://localhost:9876'
+                    );
+                }
+                return flag1;
+            }
+        );
+
+        waitsFor(
+            function() {
+                if (flag2) {
+                    $httpBackend.flush();
+                }
+                return flag2;
+            }
+        );
     });
     
 	it("should correctly get logout when user is logged in", function() {
@@ -331,6 +366,7 @@ describe('MyPundit service', function() {
 
 		$httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
 
+        // TODO use new login
 		var promise = MyPundit.oldLogin();
 
 		// wait for promise....
@@ -369,6 +405,7 @@ describe('MyPundit service', function() {
 
         var serverError = false;
 
+        // TODO use new login
         var loginPromise = MyPundit.oldLogin();
 
         loginPromise.then(function() {
@@ -393,6 +430,7 @@ describe('MyPundit service', function() {
             .expectGET(NameSpace.get('asUsersCurrent'))
             .respond(userNotLogged);
 
+        // TODO use new login
         MyPundit.oldLogin();
 
         //start polling
