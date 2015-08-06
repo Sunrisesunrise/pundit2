@@ -57,8 +57,6 @@ angular.module('Pundit2.Dashboard')
             $scope.panes[p].isVisible = true;
         }
 
-        init();
-
     }, true);
 
     var panesLen = 0,
@@ -115,8 +113,15 @@ angular.module('Pundit2.Dashboard')
             $scope.panes[i].width = w;
             //$scope.panes[i].isVisible = true;
         }
+
+        // TODO change watch system on with of tab header and remove this and the style in tabs.less
+        angular.element('.pnd-tab-header').css({
+            'overflow-y': 'visible',
+            'height': 'auto'
+        });
     };
 
+    // TODO fix the watch system on with of tabs
     var dashboardToggleHandler = EventDispatcher.addListener('Dashboard.toggle', function(e) {
         if (firstTime) {
             if (e.args) {
@@ -129,6 +134,7 @@ angular.module('Pundit2.Dashboard')
             EventDispatcher.removeListener(dashboardToggleHandler);
         }
     });
+
 
     // for each tabs, check if it fit in the <ul> width
     // if fit, set its visibility to true and show in DOM
