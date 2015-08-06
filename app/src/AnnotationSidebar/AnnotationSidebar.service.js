@@ -810,12 +810,11 @@ angular.module('Pundit2.AnnotationSidebar')
         var index = (start + end) / 2;
         index = parseInt(index, 10);
 
-
         if (start === end) {
             return start;
         }
         if (start === end - 1) {
-            if (annotations[start] > val) {
+            if (annotations[start].created > val) {
                 return end;
             } else {
                 return start;
@@ -842,7 +841,7 @@ angular.module('Pundit2.AnnotationSidebar')
             return start;
         }
         if (start == end - 1) {
-            if (annotations[start] < val) {
+            if (annotations[start].created < val) {
                 return end;
             } else {
                 return start;
@@ -896,7 +895,7 @@ angular.module('Pundit2.AnnotationSidebar')
         annStartIndex = findDateFromIndex(dateFrom, 0, annotationsByDate.length, annotationsByDate);
         annEndIndex = findDateToIndex(dateTo, annStartIndex, annotationsByDate.length, annotationsByDate);
 
-        for (var i = annStartIndex - 1; i <= annEndIndex; i++) {
+        for (var i = annStartIndex; i <= annEndIndex; i++) {
             if (typeof annotationsByDate[i] !== 'undefined') {
                 results[annotationsByDate[i].id] = annotationsByDate[i];
             }
