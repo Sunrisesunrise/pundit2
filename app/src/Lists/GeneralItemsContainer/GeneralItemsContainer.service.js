@@ -282,18 +282,18 @@ angular.module('Pundit2.GeneralItemsContainer')
         var btnClass = 'pnd-triplecomposer-cancel btn btn-info btn-xs pnd-btn-full';
 
         if (generalItemsContainer.isMyItemsType(type)) {
-            title = 'Remove from my items';
+            title = 'Remove from My Items';
             text = 'Remove';
             action = 'remove';
             btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isPageItemsType(type)) {
-            title = 'Add to myItems';
-            text = 'Add to myItems';
+            title = 'Add to  My Items';
+            text = 'Add to My Items';
             action = 'add';
             btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isVocabulariesType(type)) {
-            title = 'Add to myItems';
-            text = 'Add to myItems';
+            title = 'Add to My Items';
+            text = 'Add to My Items';
             action = 'add';
             requireLoggedUser = false;
             btnClass = 'pnd-btn';

@@ -383,7 +383,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         );
         $scope.dropdownOrdering.push(
             {
-                text: 'Add web page to My items',
+                text: 'Add web page to My Items',
                 click: function() {
                     //var item = PageHandler.createItemFromPage();
                     if (MyPundit.isUserLogged() && !isCurrentPageInMyItems()) {
