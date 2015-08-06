@@ -27,6 +27,9 @@ angular.module('Pundit2.AnnotationSidebar')
         clean: AnnotationSidebar.options.inputIconClear
     };
 
+    var minDateWatch,
+        maxDateWatch;
+
     var delay;
 
     $scope.annotationSidebar = AnnotationSidebar;
@@ -116,7 +119,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.toggleFilterList = function(event, filterType) {
         var pndFilterShowClass = 'pnd-annotation-sidebar-filter-show';
-        var previousElement = angular.element('.' +pndFilterShowClass);
+        var previousElement = angular.element('.' + pndFilterShowClass);
         var currentElement = angular.element(event.target.parentElement.parentElement);
 
         $scope.searchAuthors = '';
@@ -131,10 +134,19 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if (currentElement.hasClass(pndFilterShowClass)) {
             $scope.filterTypeExpanded = filterType;
+
+            if (filterType === 'date') {
+                enableDateWatch();
+            }
         } else {
             $scope.filterTypeExpanded = '';
+
+            if (filterType === 'date') {
+                disableDateWatch();
+            }
         }
 
+        // TODO this is not the right way to handle limit cases
         if (typeof filterType === 'undefined') {
             filterType = angular.element(event.target).text().trim();
         }
@@ -225,37 +237,15 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     });
 
-    $scope.$watch(function() {
-        return AnnotationSidebar.getMinDate();
-    }, function(minDate) {
-        if (typeof(minDate) !== 'undefined') {
-            var newMinDate = $filter('date')(minDate, 'yyyy-MM-dd');
-            $scope.fromMinDate = setMin(newMinDate);
-            if (AnnotationSidebar.filters.fromDate.expression === '') {
-                $scope.toMinDate = setMin(newMinDate);
-            }
-        }
-    });
-    $scope.$watch(function() {
-        return AnnotationSidebar.getMaxDate();
-    }, function(maxDate) {
-        if (typeof(maxDate) !== 'undefined') {
-            var newMaxDate = $filter('date')(maxDate, 'yyyy-MM-dd');
-            $scope.toMaxDate = newMaxDate;
-            if (AnnotationSidebar.filters.toDate.expression === '') {
-                $scope.fromMaxDate = newMaxDate;
-            }
-        }
-    });
     $scope.$watch('annotationSidebar.filters.fromDate.expression', function(currentFromDate) {
-        if (typeof(currentFromDate) !== 'undefined') {
+        if (typeof(currentFromDate) !== 'undefined' && currentFromDate !== null) {
             $scope.toMinDate = setMin(currentFromDate);
         } else {
             $scope.toMinDate = setMin($scope.fromMinDate);
         }
     });
     $scope.$watch('annotationSidebar.filters.toDate.expression', function(currentToDate) {
-        if (typeof(currentToDate) !== 'undefined') {
+        if (typeof(currentToDate) !== 'undefined' && currentToDate !== null) {
             $scope.fromMaxDate = currentToDate;
         } else {
             $scope.fromMaxDate = $scope.toMaxDate;
@@ -303,6 +293,42 @@ angular.module('Pundit2.AnnotationSidebar')
     }, function() {
         resizeSidebarHeight();
     });
+
+    function enableDateWatch() {
+        minDateWatch = $scope.$watch(function() {
+            return AnnotationSidebar.getMinDate();
+        }, function(minDate) {
+            if (typeof(minDate) !== 'undefined') {
+                var newMinDate = $filter('date')(minDate, 'yyyy-MM-dd');
+                $scope.fromMinDate = setMin(newMinDate);
+                if (AnnotationSidebar.filters.fromDate.expression === '') {
+                    $scope.toMinDate = setMin(newMinDate);
+                }
+            }
+        });
+        
+        maxDateWatch = $scope.$watch(function() {
+            return AnnotationSidebar.getMaxDate();
+        }, function(maxDate) {
+            if (typeof(maxDate) !== 'undefined') {
+                var newMaxDate = $filter('date')(maxDate, 'yyyy-MM-dd');
+                $scope.toMaxDate = newMaxDate;
+                if (AnnotationSidebar.filters.toDate.expression === '') {
+                    $scope.fromMaxDate = newMaxDate;
+                }
+            }
+        });
+    }
+    function disableDateWatch() {
+        if (typeof minDateWatch === 'function') {
+            minDateWatch();
+            minDateWatch = undefined;
+        }
+        if (typeof maxDateWatch === 'function') {
+            maxDateWatch();
+            maxDateWatch = undefined;
+        }
+    }
 
     angular.element($window).bind('resize', function() {
         resizeSidebarHeight();

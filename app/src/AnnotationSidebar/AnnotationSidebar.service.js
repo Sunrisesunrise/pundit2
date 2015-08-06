@@ -289,16 +289,6 @@ angular.module('Pundit2.AnnotationSidebar')
         isSuggestionsPanelActive: annotationSidebar.options.suggestionsPanelActive
     };
 
-    // Contains the list of elements relating to the annotations on the page
-    var elementsList = {
-        annotationsDate: [],
-        authors: {},
-        notebooks: {},
-        predicates: {},
-        types: {},
-        broken: {}
-    };
-
     var annotationsByDate = [];
     var annotationsByLabel = [];
 
@@ -311,6 +301,16 @@ angular.module('Pundit2.AnnotationSidebar')
     var tempBrokenList = {};
 
     var isEntitiesActive = annotationSidebar.isEntitesActive = PageItemsContainer.options.active;
+
+    // Contains the list of elements relating to the annotations on the page
+    var elementsList = {
+        annotationsDate: [],
+        authors: {},
+        notebooks: {},
+        predicates: {},
+        types: {},
+        broken: {}
+    };
 
     annotationSidebar.minHeightRequired = startPosition;
 
@@ -369,16 +369,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
     annotationSidebar.annotationPositionReal = {};
 
-    // sort on key values
-    // function keysrt(key) {
-    //     return function(a, b) {
-    //         if (a[key] > b[key]) return 1;
-    //         if (a[key] < b[key]) return -1;
-    //         return 0;
-    //     }
-    // }
-
-
     // TODO add single filter add to elementsList
     var resetElementsList = function() {
         for (var i in elementsList) {
@@ -398,6 +388,10 @@ angular.module('Pundit2.AnnotationSidebar')
             var y = b[key];
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         });
+    };
+
+    var isValidDate = function(date) {
+        return !isNaN(Date.parse(date));
     };
 
     var orderAndSetPos = function(optId, optHeight) {
@@ -869,22 +863,27 @@ angular.module('Pundit2.AnnotationSidebar')
     var filterAnnotationsByDate = function(dateFrom, dateTo) {
         var results = {};
 
+        var isValidFrom = isValidDate(dateFrom),
+            isValidTo = isValidDate(dateTo);
+
+        var annStartIndex,
+            annEndIndex;
+
         if (annotationsByDate.length === 0) {
             return results;
         }
 
-        if ((dateFrom === '' || typeof dateFrom === 'undefined') &&
-            (dateTo === '' || typeof dateTo === 'undefined')) {
+        if (!isValidFrom && !isValidTo) {
             return results;
         }
 
-        if (typeof dateFrom === 'undefined' || dateFrom === '') {
+        if (!isValidFrom) {
             dateFrom = annotationsByDate[0].created;
         } else {
             dateFrom = dateFrom + 'T00:00:00';
         }
 
-        if (typeof dateTo === 'undefined' || dateTo === '') {
+        if (!isValidTo) {
             dateTo = annotationsByDate[annotationsByDate.length - 1].created;
         } else {
             dateTo = dateTo + 'T23:59:59';
@@ -894,11 +893,13 @@ angular.module('Pundit2.AnnotationSidebar')
             return results;
         }
 
-        var annStartIndex = findDateFromIndex(dateFrom, 0, annotationsByDate.length, annotationsByDate);
-        var annEndIndex = findDateToIndex(dateTo, annStartIndex, annotationsByDate.length, annotationsByDate);
+        annStartIndex = findDateFromIndex(dateFrom, 0, annotationsByDate.length, annotationsByDate);
+        annEndIndex = findDateToIndex(dateTo, annStartIndex, annotationsByDate.length, annotationsByDate);
 
-        for (var i = annStartIndex; i <= annEndIndex; i++) {
-            results[annotationsByDate[i].id] = annotationsByDate[i];
+        for (var i = annStartIndex - 1; i <= annEndIndex; i++) {
+            if (typeof annotationsByDate[i] !== 'undefined') {
+                results[annotationsByDate[i].id] = annotationsByDate[i];
+            }
         }
 
         annotationSidebar.log('DateFrom ' + dateFrom + ' DateTo ' + dateTo);
@@ -1008,7 +1009,8 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var getFilteredAnnotations = function(activeFilters, globalFilters) {
-        var exceptionsCheck = ['freeText', 'fromDate', 'toDate', 'broken'];
+        var exceptionsCheckList = ['freeText', 'fromDate', 'toDate', 'broken'],
+            exceptionsCheckIndex = -1;
 
         var firstTime = true,
             atLeastOneActiveFilter = false,
@@ -1017,12 +1019,14 @@ angular.module('Pundit2.AnnotationSidebar')
             subFiltersSet = {},
             currentAnnotationsList;
 
-        var activeAnnotations = Object.keys(state.filteredAnnotations).length === 0 ? state.allAnnotations : state.filteredAnnotations;
         var results = {};
 
         angular.forEach(activeFilters, function(filter, key) {
-            if (exceptionsCheck.indexOf(key) !== -1 || filter.expression.length === 0) {
-                if (exceptionsCheck.indexOf(key) === -1) {
+            exceptionsCheckIndex = exceptionsCheckList.indexOf(key);
+
+            // if there aren't subfilter active or we should skip a specific subfilter 
+            if (exceptionsCheckIndex !== -1 || filter.expression.length === 0) {
+                if (exceptionsCheckIndex === -1) {
                     subFiltersSet[key] = {};
                 }
                 return;
@@ -1043,7 +1047,7 @@ angular.module('Pundit2.AnnotationSidebar')
             subFiltersSet['broken'] = elementsList.broken['uri:broken'].annotationsList;
         }
 
-        if (activeFilters['fromDate'].expression !== '' || activeFilters['toDate'].expression !== '') {
+        if (isValidDate(activeFilters['fromDate'].expression) || isValidDate(activeFilters['toDate'].expression)) {
             subFiltersSet['date'] = filterAnnotationsByDate(activeFilters['fromDate'].expression, activeFilters['toDate'].expression);
             atLeastOneActiveFilter = true;
         }
@@ -1143,23 +1147,25 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationSidebar.getMinDate = function() {
-        if (elementsList.annotationsDate.length > 0) {
-            return elementsList.annotationsDate.reduce(
-                function(prev, current) {
-                    return prev < current ? prev : current;
-                }
-            );
+        var firstAnnotation = annotationsByDate[0],
+            minDate;
+
+        if (typeof firstAnnotation !== 'undefined') {
+            minDate = firstAnnotation.created;
         }
+
+        return minDate;
     };
 
     annotationSidebar.getMaxDate = function() {
-        if (elementsList.annotationsDate.length > 0) {
-            return elementsList.annotationsDate.reduce(
-                function(prev, current) {
-                    return prev > current ? prev : current;
-                }
-            );
+        var lastAnnotation = annotationsByDate[annotationsByDate.length - 1],
+            maxDate;
+
+        if (typeof lastAnnotation !== 'undefined') {
+            maxDate = lastAnnotation.created;
         }
+
+        return maxDate;
     };
 
     annotationSidebar.getLoadingStatus = function() {
