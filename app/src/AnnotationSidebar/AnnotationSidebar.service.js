@@ -846,7 +846,7 @@ angular.module('Pundit2.AnnotationSidebar')
         EventDispatcher.sendEvent('AnnotationSidebar.toggle', state.isSidebarExpanded);
     };
 
-    annotationSidebar.toggleLoadingannotationSidebar.toggleLoading = function() {
+    annotationSidebar.toggleLoading = function() {
         state.isLoading = !state.isLoading;
         EventDispatcher.sendEvent('AnnotationSidebar.toggleLoading', state.isLoading);
     };
