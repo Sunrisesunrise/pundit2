@@ -14,6 +14,7 @@ module.exports = function(config) {
             'bower_components/angular-moment/angular-moment.min.js',
             'bower_components/angular-datepicker/dist/index.min.js',
             'bower_components/angular-md5/angular-md5.min.js',
+            'bower_components/ng-resize/ngresize.min.js',
 
             // Load the module declaration before the module utilization, or karma
             // will screw up :|
