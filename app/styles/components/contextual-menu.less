@@ -15,7 +15,7 @@
     .divider {
         height: 1px;
         background-color: @color-border-light;
-        margin: 0 0 1px 0;
+        margin: 0 0 0 0;
     }
 
     li a {
@@ -24,7 +24,7 @@
         padding: 5px 10px;
         overflow: hidden;
 
-        border-top: 1px solid @color-border-light; // 1px lighten(@brand-success, 30%) solid;
+        // border-top: 1px solid @color-border-light; // 1px lighten(@brand-success, 30%) solid;
         border-right: 0;
         border-left: 0;
         background-color: @color-dropdown-bg; // @brand-success;
@@ -46,7 +46,7 @@
     }
 
     li:first-child a {
-        border-top: 0;
+        // border-top: 0;
     }
 
     /* Selected or active element */
@@ -63,6 +63,7 @@
 
     .dropdown-header {
         padding: 15px;
+        border-bottom: 1px solid @color-border-light;
         color: @color-text-light;
     }
 }
