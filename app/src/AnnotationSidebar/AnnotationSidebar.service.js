@@ -812,23 +812,58 @@ angular.module('Pundit2.AnnotationSidebar')
         annotationsByDate = sortByKey(annotationsByDate, 'created');
     };
 
-    var findIndex = function(val, start, end) {
+    var findDateFromIndex = function(val, start, end, annotations) {
         var index = (start + end) / 2;
         index = parseInt(index, 10);
 
-        if (start === end - 1) {
+
+        if (start === end) {
             return start;
         }
+        if (start === end - 1) {
+            if (annotations[start] > val) {
+                return end;
+            } else {
+                return start;
+            }
+        }
 
-        if (annotationsByDate[index].created === val) {
+        if (annotations[index].created === val) {
             return index;
-        } else if (annotationsByDate[index].created < val) {
+        } else if (annotations[index].created < val) {
             start = index;
         } else {
             end = index;
         }
 
-        return findIndex(val, start, end);
+        return findDateFromIndex(val, start, end, annotations);
+    };
+
+
+    var findDateToIndex = function(val, start, end, annotations) {
+        var index = (start + end) / 2;
+        index = parseInt(index, 10);
+
+        if (start == end) {
+            return start;
+        }
+        if (start == end - 1) {
+            if (annotations[start] < val) {
+                return end;
+            } else {
+                return start;
+            }
+        }
+
+        if (annotations[index].created === val) {
+            return index;
+        } else if (annotations[index].created < val) {
+            start = index;
+        } else {
+            end = index;
+        }
+
+        return findDateToIndex(val, start, end, annotations);
     };
 
     var filterAnnotationsByDate = function(dateFrom, dateTo) {
@@ -859,10 +894,10 @@ angular.module('Pundit2.AnnotationSidebar')
             return results;
         }
 
-        var annStartIndex = findIndex(dateFrom, 0, annotationsByDate.length, annotationsByDate, 'created');
-        var annEndIndex = findIndex(dateTo, annStartIndex, annotationsByDate.length, annotationsByDate, 'created');
+        var annStartIndex = findDateFromIndex(dateFrom, 0, annotationsByDate.length, annotationsByDate);
+        var annEndIndex = findDateToIndex(dateTo, annStartIndex, annotationsByDate.length, annotationsByDate);
 
-        for (var i = annStartIndex; i < annEndIndex; i++) {
+        for (var i = annStartIndex; i <= annEndIndex; i++) {
             results[annotationsByDate[i].id] = annotationsByDate[i];
         }
 
