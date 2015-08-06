@@ -454,7 +454,7 @@ angular.module('Pundit2.Client')
     Toolbar, Annomatic, NotebookCommunication, NotebookExchange, TemplatesExchange,
     SelectorsManager, FreebaseSelector, MurucaSelector, KorboBasketSelector, Korbo2Selector, EuropeanaSelector, DbpediaSelector, GeonamesSelector, PredicateSelector,
     TemplatesSelector, TripleComposer, ImageFragmentAnnotatorHelper,
-    $injector, $templateCache, $rootScope, $compile, $window) {
+    $injector, $templateCache, $rootScope, $compile, $window, $document) {
 
     var client = new BaseComponent('Client', CLIENTDEFAULTS),
 
@@ -661,6 +661,8 @@ angular.module('Pundit2.Client')
 
     };
 
+
+
     // Called when the user completed the login process with the modal etc, NOT if the user
     // was already logged in on boot etc
     var onLogin = function() {
@@ -734,6 +736,29 @@ angular.module('Pundit2.Client')
         delete keeSelector;
 
     };
+
+    var hideClient = function() {
+        EventDispatcher.sendEvent('Client.hide');
+        $rootScope.$$phase || $rootScope.$digest();
+        angular.element('body').css({
+            'marginTop': 0
+        });
+        angular.element('div[data-ng-app="Pundit2"]').css('display','none');
+    };
+
+    var showClient = function() {
+        angular.element('div[data-ng-app="Pundit2"]').css('display','inherit');
+        EventDispatcher.sendEvent('Client.show');
+        $rootScope.$$phase || $rootScope.$digest();
+    };
+
+    var requestAnnotationsNumber = function() {
+        EventDispatcher.sendEvent('Client.requestAnnotationsNumber');
+    };
+
+    $document.on('Pundit2.hide', hideClient);
+    $document.on('Pundit2.show', showClient);
+    $document.on('Pundit2.requestAnnotationsNumber', requestAnnotationsNumber);
 
     client.log("Component up and running");
     return client;

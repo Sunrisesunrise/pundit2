@@ -680,6 +680,18 @@ angular.module('Pundit2.Dashboard')
         }
     });
 
+    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+        if (state.isDashboardVisible) {
+            dashboard.toggle();
+        }
+    });
+
+    EventDispatcher.addListener('Client.show', function(/*e*/) {
+        dashboard.toggle();
+        $rootScope.$$phase || $rootScope.$digest();
+        dashboard.toggle();
+    });
+
     dashboard.log('Service run');
 
     return dashboard;

@@ -24,7 +24,7 @@ angular.module('Pundit2.ContextualMenu')
  * @description Pundit2 ContextualMenu Service
  *
  */
-.service('ContextualMenu', function($rootScope, BaseComponent, CONTEXTUALMENUDEFAULTS, $dropdown, $window) {
+.service('ContextualMenu', function($rootScope, BaseComponent, CONTEXTUALMENUDEFAULTS, $dropdown, $window, EventDispatcher) {
 
     var contextualMenu = new BaseComponent('ContextualMenu', CONTEXTUALMENUDEFAULTS);
 
@@ -463,6 +463,11 @@ angular.module('Pundit2.ContextualMenu')
             return 'right';
         }
     };
+
+    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+        contextualMenu.hide();
+        state.mockMenu.hide();
+    });
 
     contextualMenu.log('service run');
     return contextualMenu;
