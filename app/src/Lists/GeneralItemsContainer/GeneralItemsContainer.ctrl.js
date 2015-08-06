@@ -300,16 +300,15 @@ angular.module('Pundit2.GeneralItemsContainer')
         confirmModal.$promise.then(confirmModal.show);
     };
    */
+    $scope.isSelected = function(item) {
+        if ($scope.itemSelected !== null && $scope.itemSelected.uri === item.uri) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     if(!$scope.isMyNotebooks) {
-        $scope.isSelected = function (item) {
-            if ($scope.itemSelected !== null && $scope.itemSelected.uri === item.uri) {
-                return true;
-            } else {
-                return false;
-            }
-        };
-
         $scope.select = function (item) {
             Preview.setItemDashboardSticky(item);
             EventDispatcher.sendEvent('Pundit.changeSelection');
@@ -356,11 +355,17 @@ angular.module('Pundit2.GeneralItemsContainer')
 
             resetContainer();
         };
-
-        EventDispatcher.addListener('Pundit.changeSelection', function () {
-            resetContainer();
-        });
+    } else {
+        $scope.select = function (item) {
+            Preview.setItemDashboardSticky(item);
+            EventDispatcher.sendEvent('Pundit.changeSelection');
+            $scope.itemSelected = item;
+        };
     }
+
+    EventDispatcher.addListener('Pundit.changeSelection', function() {
+        resetContainer();
+    });
 
 
     //TODO: only on myitems

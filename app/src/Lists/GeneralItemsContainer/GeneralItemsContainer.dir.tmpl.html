@@ -40,7 +40,8 @@
                           menu-type="{{itemMenuType}}"
                           item-type="notebook"
                           hide-sticky-button="true"
-                          force-sticky="true"></item>
+                          is-selected="isSelected(item)"
+                          ng-click="select(item)"></item>
                     <item ng-if="isPredicates"
                           uri="{{item.uri}}"
                           menu-type="{{itemMenuType}}"
