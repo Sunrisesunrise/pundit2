@@ -365,7 +365,7 @@ angular.module('Pundit2.AnnotationSidebar')
         if (typeof(annotationSidebar.filtersCount[uri]) === 'undefined') {
             annotationSidebar.filtersCount[uri] = 1;
         } else {
-            annotationSidebar.filtersCount[uri] ++;
+            annotationSidebar.filtersCount[uri]++;
         }
         return annotationSidebar.filtersCount[uri];
     };
@@ -698,7 +698,7 @@ angular.module('Pundit2.AnnotationSidebar')
         for (var i in state.allAnnotations) {
             isBroken = state.allAnnotations[i].isBroken();
             isBrokenYet = state.allAnnotations[i].isBrokenYet;
-            
+
             state.allAnnotations[i].broken = isBroken;
 
             if (typeof(isBrokenYet) === 'string' && isBrokenYet === 'true') {
@@ -711,7 +711,7 @@ angular.module('Pundit2.AnnotationSidebar')
             if (isBrokenYet && !isBroken) {
                 BrokenHelper.addAnnotation(state.allAnnotations[i].id, false);
             }
-            
+
             // Add broken annotation to BrokenHelper
             if (!isBrokenYet && isBroken) {
                 BrokenHelper.addAnnotation(state.allAnnotations[i].id, true);
@@ -846,7 +846,7 @@ angular.module('Pundit2.AnnotationSidebar')
         EventDispatcher.sendEvent('AnnotationSidebar.toggle', state.isSidebarExpanded);
     };
 
-    annotationSidebar.toggleLoading = function() {
+    annotationSidebar.toggleLoadingannotationSidebar.toggleLoading = function() {
         state.isLoading = !state.isLoading;
         EventDispatcher.sendEvent('AnnotationSidebar.toggleLoading', state.isLoading);
     };
@@ -1087,8 +1087,10 @@ angular.module('Pundit2.AnnotationSidebar')
     });
 
     EventDispatcher.addListener('ResizeManager.resize', function() {
-        setAnnotationsPosition();
-        annotationSidebar.log('Position annotations on resize');
+        if (state.isLoading !== false) {
+            setAnnotationsPosition();
+            annotationSidebar.log('Position annotations on resize');
+        }
     });
 
     annotationSidebar.log('Component running');

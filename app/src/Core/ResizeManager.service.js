@@ -8,10 +8,9 @@ angular.module('Pundit2.Core')
     resizeProvider.throttle = 500;
 }])
 
-.service('ResizeManager', function(BaseComponent, Status, EventDispatcher, resize, $timeout, $rootScope, RESIZEMANAGERDEFAULTS) {
+.service('ResizeManager', function(BaseComponent, EventDispatcher, resize, $timeout, $rootScope, RESIZEMANAGERDEFAULTS) {
     var resizeManager = new BaseComponent('ResizeManager', RESIZEMANAGERDEFAULTS);
 
-    var isLoading = Status.getLoading();
     var firstTime = true;
     var timerPromise;
 
@@ -22,16 +21,12 @@ angular.module('Pundit2.Core')
 
         timerPromise = $timeout(function() {
             if (firstTime === false) {
-                EventDispatcher.sendEvent('ResizeManager.resize');                
+                EventDispatcher.sendEvent('ResizeManager.resize');
             } else {
                 firstTime = false;
             }
             $timeout.cancel(timerPromise);
         }, 700);
-    });
-
-    EventDispatcher.addListener('Pundit.loading', function(e) {
-        isLoading = e.args;
     });
 
     resizeManager.log('Service running');
