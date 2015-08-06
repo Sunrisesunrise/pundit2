@@ -1,0 +1,90 @@
+/**
+ * TABS
+ *
+ * Style for horizontal and vertical tabs
+ */
+
+// TODO and Important: the style for tabs is dispersed in the code, lets move it here!
+
+/* ------------------------------------ *\
+   #TABS
+\* ------------------------------------ */
+
+.tab-content .tab-pane {
+    display: none;
+    margin-bottom: 30px;
+}
+
+.tab-content .active {
+    display: block;
+}
+
+/* ------------------------------------ *\
+   #VERTICAL-TABS
+\* ------------------------------------ */
+
+.tabs-left .nav-tabs {
+    float: left;
+    border-bottom: 0;
+    background-color: lighten(@gray-lighter, 2);
+
+    /* Single item */
+    & > li {
+        float: none;
+
+        .pnd-icon {
+            margin: 2px 4px 0 0;
+        }
+
+        .badge {
+            padding: 3px 7px;
+            font-size: 10px;
+            font-weight: normal;
+            background-color: lighten(@gray-light, 10%);
+            border-radius: 8px;
+        }
+
+        & > a {
+            min-width: 150px;
+            margin-right: 0;
+            margin-bottom: 1px;
+            background-color: @gray-lighter;
+            color: @gray;
+            border-bottom: 1px solid #fff;
+
+            &:hover, &:focus {
+                color: @gray-darker;
+                background-color: darken(@gray-lighter, 3%);
+                border-bottom: 1px solid #fff;
+
+                .badge {
+                    background-color: lighten(@gray, 20%);
+                }
+            }
+        }
+
+        /* The currently active item */
+        &.active {
+            & > a {
+                background-color: #fff;
+                cursor: default;
+                border-bottom: 1px solid #fff;
+                box-shadow: none;
+
+                &:hover, &:focus {
+                    color: @gray;
+                    background-color: #fff;
+                    border-bottom: 1px solid #fff;
+
+                    .badge {
+                        background-color: lighten(@gray, 20%);
+                    }
+                }
+            }
+
+            .badge {
+                background-color: lighten(@gray, 20%);
+            }
+        }
+    }
+}

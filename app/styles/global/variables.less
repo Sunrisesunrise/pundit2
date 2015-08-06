@@ -96,19 +96,27 @@
 // ------------------------------------ //
 // #INLINE-CONSOLIDATION
 // ------------------------------------ //
-@text-fragment-color: fade(#feff99, 70%); // fade(#f8d420, 45%); // Original from Simone Fonda #f8cd48; // rgba(255,255,0,.32); // #f8cd48;
+@text-fragment-color: fade(#ffff33, 35%); // fade(#f8d420, 45%); // Original from Simone Fonda #f8cd48; // rgba(255,255,0,.32); // #f8cd48;
+@text-fragment-color-1: fade(#ffff33, 35%);
+@text-fragment-color-2: fade(#ffff00, 45%);
+@text-fragment-color-3: fade(#ffff00, 50%);
+@text-fragment-color-4: fade(#ffff00, 55%);
+@text-fragment-color-5: fade(#ffff00, 60%);
+@text-fragment-color-6: fade(#ffff00, 65%);
 
-@text-fragment-color-1: fade(#feff99, 60%);
-@text-fragment-color-2: fade(#feff99, 80%);
-@text-fragment-color-3: fade(#feff99, 100%);
-@text-fragment-color-4: fade(#feff99, 100%);
-@text-fragment-color-5: fade(#feff99, 100%);
-@text-fragment-color-6: fade(#feff99, 100%);
-@text-fragment-color-7: fade(#feff99, 100%);
-@text-fragment-color-8: fade(#feff99, 100%);
-@text-fragment-color-all: fade(#feff99, 100%);
+// Highlights the text fragment the user is annotating
+@text-fragment-color-highlight: fade(#2ee6e6, 40%);
 
-@text-fragment-color-hover: fade(#feff99, 100%); // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
+// Hovering on a text fragment icon or an annotations in the sidebar
+@text-fragment-color-hover: @text-fragment-color-highlight; // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
+
+// When doing "Show all annotations on this item"... alle the others text fragment are ghosted
+@text-fragment-ghosted: fade(#ffff33, 15%);
+
+// Icons
+@text-fragment-icon-color: fade(#bfbf00, 65%);
+@text-fragment-icon-color-hover: fade(#47b3b3, 65%);
+@text-fragment-icon-color-ghosted: fade(#bfbf00, 30%);
 
 
 // ------------------------------------ //
