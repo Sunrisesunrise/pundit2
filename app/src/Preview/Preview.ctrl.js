@@ -2,6 +2,10 @@ angular.module('Pundit2.Preview')
 
 .controller('PreviewCtrl', function($scope, Preview, TypesHelper, $window, Config, Analytics) {
 
+    $scope.itemDashboardPreview = null;
+
+    $scope.askThePundit = Config.askThePundit;
+
     // getter function used to build hierarchystring.
     // hierarchystring is used for tracking events with analytics.
     var getHierarchyString = function() {
@@ -24,34 +28,6 @@ angular.module('Pundit2.Preview')
 
         return eventLabel;
     };
-
-    $scope.itemDashboardPreview = null;
-
-
-    // check where a new item is selected to get a preview
-    $scope.$watch(function() {
-        return Preview.getItemDashboardPreview();
-    }, function(newItem) {
-
-        $scope.itemDashboardPreview = newItem;
-        // check if item has an image to show
-        if (newItem === null) {
-
-            $scope.hasImage = false;
-            $scope.itemIsAnImage = false;
-
-        } else {
-            if (TypesHelper.getLabel(newItem.type[0]) === 'Notebook') {
-                $scope.hasImage = false;
-                $scope.itemIsAnImage = false;
-            } else {
-                $scope.hasImage = (typeof(newItem.image) !== 'undefined');
-                $scope.itemIsAnImage = $scope.itemDashboardPreview.isImage() || $scope.itemDashboardPreview.isImageFragment();
-            }
-
-
-        }
-    });
 
     $scope.getWelcomeHeaderMessage = function() {
         return Preview.getWelcomeHeaderMessage();
@@ -131,4 +107,28 @@ angular.module('Pundit2.Preview')
         }
     };
 
+    // check where a new item is selected to get a preview
+    $scope.$watch(function() {
+        return Preview.getItemDashboardPreview();
+    }, function(newItem) {
+
+        $scope.itemDashboardPreview = newItem;
+        // check if item has an image to show
+        if (newItem === null) {
+
+            $scope.hasImage = false;
+            $scope.itemIsAnImage = false;
+
+        } else {
+            if (TypesHelper.getLabel(newItem.type[0]) === 'Notebook') {
+                $scope.hasImage = false;
+                $scope.itemIsAnImage = false;
+            } else {
+                $scope.hasImage = (typeof(newItem.image) !== 'undefined');
+                $scope.itemIsAnImage = $scope.itemDashboardPreview.isImage() || $scope.itemDashboardPreview.isImageFragment();
+            }
+
+
+        }
+    });
 });

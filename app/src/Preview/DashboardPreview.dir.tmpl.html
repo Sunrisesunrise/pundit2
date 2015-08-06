@@ -49,7 +49,7 @@
             Go to page
         </button><button
             class="pnd-btn pnd-dashboard-preview-more-info-button"
-            ng-if="isNotebook()" 
+            ng-if="isNotebook() && askThePundit" 
             ng-click="openNotebookUrl(itemDashboardPreview.id)" 
             ng-class="{disabled: !isStickyItem()}">
             More info
