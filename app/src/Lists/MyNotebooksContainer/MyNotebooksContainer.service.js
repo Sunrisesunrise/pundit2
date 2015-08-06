@@ -6,7 +6,7 @@ angular.module('Pundit2.MyNotebooksContainer')
 
     clientDashboardPanel: "lists",
 
-    clientDashboardTabTitle: "My notebooks",
+    clientDashboardTabTitle: "Notebooks",
 
     cMenuType: 'myNotebooks',
 

@@ -324,14 +324,10 @@
 
         &.active a {
             background-color: @nav-tabs-active-link-hover-bg;
-            // color: @brand-success;
         }
 
         a {
             padding: 5px 10px 2px 10px;
-            // background-color: darken(@gray-light, 6%);
-            // color: #fff;
-            // width: 30px;
 
             .pnd-icon {
                 display: inline-block;
@@ -340,25 +336,20 @@
                 font-size: 14px;
                 line-height: normal;
             }
-
-            &:hover {
-                // background-color: darken(@gray-light, 14%);
-                // color: #fff;
-            }
         }
     }
 
     > li {
-
         // Actual tabs (as links)
         > a {
-            color: @nav-tabs-active-link-hover-color;
             margin-right: 0;
-            line-height: @line-height-base;
+            padding: 5px 8px;
+            background-color: @gray-light;
             border: 0 solid transparent;
             border-radius: @tab-border-radius @tab-border-radius 0 0;
-            background-color: @gray-light;
-            margin-right: 2px;
+            color: @nav-tabs-active-link-hover-color;
+            line-height: @line-height-base;
+            // margin-right: 2px;
 
             &:hover {
                 border-color: transparent;
@@ -383,7 +374,7 @@
 
         &.pull-right {
             a {
-                margin-right: 0;
+                // margin-right: 0;
             }
         }
     }

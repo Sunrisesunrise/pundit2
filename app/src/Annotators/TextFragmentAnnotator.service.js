@@ -39,9 +39,9 @@ angular.module('Pundit2.Annotators')
      * Icon shown for annotation
      *
      * Default value:
-     * <pre> annotationIconClass: 'pnd-icon-comment-alt' </pre>
+     * <pre> annotationIconClass: 'pnd-icon-tag' </pre>
      */
-    annotationIconClass: "pnd-icon-comment-alt",
+    annotationIconClass: "pnd-icon-tag",
 
     /**
      * @module punditConfig

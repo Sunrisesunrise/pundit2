@@ -75,9 +75,9 @@ angular.module('Pundit2.VocabulariesContainer')
      * Tab title inside panel dashboard tabs.
      *
      * Default value:
-     * <pre> clientDashboardTabTitle: "Vocab" </pre>
+     * <pre> clientDashboardTabTitle: "Linked Data" </pre>
      */
-    clientDashboardTabTitle: "Vocab",
+    clientDashboardTabTitle: "Linked Data",
 
     /**
      * @module punditConfig
