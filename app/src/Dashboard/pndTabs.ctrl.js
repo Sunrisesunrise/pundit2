@@ -1,6 +1,6 @@
 angular.module('Pundit2.Dashboard')
 
-.controller('pndTabsCtrl', function($document, $window, $rootScope, $scope, $element,
+.controller('pndTabsCtrl', function($document, $window, $rootScope, $scope, $element, $timeout,
     Dashboard, ResourcePanel, EventDispatcher, Analytics) {
 
     // TODO: Create service and move some logic there.
@@ -9,6 +9,10 @@ angular.module('Pundit2.Dashboard')
         animation: 'am-fade',
         offsetButton: 40
     };
+
+    var firstTime = true;
+    var dashboardToggleHandler;
+
     $scope.hiddenTabsDropdownTemplate = 'src/ContextualMenu/dropdown.tmpl.html';
 
     // Support animations
@@ -53,6 +57,8 @@ angular.module('Pundit2.Dashboard')
             $scope.panes[p].isVisible = true;
         }
 
+        init();
+
     }, true);
 
     var panesLen = 0,
@@ -83,6 +89,10 @@ angular.module('Pundit2.Dashboard')
             return el.width();
         },
         function(newWidth) {
+            if (newWidth === 0) {
+                return;
+            }
+
             panesWidth = parseInt(newWidth, 10);
             check();
 
@@ -94,30 +104,31 @@ angular.module('Pundit2.Dashboard')
             }
         });
 
-    // check if panels are renderer.
-    // Init() is executed only when <li> tabs are changed in DOM
-    var check = function() {
-        //$scope.hiddenTabs = [];
-        if (panesLen > 0 && panesWidth > 0) {
-            if (panesJustChanged) {
-                panesJustChanged = false;
-                init();
-            }
-            setVisibility(panesWidth);
-        }
-    };
-
     // <li> tabs initialization
     // for each <li> tab get his width and store it
     var init = function() {
         //var tabsElement = angular.element($element).find('ul.pnd-tab-header>li');
         var tabsElement = angular.element($element).children('ul.pnd-tab-header').children('li:not(.pull-right)');
+
         for (var i = 0; i < tabsElement.length; i++) {
             var w = parseInt(angular.element(tabsElement[i]).css('width'), 10);
             $scope.panes[i].width = w;
             //$scope.panes[i].isVisible = true;
         }
     };
+
+    var dashboardToggleHandler = EventDispatcher.addListener('Dashboard.toggle', function(e) {
+        if (firstTime) {
+            if (e.args) {
+                $timeout(function() {
+                    $rootScope.$$phase || $rootScope.$digest();
+                }, 0.1);
+            }
+            firstTime = false;
+        } else {
+            EventDispatcher.removeListener(dashboardToggleHandler);
+        }
+    });
 
     // for each tabs, check if it fit in the <ul> width
     // if fit, set its visibility to true and show in DOM
@@ -171,7 +182,19 @@ angular.module('Pundit2.Dashboard')
                 $scope.hiddenTabs.push(t);
             }
         }
+    };
 
+    // check if panels are renderer.
+    // Init() is executed only when <li> tabs are changed in DOM
+    var check = function() {
+        //$scope.hiddenTabs = [];
+        if (panesLen > 0 && panesWidth > 0) {
+            if (panesJustChanged) {
+                panesJustChanged = false;
+                init();
+            }
+            setVisibility(panesWidth);
+        }
     };
 
     // check it a tab is hidden or not
