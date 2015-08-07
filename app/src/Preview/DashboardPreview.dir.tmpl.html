@@ -4,8 +4,8 @@
 
     <div class="pnd-panel-tab-content-header pnd-panel-tab-content-header-border" ng-if="!useInKorbo || (useInKorbo && !isItemEmpty())">
         <span ng-if="!isItemEmpty()" class="{{getItemIcon()}}"></span>
-        <span class="pnd-dashboard-preview-panel-heading" ng-if="isItemEmpty() && !useInKorbo">{{getWelcomeHeaderMessage()}}</span>
-        <span class="pnd-dashboard-preview-panel-label" ng-if="!isItemEmpty()">{{itemDashboardPreview.label}}</span>
+        <h1 class="pnd-dashboard-preview-panel-heading" ng-if="isItemEmpty() && !useInKorbo">{{getWelcomeHeaderMessage()}}</h1>
+        <h1 class="pnd-dashboard-preview-panel-label" ng-if="!isItemEmpty()">{{itemDashboardPreview.label}}</h1>
     </div> <!-- end pnd-panel-tab-content-header -->
 
     <!-- CONTENT -->
