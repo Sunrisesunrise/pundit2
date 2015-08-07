@@ -14,7 +14,7 @@
     "128": "icons/icon128.png"
   },
   "browser_action": {
-    "default_icon": "icons/icon19.png",
+    "default_icon": "icons/pundit-icon-19.png",
     "default_title": "Launch Pundit"
   },
   "permissions": [

@@ -465,8 +465,12 @@ angular.module('Pundit2.ContextualMenu')
     };
 
     EventDispatcher.addListener('Client.hide', function(/*e*/) {
-        contextualMenu.hide();
-        state.mockMenu.hide();
+        if (contextualMenu !== null) {
+            contextualMenu.hide();
+        }
+        if (state.mockMenu !== null) {
+            state.mockMenu.hide();
+        }
     });
 
     contextualMenu.log('service run');

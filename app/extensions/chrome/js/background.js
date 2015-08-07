@@ -44,11 +44,13 @@ var injectScripts = function(tab) {
 };
 
 var showOnIcon = function() {
-    chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/close-icon19.png")});
+    //chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/close-icon19.png")});
+    chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/pundit-icon-19-close.png")});
 };
 
 var showOffIcon = function() {
-    chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/icon19.png")});
+    //chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/icon19.png")});
+    chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/pundit-icon-19.png")});
 };
 
 var switchOn = function(tab) {
