@@ -356,7 +356,7 @@ describe("Client interaction when user is logged in", function() {
         });
     });
 
-    iit("should open resource panel on subject", function(){
+    it("should open resource panel on subject", function(){
 
         p.driver.manage().window().setSize(1200, 960);
 
