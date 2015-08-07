@@ -631,10 +631,11 @@ angular.module('Pundit2.AnnotationSidebar')
     // Updates the list of filters and annotation positions when the consolidation is completed
     var initializeFiltersAndPositions = function(annotations) {
         var isBroken, isBrokenYet;
-        var annotationsByLabelTemp = {};
         var dashboardHeight;
 
         resetElementsList();
+
+        annotationsByDate = [];
 
         elementsList.broken['uri:broken'] = {
             annotationsList: {}
@@ -802,7 +803,6 @@ angular.module('Pundit2.AnnotationSidebar')
         BrokenHelper.sendQueques();
 
         elementsList.broken['uri:broken'].annotationsList = removeBroken(angular.extend({}, state.allAnnotations), tempBrokenList);;
-        annotationsByLabel = sortByKey(annotationsByLabel, 'label');
         annotationsByDate = sortByKey(annotationsByDate, 'created');
     };
 
