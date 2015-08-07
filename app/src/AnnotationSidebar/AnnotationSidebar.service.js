@@ -806,23 +806,49 @@ angular.module('Pundit2.AnnotationSidebar')
         annotationsByDate = sortByKey(annotationsByDate, 'created');
     };
 
+    var findBackward = function(index, annotations) {
+        if (index === 0) {
+            return index;
+        }
+        var val = annotations[index].created;
+        for (var i = index - 1; i > 0; i--) {
+            if (annotations[i].created != val) {
+                return i + 1;
+            }
+        }
+        return 0;
+    };
+
+    var findForward = function(index, annotations) {
+        if (index === annotations.length - 1) {
+            return index;
+        }
+        var val = annotations[index].created;
+        for (var i = index + 1; i < annotations.length; i++) {
+            if (annotations[i].created != val) {
+                return i - 1;
+            }
+        }
+        return annotations.length;
+    };
+
     var findDateFromIndex = function(val, start, end, annotations) {
         var index = (start + end) / 2;
         index = parseInt(index, 10);
 
         if (start === end) {
-            return start;
+            return findBackward(start, annotations);
         }
         if (start === end - 1) {
-            if (annotations[start].created > val) {
+            if (annotations[start].created < val) {
                 return end;
             } else {
-                return start;
+                return findBackward(start, annotations);
             }
         }
 
         if (annotations[index].created === val) {
-            return index;
+            return findBackward(index, annotations);
         } else if (annotations[index].created < val) {
             start = index;
         } else {
@@ -838,18 +864,18 @@ angular.module('Pundit2.AnnotationSidebar')
         index = parseInt(index, 10);
 
         if (start == end) {
-            return start;
+            return findForward(start, annotations);
         }
         if (start == end - 1) {
             if (annotations[start].created < val) {
-                return end;
+                return findForward(end, annotations);
             } else {
                 return start;
             }
         }
 
         if (annotations[index].created === val) {
-            return index;
+            return findForward(index, annotations);
         } else if (annotations[index].created < val) {
             start = index;
         } else {
@@ -858,6 +884,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         return findDateToIndex(val, start, end, annotations);
     };
+
 
     var filterAnnotationsByDate = function(dateFrom, dateTo) {
         var results = {};
@@ -892,8 +919,12 @@ angular.module('Pundit2.AnnotationSidebar')
             return results;
         }
 
-        annStartIndex = findDateFromIndex(dateFrom, 0, annotationsByDate.length, annotationsByDate);
-        annEndIndex = findDateToIndex(dateTo, annStartIndex, annotationsByDate.length, annotationsByDate);
+        annStartIndex = findDateFromIndex(dateFrom, 0, annotationsByDate.length - 1, annotationsByDate);
+        annEndIndex = findDateToIndex(dateTo, annStartIndex, annotationsByDate.length - 1, annotationsByDate);
+
+        console.log(annStartIndex);
+        console.log(annEndIndex);
+        console.log(annotationsByDate);
 
         for (var i = annStartIndex; i <= annEndIndex; i++) {
             if (typeof annotationsByDate[i] !== 'undefined') {
