@@ -27,23 +27,6 @@ angular.module('Pundit2.Core')
         EventDispatcher.sendEvent('Pundit.loading', currentState);
     };
 
-    var dispatchDocumentEvent = function(loading) {
-        var evt;
-        if (document.createEventObject) {
-            // dispatch for IE
-            evt = document.createEventObject();
-            evt.details = loading;
-            document.fireEvent('Pundit2.loading', evt)
-        }
-        else {
-            // dispatch for firefox + others
-            evt = document.createEvent("HTMLEvents");
-            evt.initEvent('Pundit2.loading', true, true); // event type,bubbling,cancelable
-            evt.details = loading;
-            return !document.dispatchEvent(evt);
-        }
-    };
-
     var setLoading = function(eventName, currentState)  {
         var loadingState = [];
 
@@ -54,7 +37,7 @@ angular.module('Pundit2.Core')
         if (currentState) {
             state.Pundit.loading = true;
             updateLoading(true);
-            dispatchDocumentEvent(true);
+            EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.loading', data: true});
             loadingCount[eventName] ++;
         } else {
             loadingCount[eventName] --;
@@ -67,7 +50,7 @@ angular.module('Pundit2.Core')
             if (loadingState.length === 0) {
                 state.Pundit.loading = false;
                 updateLoading(false);
-                dispatchDocumentEvent(false);
+                EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.loading', data: false});
                 loadingCount[eventName] = 0;
             }
         }

@@ -734,7 +734,27 @@ angular.module('Pundit2.Client')
         var keeSelector = new Korbo2Selector(config);
         keeSelector.push(config);
         delete keeSelector;
+    };
 
+    EventDispatcher.addListener('Client.dispatchDocumentEvent', function(data) {
+        dispatchDocumentEvent(data.args.event, data.args.data);
+    });
+
+    var dispatchDocumentEvent = function(eventName, details) {
+        var evt;
+        if (document.createEventObject) {
+            // dispatch for IE
+            evt = document.createEventObject();
+            evt.details = details;
+            document.fireEvent(eventName, evt)
+        }
+        else {
+            // dispatch for firefox + others
+            evt = document.createEvent("HTMLEvents");
+            evt.initEvent(eventName, true, true); // event type,bubbling,cancelable
+            evt.details = details;
+            return !document.dispatchEvent(evt);
+        }
     };
 
     var hideClient = function() {
@@ -753,6 +773,9 @@ angular.module('Pundit2.Client')
     };
 
     var requestAnnotationsNumber = function() {
+        if (Status.getLoading()) {
+
+        }
         EventDispatcher.sendEvent('Client.requestAnnotationsNumber');
     };
 

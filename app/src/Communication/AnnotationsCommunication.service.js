@@ -133,23 +133,6 @@ angular.module('Pundit2.Communication')
         });
     };
 
-    var dispatchDocumentEvent = function(anns) {
-        var evt;
-        if (document.createEventObject) {
-            // dispatch for IE
-            evt = document.createEventObject();
-            evt.details = anns;
-            document.fireEvent('Pundit2.updateAnnotationsNumber', evt)
-        }
-        else {
-            // dispatch for firefox + others
-            evt = document.createEvent("HTMLEvents");
-            evt.initEvent('Pundit2.updateAnnotationsNumber', true, true); // event type,bubbling,cancelable
-            evt.details = anns;
-            return !document.dispatchEvent(evt);
-        }
-    };
-
     // get all annotations of the page from the server
     // add annotation inside annotationExchange
     // add items to page items inside itemsExchange
@@ -176,7 +159,7 @@ angular.module('Pundit2.Communication')
 
         annPromise.then(function(ids) {
             annotationsCommunication.log('Found ' + ids.length + ' annotations on the current page.');
-            dispatchDocumentEvent(ids.length);
+            EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.updateAnnotationsNumber', data: ids.length});
             if (ids.length === 0) {
                 // TODO: use wipe (not consolidateAll) and specific event in other component (like sidebar)
                 Consolidation.consolidateAll();
@@ -411,7 +394,7 @@ angular.module('Pundit2.Communication')
                         EventDispatcher.sendEvent('AnnotationsCommunication.saveAnnotation', data.AnnotationID);
                     }
 
-                    dispatchDocumentEvent(AnnotationsExchange.getAnnotations().length);
+                    EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.updateAnnotationsNumber', data: AnnotationsExchange.getAnnotations().length});
 
                     // TODO move inside notebook then?
                     setLoading(false);
@@ -511,7 +494,7 @@ angular.module('Pundit2.Communication')
     });
 
     EventDispatcher.addListener('Client.requestAnnotationsNumber', function(e) {
-        dispatchDocumentEvent(AnnotationsExchange.getAnnotations().length);
+        EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.updateAnnotationsNumber', data: AnnotationsExchange.getAnnotations().length});
     });
 
     return annotationsCommunication;

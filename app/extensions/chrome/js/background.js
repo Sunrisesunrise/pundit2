@@ -16,9 +16,8 @@ var injectScripts = function(tab) {
 
     state.injections[tab.id] = true;
 
-    // On Off handler
     chrome.tabs.executeScript(tab.id, {
-        file: 'inject/on_off_handler.js',
+        file: 'inject/content_script.js',
         runAt: "document_start"
     });
 
