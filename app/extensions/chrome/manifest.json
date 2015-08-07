@@ -30,7 +30,8 @@
   //   }
   // ],
   "web_accessible_resources": [
-    "inject/css/fonts/*.*"
+    "inject/css/fonts/*.*",
+    "inject/*.*"
     //"inject/css/fonts/pundit-font.eof",
     //"inject/css/fonts/pundit-font.svg",
     //"inject/css/fonts/pundit-font.ttf",

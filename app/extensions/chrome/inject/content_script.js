@@ -9,6 +9,9 @@ var switchPundit = function(on) {
     if (on) {
         if (document.getElementById('pundit2') !== null) {
             angular.element(document).trigger('Pundit2.show');
+            angular.element(document).trigger('Pundit2.requestAnnotationsNumber');
+            angular.element('span[text-fragment-bit]').addClass('pnd-cons');
+            angular.element('span.pnd-text-fragment-icon').removeClass('pnd-text-fragment-icon-hidden');
             return;
         }
         // Turn on.
@@ -21,6 +24,7 @@ var switchPundit = function(on) {
         div.setAttribute('id', "pundit2");
         b.appendChild(div);
 
+        chrome.runtime.sendMessage({action: "setLoading", loading: true});
         // Boot angular app.
         angular.bootstrap(div, ['Pundit2']);
     }
@@ -29,6 +33,8 @@ var switchPundit = function(on) {
         if (typeof angular !== 'undefined') {
             //angular.element('div[data-ng-app="Pundit2"]').remove();
             angular.element(document).trigger('Pundit2.hide');
+            angular.element('span[text-fragment-bit]').removeClass('pnd-cons');
+            angular.element('span.pnd-text-fragment-icon').addClass('pnd-text-fragment-icon-hidden');
         }
         //bodyStyle[cssTransform] = 'translateY(' - 30 + ')';
     }

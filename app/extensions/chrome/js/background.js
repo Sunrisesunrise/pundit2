@@ -16,6 +16,11 @@ var injectScripts = function(tab) {
 
     state.injections[tab.id] = true;
 
+    chrome.tabs.insertCSS(tab.id, {
+        file: 'inject/pundit2-ce.css',
+        runAt: "document_start"
+    });
+
     chrome.tabs.executeScript(tab.id, {
         file: 'inject/content_script.js',
         runAt: "document_start"
@@ -43,14 +48,12 @@ var injectScripts = function(tab) {
 
 };
 
-var showOnIcon = function() {
-    //chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/close-icon19.png")});
-    chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/pundit-icon-19-close.png")});
+var showOnIcon = function(tabId) {
+    chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/pundit-icon-19-close.png"), tabId: tabId});
 };
 
-var showOffIcon = function() {
-    //chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/icon19.png")});
-    chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/pundit-icon-19.png")});
+var showOffIcon = function(tabId) {
+    chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/pundit-icon-19.png"), tabId: tabId});
 };
 
 var switchOn = function(tab) {
@@ -59,8 +62,16 @@ var switchOn = function(tab) {
         chrome.tabs.sendMessage(tab.id, {action: 'switchOn'});
         state.tabs[tab.id] = true;
         state.tabsOnOff[tab.id] = true;
-        showOnIcon();
+        showOnIcon(tab.id);
     }, 350);
+};
+
+var switchOff = function(tab) {
+    chrome.tabs.sendMessage(tab.id, {action: 'switchOff'});
+    chrome.browserAction.setBadgeText({text: "", tabId: tab.id});
+    state.tabs[tab.id] = false;
+    state.tabsOnOff[tab.id] = false;
+    showOffIcon(tab.id);
 };
 
 var switchPundit = function(tab) {
@@ -69,36 +80,36 @@ var switchPundit = function(tab) {
         switchOn(tab);
     }
     else {
-        chrome.tabs.sendMessage(tab.id, {action: 'switchOff'});
-        state.tabs[tab.id] = false;
-        state.tabsOnOff[tab.id] = false;
-        showOffIcon();
+        switchOff(tab);
     }
 };
 
 var loadingInterval;
-var setLoading = function(loading) {
+var isLoading = function() {
+  return typeof loadingIconInterval !== 'undefined';
+};
+var setLoading = function(loading, tabId) {
     //window.clearInterval(loadingIconInterval);
     if (!loading) {
         window.clearInterval(loadingIconInterval);
         loadingIconInterval = undefined;
-        chrome.browserAction.setBadgeText({text: ""});
+        chrome.browserAction.setBadgeText({text: "", tabId: tabId});
         return;
     }
-    if (loading && typeof loadingIconInterval !== 'undefined') {
+    if (loading && isLoading()) {
         return;
     }
     var iconIndex = 0;
     loadingIconInterval = window.setInterval(function(){
         switch (iconIndex) {
             case 0:
-                chrome.browserAction.setBadgeText({text: ".  "});
+                chrome.browserAction.setBadgeText({text: ".  ", tabId: tabId});
                 break;
             case 1:
-                chrome.browserAction.setBadgeText({text: ".. "});
+                chrome.browserAction.setBadgeText({text: ".. ", tabId: tabId});
                 break;
             case 2:
-                chrome.browserAction.setBadgeText({text: "..."});
+                chrome.browserAction.setBadgeText({text: "...", tabId: tabId});
                 break;
         }
         iconIndex ++;
@@ -124,27 +135,48 @@ chrome.tabs.onUpdated.addListener(function(tabId , info, tab) {
 });
 
 chrome.tabs.onActivated.addListener(function(activeInfo) {
+    chrome.browserAction.setBadgeText({text: "", tabId: activeInfo.tabId});
     if (state.tabsOnOff[activeInfo.tabId]) {
         chrome.tabs.sendMessage(activeInfo.tabId, {action: 'requestAnnotationsNumber'});
-        showOnIcon();
+        showOnIcon(activeInfo.tabId);
     }
     else {
-        chrome.browserAction.setBadgeText({text: "" });
-        showOffIcon();
+        showOffIcon(activeInfo.tabId);
     }
 });
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    var doStuff;
+
     switch (request.action) {
         case 'updateAnnotationsNumber':
-            chrome.browserAction.setBadgeText({text: "" + request.number});
+            if (isLoading()) {
+                break;
+            }
+            doStuff = function() {
+                chrome.browserAction.setBadgeText({text: "" + request.number, tabId: sender.tab.id});
+            };
             break;
 
         case 'setLoading':
-            setLoading(request.loading);
-            if (!request.loading) {
-                sendResponse({action: 'updateAnnotationsNumber', request: request});
-            }
+            doStuff = function() {
+                setLoading(request.loading, sender.tab.id);
+                if (!request.loading) {
+                    chrome.tabs.sendMessage(sender.tab.id, {action: 'requestAnnotationsNumber'});
+                }
+            };
             break;
     }
+
+    chrome.tabs.query({active: true}, function(tabs){
+        if (typeof doStuff === 'undefined') {
+            return;
+        }
+        for (var i in tabs) {
+            if (sender.tab.id === tabs[i].id && sender.tab.windowId === tabs[i].windowId) {
+                doStuff();
+                break;
+            }
+        }
+    });
 });
