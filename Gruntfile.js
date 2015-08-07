@@ -152,7 +152,7 @@ module.exports = function(grunt) {
         // WARNING! Declare every time the angular.module('SomethingApp') and then
         // .controller(), without chaining .controller().controller() or it will
         // screw up... At least with grunt-ngmin 0.0.3
-        ngmin: {
+        ngAnnotate: {
             dist: {
                 files: [{
                     expand: true,
@@ -649,7 +649,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', 'Builds a production-ready version of the application',
         ['clean:dist', 'copy:fonts', 'html2js:main', 'html2js:korboee', 'examples', 'useminPrepare', 'less:dist', 'copy:css', 'imagemin',
-            'htmlmin', 'concat',  'copy:dist', 'ngmin', 'cssmin', 'uglify',
+            'htmlmin', 'concat',  'copy:dist', 'ngAnnotate', 'cssmin', 'uglify',
             'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet']);
 
     grunt.registerTask('dev', 'Live dev workflow: watches app files and reloads the browser automatically',

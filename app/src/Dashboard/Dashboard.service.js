@@ -303,6 +303,8 @@ angular.module('Pundit2.Dashboard')
                 panels[p].setTabContentHeight();
             }
         }
+
+        EventDispatcher.sendEvent('Dashboard.toggle', state.isDashboardVisible);
     };
 
     dashboard.isDashboardVisible = function() {

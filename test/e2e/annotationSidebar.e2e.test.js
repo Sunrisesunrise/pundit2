@@ -897,7 +897,7 @@ describe("AnnotationSidebar interaction", function() {
         // p.findElement(protractor.By.css('.pnd-toolbar-annotations-button')).click();
 
         toolbarContainer.getSize().then(function(size){
-            toolbarHeight = size.height +1;
+            toolbarHeight = size.height;
             sidebarContainer.getCssValue('margin-top').then(function(sidebarTop){
                 expect(toolbarHeight + "px").toEqual(sidebarTop);
             });

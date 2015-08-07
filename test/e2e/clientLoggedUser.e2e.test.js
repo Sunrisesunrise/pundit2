@@ -258,7 +258,7 @@ describe("Client interaction when user is logged in", function() {
             expect(a.length).toBe(3);
             expect(a[0].getText()).toBe('Use as subject');
             expect(a[1].getText()).toBe('Use as object');
-            expect(a[2].getText()).toBe('Add to my items');
+            expect(a[2].getText()).toBe('Add to My Items');
         });
     });
 
@@ -494,7 +494,7 @@ describe("Client interaction when user is logged in", function() {
         // open my notebooks tab
         p.findElements(protractor.By.css("dashboard-panel[paneltitle=lists] .pnd-tab-header > li > a")).then(function(tabs) {
             expect(tabs.length).toBeGreaterThan(4);
-            expect(tabs[4].getText()).toBe("My notebooks");
+            expect(tabs[4].getText()).toBe("Notebooks");
             tabs[4].click();
         });
         // move on notebook item
@@ -535,7 +535,7 @@ describe("Client interaction when user is logged in", function() {
         // open my notebooks tab
         p.findElements(protractor.By.css("dashboard-panel[paneltitle=lists] .pnd-tab-header > li > a")).then(function(tabs) {
             tabs[4].click();
-            expect(tabs[4].getText()).toBe("My notebooks");
+            expect(tabs[4].getText()).toBe("Notebooks");
         });
 
         // click on create new notebook

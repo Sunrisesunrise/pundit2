@@ -88,6 +88,11 @@ angular.module('Pundit2.Core')
         state.AnnotationSidebar.isFiltersContentExpanded = e.args;
     });
 
+    // Dashboard
+    EventDispatcher.addListener('Dashboard.toggle', function(e) {
+        state.Dashboard.isVisible = e.args;
+    });
+
     // Template mode
     EventDispatcher.addListener('Pundit.templateMode', function(e) {
         state.Pundit.templateMode = e.args;

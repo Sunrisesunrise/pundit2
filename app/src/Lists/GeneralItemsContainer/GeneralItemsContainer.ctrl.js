@@ -300,16 +300,15 @@ angular.module('Pundit2.GeneralItemsContainer')
         confirmModal.$promise.then(confirmModal.show);
     };
    */
+    $scope.isSelected = function(item) {
+        if ($scope.itemSelected !== null && $scope.itemSelected.uri === item.uri) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     if(!$scope.isMyNotebooks) {
-        $scope.isSelected = function (item) {
-            if ($scope.itemSelected !== null && $scope.itemSelected.uri === item.uri) {
-                return true;
-            } else {
-                return false;
-            }
-        };
-
         $scope.select = function (item) {
             Preview.setItemDashboardSticky(item);
             EventDispatcher.sendEvent('Pundit.changeSelection');
@@ -356,11 +355,17 @@ angular.module('Pundit2.GeneralItemsContainer')
 
             resetContainer();
         };
-
-        EventDispatcher.addListener('Pundit.changeSelection', function () {
-            resetContainer();
-        });
+    } else {
+        $scope.select = function (item) {
+            Preview.setItemDashboardSticky(item);
+            EventDispatcher.sendEvent('Pundit.changeSelection');
+            $scope.itemSelected = item;
+        };
     }
+
+    EventDispatcher.addListener('Pundit.changeSelection', function() {
+        resetContainer();
+    });
 
 
     //TODO: only on myitems
@@ -378,7 +383,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         );
         $scope.dropdownOrdering.push(
             {
-                text: 'Add web page to My items',
+                text: 'Add web page to My Items',
                 click: function() {
                     //var item = PageHandler.createItemFromPage();
                     if (MyPundit.isUserLogged() && !isCurrentPageInMyItems()) {

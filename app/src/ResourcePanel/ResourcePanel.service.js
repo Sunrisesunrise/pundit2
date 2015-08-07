@@ -545,7 +545,7 @@ angular.module('Pundit2.ResourcePanel')
 
             if (resourcePanel.options.myItemsEnabled) {
                 var myItemsForTabs = {
-                    title: 'My items',
+                    title: 'My Items',
                     items: myItems,
                     module: 'Pundit2',
                     isStarted: true,
