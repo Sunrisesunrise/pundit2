@@ -48,6 +48,17 @@ var injectScripts = function(tab) {
 
 };
 
+var defaultBadgeBackgroundColor = [75, 112, 165, 255]; //#1E2E43
+var loadinBadgeBackgroundColor = [255, 191, 0, 128]; //#FFBF00
+
+var setBadgeText = function(tabId, text, backgroundColor) {
+    if (typeof backgroundColor === 'undefined') {
+        backgroundColor = defaultBadgeBackgroundColor;
+    }
+    chrome.browserAction.setBadgeBackgroundColor({tabId: tabId, color: backgroundColor});
+    chrome.browserAction.setBadgeText({tabId: tabId, text: text});
+};
+
 var showOnIcon = function(tabId) {
     chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/pundit-icon-19-close.png"), tabId: tabId});
 };
@@ -68,7 +79,8 @@ var switchOn = function(tab) {
 
 var switchOff = function(tab) {
     chrome.tabs.sendMessage(tab.id, {action: 'switchOff'});
-    chrome.browserAction.setBadgeText({text: "", tabId: tab.id});
+    //chrome.browserAction.setBadgeText({text: "", tabId: tab.id});
+    setBadgeText(tab.id, '');
     state.tabs[tab.id] = false;
     state.tabsOnOff[tab.id] = false;
     showOffIcon(tab.id);
@@ -93,7 +105,8 @@ var setLoading = function(loading, tabId) {
     if (!loading) {
         window.clearInterval(loadingIconInterval);
         loadingIconInterval = undefined;
-        chrome.browserAction.setBadgeText({text: "", tabId: tabId});
+        //chrome.browserAction.setBadgeText({text: "", tabId: tabId});
+        setBadgeText(tabId, '');
         return;
     }
     if (loading && isLoading()) {
@@ -101,17 +114,22 @@ var setLoading = function(loading, tabId) {
     }
     var iconIndex = 0;
     loadingIconInterval = window.setInterval(function(){
+        var text = '';
         switch (iconIndex) {
             case 0:
-                chrome.browserAction.setBadgeText({text: ".  ", tabId: tabId});
+                //chrome.browserAction.setBadgeText({text: ".  ", tabId: tabId});
+                text = ".  ";
                 break;
             case 1:
-                chrome.browserAction.setBadgeText({text: ".. ", tabId: tabId});
+                //chrome.browserAction.setBadgeText({text: ".. ", tabId: tabId});
+                text = ".. ";
                 break;
             case 2:
-                chrome.browserAction.setBadgeText({text: "...", tabId: tabId});
+                //chrome.browserAction.setBadgeText({text: "...", tabId: tabId});
+                text = "...";
                 break;
         }
+        setBadgeText(tabId, text, loadinBadgeBackgroundColor);
         iconIndex ++;
         iconIndex = iconIndex % 3;
     }, 250);
@@ -135,7 +153,8 @@ chrome.tabs.onUpdated.addListener(function(tabId , info, tab) {
 });
 
 chrome.tabs.onActivated.addListener(function(activeInfo) {
-    chrome.browserAction.setBadgeText({text: "", tabId: activeInfo.tabId});
+    //chrome.browserAction.setBadgeText({text: "", tabId: activeInfo.tabId});
+    setBadgeText(activeInfo.tabId, '');
     if (state.tabsOnOff[activeInfo.tabId]) {
         chrome.tabs.sendMessage(activeInfo.tabId, {action: 'requestAnnotationsNumber'});
         showOnIcon(activeInfo.tabId);
@@ -154,7 +173,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 break;
             }
             doStuff = function() {
-                chrome.browserAction.setBadgeText({text: "" + request.number, tabId: sender.tab.id});
+                //chrome.browserAction.setBadgeText({text: "" + request.number, tabId: sender.tab.id});
+                setBadgeText(sender.tab.id, "" + request.number);
             };
             break;
 
