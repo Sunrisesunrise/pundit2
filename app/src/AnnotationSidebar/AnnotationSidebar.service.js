@@ -648,6 +648,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
         angular.forEach(annotations, function(annotation) {
 
+            // annotation.visible = true;
+
             var uriList = {};
 
             annotation.firstConsolidableItem = findFirstConsolidateItem(annotation);
@@ -1084,6 +1086,12 @@ angular.module('Pundit2.AnnotationSidebar')
         return results;
     };
 
+    annotationSidebar.resetVisibility = function() {
+        angular.forEach(state.allAnnotations, function(annotation) {
+            annotation.visible = true;
+        });
+    };
+
     // Expands or collapses the sidebar
     annotationSidebar.toggle = function() {
         state.isSidebarExpanded = !state.isSidebarExpanded;
@@ -1154,6 +1162,14 @@ angular.module('Pundit2.AnnotationSidebar')
         var currentFilters = typeof filers !== 'undefined' ? filters : annotationSidebar.filters;
 
         state.filteredAnnotations = getFilteredAnnotations(currentFilters, elementsList);
+
+        // angular.forEach(state.allAnnotations, function(annotation, key) {
+        //     if (typeof state.filteredAnnotations[key] === 'undefined') {
+        //         annotation.visible = false;
+        //     } else {
+        //         annotation.visible = true;
+        //     }
+        // });
 
         setAnnotationInPage(state.filteredAnnotations);
         setAnnotationsPosition();

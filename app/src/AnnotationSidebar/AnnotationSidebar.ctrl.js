@@ -225,6 +225,7 @@ angular.module('Pundit2.AnnotationSidebar')
     }, function(currentAnnotations) {
         $scope.allAnnotations = currentAnnotations;
         $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
+
         if (AnnotationSidebar.needToFilter()) {
             $scope.annotations = AnnotationSidebar.getAllAnnotationsFiltered();
             $scope.annotationsLength = Object.keys($scope.annotations).length;
@@ -256,11 +257,12 @@ angular.module('Pundit2.AnnotationSidebar')
         if (AnnotationSidebar.filters.freeText.expression === '') {
             $scope.freeText = '';
         }
+        // var filteredAnnotations = AnnotationSidebar.getAllAnnotationsFiltered();
+        // $scope.annotationsLength = Object.keys(filteredAnnotations).length;
         $scope.annotations = AnnotationSidebar.getAllAnnotationsFiltered();
         $scope.annotationsLength = Object.keys($scope.annotations).length;
     });
 
-    // TODO Use EventDispatcher
     // Watch dashboard height for top of sidebar
     $scope.$watch(function() {
         return Dashboard.getContainerHeight();
