@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.controller('AnnotationSidebarCtrl', function($scope, $filter, $timeout, $document, $window,
+.controller('AnnotationSidebarCtrl', function($scope, $filter, $document, $window,
     EventDispatcher, AnnotationSidebar, Dashboard, Config, Analytics) {
 
     var bodyClasses = AnnotationSidebar.options.bodyExpandedClass + ' ' + AnnotationSidebar.options.bodyCollapsedClass;
@@ -105,10 +105,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.updateSearch = function(freeText) {
-        $timeout.cancel(delay);
-        delay = $timeout(function() {
-            AnnotationSidebar.filters.freeText.expression = freeText;
-        }, 1000);
+        AnnotationSidebar.filters.freeText.expression = freeText;
     };
 
     $scope.isFilterLabelShowed = function(currentInputText) {

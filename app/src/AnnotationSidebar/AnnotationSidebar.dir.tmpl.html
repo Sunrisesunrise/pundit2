@@ -61,7 +61,7 @@
                                 class="pnd-icon"
                                 ng-class="setSearchIcon(annotationSidebar.filters.freeText.expression)"
                                 ng-click="freeText = ''; updateSearch(freeText)"></span>
-                            <input class="form-control" ng-model="freeText" ng-change="updateSearch(freeText)" placeholder="Contains">
+                            <input class="form-control" ng-model="freeText" ng-change="updateSearch(freeText)" ng-model-options="{debounce: 1000}" placeholder="Contains">
                         </div>
 
                         <!-- Authors -->
