@@ -229,7 +229,7 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.allAnnotations = currentAnnotations;
         $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
         if (AnnotationSidebar.needToFilter()) {
-            $scope.annotations = AnnotationSidebar.getAllAnnotationsFiltered(AnnotationSidebar.filters);
+            $scope.annotations = AnnotationSidebar.getAllAnnotationsFiltered();
             $scope.annotationsLength = Object.keys($scope.annotations).length;
         } else {
             $scope.annotations = currentAnnotations;
@@ -252,13 +252,16 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     });
 
-    $scope.$watch('annotationSidebar.filters', function(currentFilters) {
+    // Using JSON.strigify to avoid deep watch (, true) on AnnotationSidebar filters 
+    $scope.$watch(function() {
+        return JSON.stringify(AnnotationSidebar.filters);
+    }, function(currentFilters) {
         if (AnnotationSidebar.filters.freeText.expression === '') {
             $scope.freeText = '';
         }
-        $scope.annotations = AnnotationSidebar.getAllAnnotationsFiltered(currentFilters);
+        $scope.annotations = AnnotationSidebar.getAllAnnotationsFiltered();
         $scope.annotationsLength = Object.keys($scope.annotations).length;
-    }, true);
+    });
 
     // TODO Use EventDispatcher
     // Watch dashboard height for top of sidebar

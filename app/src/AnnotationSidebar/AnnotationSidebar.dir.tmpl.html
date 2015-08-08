@@ -331,11 +331,11 @@
             ng-show="isAnnotationsPanelActive()"
             class="pnd-annotation-sidebar-annotations">         
 
-            <div ng-repeat="ann in filtered = (annotations)">
+            <div ng-repeat="ann in filtered = (annotations) track by ann.id">
                 <!-- <annotation-details id="{{ann.id}}"></annotation-details> -->
                 <annotation-details 
-                    id="{{ann.id}}" 
-                    broken="ann.broken"
+                    id="{{::ann.id}}" 
+                    broken="::ann.broken"
                     class="pnd-annotation-details"
                     ng-style="{'top': annotationSidebar.annotationPositionReal[ann.id].top}">
                 </annotation-details>

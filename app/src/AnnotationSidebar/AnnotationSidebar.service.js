@@ -304,7 +304,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
     // Contains the list of elements relating to the annotations on the page
     var elementsList = {
-        annotationsDate: [],
         authors: {},
         notebooks: {},
         predicates: {},
@@ -370,14 +369,10 @@ angular.module('Pundit2.AnnotationSidebar')
     annotationSidebar.annotationPositionReal = {};
 
     // TODO add single filter add to elementsList
-    var resetElementsList = function() {
+    var resetElementsListPartial = function() {
         for (var i in elementsList) {
-            if (angular.isArray(elementsList[i])) {
-                elementsList[i] = [];
-            } else {
-                for (var j in elementsList[i]) {
-                    elementsList[i][j].partial = 0;
-                }
+            for (var j in elementsList[i]) {
+                elementsList[i][j].partial = 0;
             }
         }
     };
@@ -633,7 +628,7 @@ angular.module('Pundit2.AnnotationSidebar')
         var isBroken, isBrokenYet;
         var dashboardHeight;
 
-        resetElementsList();
+        resetElementsListPartial();
 
         annotationsByDate = [];
 
@@ -673,11 +668,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 elementsList.authors[annotation.creator].partial++;
             }
             elementsList.authors[annotation.creator].annotationsList[annotation.id] = annotation;
-
-            // Annotation date
-            if (elementsList.annotationsDate.indexOf(annotation.created) === -1) {
-                elementsList.annotationsDate.push(annotation.created);
-            }
 
             // Annotation notebook
             var notebookId = annotation.isIncludedIn;
@@ -812,7 +802,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         var val = annotations[index].created;
-        
+
         for (i = index - 1; i > 0; i--) {
             if (annotations[i].created != val) {
                 return i + 1;
@@ -828,13 +818,13 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         var val = annotations[index].created;
-        
+
         for (i = index + 1; i < annotations.length; i++) {
             if (annotations[i].created != val) {
                 return i - 1;
             }
         }
-        
+
         return annotations.length - 1;
     };
 
@@ -1014,14 +1004,9 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var updatePartialFiltersCount = function(globalFilters, filteredAnnotations, subFiltersSet) {
-        var exceptionsCheck = ['annotationsDate'];
         var subFiltersSetCopy = {};
 
         angular.forEach(globalFilters, function(filter, key) {
-            if (exceptionsCheck.indexOf(key) !== -1) {
-                return;
-            }
-
             for (var i in filter) {
                 if (!isFilterUriActive(key, i)) {
                     for (var j in subFiltersSet) {
@@ -1166,7 +1151,9 @@ angular.module('Pundit2.AnnotationSidebar')
 
     // Get the object of filtered annotations
     annotationSidebar.getAllAnnotationsFiltered = function(filters) {
-        state.filteredAnnotations = getFilteredAnnotations(filters, elementsList);
+        var currentFilters = typeof filers !== 'undefined' ? filters : annotationSidebar.filters;
+
+        state.filteredAnnotations = getFilteredAnnotations(currentFilters, elementsList);
 
         setAnnotationInPage(state.filteredAnnotations);
         setAnnotationsPosition();
