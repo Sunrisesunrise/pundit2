@@ -377,6 +377,10 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
+    var getDashboardHeight = function() {
+        return Dashboard.isDashboardVisible() ? Dashboard.getContainerHeight() : 0;
+    };
+
     var sortByKey = function(array, key) {
         return array.sort(function(a, b) {
             var x = a[key];
@@ -507,7 +511,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
             } else if (currentItem.isImage()) {
                 // TODO: add icon during the consolidation and get the top of the specific image
-                // console.log("img ? ", currentItem);
                 top = -1;
                 xpathTemp = XpointersHelper.xPointerToXPath(currentItem.uri);
                 imgRef = angular.element(xpathTemp.startNode.firstElementChild);
@@ -540,48 +543,52 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     }
 
-    var setAnnotationsPosition = function(optId, optHeight) {
+    var setAnnotationsPosition = function() {
         var annotations = (annotationSidebar.needToFilter() ? state.filteredAnnotations : state.allAnnotations);
-        var optCheck = false;
         var dashboardHeight;
 
         if (Object.keys(annotations).length === 0) {
             return;
         }
 
-        if (Dashboard.isDashboardVisible()) {
-            dashboardHeight = Dashboard.getContainerHeight();
-        } else {
-            dashboardHeight = 0;
-        }
-
-        if (typeof(optId) !== 'undefined' && typeof(optHeight) === 'number') {
-            optCheck = true;
-        }
-
+        dashboardHeight = getDashboardHeight();
         startPosition = annotationSidebar.options.startTop;
         annotationPosition = [];
 
         angular.forEach(annotations, function(annotation) {
-            setAnnotationPosition(annotation, dashboardHeight, optCheck, optId, optHeight)
+            setAnnotationPosition(annotation, dashboardHeight)
         });
 
         orderAndSetPos();
     };
 
-    var setAnnotationInPage = function(annotations) {
-        var currentItem;
-        TextFragmentAnnotator.hideAll();
+    var setAnnotationPositionAndHighlight = function() {
+        var annotations = (annotationSidebar.needToFilter() ? state.filteredAnnotations : state.allAnnotations);
+        var dashboardHeight;
+
+        if (Object.keys(annotations).length === 0) {
+            return;
+        }
+
+        dashboardHeight = getDashboardHeight();
+        startPosition = annotationSidebar.options.startTop;
+        annotationPosition = [];
+
         angular.forEach(annotations, function(annotation) {
-            for (var itemUri in annotation.items) {
-                if (annotation.predicates.indexOf(itemUri) === -1) {
-                    currentItem = ItemsExchange.getItemByUri(itemUri);
+            setAnnotationPosition(annotation, dashboardHeight);
+
+            // Set annotation in page (text fragment hightlight)
+            for (var i in annotation.items) {
+                currentItem = annotation.items[i];
+                if (currentItem.isProperty() === false) {
                     if (Consolidation.isConsolidated(currentItem)) {
                         TextFragmentAnnotator.showByUri(currentItem.uri);
                     }
                 }
             }
         });
+
+        orderAndSetPos();
     };
 
     var setBrokenInfo = function(annotation) {
@@ -788,7 +795,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
             }
 
-            setAnnotationPosition(annotation, dashboardHeight, false)
+            setAnnotationPosition(annotation, dashboardHeight)
         });
 
         orderAndSetPos();
@@ -1171,8 +1178,7 @@ angular.module('Pundit2.AnnotationSidebar')
         //     }
         // });
 
-        setAnnotationInPage(state.filteredAnnotations);
-        setAnnotationsPosition();
+        setAnnotationPositionAndHighlight();
 
         return state.filteredAnnotations;
     };
@@ -1302,7 +1308,7 @@ angular.module('Pundit2.AnnotationSidebar')
     });
 
     EventDispatcher.addListener('ResizeManager.resize', function() {
-        if (state.isLoading !== false) {
+        if (state.isLoading === false) {
             setAnnotationsPosition();
             annotationSidebar.log('Position annotations on resize');
         }
