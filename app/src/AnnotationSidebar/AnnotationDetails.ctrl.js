@@ -1,9 +1,8 @@
 angular.module('Pundit2.AnnotationSidebar')
 
 .controller('AnnotationDetailsCtrl', function($scope, $rootScope, $element, $modal, $timeout, $window,
-    AnnotationSidebar, AnnotationDetails, AnnotationsExchange, AnnotationsCommunication, Config,
-    EventDispatcher, NotebookExchange, ItemsExchange, TripleComposer, Dashboard, ImageAnnotator,
-    TextFragmentAnnotator, TypesHelper, MyPundit, Consolidation, Status, Analytics) {
+    AnnotationSidebar, AnnotationDetails, AnnotationsCommunication, TripleComposer, Dashboard,
+    EventDispatcher, Config, MyPundit, Analytics) {
 
     if (AnnotationDetails.getAnnotationDetails($scope.id) === undefined) {
         AnnotationDetails.addAnnotationReference($scope);
@@ -152,116 +151,12 @@ angular.module('Pundit2.AnnotationSidebar')
         return (AnnotationDetails.isUserToolShowed($scope.annotation.creator) || ($scope.forceEdit && MyPundit.isUserLogged())) && AnnotationSidebar.isAnnotationsPanelActive();
     };
 
-    $scope.mouseoverAllHandler = function() {
-        if ($scope.annotation.broken) {
-            return;
-        }
-
-        var currentItem;
-        var items = $scope.annotation.itemsUriArray;
-        for (var index in items) {
-            currentItem = ItemsExchange.getItemByUri(items[index]);
-            if (typeof(currentItem) !== 'undefined') {
-                if (currentItem.isImageFragment() && Consolidation.isConsolidated(currentItem)) {
-                    ImageAnnotator.svgHighlightByItem(currentItem);
-                }
-            }
-        }
-    };
-
-    $scope.mouseoutAllHandler = function() {
-        if ($scope.annotation.broken) {
-            return;
-        }
-
-        var currentItem;
-        var items = $scope.annotation.itemsUriArray;
-        for (var index in items) {
-            currentItem = ItemsExchange.getItemByUri(items[index]);
-            if (typeof(currentItem) !== 'undefined') {
-                if (currentItem.isImageFragment() && Consolidation.isConsolidated(currentItem)) {
-                    ImageAnnotator.svgClearHighlightByItem(currentItem);
-                }
-            }
-        }
-    };
-
     $scope.mouseoverHandler = function() {
-        if ($scope.annotation.broken) {
-            return;
-        }
-
-        var currentItem;
-        var items = $scope.annotation.itemsUriArray;
-        for (var index in items) {
-            currentItem = ItemsExchange.getItemByUri(items[index]);
-            if (typeof(currentItem) !== 'undefined') {
-                if (currentItem.isTextFragment()) {
-                    TextFragmentAnnotator.highlightByUri(items[index]);
-                } else if (currentItem.isImageFragment()) {
-                    // ImageAnnotator.svgHighlightByItem(currentItem);
-                } else if (currentItem.isImage()) {
-                    ImageAnnotator.highlightByUri(items[index]);
-                }
-            }
-        }
+        AnnotationDetails.activateTextFragmentHighlight($scope.annotation.broken, currentId, $scope.annotation.itemsUriArray);
     };
 
     $scope.mouseoutHandler = function() {
-        if ($scope.annotation.broken) {
-            return;
-        }
-
-        var currentItem;
-        var items = $scope.annotation.itemsUriArray;
-        for (var index in items) {
-            currentItem = ItemsExchange.getItemByUri(items[index]);
-            if (typeof(currentItem) !== 'undefined') {
-                if (currentItem.isTextFragment()) {
-                    TextFragmentAnnotator.clearHighlightByUri(items[index]);
-                } else if (currentItem.isImageFragment()) {
-                    // ImageAnnotator.svgClearHighlightByItem(currentItem);
-                } else if (currentItem.isImage()) {
-                    ImageAnnotator.clearHighlightByUri(items[index]);
-                }
-            }
-        }
-    };
-
-    $scope.mouseoverItemHandler = function(itemUri) {
-        if ($scope.annotation.broken) {
-            return;
-        }
-
-        var currentItem = ItemsExchange.getItemByUri(itemUri);
-        if (typeof(currentItem) !== 'undefined') {
-            if (currentItem.isTextFragment()) {
-                TextFragmentAnnotator.highlightByUri(itemUri);
-            } else if (currentItem.isImageFragment() && Consolidation.isConsolidated(currentItem)) {
-                // TODO really temp trick!!
-                ImageAnnotator.svgClearHighlightByItem(currentItem);
-                ImageAnnotator.svgHighlightByItem(currentItem);
-            } else if (currentItem.isImage()) {
-                ImageAnnotator.highlightByUri(itemUri);
-            }
-        }
-    };
-
-    $scope.mouseoutItemHandler = function(itemUri) {
-        if ($scope.annotation.broken) {
-            return;
-        }
-
-        var currentItem = ItemsExchange.getItemByUri(itemUri);
-        if (typeof(currentItem) !== 'undefined') {
-            if (currentItem.isTextFragment()) {
-                TextFragmentAnnotator.clearHighlightByUri(itemUri);
-            } else if (currentItem.isImageFragment()) {
-                // ImageAnnotator.svgClearHighlightByItem(currentItem);
-            } else if (currentItem.isImage()) {
-                ImageAnnotator.clearHighlightByUri(itemUri);
-            }
-        }
+        AnnotationDetails.resetTextFragmentHighlight($scope.annotation.broken);
     };
 
     $scope.$watch(function() {
@@ -272,7 +167,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 AnnotationSidebar.setAllPosition(currentId, newHeight);
             }
         }
-    });    
+    });
 
     // TODO find alternative to force digest and avoid watch delay on the height change (?)
     currentElement.bind('DOMSubtreeModified', function() {

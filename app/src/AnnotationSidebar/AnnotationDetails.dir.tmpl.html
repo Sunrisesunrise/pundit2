@@ -1,12 +1,10 @@
 <div 
     class="pnd-annotation-details-wrap pnd-ignore"
-    ng-mouseover="mouseoverAllHandler()"
-    ng-mouseout="mouseoutAllHandler()">
+    ng-mouseover="mouseoverHandler()"
+    ng-mouseout="mouseoutHandler()">
     <div class="pnd-annotation-details-header pnd-annotation-details-top" 
         ng-click="toggleAnnotation()"
-        ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}"
-        ng-mouseover="mouseoverHandler()"
-        ng-mouseout="mouseoutHandler()">
+        ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
         <div class="{{annotation.mainItem.class}}">
                 <div class="pnd-annotation-item-header-text">
                         <span ng-show="annotation.broken" class="pnd-annotation-icon-color">
@@ -30,7 +28,9 @@
         <div class="pnd-annotation-details-content">
 
             <!-- Meta -->
-            <div class="pnd-annotation-details-meta" ng-init="meta = false">
+            <div 
+                class="pnd-annotation-details-meta" 
+                ng-init="meta = false">
                 <div class="pnd-annotation-details-item-header"
                      ng-click="meta = !meta; trackAnalyticsToggleEvent('meta', meta)"
                      ng-class="{'pnd-annotation-details-sub-open': meta}">
@@ -85,9 +85,7 @@
                 <!-- Subject -->
                 <div 
                     class="pnd-annotation-details-subject" 
-                    ng-init="subInfo = false"
-                    ng-mouseover="mouseoverItemHandler(item.subject.uri)"
-                    ng-mouseout="mouseoutItemHandler(item.subject.uri)">
+                    ng-init="subInfo = false">
                         <div 
                             class="pnd-annotation-details-item-header" 
                             ng-click="subInfo = !subInfo; trackAnalyticsToggleEvent('subInfo--subject', subInfo)"
@@ -139,9 +137,7 @@
                 <div ng-repeat="object in item.objects">
                     <div 
                         class="pnd-annotation-details-object"
-                        ng-init="objInfo = false"
-                        ng-mouseover="mouseoverItemHandler(object.uri)"
-                        ng-mouseout="mouseoutItemHandler(object.uri)">
+                        ng-init="objInfo = false">
                             <div 
                                 class="pnd-annotation-details-item-header" 
                                 ng-click="objInfo = !objInfo; trackAnalyticsToggleEvent('subInfo--object', objInfo)"

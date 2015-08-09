@@ -63,7 +63,7 @@ angular.module('Pundit2.AnnotationSidebar')
 .service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document,
     BaseComponent, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, TemplatesExchange,
     Consolidation, ContextualMenu, Dashboard, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
-    NotebookExchange, TypesHelper, Analytics, NameSpace) {
+    ImageAnnotator, NotebookExchange, TypesHelper, Analytics, NameSpace) {
 
     var annotationDetails = new BaseComponent('AnnotationDetails', ANNOTATIONDETAILSDEFAULTS);
 
@@ -76,6 +76,10 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var forceSkip = '';
+
+    var mouseoutHandlerPromise,
+        overActiveId = '',
+        highlightFragments = [];
 
     ContextualMenu.addAction({
         type: [
@@ -125,6 +129,42 @@ angular.module('Pundit2.AnnotationSidebar')
             Analytics.track('buttons', 'click', 'contextualMenu--showAllAnnotationForItem');
         }
     });
+
+    var activateTextFragmentHighlight = function(items) {
+        var currentItem;
+        for (var index in items) {
+            currentItem = ItemsExchange.getItemByUri(items[index]);
+            if (typeof(currentItem) !== 'undefined') {
+                if (currentItem.isTextFragment()) {
+                    TextFragmentAnnotator.highlightByUri(items[index]);
+                } else if (currentItem.isImageFragment()) {
+                    // TODO really temp trick!!
+                    ImageAnnotator.svgClearHighlightByItem(currentItem);
+                    ImageAnnotator.svgHighlightByItem(currentItem);
+                } else if (currentItem.isImage()) {
+                    ImageAnnotator.highlightByUri(items[index]);
+                }
+                highlightFragments.push(items[index]);
+            }
+        }
+    };
+
+    var resetTextFragmentHighlight = function() {
+        var currentItem;
+        for (var index in highlightFragments) {
+            currentItem = ItemsExchange.getItemByUri(highlightFragments[index]);
+            if (typeof(currentItem) !== 'undefined') {
+                if (currentItem.isTextFragment()) {
+                    TextFragmentAnnotator.clearHighlightByUri(highlightFragments[index]);
+                } else if (currentItem.isImageFragment()) {
+                    ImageAnnotator.svgClearHighlightByItem(currentItem);
+                } else if (currentItem.isImage()) {
+                    ImageAnnotator.clearHighlightByUri(highlightFragments[index]);
+                }
+            }
+        }
+        highlightFragments = [];
+    };
 
     var isToBeIgnored = function(node) {
         var annClass = 'pnd-annotation-details-wrap';
@@ -391,6 +431,32 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
             }
         }
+    };
+
+    annotationDetails.activateTextFragmentHighlight = function(broken, annotationId, items) {
+        $timeout.cancel(mouseoutHandlerPromise);
+
+        if (broken || overActiveId === annotationId) {
+            return;
+        }
+
+        resetTextFragmentHighlight();
+        activateTextFragmentHighlight(items);
+        overActiveId = annotationId;
+    };
+
+    annotationDetails.resetTextFragmentHighlight = function(broken) {
+        $timeout.cancel(mouseoutHandlerPromise);
+
+        if (broken || overActiveId === '') {
+            return;
+        }
+
+        mouseoutHandlerPromise = $timeout(function() {
+            resetTextFragmentHighlight();
+            overActiveId = '';
+            $timeout.cancel(mouseoutHandlerPromise);
+        }, 100);
     };
 
     EventDispatcher.addListener('AnnotationSidebar.filteredAnnotationsUpdate', function() {
