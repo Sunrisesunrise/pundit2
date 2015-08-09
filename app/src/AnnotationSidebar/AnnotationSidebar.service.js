@@ -500,10 +500,9 @@ angular.module('Pundit2.AnnotationSidebar')
 
             if (currentItem.isTextFragment()) {
                 top = -1;
-                currentFragment = TextFragmentAnnotator.getFragmentIdByUri(firstValid.uri);
-                fragRef = angular.element('.' + currentFragment);
+                fragRef = TextFragmentAnnotator.getFragmentReferenceByUri(firstValid.uri);
 
-                if (typeof(currentFragment) !== 'undefined' && typeof(fragRef.offset()) !== 'undefined') {
+                if (typeof(fragRef) !== 'undefined' && typeof(fragRef.offset()) !== 'undefined') {
                     top = fragRef.offset().top - toolbarHeight - dashboardHeight;
                     // annotationSidebar.log("curr fr "+currentFragment + " alt "+ angular.element('.'+currentFragment).offset().top );
                 } else {
