@@ -11,7 +11,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     var notebookId,
         currentId = $scope.id,
-        currentElement = angular.element($element).find('.pnd-annotation-details-wrap'),
+        currentElement = $element,
         initialHeight = AnnotationSidebar.options.annotationHeigth,
         currentHeight = initialHeight - 1;
 
