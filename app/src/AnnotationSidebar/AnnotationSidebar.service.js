@@ -565,6 +565,8 @@ angular.module('Pundit2.AnnotationSidebar')
         var annotations = (annotationSidebar.needToFilter() ? state.filteredAnnotations : state.allAnnotations);
         var dashboardHeight;
 
+        TextFragmentAnnotator.hideAll();
+
         if (Object.keys(annotations).length === 0) {
             return;
         }
@@ -1077,6 +1079,7 @@ angular.module('Pundit2.AnnotationSidebar')
             atLeastOneActiveFilter = true;
         }
 
+        // TODO: manage the case with 0 freeText result 
         if (activeFilters['freeText'].expression !== '') {
             atLeastOneActiveFilter = true;
             subFiltersSet['freeText'] = filterAnnotationsByLabel(activeFilters['freeText'].expression, state.allAnnotations);
