@@ -63,7 +63,7 @@ angular.module('Pundit2.AnnotationSidebar')
 .service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document,
     BaseComponent, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, TemplatesExchange,
     Consolidation, ContextualMenu, Dashboard, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
-    TypesHelper, Analytics, NameSpace) {
+    NotebookExchange, TypesHelper, Analytics, NameSpace) {
 
     var annotationDetails = new BaseComponent('AnnotationDetails', ANNOTATIONDETAILSDEFAULTS);
 
@@ -331,6 +331,7 @@ angular.module('Pundit2.AnnotationSidebar')
     annotationDetails.addAnnotationReference = function(scope, force) {
         var currentId = scope.id;
         var isBroken = scope.broken;
+        var notebookName = "Downloading in progress";
         var currentAnnotation;
         var expandedState;
         var template;
@@ -352,6 +353,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     creatorName: currentAnnotation.creatorName,
                     created: currentAnnotation.created,
                     notebookId: currentAnnotation.isIncludedIn,
+                    notebookName: notebookName,
                     scopeReference: scope,
                     mainItem: buildMainItem(currentAnnotation),
                     itemsArray: buildItemsArray(currentAnnotation),
@@ -362,6 +364,16 @@ angular.module('Pundit2.AnnotationSidebar')
                     color: currentColor,
                     hasTemplate: template
                 };
+
+                var cancelWatchNotebookName = $rootScope.$watch(function() {
+                    return NotebookExchange.getNotebookById(currentAnnotation.isIncludedIn);
+                }, function(nb) {
+                    if (typeof(nb) !== 'undefined') {
+                        notebookName = nb.label;
+                        state.annotations[currentId].notebookName = notebookName;
+                        cancelWatchNotebookName();
+                    }
+                });
             } else {
                 state.annotations[currentId].expanded = expandedState;
 
@@ -425,6 +437,14 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
             }, 100);
 
+        }
+    });
+
+    // Watch annotation sidebar expanded or collapsed
+    EventDispatcher.addListener('AnnotationSidebar.toggle', function(e) {
+        var isSidebarExpanded = e.args;
+        if (isSidebarExpanded === false) {
+            annotationDetails.closeAllAnnotationView();
         }
     });
 

@@ -18,9 +18,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
     $scope.moreInfo = AnnotationDetails.options.moreInfo;
-    $scope.notebookName = 'Downloading notebook in progress';
     $scope.notebookLink = Config.askThePundit;
-    $scope.isLoading = false;
 
     if (typeof($scope.annotation) !== 'undefined') {
         if (AnnotationDetails.isUserToolShowed($scope.annotation.creator)) {
@@ -265,29 +263,6 @@ angular.module('Pundit2.AnnotationSidebar')
             }
         }
     };
-
-    var cancelWatchNotebookName = $scope.$watch(function() {
-        return NotebookExchange.getNotebookById(notebookId);
-    }, function(nb) {
-        if (typeof(nb) !== 'undefined') {
-            $scope.notebookName = nb.label;
-            cancelWatchNotebookName();
-        }
-    });
-
-    $scope.$watch(function() {
-        return Status.getLoading();
-    }, function(isLoading) {
-        $scope.isLoading = isLoading;
-    });
-
-    $scope.$watch(function() {
-        return AnnotationSidebar.isAnnotationSidebarExpanded();
-    }, function(newState, oldState) {
-        if (newState !== oldState && !newState) {
-            AnnotationDetails.closeAnnotationView(currentId);
-        }
-    });
 
     $scope.$watch(function() {
         return currentElement.height();
