@@ -302,15 +302,13 @@ angular.module('Pundit2.AnnotationSidebar')
     var isEntitiesActive = annotationSidebar.isEntitesActive = PageItemsContainer.options.active;
 
     // Contains the list of elements relating to the annotations on the page
-    var elementsList = {
+    var annotationsFilters = {
         authors: {},
         notebooks: {},
         predicates: {},
         types: {},
         broken: {}
     };
-
-    annotationSidebar.minHeightRequired = startPosition;
 
     // Contains the values ​​of active filters
     annotationSidebar.filters = {
@@ -357,7 +355,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     if (isEntitiesActive) {
-        elementsList.entities = {};
+        annotationsFilters.entities = {};
         annotationSidebar.filters.entities = {
             filterName: 'entities',
             filterLabel: 'Entities',
@@ -365,11 +363,13 @@ angular.module('Pundit2.AnnotationSidebar')
         };
     }
 
-    // TODO add single filter add to elementsList
-    var resetElementsListPartial = function() {
-        for (var i in elementsList) {
-            for (var j in elementsList[i]) {
-                elementsList[i][j].partial = 0;
+    annotationSidebar.minHeightRequired = startPosition;
+
+    // TODO add single filter add to annotationsFilters
+    var resetAnnotationsFiltersPartial = function() {
+        for (var i in annotationsFilters) {
+            for (var j in annotationsFilters[i]) {
+                annotationsFilters[i][j].partial = 0;
             }
         }
     };
@@ -473,6 +473,7 @@ angular.module('Pundit2.AnnotationSidebar')
             if (optCheck && optId === annotation.id) {
                 annotationHeigth = optHeight;
             }
+            // TODO minor refactoring here
 
             annotation.top = -3;
             annotation.height = annotationHeigth;
@@ -511,6 +512,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 top = -2;
             }
 
+            // TODO minor refactoring here
             annotationHeigth = annotationSidebar.options.annotationHeigth;
             if (optCheck && optId === annotation.id) {
                 annotationHeigth = optHeight;
@@ -591,10 +593,10 @@ angular.module('Pundit2.AnnotationSidebar')
             BrokenHelper.addAnnotation(annotation.id, true);
         }
 
-        // Update elementsList
+        // Update annotationsFilters
         if (isBroken) {
             tempBrokenList[annotation.id] = annotation;
-            // elementsList.broken['uri:broken'].annotationsList[annotation.id] = annotation;
+            // annotationsFilters.broken['uri:broken'].annotationsList[annotation.id] = annotation;
         }
     };
 
@@ -609,13 +611,17 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     // Updates the list of filters and annotation positions when the consolidation is completed
-    var initializeFiltersAndPositions = function(annotations) {
+    var initializeFiltersAndPositions = function() {
+        if (Object.keys(state.allAnnotations).length === 0) {
+            return;
+        }
+
         var isBroken, isBrokenYet;
         var dashboardHeight;
 
-        resetElementsListPartial();
+        resetAnnotationsFiltersPartial();
 
-        elementsList.broken['uri:broken'] = {
+        annotationsFilters.broken['uri:broken'] = {
             annotationsList: {}
         };
         BrokenHelper.resetQueques();
@@ -628,18 +634,15 @@ angular.module('Pundit2.AnnotationSidebar')
 
         startPosition = annotationSidebar.options.startTop;
 
-        angular.forEach(annotations, function(annotation) {
-
-            // annotation.visible = true;
-
+        angular.forEach(state.allAnnotations, function(annotation) {
             var uriList = {};
 
             annotation.firstConsolidableItem = findFirstConsolidateItem(annotation);
             setBrokenInfo(annotation);
 
             // Annotation authors
-            if (typeof(elementsList.authors[annotation.creator]) === 'undefined') {
-                elementsList.authors[annotation.creator] = {
+            if (typeof(annotationsFilters.authors[annotation.creator]) === 'undefined') {
+                annotationsFilters.authors[annotation.creator] = {
                     uri: annotation.creator,
                     label: annotation.creatorName,
                     active: false,
@@ -647,26 +650,26 @@ angular.module('Pundit2.AnnotationSidebar')
                     annotationsList: {}
                 };
             } else {
-                elementsList.authors[annotation.creator].partial++;
+                annotationsFilters.authors[annotation.creator].partial++;
             }
-            elementsList.authors[annotation.creator].annotationsList[annotation.id] = annotation;
+            annotationsFilters.authors[annotation.creator].annotationsList[annotation.id] = annotation;
 
             // Annotation notebook
             var notebookId = annotation.isIncludedIn;
             var notebookUri = annotation.isIncludedInUri;
-            if (typeof(elementsList.notebooks[notebookUri]) === 'undefined') {
+            if (typeof(annotationsFilters.notebooks[notebookUri]) === 'undefined') {
                 var notebookName = "Downloading in progress";
                 var cancelWatchNotebookName = $rootScope.$watch(function() {
                     return NotebookExchange.getNotebookById(notebookId);
                 }, function(nb) {
                     if (typeof(nb) !== 'undefined') {
                         notebookName = nb.label;
-                        elementsList.notebooks[notebookUri].label = notebookName;
+                        annotationsFilters.notebooks[notebookUri].label = notebookName;
                         cancelWatchNotebookName();
                     }
                 });
 
-                elementsList.notebooks[notebookUri] = {
+                annotationsFilters.notebooks[notebookUri] = {
                     uri: notebookUri,
                     label: notebookName,
                     notebookId: notebookId,
@@ -675,9 +678,9 @@ angular.module('Pundit2.AnnotationSidebar')
                     annotationsList: {}
                 };
             } else {
-                elementsList.notebooks[notebookUri].partial++;
+                annotationsFilters.notebooks[notebookUri].partial++;
             }
-            elementsList.notebooks[notebookUri].annotationsList[annotation.id] = annotation;
+            annotationsFilters.notebooks[notebookUri].annotationsList[annotation.id] = annotation;
 
 
             // Predicates
@@ -686,8 +689,8 @@ angular.module('Pundit2.AnnotationSidebar')
                     uriList[predicateUri] = {
                         uri: predicateUri
                     };
-                    if (typeof(elementsList.predicates[predicateUri]) === 'undefined') {
-                        elementsList.predicates[predicateUri] = {
+                    if (typeof(annotationsFilters.predicates[predicateUri]) === 'undefined') {
+                        annotationsFilters.predicates[predicateUri] = {
                             uri: predicateUri,
                             label: annotation.items[predicateUri].label,
                             active: false,
@@ -695,9 +698,9 @@ angular.module('Pundit2.AnnotationSidebar')
                             annotationsList: {}
                         };
                     } else {
-                        elementsList.predicates[predicateUri].partial++;
+                        annotationsFilters.predicates[predicateUri].partial++;
                     }
-                    elementsList.predicates[predicateUri].annotationsList[annotation.id] = annotation;
+                    annotationsFilters.predicates[predicateUri].annotationsList[annotation.id] = annotation;
                 }
             });
 
@@ -708,8 +711,8 @@ angular.module('Pundit2.AnnotationSidebar')
                         uriList[entUri] = {
                             uri: entUri
                         };
-                        if (typeof(elementsList.entities[entUri]) === 'undefined') {
-                            elementsList.entities[entUri] = {
+                        if (typeof(annotationsFilters.entities[entUri]) === 'undefined') {
+                            annotationsFilters.entities[entUri] = {
                                 uri: entUri,
                                 label: annotation.items[entUri].label, // TODO add check ?
                                 active: false,
@@ -717,9 +720,9 @@ angular.module('Pundit2.AnnotationSidebar')
                                 annotationsList: {}
                             };
                         } else {
-                            elementsList.entities[entUri].partial++;
+                            annotationsFilters.entities[entUri].partial++;
                         }
-                        elementsList.entities[entUri].annotationsList[annotation.id] = annotation;
+                        annotationsFilters.entities[entUri].annotationsList[annotation.id] = annotation;
                     }
                 });
             }
@@ -731,8 +734,8 @@ angular.module('Pundit2.AnnotationSidebar')
                         uriList[typeUri] = {
                             uri: typeUri
                         };
-                        if (typeof(elementsList.types[typeUri]) === 'undefined') {
-                            elementsList.types[typeUri] = {
+                        if (typeof(annotationsFilters.types[typeUri]) === 'undefined') {
+                            annotationsFilters.types[typeUri] = {
                                 uri: typeUri,
                                 label: TypesHelper.getLabel(typeUri),
                                 active: false,
@@ -740,9 +743,9 @@ angular.module('Pundit2.AnnotationSidebar')
                                 annotationsList: {}
                             };
                         } else {
-                            elementsList.types[typeUri].partial++;
+                            annotationsFilters.types[typeUri].partial++;
                         }
-                        elementsList.types[typeUri].annotationsList[annotation.id] = annotation;
+                        annotationsFilters.types[typeUri].annotationsList[annotation.id] = annotation;
                     }
                 });
             });
@@ -774,7 +777,7 @@ angular.module('Pundit2.AnnotationSidebar')
         orderAndSetPos();
         BrokenHelper.sendQueques();
 
-        elementsList.broken['uri:broken'].annotationsList = removeBroken(angular.extend({}, state.allAnnotations), tempBrokenList);;
+        annotationsFilters.broken['uri:broken'].annotationsList = removeBroken(angular.extend({}, state.allAnnotations), tempBrokenList);;
     };
 
     var findBackward = function(index, annotations) {
@@ -951,8 +954,8 @@ angular.module('Pundit2.AnnotationSidebar')
     var getAnnotationsOfSpecificFilter = function(filterKey, activeItems) {
         var results = {};
         for (var i in activeItems) {
-            if (typeof elementsList[filterKey][activeItems[i]] !== 'undefined') {
-                angular.extend(results, elementsList[filterKey][activeItems[i]].annotationsList);
+            if (typeof annotationsFilters[filterKey][activeItems[i]] !== 'undefined') {
+                angular.extend(results, annotationsFilters[filterKey][activeItems[i]].annotationsList);
             }
         }
 
@@ -984,31 +987,37 @@ angular.module('Pundit2.AnnotationSidebar')
         return res !== -1;
     };
 
-    var updatePartialFiltersCount = function(globalFilters, filteredAnnotations, subFiltersSet) {
-        var subFiltersSetCopy = {};
+    var updatePartialFiltersCount = function(annotationsFilters, subFiltersSet, filteredAnnotations) {
+        var subFiltersSetCopy = {},
+            filtersIntersection,
+            filtersKeys;
 
-        angular.forEach(globalFilters, function(filter, key) {
-            for (var i in filter) {
-                if (!isFilterUriActive(key, i)) {
-                    for (var j in subFiltersSet) {
-                        subFiltersSetCopy[j] = subFiltersSet[j];
+        angular.forEach(annotationsFilters, function(filter, filterKey) {
+            for (var uri in filter) {
+                if (isFilterUriActive(filterKey, uri) === false) {
+                    for (var i in subFiltersSet) {
+                        subFiltersSetCopy[i] = subFiltersSet[i];
                     }
 
-                    subFiltersSetCopy[key] = getAnnotationsOfSpecificFilter(key, [i]);
+                    subFiltersSetCopy[filterKey] = getAnnotationsOfSpecificFilter(filterKey, [uri]);
 
-                    elementsList[key][i].partial = Object.keys(multipleIntersection(subFiltersSetCopy)).length;
+                    filtersIntersection = multipleIntersection(subFiltersSetCopy);
+                    filtersKeys = Object.keys(filtersIntersection);
+                    filter[uri].partial = filtersKeys.length;
                 } else {
-                    elementsList[key][i].partial = Object.keys(intersection(elementsList[key][i].annotationsList, filteredAnnotations)).length;
+                    filtersIntersection = intersection(filter[uri].annotationsList, filteredAnnotations);
+                    filtersKeys = Object.keys(filtersIntersection);
+                    filter[uri].partial = filtersKeys.length;
                 }
             }
         });
 
-        annotationSidebar.log('Updated elementsList with partial counting ', elementsList);
+        annotationSidebar.log('Updated annotationsFilters with partial counting ', annotationsFilters);
     };
 
     var wipePartialFilterCount = function() {
         var filter;
-        angular.forEach(elementsList, function(filterGroup) {
+        angular.forEach(annotationsFilters, function(filterGroup) {
             for (var i in filterGroup) {
                 filter = filterGroup[i];
                 filter.partial = 0;
@@ -1016,16 +1025,22 @@ angular.module('Pundit2.AnnotationSidebar')
         });
     };
 
-    var getFilteredAnnotations = function(activeFilters, globalFilters) {
+    var getFilteredAnnotations = function(activeFilters, annotationsFilters) {
         var exceptionsCheckList = ['freeText', 'fromDate', 'toDate', 'broken'],
             exceptionsCheckIndex = -1;
 
         var firstTime = true,
             atLeastOneActiveFilter = false,
-            list = [],
+            subActiveFiltersList = [],
             temp = {},
             subFiltersSet = {},
             currentAnnotationsList;
+
+        var fromDate = activeFilters['fromDate'].expression, 
+            toDate = activeFilters['toDate'].expression;
+
+        var freeTextSearchLabel = activeFilters['freeText'].expression,
+            brokenValue = annotationSidebar.filters.broken.expression;
 
         var results = {};
 
@@ -1040,38 +1055,38 @@ angular.module('Pundit2.AnnotationSidebar')
                 return;
             }
 
-            list = filter.expression;
-            currentAnnotationsList = getAnnotationsOfSpecificFilter(key, list);
+            subActiveFiltersList = filter.expression;
+            currentAnnotationsList = getAnnotationsOfSpecificFilter(key, subActiveFiltersList);
 
             subFiltersSet[key] = currentAnnotationsList;
 
-            if (list.length > 0) {
+            if (subActiveFiltersList.length > 0) {
                 atLeastOneActiveFilter = true;
             }
         });
 
-        if (annotationSidebar.filters.broken.expression === 'hideBroken') {
-            subFiltersSet['broken'] = elementsList.broken['uri:broken'].annotationsList;
+        if (brokenValue === 'hideBroken') {
+            subFiltersSet['broken'] = annotationsFilters.broken['uri:broken'].annotationsList;
             atLeastOneActiveFilter = true;
         }
 
-        if (isValidDate(activeFilters['fromDate'].expression) || isValidDate(activeFilters['toDate'].expression)) {
-            subFiltersSet['date'] = filterAnnotationsByDate(activeFilters['fromDate'].expression, activeFilters['toDate'].expression);
+        if (isValidDate(fromDate) || isValidDate(toDate)) {
+            subFiltersSet['date'] = filterAnnotationsByDate(fromDate, toDate);
             atLeastOneActiveFilter = true;
         }
 
-        if (activeFilters['freeText'].expression !== '') {
-            subFiltersSet['freeText'] = filterAnnotationsByLabel(activeFilters['freeText'].expression, state.allAnnotations);
+        if (freeTextSearchLabel !== '') {
+            subFiltersSet['freeText'] = filterAnnotationsByLabel(freeTextSearchLabel, state.allAnnotations);
             atLeastOneActiveFilter = true;
         }
 
         if (typeof subFiltersSet['freeText'] !== 'undefined' &&
             Object.keys(subFiltersSet['freeText']).length === 0) {
             results = {};
-            wipePartialFilterCount();
+            wipePartialFilterCount(annotationsFilters);
         } else {
             results = atLeastOneActiveFilter ? multipleIntersection(subFiltersSet) : angular.extend({}, state.allAnnotations);
-            updatePartialFiltersCount(globalFilters, results, subFiltersSet);
+            updatePartialFiltersCount(annotationsFilters, subFiltersSet, results);
         }
 
         EventDispatcher.sendEvent('AnnotationSidebar.filteredAnnotationsUpdate');
@@ -1153,25 +1168,16 @@ angular.module('Pundit2.AnnotationSidebar')
 
     // Get the object of filtered annotations
     annotationSidebar.getAllAnnotationsFiltered = function(filters) {
-        var currentFilters = typeof filers !== 'undefined' ? filters : annotationSidebar.filters;
+        var activeFilters = typeof filers !== 'undefined' ? filters : annotationSidebar.filters;
 
-        state.filteredAnnotations = getFilteredAnnotations(currentFilters, elementsList);
-
-        // angular.forEach(state.allAnnotations, function(annotation, key) {
-        //     if (typeof state.filteredAnnotations[key] === 'undefined') {
-        //         annotation.visible = false;
-        //     } else {
-        //         annotation.visible = true;
-        //     }
-        // });
-
+        state.filteredAnnotations = getFilteredAnnotations(activeFilters, annotationsFilters);
         setAnnotationPositionAndHighlight();
 
         return state.filteredAnnotations;
     };
 
-    annotationSidebar.getFilters = function() {
-        return elementsList;
+    annotationSidebar.getAnnotationsFilters = function() {
+        return annotationsFilters;
     };
 
     annotationSidebar.getMinDate = function() {
@@ -1232,8 +1238,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
     // Activate / Disable a specific filter
     annotationSidebar.toggleActiveFilter = function(list, uri) {
-        elementsList[list][uri].active = !elementsList[list][uri].active;
-        Analytics.track('buttons', 'click', 'sidebar--filters--filtersPanel--' + list + '--' + (elementsList[list][uri].active ? 'active' : 'inactive'));
+        annotationsFilters[list][uri].active = !annotationsFilters[list][uri].active;
+        Analytics.track('buttons', 'click', 'sidebar--filters--filtersPanel--' + list + '--' + (annotationsFilters[list][uri].active ? 'active' : 'inactive'));
     };
 
     annotationSidebar.setFilter = function(filterKey, uriValue) {
@@ -1244,7 +1250,7 @@ angular.module('Pundit2.AnnotationSidebar')
             annotationSidebar.filters[filterKey].expression = uriValue;
         } else if (typeof(currentFilter) === 'object') {
             currentIndex = annotationSidebar.filters[filterKey].expression.indexOf(uriValue);
-            currentElementInList = elementsList[filterKey][uriValue];
+            currentElementInList = annotationsFilters[filterKey][uriValue];
             if (currentIndex === -1 && typeof(currentElementInList) !== 'undefined') {
                 currentElementInList.active = true;
                 annotationSidebar.filters[filterKey].expression.push(uriValue);
@@ -1261,7 +1267,7 @@ angular.module('Pundit2.AnnotationSidebar')
         } else if (typeof(currentFilter) === 'object') {
             currentIndex = annotationSidebar.filters[filterKey].expression.indexOf(uriValue);
             if (currentIndex !== -1) {
-                elementsList[filterKey][uriValue].active = false;
+                annotationsFilters[filterKey][uriValue].active = false;
                 annotationSidebar.filters[filterKey].expression.splice(currentIndex, 1);
             }
         }
@@ -1273,8 +1279,8 @@ angular.module('Pundit2.AnnotationSidebar')
             if (typeof(filter.expression) === 'string') {
                 filter.expression = '';
             } else if (typeof(filter.expression) === 'object') {
-                for (var f in elementsList[filter.filterName]) {
-                    elementsList[filter.filterName][f].active = false;
+                for (var f in annotationsFilters[filter.filterName]) {
+                    annotationsFilters[filter.filterName][f].active = false;
                 }
                 filter.expression = [];
             }
@@ -1289,12 +1295,11 @@ angular.module('Pundit2.AnnotationSidebar')
         var annotations = AnnotationsExchange.getAnnotations();
         var annotationsList = AnnotationsExchange.getAnnotationsList();
 
-        annotationsByDate = angular.extend([], annotations);
         annotationsByPosition = angular.extend([], annotations);
-        state.allAnnotations = angular.extend({}, annotationsList);
-
+        annotationsByDate = angular.extend([], annotations);
         annotationsByDate = sortByKey(annotationsByDate, 'created');
-        initializeFiltersAndPositions(state.allAnnotations);
+        state.allAnnotations = angular.extend({}, annotationsList);
+        initializeFiltersAndPositions();
     });
 
     EventDispatcher.addListener('ResizeManager.resize', function() {

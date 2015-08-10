@@ -37,7 +37,7 @@ angular.module('Pundit2.AnnotationSidebar')
         deletedIdQueue = [];
 
     $scope.annotationSidebar = AnnotationSidebar;
-    $scope.filters = AnnotationSidebar.getFilters();
+    $scope.filters = AnnotationSidebar.getAnnotationsFilters();
     $scope.isAnnomaticActive = Config.isModuleActive('Annomatic');
     $scope.isAnnotationSidebarExpanded = AnnotationSidebar.options.isAnnotationSidebarExpanded;
     $scope.isLoadingData = false;
