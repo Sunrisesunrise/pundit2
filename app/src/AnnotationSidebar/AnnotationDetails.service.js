@@ -60,10 +60,10 @@ angular.module('Pundit2.AnnotationSidebar')
     debug: false
 })
 
-.service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document,
-    BaseComponent, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, TemplatesExchange,
+.service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $modal,
+    BaseComponent, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, TemplatesExchange, TripleComposer,
     Consolidation, ContextualMenu, Dashboard, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
-    ImageAnnotator, NotebookExchange, TypesHelper, Analytics, NameSpace) {
+    ImageAnnotator, AnnotationsCommunication, NotebookExchange, TypesHelper, Analytics, NameSpace) {
 
     var annotationDetails = new BaseComponent('AnnotationDetails', ANNOTATIONDETAILSDEFAULTS);
 
@@ -80,6 +80,8 @@ angular.module('Pundit2.AnnotationSidebar')
     var mouseoutHandlerPromise,
         overActiveId = '',
         highlightFragments = [];
+
+    var modalTimeoutPromise;
 
     ContextualMenu.addAction({
         type: [
@@ -129,6 +131,56 @@ angular.module('Pundit2.AnnotationSidebar')
             Analytics.track('buttons', 'click', 'contextualMenu--showAllAnnotationForItem');
         }
     });
+
+    // confirm modal
+    var modalScope = $rootScope.$new();
+    modalScope.titleMessage = 'Delete Annotation';
+
+    var confirmModal = $modal({
+        container: '[data-ng-app="Pundit2"]',
+        template: 'src/Core/Templates/confirm.modal.tmpl.html',
+        show: false,
+        backdrop: 'static',
+        scope: modalScope
+    });
+
+    // confirm btn click
+    modalScope.confirm = function() {
+        var currentElement = modalScope.elementReference,
+            currentId = modalScope.annotationId;
+
+        if (MyPundit.isUserLogged()) {
+            currentElement.addClass('pnd-annotation-details-delete-in-progress');
+            AnnotationsCommunication.deleteAnnotation(currentId).then(function() {
+                modalScope.notifyMessage = "Your annotation has been deleted successfully";
+                TripleComposer.reset();
+            }, function() {
+                currentElement.removeClass('pnd-annotation-details-delete-in-progress');
+                modalScope.notifyMessage = 'Impossible to delete the annotation. Please reatry later.';
+            });
+        }
+
+        Analytics.track('buttons', 'click', 'annotation--details--delete--confirm');
+
+        modalTimeoutPromise = $timeout(function() {
+            confirmModal.hide();
+            $timeout.cancel(modalTimeoutPromise);
+        }, 1000);
+    };
+
+    // cancel btn click
+    modalScope.cancel = function() {
+        confirmModal.hide();
+        Analytics.track('buttons', 'click', 'annotation--details--delete--cancel');
+    };
+
+    annotationDetails.openConfirmModal = function(currentElement, currentId) {
+        // promise is needed to open modal when template is ready
+        modalScope.notifyMessage = 'Are you sure you want to delete this annotation? Please be aware that deleted annotations cannot be recovered.';
+        modalScope.elementReference = currentElement;
+        modalScope.annotationId = currentId;
+        confirmModal.$promise.then(confirmModal.show);
+    };
 
     var activateTextFragmentHighlight = function(items) {
         var currentItem;
