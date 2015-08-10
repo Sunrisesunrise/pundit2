@@ -391,7 +391,8 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var orderAndSetPos = function(optId, optHeight) {
-        var pos;
+        var annotations = (annotationSidebar.needToFilter() ? state.filteredAnnotations : state.allAnnotations);
+
         var currentTop,
             currentIndex;
 
@@ -407,17 +408,17 @@ angular.module('Pundit2.AnnotationSidebar')
             });
         }
 
-        pos = annotationsByPosition;
-
         angular.forEach(annotationsByPosition, function(annotation) {
-            currentTop = annotation.top;
+            if (typeof annotations[annotation.id] !== 'undefined') {
+                currentTop = annotation.top;
 
-            if (currentTop > startPosition) {
-                annotation.realTop = currentTop;
-                startPosition = currentTop + annotation.height;
-            } else {
-                annotation.realTop = startPosition;
-                startPosition += annotation.height;
+                if (currentTop > startPosition) {
+                    annotation.realTop = currentTop;
+                    startPosition = currentTop + annotation.height;
+                } else {
+                    annotation.realTop = startPosition;
+                    startPosition += annotation.height;
+                }
             }
         });
 
