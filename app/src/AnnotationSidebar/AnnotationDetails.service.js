@@ -326,7 +326,7 @@ angular.module('Pundit2.AnnotationSidebar')
         for (var id in state.annotations) {
             if (id !== skipId) {
                 state.annotations[id].expanded = false;
-                AnnotationSidebar.setAnnotationPosition(id, AnnotationSidebar.options.annotationHeigth);
+                AnnotationSidebar.setAnnotationHeight(id, AnnotationSidebar.options.annotationHeigth);
             }
         }
     };

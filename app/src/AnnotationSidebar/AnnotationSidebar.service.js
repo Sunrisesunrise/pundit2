@@ -289,14 +289,13 @@ angular.module('Pundit2.AnnotationSidebar')
         isSuggestionsPanelActive: annotationSidebar.options.suggestionsPanelActive
     };
 
-    var annotationsByDate = [];
-    var annotationsByLabel = [];
+    var annotationsByDate = [],
+        annotationsByPosition = [];
 
     // TODO: take startPosition from element in sidebar
     // TODO: take toolbar height from service
     var startPosition = annotationSidebar.options.startTop;
     var toolbarHeight = 30;
-    var annotationPosition = [];
 
     var tempBrokenList = {};
 
@@ -366,8 +365,6 @@ angular.module('Pundit2.AnnotationSidebar')
         };
     }
 
-    annotationSidebar.annotationPositionReal = {};
-
     // TODO add single filter add to elementsList
     var resetElementsListPartial = function() {
         for (var i in elementsList) {
@@ -399,42 +396,30 @@ angular.module('Pundit2.AnnotationSidebar')
             currentIndex;
 
         startPosition = annotationSidebar.options.startTop;
-        annotationSidebar.annotationPositionReal = {};
 
         if (typeof(optId) !== 'undefined' && typeof(optHeight) === 'number') {
-            currentIndex = annotationPosition.map(function(e) {
-                return e.id;
-            }).indexOf(optId);
-            if (currentIndex !== -1) {
-                annotationPosition[currentIndex].height = optHeight;
+            if (typeof state.allAnnotations[optId] !== 'undefined') {
+                state.allAnnotations[optId].height = optHeight;
             }
         } else {
-            annotationPosition.sort(function(a, b) {
+            annotationsByPosition.sort(function(a, b) {
                 return a.top - b.top;
             });
         }
 
+        pos = annotationsByPosition;
 
-
-        pos = annotationPosition;
-        for (var ann in pos) {
-            annotationSidebar.annotationPositionReal[pos[ann].id] = {
-                id: pos[ann].id,
-                top: pos[ann].top,
-                height: pos[ann].height,
-                broken: pos[ann].broken
-            };
-
-            currentTop = pos[ann].top;
+        angular.forEach(annotationsByPosition, function(annotation) {
+            currentTop = annotation.top;
 
             if (currentTop > startPosition) {
-                annotationSidebar.annotationPositionReal[pos[ann].id].top = currentTop;
-                startPosition = currentTop + pos[ann].height;
+                annotation.realTop = currentTop;
+                startPosition = currentTop + annotation.height;
             } else {
-                annotationSidebar.annotationPositionReal[pos[ann].id].top = startPosition;
-                startPosition += pos[ann].height;
+                annotation.realTop = startPosition;
+                startPosition += annotation.height;
             }
-        }
+        });
 
         annotationSidebar.minHeightRequired = startPosition + annotationSidebar.options.annotationHeigth;
     };
@@ -488,12 +473,8 @@ angular.module('Pundit2.AnnotationSidebar')
                 annotationHeigth = optHeight;
             }
 
-            annotationPosition.push({
-                id: annotation.id,
-                top: -3,
-                height: annotationHeigth,
-                broken: true
-            });
+            annotation.top = -3;
+            annotation.height = annotationHeigth;
         } else {
             var top, imgRef, fragRef, xpathTemp;
             currentItem = firstValid;
@@ -533,12 +514,8 @@ angular.module('Pundit2.AnnotationSidebar')
             if (optCheck && optId === annotation.id) {
                 annotationHeigth = optHeight;
             }
-            annotationPosition.push({
-                id: annotation.id,
-                top: top,
-                height: annotationHeigth,
-                broken: false
-            });
+            annotation.top = top;
+            annotation.height = annotationHeigth
         }
     }
 
@@ -552,7 +529,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         dashboardHeight = getDashboardHeight();
         startPosition = annotationSidebar.options.startTop;
-        annotationPosition = [];
+        // annotationPosition = [];
 
         angular.forEach(annotations, function(annotation) {
             setAnnotationPosition(annotation, dashboardHeight)
@@ -573,7 +550,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
         dashboardHeight = getDashboardHeight();
         startPosition = annotationSidebar.options.startTop;
-        annotationPosition = [];
 
         angular.forEach(annotations, function(annotation) {
             setAnnotationPosition(annotation, dashboardHeight);
@@ -638,8 +614,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
         resetElementsListPartial();
 
-        annotationsByDate = [];
-
         elementsList.broken['uri:broken'] = {
             annotationsList: {}
         };
@@ -652,7 +626,6 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         startPosition = annotationSidebar.options.startTop;
-        annotationPosition = [];
 
         angular.forEach(annotations, function(annotation) {
 
@@ -661,8 +634,6 @@ angular.module('Pundit2.AnnotationSidebar')
             var uriList = {};
 
             annotation.firstConsolidableItem = findFirstConsolidateItem(annotation);
-
-            annotationsByDate.push(annotation);
             setBrokenInfo(annotation);
 
             // Annotation authors
@@ -803,7 +774,6 @@ angular.module('Pundit2.AnnotationSidebar')
         BrokenHelper.sendQueques();
 
         elementsList.broken['uri:broken'].annotationsList = removeBroken(angular.extend({}, state.allAnnotations), tempBrokenList);;
-        annotationsByDate = sortByKey(annotationsByDate, 'created');
     };
 
     var findBackward = function(index, annotations) {
@@ -1094,7 +1064,7 @@ angular.module('Pundit2.AnnotationSidebar')
             atLeastOneActiveFilter = true;
         }
 
-        if (typeof subFiltersSet['freeText'] !== 'undefined' && 
+        if (typeof subFiltersSet['freeText'] !== 'undefined' &&
             Object.keys(subFiltersSet['freeText']).length === 0) {
             results = {};
             wipePartialFilterCount();
@@ -1233,14 +1203,11 @@ angular.module('Pundit2.AnnotationSidebar')
         orderAndSetPos(id, height);
     };
 
-    annotationSidebar.setAnnotationPosition = function(optId, optHeight) {
+    annotationSidebar.setAnnotationHeight = function(optId, optHeight) {
         var currentIndex;
         if (typeof(optId) !== 'undefined' && typeof(optHeight) === 'number') {
-            currentIndex = annotationPosition.map(function(e) {
-                return e.id;
-            }).indexOf(optId);
-            if (currentIndex !== -1) {
-                annotationPosition[currentIndex].height = optHeight;
+            if (typeof state.allAnnotations[optId] !== 'undefined') {
+                state.allAnnotations[optId].height = optHeight;
             }
         }
     };
@@ -1318,8 +1285,14 @@ angular.module('Pundit2.AnnotationSidebar')
     EventDispatcher.addListener('Consolidation.consolidateAll', function() {
         annotationSidebar.log('Update annotations in sidebar');
 
-        var annotations = AnnotationsExchange.getAnnotationsList();
-        state.allAnnotations = angular.extend({}, annotations);
+        var annotations = AnnotationsExchange.getAnnotations();
+        var annotationsList = AnnotationsExchange.getAnnotationsList();
+
+        annotationsByDate = angular.extend([], annotations);
+        annotationsByPosition = angular.extend([], annotations);
+        state.allAnnotations = angular.extend({}, annotationsList);
+
+        annotationsByDate = sortByKey(annotationsByDate, 'created');
         initializeFiltersAndPositions(state.allAnnotations);
     });
 

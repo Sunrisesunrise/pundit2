@@ -334,7 +334,7 @@
                 id="{{::ann.id}}"
                 broken="ann.broken"
                 class="pnd-annotation-details"
-                ng-style="{'top': annotationSidebar.annotationPositionReal[ann.id].top}"
+                ng-style="{'top': ann.realTop}"
                 ng-repeat="ann in annotations track by ann.id">
             </annotation-details>
         </div>
