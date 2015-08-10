@@ -1035,6 +1035,16 @@ angular.module('Pundit2.AnnotationSidebar')
         annotationSidebar.log('Updated elementsList with partial counting ', elementsList);
     };
 
+    var wipePartialFilterCount = function() {
+        var filter;
+        angular.forEach(elementsList, function(filterGroup) {
+            for (var i in filterGroup) {
+                filter = filterGroup[i];
+                filter.partial = 0;
+            }
+        });
+    };
+
     var getFilteredAnnotations = function(activeFilters, globalFilters) {
         var exceptionsCheckList = ['freeText', 'fromDate', 'toDate', 'broken'],
             exceptionsCheckIndex = -1;
@@ -1070,8 +1080,8 @@ angular.module('Pundit2.AnnotationSidebar')
         });
 
         if (annotationSidebar.filters.broken.expression === 'hideBroken') {
-            atLeastOneActiveFilter = true;
             subFiltersSet['broken'] = elementsList.broken['uri:broken'].annotationsList;
+            atLeastOneActiveFilter = true;
         }
 
         if (isValidDate(activeFilters['fromDate'].expression) || isValidDate(activeFilters['toDate'].expression)) {
@@ -1079,17 +1089,21 @@ angular.module('Pundit2.AnnotationSidebar')
             atLeastOneActiveFilter = true;
         }
 
-        // TODO: manage the case with 0 freeText result 
         if (activeFilters['freeText'].expression !== '') {
-            atLeastOneActiveFilter = true;
             subFiltersSet['freeText'] = filterAnnotationsByLabel(activeFilters['freeText'].expression, state.allAnnotations);
+            atLeastOneActiveFilter = true;
         }
 
-        results = atLeastOneActiveFilter ? multipleIntersection(subFiltersSet) : angular.extend({}, state.allAnnotations);
-        updatePartialFiltersCount(globalFilters, results, subFiltersSet);
+        if (typeof subFiltersSet['freeText'] !== 'undefined' && 
+            Object.keys(subFiltersSet['freeText']).length === 0) {
+            results = {};
+            wipePartialFilterCount();
+        } else {
+            results = atLeastOneActiveFilter ? multipleIntersection(subFiltersSet) : angular.extend({}, state.allAnnotations);
+            updatePartialFiltersCount(globalFilters, results, subFiltersSet);
+        }
 
         EventDispatcher.sendEvent('AnnotationSidebar.filteredAnnotationsUpdate');
-
         annotationSidebar.log(Object.keys(results).length + ' multi result ', results);
 
         return results;
