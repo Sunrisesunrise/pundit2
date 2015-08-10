@@ -43,7 +43,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.isLoadingData = false;
     $scope.isLoading = false;
 
-    $scope.annotations = [];
+    $scope.annotations = {};
 
     $scope.filterTypeExpanded = '';
 
@@ -64,6 +64,14 @@ angular.module('Pundit2.AnnotationSidebar')
         container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
     }
 
+    var addAnnotation = function(annotation, sendEvent) {
+        $scope.annotations[annotation.id] = annotation;
+
+        if (sendEvent) {
+            EventDispatcher.sendEvent('AnnotationSidebar.updateAnnotation', annotation.id);
+        }
+    }
+
     var addAnnotations = function() {
         $timeout.cancel(updateHitsTimer);
 
@@ -77,8 +85,9 @@ angular.module('Pundit2.AnnotationSidebar')
 
         updateHitsTimer = $timeout(function() {
             while (currentHits < maxHits && annotationsCache.length !== 0) {
-                var currentAnnotation = annotationsCache.shift();
-                $scope.annotations.push(currentAnnotation);
+                var currentAnnotation = annotationsCache.shift(),
+                    currentId = currentAnnotation.id;
+                $scope.annotations[currentId] = currentAnnotation;
 
                 currentHits++;
             }
@@ -86,24 +95,18 @@ angular.module('Pundit2.AnnotationSidebar')
         }, delay);
     };
 
-    var addAnnotation = function(annotation, sendEvent) {
-        if (typeof $scope.allAnnotations[annotation.id] === 'undefined') {
-            $scope.annotations.push(annotation);
-            $scope.annotationsList[annotation.id] = annotation;
-        }
-        if (sendEvent) {
-            EventDispatcher.sendEvent('AnnotationSidebar.updateAnnotation', annotation.id);
-        }
-    }
-
     var removeAnnotation = function(annotationId) {
-        var currentIndex = $scope.annotations.map(function(e) {
-            return e.id;
-        }).indexOf(annotationId);
-        if (currentIndex !== -1) {
-            $scope.annotations.splice(currentIndex, 1);
-            delete $scope.annotationsList[annotationId];
+        if (typeof $scope.annotations[annotationId] !== 'undefined') {
+            delete $scope.annotations[annotationId];
         }
+    };
+ 
+    var removeAnnotations = function(filteredAnnotations) {
+        angular.forEach($scope.annotations, function(annotation) {
+            if (typeof filteredAnnotations[annotation.id] === 'undefined') {
+                removeAnnotation(annotation.id);
+            }
+        });
     };
 
     // Annotation sidebar height
@@ -306,7 +309,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.$watch(function() {
         return AnnotationSidebar.getAllAnnotations();
     }, function(currentAnnotations) {
-        var annotation, annotations, annotationsKey;
+        var currentAnnotation, annotations, annotationsKey, mergedAnnotations;
 
         if (AnnotationSidebar.needToFilter()) {
             annotations = AnnotationSidebar.getAllAnnotationsFiltered();
@@ -317,11 +320,14 @@ angular.module('Pundit2.AnnotationSidebar')
         annotationsKey = Object.keys(annotations);
         $scope.annotationsLength = annotationsKey.length;
 
+        $scope.allAnnotations = currentAnnotations;
+        $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
+
         if (savedOrEditedAnnotationQueque.length > 0) {
             for (var i in savedOrEditedAnnotationQueque) {
-                annotation = savedOrEditedAnnotationQueque[i];
-                if (typeof annotations[annotation.id] !== 'undefined') {
-                    addAnnotation(annotation, true);
+                currentAnnotation = savedOrEditedAnnotationQueque[i];
+                if (typeof annotations[currentAnnotation.id] !== 'undefined') {
+                    addAnnotation(currentAnnotation, true);
                 }
             }
             savedOrEditedAnnotationQueque = [];
@@ -331,11 +337,12 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             deletedIdQueue = [];
 
+            // TODO alternative check? 
             for (var a in $scope.annotations) {
                 var annId = $scope.annotations[a].id;
 
                 // has someone deleted one annotation in another session?
-                if (typeof annotations[annId] === 'undefined') { 
+                if (typeof annotations[annId] === 'undefined') {
                     removeAnnotation(annId);
                 } else {
                     // Update annotation reference
@@ -343,23 +350,19 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
             }
 
-            angular.forEach(annotations, function(ann) {
+            angular.forEach(annotations, function(annotation) {
                 // has someone added one annotation in another session?
-                if (typeof $scope.annotationsList[ann.id] === 'undefined') {
+                if (typeof $scope.annotations[annotation.id] === 'undefined') {
                     addAnnotation(ann, false);
                 }
             });
         } else {
+            removeAnnotations(annotations);
             annotationsCache = annotationsKey.map(function(k) {
                 return annotations[k]
             });
-            $scope.annotations = [];
             addAnnotations();
         }
-
-        $scope.annotationsList = annotations;
-        $scope.allAnnotations = currentAnnotations;
-        $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
     });
 
     // Using JSON.strigify to avoid deep watch (, true) on AnnotationSidebar filters 
@@ -377,12 +380,14 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var annotations = AnnotationSidebar.getAllAnnotationsFiltered(),
             annotationsKey = Object.keys(annotations);
+
+        removeAnnotations(annotations);
+
         annotationsCache = annotationsKey.map(function(k) {
             return annotations[k]
         });
-        $scope.annotations = [];
+
         $scope.annotationsLength = annotationsKey.length;
-        $scope.annotationsList = annotations;
         addAnnotations();
     });
 
