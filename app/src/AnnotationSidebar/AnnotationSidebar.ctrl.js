@@ -115,6 +115,26 @@ angular.module('Pundit2.AnnotationSidebar')
         return $filter('date')(newMinDate, 'yyyy-MM-dd');
     };
 
+    var updateMinDate = function(minDate) {
+        if (typeof(minDate) !== 'undefined') {
+            var newMinDate = $filter('date')(minDate, 'yyyy-MM-dd');
+            $scope.fromMinDate = setMin(newMinDate);
+            if (AnnotationSidebar.filters.fromDate.expression === '') {
+                $scope.toMinDate = setMin(newMinDate);
+            }
+        }
+    };
+
+    var updateMaxDate = function(maxDate) {
+        if (typeof(maxDate) !== 'undefined') {
+            var newMaxDate = $filter('date')(maxDate, 'yyyy-MM-dd');
+            $scope.toMaxDate = newMaxDate;
+            if (AnnotationSidebar.filters.toDate.expression === '') {
+                $scope.fromMaxDate = newMaxDate;
+            }
+        }
+    };
+
     $scope.isSuggestionsPanelActive = function() {
         return AnnotationSidebar.isSuggestionsPanelActive();
     };
@@ -131,6 +151,21 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.updateSearch = function(freeText) {
         AnnotationSidebar.filters.freeText.expression = freeText;
+    };
+
+    $scope.updateDate = function(date, fromTo) {
+        var currentDate;
+        if (typeof(date) !== 'undefined' && date !== null) {
+            currentDate = date;
+        } else {
+            currentDate = fromTo === 'from' ? $scope.fromMinDate : $scope.toMaxDate;
+        }
+
+        if (fromTo === 'from') {
+            $scope.toMinDate = setMin(currentDate);
+        } else if (fromTo === 'to') {
+            $scope.fromMaxDate = currentDate;
+        }
     };
 
     $scope.isFilterLabelShowed = function(currentInputText) {
@@ -268,27 +303,17 @@ angular.module('Pundit2.AnnotationSidebar')
         addAnnotations();
     });
 
-    $scope.$watch('annotationSidebar.filters.fromDate.expression', function(currentFromDate) {
-        if (typeof(currentFromDate) !== 'undefined' && currentFromDate !== null) {
-            $scope.toMinDate = setMin(currentFromDate);
-        } else {
-            $scope.toMinDate = setMin($scope.fromMinDate);
-        }
-    });
-    $scope.$watch('annotationSidebar.filters.toDate.expression', function(currentToDate) {
-        if (typeof(currentToDate) !== 'undefined' && currentToDate !== null) {
-            $scope.fromMaxDate = currentToDate;
-        } else {
-            $scope.fromMaxDate = $scope.toMaxDate;
-        }
-    });
-
     // Using JSON.strigify to avoid deep watch (, true) on AnnotationSidebar filters 
     $scope.$watch(function() {
         return JSON.stringify(AnnotationSidebar.filters);
     }, function(currentFilters) {
         if (AnnotationSidebar.filters.freeText.expression === '') {
             $scope.freeText = '';
+        }
+        if (AnnotationSidebar.filters.fromDate.expression === '' &&
+            AnnotationSidebar.filters.toDate.expression === '') {
+            updateMinDate(AnnotationSidebar.getMinDate());
+            updateMaxDate(AnnotationSidebar.getMaxDate());
         }
 
         var annotations = AnnotationSidebar.getAllAnnotationsFiltered(),
@@ -338,25 +363,13 @@ angular.module('Pundit2.AnnotationSidebar')
         minDateWatch = $scope.$watch(function() {
             return AnnotationSidebar.getMinDate();
         }, function(minDate) {
-            if (typeof(minDate) !== 'undefined') {
-                var newMinDate = $filter('date')(minDate, 'yyyy-MM-dd');
-                $scope.fromMinDate = setMin(newMinDate);
-                if (AnnotationSidebar.filters.fromDate.expression === '') {
-                    $scope.toMinDate = setMin(newMinDate);
-                }
-            }
+            updateMinDate(minDate);
         });
 
         maxDateWatch = $scope.$watch(function() {
             return AnnotationSidebar.getMaxDate();
         }, function(maxDate) {
-            if (typeof(maxDate) !== 'undefined') {
-                var newMaxDate = $filter('date')(maxDate, 'yyyy-MM-dd');
-                $scope.toMaxDate = newMaxDate;
-                if (AnnotationSidebar.filters.toDate.expression === '') {
-                    $scope.fromMaxDate = newMaxDate;
-                }
-            }
+            updateMaxDate(maxDate);
         });
     }
 
