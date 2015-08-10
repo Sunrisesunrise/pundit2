@@ -1,7 +1,7 @@
 angular.module('Pundit2.AnnotationSidebar')
 
 .controller('AnnotationSidebarCtrl', function($scope, $filter, $document, $window, $timeout,
-    EventDispatcher, AnnotationSidebar, Dashboard, Config, Analytics) {
+    EventDispatcher, AnnotationSidebar, AnnotationsExchange, Dashboard, Config, Analytics) {
 
     var bodyClasses = AnnotationSidebar.options.bodyExpandedClass + ' ' + AnnotationSidebar.options.bodyCollapsedClass;
     var sidebarClasses = AnnotationSidebar.options.sidebarExpandedClass + ' ' + AnnotationSidebar.options.sidebarCollapsedClass;
@@ -32,6 +32,9 @@ angular.module('Pundit2.AnnotationSidebar')
 
     var updateHitsTimer,
         annotationsCache = [];
+
+    var savedOrEditedAnnotationQueque = [],
+        deletedIdQueue = [];
 
     $scope.annotationSidebar = AnnotationSidebar;
     $scope.filters = AnnotationSidebar.getFilters();
@@ -81,6 +84,26 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             addAnnotations();
         }, delay);
+    };
+
+    var addAnnotation = function(annotation, sendEvent) {
+        if (typeof $scope.allAnnotations[annotation.id] === 'undefined') {
+            $scope.annotations.push(annotation);
+            $scope.annotationsList[annotation.id] = annotation;
+        }
+        if (sendEvent) {
+            EventDispatcher.sendEvent('AnnotationSidebar.updateAnnotation', annotation.id);
+        }
+    }
+
+    var removeAnnotation = function(annotationId) {
+        var currentIndex = $scope.annotations.map(function(e) {
+            return e.id;
+        }).indexOf(annotationId);
+        if (currentIndex !== -1) {
+            $scope.annotations.splice(currentIndex, 1);
+            delete $scope.annotationsList[annotationId];
+        }
     };
 
     // Annotation sidebar height
@@ -283,10 +306,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.$watch(function() {
         return AnnotationSidebar.getAllAnnotations();
     }, function(currentAnnotations) {
-        var annotations, annotationsKey;
-
-        $scope.allAnnotations = currentAnnotations;
-        $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
+        var annotation, annotations, annotationsKey;
 
         if (AnnotationSidebar.needToFilter()) {
             annotations = AnnotationSidebar.getAllAnnotationsFiltered();
@@ -295,12 +315,51 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         annotationsKey = Object.keys(annotations);
-        annotationsCache = annotationsKey.map(function(k) {
-            return annotations[k]
-        });
-        $scope.annotations = [];
         $scope.annotationsLength = annotationsKey.length;
-        addAnnotations();
+
+        if (savedOrEditedAnnotationQueque.length > 0) {
+            for (var i in savedOrEditedAnnotationQueque) {
+                annotation = savedOrEditedAnnotationQueque[i];
+                if (typeof annotations[annotation.id] !== 'undefined') {
+                    addAnnotation(annotation, true);
+                }
+            }
+            savedOrEditedAnnotationQueque = [];
+        } else if (deletedIdQueue.length > 0) {
+            for (var j in deletedIdQueue) {
+                removeAnnotation(deletedIdQueue[j]);
+            }
+            deletedIdQueue = [];
+
+            for (var a in $scope.annotations) {
+                var annId = $scope.annotations[a].id;
+
+                // has someone deleted one annotation in another session?
+                if (typeof annotations[annId] === 'undefined') { 
+                    removeAnnotation(annId);
+                } else {
+                    // Update annotation reference
+                    $scope.annotations[a] = annotations[annId];
+                }
+            }
+
+            angular.forEach(annotations, function(ann) {
+                // has someone added one annotation in another session?
+                if (typeof $scope.annotationsList[ann.id] === 'undefined') {
+                    addAnnotation(ann, false);
+                }
+            });
+        } else {
+            annotationsCache = annotationsKey.map(function(k) {
+                return annotations[k]
+            });
+            $scope.annotations = [];
+            addAnnotations();
+        }
+
+        $scope.annotationsList = annotations;
+        $scope.allAnnotations = currentAnnotations;
+        $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
     });
 
     // Using JSON.strigify to avoid deep watch (, true) on AnnotationSidebar filters 
@@ -323,6 +382,7 @@ angular.module('Pundit2.AnnotationSidebar')
         });
         $scope.annotations = [];
         $scope.annotationsLength = annotationsKey.length;
+        $scope.annotationsList = annotations;
         addAnnotations();
     });
 
@@ -383,6 +443,17 @@ angular.module('Pundit2.AnnotationSidebar')
             maxDateWatch = undefined;
         }
     }
+
+    EventDispatcher.addListeners(['AnnotationsCommunication.saveAnnotation', 'AnnotationsCommunication.editAnnotation'], function(e) {
+        var annotationId = e.args,
+            currentAnnotation = AnnotationsExchange.getAnnotationById(annotationId);
+        savedOrEditedAnnotationQueque.push(currentAnnotation);
+    });
+
+    EventDispatcher.addListeners(['AnnotationsCommunication.annotationDeleted'], function(e) {
+        var annotationId = e.args;
+        deletedIdQueue.push(annotationId);
+    });
 
     angular.element($window).bind('resize', function() {
         resizeSidebarHeight();

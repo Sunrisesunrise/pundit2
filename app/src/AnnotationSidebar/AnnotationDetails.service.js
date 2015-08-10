@@ -174,7 +174,7 @@ angular.module('Pundit2.AnnotationSidebar')
         Analytics.track('buttons', 'click', 'annotation--details--delete--cancel');
     };
 
-    annotationDetails.openConfirmModal = function(currentElement, currentId) {
+    annotationDetails.openConfirmModal = function(currentElement, currentId)  {
         // promise is needed to open modal when template is ready
         modalScope.notifyMessage = 'Are you sure you want to delete this annotation? Please be aware that deleted annotations cannot be recovered.';
         modalScope.elementReference = currentElement;
@@ -522,8 +522,8 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     });
 
-    EventDispatcher.addListeners(['AnnotationsCommunication.saveAnnotation', 'AnnotationsCommunication.editAnnotation'], function(e) {
-        annotationDetails.log('Update annotation');
+    EventDispatcher.addListeners(['AnnotationSidebar.updateAnnotation'], function(e) {
+        annotationDetails.log('Update annotation ' + e.args);
 
         var annotationId = e.args,
             targetAnnotation,
@@ -545,16 +545,14 @@ angular.module('Pundit2.AnnotationSidebar')
             annotationDetails.closeAllAnnotationView(annotationId);
             annotationDetails.addAnnotationReference(targetAnnotation, true);
 
-            // TODO: improve the update of the annotations in the sidebar
             $timeout(function() {
                 var currentElement = angular.element('#' + annotationId);
                 if (currentElement.length > 0) {
                     angular.element('body').animate({
-                        scrollTop: currentElement.offset().top - Dashboard.getContainerHeight() - 30
+                        scrollTop: currentElement.offset().top - Dashboard.getContainerHeight() - 60
                     }, 'slow');
                 }
             }, 100);
-
         }
     });
 

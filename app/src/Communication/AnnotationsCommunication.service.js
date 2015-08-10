@@ -47,8 +47,8 @@ angular.module('Pundit2.Communication')
         }).success(function() {
             if (completed > 0) {
                 AnnotationsExchange.getAnnotationById(annID).update().then(function() {
-                    Consolidation.consolidateAll();
                     EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
+                    Consolidation.consolidateAll();
                     setLoading(false);
                     promise.resolve();
                 });
@@ -389,8 +389,8 @@ angular.module('Pundit2.Communication')
                     }
 
                     if (typeof(skipConsolidation) === 'undefined' || !skipConsolidation) {
-                        Consolidation.consolidateAll();
                         EventDispatcher.sendEvent('AnnotationsCommunication.saveAnnotation', data.AnnotationID);
+                        Consolidation.consolidateAll();
                     }
 
                     // TODO move inside notebook then?
