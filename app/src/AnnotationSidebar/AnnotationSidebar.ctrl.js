@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.controller('AnnotationSidebarCtrl', function($scope, $filter, $document, $window,
+.controller('AnnotationSidebarCtrl', function($scope, $filter, $document, $window, $timeout,
     EventDispatcher, AnnotationSidebar, Dashboard, Config, Analytics) {
 
     var bodyClasses = AnnotationSidebar.options.bodyExpandedClass + ' ' + AnnotationSidebar.options.bodyCollapsedClass;
@@ -30,7 +30,8 @@ angular.module('Pundit2.AnnotationSidebar')
     var minDateWatch,
         maxDateWatch;
 
-    var delay;
+    var updateHitsTimer,
+        annotationsCache = [];
 
     $scope.annotationSidebar = AnnotationSidebar;
     $scope.filters = AnnotationSidebar.getFilters();
@@ -38,6 +39,8 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.isAnnotationSidebarExpanded = AnnotationSidebar.options.isAnnotationSidebarExpanded;
     $scope.isLoadingData = false;
     $scope.isLoading = false;
+
+    $scope.annotations = [];
 
     $scope.filterTypeExpanded = '';
 
@@ -57,6 +60,28 @@ angular.module('Pundit2.AnnotationSidebar')
         body.addClass(AnnotationSidebar.options.bodyCollapsedClass);
         container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
     }
+
+    var addAnnotations = function() {
+        $timeout.cancel(updateHitsTimer);
+
+        if (annotationsCache.length === 0) {
+            return;
+        }
+
+        var currentHits = 0,
+            maxHits = 20,
+            delay = 200;
+
+        updateHitsTimer = $timeout(function() {
+            while (currentHits < maxHits && annotationsCache.length !== 0) {
+                var currentAnnotation = annotationsCache.shift();
+                $scope.annotations.push(currentAnnotation);
+
+                currentHits++;
+            }
+            addAnnotations();
+        }, delay);
+    };
 
     // Annotation sidebar height
     var resizeSidebarHeight = function() {
@@ -223,16 +248,24 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.$watch(function() {
         return AnnotationSidebar.getAllAnnotations();
     }, function(currentAnnotations) {
+        var annotations, annotationsKey;
+
         $scope.allAnnotations = currentAnnotations;
         $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
 
         if (AnnotationSidebar.needToFilter()) {
-            $scope.annotations = AnnotationSidebar.getAllAnnotationsFiltered();
-            $scope.annotationsLength = Object.keys($scope.annotations).length;
+            annotations = AnnotationSidebar.getAllAnnotationsFiltered();
         } else {
-            $scope.annotations = currentAnnotations;
-            $scope.annotationsLength = Object.keys($scope.annotations).length;
+            annotations = currentAnnotations;
         }
+
+        annotationsKey = Object.keys(annotations);
+        annotationsCache = annotationsKey.map(function(k) {
+            return annotations[k]
+        });
+        $scope.annotations = [];
+        $scope.annotationsLength = annotationsKey.length;
+        addAnnotations();
     });
 
     $scope.$watch('annotationSidebar.filters.fromDate.expression', function(currentFromDate) {
@@ -257,10 +290,15 @@ angular.module('Pundit2.AnnotationSidebar')
         if (AnnotationSidebar.filters.freeText.expression === '') {
             $scope.freeText = '';
         }
-        // var filteredAnnotations = AnnotationSidebar.getAllAnnotationsFiltered();
-        // $scope.annotationsLength = Object.keys(filteredAnnotations).length;
-        $scope.annotations = AnnotationSidebar.getAllAnnotationsFiltered();
-        $scope.annotationsLength = Object.keys($scope.annotations).length;
+
+        var annotations = AnnotationSidebar.getAllAnnotationsFiltered(),
+            annotationsKey = Object.keys(annotations);
+        annotationsCache = annotationsKey.map(function(k) {
+            return annotations[k]
+        });
+        $scope.annotations = [];
+        $scope.annotationsLength = annotationsKey.length;
+        addAnnotations();
     });
 
     // Watch dashboard height for top of sidebar
@@ -308,7 +346,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
             }
         });
-        
+
         maxDateWatch = $scope.$watch(function() {
             return AnnotationSidebar.getMaxDate();
         }, function(maxDate) {
@@ -321,6 +359,7 @@ angular.module('Pundit2.AnnotationSidebar')
             }
         });
     }
+
     function disableDateWatch() {
         if (typeof minDateWatch === 'function') {
             minDateWatch();
