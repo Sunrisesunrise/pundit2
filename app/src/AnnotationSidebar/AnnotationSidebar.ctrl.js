@@ -337,18 +337,15 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             deletedIdQueue = [];
 
-            // TODO alternative check? 
-            for (var a in $scope.annotations) {
-                var annId = $scope.annotations[a].id;
-
+            angular.forEach($scope.annotations, function(annotation) {
                 // has someone deleted one annotation in another session?
-                if (typeof annotations[annId] === 'undefined') {
-                    removeAnnotation(annId);
+                if (typeof annotations[annotation.id] === 'undefined') {
+                    removeAnnotation(annotation.id);
                 } else {
                     // Update annotation reference
-                    $scope.annotations[a] = annotations[annId];
+                    $scope.annotations[annotation.id] = annotations[annotation.id];
                 }
-            }
+            });
 
             angular.forEach(annotations, function(annotation) {
                 // has someone added one annotation in another session?
