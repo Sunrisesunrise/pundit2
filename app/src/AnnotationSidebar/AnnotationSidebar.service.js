@@ -461,8 +461,7 @@ angular.module('Pundit2.AnnotationSidebar')
     var setAnnotationPosition = function(annotation, dashboardHeight, optCheck, optId, optHeight) {
         var annotationHeight = 0,
             firstValid,
-            currentItem,
-            currentFragment;
+            currentItem;
 
         var top, imgRef, fragRef, xpathTemp;
 
@@ -527,7 +526,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         angular.forEach(annotations, function(annotation) {
-            setAnnotationPosition(annotation, dashboardHeight)
+            setAnnotationPosition(annotation, dashboardHeight);
         });
 
         orderAndSetPos();
@@ -535,7 +534,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     var setAnnotationPositionAndHighlight = function() {
         var annotations = (annotationSidebar.needToFilter() ? state.filteredAnnotations : state.allAnnotations),
-            dashboardHeight = getDashboardHeight(),
+            currentItem,
             currentTop;
 
         TextFragmentAnnotator.hideAll();
@@ -576,8 +575,8 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var setBrokenInfo = function(annotation) {
-        isBroken = annotation.isBroken();
-        isBrokenYet = annotation.isBrokenYet;
+        var isBroken = annotation.isBroken(),
+            isBrokenYet = annotation.isBrokenYet;
 
         annotation.broken = isBroken;
 
@@ -620,8 +619,7 @@ angular.module('Pundit2.AnnotationSidebar')
             return;
         }
 
-        var isBroken, isBrokenYet;
-        var dashboardHeight;
+        var dashboardHeight = getDashboardHeight();
 
         resetAnnotationsFiltersPartial();
 
@@ -629,12 +627,6 @@ angular.module('Pundit2.AnnotationSidebar')
             annotationsList: {}
         };
         BrokenHelper.resetQueques();
-
-        if (Dashboard.isDashboardVisible()) {
-            dashboardHeight = Dashboard.getContainerHeight();
-        } else {
-            dashboardHeight = 0;
-        }
 
         startPosition = annotationSidebar.options.startTop;
 
@@ -775,13 +767,13 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
             }
 
-            setAnnotationPosition(annotation, dashboardHeight)
+            setAnnotationPosition(annotation, dashboardHeight);
         });
 
         orderAndSetPos();
         BrokenHelper.sendQueques();
 
-        annotationsFilters.broken['uri:broken'].annotationsList = removeBroken(angular.extend({}, state.allAnnotations), tempBrokenList);;
+        annotationsFilters.broken['uri:broken'].annotationsList = removeBroken(angular.extend({}, state.allAnnotations), tempBrokenList);
     };
 
     var findBackward = function(index, annotations) {
@@ -791,8 +783,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var val = annotations[index].created;
 
-        for (i = index - 1; i > 0; i--) {
-            if (annotations[i].created != val) {
+        for (var i = index - 1; i > 0; i--) {
+            if (annotations[i].created !== val) {
                 return i + 1;
             }
         }
@@ -807,8 +799,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var val = annotations[index].created;
 
-        for (i = index + 1; i < annotations.length; i++) {
-            if (annotations[i].created != val) {
+        for (var i = index + 1; i < annotations.length; i++) {
+            if (annotations[i].created !== val) {
                 return i - 1;
             }
         }
@@ -847,10 +839,10 @@ angular.module('Pundit2.AnnotationSidebar')
         var index = (start + end) / 2;
         index = parseInt(index, 10);
 
-        if (start == end) {
+        if (start === end) {
             return findForward(start, annotations);
         }
-        if (start == end - 1) {
+        if (start === end - 1) {
             if (annotations[end].created <= val) {
                 return findForward(end, annotations);
             } else {
@@ -1033,17 +1025,15 @@ angular.module('Pundit2.AnnotationSidebar')
         var exceptionsCheckList = ['freeText', 'fromDate', 'toDate', 'broken'],
             exceptionsCheckIndex = -1;
 
-        var firstTime = true,
-            atLeastOneActiveFilter = false,
+        var atLeastOneActiveFilter = false,
             subActiveFiltersList = [],
-            temp = {},
             subFiltersSet = {},
             currentAnnotationsList;
 
-        var fromDate = activeFilters['fromDate'].expression,
-            toDate = activeFilters['toDate'].expression;
+        var fromDate = activeFilters.fromDate.expression,
+            toDate = activeFilters.toDate.expression;
 
-        var freeTextSearchLabel = activeFilters['freeText'].expression,
+        var freeTextSearchLabel = activeFilters.freeText.expression,
             brokenValue = annotationSidebar.filters.broken.expression;
 
         var results = {};
@@ -1070,22 +1060,22 @@ angular.module('Pundit2.AnnotationSidebar')
         });
 
         if (brokenValue === 'hideBroken') {
-            subFiltersSet['broken'] = annotationsFilters.broken['uri:broken'].annotationsList;
+            subFiltersSet.broken = annotationsFilters.broken['uri:broken'].annotationsList;
             atLeastOneActiveFilter = true;
         }
 
         if (isValidDate(fromDate) || isValidDate(toDate)) {
-            subFiltersSet['date'] = filterAnnotationsByDate(fromDate, toDate);
+            subFiltersSet.date = filterAnnotationsByDate(fromDate, toDate);
             atLeastOneActiveFilter = true;
         }
 
         if (freeTextSearchLabel !== '') {
-            subFiltersSet['freeText'] = filterAnnotationsByLabel(freeTextSearchLabel, state.allAnnotations);
+            subFiltersSet.freeText = filterAnnotationsByLabel(freeTextSearchLabel, state.allAnnotations);
             atLeastOneActiveFilter = true;
         }
 
-        if (typeof subFiltersSet['freeText'] !== 'undefined' &&
-            Object.keys(subFiltersSet['freeText']).length === 0) {
+        if (typeof subFiltersSet.freeText !== 'undefined' &&
+            Object.keys(subFiltersSet.freeText).length === 0) {
             results = {};
             wipePartialFilterCount(annotationsFilters);
         } else {
@@ -1215,7 +1205,6 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationSidebar.setAnnotationHeight = function(optId, optHeight) {
-        var currentIndex;
         if (typeof(optId) !== 'undefined' && typeof(optHeight) === 'number') {
             if (typeof state.allAnnotations[optId] !== 'undefined') {
                 state.allAnnotations[optId].height = optHeight;
