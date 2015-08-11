@@ -71,7 +71,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> suggestionIconClass: 'pnd-icon-pencil' </pre>
      */
-    suggestionIconClass: 'pnd-icon-pencil', 
+    suggestionIconClass: 'pnd-icon-pencil',
 
     /**
      * @module punditConfig
@@ -86,7 +86,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> addIcon: 'true' </pre>
      */
-     addIcon: true
+    addIcon: true
 })
 
 .service('TextFragmentAnnotator', function(TEXTFRAGMENTANNOTATORDEFAULTS, NameSpace, BaseComponent, Consolidation,
@@ -418,11 +418,11 @@ angular.module('Pundit2.Annotators')
         }
     };
 
-    $rootScope.$on('annomatic-run', function () {
-      annomaticIsRunning = true;
+    $rootScope.$on('annomatic-run', function() {
+        annomaticIsRunning = true;
     });
-    $rootScope.$on('annomatic-stop', function () {
-      annomaticIsRunning = false;
+    $rootScope.$on('annomatic-stop', function() {
+        annomaticIsRunning = false;
     });
 
     tfa.log('Component up and running');
