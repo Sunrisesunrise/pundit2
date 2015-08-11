@@ -111,13 +111,13 @@ angular.module('Pundit2.AnnotationSidebar')
         return (AnnotationDetails.isUserToolShowed($scope.annotation.creator) || ($scope.forceEdit && MyPundit.isUserLogged())) && AnnotationSidebar.isAnnotationsPanelActive();
     };
 
-    $scope.mouseoverHandler = function() {
-        AnnotationDetails.activateTextFragmentHighlight($scope.annotation.broken, currentId, $scope.annotation.itemsUriArray);
-    };
+    // $scope.mouseoverHandler = function() {
+    //     AnnotationDetails.activateTextFragmentHighlight($scope.annotation.broken, currentId, $scope.annotation.itemsUriArray);
+    // };
 
-    $scope.mouseoutHandler = function() {
-        AnnotationDetails.resetTextFragmentHighlight($scope.annotation.broken);
-    };
+    // $scope.mouseoutHandler = function() {
+    //     AnnotationDetails.resetTextFragmentHighlight($scope.annotation.broken);
+    // };
 
     $scope.$watch(function() {
         return currentElement.height();
