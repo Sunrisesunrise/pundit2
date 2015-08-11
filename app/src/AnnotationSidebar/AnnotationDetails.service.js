@@ -536,9 +536,10 @@ angular.module('Pundit2.AnnotationSidebar')
 
             $timeout(function() {
                 var currentElement = angular.element('#' + annotationId);
+                var dashboardHeight = Dashboard.isDashboardVisible() ? Dashboard.getContainerHeight() : 0;
                 if (currentElement.length > 0) {
                     angular.element('body').animate({
-                        scrollTop: currentElement.offset().top - Dashboard.getContainerHeight() - 60
+                        scrollTop: currentElement.offset().top - dashboardHeight - 60
                     }, 'slow');
                 }
             }, 100);

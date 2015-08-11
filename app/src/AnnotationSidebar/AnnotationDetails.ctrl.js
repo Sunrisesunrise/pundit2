@@ -1,7 +1,7 @@
 angular.module('Pundit2.AnnotationSidebar')
 
 .controller('AnnotationDetailsCtrl', function($scope, $rootScope, $element, $timeout, $window,
-    AnnotationSidebar, AnnotationDetails, TripleComposer, Dashboard, EventDispatcher, 
+    AnnotationSidebar, AnnotationDetails, TripleComposer, Dashboard, EventDispatcher,
     Config, MyPundit, Analytics) {
 
     if (AnnotationDetails.getAnnotationDetails($scope.id) === undefined) {
@@ -51,6 +51,12 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.toggleAnnotation = function() {
         if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
             AnnotationSidebar.toggle();
+            $timeout(function() {
+                var dashboardHeight = Dashboard.isDashboardVisible() ? Dashboard.getContainerHeight() : 0;
+                angular.element('body').animate({
+                    scrollTop: currentElement.offset().top - dashboardHeight - 60
+                }, 'slow');
+            }, 100);
         }
         // if(AnnotationDetails.isAnnotationGhosted(currentId)){
         //     AnnotationDetails.closeViewAndReset();
