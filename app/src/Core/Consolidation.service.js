@@ -111,8 +111,10 @@ angular.module('Pundit2.Core')
     // TODO: pass an element and consolidate just that element? or a named content?
     // an image or something?
     cc.consolidate = function(items) {
-
-        // TODO: check if its not an array
+        if (!angular.isArray(items)) {
+            cc.err('Items not valid: malformed array', items);
+            return;
+        }
 
         cc.log('Will try to consolidate ' + items.length + ' items');
         cc.wipe();

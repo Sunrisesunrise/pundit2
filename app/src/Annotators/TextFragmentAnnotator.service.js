@@ -146,6 +146,11 @@ angular.module('Pundit2.Annotators')
     // TODO: better check twice? :|
     tfa.consolidate = function(items) {
 
+        if (!angular.isObject(items)) {
+            cc.err('Items not valid: malformed object', items);
+            return;
+        }
+
         tfa.log('Consolidating!');
 
         var xpointers = [],
