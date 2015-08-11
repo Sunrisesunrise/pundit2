@@ -214,7 +214,7 @@ angular.module('Pundit2.AnnotationSidebar')
     /**
      * @module punditConfig
      * @ngdoc property
-     * @name modules#AnnotationSidebar.annotationHeigth
+     * @name modules#AnnotationSidebar.annotationHeight
      *
      * @description
      * `number`
@@ -222,9 +222,9 @@ angular.module('Pundit2.AnnotationSidebar')
      * The height of the annotations in the sidebar for positioning
      *
      * Default value:
-     * <pre> annotationHeigth: 25 </pre>
+     * <pre> annotationHeight: 25 </pre>
      */
-    annotationHeigth: 25,
+    annotationHeight: 25,
 
     /**
      * @module punditConfig
@@ -390,41 +390,6 @@ angular.module('Pundit2.AnnotationSidebar')
         return !isNaN(Date.parse(date));
     };
 
-    var orderAndSetPos = function(optId, optHeight) {
-        var annotations = (annotationSidebar.needToFilter() ? state.filteredAnnotations : state.allAnnotations);
-
-        var currentTop,
-            currentIndex;
-
-        startPosition = annotationSidebar.options.startTop;
-
-        if (typeof(optId) !== 'undefined' && typeof(optHeight) === 'number') {
-            if (typeof state.allAnnotations[optId] !== 'undefined') {
-                state.allAnnotations[optId].height = optHeight;
-            }
-        } else {
-            annotationsByPosition.sort(function(a, b) {
-                return a.top - b.top;
-            });
-        }
-
-        angular.forEach(annotationsByPosition, function(annotation) {
-            if (typeof annotations[annotation.id] !== 'undefined') {
-                currentTop = annotation.top;
-
-                if (currentTop > startPosition) {
-                    annotation.realTop = currentTop;
-                    startPosition = currentTop + annotation.height;
-                } else {
-                    annotation.realTop = startPosition;
-                    startPosition += annotation.height;
-                }
-            }
-        });
-
-        annotationSidebar.minHeightRequired = startPosition + annotationSidebar.options.annotationHeigth;
-    };
-
     var findFirstConsolidateItem = function(currentAnnotation) {
         var graph = currentAnnotation.graph;
         var list;
@@ -460,25 +425,57 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
+    var orderAndSetPos = function(optId, optHeight) {
+        var annotations = (annotationSidebar.needToFilter() ? state.filteredAnnotations : state.allAnnotations);
+        var currentTop;
+
+        startPosition = annotationSidebar.options.startTop;
+
+        if (typeof(optId) !== 'undefined' && typeof(optHeight) === 'number') {
+            if (typeof state.allAnnotations[optId] !== 'undefined') {
+                state.allAnnotations[optId].height = optHeight;
+            }
+        } else {
+            annotationsByPosition.sort(function(a, b) {
+                return a.top - b.top;
+            });
+        }
+
+        angular.forEach(annotationsByPosition, function(annotation) {
+            if (typeof annotations[annotation.id] !== 'undefined') {
+                currentTop = annotation.top;
+
+                if (currentTop > startPosition) {
+                    annotation.realTop = currentTop;
+                    startPosition = currentTop + annotation.height;
+                } else {
+                    annotation.realTop = startPosition;
+                    startPosition += annotation.height;
+                }
+            }
+        });
+
+        annotationSidebar.minHeightRequired = startPosition + annotationSidebar.options.annotationHeight;
+    };
+
     var setAnnotationPosition = function(annotation, dashboardHeight, optCheck, optId, optHeight) {
-        var annotationHeigth = 0,
+        var annotationHeight = 0,
             firstValid,
             currentItem,
             currentFragment;
 
+        var top, imgRef, fragRef, xpathTemp;
+
         firstValid = annotation.firstConsolidableItem;
+        annotationHeight = annotationSidebar.options.annotationHeight;
 
         if (typeof(firstValid) === 'undefined') {
-            annotationHeigth = annotationSidebar.options.annotationHeigth;
             if (optCheck && optId === annotation.id) {
-                annotationHeigth = optHeight;
+                annotationHeight = optHeight;
             }
-            // TODO minor refactoring here
 
-            annotation.top = -3;
-            annotation.height = annotationHeigth;
+            top = -3;
         } else {
-            var top, imgRef, fragRef, xpathTemp;
             currentItem = firstValid;
 
             if (currentItem.isTextFragment()) {
@@ -512,27 +509,22 @@ angular.module('Pundit2.AnnotationSidebar')
                 top = -2;
             }
 
-            // TODO minor refactoring here
-            annotationHeigth = annotationSidebar.options.annotationHeigth;
             if (optCheck && optId === annotation.id) {
-                annotationHeigth = optHeight;
+                annotationHeight = optHeight;
             }
-            annotation.top = top;
-            annotation.height = annotationHeigth
         }
-    }
+
+        annotation.top = top;
+        annotation.height = annotationHeight;
+    };
 
     var setAnnotationsPosition = function() {
-        var annotations = (annotationSidebar.needToFilter() ? state.filteredAnnotations : state.allAnnotations);
-        var dashboardHeight;
+        var annotations = (annotationSidebar.needToFilter() ? state.filteredAnnotations : state.allAnnotations),
+            dashboardHeight = getDashboardHeight();
 
         if (Object.keys(annotations).length === 0) {
             return;
         }
-
-        dashboardHeight = getDashboardHeight();
-        startPosition = annotationSidebar.options.startTop;
-        // annotationPosition = [];
 
         angular.forEach(annotations, function(annotation) {
             setAnnotationPosition(annotation, dashboardHeight)
@@ -542,8 +534,9 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var setAnnotationPositionAndHighlight = function() {
-        var annotations = (annotationSidebar.needToFilter() ? state.filteredAnnotations : state.allAnnotations);
-        var dashboardHeight;
+        var annotations = (annotationSidebar.needToFilter() ? state.filteredAnnotations : state.allAnnotations),
+            dashboardHeight = getDashboardHeight(),
+            currentTop;
 
         TextFragmentAnnotator.hideAll();
 
@@ -551,24 +544,35 @@ angular.module('Pundit2.AnnotationSidebar')
             return;
         }
 
-        dashboardHeight = getDashboardHeight();
         startPosition = annotationSidebar.options.startTop;
 
-        angular.forEach(annotations, function(annotation) {
-            setAnnotationPosition(annotation, dashboardHeight);
+        angular.forEach(annotationsByPosition, function(annotation) {
+            // Skip annotations not included in the current view
+            if (typeof annotations[annotation.id] !== 'undefined') {
+                // Set position
+                currentTop = annotation.top;
 
-            // Set annotation in page (text fragment hightlight)
-            for (var i in annotation.items) {
-                currentItem = annotation.items[i];
-                if (currentItem.isProperty() === false) {
-                    if (Consolidation.isConsolidated(currentItem)) {
-                        TextFragmentAnnotator.showByUri(currentItem.uri);
+                if (currentTop > startPosition) {
+                    annotation.realTop = currentTop;
+                    startPosition = currentTop + annotation.height;
+                } else {
+                    annotation.realTop = startPosition;
+                    startPosition += annotation.height;
+                }
+
+                // Set annotation in page (text fragment hightlight)
+                for (var i in annotation.items) {
+                    currentItem = annotation.items[i];
+                    if (currentItem.isProperty() === false) {
+                        if (Consolidation.isConsolidated(currentItem)) {
+                            TextFragmentAnnotator.showByUri(currentItem.uri);
+                        }
                     }
                 }
             }
         });
 
-        orderAndSetPos();
+        annotationSidebar.minHeightRequired = startPosition + annotationSidebar.options.annotationHeight;
     };
 
     var setBrokenInfo = function(annotation) {
@@ -1036,7 +1040,7 @@ angular.module('Pundit2.AnnotationSidebar')
             subFiltersSet = {},
             currentAnnotationsList;
 
-        var fromDate = activeFilters['fromDate'].expression, 
+        var fromDate = activeFilters['fromDate'].expression,
             toDate = activeFilters['toDate'].expression;
 
         var freeTextSearchLabel = activeFilters['freeText'].expression,

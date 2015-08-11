@@ -368,7 +368,7 @@ angular.module('Pundit2.AnnotationSidebar')
         for (var id in state.annotations) {
             state.annotations[id].ghosted = false;
             state.annotations[id].expanded = false;
-            AnnotationSidebar.setAllPosition(id, AnnotationSidebar.options.annotationHeigth);
+            AnnotationSidebar.setAllPosition(id, AnnotationSidebar.options.annotationHeight);
         }
         state.isGhostedActive = false;
         TextFragmentAnnotator.ghostRemoveAll();
@@ -378,7 +378,7 @@ angular.module('Pundit2.AnnotationSidebar')
         for (var id in state.annotations) {
             if (id !== skipId) {
                 state.annotations[id].expanded = false;
-                AnnotationSidebar.setAnnotationHeight(id, AnnotationSidebar.options.annotationHeigth);
+                AnnotationSidebar.setAnnotationHeight(id, AnnotationSidebar.options.annotationHeight);
             }
         }
     };
@@ -510,17 +510,6 @@ angular.module('Pundit2.AnnotationSidebar')
             $timeout.cancel(mouseoutHandlerPromise);
         }, 100);
     };
-
-    EventDispatcher.addListener('AnnotationSidebar.filteredAnnotationsUpdate', function() {
-        for (var id in state.annotations) {
-            if (id !== forceSkip) {
-                state.annotations[id].expanded = state.defaultExpanded;
-            } else {
-                state.annotations[id].expanded = true;
-                forceSkip = '';
-            }
-        }
-    });
 
     EventDispatcher.addListeners(['AnnotationSidebar.updateAnnotation'], function(e) {
         annotationDetails.log('Update annotation ' + e.args);
