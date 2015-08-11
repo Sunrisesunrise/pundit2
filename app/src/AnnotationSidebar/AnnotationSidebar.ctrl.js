@@ -70,7 +70,7 @@ angular.module('Pundit2.AnnotationSidebar')
         if (sendEvent) {
             EventDispatcher.sendEvent('AnnotationSidebar.updateAnnotation', annotation.id);
         }
-    }
+    };
 
     var addAnnotations = function() {
         $timeout.cancel(updateHitsTimer);
@@ -309,7 +309,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.$watch(function() {
         return AnnotationSidebar.getAllAnnotations();
     }, function(currentAnnotations) {
-        var currentAnnotation, annotations, annotationsKey, mergedAnnotations;
+        var currentAnnotation, annotations, annotationsKey;
 
         if (AnnotationSidebar.needToFilter()) {
             annotations = AnnotationSidebar.getAllAnnotationsFiltered();
@@ -350,13 +350,13 @@ angular.module('Pundit2.AnnotationSidebar')
             angular.forEach(annotations, function(annotation) {
                 // has someone added one annotation in another session?
                 if (typeof $scope.annotations[annotation.id] === 'undefined') {
-                    addAnnotation(ann, false);
+                    addAnnotation(annotation, false);
                 }
             });
         } else {
             removeAnnotations(annotations);
             annotationsCache = annotationsKey.map(function(k) {
-                return annotations[k]
+                return annotations[k];
             });
             addAnnotations();
         }
@@ -365,7 +365,7 @@ angular.module('Pundit2.AnnotationSidebar')
     // Using JSON.strigify to avoid deep watch (, true) on AnnotationSidebar filters 
     $scope.$watch(function() {
         return JSON.stringify(AnnotationSidebar.filters);
-    }, function(currentFilters) {
+    }, function() {
         if (AnnotationSidebar.filters.freeText.expression === '') {
             $scope.freeText = '';
         }
@@ -381,7 +381,7 @@ angular.module('Pundit2.AnnotationSidebar')
         removeAnnotations(annotations);
 
         annotationsCache = annotationsKey.map(function(k) {
-            return annotations[k]
+            return annotations[k];
         });
 
         $scope.annotationsLength = annotationsKey.length;

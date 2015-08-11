@@ -1,3 +1,5 @@
+/*global moment*/
+
 angular.module('Pundit2.AnnotationSidebar')
 
 .constant('ANNOTATIONDETAILSDEFAULTS', {
