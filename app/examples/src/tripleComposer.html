@@ -1,6 +1,13 @@
 <!-- buildexamples:section header --><!-- /buildexamples -->
 
 <script>
+    var punditConfig = {
+        modules: {
+            "ResourcePanel": {
+                pageItemsEnabled: true
+            }
+        }
+    };
 
     var TripleComposerDemoCtrl = function($scope, $http, $timeout, NameSpace, ItemsExchange, Item, MyPundit, EventDispatcher,
         CLIENTDEFAULTS, PAGEITEMSCONTAINERDEFAULTS, MYITEMSDEFAULTS) {
