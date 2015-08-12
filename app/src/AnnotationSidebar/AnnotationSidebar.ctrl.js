@@ -64,12 +64,8 @@ angular.module('Pundit2.AnnotationSidebar')
         container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
     }
 
-    var addAnnotation = function(annotation, sendEvent) {
+    var addAnnotation = function(annotation) {
         $scope.annotations[annotation.id] = annotation;
-
-        if (sendEvent) {
-            EventDispatcher.sendEvent('AnnotationSidebar.updateAnnotation', annotation.id);
-        }
     };
 
     var addAnnotations = function() {
@@ -85,10 +81,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
         updateHitsTimer = $timeout(function() {
             while (currentHits < maxHits && annotationsCache.length !== 0) {
-                var currentAnnotation = annotationsCache.shift(),
-                    currentId = currentAnnotation.id;
-                $scope.annotations[currentId] = currentAnnotation;
-
+                var currentAnnotation = annotationsCache.shift();
+                addAnnotation(currentAnnotation);
                 currentHits++;
             }
             addAnnotations();
@@ -309,7 +303,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.$watch(function() {
         return AnnotationSidebar.getAllAnnotations();
     }, function(currentAnnotations) {
-        var currentAnnotation, annotations, annotationsKey;
+        var currentAnnotation, currentId, annotations, annotationsKey;
 
         if (AnnotationSidebar.needToFilter()) {
             annotations = AnnotationSidebar.getAllAnnotationsFiltered();
@@ -326,16 +320,18 @@ angular.module('Pundit2.AnnotationSidebar')
         if (savedOrEditedAnnotationQueque.length > 0) {
             for (var i in savedOrEditedAnnotationQueque) {
                 currentAnnotation = savedOrEditedAnnotationQueque[i];
-                if (typeof annotations[currentAnnotation.id] !== 'undefined') {
-                    addAnnotation(currentAnnotation, true);
+                currentId = currentAnnotation.id;
+                if (typeof annotations[currentId] !== 'undefined') {
+                    addAnnotation(currentAnnotation);
                 }
+                EventDispatcher.sendEvent('AnnotationSidebar.updateAnnotation', currentId);
             }
             savedOrEditedAnnotationQueque = [];
         } else if (deletedIdQueue.length > 0) {
             // TODO: avoid in communication the download of all annotations when one is deleted
             removeAnnotations(annotations);
             angular.forEach(annotations, function(annotation) {
-                addAnnotation(annotation, false);
+                addAnnotation(annotation);
             });
 
             for (var j in deletedIdQueue) {
