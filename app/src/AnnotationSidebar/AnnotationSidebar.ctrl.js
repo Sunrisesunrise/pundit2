@@ -100,7 +100,7 @@ angular.module('Pundit2.AnnotationSidebar')
             delete $scope.annotations[annotationId];
         }
     };
- 
+
     var removeAnnotations = function(filteredAnnotations) {
         angular.forEach($scope.annotations, function(annotation) {
             if (typeof filteredAnnotations[annotation.id] === 'undefined') {
@@ -332,27 +332,16 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             savedOrEditedAnnotationQueque = [];
         } else if (deletedIdQueue.length > 0) {
+            // TODO: avoid in communication the download of all annotations when one is deleted
+            removeAnnotations(annotations);
+            angular.forEach(annotations, function(annotation) {
+                addAnnotation(annotation, false);
+            });
+
             for (var j in deletedIdQueue) {
                 removeAnnotation(deletedIdQueue[j]);
             }
             deletedIdQueue = [];
-
-            angular.forEach($scope.annotations, function(annotation) {
-                // has someone deleted one annotation in another session?
-                if (typeof annotations[annotation.id] === 'undefined') {
-                    removeAnnotation(annotation.id);
-                } else {
-                    // Update annotation reference
-                    $scope.annotations[annotation.id] = annotations[annotation.id];
-                }
-            });
-
-            angular.forEach(annotations, function(annotation) {
-                // has someone added one annotation in another session?
-                if (typeof $scope.annotations[annotation.id] === 'undefined') {
-                    addAnnotation(annotation, false);
-                }
-            });
         } else {
             removeAnnotations(annotations);
             annotationsCache = annotationsKey.map(function(k) {
@@ -379,13 +368,12 @@ angular.module('Pundit2.AnnotationSidebar')
             annotationsKey = Object.keys(annotations);
 
         removeAnnotations(annotations);
-
         annotationsCache = annotationsKey.map(function(k) {
             return annotations[k];
         });
+        addAnnotations();
 
         $scope.annotationsLength = annotationsKey.length;
-        addAnnotations();
     });
 
     // Watch dashboard height for top of sidebar
