@@ -42,6 +42,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.isAnnotationSidebarExpanded = AnnotationSidebar.options.isAnnotationSidebarExpanded;
     $scope.isLoadingData = false;
     $scope.isLoading = false;
+    $scope.consolidationInProgress = false;
 
     $scope.annotations = {};
 
@@ -269,41 +270,13 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
-    EventDispatcher.addListener('Pundit.loading', function(e) {
-        var currentState = e.args;
-        if (currentState !== $scope.isLoadingData) {
-            AnnotationSidebar.toggleLoading();
-            $scope.isLoadingData = currentState;
-        }
-    });
-
-    EventDispatcher.addListener('AnnotationSidebar.toggleLoading', function(e) {
-        $scope.isLoading = e.args;
-    });
-
-    // Watch annotation sidebar expanded or collapsed
-    EventDispatcher.addListener('AnnotationSidebar.toggle', function(e) {
-        var currentState = e.args;
-        if (currentState !== $scope.isAnnotationSidebarExpanded) {
-            body.toggleClass(bodyClasses);
-            container.toggleClass(sidebarClasses);
-
-            AnnotationSidebar.setAnnotationsPosition();
-
-            $scope.isAnnotationSidebarExpanded = currentState;
-        }
-    });
-
-    // Watch filters expanded or collapsed
-    EventDispatcher.addListener('AnnotationSidebar.toggleFiltersContent', function(e) {
-        $scope.isFiltersShowed = e.args;
-    });
-
     // Watch annotations
     $scope.$watch(function() {
         return AnnotationSidebar.getAllAnnotations();
     }, function(currentAnnotations) {
         var currentAnnotation, currentId, annotations, annotationsKey;
+
+        $scope.consolidationInProgress = false;
 
         if (AnnotationSidebar.needToFilter()) {
             annotations = AnnotationSidebar.getAllAnnotationsFiltered();
@@ -429,6 +402,40 @@ angular.module('Pundit2.AnnotationSidebar')
             maxDateWatch = undefined;
         }
     }
+
+    EventDispatcher.addListener('Pundit.loading', function(e) {
+        var currentState = e.args;
+        if (currentState !== $scope.isLoadingData) {
+            AnnotationSidebar.toggleLoading();
+            $scope.isLoadingData = currentState;
+        }
+    });
+
+    EventDispatcher.addListener('AnnotationSidebar.toggleLoading', function(e) {
+        $scope.isLoading = e.args;
+    });
+
+    EventDispatcher.addListener('Consolidation.StartConsolidate', function() {
+        $scope.consolidationInProgress = true;
+    });
+
+    // Watch annotation sidebar expanded or collapsed
+    EventDispatcher.addListener('AnnotationSidebar.toggle', function(e) {
+        var currentState = e.args;
+        if (currentState !== $scope.isAnnotationSidebarExpanded) {
+            body.toggleClass(bodyClasses);
+            container.toggleClass(sidebarClasses);
+
+            AnnotationSidebar.setAnnotationsPosition();
+
+            $scope.isAnnotationSidebarExpanded = currentState;
+        }
+    });
+
+    // Watch filters expanded or collapsed
+    EventDispatcher.addListener('AnnotationSidebar.toggleFiltersContent', function(e) {
+        $scope.isFiltersShowed = e.args;
+    });
 
     EventDispatcher.addListeners(['AnnotationsCommunication.saveAnnotation', 'AnnotationsCommunication.editAnnotation'], function(e) {
         var annotationId = e.args,

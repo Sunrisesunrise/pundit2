@@ -321,7 +321,9 @@
         </div>
 
         <!-- Loading -->
-        <div ng-show="isLoading" class="pnd-saving-content" ng-show="isAnnotationSidebarExpanded">
+        <div 
+            class="pnd-saving-content" 
+            ng-show="isLoading || consolidationInProgress && isAnnotationSidebarExpanded">
             <div>
                 <span class="pnd-icon pnd-icon-refresh pnd-icon-spin pnd-icon-2x"></span>
                 <span class="pnd-message">Loading annotations...</span>

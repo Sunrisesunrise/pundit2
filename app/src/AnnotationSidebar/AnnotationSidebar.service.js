@@ -463,7 +463,7 @@ angular.module('Pundit2.AnnotationSidebar')
             firstValid,
             currentItem;
 
-        var top, imgRef, fragRef, xpathTemp;
+        var top, imgRef, fragRefs, fragRef, xpathTemp;
 
         firstValid = annotation.firstConsolidableItem;
         annotationHeight = annotationSidebar.options.annotationHeight;
@@ -479,7 +479,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
             if (currentItem.isTextFragment()) {
                 top = -1;
-                fragRef = TextFragmentAnnotator.getFragmentReferenceByUri(firstValid.uri);
+                fragRefs = TextFragmentAnnotator.getFragmentReferenceByUri(firstValid.uri);
+                fragRef = fragRefs[fragRefs.length - 1];
 
                 if (typeof(fragRef) !== 'undefined' && typeof(fragRef.offset()) !== 'undefined') {
                     top = fragRef.offset().top - toolbarHeight - dashboardHeight;
