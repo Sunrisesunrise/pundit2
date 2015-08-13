@@ -28,8 +28,9 @@ angular.module('Pundit2.Annotators')
     // Number of node wrapping for time
     maxHits: 20,
     // Delay in ms for the refresh of the buffer
-    bufferDelay: 200
-
+    bufferDelay: 200,
+    // undefined / true / false
+    preventDelay: undefined
 })
 
 .config(function($locationProvider) {
@@ -44,7 +45,7 @@ angular.module('Pundit2.Annotators')
     $document, $location, $window, $q, $timeout) {
 
     var xp = new BaseComponent('XpointersHelper', XPOINTERSHELPERDEFAULTS);
-    var preventDelay = false;
+    var preventDelay = xp.options.preventDelay ? true : false;
 
     xp.getXPathsFromXPointers = function(xpArray) {
         var xpointers = [],
@@ -327,9 +328,7 @@ angular.module('Pundit2.Annotators')
 
             if (preventDelay) {
                 doUpdate();
-                console.log('preventDelay');
             } else {
-                console.log('NOpreventDelay');
                 updateAddTimer = $timeout(function() {
                     doUpdate();
                 }, delay);
@@ -684,9 +683,11 @@ angular.module('Pundit2.Annotators')
         return decodeURIComponent(uri);
     };
 
-    EventDispatcher.addListener('AnnotationsCommunication.PreventDelay', function(e) {
-        preventDelay = e.args;
-    });
+    if (xp.options.preventDelay === undefined) {
+        EventDispatcher.addListener('AnnotationsCommunication.PreventDelay', function(e) {
+            preventDelay = e.args;
+        });
+    }
 
     xp.log("Component up and running");
     return xp;

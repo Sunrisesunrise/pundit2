@@ -4,7 +4,9 @@ angular.module('Pundit2.Core')
     // Number of item operations for time
     maxHits: 40,
     // Delay in ms for the refresh of the buffer
-    bufferDelay: 80
+    bufferDelay: 80,
+    // undefined / true / false
+    preventDelay: undefined
 })
 
 .service('Consolidation', function($rootScope, $location, $q, $timeout, CONSOLIDATIONDEFAULTS, BaseComponent, EventDispatcher, NameSpace, Config,
@@ -13,7 +15,7 @@ angular.module('Pundit2.Core')
     var cc = new BaseComponent('Consolidation', CONSOLIDATIONDEFAULTS),
         state = {};
 
-    var preventDelay = false;
+    var preventDelay = cc.options.preventDelay ? true : false;
 
     // Wipes out every item, map, uri etc .. ready to get new items
     cc.wipe = function() {
@@ -258,9 +260,11 @@ angular.module('Pundit2.Core')
         return ret;
     };
 
-    EventDispatcher.addListener('AnnotationsCommunication.PreventDelay', function(e) {
-        preventDelay = e.args;
-    });
+    if (cc.options.preventDelay === undefined) {
+        EventDispatcher.addListener('AnnotationsCommunication.PreventDelay', function(e) {
+            preventDelay = e.args;
+        });
+    }
 
     return cc;
 });

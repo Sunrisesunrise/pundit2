@@ -31,7 +31,8 @@ angular.module('Pundit2.AnnotationSidebar')
         maxDateWatch;
 
     var updateHitsTimer,
-        annotationsCache = [];
+        annotationsCache = [],
+        preventDelay = AnnotationSidebar.options.preventDelay ? true : false;
 
     var savedOrEditedAnnotationQueque = [],
         deletedIdQueue = [];
@@ -77,17 +78,25 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         var currentHits = 0,
-            maxHits = 20,
-            delay = 200;
+            maxHits = AnnotationSidebar.options.maxHits,
+            delay = AnnotationSidebar.options.bufferDelay;
 
-        updateHitsTimer = $timeout(function() {
+        var doAdd = function() {
             while (currentHits < maxHits && annotationsCache.length !== 0) {
                 var currentAnnotation = annotationsCache.shift();
                 addAnnotation(currentAnnotation);
                 currentHits++;
             }
             addAnnotations();
-        }, delay);
+        };
+
+        if (preventDelay) {
+            doAdd();
+        } else {
+            updateHitsTimer = $timeout(function() {
+                doAdd();
+            }, delay);
+        }
     };
 
     var removeAnnotation = function(annotationId) {

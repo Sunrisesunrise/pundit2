@@ -244,6 +244,51 @@ angular.module('Pundit2.AnnotationSidebar')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#AnnotationSidebar.maxHits
+     *
+     * @description
+     * `number`
+     *
+     * Number of annotation operations for time
+     *
+     * Default value:
+     * <pre> maxHits: 20 </pre>
+     */
+    maxHits: 20,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationSidebar.bufferDelay
+     *
+     * @description
+     * `number`
+     *
+     * Delay in ms for the refresh of the buffer
+     *
+     * Default value:
+     * <pre> bufferDelay: 200 </pre>
+     */
+    bufferDelay: 200,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationSidebar.bufferDelay
+     *
+     * @description
+     * `boolean`
+     *
+     * undefined / true / false
+     *
+     * Default value:
+     * <pre> bufferDelay: undefined </pre>
+     */
+    preventDelay: undefined,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#AnnotationSidebar.clientDomTemplate
      *
      * @description
@@ -366,10 +411,11 @@ angular.module('Pundit2.AnnotationSidebar')
     annotationSidebar.minHeightRequired = startPosition;
 
     // TODO add single filter add to annotationsFilters
-    var resetAnnotationsFiltersPartial = function() {
+    var resetPartialsAndAnnotationsList = function() {
         for (var i in annotationsFilters) {
             for (var j in annotationsFilters[i]) {
                 annotationsFilters[i][j].partial = 0;
+                annotationsFilters[i][j].annotationsList = {};
             }
         }
     };
@@ -622,7 +668,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var dashboardHeight = getDashboardHeight();
 
-        resetAnnotationsFiltersPartial();
+        resetPartialsAndAnnotationsList();
 
         annotationsFilters.broken['uri:broken'] = {
             annotationsList: {}
@@ -1287,7 +1333,7 @@ angular.module('Pundit2.AnnotationSidebar')
         annotationSidebar.log('Update annotations in sidebar');
 
         var annotations = AnnotationsExchange.getAnnotations();
-        var annotationsList = AnnotationsExchange.getAnnotationsList();
+        var annotationsList = AnnotationsExchange.getAnnotationsHash();
 
         annotationsByPosition = angular.extend([], annotations);
         annotationsByDate = angular.extend([], annotations);

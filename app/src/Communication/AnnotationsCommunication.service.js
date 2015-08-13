@@ -290,7 +290,7 @@ angular.module('Pundit2.Communication')
                 }
                 // wipe page items
                 ItemsExchange.wipeContainer(Config.modules.PageItemsContainer.container);
-                // wipe all annotations (are in chace)
+                // wipe all annotations (are in cache)
                 AnnotationsExchange.wipe();
 
                 // Dispatch event
