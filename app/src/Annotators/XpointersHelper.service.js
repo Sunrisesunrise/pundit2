@@ -310,7 +310,7 @@ angular.module('Pundit2.Annotators')
                 delay = preventDelay ? 0 : xp.options.bufferDelay;
 
             var doUpdate = function() {
-                while (currentHits < maxHits && xpathsCache.length !== 1) {
+                while (currentHits < maxHits && xpathsCache.length > 1) {
                     var end = xpathsCache.pop(),
                         start = xpathsCache[xpathsCache.length - 1];
 
