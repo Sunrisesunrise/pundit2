@@ -454,7 +454,7 @@ angular.module('Pundit2.Client')
     Toolbar, Annomatic, NotebookCommunication, NotebookExchange, TemplatesExchange,
     SelectorsManager, FreebaseSelector, MurucaSelector, KorboBasketSelector, Korbo2Selector, EuropeanaSelector, DbpediaSelector, GeonamesSelector, PredicateSelector,
     TemplatesSelector, TripleComposer, ImageFragmentAnnotatorHelper,
-    $injector, $templateCache, $rootScope, $compile, $window) {
+    $injector, $templateCache, $rootScope, $compile, $window, $document) {
 
     var client = new BaseComponent('Client', CLIENTDEFAULTS),
 
@@ -661,6 +661,8 @@ angular.module('Pundit2.Client')
 
     };
 
+
+
     // Called when the user completed the login process with the modal etc, NOT if the user
     // was already logged in on boot etc
     var onLogin = function() {
@@ -732,8 +734,54 @@ angular.module('Pundit2.Client')
         var keeSelector = new Korbo2Selector(config);
         keeSelector.push(config);
         delete keeSelector;
-
     };
+
+    EventDispatcher.addListener('Client.dispatchDocumentEvent', function(data) {
+        dispatchDocumentEvent(data.args.event, data.args.data);
+    });
+
+    var dispatchDocumentEvent = function(eventName, details) {
+        var evt;
+        if (document.createEventObject) {
+            // dispatch for IE
+            evt = document.createEventObject();
+            evt.details = details;
+            document.fireEvent(eventName, evt)
+        }
+        else {
+            // dispatch for firefox + others
+            evt = document.createEvent("HTMLEvents");
+            evt.initEvent(eventName, true, true); // event type,bubbling,cancelable
+            evt.details = details;
+            return !document.dispatchEvent(evt);
+        }
+    };
+
+    var hideClient = function() {
+        EventDispatcher.sendEvent('Client.hide');
+        $rootScope.$$phase || $rootScope.$digest();
+        angular.element('body').css({
+            'marginTop': 0
+        });
+        angular.element('div[data-ng-app="Pundit2"]').css('display','none');
+    };
+
+    var showClient = function() {
+        angular.element('div[data-ng-app="Pundit2"]').css('display','inherit');
+        EventDispatcher.sendEvent('Client.show');
+        $rootScope.$$phase || $rootScope.$digest();
+    };
+
+    var requestAnnotationsNumber = function() {
+        if (Status.getLoading()) {
+
+        }
+        EventDispatcher.sendEvent('Client.requestAnnotationsNumber');
+    };
+
+    $document.on('Pundit2.hide', hideClient);
+    $document.on('Pundit2.show', showClient);
+    $document.on('Pundit2.requestAnnotationsNumber', requestAnnotationsNumber);
 
     client.log("Component up and running");
     return client;

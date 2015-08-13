@@ -1349,6 +1349,12 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     });
 
+    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+        if (state.isSidebarExpanded) {
+            annotationSidebar.toggle();
+        }
+    });
+
     annotationSidebar.log('Component running');
     return annotationSidebar;
 });

@@ -1143,5 +1143,9 @@ angular.module('Pundit2.ResourcePanel')
         hide();
     });
 
+    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+        hide();
+    });
+
     return resourcePanel;
 });

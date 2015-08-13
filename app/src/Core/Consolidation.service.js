@@ -9,7 +9,7 @@ angular.module('Pundit2.Core')
     preventDelay: undefined
 })
 
-.service('Consolidation', function($rootScope, $location, $q, $timeout, CONSOLIDATIONDEFAULTS, BaseComponent, EventDispatcher, NameSpace, Config,
+.service('Consolidation', function($rootScope, $location, $q, $timeout, $window, CONSOLIDATIONDEFAULTS, BaseComponent, EventDispatcher, NameSpace, Config,
     Item, ItemsExchange, XpointersHelper) {
 
     var cc = new BaseComponent('Consolidation', CONSOLIDATIONDEFAULTS),
@@ -264,6 +264,8 @@ angular.module('Pundit2.Core')
             preventDelay = e.args;
         });
     }
+
+    $window.punditConolidationWipe = cc.wipe;
 
     return cc;
 });
