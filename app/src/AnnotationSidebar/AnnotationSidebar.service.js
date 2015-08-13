@@ -797,9 +797,12 @@ angular.module('Pundit2.AnnotationSidebar')
             annotation.allLabels = '';
 
             for (var i in annotation.items) {
-                var label = annotation.items[i].label;
+                var label = annotation.items[i].label,
+                    description = annotation.items[i].description;
+
                 label = label.toLowerCase();
-                annotation.allLabels = annotation.allLabels.concat(' ', label);
+                description = typeof description !== 'undefined' ? description.toLowerCase() : '';
+                annotation.allLabels = annotation.allLabels.concat(' ', label, description);
             }
             for (var subject in annotation.graph) {
                 for (var predicate in annotation.graph[subject]) {
