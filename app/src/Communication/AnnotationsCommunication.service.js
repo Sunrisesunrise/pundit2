@@ -144,11 +144,14 @@ angular.module('Pundit2.Communication')
     // it's necessary to add again items to container.
     annotationsCommunication.getAnnotations = function(forceAddToContainer) {
         var promise = $q.defer();
+        var preventDelay = forceAddToContainer ? true : false;
 
         if (annotationsCommunication.options.preventDownload) {
             promise.reject('Prevent download forced by conf');
             return;
         }
+
+        EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', preventDelay);
 
         setLoading(true);
 
@@ -266,6 +269,8 @@ angular.module('Pundit2.Communication')
 
         var promise = $q.defer();
 
+        EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
+
         if (MyPundit.isUserLogged()) {
             setLoading(true);
             $http({
@@ -314,6 +319,8 @@ angular.module('Pundit2.Communication')
     annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, skipConsolidation, postDataTargets, types) {
         // var completed = 0;
         var promise = $q.defer();
+
+        EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
 
         var postSaveSend = function(url, annotationId) {
             $http({
@@ -432,6 +439,8 @@ angular.module('Pundit2.Communication')
     annotationsCommunication.editAnnotation = function(annID, graph, items, flatTargets, targets, types) {
 
         var promise = $q.defer();
+
+        EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
 
         if (MyPundit.isUserLogged()) {
 

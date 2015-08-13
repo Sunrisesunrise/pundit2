@@ -54,7 +54,7 @@ angular.module('Pundit2.Annotators')
         return true;
     };
 
-    ia.consolidate = function(items) {
+    ia.consolidate = function(items, promise) {
         ia.log('Consolidating!');
 
         var uri, currentUri, xpointers = [],
@@ -87,6 +87,8 @@ angular.module('Pundit2.Annotators')
             //     }
             // }
         }
+
+        return promise.resolve();
     };
 
     ia.wipe = function() {
