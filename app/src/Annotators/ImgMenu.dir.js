@@ -24,6 +24,7 @@ angular.module('Pundit2.Annotators')
                 // item generated from image reference
                 scope.item = null;
 
+                // TODO use global class insead this watch
                 scope.$watch(function() {
                     return Toolbar.isActiveTemplateMode();
                 }, function(active) {

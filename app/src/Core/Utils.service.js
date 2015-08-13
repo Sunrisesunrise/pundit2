@@ -13,6 +13,10 @@ angular.module('Pundit2.Core')
             }
         }
         return destination;
+
+        // N.B. in this deepExtend the destination property could be overwritten
+        // by the source propery, so angular.merge can't be used here
+        // return angular.merge(destination, source);
     };
 
     Utils.getLabelFromURI = function(uri) {

@@ -142,17 +142,15 @@ describe('AnnotationSidebar service', function() {
     it('should sidebar get annotation after consolidation-completed event', function(){
         EventDispatcher.sendEvent('Consolidation.consolidateAll');
         myAnnotation = AnnotationSidebar.getAllAnnotations();
-        expect(myAnnotation.length).toEqual(1);
+        expect(Object.keys(myAnnotation).length).toEqual(1);
     });
-
-    // TODO: testare singolarmente le funzioni per la creazione e il conteggio dei filtri
 
     it('should filter be applied to the list of filtered annotations', function(){
         AnnotationSidebar.filters['authors'].expression.push('http://fakeuri.it/test');
         var currentFilters = AnnotationSidebar.filters;
         var myAnnotationFiltered = AnnotationSidebar.getAllAnnotationsFiltered(currentFilters);
 
-        expect(myAnnotationFiltered.length).toEqual(0);
+        expect(Object.keys(myAnnotationFiltered).length).toEqual(0);
     });
 
     it('should service know if some filters are active', function(){

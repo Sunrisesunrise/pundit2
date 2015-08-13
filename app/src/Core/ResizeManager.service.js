@@ -14,7 +14,7 @@ angular.module('Pundit2.Core')
     var firstTime = true;
     var timerPromise;
 
-    $rootScope.$on('resize', function($event) {
+    $rootScope.$on('resize', function() {
         if (typeof timerPromise !== 'undefined') {
             $timeout.cancel(timerPromise);
         }

@@ -62,7 +62,7 @@ angular.module('Pundit2.Core')
                 fixedAnnotationsQueque = [];
             }, function() {
                 brokenHelper.err('Something wrong with fixed annotations');
-            });;
+            });
         }
     };
 

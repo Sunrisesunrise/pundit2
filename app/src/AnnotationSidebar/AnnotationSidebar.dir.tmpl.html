@@ -23,7 +23,7 @@
                             }"
                             class="pnd-btn pnd-btn-sidebar pnd-btn-fill-width"
                             ng-disabled="isLoading || isAnnotationsPanelActive()">
-                        Annotations ({{annotations.length}}/{{allAnnotations.length}})
+                        Annotations ({{annotationsLength}}/{{allAnnotationsLength}})
                     </button>
                 </div>
 
@@ -35,7 +35,7 @@
                             ng-click="annotationSidebar.toggleFiltersContent()"
                             ng-show="!isFiltersShowed"
                             class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-show-filter">
-                                Annotations filters ({{annotations.length}}/{{allAnnotations.length}})
+                                Annotations filters ({{annotationsLength}}/{{allAnnotationsLength}})
                                 <span class="pnd-icon-caret-down"></span>
                         </button>
                     </div>
@@ -46,7 +46,7 @@
                                 ng-click="annotationSidebar.toggleFiltersContent()"
                                 type="button"
                                 class="pnd-btn pnd-btn-dark pnd-btn-fill-width pnd-annotation-sidebar-btn-close-filters">
-                            Annotations filters ({{annotations.length}}/{{allAnnotations.length}})
+                            Annotations filters ({{annotationsLength}}/{{allAnnotationsLength}})
                             <span class="pnd-icon-caret-up"></span>
                         </button>
                     </div>
@@ -61,7 +61,7 @@
                                 class="pnd-icon"
                                 ng-class="setSearchIcon(annotationSidebar.filters.freeText.expression)"
                                 ng-click="freeText = ''; updateSearch(freeText)"></span>
-                            <input class="form-control" ng-model="freeText" ng-change="updateSearch(freeText)" placeholder="Contains">
+                            <input class="form-control" ng-model="freeText" ng-change="updateSearch(freeText)" ng-model-options="{debounce: 1000}" placeholder="Contains">
                         </div>
 
                         <!-- Authors -->
@@ -179,9 +179,7 @@
                         </div>
 
                         <!-- Page items -->
-                        <!--
-                        TODO Remove (comment) Page items in the whole ionterface
-                        <div class="pnd-annotation-sidebar-filter">
+                        <div class="pnd-annotation-sidebar-filter" ng-if="annotationSidebar.isEntitesActive">
                             <div class="pnd-panel" ng-click="toggleFilterList($event, 'entities')">
                                 <div class="pnd-annotation-sidebar-filter-label">Page items</div>
                                 <span class="pnd-icon" ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[filterTypeExpanded === 'entities']"></span>
@@ -208,7 +206,6 @@
                                 </div>
                             </div>
                         </div>
-                        -->
 
                         <!-- Date -->
                         <div class="pnd-annotation-sidebar-filter">
@@ -238,6 +235,7 @@
                                     type="text"
                                     class="form-control"
                                     ng-model="annotationSidebar.filters.fromDate.expression"
+                                    ng-change="updateDate(annotationSidebar.filters.fromDate.expression, 'from')"
                                     data-min-date="{{fromMinDate}}"
                                     data-max-date="{{fromMaxDate}}"
                                     placeholder="From"
@@ -252,6 +250,7 @@
                                     type="text"
                                     class="form-control"
                                     ng-model="annotationSidebar.filters.toDate.expression"
+                                    ng-change="updateDate(annotationSidebar.filters.toDate.expression, 'to')"
                                     data-min-date="{{toMinDate}}"
                                     data-max-date="{{toMaxDate}}"
                                     placeholder="To"
@@ -266,10 +265,10 @@
                         <!-- Broken -->
                         <div
                             class="pnd-annotation-sidebar-filter-broken"
-                            ng-class="{'pnd-annotation-sidebar-current-filter-active': annotationSidebar.filters.broken.expression.length>0}"
+                            ng-class="{'pnd-annotation-sidebar-current-filter-active': annotationSidebar.filters.broken.expression.length > 0}"
                             ng-click="toggleBrokenAnnotations()">
                             <span
-                                ng-show="annotationSidebar.filters.broken.expression.length>0">
+                                ng-show="annotationSidebar.filters.broken.expression.length > 0">
                                     Show broken annotations
                             </span>
                             <span
@@ -322,7 +321,9 @@
         </div>
 
         <!-- Loading -->
-        <div ng-show="isLoading" class="pnd-saving-content" ng-show="isAnnotationSidebarExpanded">
+        <div 
+            class="pnd-saving-content" 
+            ng-show="isLoading || consolidationInProgress && isAnnotationSidebarExpanded">
             <div>
                 <span class="pnd-icon pnd-icon-refresh pnd-icon-spin pnd-icon-2x"></span>
                 <span class="pnd-message">Loading annotations...</span>
@@ -333,25 +334,13 @@
         <div 
             ng-show="isAnnotationsPanelActive()"
             class="pnd-annotation-sidebar-annotations">         
-
-            <div ng-repeat="ann in filtered = (annotations)">
-                <!-- <annotation-details id="{{ann.id}}"></annotation-details> -->
-                <annotation-details 
-                    id="{{ann.id}}" 
-                    broken="ann.broken"
-                    class="pnd-annotation-details"
-                    ng-style="{'top': annotationSidebar.annotationPositionReal[ann.id].top}">
-                </annotation-details>
-            </div>
-            
-            <!-- 
-                TODO: need to delegate the management of 
-                annotations in the service of the sidebar
-                to avoid forcing the instance of details
-            -->
-            <div ng-if="allAnnotations.length == 0">
-                <annotation-details ng-show="false"></annotation-details>
-            </div>
+            <annotation-details
+                id="{{::ann.id}}"
+                broken="ann.broken"
+                class="pnd-annotation-details"
+                ng-style="{'top': ann.realTop}"
+                ng-repeat="ann in annotations track by ann.id">
+            </annotation-details>
         </div>
     </div>
 </div>

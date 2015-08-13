@@ -1,12 +1,21 @@
 angular.module('Pundit2.Core')
 
-.constant('CONSOLIDATIONDEFAULTS', {})
+.constant('CONSOLIDATIONDEFAULTS', {
+    // Number of item operations for time
+    maxHits: 40,
+    // Delay in ms for the refresh of the buffer
+    bufferDelay: 80,
+    // undefined / true / false
+    preventDelay: undefined
+})
 
-.service('Consolidation', function($rootScope, $location, CONSOLIDATIONDEFAULTS, BaseComponent, EventDispatcher, NameSpace, Config,
+.service('Consolidation', function($rootScope, $location, $q, $timeout, CONSOLIDATIONDEFAULTS, BaseComponent, EventDispatcher, NameSpace, Config,
     Item, ItemsExchange, XpointersHelper) {
 
     var cc = new BaseComponent('Consolidation', CONSOLIDATIONDEFAULTS),
         state = {};
+
+    var preventDelay = cc.options.preventDelay ? true : false;
 
     // Wipes out every item, map, uri etc .. ready to get new items
     cc.wipe = function() {
@@ -45,51 +54,87 @@ angular.module('Pundit2.Core')
     };
 
     var addItems = function(items) {
+        var deferred = $q.defer(),
+            itemsCache = [],
+            updateAddTimer;
+
+        var deferredAddItems = function(promise) {
+            $timeout.cancel(updateAddTimer);
+
+            if (itemsCache.length === 0) {
+                promise.resolve();
+                return;
+            }
+
+            var currentHits = 0,
+                maxHits = preventDelay ? 1000 : cc.options.maxHits,
+                delay = preventDelay ? 0 : cc.options.bufferDelay;
+
+            var doAdd = function()  {
+                while (currentHits < maxHits && itemsCache.length !== 0) {
+                    var item = itemsCache.pop();
+
+                    var fragmentType = cc.isConsolidable(item);
+                    if (fragmentType === false) {
+                        cc.log("Not adding, item is not consolidable: " + item.label);
+                        continue;
+                    } else if (item.uri in state.itemListByURI) {
+                        cc.log("Item already present: " + item.label);
+                        continue;
+                    }
+
+                    // Add or create a new element for the indexes
+                    if (fragmentType in state.itemListByType) {
+                        state.itemListByType[fragmentType][item.uri] = item;
+                        state.typeUriMap[fragmentType].push(item.uri);
+                    } else {
+                        state.typeUriMap[fragmentType] = [];
+                        state.itemListByType[fragmentType] = {};
+                        state.itemListByType[fragmentType][item.uri] = item;
+                    }
+
+                    // Create or update parent list of fragments
+                    if (typeof(item.parentItemXP) !== 'undefined') {
+                        if (item.parentItemXP in state.fragmentsItemListByParentURI) {
+                            state.fragmentsItemListByParentURI[item.parentItemXP].push(item);
+                        } else {
+                            state.fragmentsItemListByParentURI[item.parentItemXP] = [item];
+                        }
+                    }
+
+                    state.itemListByURI[item.uri] = item;
+                    state.uriTypeMap[item.uri] = fragmentType;
+
+                    cc.log("Added item: " + item.label + " (" + fragmentType + ")");
+
+                    currentHits++;
+                }
+                deferredAddItems(promise);
+            };
+
+            if (preventDelay) {
+                doAdd();
+            } else {
+                updateAddTimer = $timeout(function() {
+                    doAdd();
+                }, delay);
+            }
+        };
+
         if (!angular.isArray(items)) {
             items = [items];
         }
 
-        for (var l = items.length; l--;) {
-            var item = items[l];
+        itemsCache = items;
 
-            var fragmentType = cc.isConsolidable(item);
-            if (fragmentType === false) {
-                cc.log("Not adding, item is not consolidable: " + item.label);
-                continue;
-            } else if (item.uri in state.itemListByURI) {
-                cc.log("Item already present: " + item.label);
-                continue;
-            }
+        deferredAddItems(deferred);
 
-            // Add or create a new element for the indexes
-            if (fragmentType in state.itemListByType) {
-                state.itemListByType[fragmentType][item.uri] = item;
-                state.typeUriMap[fragmentType].push(item.uri);
-            } else {
-                state.typeUriMap[fragmentType] = [];
-                state.itemListByType[fragmentType] = {};
-                state.itemListByType[fragmentType][item.uri] = item;
-            }
-
-            // Create or update parent list of fragments
-            if (typeof(item.parentItemXP) !== 'undefined') {
-                if (item.parentItemXP in state.fragmentsItemListByParentURI) {
-                    state.fragmentsItemListByParentURI[item.parentItemXP].push(item);
-                } else {
-                    state.fragmentsItemListByParentURI[item.parentItemXP] = [item];
-                }
-            }
-
-            state.itemListByURI[item.uri] = item;
-            state.uriTypeMap[item.uri] = fragmentType;
-
-            cc.log("Added item: " + item.label + " (" + fragmentType + ")");
-        }
+        return deferred.promise;
     };
-
 
     // Will consolidate every possible item found in the ItemsExchange
     cc.consolidateAll = function() {
+        var consolidatePromise;
 
         if (state.isRunningAnnomatic) {
             return;
@@ -103,32 +148,56 @@ angular.module('Pundit2.Core')
             allItems = allItems.concat(ItemsExchange.getItemsByContainer(Config.modules.MyItems.container));
         }
 
+        EventDispatcher.sendEvent('Consolidation.StartConsolidate');
         cc.log('Consolidating ALL items');
-        cc.consolidate(allItems);
-        EventDispatcher.sendEvent('Consolidation.consolidateAll');
+        consolidatePromise = cc.consolidate(allItems);
+        consolidatePromise.then(function() {
+            EventDispatcher.sendEvent('Consolidation.consolidateAll');
+        });
     };
 
     // TODO: pass an element and consolidate just that element? or a named content?
     // an image or something?
     cc.consolidate = function(items) {
+        var deferred = $q.defer(),
+            deferredArray = [],
+            defIndex = 0,
+            promises = [];
 
-        // TODO: check if its not an array
+        if (!angular.isArray(items)) {
+            cc.err('Items not valid: malformed array', items);
+            return;
+        }
+
+        var addItemsPromise;
 
         cc.log('Will try to consolidate ' + items.length + ' items');
         cc.wipe();
-        addItems(items);
+        addItemsPromise = addItems(items);
 
-        for (var a in state.annotators) {
-            if (a in state.itemListByType) {
-                cc.log('Consolidating annotator type ' + a + ', ' + state.typeUriMap[a].length + ' items');
-                state.annotators[a].consolidate(state.itemListByType[a]);
-            } else {
-                cc.log('Skipping annotator type ' + a + ': no item to consolidate.');
+        addItemsPromise.then(function() {
+            for (var a in state.annotators) {
+                if (a in state.itemListByType) {
+                    deferredArray.push($q.defer());
+                    cc.log('Consolidating annotator type ' + a + ', ' + state.typeUriMap[a].length + ' items');
+                    state.annotators[a].consolidate(state.itemListByType[a], deferredArray[defIndex]);
+                    defIndex++;
+                } else {
+                    cc.log('Skipping annotator type ' + a + ': no item to consolidate.');
+                }
             }
-        }
 
-        EventDispatcher.sendEvent('Consolidation.consolidate');
+            promises = deferredArray.map(function(p) {
+                return p.promise;
+            });
 
+            $q.all(promises).then(function() {
+                EventDispatcher.sendEvent('Consolidation.consolidate');
+                deferred.resolve();
+            });
+        });
+
+        return deferred.promise;
         // TODO: ImageConsolidator ? (polygons, areas, whatever: on images?)
         // TODO: More consolidator types? Video? Maps? ..
     };
@@ -189,6 +258,12 @@ angular.module('Pundit2.Core')
 
         return ret;
     };
+
+    if (cc.options.preventDelay === undefined) {
+        EventDispatcher.addListener('AnnotationsCommunication.PreventDelay', function(e) {
+            preventDelay = e.args;
+        });
+    }
 
     return cc;
 });

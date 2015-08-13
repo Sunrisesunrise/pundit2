@@ -266,7 +266,7 @@ angular.module('Pundit2.TripleComposer')
             return false;
         }
         return true;
-    }
+    };
 
     $scope.onClickSubject = function($event) {
         if ($scope.templateMode) {

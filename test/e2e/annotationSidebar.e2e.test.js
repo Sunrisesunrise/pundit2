@@ -875,7 +875,6 @@ describe("AnnotationSidebar interaction", function() {
             expect(elements.length).toBe(0);
         });
 
-        p.findElement(protractor.By.css('.pnd-annotation-sidebar-btn-close-filters')).click();
         p.findElement(protractor.By.css('.pnd-annotation-sidebar-btn-remove-filters')).click();
 
         p.findElements(protractor.By.css('#'+firstAnnotation)).then(function(elements) {
@@ -985,7 +984,6 @@ describe("AnnotationSidebar interaction", function() {
             expect(elements.length).toBe(1);
         });
 
-        p.findElement(protractor.By.css('.pnd-annotation-sidebar-btn-close-filters')).click();
         p.findElement(protractor.By.css('.pnd-annotation-sidebar-btn-remove-filters')).click();
 
         p.findElements(protractor.By.css('.pnd-annotation-details-wrap')).then(function(elements) {

@@ -1,3 +1,5 @@
+/*global testConfig*/
+
 describe('Subject Popover Resource Panel service', function() {
 
     var ResourcePanel,

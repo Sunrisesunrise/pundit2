@@ -1,7 +1,7 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.controller('AnnotationSidebarCtrl', function($scope, $filter, $timeout, $document, $window,
-    EventDispatcher, AnnotationSidebar, Dashboard, Config, Analytics) {
+.controller('AnnotationSidebarCtrl', function($scope, $filter, $document, $window, $timeout,
+    EventDispatcher, AnnotationSidebar, AnnotationsExchange, Dashboard, Config, Analytics) {
 
     var bodyClasses = AnnotationSidebar.options.bodyExpandedClass + ' ' + AnnotationSidebar.options.bodyCollapsedClass;
     var sidebarClasses = AnnotationSidebar.options.sidebarExpandedClass + ' ' + AnnotationSidebar.options.sidebarCollapsedClass;
@@ -27,14 +27,25 @@ angular.module('Pundit2.AnnotationSidebar')
         clean: AnnotationSidebar.options.inputIconClear
     };
 
-    var delay;
+    var minDateWatch,
+        maxDateWatch;
+
+    var updateHitsTimer,
+        annotationsCache = [],
+        preventDelay = AnnotationSidebar.options.preventDelay ? true : false;
+
+    var savedOrEditedAnnotationQueque = [],
+        deletedIdQueue = [];
 
     $scope.annotationSidebar = AnnotationSidebar;
-    $scope.filters = AnnotationSidebar.getFilters();
+    $scope.filters = AnnotationSidebar.getAnnotationsFilters();
     $scope.isAnnomaticActive = Config.isModuleActive('Annomatic');
     $scope.isAnnotationSidebarExpanded = AnnotationSidebar.options.isAnnotationSidebarExpanded;
     $scope.isLoadingData = false;
     $scope.isLoading = false;
+    $scope.consolidationInProgress = false;
+
+    $scope.annotations = {};
 
     $scope.filterTypeExpanded = '';
 
@@ -54,6 +65,53 @@ angular.module('Pundit2.AnnotationSidebar')
         body.addClass(AnnotationSidebar.options.bodyCollapsedClass);
         container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
     }
+
+    var addAnnotation = function(annotation) {
+        $scope.annotations[annotation.id] = annotation;
+    };
+
+    var addAnnotations = function() {
+        $timeout.cancel(updateHitsTimer);
+
+        if (annotationsCache.length === 0) {
+            return;
+        }
+
+        var currentHits = 0,
+            maxHits = AnnotationSidebar.options.maxHits,
+            delay = AnnotationSidebar.options.bufferDelay;
+
+        var doAdd = function() {
+            while (currentHits < maxHits && annotationsCache.length !== 0) {
+                var currentAnnotation = annotationsCache.shift();
+                addAnnotation(currentAnnotation);
+                currentHits++;
+            }
+            addAnnotations();
+        };
+
+        if (preventDelay) {
+            doAdd();
+        } else {
+            updateHitsTimer = $timeout(function() {
+                doAdd();
+            }, delay);
+        }
+    };
+
+    var removeAnnotation = function(annotationId) {
+        if (typeof $scope.annotations[annotationId] !== 'undefined') {
+            delete $scope.annotations[annotationId];
+        }
+    };
+
+    var removeAnnotations = function(filteredAnnotations) {
+        angular.forEach($scope.annotations, function(annotation) {
+            if (typeof filteredAnnotations[annotation.id] === 'undefined') {
+                removeAnnotation(annotation.id);
+            }
+        });
+    };
 
     // Annotation sidebar height
     var resizeSidebarHeight = function() {
@@ -87,6 +145,26 @@ angular.module('Pundit2.AnnotationSidebar')
         return $filter('date')(newMinDate, 'yyyy-MM-dd');
     };
 
+    var updateMinDate = function(minDate) {
+        if (typeof(minDate) !== 'undefined') {
+            var newMinDate = $filter('date')(minDate, 'yyyy-MM-dd');
+            $scope.fromMinDate = setMin(newMinDate);
+            if (AnnotationSidebar.filters.fromDate.expression === '') {
+                $scope.toMinDate = setMin(newMinDate);
+            }
+        }
+    };
+
+    var updateMaxDate = function(maxDate) {
+        if (typeof(maxDate) !== 'undefined') {
+            var newMaxDate = $filter('date')(maxDate, 'yyyy-MM-dd');
+            $scope.toMaxDate = newMaxDate;
+            if (AnnotationSidebar.filters.toDate.expression === '') {
+                $scope.fromMaxDate = newMaxDate;
+            }
+        }
+    };
+
     $scope.isSuggestionsPanelActive = function() {
         return AnnotationSidebar.isSuggestionsPanelActive();
     };
@@ -102,10 +180,22 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.updateSearch = function(freeText) {
-        $timeout.cancel(delay);
-        delay = $timeout(function() {
-            AnnotationSidebar.filters.freeText.expression = freeText;
-        }, 1000);
+        AnnotationSidebar.filters.freeText.expression = freeText;
+    };
+
+    $scope.updateDate = function(date, fromTo) {
+        var currentDate;
+        if (typeof(date) !== 'undefined' && date !== null) {
+            currentDate = date;
+        } else {
+            currentDate = fromTo === 'from' ? $scope.fromMinDate : $scope.toMaxDate;
+        }
+
+        if (fromTo === 'from') {
+            $scope.toMinDate = setMin(currentDate);
+        } else if (fromTo === 'to') {
+            $scope.fromMaxDate = currentDate;
+        }
     };
 
     $scope.isFilterLabelShowed = function(currentInputText) {
@@ -116,7 +206,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.toggleFilterList = function(event, filterType) {
         var pndFilterShowClass = 'pnd-annotation-sidebar-filter-show';
-        var previousElement = angular.element('.' +pndFilterShowClass);
+        var previousElement = angular.element('.' + pndFilterShowClass);
         var currentElement = angular.element(event.target.parentElement.parentElement);
 
         $scope.searchAuthors = '';
@@ -131,10 +221,19 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if (currentElement.hasClass(pndFilterShowClass)) {
             $scope.filterTypeExpanded = filterType;
+
+            if (filterType === 'date') {
+                enableDateWatch();
+            }
         } else {
             $scope.filterTypeExpanded = '';
+
+            if (filterType === 'date') {
+                disableDateWatch();
+            }
         }
 
+        // TODO this is not the right way to handle limit cases
         if (typeof filterType === 'undefined') {
             filterType = angular.element(event.target).text().trim();
         }
@@ -180,93 +279,81 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
-    EventDispatcher.addListener('Pundit.loading', function(e) {
-        var currentState = e.args;
-        if (currentState !== $scope.isLoadingData) {
-            AnnotationSidebar.toggleLoading();
-            $scope.isLoadingData = currentState;
-        }
-    });
-
-    EventDispatcher.addListener('AnnotationSidebar.toggleLoading', function(e) {
-        $scope.isLoading = e.args;
-    });
-
-    // Watch annotation sidebar expanded or collapsed
-    EventDispatcher.addListener('AnnotationSidebar.toggle', function(e) {
-        var currentState = e.args;
-        if (currentState !== $scope.isAnnotationSidebarExpanded) {
-            body.toggleClass(bodyClasses);
-            container.toggleClass(sidebarClasses);
-
-            AnnotationSidebar.setAnnotationsPosition();
-
-            $scope.isAnnotationSidebarExpanded = currentState;
-        }
-    });
-
-    // Watch filters expanded or collapsed
-    EventDispatcher.addListener('AnnotationSidebar.toggleFiltersContent', function(e) {
-        $scope.isFiltersShowed = e.args;
-    });
-
     // Watch annotations
     $scope.$watch(function() {
         return AnnotationSidebar.getAllAnnotations();
     }, function(currentAnnotations) {
-        $scope.allAnnotations = currentAnnotations;
+        var currentAnnotation, currentId, annotations, annotationsKey;
+
+        $scope.consolidationInProgress = false;
+
         if (AnnotationSidebar.needToFilter()) {
-            $scope.annotations = AnnotationSidebar.getAllAnnotationsFiltered(AnnotationSidebar.filters);
+            annotations = AnnotationSidebar.getAllAnnotationsFiltered();
         } else {
-            $scope.annotations = currentAnnotations;
+            annotations = currentAnnotations;
+        }
+
+        annotationsKey = Object.keys(annotations);
+        $scope.annotationsLength = annotationsKey.length;
+
+        $scope.allAnnotations = currentAnnotations;
+        $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
+
+        if (savedOrEditedAnnotationQueque.length > 0) {
+            for (var i in savedOrEditedAnnotationQueque) {
+                currentAnnotation = savedOrEditedAnnotationQueque[i];
+                currentId = currentAnnotation.id;
+                if (typeof annotations[currentId] !== 'undefined') {
+                    addAnnotation(currentAnnotation);
+                }
+                EventDispatcher.sendEvent('AnnotationSidebar.updateAnnotation', currentId);
+            }
+            savedOrEditedAnnotationQueque = [];
+        } else if (deletedIdQueue.length > 0) {
+            // TODO: avoid in communication the download of all annotations when one is deleted
+            removeAnnotations(annotations);
+            angular.forEach(annotations, function(annotation) {
+                addAnnotation(annotation);
+            });
+
+            for (var j in deletedIdQueue) {
+                removeAnnotation(deletedIdQueue[j]);
+            }
+            deletedIdQueue = [];
+        } else {
+            removeAnnotations(annotations);
+            annotationsCache = annotationsKey.map(function(k) {
+                return annotations[k];
+            });
+            addAnnotations();
         }
     });
 
+    // Using JSON.strigify to avoid deep watch (, true) on AnnotationSidebar filters 
     $scope.$watch(function() {
-        return AnnotationSidebar.getMinDate();
-    }, function(minDate) {
-        if (typeof(minDate) !== 'undefined') {
-            var newMinDate = $filter('date')(minDate, 'yyyy-MM-dd');
-            $scope.fromMinDate = setMin(newMinDate);
-            if (AnnotationSidebar.filters.fromDate.expression === '') {
-                $scope.toMinDate = setMin(newMinDate);
-            }
-        }
-    });
-    $scope.$watch(function() {
-        return AnnotationSidebar.getMaxDate();
-    }, function(maxDate) {
-        if (typeof(maxDate) !== 'undefined') {
-            var newMaxDate = $filter('date')(maxDate, 'yyyy-MM-dd');
-            $scope.toMaxDate = newMaxDate;
-            if (AnnotationSidebar.filters.toDate.expression === '') {
-                $scope.fromMaxDate = newMaxDate;
-            }
-        }
-    });
-    $scope.$watch('annotationSidebar.filters.fromDate.expression', function(currentFromDate) {
-        if (typeof(currentFromDate) !== 'undefined') {
-            $scope.toMinDate = setMin(currentFromDate);
-        } else {
-            $scope.toMinDate = setMin($scope.fromMinDate);
-        }
-    });
-    $scope.$watch('annotationSidebar.filters.toDate.expression', function(currentToDate) {
-        if (typeof(currentToDate) !== 'undefined') {
-            $scope.fromMaxDate = currentToDate;
-        } else {
-            $scope.fromMaxDate = $scope.toMaxDate;
-        }
-    });
-
-    $scope.$watch('annotationSidebar.filters', function(currentFilters) {
+        return JSON.stringify(AnnotationSidebar.filters);
+    }, function() {
         if (AnnotationSidebar.filters.freeText.expression === '') {
             $scope.freeText = '';
         }
-        $scope.annotations = AnnotationSidebar.getAllAnnotationsFiltered(currentFilters);
-    }, true);
+        if (AnnotationSidebar.filters.fromDate.expression === '' &&
+            AnnotationSidebar.filters.toDate.expression === '') {
+            updateMinDate(AnnotationSidebar.getMinDate());
+            updateMaxDate(AnnotationSidebar.getMaxDate());
+        }
 
-    // TODO Use EventDispatcher
+        var annotations = AnnotationSidebar.getAllAnnotationsFiltered(),
+            annotationsKey = Object.keys(annotations);
+
+        removeAnnotations(annotations);
+        annotationsCache = annotationsKey.map(function(k) {
+            return annotations[k];
+        });
+        addAnnotations();
+
+        $scope.annotationsLength = annotationsKey.length;
+    });
+
     // Watch dashboard height for top of sidebar
     $scope.$watch(function() {
         return Dashboard.getContainerHeight();
@@ -298,6 +385,78 @@ angular.module('Pundit2.AnnotationSidebar')
         return $document.innerHeight();
     }, function() {
         resizeSidebarHeight();
+    });
+
+    function enableDateWatch() {
+        minDateWatch = $scope.$watch(function() {
+            return AnnotationSidebar.getMinDate();
+        }, function(minDate) {
+            updateMinDate(minDate);
+        });
+
+        maxDateWatch = $scope.$watch(function() {
+            return AnnotationSidebar.getMaxDate();
+        }, function(maxDate) {
+            updateMaxDate(maxDate);
+        });
+    }
+
+    function disableDateWatch() {
+        if (typeof minDateWatch === 'function') {
+            minDateWatch();
+            minDateWatch = undefined;
+        }
+        if (typeof maxDateWatch === 'function') {
+            maxDateWatch();
+            maxDateWatch = undefined;
+        }
+    }
+
+    EventDispatcher.addListener('Pundit.loading', function(e) {
+        var currentState = e.args;
+        if (currentState !== $scope.isLoadingData) {
+            AnnotationSidebar.toggleLoading();
+            $scope.isLoadingData = currentState;
+        }
+    });
+
+    EventDispatcher.addListener('AnnotationSidebar.toggleLoading', function(e) {
+        $scope.isLoading = e.args;
+    });
+
+    EventDispatcher.addListener('Consolidation.StartConsolidate', function() {
+        $scope.consolidationInProgress = true;
+    });
+
+    // Watch annotation sidebar expanded or collapsed
+    EventDispatcher.addListener('AnnotationSidebar.toggle', function(e) {
+        var currentState = e.args;
+        if (currentState !== $scope.isAnnotationSidebarExpanded) {
+            body.toggleClass(bodyClasses);
+            container.toggleClass(sidebarClasses);
+
+            $timeout(function() {
+                AnnotationSidebar.setAnnotationsPosition();
+            }, 50);
+
+            $scope.isAnnotationSidebarExpanded = currentState;
+        }
+    });
+
+    // Watch filters expanded or collapsed
+    EventDispatcher.addListener('AnnotationSidebar.toggleFiltersContent', function(e) {
+        $scope.isFiltersShowed = e.args;
+    });
+
+    EventDispatcher.addListeners(['AnnotationsCommunication.saveAnnotation', 'AnnotationsCommunication.editAnnotation'], function(e) {
+        var annotationId = e.args,
+            currentAnnotation = AnnotationsExchange.getAnnotationById(annotationId);
+        savedOrEditedAnnotationQueque.push(currentAnnotation);
+    });
+
+    EventDispatcher.addListeners(['AnnotationsCommunication.annotationDeleted'], function(e) {
+        var annotationId = e.args;
+        deletedIdQueue.push(annotationId);
     });
 
     angular.element($window).bind('resize', function() {

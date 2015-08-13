@@ -23,8 +23,14 @@ angular.module('Pundit2.Annotators')
     consolidationIconClasses: ['pnd-icon-tag'],
 
     // Classes to assign to named content elements to have them recognized by Pundit
-    namedContentClasses: ['pundit-content']
+    namedContentClasses: ['pundit-content'],
 
+    // Number of node wrapping for time
+    maxHits: 20,
+    // Delay in ms for the refresh of the buffer
+    bufferDelay: 200,
+    // undefined / true / false
+    preventDelay: undefined
 })
 
 .config(function($locationProvider) {
@@ -35,10 +41,11 @@ angular.module('Pundit2.Annotators')
     });
 })
 
-.service('XpointersHelper', function(XPOINTERSHELPERDEFAULTS, NameSpace, BaseComponent,
-    $document, $location, $window) {
+.service('XpointersHelper', function(XPOINTERSHELPERDEFAULTS, NameSpace, BaseComponent, EventDispatcher,
+    $document, $location, $window, $q, $timeout) {
 
     var xp = new BaseComponent('XpointersHelper', XPOINTERSHELPERDEFAULTS);
+    var preventDelay = xp.options.preventDelay ? true : false;
 
     xp.getXPathsFromXPointers = function(xpArray) {
         var xpointers = [],
@@ -284,17 +291,53 @@ angular.module('Pundit2.Annotators')
     // Wraps all of the calculated xpaths with some htmltag and the computed
     // classes
     xp.updateDOM = function(sortedXpaths, htmlClass, xpathsFragmentIds) {
+        var xpathsCache = sortedXpaths,
+            i = sortedXpaths.length - 1,
+            deferred = $q.defer(),
+            updateTimer;
 
-        for (var i = sortedXpaths.length - 1; i > 0; i--) {
-            var start = sortedXpaths[i - 1],
-                end = sortedXpaths[i];
+        var deferredUpdate = function(promise) {
+            $timeout.cancel(updateTimer);
 
-            if (xpathsFragmentIds[i].length > 0) {
-                xp.log("## Updating DOM, xpath " + i + ": " + xpathsFragmentIds[i].join(" "));
-                xp.wrapXPaths(start, end, xp.options.wrapNodeName, htmlClass, xpathsFragmentIds[i]);
+            if (xpathsCache.length <= 1) {
+                xp.log("Dom successfully updated!");
+                EventDispatcher.sendEvent('XpointersHelper.DOMUpdated');
+                promise.resolve();
+                return;
             }
-        }
-        xp.log("Dom successfully updated!");
+
+            var currentHits = 0,
+                maxHits = preventDelay ? 1000 : xp.options.maxHits,
+                delay = preventDelay ? 0 : xp.options.bufferDelay;
+
+            var doUpdate = function() {
+                while (currentHits < maxHits && xpathsCache.length > 1) {
+                    var end = xpathsCache.pop(),
+                        start = xpathsCache[xpathsCache.length - 1];
+
+                    if (xpathsFragmentIds[i].length > 0) {
+                        xp.log("## Updating DOM, xpath " + i + ": " + xpathsFragmentIds[i].join(" "));
+                        xp.wrapXPaths(start, end, xp.options.wrapNodeName, htmlClass, xpathsFragmentIds[i]);
+                    }
+
+                    currentHits++;
+                    i--;
+                }
+                deferredUpdate(promise);
+            };
+
+            if (preventDelay) {
+                doUpdate();
+            } else {
+                updateTimer = $timeout(function() {
+                    doUpdate();
+                }, delay);
+            }
+        };
+
+        deferredUpdate(deferred);
+
+        return deferred.promise;
     }; // updateDOM()
 
 
@@ -405,7 +448,8 @@ angular.module('Pundit2.Annotators')
     // Will wrap a node (or part of it) with the given htmlTag. Just part of it when it's
     // on the edge of the given range and the range starts (or ends) somewhere inside it
     xp.wrapNode = function(element, range, htmlTag, htmlClass, parents) {
-        var r2 = $document[0].createRange();
+        var r2 = $document[0].createRange(),
+            wrapNode;
 
         // Select correct sub-range: if the element is the start or end container of the range
         // set the boundaries accordingly: if it's startContainer use it's start offset and set
@@ -420,24 +464,36 @@ angular.module('Pundit2.Annotators')
             r2.selectNode(element);
         }
 
+        wrapNode = xp.createWrapNode(htmlTag, htmlClass, parents);
+
         // Finally surround the range contents with an ad-hoc crafted html element
-        r2.surroundContents(xp.createWrapNode(htmlTag, htmlClass, parents));
+        r2.surroundContents(wrapNode.element);
+
+        EventDispatcher.sendEvent('XpointersHelper.NodeAdded', {
+            fragments: parents,
+            reference: wrapNode.jElement
+        });
     }; // wrapNode()
 
     // Creates an HTML element to be used to wrap (usually a span?) adding the given
     // classes to it
     xp.createWrapNode = function(htmlTag, htmlClass, parents) {
-        var element = $document[0].createElement(htmlTag);
-        angular.element(element).addClass(htmlClass);
+        var element = $document[0].createElement(htmlTag),
+            currentElement = angular.element(element);
+        currentElement.addClass(htmlClass);
 
         // TODO: make this directive name configurable??
-        angular.element(element).attr('text-fragment-bit', '');
+        currentElement.attr('text-fragment-bit', '');
         // Parent fragment ids both in fragments attribute and in classes. First used to
         // pass them back to the TextFragmentAnnotator service, the second to being able
         // to retrieve the last of them with a css selector to place the icon
-        angular.element(element).attr('fragments', parents.join(','));
-        angular.element(element).addClass(parents.join(' '));
-        return element;
+        currentElement.attr('fragments', parents.join(','));
+        currentElement.addClass(parents.join(' '));
+
+        return {
+            element: element,
+            jElement: currentElement
+        };
     };
 
     // Merges text nodes: when unwrapping consolidated fragments we are splitting the original
@@ -627,7 +683,11 @@ angular.module('Pundit2.Annotators')
         return decodeURIComponent(uri);
     };
 
-
+    if (xp.options.preventDelay === undefined) {
+        EventDispatcher.addListener('AnnotationsCommunication.PreventDelay', function(e) {
+            preventDelay = e.args;
+        });
+    }
 
     xp.log("Component up and running");
     return xp;

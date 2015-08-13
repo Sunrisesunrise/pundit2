@@ -9,7 +9,6 @@ angular.module('Pundit2.Annotators')
         link: function(scope, element /*, attrs */ ) {
                 var numberOfTextFragments = scope.fragments.split(",").length;
 
-                // TODO: move this to its own controller?
                 TextFragmentAnnotator.addFragmentBit(scope);
 
                 element.addClass('pnd-textfragment-numbers-' + numberOfTextFragments);

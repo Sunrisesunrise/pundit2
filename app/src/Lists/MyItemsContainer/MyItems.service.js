@@ -368,7 +368,7 @@ angular.module("Pundit2.MyItemsContainer")
 
         var currentTime = new Date(),
             // get all my items and make a copy
-            items = angular.copy(ItemsExchange.getItemsByContainer(myItems.options.container)),
+            items = angular.extend([], ItemsExchange.getItemsByContainer(myItems.options.container)),
             promise = $q.defer();
 
         // add new item to the copied array

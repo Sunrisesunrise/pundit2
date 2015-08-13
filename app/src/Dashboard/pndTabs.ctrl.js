@@ -122,7 +122,7 @@ angular.module('Pundit2.Dashboard')
     };
 
     // TODO fix the watch system on with of tabs
-    var dashboardToggleHandler = EventDispatcher.addListener('Dashboard.toggle', function(e) {
+    dashboardToggleHandler = EventDispatcher.addListener('Dashboard.toggle', function(e) {
         if (firstTime) {
             if (e.args) {
                 $timeout(function() {
