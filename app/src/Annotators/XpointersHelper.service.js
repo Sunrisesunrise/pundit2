@@ -301,7 +301,7 @@ angular.module('Pundit2.Annotators')
 
             if (xpathsCache.length <= 1) {
                 xp.log("Dom successfully updated!");
-                promise.resolve()
+                promise.resolve();
                 return;
             }
 
@@ -329,7 +329,7 @@ angular.module('Pundit2.Annotators')
             if (preventDelay) {
                 doUpdate();
             } else {
-                updateAddTimer = $timeout(function() {
+                updateTimer = $timeout(function() {
                     doUpdate();
                 }, delay);
             }

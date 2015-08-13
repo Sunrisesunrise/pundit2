@@ -62,7 +62,7 @@ angular.module('Pundit2.Core')
             $timeout.cancel(updateAddTimer);
 
             if (itemsCache.length === 0) {
-                promise.resolve()
+                promise.resolve();
                 return;
             }
 
@@ -131,7 +131,6 @@ angular.module('Pundit2.Core')
 
         return deferred.promise;
     };
-
 
     // Will consolidate every possible item found in the ItemsExchange
     cc.consolidateAll = function() {
