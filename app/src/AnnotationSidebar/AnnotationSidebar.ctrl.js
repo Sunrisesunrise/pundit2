@@ -435,7 +435,9 @@ angular.module('Pundit2.AnnotationSidebar')
             body.toggleClass(bodyClasses);
             container.toggleClass(sidebarClasses);
 
-            AnnotationSidebar.setAnnotationsPosition();
+            $timeout(function() {
+                AnnotationSidebar.setAnnotationsPosition();
+            }, 50);
 
             $scope.isAnnotationSidebarExpanded = currentState;
         }
