@@ -162,7 +162,10 @@ angular.module('Pundit2.Communication')
 
         annPromise.then(function(ids) {
             annotationsCommunication.log('Found ' + ids.length + ' annotations on the current page.');
-            EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.updateAnnotationsNumber', data: ids.length});
+            EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
+                event: 'Pundit2.updateAnnotationsNumber',
+                data: ids.length
+            });
             if (ids.length === 0) {
                 // TODO: use wipe (not consolidateAll) and specific event in other component (like sidebar)
                 Consolidation.consolidateAll();
@@ -401,7 +404,10 @@ angular.module('Pundit2.Communication')
                         Consolidation.consolidateAll();
                     }
 
-                    EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.updateAnnotationsNumber', data: AnnotationsExchange.getAnnotations().length});
+                    EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
+                        event: 'Pundit2.updateAnnotationsNumber',
+                        data: AnnotationsExchange.getAnnotations().length
+                    });
 
                     // TODO move inside notebook then?
                     setLoading(false);
@@ -502,8 +508,11 @@ angular.module('Pundit2.Communication')
         annotationsCommunication.setAnnotationsBroken(e.args, false, e.promise);
     });
 
-    EventDispatcher.addListener('Client.requestAnnotationsNumber', function(e) {
-        EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.updateAnnotationsNumber', data: AnnotationsExchange.getAnnotations().length});
+    EventDispatcher.addListener('Client.requestAnnotationsNumber', function() {
+        EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
+            event: 'Pundit2.updateAnnotationsNumber',
+            data: AnnotationsExchange.getAnnotations().length
+        });
     });
 
     return annotationsCommunication;

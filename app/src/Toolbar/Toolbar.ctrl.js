@@ -2,8 +2,10 @@
 
 angular.module('Pundit2.Toolbar')
 
-.controller('ToolbarCtrl', function($scope, $rootScope, $modal, $http, $window, NameSpace, Config, Toolbar, SelectorsManager, Fp3,
-    MyPundit, Dashboard, TripleComposer, AnnotationSidebar, Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, Analytics, PageHandler, EventDispatcher, Client) {
+.controller('ToolbarCtrl', function($scope, $rootScope, $modal, $http, $window, NameSpace, Config, 
+    Toolbar, SelectorsManager, Fp3, MyPundit, Dashboard, TripleComposer, AnnotationSidebar, 
+    Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, 
+    Analytics, PageHandler, EventDispatcher) {
 
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
     $scope.dropdownTemplateMyNotebook = "src/Toolbar/myNotebooksDropdown.tmpl.html";

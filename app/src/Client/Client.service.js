@@ -746,7 +746,7 @@ angular.module('Pundit2.Client')
             // dispatch for IE
             evt = document.createEventObject();
             evt.details = details;
-            document.fireEvent(eventName, evt)
+            document.fireEvent(eventName, evt);
         }
         else {
             // dispatch for firefox + others
