@@ -40,10 +40,10 @@ describe('MyPundit service', function() {
         }, 1000);
         setTimeout(function() {
             flag1 = true;
-        }, 2000);
+        }, 3000);
         setTimeout(function() {
             flag2 = true;
-        }, 3000);
+        }, 4000);
 
         waitsFor(function() {
             if (flag0) {
@@ -101,6 +101,10 @@ describe('MyPundit service', function() {
         angular.element('#loginButton').remove();
 
         angular.element('div[data-ng-app="Pundit2"]').remove();
+    });
+
+    afterEach(function() {
+        MyPundit.removePostMessageListener();
     });
     
     it("should check if user is logged in", function() {
@@ -274,6 +278,7 @@ describe('MyPundit service', function() {
         // loginPromise should be resolved as false 
         promise.then(function(value) {
             promiseValue = value;
+            MyPundit.closeLoginPopover();
             expect(promiseValue).toBe(false);
         });
 
@@ -373,6 +378,7 @@ describe('MyPundit service', function() {
 		// loginPromise should be resolved as true when user is logged in
 		promise.then(function(value) {
 			promiseValue = value;
+            MyPundit.closeLoginPopover();
             expect(promiseValue).toBe(true);
 		});
 

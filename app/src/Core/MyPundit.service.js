@@ -63,7 +63,7 @@ angular.module('Pundit2.Core')
  *
  */
 .service('MyPundit', function(MYPUNDITDEFAULTS, $http, $q, $timeout, $modal, $window, $interval,
-    BaseComponent, EventDispatcher, NameSpace, Analytics, $popover) {
+    BaseComponent, EventDispatcher, NameSpace, Analytics, $popover, $rootScope) {
 
     var myPundit = new BaseComponent('MyPundit', MYPUNDITDEFAULTS);
 
@@ -437,14 +437,42 @@ angular.module('Pundit2.Core')
         }
     };
 
-    // TODO is there a better way? should we use $window? 
-    if (window.addEventListener) {
-        window.addEventListener("message", popoverLoginPostMessageHandler, false);
-    } else {
-        if (window.attachEvent) {
-            window.attachEvent("onmessage", popoverLoginPostMessageHandler, false);
+    var clearOldListeners = function() {
+        if (typeof window.punditPostMessageListeners !== 'undefined') {
+            // clear old listeners.
+            for (var i in window.punditPostMessageListeners) {
+                if (window.addEventListener) {
+                    window.removeEventListener("message", window.punditPostMessageListeners[i]);
+                } else {
+                    if (window.attachEvent) {
+                        window.detachEvent("onmessage", window.punditPostMessageListeners[i]);
+                    }
+                }
+            }
         }
-    }
+        window.punditPostMessageListeners = [];
+    };
+
+    myPundit.addPostMessageListener = function() {
+        clearOldListeners();
+        if (window.addEventListener) {
+            window.addEventListener("message", popoverLoginPostMessageHandler, false);
+        } else {
+            if (window.attachEvent) {
+                window.attachEvent("onmessage", popoverLoginPostMessageHandler, false);
+            }
+        }
+        window.punditPostMessageListeners.push(popoverLoginPostMessageHandler);
+    };
+
+
+    myPundit.removePostMessageListener = function() {
+        clearOldListeners();
+    };
+
+    // First init.
+    myPundit.removePostMessageListener();
+    myPundit.addPostMessageListener();
 
     // TODO This is not really a popoverLogin but more a popover toggler
     myPundit.popoverLogin = function(where) {
@@ -515,6 +543,21 @@ angular.module('Pundit2.Core')
         }
         myPundit.popoverLogin('editProfile');
     };
+
+    var clientHidden = false;
+    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+        if (!clientHidden) {
+            myPundit.removePostMessageListener();
+        }
+        clientHidden = true;
+    });
+
+    EventDispatcher.addListener('Client.show', function(/*e*/) {
+        if (clientHidden) {
+            myPundit.addPostMessageListener();
+        }
+        clientHidden = false;
+    });
 
     return myPundit;
 });
