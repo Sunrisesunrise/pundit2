@@ -1,5 +1,5 @@
 angular.module('Pundit2', [
-    'ngResource', 'ngSanitize', 'ngAnimate', 'ngResize',
+    'ngResource', 'ngSanitize', 'ngAnimate', 'ngResize','ngCookies',
     'mgcrea.ngStrap', 'templates-main', 'angular-md5', 'angularMoment', 'datePicker',
     'Pundit2.Core',
     'Pundit2.Annomatic',

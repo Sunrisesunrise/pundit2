@@ -47,6 +47,8 @@ angular.module('Pundit2.Core')
      */
     loginModalCloseTimer: 300000, // 5 minutes
 
+    userCookieExpireTime: 1000 * 60 * 30,
+
     popoverLoginURL: 'http://dev.thepund.it/connect/index.php'
 })
 
@@ -63,7 +65,7 @@ angular.module('Pundit2.Core')
  *
  */
 .service('MyPundit', function(MYPUNDITDEFAULTS, $http, $q, $timeout, $modal, $window, $interval,
-    BaseComponent, EventDispatcher, NameSpace, Analytics, $popover, $rootScope) {
+    BaseComponent, EventDispatcher, NameSpace, Analytics, $popover, $rootScope, $cookies) {
 
     var myPundit = new BaseComponent('MyPundit', MYPUNDITDEFAULTS);
 
@@ -71,7 +73,14 @@ angular.module('Pundit2.Core')
     var loginServer,
         editProfile,
         loginStatus,
-        userData = {};
+        userData = {},
+        infoCookie = {
+            templateLabel: undefined,
+            templateId: undefined,
+            templateColor: undefined,
+            notebookLabel: undefined
+        };
+
 
     /**
      * @ngdoc method
@@ -140,6 +149,17 @@ angular.module('Pundit2.Core')
         }
     };
 
+    myPundit.getInfoCookie = function() {
+        return infoCookie;
+    };
+
+    myPundit.setInfoCookie = function(data) {
+        angular.extend(infoCookie, data);
+        var expirationDate = (new Date()).getTime() + myPundit.options.userCookieExpireTime;
+        expirationDate = new Date(expirationDate);
+        $cookies.putObject('pundit.Info', infoCookie, {expires: expirationDate, path: '/'});
+    };
+
     /**
      * @ngdoc method
      * @name MyPundit#checkLoggedIn
@@ -156,6 +176,20 @@ angular.module('Pundit2.Core')
         var promise = $q.defer(),
             httpCall;
 
+        var expirationDate = (new Date()).getTime() + myPundit.options.userCookieExpireTime;
+        expirationDate = new Date(expirationDate);
+        var cookieUserdata = $cookies.getObject('pundit.User');
+        var cookieInfo = $cookies.getObject('pundit.Info');
+        var a = angular.extend(infoCookie, cookieInfo);
+        if (typeof cookieUserdata !== 'undefined' && cookieUserdata !== null && cookieUserdata.loginStatus === 1) {
+            isUserLogged = true;
+            loginStatus = 'loggedIn';
+            userData = cookieUserdata;
+            $cookies.putObject('pundit.User', cookieUserdata, {expires: expirationDate, path: '/'});
+            EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
+            promise.resolve(true);
+        }
+
         httpCall = $http({
             headers: {
                 'Accept': 'application/json'
@@ -168,15 +202,19 @@ angular.module('Pundit2.Core')
             loginServer = data.loginServer;
             editProfile = data.editProfile;
             // user is not logged in
+
             if (data.loginStatus === 0) {
                 isUserLogged = false;
                 EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
+                $cookies.remove('pundit.User');
+                $cookies.remove('pundit.Info');
                 promise.resolve(false);
             } else {
                 // user is logged in
                 isUserLogged = true;
                 loginStatus = 'loggedIn';
                 userData = data;
+                $cookies.putObject('pundit.User', data, {expires: expirationDate, path: '/'});
                 EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
                 promise.resolve(true);
             }
@@ -351,6 +389,9 @@ angular.module('Pundit2.Core')
         }).error(function() {
             logoutPromise.reject('logout promise error');
         });
+
+        $cookies.remove('pundit.User');
+        $cookies.remove('pundit.Info');
 
         return logoutPromise.promise;
     };

@@ -359,13 +359,16 @@ angular.module('Pundit2.Toolbar')
         updateMyNotebooks();
     }, true);
 
-    $scope.currentNotebookLabel = "Loading...";
+    $scope.currentNotebookLabel = typeof MyPundit.getInfoCookie().notebookLabel === 'undefined' ? "Loading..." : MyPundit.getInfoCookie().notebookLabel;
     $scope.$watch(function() {
         return NotebookExchange.getCurrentNotebooks();
     }, function(newCurr) {
         if (typeof(newCurr) !== "undefined") {
             updateMyNotebooks();
             $scope.currentNotebookLabel = newCurr.label;
+            MyPundit.setInfoCookie({
+                notebookLabel: newCurr.label
+            });
         }
     });
 
@@ -414,7 +417,14 @@ angular.module('Pundit2.Toolbar')
             text: 'Select the template you wish to use',
             header: true
         }];
-        $scope.currentTemplateLabel = "Loading...";
+
+        if (typeof MyPundit.getInfoCookie().templateId !== 'undefined') {
+            TemplatesExchange.setCurrent(MyPundit.getInfoCookie().templateId);
+        }
+        if (typeof MyPundit.getInfoCookie().templateColor !== 'undefined') {
+            $scope.currentTemplateColor = MyPundit.getInfoCookie().templateColor;
+        }
+        $scope.currentTemplateLabel = typeof MyPundit.getInfoCookie().templateLabel === 'undefined' ? "Loading..." : MyPundit.getInfoCookie().templateLabel;
 
         $scope.$watch(function() {
             return TemplatesExchange.getTemplates().length;
@@ -429,6 +439,11 @@ angular.module('Pundit2.Toolbar')
                 updateTemplates();
                 $scope.currentTemplateLabel = newCurr.label;
                 $scope.currentTemplateColor = newCurr.hasColor;
+                MyPundit.setInfoCookie({
+                    templateLabel: newCurr.label,
+                    templateId: newCurr.id,
+                    templateColor: newCurr.hasColor
+                });
             }
         });
 
