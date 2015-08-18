@@ -51,6 +51,8 @@ describe('AnnotationDetails service', function() {
             ANNOTATIONDETAILSDEFAULTS = _ANNOTATIONDETAILSDEFAULTS_;
         });
 
+        MyPundit.useCookies = false;
+
         var promiseValue;
 
         var testId = fakeScope.id;

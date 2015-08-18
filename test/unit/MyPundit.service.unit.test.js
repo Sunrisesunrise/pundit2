@@ -88,6 +88,8 @@ describe('MyPundit service', function() {
         MYPUNDITDEFAULTS = _MYPUNDITDEFAULTS_;
         $log = _$log_;
         $httpBackend2 = _$httpBackend_;
+
+        MyPundit.useCookies = false;
     }));
 
     beforeEach(function() {

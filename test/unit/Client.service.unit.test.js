@@ -1,7 +1,7 @@
 describe('Client service', function() {
     
     var Client, NameSpace, SelectorsManager, ItemsExchange, EventDispatcher,
-        $rootScope, $httpBackend, $templateCache, $compile;
+        $rootScope, $httpBackend, $templateCache, $compile, MyPundit;
 
     var testPunditConfig = {
         korbo : {
@@ -68,7 +68,7 @@ describe('Client service', function() {
 
     var ImageHandler;
     beforeEach(inject(function( _$rootScope_, _$httpBackend_, _$templateCache_, _$compile_,
-        _Client_, _NameSpace_, _SelectorsManager_, _ItemsExchange_, _ImageHandler_, _EventDispatcher_){
+        _Client_, _NameSpace_, _SelectorsManager_, _ItemsExchange_, _ImageHandler_, _EventDispatcher_, _MyPundit_){
 
         $rootScope = _$rootScope_;
         $httpBackend = _$httpBackend_;
@@ -80,6 +80,9 @@ describe('Client service', function() {
         SelectorsManager = _SelectorsManager_;
         ItemsExchange = _ItemsExchange_;
         ImageHandler = _ImageHandler_;
+        MyPundit = _MyPundit_;
+
+        MyPundit.useCookies = false;
 
     }));
 

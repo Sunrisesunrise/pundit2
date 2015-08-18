@@ -81,6 +81,8 @@ describe('Object Popover Resource Panel service', function() {
         SelectorsManager = _SelectorsManager_;
         $timeout = _$timeout_;
         $window = _$window_;
+
+        MyPundit.useCookies = false;
     }));
 
     beforeEach(function(){

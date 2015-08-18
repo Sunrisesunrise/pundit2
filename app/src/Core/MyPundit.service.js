@@ -81,6 +81,7 @@ angular.module('Pundit2.Core')
             notebookLabel: undefined
         };
 
+    myPundit.useCookies = true;
 
     /**
      * @ngdoc method
@@ -178,16 +179,25 @@ angular.module('Pundit2.Core')
 
         var expirationDate = (new Date()).getTime() + myPundit.options.userCookieExpireTime;
         expirationDate = new Date(expirationDate);
-        var cookieUserdata = $cookies.getObject('pundit.User');
-        var cookieInfo = $cookies.getObject('pundit.Info');
-        var a = angular.extend(infoCookie, cookieInfo);
-        if (typeof cookieUserdata !== 'undefined' && cookieUserdata !== null && cookieUserdata.loginStatus === 1) {
-            isUserLogged = true;
-            loginStatus = 'loggedIn';
-            userData = cookieUserdata;
-            $cookies.putObject('pundit.User', cookieUserdata, {expires: expirationDate, path: '/'});
-            EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
-            promise.resolve(true);
+
+        if (myPundit.useCookies) {
+            var cookieUserdata = $cookies.getObject('pundit.User');
+            var cookieInfo = $cookies.getObject('pundit.Info');
+            var a = angular.extend(infoCookie, cookieInfo);
+            if (typeof cookieUserdata !== 'undefined' && cookieUserdata !== null && cookieUserdata.loginStatus === 1) {
+                isUserLogged = true;
+                loginStatus = 'loggedIn';
+                userData = cookieUserdata;
+                $cookies.putObject('pundit.User', cookieUserdata, {
+                    expires: expirationDate,
+                    path: '/'
+                });
+                EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
+                setTimeout(function () {
+                    promise.resolve(true)
+                }, 5);
+                return promise.promise;
+            }
         }
 
         httpCall = $http({
