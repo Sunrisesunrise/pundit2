@@ -5,7 +5,7 @@ angular.module('Pundit2.Toolbar')
 .controller('ToolbarCtrl', function($scope, $rootScope, $modal, $http, $window, NameSpace, Config, 
     Toolbar, SelectorsManager, Fp3, MyPundit, Dashboard, TripleComposer, AnnotationSidebar, 
     Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, 
-    Analytics, PageHandler, EventDispatcher) {
+    Analytics, PageHandler, EventDispatcher, $timeout) {
 
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
     $scope.dropdownTemplateMyNotebook = "src/Toolbar/myNotebooksDropdown.tmpl.html";
@@ -616,4 +616,8 @@ angular.module('Pundit2.Toolbar')
         MyPundit.closeLoginPopover();
         angular.element('.dropdown-menu').dropdown("toggle");
     });
+
+    $timeout(function() {
+        angular.element('#pundit2_preload').remove();
+    }, 1000);
 });

@@ -16,17 +16,52 @@ var switchPundit = function(on) {
         }
         // Turn on.
         var b = document.getElementsByTagName('body')[0],
-        div = document.createElement('div');
+            div = document.createElement('div'),
+            preloadDiv = document.createElement('div');
 
         bodyStyle[cssTransform] = 'translateY(' + 30 + ')';
+        bodyStyle.position = 'static';
+        bodyStyle.marginTop = '30px';
+
+        preloadDiv.setAttribute('id', "pundit2_preload");
 
         div.setAttribute('data-ng-app', "Pundit2");
         div.setAttribute('id', "pundit2");
+        div.setAttribute('class', "pnd-wrp");
         b.appendChild(div);
+        div.appendChild(preloadDiv);
+
+        var innerHtml = '';
+        innerHtml += '<div class="navbar navbar-inverse navbar-fixed-top pnd-toolbar-navbar pnd-ignore">';
+        innerHtml += '  <div class="container-fluid pnd-toolbar-navbar-container">';
+        innerHtml += '      <div class="pnd-toolbar-navbar-collapse">';
+        innerHtml += '          <ul class="nav navbar-nav pnd-toolbar-navbar-left">';
+        innerHtml += '              <li class="pnd-toolbar-loading-button pnd-toolbar-first-button">';
+        innerHtml += '                  <a href="javascript:void(0)">';
+        innerHtml += '                      <span class="pnd-icon pnd-icon-refresh pnd-icon-spin"></span>';
+        innerHtml += '                  </a>';
+        innerHtml += '              </li>';
+        innerHtml += '              <li class="pnd-toolbar-user-button  pnd-toolbar-button-active">';
+        innerHtml += '                  <a href="javascript:void(0)" id="pundit2_preload_message">';
+        innerHtml += '                      Pundit is loading, please wait ...';
+        innerHtml += '                  </a>';
+        innerHtml += '              </li>';
+        innerHtml += '          </ul> <!-- pnd-navbar-left -->';
+        innerHtml += '      </div><!-- pnd-toolbar-navbar-collapse -->';
+        innerHtml += '  </div><!-- pnd-toolbar-navbar-container -->';
+        innerHtml += '</div><!-- navbar-inverse navbar-fixed-top -->';
+
+        preloadDiv.innerHTML = innerHtml;
+
+        var message = document.getElementById('pundit2_preload_message');
+        var i = 0;
 
         chrome.runtime.sendMessage({action: "setLoading", loading: true});
+
         // Boot angular app.
-        angular.bootstrap(div, ['Pundit2']);
+        setTimeout(function() {
+            angular.bootstrap(div, ['Pundit2']);
+        }, 100);
     }
     else {
         // Turn off.

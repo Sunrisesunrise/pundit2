@@ -21,11 +21,6 @@ var injectScripts = function(tab) {
         runAt: "document_start"
     });
 
-    chrome.tabs.executeScript(tab.id, {
-        file: 'inject/content_script.js',
-        runAt: "document_start"
-    });
-
     // Run the css.
     chrome.tabs.insertCSS(tab.id, {
         file: 'inject/css/pundit.css',
@@ -43,6 +38,11 @@ var injectScripts = function(tab) {
     });
     chrome.tabs.executeScript(tab.id, {
         file: 'inject/scripts/pundit2.js',
+        runAt: "document_start"
+    });
+
+    chrome.tabs.executeScript(tab.id, {
+        file: 'inject/content_script.js',
         runAt: "document_start"
     });
 
