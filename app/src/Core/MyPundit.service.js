@@ -402,8 +402,8 @@ angular.module('Pundit2.Core')
             logoutPromise.reject('logout promise error');
         });
 
-        $cookies.remove('pundit.User');
-        $cookies.remove('pundit.Info');
+        $cookies.remove('pundit.User', {path: '/'});
+        $cookies.remove('pundit.Info', {path: '/'});
 
         return logoutPromise.promise;
     };
