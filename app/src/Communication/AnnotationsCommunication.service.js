@@ -231,12 +231,15 @@ angular.module('Pundit2.Communication')
 
                     makeTargetsAndItems(data, forceAddToContainer);
 
+                    var creatingNotebooks = {};
+
                     for (var annId in parsedData) {
                         var a = new Annotation(annId, false, parsedData[annId]);
                         a.then(function(ann) {
                             var notebookID = ann.isIncludedIn;
-                            if (typeof(NotebookExchange.getNotebookById(notebookID)) === 'undefined') {
+                            if (typeof(NotebookExchange.getNotebookById(notebookID)) === 'undefined' && typeof creatingNotebooks[notebookID] === 'undefined') {
                                 // if the notebook is not loaded download it and add to notebooksExchange
+                                creatingNotebooks[notebookID] = true;
                                 new Notebook(notebookID);
                             }
                         }, function(error) {
