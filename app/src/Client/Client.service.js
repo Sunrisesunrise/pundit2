@@ -587,6 +587,8 @@ angular.module('Pundit2.Client')
 
         fixRootNode();
 
+        addComponents();
+
         if (Config.useBasicRelations) {
             loadBasicRelations();
         }
@@ -644,8 +646,6 @@ angular.module('Pundit2.Client')
             addKorboEESelector();
         }
         SelectorsManager.init();
-
-        addComponents();
 
         client.log('Boot is completed, emitting pundit-boot-done event');
         EventDispatcher.sendEvent('Client.boot');

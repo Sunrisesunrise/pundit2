@@ -36,11 +36,6 @@ var switchPundit = function(on) {
         innerHtml += '  <div class="container-fluid pnd-toolbar-navbar-container">';
         innerHtml += '      <div class="pnd-toolbar-navbar-collapse">';
         innerHtml += '          <ul class="nav navbar-nav pnd-toolbar-navbar-left">';
-        innerHtml += '              <li class="pnd-toolbar-loading-button pnd-toolbar-first-button">';
-        innerHtml += '                  <a href="javascript:void(0)">';
-        innerHtml += '                      <span class="pnd-icon pnd-icon-refresh pnd-icon-spin"></span>';
-        innerHtml += '                  </a>';
-        innerHtml += '              </li>';
         innerHtml += '              <li class="pnd-toolbar-user-button  pnd-toolbar-button-active">';
         innerHtml += '                  <a href="javascript:void(0)" id="pundit2_preload_message">';
         innerHtml += '                      Pundit is loading, please wait ...';
@@ -53,15 +48,12 @@ var switchPundit = function(on) {
 
         preloadDiv.innerHTML = innerHtml;
 
-        var message = document.getElementById('pundit2_preload_message');
-        var i = 0;
-
         chrome.runtime.sendMessage({action: "setLoading", loading: true});
 
         // Boot angular app.
         setTimeout(function() {
             angular.bootstrap(div, ['Pundit2']);
-        }, 100);
+        }, 92);
     }
     else {
         // Turn off.
