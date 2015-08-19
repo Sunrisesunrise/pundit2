@@ -188,6 +188,8 @@ angular.module('Pundit2.Core')
                 isUserLogged = true;
                 loginStatus = 'loggedIn';
                 userData = cookieUserdata;
+                loginServer = userData.loginServer;
+                editProfile = userData.editProfile;
                 $cookies.putObject('pundit.User', cookieUserdata, {
                     expires: expirationDate,
                     path: '/'
@@ -569,7 +571,9 @@ angular.module('Pundit2.Core')
             popoverState.renderIFrame(where);
         });
 
-        return loginPromise.promise;
+        if (typeof loginPromise !== 'undefined'){
+            return loginPromise.promise;
+        }
     };
 
     myPundit.getLoginPopoverSrc = function() {
