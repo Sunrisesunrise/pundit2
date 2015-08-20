@@ -745,15 +745,16 @@ angular.module('Pundit2.Client')
         if (document.createEventObject) {
             // dispatch for IE
             evt = document.createEventObject();
-            evt.details = details;
+            evt.detail = details;
             document.fireEvent(eventName, evt);
         }
         else {
             // dispatch for firefox + others
-            evt = document.createEvent("HTMLEvents");
+            evt = document.createEvent("Event");
             evt.initEvent(eventName, true, true); // event type,bubbling,cancelable
-            evt.details = details;
-            return !document.dispatchEvent(evt);
+            evt.detail = details;
+            evt = new CustomEvent(eventName, {detail: details});
+            document.dispatchEvent(evt);
         }
     };
 
@@ -782,6 +783,8 @@ angular.module('Pundit2.Client')
     $document.on('Pundit2.hide', hideClient);
     $document.on('Pundit2.show', showClient);
     $document.on('Pundit2.requestAnnotationsNumber', requestAnnotationsNumber);
+
+    document.addEventListener('Pundit2.requestAnnotationsNumberRaw', requestAnnotationsNumber);
 
     client.log("Component up and running");
     return client;

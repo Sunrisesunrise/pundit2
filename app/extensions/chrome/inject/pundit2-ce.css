@@ -11,3 +11,7 @@
   left: 0px;
   z-index: 99999;
 }
+
+#pundit2_preload_message{
+  padding-left: 50px;
+}

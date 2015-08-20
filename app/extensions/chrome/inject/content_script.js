@@ -9,11 +9,13 @@ var switchPundit = function(on) {
     if (on) {
         if (document.getElementById('pundit2') !== null) {
             angular.element(document).trigger('Pundit2.show');
+            chrome.runtime.sendMessage({action: "setLoading", loading: false});
             angular.element(document).trigger('Pundit2.requestAnnotationsNumber');
             angular.element('span[text-fragment-bit]').addClass('pnd-cons');
             angular.element('span.pnd-text-fragment-icon').removeClass('pnd-text-fragment-icon-hidden');
             return;
         }
+
         // Turn on.
         var b = document.getElementsByTagName('body')[0],
             div = document.createElement('div'),
@@ -36,7 +38,7 @@ var switchPundit = function(on) {
         innerHtml += '  <div class="container-fluid pnd-toolbar-navbar-container">';
         innerHtml += '      <div class="pnd-toolbar-navbar-collapse">';
         innerHtml += '          <ul class="nav navbar-nav pnd-toolbar-navbar-left">';
-        innerHtml += '              <li class="pnd-toolbar-user-button  pnd-toolbar-button-active">';
+        innerHtml += '              <li class="pnd-toolbar-user-button">';
         innerHtml += '                  <a href="javascript:void(0)" id="pundit2_preload_message">';
         innerHtml += '                      Pundit is loading, please wait ...';
         innerHtml += '                  </a>';
@@ -47,8 +49,6 @@ var switchPundit = function(on) {
         innerHtml += '</div><!-- navbar-inverse navbar-fixed-top -->';
 
         preloadDiv.innerHTML = innerHtml;
-
-        chrome.runtime.sendMessage({action: "setLoading", loading: true});
 
         // Boot angular app.
         setTimeout(function() {
@@ -67,8 +67,29 @@ var switchPundit = function(on) {
     }
 }
 
+var dispatchDocumentEvent = function(eventName, details) {
+    var evt;
+    if (document.createEventObject) {
+        // dispatch for IE
+        evt = document.createEventObject();
+        evt.details = details;
+        document.fireEvent(eventName, evt);
+    }
+    else {
+        // dispatch for firefox + others
+        evt = document.createEvent("HTMLEvents");
+        evt.initEvent(eventName, true, true); // event type,bubbling,cancelable
+        evt.details = details;
+        return !document.dispatchEvent(evt);
+    }
+};
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     switch (request.action) {
+        case "checkPundit":
+            var responseObject = {isPresent: (document.getElementsByClassName('pnd-wrp').length !== 0)};
+            sendResponse(responseObject);
+            break;
         case "switchOn":
             switchPundit(true);
             break;
@@ -76,21 +97,24 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             switchPundit(false);
             break;
         case "requestAnnotationsNumber":
-            if (angular) {
+            if (typeof angular !== 'undefined') {
                 angular.element(document).trigger('Pundit2.requestAnnotationsNumber');
+            }
+            else {
+                dispatchDocumentEvent('Pundit2.requestAnnotationsNumberRaw', 0);
             }
             break;
     }
 });
 
 document.addEventListener("Pundit2.updateAnnotationsNumber", function(evt){
-    chrome.runtime.sendMessage({action: "updateAnnotationsNumber", number: evt.details}, function(response) {
+    chrome.runtime.sendMessage({action: "updateAnnotationsNumber", number: evt.detail}, function(response) {
         /*NO OP*/
     });
 });
 
 document.addEventListener("Pundit2.loading", function(evt){
-    chrome.runtime.sendMessage({action: "setLoading", loading: evt.details}, function(response) {
+    chrome.runtime.sendMessage({action: "setLoading", loading: evt.detail}, function(response) {
         if (response.action === 'updateAnnotationsNumber') {
             angular.element(document).trigger('Pundit2.requestAnnotationsNumber');
         }
