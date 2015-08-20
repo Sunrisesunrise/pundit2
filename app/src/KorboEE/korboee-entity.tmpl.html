@@ -14,7 +14,7 @@
                    id="{{conf.tafonyId}}"
                    ng-model="elemToSearch"
                    placeholder="Type at least {{conf.labelMinLength}} characters..."
-                   template="{{autocompleteListTemplate}}"
+                   templateUrl="{{autocompleteListTemplate}}"
                    data-limit="{{korboSearchLimit}}"
                    data-min-length="{{korboMinLength}}"
                    bs-options="e.label for e in autoCompleteSearch($viewValue)"

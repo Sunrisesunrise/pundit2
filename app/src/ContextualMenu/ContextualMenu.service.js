@@ -76,7 +76,7 @@ angular.module('Pundit2.ContextualMenu')
         } else {
             options.placement = contextualMenu.options.position;
         }
-        options.template = 'src/ContextualMenu/dropdown.tmpl.html';
+        options.templateUrl = 'src/ContextualMenu/dropdown.tmpl.html';
 
         state.init = true;
 

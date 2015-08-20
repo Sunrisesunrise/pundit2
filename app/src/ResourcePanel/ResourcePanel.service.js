@@ -180,7 +180,7 @@ angular.module('Pundit2.ResourcePanel')
         // initialize a calendar popover
         if (type === 'calendar') {
 
-            state.popoverOptions.template = 'src/ResourcePanel/popoverCalendar.tmpl.html';
+            state.popoverOptions.templateUrl = 'src/ResourcePanel/popoverCalendar.tmpl.html';
 
             if (content !== '' && typeof(content.value) !== 'undefined' && content.value !== '') {
                 state.popoverOptions.scope.modelDate = {};
@@ -230,7 +230,7 @@ angular.module('Pundit2.ResourcePanel')
             // initialize a literal popover
         } else if (type === 'literal') {
 
-            state.popoverOptions.template = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
+            state.popoverOptions.templateUrl = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
 
             if (typeof(content.literalText) === 'undefined') {
                 state.popoverOptions.scope.literalText = '';
@@ -293,7 +293,7 @@ angular.module('Pundit2.ResourcePanel')
                 );
             }
 
-            state.popoverOptions.template = 'src/ResourcePanel/popoverResourcePanel.tmpl.html';
+            state.popoverOptions.templateUrl = 'src/ResourcePanel/popoverResourcePanel.tmpl.html';
 
             state.popoverOptions.scope.originalContent = angular.extend({}, content);
             state.popoverOptions.scope.type = content.type;

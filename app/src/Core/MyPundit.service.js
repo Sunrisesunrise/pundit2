@@ -414,7 +414,7 @@ angular.module('Pundit2.Core')
         anchor: undefined,
         loginSrc: loginServer, //myPundit.options.popoverLoginURL,//'http://dev.thepund.it/connect/index.php',
         options: {
-            template: 'src/Core/Templates/login.popover.tmpl.html',
+            templateUrl: 'src/Core/Templates/login.popover.tmpl.html',
             container: "[data-ng-app='Pundit2']",
             placement: "bottom-left",
             // target: '.pnd-toolbar-login-button',
