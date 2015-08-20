@@ -14,6 +14,9 @@ var state = {
 
 var injectScripts = function(tab, force, callback) {
     if (typeof state.injections[tab.id] !== 'undefined') {
+        if (typeof callback !== 'undefined') {
+            callback();
+        }
         return;
     }
 
