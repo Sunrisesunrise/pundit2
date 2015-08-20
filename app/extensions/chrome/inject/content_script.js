@@ -113,6 +113,12 @@ document.addEventListener("Pundit2.updateAnnotationsNumber", function(evt){
     });
 });
 
+document.addEventListener("Pundit2.consolidation", function(evt){
+    chrome.runtime.sendMessage({action: "consolidation", active: evt.detail}, function(response) {
+        /*NO OP*/
+    });
+});
+
 document.addEventListener("Pundit2.loading", function(evt){
     chrome.runtime.sendMessage({action: "setLoading", loading: evt.detail}, function(response) {
         if (response.action === 'updateAnnotationsNumber') {

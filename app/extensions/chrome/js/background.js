@@ -11,7 +11,8 @@ var state = {
         stopLoading: {}
     },
     defaultBadgeBackgroundColor = [75, 112, 165, 255], //#1E2E43
-    loadingBadgeBackgroundColor = [255, 191, 0, 128]; //#FFBF00
+    consolidationBadgeBackgroundColor = [255, 191, 0, 128], //#1E2E43
+    loadingBadgeBackgroundColor = [72, 187, 88, 128];//[255, 191, 0, 128]; //#FFBF00
 
 var injectScripts = function(tab, force, callback) {
     if (typeof state.injections[tab.id] !== 'undefined') {
@@ -241,6 +242,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             else {
                 setLoading(request.loading, sender.tab.id);
             }
+            break;
+
+        case 'consolidation':
+            //chrome.browserAction.setBadgeBackgroundColor({color: request.active ? consolidationBadgeBackgroundColor : defaultBadgeBackgroundColor, tabId: sender.tab.id});
             break;
     }
 });

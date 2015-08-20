@@ -149,10 +149,12 @@ angular.module('Pundit2.Core')
         }
 
         EventDispatcher.sendEvent('Consolidation.StartConsolidate');
+        EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.consolidation', data: true});
         cc.log('Consolidating ALL items');
         consolidatePromise = cc.consolidate(allItems);
         consolidatePromise.then(function() {
             EventDispatcher.sendEvent('Consolidation.consolidateAll');
+            EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.consolidation', data: false});
         });
     };
 
