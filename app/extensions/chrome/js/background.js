@@ -7,7 +7,8 @@ var state = {
         tabs: {},
         tabsOnOff: {},
         injections: {},
-        loading: {}
+        loading: {},
+        stopLoading: {}
     },
     defaultBadgeBackgroundColor = [75, 112, 165, 255], //#1E2E43
     loadingBadgeBackgroundColor = [255, 191, 0, 128]; //#FFBF00
@@ -168,13 +169,14 @@ var isLoading = function(tabId) {
     return typeof state.loading[tabId] !== 'undefined';
 };
 
-var setLoading = function(loading, tabId) {
+var setLoading = function(loading, tabId, stopLoadingText) {
     if (!loading) {
         if (isLoading(tabId)) {
             window.clearInterval(state.loading[tabId]);
             delete state.loading[tabId];
         }
-        setBadgeText(tabId, '');
+        delete state.stopLoading[tabId];
+        setBadgeText(tabId, typeof stopLoadingText === 'undefined' ? '' : stopLoadingText);
         return;
     }
     if (loading && isLoading(tabId)) {
@@ -223,15 +225,21 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     switch (request.action) {
         case 'updateAnnotationsNumber':
             if (isLoading(sender.tab.id)) {
+                if (typeof state.stopLoading[sender.tab.id] !== 'undefined' && state.stopLoading[sender.tab.id]) {
+                    setLoading(false, sender.tab.id, "" + request.number);
+                }
                 break;
             }
             setBadgeText(sender.tab.id, "" + request.number);
             break;
 
         case 'setLoading':
-            setLoading(request.loading, sender.tab.id);
             if (!request.loading) {
+                state.stopLoading[sender.tab.id] = true;
                 chrome.tabs.sendMessage(sender.tab.id, {action: 'requestAnnotationsNumber'});
+            }
+            else {
+                setLoading(request.loading, sender.tab.id);
             }
             break;
     }
