@@ -443,6 +443,10 @@ angular.module('Pundit2.Core')
             popoverState.popover.$scope.autoCloseIn = popoverState.autoCloseWait;
             popoverState.popover.$scope.loginSuccess = true;
             popoverState.autoCloseIntervall = $interval(function() {
+                if (popoverState.popover === null || typeof popoverState.popover === 'undefined') {
+                    $interval.cancel(popoverState.autoCloseIntervall);
+                    return;
+                }
                 var sec = popoverState.popover.$scope.autoCloseIn;
                 sec--;
                 if (sec < 1) {
