@@ -112,7 +112,7 @@ angular.module('Pundit2.ResourcePanel')
  */
 .service('ResourcePanel', function(BaseComponent, EventDispatcher, RESOURCEPANELDEFAULTS,
     ItemsExchange, MyItems, PageItemsContainer, Client, NameSpace, SelectorsManager,
-    $filter, $rootScope, $popover, $q, $timeout, Preview, $window, Config, Item, Utils, Analytics) {
+    $filter, $rootScope, $popover, $q, $timeout, Preview, $window, Config, Item, Utils, Analytics, Keyboard) {
 
     var resourcePanel = new BaseComponent('ResourcePanel', RESOURCEPANELDEFAULTS);
 
@@ -143,11 +143,18 @@ angular.module('Pundit2.ResourcePanel')
             return;
         }
 
+        for (var key in state.popoverOptions.eventKeyHandlers) {
+            Keyboard.unregisterHandler(state.popoverOptions.eventKeyHandlers[key]);
+        }
+
+        state.popoverOptions.eventKeyHandlers = {};
         state.popoverOptions.scope.vocabObjRes = [];
         state.popoverOptions.scope.vocabSubRes = [];
         state.popoverOptions.scope.label = "";
         state.popover.hide();
-        state.popover.destroy();
+        if (state.popover) {
+            state.popover.destroy();
+        }
         state.popover = null;
 
         resourcePanel.openBy = undefined;
@@ -166,6 +173,17 @@ angular.module('Pundit2.ResourcePanel')
         var posPopMod = 0,
             valMod = 100;
         state.popoverOptions.scope.arrowLeft = '-11px';
+        state.popoverOptions.eventKeyHandlers = {};
+
+        var childScope;
+        state.popoverOptions.scope.showSaveButton = function(cs) {
+            childScope = cs;
+            return true;
+        }
+
+        state.popoverOptions.scope.showCancelButton = function() {
+            return true;
+        }
 
         if (typeof(tripleElemType) !== 'undefined') {
             if (tripleElemType === 'sub') {
@@ -193,13 +211,10 @@ angular.module('Pundit2.ResourcePanel')
 
             state.popoverOptions.scope.container = "[data-ng-app='Pundit2'] .popover-datepicker .popover-content .form-group";
 
-            state.popoverOptions.scope.escapeEvent = function(e) {
-                if (e.which === 27) {
-                    e.stopPropagation();
+            state.popoverOptions.scope.save = function(byKey) {
+                if (byKey) {
+                    this.modelDate = childScope.modelDate;
                 }
-            };
-
-            state.popoverOptions.scope.save = function() {
 
                 if (typeof(this.modelDate) !== 'undefined' && this.modelDate.valid) {
                     this.modelDate.type = 'date';
@@ -227,8 +242,18 @@ angular.module('Pundit2.ResourcePanel')
                 Analytics.track('buttons', 'click', eventLabel);
             };
 
-            // initialize a literal popover
-        } else if (type === 'literal') {
+            state.popoverOptions.eventKeyHandlers['enter'] = Keyboard.registerHandler('ResourcePanelService', {
+                scope: state.popoverOptions.scope,
+                keyCode: 13,
+                ignoreOnInput: false,
+                stopPropagation: true,
+            }, function(event, eventKeyConfig){
+                var a = childScope;
+                state.popoverOptions.scope.save(true);
+                $rootScope.$$phase || $rootScope.$digest();
+            });
+        }
+        else if (type === 'literal') { // initialize a literal popover
 
             state.popoverOptions.templateUrl = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
 
@@ -238,14 +263,14 @@ angular.module('Pundit2.ResourcePanel')
                 state.popoverOptions.scope.literalText = content.literalText;
             }
 
-            state.popoverOptions.scope.escapeEvent = function(e) {
-                if (e.which === 27) {
-                    e.stopPropagation();
-                }
-            };
-
             // handle save a new popoverLiteral
-            state.popoverOptions.scope.save = function() {
+            state.popoverOptions.scope.save = function(byKey) {
+                if (typeof byKey !== 'undefined' && byKey) {
+                    if (childScope.literalText.length == 0) {
+                        return;
+                    }
+                    this.literalText = childScope.literalText;
+                }
                 state.resourcePromise.resolve(this.literalText);
                 Preview.hideDashboardPreview();
                 hide();
@@ -265,8 +290,31 @@ angular.module('Pundit2.ResourcePanel')
                 Analytics.track('buttons', 'click', eventLabel);
             };
 
+            state.popoverOptions.eventKeyHandlers['meta+enter'] = Keyboard.registerHandler('ResourcePanelService', {
+                scope: state.popoverOptions.scope,
+                keyCode: 13,
+                ignoreOnInput: false,
+                stopPropagation: true,
+                metaKey: true
+            }, function(event, eventKeyConfig){
+                state.popoverOptions.scope.save(true);
+                $rootScope.$$phase || $rootScope.$digest();
+            });
+            // Needs to be duplicate to support also Ctrl+Enter
+            state.popoverOptions.eventKeyHandlers['ctrl+enter'] = Keyboard.registerHandler('ResourcePanelService', {
+                scope: state.popoverOptions.scope,
+                keyCode: 13,
+                ignoreOnInput: false,
+                stopPropagation: true,
+                ctrlKey: true
+            }, function(event, eventKeyConfig){
+                state.popoverOptions.scope.save(true);
+                $rootScope.$$phase || $rootScope.$digest();
+            });
+
             // initialize a resource panel popover
-        } else if (type === 'resourcePanel') {
+        }
+        else if (type === 'resourcePanel') {
 
             if (typeof(Config.korbo) !== 'undefined' && Config.korbo.active) {
                 var name = $window[Config.korbo.confName].globalObjectName;
@@ -391,6 +439,14 @@ angular.module('Pundit2.ResourcePanel')
 
         }
 
+        state.popoverOptions.eventKeyHandlers['ESC'] = Keyboard.registerHandler('ResourcePanelService', {
+            scope: state.popoverOptions.scope,
+            keyCode: 27,
+            ignoreOnInput: false,
+            stopPropagation: true
+        }, function(event, eventKeyConfig){
+            state.popoverOptions.scope.cancel();
+        });
 
         state.popover.clickTarget = target;
         return state.popover;

@@ -2,7 +2,7 @@ angular.module('Pundit2.ResourcePanel')
 
 .controller('ResourcePanelCtrl', function($rootScope, $scope, $timeout, $filter, $window,
     Client, Config, ItemsExchange, MyItems, MyPundit, PageItemsContainer, Preview,
-    ResourcePanel, SelectorsManager, KorboCommunicationService, EventDispatcher, Analytics, PageHandler, TripleComposer) {
+    ResourcePanel, SelectorsManager, KorboCommunicationService, EventDispatcher, Analytics, PageHandler, TripleComposer, Keyboard) {
 
     var actualContainer;
     var selectors = SelectorsManager.getActiveSelectors();
@@ -75,9 +75,96 @@ angular.module('Pundit2.ResourcePanel')
         }
     };
 
-    $scope.select = function(item) {
+    var lastSelected;
+    var keyHandlers = {};
+    keyHandlers['enter'] = Keyboard.registerHandler('ResourcePanelController', {
+        scope: $scope,
+        keyCode: 13,
+        ignoreOnInput: false,
+        stopPropagation: true,
+    }, function(event, eventKeyConfig){
+        if (typeof lastSelected !== 'undefined') {
+            $scope.save(lastSelected.item);
+        }
+    });
+
+    keyHandlers['arrowUp'] = Keyboard.registerHandler('ResourcePanelController', {
+        scope: $scope,
+        keyCode: 38,
+        ignoreOnInput: true,
+        stopPropagation: true,
+    }, function(event, eventKeyConfig){
+        arrowKeyPressed(38);
+    });
+
+    keyHandlers['arrowDown'] = Keyboard.registerHandler('ResourcePanelController', {
+        scope: $scope,
+        keyCode: 40,
+        ignoreOnInput: true,
+        stopPropagation: true,
+    }, function(event, eventKeyConfig){
+        arrowKeyPressed(40);
+    });
+
+    var listContainer;
+    var listContainerMarginBottom = 0;
+    var arrowKeyPressed = function(code) {
+        if (typeof lastSelected === 'undefined') {
+            return;
+        }
+
+        var elem = angular.element(lastSelected.elementItem);
+        var li = elem.parent();
+        var ul = li.parent();
+        var other;
+        switch(code) {
+            case 38:
+                // Up.
+                other = li.prev();
+                break;
+            case 40:
+                // Down.
+                other = li.next();
+                break;
+        }
+
+        if (typeof other !== 'undefined' && other.length > 0) {
+            other.find('item').trigger('click');
+            if (typeof listContainer === 'undefined') {
+                listContainer = li.closest('.pnd-vertical-tab-list-content');
+                listContainerMarginBottom = parseInt(listContainer.css('margin-bottom'));
+            }
+
+            // TODO: to remove console log .. but not yet.
+            //console.log("listContainer.scrollTop(): " + listContainer.scrollTop());//
+            //console.log("listContainer.height(): " + listContainer.height());
+            //console.log("other.offset().top: " + other.offset().top);
+            //console.log("other.scrollTop(): " + other.scrollTop());
+            //console.log("other.height(): " + other.height());
+            //console.log("ul.offset().top: " + ul.offset().top);
+            //console.log("ul.scrollTop(): " + ul.scrollTop());
+            //console.log("other.offset().top - ul.offset().top: " + (other.offset().top - ul.offset().top));
+            //console.log("other.offset().top - ul.offset().top + other.height(): " + (other.offset().top - ul.offset().top + other.height()));
+            if ( (other.offset().top - ul.offset().top) < listContainer.scrollTop()) {
+                listContainer.scrollTop(other.offset().top - ul.offset().top);
+            }
+            else if (
+                (other.offset().top + other.height() - ul.offset().top > listContainer.height() - listContainer.scrollTop())
+                ) {
+                //console.log("scrolling to: " + (other.offset().top + other.height() - ul.offset().top - listContainer.height()));
+                listContainer.scrollTop((other.offset().top + other.height() - ul.offset().top - listContainer.height()));
+            }
+            //console.log("##########################################");
+        }
+    };
+
+    $scope.select = function(item, $event) {
         Preview.setItemDashboardSticky(item);
         EventDispatcher.sendEvent('Pundit.changeSelection');
+        lastSelected = {
+            item: item,
+            elementItem: $event.currentTarget
+        }
         $scope.isUseActive = true;
         $scope.itemSelected = item;
     };
@@ -306,6 +393,9 @@ angular.module('Pundit2.ResourcePanel')
 
     $scope.$on('$destroy', function() {
         EventDispatcher.removeListener(resetHandler);
+        for (var key in keyHandlers) {
+            Keyboard.unregisterHandler(keyHandlers[key]);
+        }
     });
 
     resetHandler = EventDispatcher.addListener('Pundit.changeSelection', function() {
