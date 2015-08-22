@@ -50,6 +50,9 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.toggleAnnotation = function() {
         if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
+            if (AnnotationSidebar.isFiltersExpanded()) {
+                AnnotationSidebar.toggleFiltersContent();
+            }
             AnnotationSidebar.toggle();
             $timeout(function() {
                 var dashboardHeight = Dashboard.isDashboardVisible() ? Dashboard.getContainerHeight() : 0;
