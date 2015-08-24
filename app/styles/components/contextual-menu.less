@@ -24,7 +24,6 @@
         padding: 5px 10px;
         overflow: hidden;
 
-        // border-top: 1px solid @color-border-light; // 1px lighten(@brand-success, 30%) solid;
         border-right: 0;
         border-left: 0;
         background-color: @color-dropdown-bg; // @brand-success;
@@ -45,10 +44,6 @@
         }
     }
 
-    li:first-child a {
-        // border-top: 0;
-    }
-
     /* Selected or active element */
     li.active a {
         background-color: @color-dropdown-active;
@@ -58,6 +53,17 @@
             color: @color-dropdown-text; // #fff;
             text-decoration: none;
             outline: 0;
+        }
+    }
+
+    /* Disabled elements */
+    li.disabled {
+        a {
+            color: fade(@color-dropdown-text, 40%);
+
+            &:hover {
+                background-color: @color-dropdown-bg;
+            }
         }
     }
 
