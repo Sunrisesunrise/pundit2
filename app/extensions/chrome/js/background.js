@@ -133,13 +133,13 @@ var showOffIcon = function(tabId) {
 };
 
 var switchOn = function(tab) {
+    showOnIcon(tab.id);
     setLoading(true, tab.id);
     injectScripts(tab, false, function() {
         setTimeout(function(){
             chrome.tabs.sendMessage(tab.id, {action: 'switchOn'});
             state.tabs[tab.id] = true;
             state.tabsOnOff[tab.id] = true;
-            showOnIcon(tab.id);
         }, 350);
     });
 };
@@ -231,7 +231,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 }
                 break;
             }
-            setBadgeText(sender.tab.id, "" + request.number);
+            if (state.tabsOnOff[sender.tab.id]) {
+                setBadgeText(sender.tab.id, "" + request.number);
+            }
             break;
 
         case 'setLoading':
