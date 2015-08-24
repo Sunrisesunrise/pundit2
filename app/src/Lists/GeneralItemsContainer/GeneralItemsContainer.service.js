@@ -90,7 +90,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
 })
 
-.service('GeneralItemsContainer', function(GENERALITEMSCONTAINER, BaseComponent, MyItemsContainer, PageItemsContainer, SelectorsManager, MyNotebooksContainer, NotebookExchange, PredicatesContainer, VocabulariesContainer, Config, ItemsExchange) {
+.service('GeneralItemsContainer', function(GENERALITEMSCONTAINER, BaseComponent, MyItemsContainer, PageItemsContainer, SelectorsManager, MyNotebooksContainer, NotebookExchange, PredicatesContainer, VocabulariesContainer, Config, ItemsExchange, Keyboard, EventDispatcher) {
 
     var generalItemsContainer = new BaseComponent('GeneralItemsContainer', GENERALITEMSCONTAINER);
 
@@ -360,6 +360,82 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     generalItemsContainer.isPredicatesType = function(type) {
         return type === PREDICATES_TYPE;
+    };
+
+    generalItemsContainer.setLastSelected = function(lastSelectedData) {
+        lastSelected = lastSelectedData;
+    };
+
+    var lastSelected;
+    var listContainer;
+    var keyHandlers = {};
+    keyHandlers['enter'] = Keyboard.registerHandler('ResourcePanelController', {
+        keyCode: 13,
+        ignoreOnInput: false,
+        stopPropagation: true,
+    }, function(event, eventKeyConfig){
+        if (typeof lastSelected !== 'undefined') {
+            //$scope.save(lastSelected.item);
+            var generalItemContainer = angular.element(lastSelected.elementItem).closest('general-items-container');
+            var actionButtons = generalItemContainer.find('.pnd-panel-tab-content-footer').find('.pnd-btn.pnd-btn-subject,.pnd-btn.pnd-btn-object,.pnd-btn.pnd-btn-predicate');
+            for (var i in actionButtons) {
+                if (!actionButtons.eq(i).is(':disabled')) {
+                    actionButtons.eq(i).trigger('click');
+                    return;
+                }
+            }
+        }
+    });
+
+    keyHandlers['arrowUp'] = Keyboard.registerHandler('ResourcePanelController', {
+        keyCode: 38,
+        ignoreOnInput: true,
+        stopPropagation: true,
+    }, function(event, eventKeyConfig){
+        arrowKeyPressed(38);
+    });
+
+    keyHandlers['arrowDown'] = Keyboard.registerHandler('ResourcePanelController', {
+        keyCode: 40,
+        ignoreOnInput: true,
+        stopPropagation: true,
+    }, function(event, eventKeyConfig){
+        arrowKeyPressed(40);
+    });
+
+    var arrowKeyPressed = function(code) {
+        if (typeof lastSelected === 'undefined') {
+            return;
+        }
+
+        var elem = angular.element(lastSelected.elementItem);
+        var li = elem.parent();
+        var ul = li.parent();
+        listContainer = ul.parent().hasClass('pnd-inner-scrollable') ? ul.parent() : li.closest('.pnd-tab-content');
+        var other;
+        switch(code) {
+            case 38:
+                // Up.
+                other = li.prev();
+                break;
+            case 40:
+                // Down.
+                other = li.next();
+                break;
+        }
+
+        if (typeof other !== 'undefined' && other.length > 0) {
+            other.find('item').trigger('click');
+            if ( (other.offset().top - ul.offset().top) < listContainer.scrollTop()) {
+                listContainer.scrollTop(other.offset().top - ul.offset().top);
+            }
+            else if (
+            (other.offset().top + other.height() - ul.offset().top > listContainer.height() - listContainer.scrollTop())
+            ) {
+                //console.log("scrolling to: " + (other.offset().top + other.height() - ul.offset().top - listContainer.height()));
+                listContainer.scrollTop((other.offset().top + other.height() - ul.offset().top - listContainer.height()));
+            }
+        }
     };
 
     return generalItemsContainer;

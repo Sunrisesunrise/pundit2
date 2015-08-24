@@ -77,7 +77,7 @@
                     <item 
                         uri="{{mi.uri}}" 
                         is-selected="isSelected(mi)" 
-                        ng-click="select(mi)"
+                        ng-click="select(mi, $event)"
                         ng-dblclick="save(mi)"
                         hide-options="true" 
                         hide-sticky-button="true"></item>
@@ -107,7 +107,7 @@
                         is-selected="isSelected(mi)"
                         hide-options="true"
                         hide-sticky-button="true" 
-                        ng-click="select(mi)" 
+                        ng-click="select(mi, $event)"
                         use-in-korbo="true"></item>
                 </li>
             </ul>

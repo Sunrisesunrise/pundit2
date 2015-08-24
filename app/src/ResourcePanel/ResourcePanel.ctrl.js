@@ -82,6 +82,7 @@ angular.module('Pundit2.ResourcePanel')
         keyCode: 13,
         ignoreOnInput: false,
         stopPropagation: true,
+        priority: 10,
     }, function(event, eventKeyConfig){
         if (typeof lastSelected !== 'undefined') {
             $scope.save(lastSelected.item);
@@ -93,6 +94,7 @@ angular.module('Pundit2.ResourcePanel')
         keyCode: 38,
         ignoreOnInput: true,
         stopPropagation: true,
+        priority: 10,
     }, function(event, eventKeyConfig){
         arrowKeyPressed(38);
     });
@@ -102,12 +104,12 @@ angular.module('Pundit2.ResourcePanel')
         keyCode: 40,
         ignoreOnInput: true,
         stopPropagation: true,
+        priority: 10,
     }, function(event, eventKeyConfig){
         arrowKeyPressed(40);
     });
 
     var listContainer;
-    var listContainerMarginBottom = 0;
     var arrowKeyPressed = function(code) {
         if (typeof lastSelected === 'undefined') {
             return;
@@ -132,7 +134,6 @@ angular.module('Pundit2.ResourcePanel')
             other.find('item').trigger('click');
             if (typeof listContainer === 'undefined') {
                 listContainer = li.closest('.pnd-vertical-tab-list-content');
-                listContainerMarginBottom = parseInt(listContainer.css('margin-bottom'));
             }
 
             // TODO: to remove console log .. but not yet.

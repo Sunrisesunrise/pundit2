@@ -41,14 +41,14 @@
                           item-type="notebook"
                           hide-sticky-button="true"
                           is-selected="isSelected(item)"
-                          ng-click="select(item)"></item>
+                          ng-click="select(item, $event)"></item>
                     <item ng-if="isPredicates"
                           uri="{{item.uri}}"
                           menu-type="{{itemMenuType}}"
                           hide-sticky-button="true"
                           hide-options="true"
                           is-selected="isSelected(item)"
-                          ng-click="select(item)"></item>
+                          ng-click="select(item, $event)"></item>
                 </li>
             </ul>
             <div

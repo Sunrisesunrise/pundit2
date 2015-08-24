@@ -12,6 +12,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
 
     var ContainerManager = GeneralItemsContainer.getManager($scope.type);
+    var lastSelected = {};
 
     // read by <item> directive (in Lists/itemList.tmpl.html)
     // specifie how contextual menu type show on item
@@ -63,6 +64,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         }else {
             $scope.canBeUseAsPredicate = false;
         }
+        GeneralItemsContainer.setLastSelected(/*undefined*/);
     };
 
     // set as active a label in contextual menu
@@ -181,8 +183,6 @@ angular.module('Pundit2.GeneralItemsContainer')
         }
 
     };
-
-
 
     var onClickRemove = function () {
         if ($scope.itemSelected === null) {
@@ -309,10 +309,14 @@ angular.module('Pundit2.GeneralItemsContainer')
     };
 
     if(!$scope.isMyNotebooks) {
-        $scope.select = function (item) {
+        $scope.select = function (item, $event) {
             Preview.setItemDashboardSticky(item);
             EventDispatcher.sendEvent('Pundit.changeSelection');
-
+            lastSelected = {
+                item: item,
+                elementItem: $event.currentTarget
+            };
+            GeneralItemsContainer.setLastSelected(lastSelected);
             $scope.isUseActive = true;
             $scope.itemSelected = item;
 
@@ -356,8 +360,13 @@ angular.module('Pundit2.GeneralItemsContainer')
             resetContainer();
         };
     } else {
-        $scope.select = function (item) {
+        $scope.select = function (item, $event) {
             Preview.setItemDashboardSticky(item);
+            lastSelected = {
+                item: item,
+                elementItem: $event.currentTarget
+            };
+            GeneralItemsContainer.setLastSelected(lastSelected);
             EventDispatcher.sendEvent('Pundit.changeSelection');
             $scope.itemSelected = item;
         };
@@ -648,4 +657,5 @@ angular.module('Pundit2.GeneralItemsContainer')
 
         };
     }
+
 });
