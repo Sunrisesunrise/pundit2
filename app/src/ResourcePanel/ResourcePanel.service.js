@@ -247,6 +247,7 @@ angular.module('Pundit2.ResourcePanel')
                 keyCode: 13,
                 ignoreOnInput: false,
                 stopPropagation: true,
+                priority: 10
             }, function(event, eventKeyConfig){
                 var a = childScope;
                 state.popoverOptions.scope.save(true);
@@ -295,18 +296,7 @@ angular.module('Pundit2.ResourcePanel')
                 keyCode: 13,
                 ignoreOnInput: false,
                 stopPropagation: true,
-                metaKey: true
-            }, function(event, eventKeyConfig){
-                state.popoverOptions.scope.save(true);
-                $rootScope.$$phase || $rootScope.$digest();
-            });
-            // Needs to be duplicate to support also Ctrl+Enter
-            state.popoverOptions.eventKeyHandlers['ctrl+enter'] = Keyboard.registerHandler('ResourcePanelService', {
-                scope: state.popoverOptions.scope,
-                keyCode: 13,
-                ignoreOnInput: false,
-                stopPropagation: true,
-                ctrlKey: true
+                priority: 10
             }, function(event, eventKeyConfig){
                 state.popoverOptions.scope.save(true);
                 $rootScope.$$phase || $rootScope.$digest();
