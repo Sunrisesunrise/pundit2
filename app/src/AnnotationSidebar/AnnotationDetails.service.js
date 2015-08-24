@@ -563,10 +563,17 @@ angular.module('Pundit2.AnnotationSidebar')
         state.userData = MyPundit.getUserData();
     });
 
+    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+        $document.off('mousedown', mouseDownHandler);
+    });
+
+    EventDispatcher.addListener('Client.show', function(/*e*/) {
+        $document.on('mousedown', mouseDownHandler);
+    });
 
     $document.on('mousedown', mouseDownHandler);
 
-    var mouseDownHandler = function(downEvt) {
+    function mouseDownHandler(downEvt) {
         var target = downEvt.target;
 
         if (state.isGhostedActive) {
@@ -577,14 +584,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
         $rootScope.$$phase || $rootScope.$digest();
     };
-
-    EventDispatcher.addListener('Client.hide', function(/*e*/) {
-        $document.off('mousedown', mouseDownHandler);
-    });
-
-    EventDispatcher.addListener('Client.show', function(/*e*/) {
-        $document.on('mousedown', mouseDownHandler);
-    });
 
     annotationDetails.log('Component running');
     return annotationDetails;
