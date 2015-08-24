@@ -112,7 +112,7 @@ angular.module('Pundit2.ResourcePanel')
  */
 .service('ResourcePanel', function(BaseComponent, EventDispatcher, RESOURCEPANELDEFAULTS,
     ItemsExchange, MyItems, PageItemsContainer, Client, NameSpace, SelectorsManager,
-    $filter, $rootScope, $popover, $q, $timeout, Preview, $window, Config, Item, Utils, Analytics, Keyboard) {
+    $filter, $rootScope, $popover, $q, $timeout, Preview, $window, Config, Item, Utils, Analytics, Keyboard, MyPundit) {
 
     var resourcePanel = new BaseComponent('ResourcePanel', RESOURCEPANELDEFAULTS);
 
@@ -341,6 +341,9 @@ angular.module('Pundit2.ResourcePanel')
             state.popoverOptions.scope.properties = content.properties;
             state.popoverOptions.scope.contentTabs = contentTabs;
             state.popoverOptions.scope.active = 0;
+            if (content.type !== 'pr') {
+                state.popoverOptions.scope.active = MyPundit.isUserLogged() ? 0 : (resourcePanel.options.pageItemsEnabled + resourcePanel.options.myItemsEnabled);
+            }
             if (content.label !== '' && typeof(content.label) !== 'undefined') {
                 setLabelToSearch(content.label);
             } else {
@@ -377,6 +380,8 @@ angular.module('Pundit2.ResourcePanel')
         }
 
         state.popoverOptions.scope.setActive = function(index) {
+            index = index >= state.popoverOptions.scope.contentTabs.length ? state.popoverOptions.scope.contentTabs.length - 1 : index;
+            index = index < 0 ? 0 : index;
             state.popoverOptions.scope.active = index;
         };
 
