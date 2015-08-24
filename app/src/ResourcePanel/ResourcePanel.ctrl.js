@@ -132,6 +132,7 @@ angular.module('Pundit2.ResourcePanel')
 
         if (typeof other !== 'undefined' && other.length > 0) {
             other.find('item').trigger('click');
+            // TODO: gestion preview.
             if (typeof listContainer === 'undefined') {
                 listContainer = li.closest('.pnd-vertical-tab-list-content');
             }
