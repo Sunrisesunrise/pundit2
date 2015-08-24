@@ -6,17 +6,17 @@
                 
                 <!-- Error button -->
                 <li ng-show="showStatusButtonError()" class="pnd-toolbar-error-button pnd-toolbar-first-button">
-                    <a href="javascript:void(0)" template="{{dropdownTemplate}}" bs-dropdown="errorMessageDropdown"><span class="pnd-icon pnd-icon-exclamation"></span></a>
+                    <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="errorMessageDropdown"><span class="pnd-icon pnd-icon-exclamation"></span></a>
                 </li>
                 
                 <!-- OK button -->
                 <li ng-show="showStatusButtonOk()" class="pnd-toolbar-status-button-ok pnd-toolbar-first-button">
-                    <a href="javascript:void(0)" template="{{dropdownTemplate}}" bs-dropdown="infoDropdown"><span class="pnd-icon pnd-icon-logo-1"></span></a>
+                    <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="infoDropdown"><span class="pnd-icon pnd-icon-logo-1"></span></a>
                 </li>
 
                 <!-- Loading button -->
                 <li ng-show="showStatusButtonLoading()" class="pnd-toolbar-loading-button pnd-toolbar-first-button">
-                    <a href="javascript:void(0)" template="{{dropdownTemplate}}" bs-dropdown="infoDropdown">
+                    <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="infoDropdown">
                         <!-- <span></span> -->
                         <span class="pnd-icon pnd-icon-refresh pnd-icon-spin"></span>
                     </a>
@@ -24,13 +24,13 @@
 
                 <!-- Login button -->
                 <li ng-show="showLogin()" class="pnd-toolbar-login-button pnd-toolbar-button-active pnd-calltoaction-btn">
-                    <!-- <a href="javascript:void(0)" templateUrl="{{dropdownTemplate}}" bs-dropdown="userNotLoggedDropdown"><span>Login</span></a> -->
+                    <!-- <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="userNotLoggedDropdown"><span>Login</span></a> -->
                     <a href="javascript:void(0)" ng-click="loginButtonClick($event)"><span>Log in</span></a>
                 </li>
                 
                 <!-- User button -->
                 <li ng-show="showUserButton()" class="pnd-toolbar-user-button  pnd-toolbar-button-active">
-                    <a href="javascript:void(0)" template="{{dropdownTemplate}}" bs-dropdown="userLoggedInDropdown" ng-click="closePopover($event)"><span>{{userData.fullName}}</span></a>
+                    <a href="javascript:void(0)" bs-dropdown="userLoggedInDropdown" template-url="{{dropdownTemplate}}" ng-click="closePopover($event)"><span>{{userData.fullName}}</span></a>
                 </li>
                 
                 <!-- Ask the Pundit button-->
@@ -78,7 +78,7 @@
                 
                 <!-- Template menu -->
                 <li class="pnd-toolbar-template-menu-button" ng-click="onClickTemplateDropdown()" ng-class="{'pnd-not-clickable':isAnnomaticRunning}" ng-show="useTemplates">
-                    <a href="javascript:void(0)" template="{{dropdownTemplateTemplates}}" bs-dropdown="userTemplateDropdown">
+                    <a href="javascript:void(0)" template-url="{{dropdownTemplateTemplates}}" bs-dropdown="userTemplateDropdown">
                         <span>{{currentTemplateLabel}}</span>
                         <span class="pnd-icon pnd-icon-circle" style="color: {{currentTemplateColor}};"></span>
                     </a>
@@ -86,13 +86,13 @@
                 
                 <!-- Notebooks menu -->
                 <li class="pnd-toolbar-notebook-menu-button" ng-if="myNotebooks" ng-click="onClickNotebookDropdown()">
-                    <a ng-show="isUserLogged" href="javascript:void(0)" placement="bottom-right" template="{{dropdownTemplateMyNotebook}}" bs-dropdown="userNotebooksDropdown"><span class="pnd-icon pnd-icon-book"> </span> <span class="pnd-toolbar-active-element">{{currentNotebookLabel}}</span></a>
-                    <a ng-show="!isUserLogged" href="javascript:void(0)" placement="bottom-right" template="{{dropdownTemplate}}" bs-dropdown="userNotLoggedDropdown"><span class="pnd-toolbar-not-active-element">Log in to select a notebook</span></a>
+                    <a ng-show="isUserLogged" href="javascript:void(0)" placement="bottom-right" template-url="{{dropdownTemplateMyNotebook}}" bs-dropdown="userNotebooksDropdown"><span class="pnd-icon pnd-icon-book"> </span> <span class="pnd-toolbar-active-element">{{currentNotebookLabel}}</span></a>
+                    <a ng-show="!isUserLogged" href="javascript:void(0)" placement="bottom-right" template-url="{{dropdownTemplate}}" bs-dropdown="userNotLoggedDropdown"><span class="pnd-toolbar-not-active-element">Log in to select a notebook</span></a>
                 </li>
 
                 <!-- Custom menu -->
                 <li class="pnd-toolbar-custom-menu-button" ng-if="menuCustom && menuCustomDropdown.length > 0">
-                    <a href="javascript:void(0)" template="{{dropdownTemplate}}" bs-dropdown="menuCustomDropdown">
+                    <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="menuCustomDropdown">
                         <span class="pnd-toolbar-active-element">Advanced menu</span>
                     </a>
                 </li>
