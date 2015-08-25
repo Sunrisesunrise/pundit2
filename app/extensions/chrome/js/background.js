@@ -12,8 +12,14 @@ var state = {
     },
     //offIcon = devicePixelRatio !== 1 ? 'pundit-icon-38.png' : 'pundit-icon-19.png',
     //onIcon = devicePixelRatio !== 1 ? 'pundit-icon-38-close.png' : 'pundit-icon-19-close.png',
-    offIcon = {"19": "icons/pundit-icon-19.png", "38": "icons/pundit-icon-38.png"},
-    onIcon = {"19": "icons/pundit-icon-19-close.png", "38": "icons/pundit-icon-38-close.png"},
+    offIcon = {
+        "19": chrome.extension.getURL("icons/pundit-icon-19.png"),
+        "38": chrome.extension.getURL("icons/pundit-icon-38.png")
+    },
+    onIcon = {
+        "19": chrome.extension.getURL("icons/pundit-icon-19-close.png"),
+        "38": chrome.extension.getURL("icons/pundit-icon-38-close.png")
+    },
     defaultBadgeBackgroundColor = [75, 112, 165, 255], //#1E2E43
     consolidationBadgeBackgroundColor = [255, 191, 0, 128], //#1E2E43
     loadingBadgeBackgroundColor = [72, 187, 88, 128];//[255, 191, 0, 128]; //#FFBF00
