@@ -10,8 +10,10 @@ var state = {
         loading: {},
         stopLoading: {}
     },
-    offIcon = devicePixelRatio !== 1 ? 'pundit-icon-38.png' : 'pundit-icon-19.png',
-    onIcon = devicePixelRatio !== 1 ? 'pundit-icon-38-close.png' : 'pundit-icon-19-close.png',
+    //offIcon = devicePixelRatio !== 1 ? 'pundit-icon-38.png' : 'pundit-icon-19.png',
+    //onIcon = devicePixelRatio !== 1 ? 'pundit-icon-38-close.png' : 'pundit-icon-19-close.png',
+    offIcon = {"19": "icons/pundit-icon-19.png", "38": "icons/pundit-icon-38.png"},
+    onIcon = {"19": "icons/pundit-icon-19-close.png", "38": "icons/pundit-icon-38-close.png"},
     defaultBadgeBackgroundColor = [75, 112, 165, 255], //#1E2E43
     consolidationBadgeBackgroundColor = [255, 191, 0, 128], //#1E2E43
     loadingBadgeBackgroundColor = [72, 187, 88, 128];//[255, 191, 0, 128]; //#FFBF00
@@ -126,12 +128,12 @@ var setBadgeText = function(tabId, text, backgroundColor) {
 };
 
 var showOnIcon = function(tabId) {
-    chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/" + onIcon), tabId: tabId});
+    chrome.browserAction.setIcon({path: onIcon, tabId: tabId});
 };
 
 var showOffIcon = function(tabId) {
     setBadgeText(tabId, '');
-    chrome.browserAction.setIcon({path: chrome.extension.getURL("icons/" + offIcon), tabId: tabId});
+    chrome.browserAction.setIcon({path: offIcon, tabId: tabId});
 };
 
 var switchOn = function(tab) {
