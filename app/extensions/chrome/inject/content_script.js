@@ -37,13 +37,9 @@ var switchPundit = function(on) {
         innerHtml += '<div class="navbar navbar-inverse navbar-fixed-top pnd-toolbar-navbar pnd-ignore">';
         innerHtml += '  <div class="container-fluid pnd-toolbar-navbar-container">';
         innerHtml += '      <div class="pnd-toolbar-navbar-collapse">';
-        innerHtml += '          <ul class="nav navbar-nav pnd-toolbar-navbar-left">';
-        innerHtml += '              <li class="pnd-toolbar-user-button">';
-        innerHtml += '                  <a href="javascript:void(0)" id="pundit2_preload_message">';
-        innerHtml += '                      Pundit is loading, please wait ...';
-        innerHtml += '                  </a>';
-        innerHtml += '              </li>';
-        innerHtml += '          </ul> <!-- pnd-navbar-left -->';
+        innerHtml += '          <div class="pnd-toolbar-notification-text ">';
+        innerHtml += '              Pundit is loading, please wait ...';
+        innerHtml += '          </div> <!-- pnd-navbar-left -->';
         innerHtml += '      </div><!-- pnd-toolbar-navbar-collapse -->';
         innerHtml += '  </div><!-- pnd-toolbar-navbar-container -->';
         innerHtml += '</div><!-- navbar-inverse navbar-fixed-top -->';
