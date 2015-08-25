@@ -263,7 +263,7 @@ angular.module('Pundit2.ContextualMenu')
 
     // when mock menu show the dimensions can be readed
     // and can calculate the proper placement for the real menu
-    mockOptions.scope.$on('tooltip.show', function() {
+    mockOptions.scope.$on('dropdown.show', function() {
 
         var place = contextualMenu.position(angular.element(state.mockMenu.$element), state.lastX, state.lastY);
 
@@ -291,7 +291,7 @@ angular.module('Pundit2.ContextualMenu')
         angular.element('body').addClass(contextualMenu.options.overflowClass);
     });
 
-    mockOptions.scope.$on('tooltip.hide', function() {
+    mockOptions.scope.$on('dropdown.hide', function() {
         angular.element($window).unbind("scroll");
         angular.element('body').removeClass(contextualMenu.options.overflowClass);
     });
