@@ -10,6 +10,8 @@ angular.module('Pundit2.ResourcePanel')
     var searchTimer;
     var resetHandler;
 
+    var isTimerRunning = false;
+
     $scope.label = '';
 
     $scope.moduleName = 'Pundit2';
@@ -74,7 +76,7 @@ angular.module('Pundit2.ResourcePanel')
         }
 
         searchLabel = typeof(searchLabel) !== 'undefined' ? searchLabel : '';
-        if (searchLabel.length > 2 && isLoading) {
+        if (searchLabel.length > 2 && isLoading || isTimerRunning) {
             return 'Loading ...';
         }
         if (selectorsLabels.indexOf(tabTitle) !== -1 && searchLabel.length <= 2) {
@@ -301,6 +303,7 @@ angular.module('Pundit2.ResourcePanel')
             }
             if (caller !== 'pr' && caller !== '') {
                 $timeout.cancel(searchTimer);
+                isTimerRunning = true;
                 searchTimer = $timeout(function() {
                     if (Config.annotationServerCallsNeedLoggedUser) {
                         MyPundit.checkLoggedIn().then(function(isLoggedIn) {
@@ -313,6 +316,7 @@ angular.module('Pundit2.ResourcePanel')
                     } else {
                         ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
                     }
+                    isTimerRunning = false;
                 }, ResourcePanel.options.vocabSearchTimer);
             }
         } else {
