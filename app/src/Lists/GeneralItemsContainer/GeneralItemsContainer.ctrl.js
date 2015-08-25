@@ -403,9 +403,10 @@ angular.module('Pundit2.GeneralItemsContainer')
                         $scope.onClickAddPageToMyItems();
                         $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = true;
                     }
+                    $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = true;
                 },
                 isActive: false,
-                disable: isCurrentPageInMyItems()
+                disable: !MyPundit.isUserLogged() || isCurrentPageInMyItems()
             }
         );
 
@@ -425,7 +426,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         $scope.$watch(function() {
             return ItemsExchange.getItemsByContainer(MyItems.options.container);
         }, function() {
-            $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = isCurrentPageInMyItems();
+            $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = !MyPundit.isUserLogged() || isCurrentPageInMyItems();
         }, true);
 
 
