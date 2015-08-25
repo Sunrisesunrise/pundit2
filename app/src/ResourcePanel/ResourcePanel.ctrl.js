@@ -137,16 +137,6 @@ angular.module('Pundit2.ResourcePanel')
                 listContainer = li.closest('.pnd-vertical-tab-list-content');
             }
 
-            // TODO: to remove console log .. but not yet.
-            //console.log("listContainer.scrollTop(): " + listContainer.scrollTop());//
-            //console.log("listContainer.height(): " + listContainer.height());
-            //console.log("other.offset().top: " + other.offset().top);
-            //console.log("other.scrollTop(): " + other.scrollTop());
-            //console.log("other.height(): " + other.height());
-            //console.log("ul.offset().top: " + ul.offset().top);
-            //console.log("ul.scrollTop(): " + ul.scrollTop());
-            //console.log("other.offset().top - ul.offset().top: " + (other.offset().top - ul.offset().top));
-            //console.log("other.offset().top - ul.offset().top + other.height(): " + (other.offset().top - ul.offset().top + other.height()));
             if ( (other.offset().top - ul.offset().top) < listContainer.scrollTop()) {
                 listContainer.scrollTop(other.offset().top - ul.offset().top);
             }
@@ -156,7 +146,6 @@ angular.module('Pundit2.ResourcePanel')
                 //console.log("scrolling to: " + (other.offset().top + other.height() - ul.offset().top - listContainer.height()));
                 listContainer.scrollTop((other.offset().top + other.height() - ul.offset().top - listContainer.height()));
             }
-            //console.log("##########################################");
         }
     };
 
