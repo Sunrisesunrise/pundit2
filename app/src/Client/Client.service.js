@@ -787,5 +787,13 @@ angular.module('Pundit2.Client')
     document.addEventListener('Pundit2.requestAnnotationsNumberRaw', requestAnnotationsNumber);
 
     client.log("Component up and running");
+
+    client.OS = '';
+    if (navigator.appVersion.indexOf("Win")!=-1){ client.OS="Windows";}
+    else if (navigator.appVersion.indexOf("Mac")!=-1){ client.OS="MacOS";}
+    else if (navigator.appVersion.indexOf("X11")!=-1){ client.OS="UNIX";}
+    else if (navigator.appVersion.indexOf("Linux")!=-1){ client.OS="Linux";}
+
+
     return client;
 });

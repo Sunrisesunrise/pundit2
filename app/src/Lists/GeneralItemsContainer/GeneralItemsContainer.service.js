@@ -90,7 +90,10 @@ angular.module('Pundit2.GeneralItemsContainer')
 
 })
 
-.service('GeneralItemsContainer', function(GENERALITEMSCONTAINER, BaseComponent, MyItemsContainer, PageItemsContainer, SelectorsManager, MyNotebooksContainer, NotebookExchange, PredicatesContainer, VocabulariesContainer, Config, ItemsExchange, Keyboard, EventDispatcher) {
+.service('GeneralItemsContainer', function(GENERALITEMSCONTAINER, BaseComponent, MyItemsContainer,
+                                           PageItemsContainer, SelectorsManager, MyNotebooksContainer,
+                                           NotebookExchange, PredicatesContainer, VocabulariesContainer,
+                                           Config, ItemsExchange, Keyboard, EventDispatcher, Preview) {
 
     var generalItemsContainer = new BaseComponent('GeneralItemsContainer', GENERALITEMSCONTAINER);
 
@@ -426,6 +429,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
         if (typeof other !== 'undefined' && other.length > 0) {
             other.find('item').trigger('click');
+            Preview.setLock(true);
             if ( (other.offset().top - ul.offset().top) < listContainer.scrollTop()) {
                 listContainer.scrollTop(other.offset().top - ul.offset().top);
             }

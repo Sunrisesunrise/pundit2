@@ -16,6 +16,7 @@ angular.module('Pundit2.Item')
 
     $scope.onItemMouseOver = function() {
         Preview.showDashboardPreview($scope.item);
+        Preview.setLock(false);
     };
 
     $scope.onItemMouseLeave = function() {

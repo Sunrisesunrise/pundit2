@@ -132,7 +132,7 @@ angular.module('Pundit2.ResourcePanel')
 
         if (typeof other !== 'undefined' && other.length > 0) {
             other.find('item').trigger('click');
-            // TODO: gestion preview.
+            Preview.setLock(true);
             if (typeof listContainer === 'undefined') {
                 listContainer = li.closest('.pnd-vertical-tab-list-content');
             }
@@ -161,6 +161,9 @@ angular.module('Pundit2.ResourcePanel')
     };
 
     $scope.select = function(item, $event) {
+        // after triggering click, lastSelect object will be updated with new selected item.
+        Preview.setLock(false);
+        Preview.showDashboardPreview(item);
         Preview.setItemDashboardSticky(item);
         EventDispatcher.sendEvent('Pundit.changeSelection');
         lastSelected = {

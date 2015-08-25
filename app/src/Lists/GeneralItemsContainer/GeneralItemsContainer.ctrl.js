@@ -310,6 +310,8 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     if(!$scope.isMyNotebooks) {
         $scope.select = function (item, $event) {
+            Preview.setLock(false);
+            Preview.showDashboardPreview(item);
             Preview.setItemDashboardSticky(item);
             EventDispatcher.sendEvent('Pundit.changeSelection');
             lastSelected = {
@@ -361,6 +363,8 @@ angular.module('Pundit2.GeneralItemsContainer')
         };
     } else {
         $scope.select = function (item, $event) {
+            Preview.setLock(false);
+            Preview.showDashboardPreview(item);
             Preview.setItemDashboardSticky(item);
             lastSelected = {
                 item: item,
