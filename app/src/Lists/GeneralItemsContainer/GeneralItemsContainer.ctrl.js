@@ -416,11 +416,10 @@ angular.module('Pundit2.GeneralItemsContainer')
         }, function (logged) {
             if (logged) {
                 $scope.isUserLogged = true;
-                $scope.message.text = "No my items found.";
             } else {
                 $scope.isUserLogged = false;
-                $scope.message.text = "Please login to see your items.";
             }
+            $scope.message.text = GeneralItemsContainer.getMessageText($scope.type, $scope.search.term);
         });
 
         $scope.$watch(function() {

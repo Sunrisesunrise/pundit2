@@ -93,7 +93,8 @@ angular.module('Pundit2.GeneralItemsContainer')
 .service('GeneralItemsContainer', function(GENERALITEMSCONTAINER, BaseComponent, MyItemsContainer,
                                            PageItemsContainer, SelectorsManager, MyNotebooksContainer,
                                            NotebookExchange, PredicatesContainer, VocabulariesContainer,
-                                           Config, ItemsExchange, Keyboard, EventDispatcher, Preview) {
+                                           Config, ItemsExchange, Keyboard, EventDispatcher, Preview, 
+                                           MyPundit) {
 
     var generalItemsContainer = new BaseComponent('GeneralItemsContainer', GENERALITEMSCONTAINER);
 
@@ -128,7 +129,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         } else if (generalItemsContainer.isPageItemsType(type)) {
             text = 'No page items found.';
         } else if (generalItemsContainer.isVocabulariesType(type)) {
-            text = 'Enter text to search in the vocabularies.';
+            text = 'Here you can search entities of Linked Data providers. Input your query string in the field above. When you hover on an entity on the list you see its details in the preview panel on the right. Once you find the desired entity you can use it as Subject, Object or add it to My Items.';
         } else if (generalItemsContainer.isMyNotebooksType(type)) {
             text = 'No notebooks found.';
         } else if (generalItemsContainer.isPredicatesType(type)) {
@@ -203,42 +204,49 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     };
 
+    var noItemsFound = 'Oops, try again. It looks like your search doesn\'t return anything.';
 
     generalItemsContainer.getMessageText = function(type, str) {
+        var text = '',
+            items = ItemsExchange.getItemsByContainer(type);
 
-        var text = '';
         if (generalItemsContainer.isMyItemsType(type)) {
+            if (MyPundit.isUserLogged() === false) {
+                return 'My Items are only available to logged users. Please log in to Pundit and use this section to bookmark and use items.'
+            }
+            if (items.length === 0) {
+                return 'It seems you haven\'t any item stored here yet! You can add My Items by selecting parts of text or selecting an entity in the Linked Data panel and clicking on "Add to My Items"';
+            }
             if (str === '') {
-                return "No item found.";
+                return 'No item found.';
             } else {
-                return "No item found to: " + str;
+                return noItemsFound;
             }
         } else if (generalItemsContainer.isPageItemsType(type)) {
             if (str === '') {
-                return "No page item found.";
+                return 'No page item found.';
             } else {
-                return "No page item found to: " + str;
+                return noItemsFound;
             }
         } else if (generalItemsContainer.isVocabulariesType(type)) {
             if (str === '') {
-                return "No vocabulary found.";
+                return 'No vocabulary found.';
             } else {
-                return "No vocabulary found to: " + str;
+                return noItemsFound;
             }
         } else if (generalItemsContainer.isMyNotebooksType(type)) {
             if (str === '') {
-                return "No notebook found.";
+                return 'No notebook found.';
             } else {
-                return "No notebook found to: " + str;
+                return noItemsFound;
             }
         } else if (generalItemsContainer.isPredicatesType(type)) {
             if (str === '') {
-                return "No predicate found.";
+                return 'No predicate found.';
             } else {
-                return "No predicate found to: " + str;
+                return noItemsFound;
             }
         }
-
 
         return text;
     };

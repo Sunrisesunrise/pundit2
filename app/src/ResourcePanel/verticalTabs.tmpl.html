@@ -83,15 +83,8 @@
                         hide-sticky-button="true"></item>
                 </li>
 
-                <!-- messages 5 -->
-                <li 
-                    ng-if="showContentMessage5 && $parent.tabItemsFiltered[$index].length === 0 && label.length > 2 && !pane.isLoading">
-                    PUNDIT: No results found
-                </li>
-                <!-- messages 6 -->
-                <li 
-                    ng-if="showContentMessage6 && label.length > 2 && pane.isLoading">
-                    Loading ... 
+                <li ng-if="showContentMessage5">
+                    {{getMessageText(contentTabs[$index].title, contentTabs[$index].items, $parent.tabItemsFiltered[$index], label, showContentMessage5, pane.isLoading)}}
                 </li>
 
                 <!-- Korbo -->
