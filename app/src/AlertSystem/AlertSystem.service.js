@@ -61,7 +61,7 @@ angular.module('Pundit2.AlertSystem')
 
 // TODO Add method documentation in JSDoc
 
-.service('AlertSystem', function(BaseComponent, $timeout, ALERTSYSTEMDEFAULTS) {
+.service('AlertSystem', function(BaseComponent, $timeout, ALERTSYSTEMDEFAULTS, EventDispatcher) {
 
     var alertSystem = new BaseComponent('AlertSystem', ALERTSYSTEMDEFAULTS);
 
@@ -228,6 +228,10 @@ angular.module('Pundit2.AlertSystem')
         var alert = getAlert(id);
         setTimeout(alert);
     };
+
+    EventDispatcher.addListener('Pundit.errorAlert', function(evt) {
+        alertSystem.addAlert(alertSystem.AlertType.ERROR, evt.args, 5000);
+    });
 
     return alertSystem;
 });

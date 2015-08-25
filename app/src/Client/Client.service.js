@@ -467,6 +467,7 @@ angular.module('Pundit2.Client')
         if (!root.hasClass('pnd-wrp')) {
             root.addClass('pnd-wrp');
         }
+        root.append('<alert-system></alert-system>');
     };
 
     // Reads the list of components which needs to be bootstrapped.. and bootstrap
