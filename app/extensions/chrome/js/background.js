@@ -20,9 +20,9 @@ var state = {
         "19": chrome.extension.getURL("icons/pundit-icon-19-close.png"),
         "38": chrome.extension.getURL("icons/pundit-icon-38-close.png")
     },
-    defaultBadgeBackgroundColor = [75, 112, 165, 255], //#1E2E43
+    defaultBadgeBackgroundColor = [127, 127, 127, 255], // [75, 112, 165, 255], //#1E2E43
     consolidationBadgeBackgroundColor = [255, 191, 0, 128], //#1E2E43
-    loadingBadgeBackgroundColor = [72, 187, 88, 128];//[255, 191, 0, 128]; //#FFBF00
+    loadingBadgeBackgroundColor = [127, 127, 127, 255]; // [72, 187, 88, 128];//[255, 191, 0, 128]; //#FFBF00
 
 var injectScripts = function(tab, force, callback) {
     if (typeof state.injections[tab.id] !== 'undefined') {
