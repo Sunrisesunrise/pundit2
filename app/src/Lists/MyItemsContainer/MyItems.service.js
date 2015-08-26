@@ -93,7 +93,7 @@ angular.module("Pundit2.MyItemsContainer")
         ContextualMenu.addAction({
             name: 'addToMyItems',
             type: cMenuTypes,
-            label: "Add to my items",
+            label: "Add to My Items",
             priority: 99,
             showIf: function(item) {
                 return MyPundit.isUserLogged() &&
@@ -110,7 +110,7 @@ angular.module("Pundit2.MyItemsContainer")
         ContextualMenu.addAction({
             name: 'removeFromMyItems',
             type: cMenuTypes,
-            label: "Remove from my items",
+            label: "Remove from My Items",
             priority: 99,
             showIf: function(item) {
                 return MyPundit.isUserLogged() &&
@@ -368,7 +368,7 @@ angular.module("Pundit2.MyItemsContainer")
 
         var currentTime = new Date(),
             // get all my items and make a copy
-            items = angular.copy(ItemsExchange.getItemsByContainer(myItems.options.container)),
+            items = angular.extend([], ItemsExchange.getItemsByContainer(myItems.options.container)),
             promise = $q.defer();
 
         // add new item to the copied array

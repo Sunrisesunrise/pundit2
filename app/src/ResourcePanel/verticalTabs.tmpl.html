@@ -77,21 +77,14 @@
                     <item 
                         uri="{{mi.uri}}" 
                         is-selected="isSelected(mi)" 
-                        ng-click="select(mi)"
+                        ng-click="select(mi, $event)"
                         ng-dblclick="save(mi)"
                         hide-options="true" 
                         hide-sticky-button="true"></item>
                 </li>
 
-                <!-- messages 5 -->
-                <li 
-                    ng-if="showContentMessage5 && $parent.tabItemsFiltered[$index].length === 0 && label.length > 2 && !pane.isLoading">
-                    PUNDIT: No results found
-                </li>
-                <!-- messages 6 -->
-                <li 
-                    ng-if="showContentMessage6 && label.length > 2 && pane.isLoading">
-                    Loading ... 
+                <li ng-if="showContentMessage5">
+                    {{getMessageText(contentTabs[$index].title, contentTabs[$index].items, $parent.tabItemsFiltered[$index], label, showContentMessage5, pane.isLoading)}}
                 </li>
 
                 <!-- Korbo -->
@@ -107,7 +100,7 @@
                         is-selected="isSelected(mi)"
                         hide-options="true"
                         hide-sticky-button="true" 
-                        ng-click="select(mi)" 
+                        ng-click="select(mi, $event)"
                         use-in-korbo="true"></item>
                 </li>
             </ul>
@@ -118,13 +111,14 @@
             ng-if="showVerticalTabFooterContent">
             <button 
                 class="pnd-resource-panel-use-button pnd-btn pnd-btn-calltoaction pnd-use"
+                ng-show="showSaveButton(this)"
                 ng-class="{'disabled': !isUseActive}" 
                 ng-click="save(itemSelected)">
                 Use
             </button><button
                 class="pnd-resource-panel-copy-button pnd-btn"
                 ng-class="{'disabled': !isUseActive}" 
-                ng-show="showUseAndCopyButton()" 
+                ng-show="showUseAndCopyButton()"
                 ng-click="useAndCopy(itemSelected)">
                 Copy and Use
             </button><button

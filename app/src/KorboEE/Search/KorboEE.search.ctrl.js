@@ -16,7 +16,6 @@ angular.module('KorboEE')
         $scope.showContentMessage1 = true;
         $scope.showContentMessage4 = true;
         $scope.showContentMessage5 = false;
-        $scope.showContentMessage6 = false;
         $scope.useCustomTemplate = 'src/Item/KorboItem.dir.tmpl.html';
         $scope.canShowPaneList = function() {
             return true;

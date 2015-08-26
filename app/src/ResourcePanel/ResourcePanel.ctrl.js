@@ -2,12 +2,15 @@ angular.module('Pundit2.ResourcePanel')
 
 .controller('ResourcePanelCtrl', function($rootScope, $scope, $timeout, $filter, $window,
     Client, Config, ItemsExchange, MyItems, MyPundit, PageItemsContainer, Preview,
-    ResourcePanel, SelectorsManager, KorboCommunicationService, EventDispatcher, Analytics, PageHandler, TripleComposer) {
+    ResourcePanel, SelectorsManager, KorboCommunicationService, EventDispatcher, Analytics, PageHandler, TripleComposer, Keyboard) {
 
     var actualContainer;
     var selectors = SelectorsManager.getActiveSelectors();
+    var selectorsLabels = [];
     var searchTimer;
     var resetHandler;
+
+    var isTimerRunning = false;
 
     $scope.label = '';
 
@@ -24,10 +27,14 @@ angular.module('Pundit2.ResourcePanel')
     $scope.showContentMessage1 = false;
     $scope.showContentMessage4 = false;
     $scope.showContentMessage5 = true;
-    $scope.showContentMessage6 = true;
     $scope.useCustomTemplate = false;
+
+    for (var i in selectors) {
+        selectorsLabels.push(selectors[i].config.label);
+    }
+
     $scope.canShowPaneList = function(title) {
-        return title !== 'My items' || (title === 'My items' && $scope.userLoggedIn);
+        return title !== 'My Items' || (title === 'My Items' && $scope.userLoggedIn);
     };
 
     // build tabs by reading active selectors inside selectors manager
@@ -60,6 +67,29 @@ angular.module('Pundit2.ResourcePanel')
         $scope.isUseActive = false;
         $scope.itemSelected = null;
     };
+    // {{getMessageText(contentTabs[$index].title, contentTabs[$index].items, $parent.tabItemsFiltered[$index], label, showContentMessage5, pane.isLoading)}}
+    // ng-if="contentTabs[$index].title != 'My Items' && showContentMessage6 && label.length > 2 && pane.isLoading">
+
+    $scope.getMessageText = function(tabTitle, tabItems, filteredItems, searchLabel, showIt, isLoading) {
+        if (showIt === false) {
+            return '';
+        }
+
+        searchLabel = typeof(searchLabel) !== 'undefined' ? searchLabel : '';
+        if (searchLabel.length > 2 && isLoading || isTimerRunning) {
+            return 'Loading ...';
+        }
+        if (selectorsLabels.indexOf(tabTitle) !== -1 && searchLabel.length <= 2) {
+            return 'Search any entity in ' + tabTitle +' using the input filed above. When you hover on an entity on the list you see its details in the preview panel on the right.';
+        }
+
+        if (tabTitle === 'My Items' && tabItems.length === 0) {
+            return 'It seems you haven\'t any item stored here yet! Please add some items to My Items to use this section.';
+        }
+        if (filteredItems.length === 0 && searchLabel.length > 2 && !isLoading) {
+            return 'Oops, try again. It looks like your search doesn\'t return anything.';
+        }
+    };
 
     // getter function used inside template to order items
     // return the items property value used to order
@@ -75,9 +105,89 @@ angular.module('Pundit2.ResourcePanel')
         }
     };
 
-    $scope.select = function(item) {
+    var lastSelected;
+    var keyHandlers = {};
+    keyHandlers['enter'] = Keyboard.registerHandler('ResourcePanelController', {
+        scope: $scope,
+        keyCode: 13,
+        ignoreOnInput: false,
+        stopPropagation: true,
+        priority: 10,
+    }, function(event, eventKeyConfig) {
+        if (typeof lastSelected !== 'undefined') {
+            $scope.save(lastSelected.item);
+        }
+    });
+
+    keyHandlers['arrowUp'] = Keyboard.registerHandler('ResourcePanelController', {
+        scope: $scope,
+        keyCode: 38,
+        ignoreOnInput: true,
+        stopPropagation: true,
+        priority: 10,
+    }, function(event, eventKeyConfig) {
+        arrowKeyPressed(38);
+    });
+
+    keyHandlers['arrowDown'] = Keyboard.registerHandler('ResourcePanelController', {
+        scope: $scope,
+        keyCode: 40,
+        ignoreOnInput: true,
+        stopPropagation: true,
+        priority: 10,
+    }, function(event, eventKeyConfig) {
+        arrowKeyPressed(40);
+    });
+
+    var listContainer;
+    var arrowKeyPressed = function(code) {
+        if (typeof lastSelected === 'undefined') {
+            return;
+        }
+
+        var elem = angular.element(lastSelected.elementItem);
+        var li = elem.parent();
+        var ul = li.parent();
+        var other;
+        switch (code) {
+            case 38:
+                // Up.
+                other = li.prev();
+                break;
+            case 40:
+                // Down.
+                other = li.next();
+                break;
+        }
+
+        if (typeof other !== 'undefined' && other.length > 0) {
+            other.find('item').trigger('click');
+            Preview.setLock(true);
+            if (typeof listContainer === 'undefined') {
+                listContainer = li.closest('.pnd-vertical-tab-list-content');
+            }
+
+            if ((other.offset().top - ul.offset().top) < listContainer.scrollTop()) {
+                listContainer.scrollTop(other.offset().top - ul.offset().top);
+            } else if (
+                (other.offset().top + other.height() - ul.offset().top > listContainer.height() - listContainer.scrollTop())
+            ) {
+                //console.log("scrolling to: " + (other.offset().top + other.height() - ul.offset().top - listContainer.height()));
+                listContainer.scrollTop((other.offset().top + other.height() - ul.offset().top - listContainer.height()));
+            }
+        }
+    };
+
+    $scope.select = function(item, $event) {
+        // after triggering click, lastSelect object will be updated with new selected item.
+        Preview.setLock(false);
+        Preview.showDashboardPreview(item);
         Preview.setItemDashboardSticky(item);
         EventDispatcher.sendEvent('Pundit.changeSelection');
+        lastSelected = {
+            item: item,
+            elementItem: $event.currentTarget
+        }
         $scope.isUseActive = true;
         $scope.itemSelected = item;
     };
@@ -151,7 +261,7 @@ angular.module('Pundit2.ResourcePanel')
         }
 
         if (typeof ResourcePanel.overrideFooterExtraButtons !== 'undefined' &&
-        typeof ResourcePanel.overrideFooterExtraButtons.showUseFullPageButton !== 'undefined') {
+            typeof ResourcePanel.overrideFooterExtraButtons.showUseFullPageButton !== 'undefined') {
             res &= ResourcePanel.overrideFooterExtraButtons.showUseFullPageButton;
         }
 
@@ -193,6 +303,7 @@ angular.module('Pundit2.ResourcePanel')
             }
             if (caller !== 'pr' && caller !== '') {
                 $timeout.cancel(searchTimer);
+                isTimerRunning = true;
                 searchTimer = $timeout(function() {
                     if (Config.annotationServerCallsNeedLoggedUser) {
                         MyPundit.checkLoggedIn().then(function(isLoggedIn) {
@@ -205,6 +316,7 @@ angular.module('Pundit2.ResourcePanel')
                     } else {
                         ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
                     }
+                    isTimerRunning = false;
                 }, ResourcePanel.options.vocabSearchTimer);
             }
         } else {
@@ -306,6 +418,9 @@ angular.module('Pundit2.ResourcePanel')
 
     $scope.$on('$destroy', function() {
         EventDispatcher.removeListener(resetHandler);
+        for (var key in keyHandlers) {
+            Keyboard.unregisterHandler(keyHandlers[key]);
+        }
     });
 
     resetHandler = EventDispatcher.addListener('Pundit.changeSelection', function() {

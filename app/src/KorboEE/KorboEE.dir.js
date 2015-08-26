@@ -17,13 +17,16 @@ angular.module('KorboEE')
  **/
 .directive('korboEntityEditor', function(korboConf, APIService, $window){
         return {
-
             restrict: 'E',
-
+            scope: {
+                korboSearchLimit: '=korboSearchLimit',
+                korboMinLength: '=korboMinLength'
+            },
             templateUrl: function(element, attrs) {
                 var confName = attrs.confName || '';
                 var conf = korboConf.setConfiguration(confName);
-
+                attrs.korboSearchLimit = "'"+conf.limitSearchResult+"'";
+                attrs.korboMinLength = "'"+conf.labelMinLength+"'";
                 // APIService is initialized only if globalObjectName doesn't exist yet in $window
                 // if it exists, show error template and set error attribute to true
 
@@ -115,9 +118,6 @@ angular.module('KorboEE')
 
             },
 
-            scope: {
-
-            },
             link: function($scope, element, attrs) {
                 var confName = attrs.confName || '';
                 // Saving this conf into this directive scope, when .open()

@@ -61,9 +61,9 @@ angular.module('Pundit2.Annotators')
         return true;
     };
 
-    pageAnnotator.consolidate = function( /*items*/ ) {
-        pageAnnotator.log('Consolidating!');
-
+    pageAnnotator.consolidate = function(items, promise) {
+        pageAnnotator.log('Consolidating!', items);
+        return promise.resolve();
         // TODO Add something to the page?
     };
 

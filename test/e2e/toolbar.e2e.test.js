@@ -48,8 +48,8 @@ describe("The toolbar module", function() {
                 // dropdown-menu should be visible
                 p.findElements(protractor.By.css('.pnd-toolbar-notebook-menu-button .dropdown-menu li')).then(function(dropdownMenu) {
                     expect(dropdownMenu.length).toBe(2);
-                    expect(dropdownMenu[0].getText()).toBe("Please sign in to use Pundit");
-                    expect(dropdownMenu[1].getText()).toBe("Sign in");
+                    expect(dropdownMenu[0].getText()).toBe("Please log in to select the notebook to store your annotations");
+                    expect(dropdownMenu[1].getText()).toBe("Log in");
                 });
             });
         });

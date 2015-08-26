@@ -102,6 +102,8 @@ angular.module('Pundit2.Annotators')
     ContextualMenu, XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, EventDispatcher,
     $document) {
 
+    var clientHidden = false;
+
     var tfh = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
 
     // If we are configured to remove the selection, we cannot preventDefault() or
@@ -154,6 +156,10 @@ angular.module('Pundit2.Annotators')
                 delete temporaryConsolidated[uri];
             }
         }
+
+        if (forceWipe) {
+            lastTemporaryConsolidable = undefined;
+        }
     };
 
     var addTemporarySelection = function() {
@@ -181,6 +187,9 @@ angular.module('Pundit2.Annotators')
 
     var mouseUpHandler = function(upEvt) {
         lastTemporaryConsolidable = undefined;
+        if (clientHidden) {
+            return;
+        }
 
         $document.off('mouseup', mouseUpHandler);
 
@@ -246,6 +255,10 @@ angular.module('Pundit2.Annotators')
     }; // mouseUpHandler()
 
     var mouseDownHandler = function(downEvt) {
+        if (clientHidden) {
+            return;
+        }
+
         var target = downEvt.target;
         if (tfh.isToBeIgnored(target)) {
             tfh.log('ABORT: ignoring mouse DOWN event on document: ignore class spotted.');
@@ -625,6 +638,15 @@ angular.module('Pundit2.Annotators')
         tfh.log('ERROR: getContentURLFromXPath returning something weird? xpath = ' + xpath);
         return '';
     }; // getContentURLFromXPath()
+
+    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+        clientHidden = true;
+        checkTemporaryConsolidated(true);
+    });
+
+    EventDispatcher.addListener('Client.show', function(/*e*/) {
+        clientHidden = false;
+    });
 
     tfh.log('Component up and running');
     return tfh;

@@ -113,6 +113,10 @@ angular.module('Pundit2.Communication')
     annotationExchange.getAnnotations = function() {
         return annList;
     };
+    
+    annotationExchange.getAnnotationsHash = function() {
+        return annListById;
+    };
 
     annotationExchange.getAnnotationById = function(id) {
         if (id in annListById) {
@@ -131,10 +135,6 @@ angular.module('Pundit2.Communication')
         }
 
         return ret;
-    };
-
-    annotationExchange.getAnnotationsHash = function() {
-        return annListById;
     };
 
     annotationExchange.log('Component up and running');

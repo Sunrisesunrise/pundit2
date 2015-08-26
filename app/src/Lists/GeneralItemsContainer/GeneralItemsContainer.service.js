@@ -90,7 +90,11 @@ angular.module('Pundit2.GeneralItemsContainer')
 
 })
 
-.service('GeneralItemsContainer', function(GENERALITEMSCONTAINER, BaseComponent, MyItemsContainer, PageItemsContainer, SelectorsManager, MyNotebooksContainer, NotebookExchange, PredicatesContainer, VocabulariesContainer, Config, ItemsExchange) {
+.service('GeneralItemsContainer', function(GENERALITEMSCONTAINER, BaseComponent, MyItemsContainer,
+                                           PageItemsContainer, SelectorsManager, MyNotebooksContainer,
+                                           NotebookExchange, PredicatesContainer, VocabulariesContainer,
+                                           Config, ItemsExchange, Keyboard, EventDispatcher, Preview, 
+                                           MyPundit) {
 
     var generalItemsContainer = new BaseComponent('GeneralItemsContainer', GENERALITEMSCONTAINER);
 
@@ -125,7 +129,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         } else if (generalItemsContainer.isPageItemsType(type)) {
             text = 'No page items found.';
         } else if (generalItemsContainer.isVocabulariesType(type)) {
-            text = 'Enter text to search in the vocabularies.';
+            text = 'Here you can search entities of Linked Data providers. Input your query string in the field above. When you hover on an entity on the list you see its details in the preview panel on the right. Once you find the desired entity you can use it as Subject, Object or add it to My Items.';
         } else if (generalItemsContainer.isMyNotebooksType(type)) {
             text = 'No notebooks found.';
         } else if (generalItemsContainer.isPredicatesType(type)) {
@@ -200,42 +204,49 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     };
 
+    var noItemsFound = 'Oops, try again. It looks like your search doesn\'t return anything.';
 
     generalItemsContainer.getMessageText = function(type, str) {
+        var text = '',
+            items = ItemsExchange.getItemsByContainer(type);
 
-        var text = '';
         if (generalItemsContainer.isMyItemsType(type)) {
+            if (MyPundit.isUserLogged() === false) {
+                return 'My Items are only available to logged users. Please log in to Pundit and use this section to bookmark and use items.'
+            }
+            if (items.length === 0) {
+                return 'It seems you haven\'t any item stored here yet! You can add My Items by selecting parts of text or selecting an entity in the Linked Data panel and clicking on "Add to My Items"';
+            }
             if (str === '') {
-                return "No item found.";
+                return 'No item found.';
             } else {
-                return "No item found to: " + str;
+                return noItemsFound;
             }
         } else if (generalItemsContainer.isPageItemsType(type)) {
             if (str === '') {
-                return "No page item found.";
+                return 'No page item found.';
             } else {
-                return "No page item found to: " + str;
+                return noItemsFound;
             }
         } else if (generalItemsContainer.isVocabulariesType(type)) {
             if (str === '') {
-                return "No vocabulary found.";
+                return 'No vocabulary found.';
             } else {
-                return "No vocabulary found to: " + str;
+                return noItemsFound;
             }
         } else if (generalItemsContainer.isMyNotebooksType(type)) {
             if (str === '') {
-                return "No notebook found.";
+                return 'No notebook found.';
             } else {
-                return "No notebook found to: " + str;
+                return noItemsFound;
             }
         } else if (generalItemsContainer.isPredicatesType(type)) {
             if (str === '') {
-                return "No predicate found.";
+                return 'No predicate found.';
             } else {
-                return "No predicate found to: " + str;
+                return noItemsFound;
             }
         }
-
 
         return text;
     };
@@ -282,18 +293,18 @@ angular.module('Pundit2.GeneralItemsContainer')
         var btnClass = 'pnd-triplecomposer-cancel btn btn-info btn-xs pnd-btn-full';
 
         if (generalItemsContainer.isMyItemsType(type)) {
-            title = 'Remove from my items';
+            title = 'Remove from My Items';
             text = 'Remove';
             action = 'remove';
             btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isPageItemsType(type)) {
-            title = 'Add to myItems';
-            text = 'Add to myItems';
+            title = 'Add to  My Items';
+            text = 'Add to My Items';
             action = 'add';
             btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isVocabulariesType(type)) {
-            title = 'Add to myItems';
-            text = 'Add to myItems';
+            title = 'Add to My Items';
+            text = 'Add to My Items';
             action = 'add';
             requireLoggedUser = false;
             btnClass = 'pnd-btn';
@@ -360,6 +371,83 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     generalItemsContainer.isPredicatesType = function(type) {
         return type === PREDICATES_TYPE;
+    };
+
+    generalItemsContainer.setLastSelected = function(lastSelectedData) {
+        lastSelected = lastSelectedData;
+    };
+
+    var lastSelected;
+    var listContainer;
+    var keyHandlers = {};
+    keyHandlers['enter'] = Keyboard.registerHandler('ResourcePanelController', {
+        keyCode: 13,
+        ignoreOnInput: false,
+        stopPropagation: true,
+    }, function(event, eventKeyConfig){
+        if (typeof lastSelected !== 'undefined') {
+            //$scope.save(lastSelected.item);
+            var generalItemContainer = angular.element(lastSelected.elementItem).closest('general-items-container');
+            var actionButtons = generalItemContainer.find('.pnd-panel-tab-content-footer').find('.pnd-btn.pnd-btn-subject,.pnd-btn.pnd-btn-object,.pnd-btn.pnd-btn-predicate');
+            for (var i in actionButtons) {
+                if (!actionButtons.eq(i).is(':disabled')) {
+                    actionButtons.eq(i).trigger('click');
+                    return;
+                }
+            }
+        }
+    });
+
+    keyHandlers['arrowUp'] = Keyboard.registerHandler('ResourcePanelController', {
+        keyCode: 38,
+        ignoreOnInput: true,
+        stopPropagation: true,
+    }, function(event, eventKeyConfig){
+        arrowKeyPressed(38);
+    });
+
+    keyHandlers['arrowDown'] = Keyboard.registerHandler('ResourcePanelController', {
+        keyCode: 40,
+        ignoreOnInput: true,
+        stopPropagation: true,
+    }, function(event, eventKeyConfig){
+        arrowKeyPressed(40);
+    });
+
+    var arrowKeyPressed = function(code) {
+        if (typeof lastSelected === 'undefined') {
+            return;
+        }
+
+        var elem = angular.element(lastSelected.elementItem);
+        var li = elem.parent();
+        var ul = li.parent();
+        listContainer = ul.parent().hasClass('pnd-inner-scrollable') ? ul.parent() : li.closest('.pnd-tab-content');
+        var other;
+        switch(code) {
+            case 38:
+                // Up.
+                other = li.prev();
+                break;
+            case 40:
+                // Down.
+                other = li.next();
+                break;
+        }
+
+        if (typeof other !== 'undefined' && other.length > 0) {
+            other.find('item').trigger('click');
+            Preview.setLock(true);
+            if ( (other.offset().top - ul.offset().top) < listContainer.scrollTop()) {
+                listContainer.scrollTop(other.offset().top - ul.offset().top);
+            }
+            else if (
+            (other.offset().top + other.height() - ul.offset().top > listContainer.height() - listContainer.scrollTop())
+            ) {
+                //console.log("scrolling to: " + (other.offset().top + other.height() - ul.offset().top - listContainer.height()));
+                listContainer.scrollTop((other.offset().top + other.height() - ul.offset().top - listContainer.height()));
+            }
+        }
     };
 
     return generalItemsContainer;

@@ -7,7 +7,7 @@
                 <span class="kee-error" bs-tooltip data-title="{{tabs[$index].tooltipMessageErrorTab}}" >{{pane.title}}</span>
             </a>
         </li>
-        <li class="pull-right show-tabs" ng-class="{active: hiddenTabIsActive}" placement="bottom-right" template="{{hiddenTabsDropdownTemplate}}" bs-dropdown="hiddenTabs" ng-show="hiddenTabsToShow()">
+        <li class="pull-right show-tabs" ng-class="{active: hiddenTabIsActive}" placement="bottom-right" template-url="{{hiddenTabsDropdownTemplate}}" bs-dropdown="hiddenTabs" ng-show="hiddenTabsToShow()">
             <a><span class="pnd-icon pnd-icon-dots"></span></a>
         </li>
     </ul>

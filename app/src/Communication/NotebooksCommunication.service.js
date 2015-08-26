@@ -64,6 +64,7 @@ angular.module('Pundit2.Communication')
                 setLoading(false);
                 promise.reject("Error from server while retrieving list of my notebooks: " + statusCode);
                 notebookCommunication.err("Error from server while retrieving list of my notebooks: " + statusCode);
+                EventDispatcher.sendEvent('Pundit.errorAlert', "Error from server while retrieving list of my notebooks: " + statusCode);
                 Analytics.track('api', 'error', 'get notebook owned', statusCode);
             });
         } else {
@@ -133,6 +134,7 @@ angular.module('Pundit2.Communication')
             }).error(function(msg) {
                 setLoading(false);
                 notebookCommunication.log('Impossible to set as current: ' + id);
+                EventDispatcher.sendEvent('Pundit.errorAlert', 'Impossible to set as current: ' + id);
                 promise.reject(msg);
             });
 
@@ -171,6 +173,7 @@ angular.module('Pundit2.Communication')
             }).error(function(msg) {
                 setLoading(false);
                 notebookCommunication.log('Impossible to set as public: ' + id);
+                EventDispatcher.sendEvent('Pundit.errorAlert', 'Impossible to set as public: ' + id);
                 promise.reject(msg);
             });
         } else {
@@ -205,6 +208,7 @@ angular.module('Pundit2.Communication')
             }).error(function(msg) {
                 setLoading(false);
                 notebookCommunication.log('Impossible to set as private: ' + id);
+                EventDispatcher.sendEvent('Pundit.errorAlert', 'Impossible to set as private: ' + id);
                 promise.reject(msg);
             });
 
@@ -291,6 +295,7 @@ angular.module('Pundit2.Communication')
             }).error(function(msg) {
                 setLoading(false);
                 notebookCommunication.log('Impossible to remove ' + id);
+                EventDispatcher.sendEvent('Pundit.errorAlert', 'Impossible to remove ' + id);
                 promise.reject(msg);
             });
 

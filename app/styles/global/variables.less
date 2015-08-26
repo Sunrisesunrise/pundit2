@@ -19,6 +19,7 @@
 // ------------------------------------ //
 // Text colors
 @color-text: #555;
+@color-text-light: #808080;
 @color-text-error: #FF643F;
 @color-text-link: #48bb58; // #39b54a;
 @color-text-link-hover: darken(@color-text-link, 15%);
@@ -62,7 +63,15 @@
 // Toolbar
 @color-toolbar-bg: #333333;
 @color-toolbar-text: #eee;
-@color-toolbar-button: #3c3c3c;
+@color-toolbar-button: lighten(@color-toolbar-bg, 3);
+@color-toolbar-button-hover: lighten(@color-toolbar-button, 8);
+@color-toolbar-button-open: #999999; // @color-toolbar-button-hover;
+
+// Dropdown
+@color-dropdown-bg: #ffffff;
+@color-dropdown-active: darken(@color-dropdown-bg, 10);
+@color-dropdown-bg-hover: darken(@color-dropdown-bg, 5);
+@color-dropdown-text: @color-text;
 
 // Login popover colors
 @color-login-popover-background: #FFF;
@@ -87,8 +96,27 @@
 // ------------------------------------ //
 // #INLINE-CONSOLIDATION
 // ------------------------------------ //
-@text-fragment-color: fade(#feff99, 70%); // fade(#f8d420, 45%); // Original from Simone Fonda #f8cd48; // rgba(255,255,0,.32); // #f8cd48;
-@text-fragment-color-hover: fade(#feff99, 100%); // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
+@text-fragment-color: fade(#ffff00, 65%); // fade(#f8d420, 45%); // Original from Simone Fonda #f8cd48; // rgba(255,255,0,.32); // #f8cd48;
+@text-fragment-color-1: fade(#ffff33, 35%);
+@text-fragment-color-2: fade(#ffff00, 45%);
+@text-fragment-color-3: fade(#ffff00, 50%);
+@text-fragment-color-4: fade(#ffff00, 55%);
+@text-fragment-color-5: fade(#ffff00, 60%);
+@text-fragment-color-6: fade(#ffff00, 65%);
+
+// Highlights the text fragment the user is annotating
+@text-fragment-color-highlight: fade(#2ee6e6, 40%);
+
+// Hovering on a text fragment icon or an annotations in the sidebar
+@text-fragment-color-hover: @text-fragment-color-highlight; // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
+
+// When doing "Show all annotations on this item"... alle the others text fragment are ghosted
+@text-fragment-ghosted: fade(#ffff33, 15%);
+
+// Icons
+@text-fragment-icon-color: fade(#bfbf00, 65%);
+@text-fragment-icon-color-hover: fade(#47b3b3, 65%);
+@text-fragment-icon-color-ghosted: fade(#bfbf00, 30%);
 
 
 // ------------------------------------ //
@@ -102,7 +130,7 @@
 // #TOOLBAR
 // ------------------------------------ //
 @toolbar-height: 30px;
-@toolbar-border-bottom: 1px;
+@toolbar-border-bottom: 0; // 1px;
 
 
 // ------------------------------------ //
@@ -146,14 +174,20 @@
 
 
 // ------------------------------------ //
+// #DROPDOWN-CONTEXTUAL-MENU
+// ------------------------------------ //
+@dropdown-round-corners: 4px;
+
+// ------------------------------------ //
 // #TABS
 // ------------------------------------ //
-@tab-bg-color: #999999;
+@tab-bg-color: transparent;
 @tab-text-color: @color-text;
-@tab-bg-hover-color: #eeeeee;
+@tab-bg-hover-color: #dddddd;
 @tab-text-hover-color: @color-text;
 @tab-bg-active-color: #FFFFFF;
 @tab-text-active-color: @color-text;
+@tab-border-radius: 1px;
 
 
 // ------------------------------------ //

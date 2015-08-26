@@ -22,17 +22,17 @@
         <span ng-if="item.isPublic()" class="pnd-icon pnd-icon-group" title="Public"></span>
         <span ng-if="item.isCurrent()" class="pnd-icon pnd-icon-pencil" title="Current"></span>
         <span class="pnd-item-label">{{item.label}}</span>
-    </div><!--
+    </div>
 
-    --><div class="pnd-item-buttons">
+    <div class="pnd-item-buttons">
         <button
                 type="button"
                 class="pnd-btn pnd-btn-transparent"
                 title="Options"
                 ng-hide="hideOptions"
                 ng-click="onClickMenu($event)">
-            <!-- <span class="pnd-icon pnd-icon-dots" ng-if="itemType !== 'notebook'"></span> -->
-            <span class="pnd-icon pnd-icon-caret-down" ng-if="itemType === 'notebook'"></span>
+            <span class="pnd-icon pnd-icon-dots" ng-if="itemType !== 'notebook'"></span>
+            <span class="pnd-icon pnd-icon-dots" ng-if="itemType === 'notebook'"></span>
         </button>
         <!-- The following code is relative to the deprecated sticky button -->
         <!--

@@ -12,6 +12,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
 
     var ContainerManager = GeneralItemsContainer.getManager($scope.type);
+    var lastSelected = {};
 
     // read by <item> directive (in Lists/itemList.tmpl.html)
     // specifie how contextual menu type show on item
@@ -63,6 +64,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         }else {
             $scope.canBeUseAsPredicate = false;
         }
+        GeneralItemsContainer.setLastSelected(/*undefined*/);
     };
 
     // set as active a label in contextual menu
@@ -182,8 +184,6 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     };
 
-
-
     var onClickRemove = function () {
         if ($scope.itemSelected === null) {
             return;
@@ -300,20 +300,25 @@ angular.module('Pundit2.GeneralItemsContainer')
         confirmModal.$promise.then(confirmModal.show);
     };
    */
+    $scope.isSelected = function(item) {
+        if ($scope.itemSelected !== null && $scope.itemSelected.uri === item.uri) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     if(!$scope.isMyNotebooks) {
-        $scope.isSelected = function (item) {
-            if ($scope.itemSelected !== null && $scope.itemSelected.uri === item.uri) {
-                return true;
-            } else {
-                return false;
-            }
-        };
-
-        $scope.select = function (item) {
+        $scope.select = function (item, $event) {
+            Preview.setLock(false);
+            Preview.showDashboardPreview(item);
             Preview.setItemDashboardSticky(item);
             EventDispatcher.sendEvent('Pundit.changeSelection');
-
+            lastSelected = {
+                item: item,
+                elementItem: $event.currentTarget
+            };
+            GeneralItemsContainer.setLastSelected(lastSelected);
             $scope.isUseActive = true;
             $scope.itemSelected = item;
 
@@ -356,11 +361,24 @@ angular.module('Pundit2.GeneralItemsContainer')
 
             resetContainer();
         };
-
-        EventDispatcher.addListener('Pundit.changeSelection', function () {
-            resetContainer();
-        });
+    } else {
+        $scope.select = function (item, $event) {
+            Preview.setLock(false);
+            Preview.showDashboardPreview(item);
+            Preview.setItemDashboardSticky(item);
+            lastSelected = {
+                item: item,
+                elementItem: $event.currentTarget
+            };
+            GeneralItemsContainer.setLastSelected(lastSelected);
+            EventDispatcher.sendEvent('Pundit.changeSelection');
+            $scope.itemSelected = item;
+        };
     }
+
+    EventDispatcher.addListener('Pundit.changeSelection', function() {
+        resetContainer();
+    });
 
 
     //TODO: only on myitems
@@ -378,16 +396,17 @@ angular.module('Pundit2.GeneralItemsContainer')
         );
         $scope.dropdownOrdering.push(
             {
-                text: 'Add web page to My items',
+                text: 'Add web page to My Items',
                 click: function() {
                     //var item = PageHandler.createItemFromPage();
                     if (MyPundit.isUserLogged() && !isCurrentPageInMyItems()) {
                         $scope.onClickAddPageToMyItems();
                         $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = true;
                     }
+                    $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = true;
                 },
                 isActive: false,
-                disable: isCurrentPageInMyItems()
+                disable: !MyPundit.isUserLogged() || isCurrentPageInMyItems()
             }
         );
 
@@ -397,17 +416,16 @@ angular.module('Pundit2.GeneralItemsContainer')
         }, function (logged) {
             if (logged) {
                 $scope.isUserLogged = true;
-                $scope.message.text = "No my items found.";
             } else {
                 $scope.isUserLogged = false;
-                $scope.message.text = "Please login to see your items.";
             }
+            $scope.message.text = GeneralItemsContainer.getMessageText($scope.type, $scope.search.term);
         });
 
         $scope.$watch(function() {
             return ItemsExchange.getItemsByContainer(MyItems.options.container);
         }, function() {
-            $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = isCurrentPageInMyItems();
+            $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = !MyPundit.isUserLogged() || isCurrentPageInMyItems();
         }, true);
 
 
@@ -643,4 +661,5 @@ angular.module('Pundit2.GeneralItemsContainer')
 
         };
     }
+
 });

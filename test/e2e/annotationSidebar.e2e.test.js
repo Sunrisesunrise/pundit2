@@ -875,7 +875,6 @@ describe("AnnotationSidebar interaction", function() {
             expect(elements.length).toBe(0);
         });
 
-        p.findElement(protractor.By.css('.pnd-annotation-sidebar-btn-close-filters')).click();
         p.findElement(protractor.By.css('.pnd-annotation-sidebar-btn-remove-filters')).click();
 
         p.findElements(protractor.By.css('#'+firstAnnotation)).then(function(elements) {
@@ -897,7 +896,7 @@ describe("AnnotationSidebar interaction", function() {
         // p.findElement(protractor.By.css('.pnd-toolbar-annotations-button')).click();
 
         toolbarContainer.getSize().then(function(size){
-            toolbarHeight = size.height +1;
+            toolbarHeight = size.height;
             sidebarContainer.getCssValue('margin-top').then(function(sidebarTop){
                 expect(toolbarHeight + "px").toEqual(sidebarTop);
             });
@@ -985,7 +984,6 @@ describe("AnnotationSidebar interaction", function() {
             expect(elements.length).toBe(1);
         });
 
-        p.findElement(protractor.By.css('.pnd-annotation-sidebar-btn-close-filters')).click();
         p.findElement(protractor.By.css('.pnd-annotation-sidebar-btn-remove-filters')).click();
 
         p.findElements(protractor.By.css('.pnd-annotation-details-wrap')).then(function(elements) {

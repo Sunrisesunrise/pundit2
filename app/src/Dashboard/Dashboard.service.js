@@ -303,6 +303,8 @@ angular.module('Pundit2.Dashboard')
                 panels[p].setTabContentHeight();
             }
         }
+
+        EventDispatcher.sendEvent('Dashboard.toggle', state.isDashboardVisible);
     };
 
     dashboard.isDashboardVisible = function() {
@@ -678,6 +680,18 @@ angular.module('Pundit2.Dashboard')
         if (state.isDashboardVisible) {
             dashboard.toggle();
         }
+    });
+
+    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+        if (state.isDashboardVisible) {
+            dashboard.toggle();
+        }
+    });
+
+    EventDispatcher.addListener('Client.show', function(/*e*/) {
+        dashboard.toggle();
+        $rootScope.$$phase || $rootScope.$digest();
+        dashboard.toggle();
     });
 
     dashboard.log('Service run');

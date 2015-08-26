@@ -1,3 +1,5 @@
+/*global testConfig*/
+
 describe('Object Popover Resource Panel service', function() {
 
     var ResourcePanel,
@@ -52,19 +54,7 @@ describe('Object Popover Resource Panel service', function() {
         loginServer: "http:\/\/demo-cloud.as.thepund.it:8080\/annotationserver\/login.jsp"
     };
 
-    var testPunditConfig = {
-        modules: {
-            "KorboBasketSelector": {
-                active: false
-            },
-            "FreebaseSelector": {
-                active: false
-            },
-            "Korbo2Selector": {
-                active: false
-            }
-        }
-    };
+    var testPunditConfig = testConfig.resourcePanel;    
 
 
     beforeEach(module('Pundit2'));
@@ -91,6 +81,8 @@ describe('Object Popover Resource Panel service', function() {
         SelectorsManager = _SelectorsManager_;
         $timeout = _$timeout_;
         $window = _$window_;
+
+        MyPundit.useCookies = false;
     }));
 
     beforeEach(function(){

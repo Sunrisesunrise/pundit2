@@ -5,6 +5,7 @@ module.exports = function(config) {
             'bower_components/angular/angular.js',
             'bower_components/angular-route/angular-route.js',
             'bower_components/angular-mocks/angular-mocks.js',
+            'bower_components/angular-cookies/angular-cookies.js',
             'bower_components/angular-resource/angular-resource.js',
             'bower_components/angular-sanitize/angular-sanitize.js',
             'bower_components/angular-animate/angular-animate.js',
@@ -14,6 +15,7 @@ module.exports = function(config) {
             'bower_components/angular-moment/angular-moment.min.js',
             'bower_components/angular-datepicker/dist/index.min.js',
             'bower_components/angular-md5/angular-md5.min.js',
+            'bower_components/ng-resize/ngresize.min.js',
 
             // Load the module declaration before the module utilization, or karma
             // will screw up :|

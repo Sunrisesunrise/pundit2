@@ -42,6 +42,8 @@ describe('AnnotationsCommunication service', function() {
         $q = _$q_;
         $rootScope = _$rootScope_;
 
+        MyPundit.useCookies = false;
+
         addLoginButton();
     }));
 

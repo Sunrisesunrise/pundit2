@@ -37,7 +37,7 @@ angular.module('Pundit2.Core')
         if (currentState) {
             state.Pundit.loading = true;
             updateLoading(true);
-
+            EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.loading', data: true});
             loadingCount[eventName] ++;
         } else {
             loadingCount[eventName] --;
@@ -50,6 +50,7 @@ angular.module('Pundit2.Core')
             if (loadingState.length === 0) {
                 state.Pundit.loading = false;
                 updateLoading(false);
+                EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.loading', data: false});
                 loadingCount[eventName] = 0;
             }
         }
@@ -86,6 +87,11 @@ angular.module('Pundit2.Core')
     });
     EventDispatcher.addListener('AnnotationSidebar.toggleFiltersContent', function(e) {
         state.AnnotationSidebar.isFiltersContentExpanded = e.args;
+    });
+
+    // Dashboard
+    EventDispatcher.addListener('Dashboard.toggle', function(e) {
+        state.Dashboard.isVisible = e.args;
     });
 
     // Template mode

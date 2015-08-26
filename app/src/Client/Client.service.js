@@ -450,11 +450,11 @@ angular.module('Pundit2.Client')
 .service('Client', function(CLIENTDEFAULTS, BaseComponent, Config, EventDispatcher, Analytics, MyPundit,
     ImageAnnotator, TextFragmentAnnotator, AnnotationsCommunication,
     AnnotationsExchange, Item, ItemsExchange, MyItems, Status,
-    TextFragmentHandler, ImageHandler, PageAnnotator,
+    TextFragmentHandler, ImageHandler, PageAnnotator, AnnotationSidebar, AnnotationDetails, ResizeManager,
     Toolbar, Annomatic, NotebookCommunication, NotebookExchange, TemplatesExchange,
     SelectorsManager, FreebaseSelector, MurucaSelector, KorboBasketSelector, Korbo2Selector, EuropeanaSelector, DbpediaSelector, GeonamesSelector, PredicateSelector,
     TemplatesSelector, TripleComposer, ImageFragmentAnnotatorHelper,
-    $injector, $templateCache, $rootScope, $compile, $window) {
+    $injector, $templateCache, $rootScope, $compile, $window, $document) {
 
     var client = new BaseComponent('Client', CLIENTDEFAULTS),
 
@@ -467,6 +467,7 @@ angular.module('Pundit2.Client')
         if (!root.hasClass('pnd-wrp')) {
             root.addClass('pnd-wrp');
         }
+        root.append('<alert-system></alert-system>');
     };
 
     // Reads the list of components which needs to be bootstrapped.. and bootstrap
@@ -587,6 +588,8 @@ angular.module('Pundit2.Client')
 
         fixRootNode();
 
+        addComponents();
+
         if (Config.useBasicRelations) {
             loadBasicRelations();
         }
@@ -645,8 +648,6 @@ angular.module('Pundit2.Client')
         }
         SelectorsManager.init();
 
-        addComponents();
-
         client.log('Boot is completed, emitting pundit-boot-done event');
         EventDispatcher.sendEvent('Client.boot');
         Analytics.track('main-events', 'client--endBootstrap');
@@ -660,6 +661,8 @@ angular.module('Pundit2.Client')
         //         Tool: comment tag, triple composer
 
     };
+
+
 
     // Called when the user completed the login process with the modal etc, NOT if the user
     // was already logged in on boot etc
@@ -732,9 +735,66 @@ angular.module('Pundit2.Client')
         var keeSelector = new Korbo2Selector(config);
         keeSelector.push(config);
         delete keeSelector;
-
     };
 
+    EventDispatcher.addListener('Client.dispatchDocumentEvent', function(data) {
+        dispatchDocumentEvent(data.args.event, data.args.data);
+    });
+
+    var dispatchDocumentEvent = function(eventName, details) {
+        var evt;
+        if (document.createEventObject) {
+            // dispatch for IE
+            evt = document.createEventObject();
+            evt.detail = details;
+            document.fireEvent(eventName, evt);
+        }
+        else {
+            // dispatch for firefox + others
+            evt = document.createEvent("Event");
+            evt.initEvent(eventName, true, true); // event type,bubbling,cancelable
+            evt.detail = details;
+            evt = new CustomEvent(eventName, {detail: details});
+            document.dispatchEvent(evt);
+        }
+    };
+
+    var hideClient = function() {
+        EventDispatcher.sendEvent('Client.hide');
+        $rootScope.$$phase || $rootScope.$digest();
+        angular.element('body').css({
+            'marginTop': 0
+        });
+        angular.element('div[data-ng-app="Pundit2"]').css('display','none');
+    };
+
+    var showClient = function() {
+        angular.element('div[data-ng-app="Pundit2"]').css('display','inherit');
+        EventDispatcher.sendEvent('Client.show');
+        $rootScope.$$phase || $rootScope.$digest();
+    };
+
+    var requestAnnotationsNumber = function() {
+        if (Status.getLoading()) {
+
+        }
+        EventDispatcher.sendEvent('Client.requestAnnotationsNumber');
+    };
+
+    $document.on('Pundit2.hide', hideClient);
+    $document.on('Pundit2.show', showClient);
+    $document.on('Pundit2.requestAnnotationsNumber', requestAnnotationsNumber);
+
+    document.addEventListener('Pundit2.requestAnnotationsNumberRaw', requestAnnotationsNumber);
+
     client.log("Component up and running");
+
+    client.OS = '';
+    if (navigator.appVersion.indexOf("Win")!=-1){ client.OS="Windows";}
+    else if (navigator.appVersion.indexOf("Mac")!=-1){ client.OS="MacOS";}
+    else if (navigator.appVersion.indexOf("X11")!=-1){ client.OS="UNIX";}
+    else if (navigator.appVersion.indexOf("Linux")!=-1){ client.OS="Linux";}
+
+
     return client;
 });

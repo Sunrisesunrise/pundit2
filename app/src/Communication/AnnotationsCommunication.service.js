@@ -47,8 +47,8 @@ angular.module('Pundit2.Communication')
         }).success(function() {
             if (completed > 0) {
                 AnnotationsExchange.getAnnotationById(annID).update().then(function() {
-                    Consolidation.consolidateAll();
                     EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
+                    Consolidation.consolidateAll();
                     setLoading(false);
                     promise.resolve();
                 });
@@ -144,11 +144,14 @@ angular.module('Pundit2.Communication')
     // it's necessary to add again items to container.
     annotationsCommunication.getAnnotations = function(forceAddToContainer) {
         var promise = $q.defer();
+        var preventDelay = forceAddToContainer ? true : false;
 
         if (annotationsCommunication.options.preventDownload) {
             promise.reject('Prevent download forced by conf');
             return;
         }
+
+        EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', preventDelay);
 
         setLoading(true);
 
@@ -156,9 +159,12 @@ angular.module('Pundit2.Communication')
             annPromise = AnnotationsExchange.searchByUri(uris);
 
         annotationsCommunication.log('Getting annotations for available targets', uris);
-
         annPromise.then(function(ids) {
             annotationsCommunication.log('Found ' + ids.length + ' annotations on the current page.');
+            EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
+                event: 'Pundit2.updateAnnotationsNumber',
+                data: ids.length
+            });
             if (ids.length === 0) {
                 // TODO: use wipe (not consolidateAll) and specific event in other component (like sidebar)
                 Consolidation.consolidateAll();
@@ -224,12 +230,15 @@ angular.module('Pundit2.Communication')
 
                     makeTargetsAndItems(data, forceAddToContainer);
 
+                    var creatingNotebooks = {};
+
                     for (var annId in parsedData) {
                         var a = new Annotation(annId, false, parsedData[annId]);
                         a.then(function(ann) {
                             var notebookID = ann.isIncludedIn;
-                            if (typeof(NotebookExchange.getNotebookById(notebookID)) === 'undefined') {
+                            if (typeof(NotebookExchange.getNotebookById(notebookID)) === 'undefined' && typeof creatingNotebooks[notebookID] === 'undefined') {
                                 // if the notebook is not loaded download it and add to notebooksExchange
+                                creatingNotebooks[notebookID] = true;
                                 new Notebook(notebookID);
                             }
                         }, function(error) {
@@ -253,6 +262,7 @@ angular.module('Pundit2.Communication')
         }, function(msg) {
             annotationsCommunication.err("Could not search for annotations, error from the server: " + msg);
             EventDispatcher.sendEvent('Pundit.error', 'Could not search for annotations, error from the server!');
+            EventDispatcher.sendEvent('Pundit.errorAlert', 'Could not search for annotations, error from the server!');
             promise.reject(msg);
         });
 
@@ -265,6 +275,8 @@ angular.module('Pundit2.Communication')
     annotationsCommunication.deleteAnnotation = function(annID) {
 
         var promise = $q.defer();
+
+        EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
 
         if (MyPundit.isUserLogged()) {
             setLoading(true);
@@ -285,7 +297,7 @@ angular.module('Pundit2.Communication')
                 }
                 // wipe page items
                 ItemsExchange.wipeContainer(Config.modules.PageItemsContainer.container);
-                // wipe all annotations (are in chace)
+                // wipe all annotations (are in cache)
                 AnnotationsExchange.wipe();
 
                 // Dispatch event
@@ -301,6 +313,7 @@ angular.module('Pundit2.Communication')
             }).error(function() {
                 setLoading(false);
                 annotationsCommunication.log("Error impossible to delete annotation: " + annID + " please retry.");
+                EventDispatcher.sendEvent('Pundit.errorAlert', "Error impossible to delete annotation: " + annID + " please retry.");
                 promise.reject("Error impossible to delete annotation: " + annID);
             });
         } else {
@@ -314,6 +327,8 @@ angular.module('Pundit2.Communication')
     annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, skipConsolidation, postDataTargets, types) {
         // var completed = 0;
         var promise = $q.defer();
+
+        EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
 
         var postSaveSend = function(url, annotationId) {
             $http({
@@ -389,9 +404,14 @@ angular.module('Pundit2.Communication')
                     }
 
                     if (typeof(skipConsolidation) === 'undefined' || !skipConsolidation) {
-                        Consolidation.consolidateAll();
                         EventDispatcher.sendEvent('AnnotationsCommunication.saveAnnotation', data.AnnotationID);
+                        Consolidation.consolidateAll();
                     }
+
+                    EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
+                        event: 'Pundit2.updateAnnotationsNumber',
+                        data: AnnotationsExchange.getAnnotations().length
+                    });
 
                     // TODO move inside notebook then?
                     setLoading(false);
@@ -411,9 +431,9 @@ angular.module('Pundit2.Communication')
                     });
                 }
             }).error(function(msg) {
-                // TODO
-                annotationsCommunication.log("Error: impossible to save annotation", msg);
                 setLoading(false);
+                annotationsCommunication.log("Error: impossible to save annotation", msg);
+                EventDispatcher.sendEvent('Pundit.errorAlert', "Error: impossible to save annotation, " + msg);
                 promise.reject();
             });
 
@@ -433,6 +453,8 @@ angular.module('Pundit2.Communication')
 
         var promise = $q.defer();
 
+        EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
+
         if (MyPundit.isUserLogged()) {
 
             if (Config.annotationServerVersion === 'v1') {
@@ -443,6 +465,7 @@ angular.module('Pundit2.Communication')
 
         } else {
             annotationsCommunication.log("Error impossible to edit annotation: " + annID + " you are not logged");
+            EventDispatcher.sendEvent('Pundit.errorAlert', "Error impossible to edit annotation: " + annID + " you are not logged");
             promise.reject("Error impossible to edit annotation: " + annID + " you are not logged");
         }
 
@@ -484,9 +507,17 @@ angular.module('Pundit2.Communication')
 
     EventDispatcher.addListener('BrokenHelper.sendBroken', function(e) {
         annotationsCommunication.setAnnotationsBroken(e.args, true, e.promise);
-    });    
+    });
+
     EventDispatcher.addListener('BrokenHelper.sendFixed', function(e) {
         annotationsCommunication.setAnnotationsBroken(e.args, false, e.promise);
+    });
+
+    EventDispatcher.addListener('Client.requestAnnotationsNumber', function() {
+        EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
+            event: 'Pundit2.updateAnnotationsNumber',
+            data: AnnotationsExchange.getAnnotations().length
+        });
     });
 
     return annotationsCommunication;

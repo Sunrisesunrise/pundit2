@@ -39,7 +39,7 @@ angular.module('KorboEE')
     // initializa korbo modal
     var KeeModal = $modal({
         container: "[data-ng-app='Pundit2']",
-        template: 'src/KorboEE/Modal/KorboEE.modal.tmpl.html',
+        templateUrl: 'src/KorboEE/Modal/KorboEE.modal.tmpl.html',
         show: false,
         //backdrop: 'static',
         backdropAnimation: 'static',
@@ -69,7 +69,7 @@ angular.module('KorboEE')
 
     var confirmModal = $modal({
         container: "[data-ng-app='Pundit2']",
-        template: 'src/KorboEE/Modal/KorboEE.confirm.modal.tmpl.html',
+        templateUrl: 'src/KorboEE/Modal/KorboEE.confirm.modal.tmpl.html',
         show: false,
         backdrop: 'static',
         scope: confirmModalScope

@@ -1,26 +1,28 @@
 {
-    "dependencies": {
-        "angular": "~1.4.3",
-        "angular-resource": "~1.4.3",
-        "angular-route": "~1.4.3",
-        "angular-mocks": "~1.4.3",
-        "angular-sanitize": "~1.4.3",
-        "angular-animate": "~1.4.3",
-        "angular-strap": "~2.2.4",
-        "bootstrap": "3.x.x",
-        "jquery": "2.x.x",
-        "angular-cookies": "~1.4.3",
-        "angular-touch": "~1.4.3",
-        "lunr.js": "0.4.3",
-        "google-code-prettify": "1.0.1",
-        "angular-md5": "~0.1.7",
-        "angular-datepicker": "~1.0.11",
-        "angular-moment": "~0.10.1"
-    },
-    "devDependencies": {},
-    "resolutions": {
-        "angular": "~1.4.3"
-    },
-    "name": "pundit2",
-    "version": "0.0.1"
+  "dependencies": {
+    "angular": "~1.4.4",
+    "angular-cookies": "~1.4.4",
+    "angular-resource": "~1.4.4",
+    "angular-route": "~1.4.4",
+    "angular-mocks": "~1.4.4",
+    "angular-sanitize": "~1.4.4",
+    "angular-animate": "~1.4.4",
+    "angular-strap": "~2.3.1",
+    "bootstrap": "3.x.x",
+    "jquery": "2.x.x",
+    "angular-cookies": "~1.4.4",
+    "angular-touch": "~1.4.4",
+    "lunr.js": "0.4.4",
+    "google-code-prettify": "1.0.1",
+    "angular-md5": "~0.1.7",
+    "angular-datepicker": "~1.0.11",
+    "angular-moment": "~0.10.1",
+    "ng-resize": "~1.1.0"
+  },
+  "devDependencies": {},
+  "resolutions": {
+    "angular": "~1.4.4"
+  },
+  "name": "pundit2",
+  "version": "0.0.1"
 }

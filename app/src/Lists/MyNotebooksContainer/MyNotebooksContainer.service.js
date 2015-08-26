@@ -6,7 +6,7 @@ angular.module('Pundit2.MyNotebooksContainer')
 
     clientDashboardPanel: "lists",
 
-    clientDashboardTabTitle: "My notebooks",
+    clientDashboardTabTitle: "Notebooks",
 
     cMenuType: 'myNotebooks',
 
@@ -207,7 +207,7 @@ angular.module('Pundit2.MyNotebooksContainer')
 
     var confirmModal = $modal({
         container: "[data-ng-app='Pundit2']",
-        template: 'src/Core/Templates/confirm.modal.tmpl.html',
+        templateUrl: 'src/Core/Templates/confirm.modal.tmpl.html',
         show: false,
         backdrop: 'static',
         scope: modalScope

@@ -33,6 +33,7 @@ describe('Notebook Communication service', function() {
         MyPundit = _MyPundit_;
         $log = _$log_;
 
+        MyPundit.useCookies = false;
     }));
 
     it("should create a new notebook", function() {

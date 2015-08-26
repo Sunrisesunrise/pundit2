@@ -2,8 +2,10 @@
 
 angular.module('Pundit2.Toolbar')
 
-.controller('ToolbarCtrl', function($scope, $rootScope, $modal, $http, $window, NameSpace, Config, Toolbar, SelectorsManager, Fp3,
-    MyPundit, Dashboard, TripleComposer, AnnotationSidebar, Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, Analytics, PageHandler, EventDispatcher) {
+.controller('ToolbarCtrl', function($scope, $rootScope, $modal, $http, $window, NameSpace, Config, 
+    Toolbar, SelectorsManager, Fp3, MyPundit, Dashboard, TripleComposer, AnnotationSidebar, 
+    Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, 
+    Analytics, PageHandler, EventDispatcher, $timeout) {
 
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
     $scope.dropdownTemplateMyNotebook = "src/Toolbar/myNotebooksDropdown.tmpl.html";
@@ -114,7 +116,7 @@ angular.module('Pundit2.Toolbar')
 
     var infoModal = $modal({
         container: "[data-ng-app='Pundit2']",
-        template: 'src/Core/Templates/info.modal.tmpl.html',
+        templateUrl: 'src/Core/Templates/info.modal.tmpl.html',
         show: false,
         backdrop: 'static',
         scope: infoModalScope
@@ -122,7 +124,7 @@ angular.module('Pundit2.Toolbar')
 
     var sendModal = $modal({
         container: "[data-ng-app='Pundit2']",
-        template: 'src/Core/Templates/send.modal.tmpl.html',
+        templateUrl: 'src/Core/Templates/send.modal.tmpl.html',
         show: false,
         backdrop: 'static',
         scope: sendModalScope
@@ -297,10 +299,10 @@ angular.module('Pundit2.Toolbar')
     $scope.errorMessageDropdown = Toolbar.getErrorMessageDropdown();
 
     $scope.userNotLoggedDropdown = [{
-        text: 'Please sign in to use Pundit',
+        text: 'Please log in to select the notebook to store your annotations',
         header: true
     }, {
-        text: 'Sign in',
+        text: 'Log in',
         click: $scope.myNoteboockSigninClick
     }];
 
@@ -357,18 +359,21 @@ angular.module('Pundit2.Toolbar')
         updateMyNotebooks();
     }, true);
 
-    $scope.currentNotebookLabel = "Loading...";
+    $scope.currentNotebookLabel = typeof MyPundit.getInfoCookie().notebookLabel === 'undefined' ? "Loading..." : MyPundit.getInfoCookie().notebookLabel;
     $scope.$watch(function() {
         return NotebookExchange.getCurrentNotebooks();
     }, function(newCurr) {
         if (typeof(newCurr) !== "undefined") {
             updateMyNotebooks();
             $scope.currentNotebookLabel = newCurr.label;
+            MyPundit.setInfoCookie({
+                notebookLabel: newCurr.label
+            });
         }
     });
 
     $scope.userNotebooksDropdown = [{
-        text: 'Please select notebook you want to use',
+        text: 'Please select the notebook you want to use',
         header: true
     }];
 
@@ -412,7 +417,14 @@ angular.module('Pundit2.Toolbar')
             text: 'Select the template you wish to use',
             header: true
         }];
-        $scope.currentTemplateLabel = "Loading...";
+
+        if (typeof MyPundit.getInfoCookie().templateId !== 'undefined') {
+            TemplatesExchange.setCurrent(MyPundit.getInfoCookie().templateId);
+        }
+        if (typeof MyPundit.getInfoCookie().templateColor !== 'undefined') {
+            $scope.currentTemplateColor = MyPundit.getInfoCookie().templateColor;
+        }
+        $scope.currentTemplateLabel = typeof MyPundit.getInfoCookie().templateLabel === 'undefined' ? "Loading..." : MyPundit.getInfoCookie().templateLabel;
 
         $scope.$watch(function() {
             return TemplatesExchange.getTemplates().length;
@@ -427,6 +439,11 @@ angular.module('Pundit2.Toolbar')
                 updateTemplates();
                 $scope.currentTemplateLabel = newCurr.label;
                 $scope.currentTemplateColor = newCurr.hasColor;
+                MyPundit.setInfoCookie({
+                    templateLabel: newCurr.label,
+                    templateId: newCurr.id,
+                    templateColor: newCurr.hasColor
+                });
             }
         });
 
@@ -594,4 +611,13 @@ angular.module('Pundit2.Toolbar')
     $scope.openUrl = function(url) {
         $window.open(url, '_self');
     };
+
+    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+        MyPundit.closeLoginPopover();
+        angular.element('.dropdown-menu').dropdown("toggle");
+    });
+
+    $timeout(function() {
+        angular.element('#pundit2_preload').remove();
+    }, 1000);
 });

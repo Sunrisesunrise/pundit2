@@ -1,7 +1,7 @@
 angular.module('Pundit2.Core')
 
 .constant("BROKENHELPERDEFAULTS", {
-    active: true,
+    active: false,
     debug: false
 })
 
@@ -62,7 +62,7 @@ angular.module('Pundit2.Core')
                 fixedAnnotationsQueque = [];
             }, function() {
                 brokenHelper.err('Something wrong with fixed annotations');
-            });;
+            });
         }
     };
 
