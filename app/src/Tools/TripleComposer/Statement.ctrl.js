@@ -408,7 +408,9 @@ angular.module('Pundit2.TripleComposer')
             return;
         }
 
-        if (triple.object === null || (!$scope.objectLiteral && !$scope.objectDate)) {
+        if (triple.object === null || 
+            (!$scope.objectLiteral && !$scope.objectDate) ||
+            TripleComposer.limitToSuggestedTypes === false) {
             ResourcePanel.showItemsForObject(triple, $event.target).then($scope.setObject);
             // Deprecating.
             ResourcePanel.lastPromiseThen = $scope.setObject;

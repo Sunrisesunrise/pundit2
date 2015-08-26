@@ -1056,7 +1056,11 @@ angular.module('Pundit2.ResourcePanel')
                     // get item predicate and check his suggestedObjectTypes
                     var itemPredicate = ItemsExchange.getItemByUri(predicate.uri);
                     // predicate with empty suggestedObjectTypes
-                    if (typeof(itemPredicate) === 'undefined' || typeof(itemPredicate.suggestedObjectTypes) === 'undefined' || itemPredicate.suggestedObjectTypes.length === 0 || itemPredicate.suggestedObjectTypes[0] === "") {
+                    if (typeof(itemPredicate) === 'undefined' || 
+                        typeof(itemPredicate.suggestedObjectTypes) === 'undefined' || 
+                        itemPredicate.suggestedObjectTypes.length === 0 || 
+                        itemPredicate.suggestedObjectTypes[0] === "" ||
+                        limitToSuggestedTypes === false) {
                         // all items are good
                         myItems = ItemsExchange.getItemsByContainer(myItemsContainer);
                         pageItems = ItemsExchange.getItemsByContainer(pageItemsContainer);
@@ -1150,24 +1154,26 @@ angular.module('Pundit2.ResourcePanel')
 
                 properties = ItemsExchange.getItemsByContainer(propertiesContainer);
 
-                if (isItemValid(subject, 'type')) {
-                    subTypes = subject.type;
-                    properties = $filter('filterByTypes')(properties, 'suggestedSubjectTypes', subTypes);
-                }
-
-                if (isItemValid(object)) {
-                    objTypes = [];
-
-                    // TODO: add full date support
-                    if (isItemValid(object, 'type')) {
-                        objTypes = object.type;
-                    } else if (Utils.isValidDate(object)) {
-                        objTypes = [NameSpace.dateTime];
-                    } else if (typeof(object) === 'string') {
-                        objTypes = [NameSpace.rdfs.literal];
+                if (limitToSuggestedTypes === true) {
+                    if (isItemValid(subject, 'type')) {
+                        subTypes = subject.type;
+                        properties = $filter('filterByTypes')(properties, 'suggestedSubjectTypes', subTypes);
                     }
 
-                    properties = $filter('filterByTypes')(properties, 'suggestedObjectTypes', objTypes);
+                    if (isItemValid(object)) {
+                        objTypes = [];
+
+                        // TODO: add full date support
+                        if (isItemValid(object, 'type')) {
+                            objTypes = object.type;
+                        } else if (Utils.isValidDate(object)) {
+                            objTypes = [NameSpace.dateTime];
+                        } else if (typeof(object) === 'string') {
+                            objTypes = [NameSpace.rdfs.literal];
+                        }
+
+                        properties = $filter('filterByTypes')(properties, 'suggestedObjectTypes', objTypes);
+                    }
                 }
 
                 if (typeof(properties) !== 'undefined' && properties.length > 0) {
