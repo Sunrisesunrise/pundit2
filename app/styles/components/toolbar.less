@@ -39,15 +39,16 @@ body.pnd-toolbar-active {
 .pnd-toolbar-navbar .navbar-nav li {
 
     /* Normal buttons */
-    a {
+    > a {
         height: @toolbar-height - @toolbar-border-bottom;
+        padding: 0 10px;
 
         background-color: @color-toolbar-button;
         border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 25);
         border-left: 0;
 
         color: @color-toolbar-text;
-        line-height: 1.5;
+        line-height: 32px;
         // .text-dark-emboss();
         transition: none !important; /* Delete any transition */
 

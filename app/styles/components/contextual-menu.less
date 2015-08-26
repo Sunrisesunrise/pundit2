@@ -26,14 +26,19 @@
 
         border-right: 0;
         border-left: 0;
-        background-color: @color-dropdown-bg; // @brand-success;
+        background-color: @color-dropdown-bg;
 
         color: @color-dropdown-text; // #fff;
         white-space: nowrap;
+        line-height: 1.5;
         text-overflow: ellipsis;
 
         &:hover {
             background-color: @color-dropdown-bg-hover;
+        }
+
+        &:focus, &:visited, &:active {
+            background-color: @color-dropdown-bg;
         }
 
         .pnd-icon {
