@@ -118,9 +118,10 @@ describe('Client service', function() {
             bootModules = rootNode.children();
 
         // add only configured modules
-        expect(bootModules.length).toBe(2);
+        expect(bootModules.length).toBe(3);
         expect(rootNode.find('dashboard').length).toBe(1);
         expect(rootNode.find('toolbar').length).toBe(1);
+        expect(rootNode.find('alert-system').length).toBe(1);
     });
 
     it('should add to the dom active modules inside dashboard panel', function(){
@@ -134,9 +135,10 @@ describe('Client service', function() {
             bootModules = rootNode.children();
 
         // add only configured modules
-        expect(bootModules.length).toBe(2);
+        expect(bootModules.length).toBe(3);
         expect(rootNode.find('dashboard').length).toBe(1);
         expect(rootNode.find('toolbar').length).toBe(1);
+        expect(rootNode.find('alert-system').length).toBe(1);
 
         compileDirective('dashboard');
         var el = angular.element.find("[paneltitle='tools'] .testClassToFindTmpl");
