@@ -250,7 +250,6 @@ angular.module('Pundit2.Annotators')
         }
 
         ContextualMenu.show(upEvt.pageX, upEvt.pageY, item, tfh.options.cMenuType);
-        $document[0].getSelection().removeAllRanges();
 
     }; // mouseUpHandler()
 
