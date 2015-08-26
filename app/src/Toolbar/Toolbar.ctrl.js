@@ -7,6 +7,11 @@ angular.module('Pundit2.Toolbar')
     Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, 
     Analytics, PageHandler, EventDispatcher, $timeout) {
 
+    $scope.triggerAlert = function(type) {
+        type = ['errorAlert', 'warningAlert', 'successAlert'][type];
+        EventDispatcher.sendEvent('Pundit.' + type, 'Messaggio di prova Messaggio di prova Messaggio di prova');
+    };
+
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
     $scope.dropdownTemplateMyNotebook = "src/Toolbar/myNotebooksDropdown.tmpl.html";
     $scope.dropdownTemplateTemplates = "src/Toolbar/templatesDropdown.tmpl.html";

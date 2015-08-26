@@ -271,5 +271,13 @@ angular.module('Pundit2.AlertSystem')
         alertSystem.addAlert(alertSystem.AlertType.ERROR, evt.args, 5000);
     });
 
+    EventDispatcher.addListener('Pundit.warningAlert', function(evt) {
+        alertSystem.addAlert(alertSystem.AlertType.ALERT, evt.args, 5000);
+    });
+
+    EventDispatcher.addListener('Pundit.successAlert', function(evt) {
+        alertSystem.addAlert(alertSystem.AlertType.OK, evt.args, 5000);
+    });
+
     return alertSystem;
 });
