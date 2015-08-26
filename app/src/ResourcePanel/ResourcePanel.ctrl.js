@@ -184,9 +184,12 @@ angular.module('Pundit2.ResourcePanel')
         Preview.showDashboardPreview(item);
         Preview.setItemDashboardSticky(item);
         EventDispatcher.sendEvent('Pundit.changeSelection');
-        lastSelected = {
-            item: item,
-            elementItem: $event.currentTarget
+        lastSelected = undefined;
+        if (typeof $event !== 'undefined') {
+            lastSelected = {
+                item: item,
+                elementItem: $event.currentTarget
+            }
         }
         $scope.isUseActive = true;
         $scope.itemSelected = item;
