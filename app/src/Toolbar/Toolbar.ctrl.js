@@ -10,11 +10,11 @@ angular.module('Pundit2.Toolbar')
     $scope.triggerAlert = function(type) {
         EventDispatcher.sendEvent('Pundit.alert', 'Messaggio semplice');
         EventDispatcher.sendEvent('Pundit.alert', {message: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'});
-        EventDispatcher.sendEvent('Pundit.alert', {message: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'ERROR'});
-        EventDispatcher.sendEvent('Pundit.alert', {message: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'SUCCESS', timeout: 5000});
-        EventDispatcher.sendEvent('Pundit.alert', {message: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'SUCCESS', timeout: null, dismissible: false});
-        EventDispatcher.sendEvent('Pundit.alert', {message: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'ALERT', timeout: null, dismissible: false});
-        EventDispatcher.sendEvent('Pundit.alert', {message: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'CUSTOM', timeout: null, dismissible: false});
+        EventDispatcher.sendEvent('Pundit.alert', {message: 'ERROR Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'ERROR'});
+        EventDispatcher.sendEvent('Pundit.alert', {message: 'OK Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'OK', timeout: 5000});
+        EventDispatcher.sendEvent('Pundit.alert', {message: 'OK Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'OK', timeout: null, dismissible: false});
+        EventDispatcher.sendEvent('Pundit.alert', {message: 'ALERT Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'ALERT', timeout: null, dismissible: false});
+        EventDispatcher.sendEvent('Pundit.alert', {message: 'CUSTOM Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'CUSTOM', timeout: null, dismissible: false});
     };
 
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
