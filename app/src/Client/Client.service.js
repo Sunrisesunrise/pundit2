@@ -781,13 +781,17 @@ angular.module('Pundit2.Client')
         EventDispatcher.sendEvent('Client.requestAnnotationsNumber');
     };
 
+    var userStatusUpdate = function() {
+        MyPundit.checkLoggedIn(true, false);
+    };
+
     $document.on('Pundit2.hide', hideClient);
     $document.on('Pundit2.show', showClient);
     $document.on('Pundit2.requestAnnotationsNumber', requestAnnotationsNumber);
+    $document.on('Pundit2.requestUserProfileUpdate', userStatusUpdate);
+    $document.on('Pundit2.requestUserLoggedStatus', userStatusUpdate);
 
     document.addEventListener('Pundit2.requestAnnotationsNumberRaw', requestAnnotationsNumber);
-
-    client.log("Component up and running");
 
     client.OS = '';
     if (navigator.appVersion.indexOf("Win") !== -1){
@@ -803,6 +807,7 @@ angular.module('Pundit2.Client')
         client.OS="Linux";
     }
 
+    client.log("Component up and running");
 
     return client;
 });

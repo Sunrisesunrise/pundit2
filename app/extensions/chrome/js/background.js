@@ -207,6 +207,8 @@ var setLoading = function(loading, tabId, stopLoadingText) {
 chrome.browserAction.onClicked.addListener(switchPundit);
 
 chrome.tabs.onUpdated.addListener(function(tabId , info, tab) {
+    console.log("chrome.tabs.onUpdated");
+    console.log(arguments);
     if (info.status == "complete") {
         if (tab.url === "chrome://newtab/") {
             return;
@@ -253,6 +255,26 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             }
             else {
                 setLoading(request.loading, sender.tab.id);
+            }
+            break;
+
+        case 'userProfileUpdated':
+            for (var tabId in state.tabsOnOff) {
+                tabId = parseInt(tabId);
+                if (tabId === sender.tab.id) {
+                    continue;
+                }
+                chrome.tabs.sendMessage(tabId, {action: 'requestUserProfileUpdate'});
+            }
+            break;
+
+        case 'userLoggedStatusChanged':
+            for (var tabId in state.tabsOnOff) {
+                tabId = parseInt(tabId);
+                if (tabId === sender.tab.id) {
+                    continue;
+                }
+                chrome.tabs.sendMessage(tabId, {action: 'requestUserLoggedStatus'});
             }
             break;
 
