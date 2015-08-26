@@ -163,7 +163,7 @@ angular.module('Pundit2.Preview')
      */
     preview.showDashboardPreview = function(item) {
         if (state.lock) {
-            console.log("Preview is locked - " +item.uri);
+            preview.log("Preview is locked - " +item.uri);
             return;
         }
         state.itemDashboardPreview = item;
