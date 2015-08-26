@@ -205,6 +205,10 @@ module.exports = function(grunt) {
                     patterns: [{
                         match: /\(fonts/g,
                         replacement: '(chrome-extension://__MSG_@@extension_id__/inject/css/fonts'
+                    },
+                    {
+                        match: /image:url\(img/g,
+                        replacement: 'image:url(chrome-extension://__MSG_@@extension_id__/inject/css/img'
                     }]
                 },
                 files: [{
@@ -684,7 +688,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', 'Builds a production-ready version of the application', ['clean:dist', 'copy:fonts', 'html2js:main', 'html2js:korboee', 'examples', 'useminPrepare', 'less:dist', 'copy:css', 'imagemin',
         'htmlmin', 'concat', 'copy:dist', 'ngAnnotate', 'cssmin', 'uglify',
-        'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet', 'copy:chrome', 'replace:chrome'
+        'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet', 'copy:chrome', 'replace'
     ]);
 
     grunt.registerTask('dev', 'Live dev workflow: watches app files and reloads the browser automatically',
