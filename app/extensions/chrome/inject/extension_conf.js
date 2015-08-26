@@ -4,6 +4,10 @@ var punditConfig = {
     modules: {
         'Client': {
             active: true
+        },
+        'DbpediaSelector': {
+            active: true,
+            limit: 100
         }
     },
     templates: [],
