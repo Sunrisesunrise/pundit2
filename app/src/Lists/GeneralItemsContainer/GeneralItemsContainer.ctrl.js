@@ -1,6 +1,6 @@
 angular.module('Pundit2.GeneralItemsContainer')
 
-.controller('GeneralItemsContainerCtrl', function($scope, $rootScope, $modal, $timeout, $element,$injector, $q,
+.controller('GeneralItemsContainerCtrl', function($scope, $rootScope, $modal, $timeout, $element, $injector, $q,
     GeneralItemsContainer, ItemsExchange, MyItems, MyPundit, NotebookComposer, Preview, TypesHelper, PageHandler,
     TripleComposer, SelectorsManager, EventDispatcher, Status, Analytics) {
 
@@ -29,7 +29,7 @@ angular.module('Pundit2.GeneralItemsContainer')
     $scope.canBeUseAsPredicate = false;
 
 
-        var orderBtn = angular.element($element).find(GeneralItemsContainer.getOrderButtonClass($scope.type));
+    var orderBtn = angular.element($element).find(GeneralItemsContainer.getOrderButtonClass($scope.type));
 
     // showed when the items list is empty
     $scope.message = GeneralItemsContainer.getMessage($scope.type);
@@ -43,11 +43,11 @@ angular.module('Pundit2.GeneralItemsContainer')
     // how order items, true is ascending, false is descending
     $scope.reverse = ContainerManager.options.reverse;
 
-    if(!($scope.isMyNotebooks || $scope.isPredicates)) {
+    if (!($scope.isMyNotebooks || $scope.isPredicates)) {
         // tabs used to filter items list by type
         $scope.tabs = GeneralItemsContainer.getTabs($scope.type);
 
-       // index of the active tab (the tab that currently shows its content)
+        // index of the active tab (the tab that currently shows its content)
         $scope.tabs.activeTab = ContainerManager.options.initialActiveTab;
     }
 
@@ -58,13 +58,13 @@ angular.module('Pundit2.GeneralItemsContainer')
     var resetContainer = function() {
         $scope.itemSelected = null;
         $scope.isUseActive = false;
-        if(!$scope.isPredicates) {
+        if (!$scope.isPredicates) {
             $scope.canAddItemAsSubject = false;
             $scope.canAddItemAsObject = false;
-        }else {
+        } else {
             $scope.canBeUseAsPredicate = false;
         }
-        GeneralItemsContainer.setLastSelected(/*undefined*/);
+        GeneralItemsContainer.setLastSelected( /*undefined*/ );
     };
 
     // set as active a label in contextual menu
@@ -100,13 +100,12 @@ angular.module('Pundit2.GeneralItemsContainer')
             Analytics.track('buttons', 'click', eventLabel);
         },
         isActive: order === 'label' && $scope.reverse === true
-    }
-    ];
+    }];
 
-    if(!$scope.isMyNotebooks && !$scope.isPredicates){
+    if (!$scope.isMyNotebooks && !$scope.isPredicates) {
         $scope.dropdownOrdering.push({
             text: 'Order by type asc',
-                click: function() {
+            click: function() {
                 //TODO: condition not in vocabularies
                 if (!$scope.isVocabularies && $scope.dropdownOrdering[2].disable) {
                     return;
@@ -123,7 +122,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         });
         $scope.dropdownOrdering.push({
             text: 'Order by type desc',
-                click: function() {
+            click: function() {
                 //TODO: condition not in vocabularies
                 if (!$scope.isVocabularies && $scope.dropdownOrdering[3].disable) {
                     return;
@@ -184,7 +183,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     };
 
-    var onClickRemove = function () {
+    var onClickRemove = function() {
         if ($scope.itemSelected === null) {
             return;
         }
@@ -200,7 +199,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         resetContainer();
     };
 
-    var onClickAdd = function () {
+    var onClickAdd = function() {
         if ($scope.itemSelected === null) {
             return;
         }
@@ -216,7 +215,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         resetContainer();
     };
 
-    var createNewNotebook = function () {
+    var createNewNotebook = function() {
         //EventDispatcher.sendEvent('Dashboard.showTab', NotebookComposer.options.clientDashboardTabTitle);
         EventDispatcher.sendEvent('MyNotebooksContainer.createNewNotebook', NotebookComposer.options.clientDashboardTabTitle);
         NotebookComposer.setNotebookToEdit(null);
@@ -226,7 +225,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         Analytics.track('buttons', 'click', eventLabel);
     };
 
-    var  onClickUsePredicate = function() {
+    var onClickUsePredicate = function() {
         if ($scope.itemSelected === null) {
             return;
         }
@@ -240,12 +239,12 @@ angular.module('Pundit2.GeneralItemsContainer')
         resetContainer();
     };
 
-    $scope.onClickAction = function () {
-        if($scope.isMyNotebooks){
+    $scope.onClickAction = function() {
+        if ($scope.isMyNotebooks) {
             createNewNotebook();
-        }else if($scope.isPredicates){
+        } else if ($scope.isPredicates) {
             onClickUsePredicate();
-        }else if ($scope.isMyItems) {
+        } else if ($scope.isMyItems) {
             onClickRemove();
         } else {
             onClickAdd();
@@ -254,11 +253,11 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     //TODO only in myItems. Probabibly dead code. Commented.
     // delete all my Items
-   /*
-    $scope.onClickDeleteAllMyItems = function() {
-        openConfirmModal();
-    };
-    */
+    /*
+     $scope.onClickDeleteAllMyItems = function() {
+         openConfirmModal();
+     };
+     */
 
     // confirm modal
     /*
@@ -308,8 +307,8 @@ angular.module('Pundit2.GeneralItemsContainer')
         }
     };
 
-    if(!$scope.isMyNotebooks) {
-        $scope.select = function (item, $event) {
+    if (!$scope.isMyNotebooks) {
+        $scope.select = function(item, $event) {
             Preview.setLock(false);
             Preview.showDashboardPreview(item);
             Preview.setItemDashboardSticky(item);
@@ -330,7 +329,7 @@ angular.module('Pundit2.GeneralItemsContainer')
             }
         };
 
-        $scope.onClickUseSubject = function () {
+        $scope.onClickUseSubject = function() {
             if ($scope.itemSelected === null) {
                 return;
             }
@@ -348,7 +347,7 @@ angular.module('Pundit2.GeneralItemsContainer')
             resetContainer();
         };
 
-        $scope.onClickUseObject = function () {
+        $scope.onClickUseObject = function() {
             if ($scope.itemSelected === null) {
                 return;
             }
@@ -362,7 +361,7 @@ angular.module('Pundit2.GeneralItemsContainer')
             resetContainer();
         };
     } else {
-        $scope.select = function (item, $event) {
+        $scope.select = function(item, $event) {
             Preview.setLock(false);
             Preview.showDashboardPreview(item);
             Preview.setItemDashboardSticky(item);
@@ -382,38 +381,34 @@ angular.module('Pundit2.GeneralItemsContainer')
 
 
     //TODO: only on myitems
-    if($scope.isMyItems) {
+    if ($scope.isMyItems) {
 
         var isCurrentPageInMyItems = function() {
             var item = PageHandler.createItemFromPage();
             return ItemsExchange.isItemInContainer(item, MyItems.options.container);
         };
 
-        $scope.dropdownOrdering.push(
-            {
-                "divider": true
-            }
-        );
-        $scope.dropdownOrdering.push(
-            {
-                text: 'Add web page to My Items',
-                click: function() {
-                    //var item = PageHandler.createItemFromPage();
-                    if (MyPundit.isUserLogged() && !isCurrentPageInMyItems()) {
-                        $scope.onClickAddPageToMyItems();
-                        $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = true;
-                    }
-                    $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = true;
-                },
-                isActive: false,
-                disable: !MyPundit.isUserLogged() || isCurrentPageInMyItems()
-            }
-        );
+        $scope.dropdownOrdering.push({
+            "divider": true
+        });
+        $scope.dropdownOrdering.push({
+            text: 'Add web page to My Items',
+            click: function() {
+                //var item = PageHandler.createItemFromPage();
+                if (MyPundit.isUserLogged() && !isCurrentPageInMyItems()) {
+                    $scope.onClickAddPageToMyItems();
+                    $scope.dropdownOrdering[$scope.dropdownOrdering.length - 1].disable = true;
+                }
+                $scope.dropdownOrdering[$scope.dropdownOrdering.length - 1].disable = true;
+            },
+            isActive: false,
+            disable: !MyPundit.isUserLogged() || isCurrentPageInMyItems()
+        });
 
 
-        $scope.$watch(function () {
+        $scope.$watch(function() {
             return MyPundit.isUserLogged();
-        }, function (logged) {
+        }, function(logged) {
             if (logged) {
                 $scope.isUserLogged = true;
             } else {
@@ -425,7 +420,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         $scope.$watch(function() {
             return ItemsExchange.getItemsByContainer(MyItems.options.container);
         }, function() {
-            $scope.dropdownOrdering[$scope.dropdownOrdering.length-1].disable = !MyPundit.isUserLogged() || isCurrentPageInMyItems();
+            $scope.dropdownOrdering[$scope.dropdownOrdering.length - 1].disable = !MyPundit.isUserLogged() || isCurrentPageInMyItems();
         }, true);
 
 
@@ -445,8 +440,8 @@ angular.module('Pundit2.GeneralItemsContainer')
         };
     }
 
-    if($scope.isMyPageItems) {
-        EventDispatcher.addListener('MyPundit.isUserLogged', function (e) {
+    if ($scope.isMyPageItems) {
+        EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
             $scope.isUserLogged = e.args;
         });
     }
@@ -455,7 +450,7 @@ angular.module('Pundit2.GeneralItemsContainer')
     $scope.search = GeneralItemsContainer.getSearch($scope.type);
 
 
-    if($scope.isVocabularies){
+    if ($scope.isVocabularies) {
         var promise;
         $scope.$watch(function() {
             return $scope.search.term;
@@ -538,9 +533,9 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     }
     //TODO: if not in vocabularies
-    else{
+    else {
         var allItems = [];
-        if($scope.isMyNotebooks || $scope.isPredicates){
+        if ($scope.isMyNotebooks || $scope.isPredicates) {
             $scope.displayedItems = [];
         }
         $scope.$watch(function() {
@@ -565,7 +560,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         });
 
         // watch only my items
-        if(!($scope.isMyNotebooks || $scope.isPredicates)){
+        if (!($scope.isMyNotebooks || $scope.isPredicates)) {
             $scope.$watch(function() {
                 return ItemsExchange.getItemsByContainer(ContainerManager.options.container);
             }, function(newItems) {
@@ -575,7 +570,7 @@ angular.module('Pundit2.GeneralItemsContainer')
                     filterItems($scope.search.term);
                 }
             }, true);
-        }else{
+        } else {
             $scope.$watch(function() {
                 return GeneralItemsContainer.itemsUpdateWatchFunction($scope.type);
             }, function(newItems) {
@@ -592,23 +587,23 @@ angular.module('Pundit2.GeneralItemsContainer')
             // show empty lists messagge
             if (len === 0) {
                 $scope.message.flag = true;
-                if(orderBtn) {
+                if (orderBtn) {
                     orderBtn.addClass('disabled');
                 }
             } else {
                 $scope.message.flag = false;
-                if(orderBtn) {
+                if (orderBtn) {
                     orderBtn.removeClass('disabled');
                 }
             }
 
         });
 
-        if(!($scope.isMyNotebooks || $scope.isPredicates)) {
+        if (!($scope.isMyNotebooks || $scope.isPredicates)) {
             // every time that change active tab show new items array
-            $scope.$watch(function () {
+            $scope.$watch(function() {
                 return $scope.tabs.activeTab;
-            }, function (activeTab) {
+            }, function(activeTab) {
                 $scope.displayedItems = ContainerManager.getItemsArrays()[activeTab];
                 // disable sort by type dropdown link
                 // enable only in All Items tab
@@ -636,14 +631,12 @@ angular.module('Pundit2.GeneralItemsContainer')
             var strParts = str.split(' '),
                 reg = new RegExp(strParts.join('.*'));
 
-
-
-            if($scope.isMyNotebooks) {
-                $scope.displayedItems = allItems.filter(function (ns) {
+            if ($scope.isMyNotebooks) {
+                $scope.displayedItems = allItems.filter(function(ns) {
                     return ns.label.toLowerCase().match(reg) !== null;
                 });
-            }else if($scope.isPredicates) {
-                $scope.displayedItems = allItems.filter(function (ns) {
+            } else if ($scope.isPredicates) {
+                $scope.displayedItems = allItems.filter(function(ns) {
                     if (typeof(ns.mergedLabel) === 'undefined') {
                         return ns.label.toLowerCase().match(reg) !== null;
                     } else {
