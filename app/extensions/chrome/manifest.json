@@ -4,8 +4,7 @@
   "manifest_version": 2,
   "description": "Pundit Chrome Extension",
   "background": {
-    "page": "html/background.html",
-    "persistent": false
+    "page": "html/background.html"
   },
   "homepage_url": "http://thepund.it",
   "icons": {
