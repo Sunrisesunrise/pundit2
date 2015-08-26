@@ -8,6 +8,7 @@ angular.module('Pundit2.Annotators')
     // use these values too.
     wrapNodeName: 'span',
     wrapNodeClass: 'pnd-cons',
+    tempWrapNodeClass: 'pnd-cons-temp',
 
     // Added by TextFragmentIcon directive, ignored when building xpointers
     textFragmentIconClass: "pnd-text-fragment-icon",
@@ -574,7 +575,7 @@ angular.module('Pundit2.Annotators')
             return false;
         }
 
-        var toIgnore = [xp.options.textFragmentIconClass, xp.options.wrapNodeClass, xp.options.imgWrapNodeClass];
+        var toIgnore = [xp.options.textFragmentIconClass, xp.options.wrapNodeClass, xp.options.tempWrapNodeClass, xp.options.imgWrapNodeClass];
         toIgnore = toIgnore.concat(xp.options.consolidationClasses);
         toIgnore = toIgnore.concat(xp.options.consolidationIconClasses);
 

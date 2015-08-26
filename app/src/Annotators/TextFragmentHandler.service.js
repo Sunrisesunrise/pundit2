@@ -116,7 +116,77 @@ angular.module('Pundit2.Annotators')
         }
     };
 
+    var checkTemporaryConsolidated = function(forceWipe) {
+        if (typeof forceWipe === 'undefined') {
+            forceWipe = false;
+        }
+        if (Object.keys(temporaryConsolidated).length === 0) {
+            return;
+        }
+        var statements = TripleComposer.getStatements();
+        var validUris = {};
+        statements.forEach(function(el) {
+            if (typeof el.scope === 'undefined') {
+                return;
+            }
+            var triple = el.scope.get();
+            if (typeof triple.subject !== 'undefined' && triple.subject !== null && typeof triple.subject.uri !== 'undefined') {
+                validUris[triple.subject.uri] = true;
+            }
+            if (typeof triple.object !== 'undefined' && triple.object !== null && typeof triple.object.uri !== 'undefined') {
+                validUris[triple.object.uri] = true;
+            }
+        });
+
+        for (var uri in temporaryConsolidated) {
+            if (forceWipe || typeof validUris[uri] === 'undefined') {
+                var temporaryFragmentId = temporaryConsolidated[uri].fragmentId;
+
+                // Replace wrapped nodes with their content
+                var bits = angular.element('span[fragments="' + temporaryFragmentId + '"]');
+                angular.forEach(bits, function(node) {
+                    var parent = node.parentNode;
+                    while (node.firstChild) {
+                        parent.insertBefore(node.firstChild, node);
+                    }
+                    angular.element(node).remove();
+                });
+                XpointersHelper.mergeTextNodes(angular.element('body')[0]);
+
+                delete temporaryConsolidated[uri];
+            }
+        }
+
+        if (forceWipe) {
+            lastTemporaryConsolidable = undefined;
+        }
+    };
+
+    var addTemporarySelection = function() {
+        if (typeof lastTemporaryConsolidable !== 'undefined') {
+            XpointersHelper.wrapElement(lastTemporaryConsolidable.range.commonAncestorContainer, lastTemporaryConsolidable.range, 'span', "pnd-cons-temp", [lastTemporaryConsolidable.fragmentId]);
+            temporaryConsolidated[lastTemporaryConsolidable.itemUri] = lastTemporaryConsolidable;
+            lastTemporaryConsolidable = undefined;
+        }
+    };
+
+    EventDispatcher.addListeners(['TripleComposer.useAsObject', 'TripleComposer.useAsSubject'], function(){
+        addTemporarySelection();
+    });
+
+    EventDispatcher.addListeners(['TripleComposer.statementChange', 'TripleComposer.statementChanged', 'TripleComposer.reset'], function(){
+        checkTemporaryConsolidated();
+    });
+
+    EventDispatcher.addListener('AnnotationsCommunication.annotationSaved', function(){
+        checkTemporaryConsolidated(true);
+    });
+
+    var lastTemporaryConsolidable,
+        temporaryConsolidated = {};
+
     var mouseUpHandler = function(upEvt) {
+        lastTemporaryConsolidable = undefined;
         if (clientHidden) {
             return;
         }
@@ -158,6 +228,17 @@ angular.module('Pundit2.Annotators')
         var item = tfh.createItemFromRange(range);
         ItemsExchange.addItemToContainer(item, tfh.options.container);
 
+        lastTemporaryConsolidable = {
+            offset: range.endOffset,
+            range: range,
+            xpointer: item.getXPointer(),
+            fragmentId: 'frt-' + (new Date()).getTime(),
+            itemUri: item.uri
+        };
+
+        //XpointersHelper.wrapElement(range.commonAncestorContainer, range, 'span', "pnd-cons-temp", [lastTemporaryConsolidable.fragmentId]);
+        //temporaryConsolidated[item.uri] = lastTemporaryConsolidable;
+
         tfh.log('Valid selection ended on document. Text fragment Item produced: ' + item.label);
 
         if (Toolbar.isActiveTemplateMode()) {
@@ -169,7 +250,7 @@ angular.module('Pundit2.Annotators')
         }
 
         ContextualMenu.show(upEvt.pageX, upEvt.pageY, item, tfh.options.cMenuType);
-
+        $document[0].getSelection().removeAllRanges();
 
     }; // mouseUpHandler()
 
@@ -560,6 +641,7 @@ angular.module('Pundit2.Annotators')
 
     EventDispatcher.addListener('Client.hide', function(/*e*/) {
         clientHidden = true;
+        checkTemporaryConsolidated(true);
     });
 
     EventDispatcher.addListener('Client.show', function(/*e*/) {
