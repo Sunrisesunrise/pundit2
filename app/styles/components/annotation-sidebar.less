@@ -281,6 +281,11 @@
         right: 0;
         top: 50%;
         margin: -20px auto 0;
+        text-align: center;
+    }
+
+    .pnd-message {
+        text-align: center;
     }
 
     .pnd-icon {
@@ -305,6 +310,10 @@
     .pnd-icon {
         display: inline-block;
         margin-top: 6px;
+        vertical-align: top;
+    }
+
+    span {
         vertical-align: top;
     }
 }
@@ -342,13 +351,13 @@
                 display: inline-block;
                 margin-top: 7px;
                 opacity: .7;
-                vertical-align: top;
+                // vertical-align: top; // Redundant... to be removed
             }
 
             .pnd-item-title {
                 display: inline-block;
                 margin-top: 1px;
-                vertical-align: top;
+                // vertical-align: top; // Redundant... to be removed
                 .text-dark-emboss();
             }
         }

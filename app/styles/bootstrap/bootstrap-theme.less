@@ -255,6 +255,46 @@
 
 
 /* ------------------------------------ *\
+   #NAV
+\* ------------------------------------ */
+
+/* The .nav elements is used by other Bootstrap's elements like the navbar
+This style are mainly for avoiding interferences with loaded pages */
+
+// Need this for normalizing
+ul.nav {
+    display: block;
+    width: auto;
+    background: transparent;
+
+    > li {
+        > a {
+            float: none;
+            margin: 0;
+            padding: 5px 8px;
+            border: 0;
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        // Active state, and its :hover to override normal :hover
+        &.active > a {
+            &,
+            &:hover,
+            &:focus {
+                margin: 0;
+                padding: 5px 8px;
+                border: 0;
+                font-weight: normal;
+            }
+        }
+    }
+}
+
+
+
+
+/* ------------------------------------ *\
    #NAVBAR
 \* ------------------------------------ */
 
@@ -310,12 +350,13 @@
 }
 
 
+
 /* ------------------------------------ *\
    #TABS
 \* ------------------------------------ */
 
 // Give the tabs something to sit on
-.nav-tabs {
+ul.nav-tabs {
     margin: 0; // 0 0 10px 0;
     background-color: @gray-light;
 
@@ -342,10 +383,7 @@
     > li {
         // Actual tabs (as links)
         > a {
-            margin-right: 0;
-            padding: 5px 8px;
             background-color: @gray-light;
-            border: 0 solid transparent;
             border-radius: @tab-border-radius @tab-border-radius 0 0;
             color: @nav-tabs-active-link-hover-color;
             line-height: @line-height-base;
@@ -363,18 +401,11 @@
             &,
             &:hover,
             &:focus {
-                color: @nav-tabs-active-link-hover-color;
                 background-color: @nav-tabs-active-link-hover-bg;
-                border: 0;
                 border-bottom-color: transparent;
+                color: @nav-tabs-active-link-hover-color;
                 cursor: pointer;
-                box-shadow: 0 -1px 2px rgba(0,0,0,.18);
-            }
-        }
-
-        &.pull-right {
-            a {
-                // margin-right: 0;
+                // box-shadow: 0 -1px 2px rgba(0,0,0,.18);
             }
         }
     }
