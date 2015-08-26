@@ -790,10 +790,18 @@ angular.module('Pundit2.Client')
     client.log("Component up and running");
 
     client.OS = '';
-    if (navigator.appVersion.indexOf("Win")!=-1){ client.OS="Windows";}
-    else if (navigator.appVersion.indexOf("Mac")!=-1){ client.OS="MacOS";}
-    else if (navigator.appVersion.indexOf("X11")!=-1){ client.OS="UNIX";}
-    else if (navigator.appVersion.indexOf("Linux")!=-1){ client.OS="Linux";}
+    if (navigator.appVersion.indexOf("Win") !== -1){
+        client.OS="Windows";
+    }
+    else if (navigator.appVersion.indexOf("Mac") !== -1) {
+        client.OS="MacOS";
+    }
+    else if (navigator.appVersion.indexOf("X11") !== -1) {
+        client.OS="UNIX";
+    }
+    else if (navigator.appVersion.indexOf("Linux") !== -1) {
+        client.OS="Linux";
+    }
 
 
     return client;

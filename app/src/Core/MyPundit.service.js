@@ -183,7 +183,7 @@ angular.module('Pundit2.Core')
         if (myPundit.useCookies) {
             var cookieUserdata = $cookies.getObject('pundit.User');
             var cookieInfo = $cookies.getObject('pundit.Info');
-            var a = angular.extend(infoCookie, cookieInfo);
+            angular.extend(infoCookie, cookieInfo);
             if (typeof cookieUserdata !== 'undefined' && cookieUserdata !== null && cookieUserdata.loginStatus === 1) {
                 isUserLogged = true;
                 loginStatus = 'loggedIn';
@@ -196,7 +196,7 @@ angular.module('Pundit2.Core')
                 });
                 EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
                 setTimeout(function () {
-                    promise.resolve(true)
+                    promise.resolve(true);
                 }, 5);
                 return promise.promise;
             }

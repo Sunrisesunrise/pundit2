@@ -212,7 +212,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
         if (generalItemsContainer.isMyItemsType(type)) {
             if (MyPundit.isUserLogged() === false) {
-                return 'My Items are only available to logged users. Please log in to Pundit and use this section to bookmark and use items.'
+                return 'My Items are only available to logged users. Please log in to Pundit and use this section to bookmark and use items.';
             }
             if (items.length === 0) {
                 return 'It seems you haven\'t any item stored here yet! You can add My Items by selecting parts of text or selecting an entity in the Linked Data panel and clicking on "Add to My Items"';
@@ -380,13 +380,12 @@ angular.module('Pundit2.GeneralItemsContainer')
     var lastSelected;
     var listContainer;
     var keyHandlers = {};
-    keyHandlers['enter'] = Keyboard.registerHandler('ResourcePanelController', {
+    keyHandlers.enter = Keyboard.registerHandler('ResourcePanelController', {
         keyCode: 13,
         ignoreOnInput: false,
         stopPropagation: true,
-    }, function(event, eventKeyConfig){
+    }, function(/*event, eventKeyConfig*/){
         if (typeof lastSelected !== 'undefined') {
-            //$scope.save(lastSelected.item);
             var generalItemContainer = angular.element(lastSelected.elementItem).closest('general-items-container');
             var actionButtons = generalItemContainer.find('.pnd-panel-tab-content-footer').find('.pnd-btn.pnd-btn-subject,.pnd-btn.pnd-btn-object,.pnd-btn.pnd-btn-predicate');
             for (var i in actionButtons) {
@@ -398,19 +397,19 @@ angular.module('Pundit2.GeneralItemsContainer')
         }
     });
 
-    keyHandlers['arrowUp'] = Keyboard.registerHandler('ResourcePanelController', {
+    keyHandlers.arrowUp = Keyboard.registerHandler('ResourcePanelController', {
         keyCode: 38,
         ignoreOnInput: true,
         stopPropagation: true,
-    }, function(event, eventKeyConfig){
+    }, function(/*event, eventKeyConfig*/){
         arrowKeyPressed(38);
     });
 
-    keyHandlers['arrowDown'] = Keyboard.registerHandler('ResourcePanelController', {
+    keyHandlers.arrowDown = Keyboard.registerHandler('ResourcePanelController', {
         keyCode: 40,
         ignoreOnInput: true,
         stopPropagation: true,
-    }, function(event, eventKeyConfig){
+    }, function(/*event, eventKeyConfig*/){
         arrowKeyPressed(40);
     });
 

@@ -179,11 +179,7 @@ angular.module('Pundit2.ResourcePanel')
         state.popoverOptions.scope.showSaveButton = function(cs) {
             childScope = cs;
             return true;
-        }
-
-        state.popoverOptions.scope.showCancelButton = function() {
-            return true;
-        }
+        };
 
         if (typeof(tripleElemType) !== 'undefined') {
             if (tripleElemType === 'sub') {
@@ -242,14 +238,13 @@ angular.module('Pundit2.ResourcePanel')
                 Analytics.track('buttons', 'click', eventLabel);
             };
 
-            state.popoverOptions.eventKeyHandlers['enter'] = Keyboard.registerHandler('ResourcePanelService', {
+            state.popoverOptions.eventKeyHandlers.enter = Keyboard.registerHandler('ResourcePanelService', {
                 scope: state.popoverOptions.scope,
                 keyCode: 13,
                 ignoreOnInput: false,
                 stopPropagation: true,
                 priority: 10
-            }, function(event, eventKeyConfig){
-                var a = childScope;
+            }, function(/*event, eventKeyConfig*/){
                 state.popoverOptions.scope.save(true);
                 $rootScope.$$phase || $rootScope.$digest();
             });
@@ -267,7 +262,7 @@ angular.module('Pundit2.ResourcePanel')
             // handle save a new popoverLiteral
             state.popoverOptions.scope.save = function(byKey) {
                 if (typeof byKey !== 'undefined' && byKey) {
-                    if (childScope.literalText.length == 0) {
+                    if (childScope.literalText.length === 0) {
                         return;
                     }
                     this.literalText = childScope.literalText;
@@ -297,7 +292,7 @@ angular.module('Pundit2.ResourcePanel')
                 ignoreOnInput: false,
                 stopPropagation: true,
                 priority: 10
-            }, function(event, eventKeyConfig){
+            }, function(/*event, eventKeyConfig*/){
                 state.popoverOptions.scope.save(true);
                 $rootScope.$$phase || $rootScope.$digest();
             });
@@ -434,12 +429,12 @@ angular.module('Pundit2.ResourcePanel')
 
         }
 
-        state.popoverOptions.eventKeyHandlers['ESC'] = Keyboard.registerHandler('ResourcePanelService', {
+        state.popoverOptions.eventKeyHandlers.ESC = Keyboard.registerHandler('ResourcePanelService', {
             scope: state.popoverOptions.scope,
             keyCode: 27,
             ignoreOnInput: false,
             stopPropagation: true
-        }, function(event, eventKeyConfig){
+        }, function(/*event, eventKeyConfig*/){
             state.popoverOptions.scope.cancel();
         });
 

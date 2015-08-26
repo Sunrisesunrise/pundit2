@@ -107,35 +107,35 @@ angular.module('Pundit2.ResourcePanel')
 
     var lastSelected;
     var keyHandlers = {};
-    keyHandlers['enter'] = Keyboard.registerHandler('ResourcePanelController', {
+    keyHandlers.enter = Keyboard.registerHandler('ResourcePanelController', {
         scope: $scope,
         keyCode: 13,
         ignoreOnInput: false,
         stopPropagation: true,
         priority: 10,
-    }, function(event, eventKeyConfig) {
+    }, function(/*event, eventKeyConfig*/){
         if (typeof lastSelected !== 'undefined') {
             $scope.save(lastSelected.item);
         }
     });
 
-    keyHandlers['arrowUp'] = Keyboard.registerHandler('ResourcePanelController', {
+    keyHandlers.arrowUp = Keyboard.registerHandler('ResourcePanelController', {
         scope: $scope,
         keyCode: 38,
         ignoreOnInput: true,
         stopPropagation: true,
         priority: 10,
-    }, function(event, eventKeyConfig) {
+    }, function(/*event, eventKeyConfig*/){
         arrowKeyPressed(38);
     });
 
-    keyHandlers['arrowDown'] = Keyboard.registerHandler('ResourcePanelController', {
+    keyHandlers.arrowDown = Keyboard.registerHandler('ResourcePanelController', {
         scope: $scope,
         keyCode: 40,
         ignoreOnInput: true,
         stopPropagation: true,
         priority: 10,
-    }, function(event, eventKeyConfig) {
+    }, function(/*event, eventKeyConfig*/){
         arrowKeyPressed(40);
     });
 
@@ -189,7 +189,7 @@ angular.module('Pundit2.ResourcePanel')
             lastSelected = {
                 item: item,
                 elementItem: $event.currentTarget
-            }
+            };
         }
         $scope.isUseActive = true;
         $scope.itemSelected = item;

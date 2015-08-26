@@ -573,7 +573,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $document.on('mousedown', mouseDownHandler);
 
-    function mouseDownHandler(downEvt) {
+    var mouseDownHandler = function(downEvt) {
         var target = downEvt.target;
 
         if (state.isGhostedActive) {
