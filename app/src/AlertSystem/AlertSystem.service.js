@@ -76,28 +76,28 @@ angular.module('Pundit2.AlertSystem')
     alertSystem.AlertType = {
         OK: {
             id: 'SUCCESS',
-            alertClass: 'alert-success',
+            alertClass: 'pnd-alert-success',
             timeout: alertSystem.options.defaultDismissTime,
             top: true,
             dismissible: true
         },
         ERROR: {
             id: 'ERROR',
-            alertClass: 'alert-danger',
+            alertClass: 'pnd-alert-danger',
             timeout: null,
             top: true,
             dismissible: true
         },
         ALERT: {
             id: 'ALERT',
-            alertClass: 'alert-info',
+            alertClass: 'pnd-alert-info',
             timeout: null,
             top: true,
             dismissible: true
         },
         CUSTOM: {
             id: 'CUSTOM',
-            alertClass: 'alert-warning',
+            alertClass: 'pnd-alert-warning',
             timeout: null,
             top: true,
             dismissible: true
