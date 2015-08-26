@@ -259,7 +259,7 @@ angular.module('Pundit2.Dashboard')
 
 })
 
-.service('Dashboard', function(BaseComponent, DASHBOARDDEFAULTS, $window, $rootScope, EventDispatcher) {
+.service('Dashboard', function(BaseComponent, DASHBOARDDEFAULTS, $window, $rootScope, EventDispatcher, Keyboard) {
 
     var dashboard = new BaseComponent('Dashboard', DASHBOARDDEFAULTS);
 
@@ -692,6 +692,17 @@ angular.module('Pundit2.Dashboard')
         dashboard.toggle();
         $rootScope.$$phase || $rootScope.$digest();
         dashboard.toggle();
+    });
+
+    Keyboard.registerHandler('DashboardService', {
+        keyCode: 27,
+        ignoreOnInput: false,
+        stopPropagation: true
+    }, function(/*event, eventKeyConfig*/){
+        if (state.isDashboardVisible) {
+            dashboard.toggle();
+            $rootScope.$$phase || $rootScope.$digest();
+        }
     });
 
     dashboard.log('Service run');
