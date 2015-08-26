@@ -16,10 +16,8 @@ angular.module('KorboEE')
         $scope.showContentMessage1 = true;
         $scope.showContentMessage4 = true;
         $scope.showContentMessage5 = false;
+        
         $scope.useCustomTemplate = 'src/Item/KorboItem.dir.tmpl.html';
-        $scope.canShowPaneList = function() {
-            return true;
-        };
 
         // set label to search
         if(typeof($scope.pane.labelToSearch) !== 'undefined'&& $scope.pane.labelToSearch !== ''){

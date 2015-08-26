@@ -274,8 +274,7 @@ angular.module('Pundit2.TripleComposer')
                 Preview.setItemDashboardSticky(triple.subject);
             }
             return;
-        }
-        else if ($scope.subjectFixed) {
+        } else if ($scope.subjectFixed) {
             return;
         }
 
@@ -310,15 +309,20 @@ angular.module('Pundit2.TripleComposer')
             $scope.predicateFixed = fixed;
         }
 
-        // check predicate range
-        if (typeof(item.range) !== 'undefined') {
-            if (item.range.indexOf(NameSpace.rdfs.literal) === -1 && item.range.length > 0) {
-                $scope.canBeObjectLiteral = false;
+        // check predicate suggestedObjectTypes
+        if (TripleComposer.limitToSuggestedTypes) {
+            if (typeof(item.suggestedObjectTypes) !== 'undefined') {
+                if (item.suggestedObjectTypes.indexOf(NameSpace.rdfs.literal) === -1 && item.suggestedObjectTypes.length > 0) {
+                    $scope.canBeObjectLiteral = false;
+                }
+                // TODO change data check and expand to other format (y, ym, ymd, ymdt)
+                if (item.suggestedObjectTypes.indexOf(NameSpace.dateTime) === -1 && item.suggestedObjectTypes.length > 0) {
+                    $scope.canBeObjectDate = false;
+                }
             }
-            // TODO change data check and expand to other format (y, ym, ymd, ymdt)
-            if (item.range.indexOf(NameSpace.dateTime) === -1 && item.range.length > 0) {
-                $scope.canBeObjectDate = false;
-            }
+        } else {
+            $scope.canBeObjectLiteral = true;
+            $scope.canBeObjectDate = true;
         }
 
         ResourcePanel.hide();

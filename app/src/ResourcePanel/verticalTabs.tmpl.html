@@ -3,8 +3,7 @@
     class="nav nav-tabs pnd-vertical-tabs">
     <li
         ng-repeat="pane in contentTabs"
-        ng-class="{active: $index == active}"
-        ng-if="canShowPaneList(pane.title)">
+        ng-class="{active: $index == active}">
         <a
             data-toggle="tab"
             ng-click="setActive($index, $event)"

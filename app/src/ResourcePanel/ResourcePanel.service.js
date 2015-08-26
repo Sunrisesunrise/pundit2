@@ -88,7 +88,6 @@ angular.module('Pundit2.ResourcePanel')
      * <pre> myItemsEnabled: true </pre>
      */
     myItemsEnabled: true
-
 })
 
 /**
@@ -131,6 +130,8 @@ angular.module('Pundit2.ResourcePanel')
             trigger: 'manual'
         }
     };
+
+    var limitToSuggestedTypes = Config.limitToSuggestedTypes;
 
     var show = function() {
         state.popover.show();
@@ -244,12 +245,11 @@ angular.module('Pundit2.ResourcePanel')
                 ignoreOnInput: false,
                 stopPropagation: true,
                 priority: 10
-            }, function(/*event, eventKeyConfig*/){
+            }, function( /*event, eventKeyConfig*/ ) {
                 state.popoverOptions.scope.save(true);
                 $rootScope.$$phase || $rootScope.$digest();
             });
-        }
-        else if (type === 'literal') { // initialize a literal popover
+        } else if (type === 'literal') { // initialize a literal popover
 
             state.popoverOptions.templateUrl = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
 
@@ -292,14 +292,13 @@ angular.module('Pundit2.ResourcePanel')
                 ignoreOnInput: false,
                 stopPropagation: true,
                 priority: 10
-            }, function(/*event, eventKeyConfig*/){
+            }, function( /*event, eventKeyConfig*/ ) {
                 state.popoverOptions.scope.save(true);
                 $rootScope.$$phase || $rootScope.$digest();
             });
 
             // initialize a resource panel popover
-        }
-        else if (type === 'resourcePanel') {
+        } else if (type === 'resourcePanel') {
 
             if (typeof(Config.korbo) !== 'undefined' && Config.korbo.active) {
                 var name = $window[Config.korbo.confName].globalObjectName;
@@ -336,9 +335,9 @@ angular.module('Pundit2.ResourcePanel')
             state.popoverOptions.scope.properties = content.properties;
             state.popoverOptions.scope.contentTabs = contentTabs;
             state.popoverOptions.scope.active = 0;
-            if (content.type !== 'pr') {
-                state.popoverOptions.scope.active = MyPundit.isUserLogged() ? 0 : (resourcePanel.options.pageItemsEnabled + resourcePanel.options.myItemsEnabled);
-            }
+            // if (content.type !== 'pr') {
+            //     state.popoverOptions.scope.active = MyPundit.isUserLogged() ? 0 : (resourcePanel.options.pageItemsEnabled + resourcePanel.options.myItemsEnabled);
+            // }
             if (content.label !== '' && typeof(content.label) !== 'undefined') {
                 setLabelToSearch(content.label);
             } else {
@@ -375,8 +374,8 @@ angular.module('Pundit2.ResourcePanel')
         }
 
         state.popoverOptions.scope.setActive = function(index) {
-            index = index >= state.popoverOptions.scope.contentTabs.length ? state.popoverOptions.scope.contentTabs.length - 1 : index;
-            index = index < 0 ? 0 : index;
+            // index = index >= state.popoverOptions.scope.contentTabs.length ? state.popoverOptions.scope.contentTabs.length - 1 : index;
+            // index = index < 0 ? 0 : index;
             state.popoverOptions.scope.active = index;
         };
 
@@ -434,7 +433,7 @@ angular.module('Pundit2.ResourcePanel')
             keyCode: 27,
             ignoreOnInput: false,
             stopPropagation: true
-        }, function(/*event, eventKeyConfig*/){
+        }, function( /*event, eventKeyConfig*/ ) {
             state.popoverOptions.scope.cancel();
         });
 
@@ -537,12 +536,12 @@ angular.module('Pundit2.ResourcePanel')
 
     var filterSubjectItems = function(items, predicate) {
         var ret = [];
-        if (!isItemValid(predicate, 'domain')) {
+        if (!isItemValid(predicate, 'suggestedSubjectTypes')) {
             return items;
         }
 
         for (var i in items) {
-            if (isTypeIncluded(items[i], predicate.domain)) {
+            if (isTypeIncluded(items[i], predicate.suggestedSubjectTypes)) {
                 ret.push(items[i]);
             }
         }
@@ -552,12 +551,12 @@ angular.module('Pundit2.ResourcePanel')
 
     var filterObjectItems = function(items, predicate) {
         var ret = [];
-        if (!isItemValid(predicate, 'range')) {
+        if (!isItemValid(predicate, 'suggestedObjectTypes')) {
             return items;
         }
 
         for (var i in items) {
-            if (isTypeIncluded(items[i], predicate.range)) {
+            if (isTypeIncluded(items[i], predicate.suggestedObjectTypes)) {
                 ret.push(items[i]);
             }
         }
@@ -876,7 +875,7 @@ angular.module('Pundit2.ResourcePanel')
      * @description
      * Open a popover where subject items are shown grouped according from their provenance ('Page items', 'My items', 'Vocabularies').
      * If predicate is not defined in the triple, all items will be shown.
-     * If predicate is defined in the triple, will be shown only items whose types are compatible with predicate domain
+     * If predicate is defined in the triple, will be shown only items whose types are compatible with predicate suggestedSubjectTypes
      *
      * My items are visible only if user is logged in.
      *
@@ -939,23 +938,27 @@ angular.module('Pundit2.ResourcePanel')
                     pageItems = ItemsExchange.getItemsByContainer(pageItemsContainer);
                     // if predicate is a valid uri
                 } else {
-                    // get item predicate and check his domain
+                    // get item predicate and check his suggestedSubjectTypes
                     var itemPredicate = ItemsExchange.getItemByUri(predicate.uri);
-                    // predicate with empty domain
-                    if (typeof(itemPredicate) === 'undefined' || typeof(itemPredicate.domain) === 'undefined' || itemPredicate.domain.length === 0 || itemPredicate.domain[0] === "") {
+                    // predicate with empty suggestedSubjectTypes
+                    if (typeof(itemPredicate) === 'undefined' ||
+                        typeof(itemPredicate.suggestedSubjectTypes) === 'undefined' ||
+                        itemPredicate.suggestedSubjectTypes.length === 0 ||
+                        itemPredicate.suggestedSubjectTypes[0] === "" ||
+                        limitToSuggestedTypes === false) {
                         // all items are good
                         myItems = ItemsExchange.getItemsByContainer(myItemsContainer);
                         pageItems = ItemsExchange.getItemsByContainer(pageItemsContainer);
                     } else {
-                        // predicate with a valid domain
-                        var domain = itemPredicate.domain;
+                        // predicate with a valid suggestedSubjectTypes
+                        var suggestedSubjectTypes = itemPredicate.suggestedSubjectTypes;
 
-                        // get only items matching with predicate domain
+                        // get only items matching with predicate suggestedSubjectTypes
                         var filter = function(item) {
 
-                            for (var i = 0; i < domain.length; i++) {
+                            for (var i = 0; i < suggestedSubjectTypes.length; i++) {
                                 for (var j = 0; j < item.type.length; j++) {
-                                    if (domain[i] === item.type[j]) {
+                                    if (suggestedSubjectTypes[i] === item.type[j]) {
                                         return true;
                                     }
                                 }
@@ -965,7 +968,7 @@ angular.module('Pundit2.ResourcePanel')
 
                         myItems = ItemsExchange.getItemsFromContainerByFilter(myItemsContainer, filter);
                         pageItems = ItemsExchange.getItemsFromContainerByFilter(pageItemsContainer, filter);
-                    } // end else domain defined
+                    } // end else suggestedSubjectTypes defined
 
                 } // end else predicate valid uri
 
@@ -987,7 +990,7 @@ angular.module('Pundit2.ResourcePanel')
      * @description
      * Open a popover where object items are shown grouped according from their provenance ('Page items', 'My items', 'Vocabularies').
      * If predicate is not defined in the triple, all items will be shown.
-     * If predicate is defined in the triple, will be shown only items whose types are compatible with predicate range
+     * If predicate is defined in the triple, will be shown only items whose types are compatible with predicate suggestedObjectTypes
      *
      * My items are visible only if user is logged in.
      *
@@ -1050,33 +1053,33 @@ angular.module('Pundit2.ResourcePanel')
                     showPopoverResourcePanel(target, pageItems, myItems, "", label, 'obj', triple);
 
                 } else {
-                    // get item predicate and check his domain
+                    // get item predicate and check his suggestedObjectTypes
                     var itemPredicate = ItemsExchange.getItemByUri(predicate.uri);
-                    // predicate with empty domain
-                    if (typeof(itemPredicate) === 'undefined' || typeof(itemPredicate.range) === 'undefined' || itemPredicate.range.length === 0 || itemPredicate.range[0] === "") {
+                    // predicate with empty suggestedObjectTypes
+                    if (typeof(itemPredicate) === 'undefined' || typeof(itemPredicate.suggestedObjectTypes) === 'undefined' || itemPredicate.suggestedObjectTypes.length === 0 || itemPredicate.suggestedObjectTypes[0] === "") {
                         // all items are good
                         myItems = ItemsExchange.getItemsByContainer(myItemsContainer);
                         pageItems = ItemsExchange.getItemsByContainer(pageItemsContainer);
                         showPopoverResourcePanel(target, pageItems, myItems, "", label, 'obj', triple);
 
                         // if predicate is literal, show popover literal
-                    } else if (itemPredicate.range.length === 1 && itemPredicate.range[0] === NameSpace.rdfs.literal) {
+                    } else if (itemPredicate.suggestedObjectTypes.length === 1 && itemPredicate.suggestedObjectTypes[0] === NameSpace.rdfs.literal) {
                         resourcePanel.showPopoverLiteral("", target);
 
                         // if predicate is dateTime, show popover calendar
-                    } else if (itemPredicate.range.length === 1 && itemPredicate.range[0] === NameSpace.dateTime) {
+                    } else if (itemPredicate.suggestedObjectTypes.length === 1 && itemPredicate.suggestedObjectTypes[0] === NameSpace.dateTime) {
                         resourcePanel.showPopoverCalendar("", target);
 
                     } else {
-                        // predicate with a valid domain
-                        var range = itemPredicate.range;
+                        // predicate with a valid suggestedObjectTypes
+                        var suggestedObjectTypes = itemPredicate.suggestedObjectTypes;
 
-                        // get only items matching with predicate domain
+                        // get only items matching with predicate suggestedObjectTypes
                         var filter = function(item) {
 
-                            for (var i = 0; i < range.length; i++) {
+                            for (var i = 0; i < suggestedObjectTypes.length; i++) {
                                 for (var j = 0; j < item.type.length; j++) {
-                                    if (range[i] === item.type[j]) {
+                                    if (suggestedObjectTypes[i] === item.type[j]) {
                                         return true;
                                     }
                                 }
@@ -1109,8 +1112,8 @@ angular.module('Pundit2.ResourcePanel')
      * @description
      * Open a popover where predicate items are shown.
      * If subject and object are both not defined in the triple, all predicates will be shown.
-     * If only subject is defined in the triple, will be shown only predicates whose domain is compatible with subject types
-     * If only object is defined in the triple, will be shown only predicates whose range is compatible with subject types
+     * If only subject is defined in the triple, will be shown only predicates whose suggestedSubjectTypes is compatible with subject types
+     * If only object is defined in the triple, will be shown only predicates whose suggestedObjectTypes is compatible with subject types
      *
      * My items are visible only if user is logged in.
      *
@@ -1149,7 +1152,7 @@ angular.module('Pundit2.ResourcePanel')
 
                 if (isItemValid(subject, 'type')) {
                     subTypes = subject.type;
-                    properties = $filter('filterByTypes')(properties, 'domain', subTypes);
+                    properties = $filter('filterByTypes')(properties, 'suggestedSubjectTypes', subTypes);
                 }
 
                 if (isItemValid(object)) {
@@ -1164,7 +1167,7 @@ angular.module('Pundit2.ResourcePanel')
                         objTypes = [NameSpace.rdfs.literal];
                     }
 
-                    properties = $filter('filterByTypes')(properties, 'range', objTypes);
+                    properties = $filter('filterByTypes')(properties, 'suggestedObjectTypes', objTypes);
                 }
 
                 if (typeof(properties) !== 'undefined' && properties.length > 0) {
@@ -1189,7 +1192,7 @@ angular.module('Pundit2.ResourcePanel')
         hide();
     });
 
-    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
         hide();
     });
 

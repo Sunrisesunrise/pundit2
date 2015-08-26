@@ -217,8 +217,9 @@ angular.module('Pundit2.TripleComposer')
     var tripleComposer = new BaseComponent('TripleComposer', TRIPLECOMPOSERDEFAULTS);
 
     var state = {};
-    var firstInstanceName; // it will be default triplecomposer.
+    var firstInstanceName; // it will be default triple composer.
 
+    var limitToSuggestedTypes = tripleComposer.limitToSuggestedTypes = Config.limitToSuggestedTypes;
 
     //var statements = [{
     //    id: 1
@@ -626,33 +627,37 @@ angular.module('Pundit2.TripleComposer')
             return false;
         }
 
-        var domainFound = false,
-            predicate = state[name].statements[index].scope.get().predicate;
-
-        if (predicate === null || predicate.domain.length === 0) {
+        if (limitToSuggestedTypes === false) {
             return true;
         }
-        // check if subject type match predicate domain
+
+        var suggestFound = false,
+            predicate = state[name].statements[index].scope.get().predicate;
+
+        if (predicate === null || predicate.suggestedSubjectTypes.length === 0) {
+            return true;
+        }
+        // check if subject type match predicate suggestedSubjectTypes
         item.type.some(function(type) {
-            if (predicate.domain.indexOf(type) > -1) {
-                domainFound = true;
-                return domainFound;
+            if (predicate.suggestedSubjectTypes.indexOf(type) > -1) {
+                suggestFound = true;
+                return suggestFound;
             }
         });
 
-        if (!domainFound) {
-            tripleComposer.log('Impossible to add item as Subject: predicate domain not match');
+        if (!suggestFound) {
+            tripleComposer.log('Impossible to add item as Subject: predicate suggestedSubjectTypes not match');
         } else {
-            tripleComposer.log('Predicate domain match.');
+            tripleComposer.log('Predicate suggestedSubjectTypes match.');
         }
 
-        return domainFound;
+        return suggestFound;
     };
 
     tripleComposer.canBeUseAsPredicate = function(item, name) {
         name = fixName(name);
-        var domainCheck = false;
-        var rangeCheck = false;
+        var subjectCheck = false;
+        var objectCheck = false;
 
         // search first empty prendicate
         var index = -1;
@@ -673,31 +678,35 @@ angular.module('Pundit2.TripleComposer')
             return true;
         }
 
-        if (subject !== null && item.domain.length !== 0) {
-            // check if subject type match predicate domain
-            item.domain.some(function(type) {
+        if (limitToSuggestedTypes === false) {
+            return true;
+        }
+
+        if (subject !== null && item.suggestedSubjectTypes.length !== 0) {
+            // check if subject type match predicate suggestedSubjectTypes
+            item.suggestedSubjectTypes.some(function(type) {
                 if (subject.type.indexOf(type) > -1) {
-                    domainCheck = true;
-                    return domainCheck;
+                    subjectCheck = true;
+                    return subjectCheck;
                 }
             });
         } else {
-            domainCheck = true;
+            subjectCheck = true;
         }
 
-        if (object !== null && item.range.length !== 0) {
-            // check if object type match predicate range
-            item.range.some(function(type) {
+        if (object !== null && item.suggestedObjectTypes.length !== 0) {
+            // check if object type match predicate suggestedObjectTypes
+            item.suggestedObjectTypes.some(function(type) {
                 if (object.type.indexOf(type) > -1) {
-                    rangeCheck = true;
-                    return rangeCheck;
+                    objectCheck = true;
+                    return objectCheck;
                 }
             });
         } else {
-            rangeCheck = true;
+            objectCheck = true;
         }
 
-        return domainCheck && rangeCheck;
+        return subjectCheck && objectCheck;
     };
 
     tripleComposer.canAddItemAsObject = function(item, name) {
@@ -718,27 +727,31 @@ angular.module('Pundit2.TripleComposer')
             return false;
         }
 
-        var rangeFound = false,
-            predicate = state[name].statements[index].scope.get().predicate;
-
-        if (predicate === null || predicate.range.length === 0) {
+        if (limitToSuggestedTypes === false) {
             return true;
         }
-        // check if object type match predicate range
+
+        var suggestFound = false,
+            predicate = state[name].statements[index].scope.get().predicate;
+
+        if (predicate === null || predicate.suggestedObjectTypes.length === 0) {
+            return true;
+        }
+        // check if object type match predicate suggestedObjectTypes
         item.type.some(function(type) {
-            if (predicate.range.indexOf(type) > -1) {
-                rangeFound = true;
-                return rangeFound;
+            if (predicate.suggestedObjectTypes.indexOf(type) > -1) {
+                suggestFound = true;
+                return suggestFound;
             }
         });
 
-        if (!rangeFound) {
-            tripleComposer.log('Impossible to add item as Object: predicate range not match');
+        if (!suggestFound) {
+            tripleComposer.log('Impossible to add item as Object: predicate suggestedObjectTypes not match');
         } else {
-            tripleComposer.log('Predicate range match.');
+            tripleComposer.log('Predicate suggestedObjectTypes match.');
         }
 
-        return rangeFound;
+        return suggestFound;
     };
 
     tripleComposer.canUseItemInTripleAs = function(item, triple, useAs) {
@@ -748,7 +761,7 @@ angular.module('Pundit2.TripleComposer')
         if (typeof triple === 'undefined') {
             return false;
         }
-        if (typeof triple.predicate === 'undefined' || triple.predicate === null) {
+        if (typeof triple.predicate === 'undefined' || triple.predicate === null || limitToSuggestedTypes === false) {
             return true;
         }
 
@@ -756,24 +769,24 @@ angular.module('Pundit2.TripleComposer')
 
         switch (useAs) {
             case 'sub':
-                if (triple.predicate.domain.length === 0) {
+                if (triple.predicate.suggestedSubjectTypes.length === 0) {
                     res = true;
                     break;
                 }
                 item.type.some(function(type) {
-                    if (triple.predicate.domain.indexOf(type) > -1) {
+                    if (triple.predicate.suggestedSubjectTypes.indexOf(type) > -1) {
                         res = true;
                         return res;
                     }
                 });
                 break;
             case 'obj':
-                if (triple.predicate.range.length === 0) {
+                if (triple.predicate.suggestedObjectTypes.length === 0) {
                     res = true;
                     break;
                 }
                 item.type.some(function(type) {
-                    if (triple.predicate.range.indexOf(type) > -1) {
+                    if (triple.predicate.suggestedObjectTypes.indexOf(type) > -1) {
                         res = true;
                         return res;
                     }

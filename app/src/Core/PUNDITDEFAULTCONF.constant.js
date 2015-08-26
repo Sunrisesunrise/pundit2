@@ -201,7 +201,7 @@ angular.module('Pundit2.Core')
      * @description
      * `Array of url`
      * Specifies relations vocaularies that will be available to Pundit users
-     * (defines a list of relations with domain and ranges).
+     * (defines a list of relations).
      * Each vocabulary definition is a JSONP file available on the Web and is loaded by resolving an absolute URL.
      *
      * Default:
@@ -218,12 +218,12 @@ angular.module('Pundit2.Core')
      *              "rdftype":["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
      *              "label":"has creator",
      *              "description":"The selected text fragment has been created by a specific Person",
-     *              "domain":[
+     *              "suggestedSubjectTypes":[
      *                  "http://xmlns.com/foaf/0.1/Image",
      *                  "http://purl.org/pundit/ont/ao#fragment-image",
      *                  "http://purl.org/pundit/ont/ao#fragment-text"
      *               ],
-     *               "range":[
+     *               "suggestedObjectTypes":[
      *                  "http://dbpedia.org/ontology/Person",
      *                  "http://xmlns.com/foaf/0.1/Person",
      *                  "http://www.freebase.com/schema/people/person"
@@ -280,8 +280,8 @@ angular.module('Pundit2.Core')
      *      "predicate" : {
      *              "uri": ...,
      *              "label": ...,
-     *              "domain": [...],
-     *              "range": [...],
+     *              "suggestedSubjectTypes": [...],
+     *              "suggestedObjectTypes": [...],
      *       },
      *       "object" : {
      *         "value" : ....,
@@ -385,6 +385,21 @@ angular.module('Pundit2.Core')
      * <pre> useBasicRelations: true </pre>
      */
     useBasicRelations: true,
+
+    /**
+     * @module punditConfig
+     * @ngdoc object
+     * @name limitToSuggestedTypes
+     *
+     * @description
+     * `boolean`
+     *
+     * Limit the use of subject and object to suggestedSubjectTypes and suggestedObjectTypes
+     *
+     * Default value:
+     * <pre> limitToSuggestedTypes: false </pre>
+     */
+    limitToSuggestedTypes: false,
 
     // Modules active by default are activated here with active=true
     /**

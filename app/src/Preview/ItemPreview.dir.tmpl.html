@@ -47,17 +47,17 @@
                 <strong>Vocabulary:</strong>
                 <span ng-repeat="vocab in item.mergedVocabulary">{{vocab}}</span>
             </li>
-            <li class="pnd-preview-item-domain" ng-if="item.domain"><strong>Domain:</strong> 
-                <span ng-repeat="domain in item.domain">{{domain}}</span>
+            <li class="pnd-preview-item-domain" ng-if="item.suggestedSubjectTypes.length !== 0"><strong>Suggested Subject Types:</strong> 
+                <span ng-repeat="suggestedSubjectType in item.suggestedSubjectTypes">{{suggestedSubjectType}}</span>
             </li>
-            <li class="pnd-preview-item-domain" ng-if="item.domain.length === 0"><strong>Domain:</strong> 
-                <span>Free domain</span>
+            <li class="pnd-preview-item-domain" ng-if="item.suggestedSubjectTypes.length === 0"><strong>Suggested Subject Types:</strong> 
+                <span>All subjects can be used</span>
             </li>
-            <li class="pnd-preview-item-range" ng-if="item.range"><strong>Range:</strong> 
-                <span ng-repeat="range in item.range">{{range}}</span>
+            <li class="pnd-preview-item-range" ng-if="item.suggestedObjectTypes.length !== 0"><strong>Suggested Object Types:</strong> 
+                <span ng-repeat="suggestedObjectType in item.suggestedObjectTypes">{{suggestedObjectType}}</span>
             </li>
-            <li class="pnd-preview-item-range" ng-if="item.range.length === 0"><strong>Range:</strong> 
-                <span>Free range</span>
+            <li class="pnd-preview-item-range" ng-if="item.suggestedObjectTypes.length === 0"><strong>Suggested Object Types:</strong> 
+                <span>All objects can be used</span>
             </li>
         </ul>
     </div>

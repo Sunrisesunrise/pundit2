@@ -84,7 +84,7 @@ angular.module('Pundit2.Annotators')
                         // verify that all predicates admit images as subject
                         // all template triples must be have a predicate
                         for (var i in triples) {
-                            if (triples[i].predicate.domain.indexOf(NameSpace.types.image) === -1) {
+                            if (triples[i].predicate.suggestedSubcjetTypes.indexOf(NameSpace.types.image) === -1) {
                                 return;
                             }
                         }
