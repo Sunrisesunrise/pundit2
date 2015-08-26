@@ -273,7 +273,9 @@ angular.module('Pundit2.Core')
         if (analytics.options.doMixpanel === false) {
             return;
         }
-
+        if (event.eventAction !== 'click') {
+            return;
+        }
         mixpanel.track(event.eventLabel, event);
     };
 
