@@ -267,16 +267,18 @@ angular.module('Pundit2.AlertSystem')
         setTimeout(alert);
     };
 
-    EventDispatcher.addListener('Pundit.errorAlert', function(evt) {
-        alertSystem.addAlert(alertSystem.AlertType.ERROR, evt.args, 5000);
-    });
-
-    EventDispatcher.addListener('Pundit.warningAlert', function(evt) {
-        alertSystem.addAlert(alertSystem.AlertType.ALERT, evt.args, 5000);
-    });
-
-    EventDispatcher.addListener('Pundit.successAlert', function(evt) {
-        alertSystem.addAlert(alertSystem.AlertType.OK, evt.args, 5000);
+    EventDispatcher.addListener('Pundit.alert', function(evt) {
+        var alertConfig = angular.copy(alertSystem.AlertType.ALERT);
+        var message = evt.args;
+        if (typeof evt.args !== 'string') {
+            if (typeof evt.args.id !== 'undefined' && typeof alertSystem.AlertType[evt.args.id] !== 'undefined') {
+                alertConfig = alertSystem.AlertType[evt.args.id];
+            }
+            angular.merge(alertConfig, evt.args);
+            message = evt.args.message || '--no-message--';
+        }
+        //alertSystem.addAlert = function(type, message, timeout, top, dismissible, alertClass)
+        alertSystem.addAlert(alertConfig, message, alertConfig.timeout, alertConfig.top, alertConfig.dismissible, alertConfig.alertClass);
     });
 
     return alertSystem;

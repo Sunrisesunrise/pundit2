@@ -262,7 +262,7 @@ angular.module('Pundit2.Communication')
         }, function(msg) {
             annotationsCommunication.err("Could not search for annotations, error from the server: " + msg);
             EventDispatcher.sendEvent('Pundit.error', 'Could not search for annotations, error from the server!');
-            EventDispatcher.sendEvent('Pundit.errorAlert', 'Could not search for annotations, error from the server!');
+            EventDispatcher.sendEvent('Pundit.alert', {id: "ERROR", timeout: 3000, message: 'Could not search for annotations, error from the server!'});
             promise.reject(msg);
         });
 
@@ -313,7 +313,7 @@ angular.module('Pundit2.Communication')
             }).error(function() {
                 setLoading(false);
                 annotationsCommunication.log("Error impossible to delete annotation: " + annID + " please retry.");
-                EventDispatcher.sendEvent('Pundit.errorAlert', "Error impossible to delete annotation: " + annID + " please retry.");
+                EventDispatcher.sendEvent('Pundit.alert', {id: "ERROR", timeout: 3000, message: "Error impossible to delete annotation: " + annID + " please retry."});
                 promise.reject("Error impossible to delete annotation: " + annID);
             });
         } else {
@@ -433,7 +433,7 @@ angular.module('Pundit2.Communication')
             }).error(function(msg) {
                 setLoading(false);
                 annotationsCommunication.log("Error: impossible to save annotation", msg);
-                EventDispatcher.sendEvent('Pundit.errorAlert', "Error: impossible to save annotation, " + msg);
+                EventDispatcher.sendEvent('Pundit.alert', {id: "ERROR", timeout: 3000, message: "Error: impossible to save annotation, " + msg});
                 promise.reject();
             });
 
@@ -465,7 +465,7 @@ angular.module('Pundit2.Communication')
 
         } else {
             annotationsCommunication.log("Error impossible to edit annotation: " + annID + " you are not logged");
-            EventDispatcher.sendEvent('Pundit.errorAlert', "Error impossible to edit annotation: " + annID + " you are not logged");
+            EventDispatcher.sendEvent('Pundit.alert', {id: "ERROR", timeout: 3000, message: "Error impossible to edit annotation: " + annID + " you are not logged"});
             promise.reject("Error impossible to edit annotation: " + annID + " you are not logged");
         }
 

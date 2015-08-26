@@ -8,8 +8,13 @@ angular.module('Pundit2.Toolbar')
     Analytics, PageHandler, EventDispatcher, $timeout) {
 
     $scope.triggerAlert = function(type) {
-        type = ['errorAlert', 'warningAlert', 'successAlert'][type];
-        EventDispatcher.sendEvent('Pundit.' + type, 'Messaggio di prova Messaggio di prova Messaggio di prova');
+        EventDispatcher.sendEvent('Pundit.alert', 'Messaggio semplice');
+        EventDispatcher.sendEvent('Pundit.alert', {message: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'});
+        EventDispatcher.sendEvent('Pundit.alert', {message: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'ERROR'});
+        EventDispatcher.sendEvent('Pundit.alert', {message: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'SUCCESS', timeout: 5000});
+        EventDispatcher.sendEvent('Pundit.alert', {message: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'SUCCESS', timeout: null, dismissible: false});
+        EventDispatcher.sendEvent('Pundit.alert', {message: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'ALERT', timeout: null, dismissible: false});
+        EventDispatcher.sendEvent('Pundit.alert', {message: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', id: 'CUSTOM', timeout: null, dismissible: false});
     };
 
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
