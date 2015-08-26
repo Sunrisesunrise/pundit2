@@ -132,15 +132,22 @@ angular.module('Pundit2.AlertSystem')
         return null;
     };
 
-
     /**
+     * @ngdoc method
+     * @name AlertSystem#addAlert
+     * @module Pundit2.AlertSystem
+     * @function
+     *
+     * @description
      * Add an alert
-     * @param type
-     * @param message
-     * @param timeout
-     * @param top
-     * @param dismissible
-     * @param alertClass
+     *
+     * @param {type}
+     * @param {message}
+     * @param {timeout}
+     * @param {top}
+     * @param {dismissible}
+     * @param {alertClass}
+     *
      */
     alertSystem.addAlert = function(type, message, timeout, top, dismissible, alertClass) {
         var newId,
@@ -178,7 +185,14 @@ angular.module('Pundit2.AlertSystem')
     };
 
     /**
+     * @ngdoc method
+     * @name AlertSystem#clearAlerts
+     * @module Pundit2.AlertSystem
+     * @function
+     *
+     * @description
      * Clear all alerts
+     *
      */
     alertSystem.clearAlerts = function() {
         for (var i = 0; i < alerts.length; i++) {
@@ -189,8 +203,16 @@ angular.module('Pundit2.AlertSystem')
     };
 
     /**
-     * Clear the alert
-     * @param id id of the alert
+     * @ngdoc method
+     * @name AlertSystem#clearAlert
+     * @module Pundit2.AlertSystem
+     * @function
+     *
+     * @description
+     * Clear an alert by id
+     *
+     * @param {id} id of the alert
+     *
      */
     alertSystem.clearAlert = function(id) {
         alertSystem.removeTimeout(id);
@@ -208,8 +230,16 @@ angular.module('Pundit2.AlertSystem')
     };
 
     /**
+     * @ngdoc method
+     * @name AlertSystem#removeTimeout
+     * @module Pundit2.AlertSystem
+     * @function
+     *
+     * @description
      * Remove the timeout associated to the alert
-     * @param id
+     *
+     * @param {id}
+     *
      */
     alertSystem.removeTimeout = function(id) {
         var key = getTimeoutKey(id);
@@ -220,8 +250,16 @@ angular.module('Pundit2.AlertSystem')
     };
 
     /**
+     * @ngdoc method
+     * @name AlertSystem#resetTimeout
+     * @module Pundit2.AlertSystem
+     * @function
+     *
+     * @description
      * Reset the timeout associated to the alert
-     * @param id
+     *
+     * @param {id}
+     *
      */
     alertSystem.resetTimeout = function(id) {
         alertSystem.removeTimeout(id);
