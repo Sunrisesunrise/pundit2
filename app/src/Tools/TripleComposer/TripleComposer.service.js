@@ -404,6 +404,11 @@ angular.module('Pundit2.TripleComposer')
         initContextualMenu();
     });
 
+    // When all modules have been initialized, services are up, Config are setup etc..
+    EventDispatcher.addListener('Client.hide', function() {
+        tripleComposer.reset();
+    });
+
     tripleComposer.showHeader = function(newVal, name) {
         name = fixName(name);
         if (typeof newVal === 'boolean') {
