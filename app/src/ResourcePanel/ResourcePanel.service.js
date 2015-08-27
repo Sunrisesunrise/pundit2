@@ -196,6 +196,7 @@ angular.module('Pundit2.ResourcePanel')
         if (type === 'calendar') {
 
             state.popoverOptions.templateUrl = 'src/ResourcePanel/popoverCalendar.tmpl.html';
+            state.popoverOptions.scope.arrowLeft = '34px';
 
             if (content !== '' && typeof(content.value) !== 'undefined' && content.value !== '') {
                 state.popoverOptions.scope.modelDate = {};
@@ -252,6 +253,7 @@ angular.module('Pundit2.ResourcePanel')
         } else if (type === 'literal') { // initialize a literal popover
 
             state.popoverOptions.templateUrl = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
+            state.popoverOptions.scope.arrowLeft = '24px';
 
             if (typeof(content.literalText) === 'undefined') {
                 state.popoverOptions.scope.literalText = '';
@@ -777,8 +779,7 @@ angular.module('Pundit2.ResourcePanel')
      * @return {Promise} when Save button is clicked, promise will be resolved with value entered in textarea
      *
      */
-    resourcePanel.showPopoverLiteral = function(text, target) {
-
+    resourcePanel.showPopoverLiteral = function(text, target, openBy) {
         var content = {};
         content.literalText = text;
 
@@ -800,7 +801,7 @@ angular.module('Pundit2.ResourcePanel')
             });
         }
 
-        resourcePanel.openBy = target;
+        resourcePanel.openBy = typeof openBy === 'undefined' ? target : openBy;
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;
     };
@@ -821,7 +822,7 @@ angular.module('Pundit2.ResourcePanel')
      * @return {Promise} when Save button is clicked, promise will be resolved with the selected date
      *
      */
-    resourcePanel.showPopoverCalendar = function(date, target) {
+    resourcePanel.showPopoverCalendar = function(date, target, openBy) {
         var content = {};
 
         if (angular.isObject(date) === false) {
@@ -860,7 +861,7 @@ angular.module('Pundit2.ResourcePanel')
             });
         }
 
-        resourcePanel.openBy = target;
+        resourcePanel.openBy = typeof openBy === 'undefined' ? target : openBy;
 
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;

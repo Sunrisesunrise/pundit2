@@ -400,7 +400,7 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.onClickObject = function($event) {
-        var target = $event.target;
+        var target = $event.currentTarget;
         if ($scope.templateMode && $scope.objectFixed) {
             Preview.setItemDashboardSticky(triple.object);
             return;
@@ -438,8 +438,7 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.onClickObjectCalendar = function($event) {
-        // TODO: improve parent selection
-        var target = $event.target;
+        var target = $event.currentTarget.parentNode.parentNode.parentNode;
         var d = {};
 
         if ($scope.objectDate) {
@@ -449,11 +448,11 @@ angular.module('Pundit2.TripleComposer')
             d.value = '';
         }
 
-        if (!checkOpenResourcePanel(target)) {
+        if (!checkOpenResourcePanel($event.currentTarget)) {
             return;
         }
         ResourcePanel.hide();
-        ResourcePanel.showPopoverCalendar(d, target).then(function(date) {
+        ResourcePanel.showPopoverCalendar(d, target, $event.currentTarget).then(function(date) {
             if (!date.valid) {
                 return;
             }
@@ -462,19 +461,18 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.onClickObjectLiteral = function($event) {
-        // TODO: improve parent selection
-        var target = $event.target;
+        var target = $event.currentTarget.parentNode.parentNode.parentNode;
         var str = '';
 
         if (typeof(triple.object) === 'string') {
             str = triple.object;
         }
 
-        if (!checkOpenResourcePanel(target)) {
+        if (!checkOpenResourcePanel($event.currentTarget)) {
             return;
         }
         ResourcePanel.hide();
-        ResourcePanel.showPopoverLiteral(str, target).then($scope.setObject);
+        ResourcePanel.showPopoverLiteral(str, target, $event.currentTarget).then($scope.setObject);
     };
 
     $scope.showDropdown = function(event) {
