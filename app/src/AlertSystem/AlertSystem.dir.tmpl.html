@@ -1,7 +1,8 @@
 <div class="pnd-alert-wrp">
     <div
-        class="pnd-alert {{alert.alertClass}} pnd-alert-closable"
-        ng-class="'pnd-alert-closable': alert.dismissible"
+        class="pnd-alert pnd-animate-repeat {{alert.alertClass}}"
+        ng-animate="{enter: 'pnd-animate-repeat-enter', leave: 'pnd-animate-repeat-leave'}"
+        ng-class="{'pnd-alert-closable': alert.dismissible}"
         role="alert"
         ng-repeat="alert in alerts"
         ng-click="alertClick(alert)">
