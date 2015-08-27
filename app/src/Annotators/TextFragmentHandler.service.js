@@ -638,6 +638,10 @@ angular.module('Pundit2.Annotators')
         return '';
     }; // getContentURLFromXPath()
 
+    EventDispatcher.addListener('Consolidation.StartConsolidate', function(/*e*/) {
+        checkTemporaryConsolidated(true);
+    });
+
     EventDispatcher.addListener('Client.hide', function(/*e*/) {
         clientHidden = true;
         checkTemporaryConsolidated(true);

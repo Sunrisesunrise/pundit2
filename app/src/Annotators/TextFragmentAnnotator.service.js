@@ -446,8 +446,12 @@ angular.module('Pundit2.Annotators')
             elementReferce = elementInfo.reference,
             currentFragment;
 
+        var patt = new RegExp(/fr\-[0-9]+/)
         for (var i in elementFragments) {
             currentFragment = elementFragments[i];
+            if (!patt.test(currentFragment)) {
+                continue;
+            }
             if (typeof fragmentsRefsById[currentFragment] === 'undefined') {
                 fragmentsRefsById[currentFragment] = [elementReferce];
                 placeIcon(currentFragment, elementReferce);

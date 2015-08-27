@@ -30,6 +30,7 @@ angular.module('Pundit2.Core')
         }
 
         cc.log('Wiped up!');
+        EventDispatcher.sendEvent('Consolidation.wipe');
     };
     cc.wipe();
 

@@ -469,7 +469,7 @@ angular.module('Pundit2.Annotators')
 
         // Finally surround the range contents with an ad-hoc crafted html element
         r2.surroundContents(wrapNode.element);
-
+        //TODO: check type nodes (images?)
         EventDispatcher.sendEvent('XpointersHelper.NodeAdded', {
             fragments: parents,
             reference: wrapNode.jElement
