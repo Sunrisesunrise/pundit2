@@ -77,7 +77,7 @@ angular.module('Pundit2.ResourcePanel')
         }
 
         var myItemsNotLogged = tabTitle === 'My Items' && MyPundit.isUserLogged() === false,
-            userNotLoggedMessage = 'My Items are only available to logged users. Please log in to Pundit to use this section or select a text fragment in the page.';
+            userNotLoggedMessage = 'My Items are only available to logged users. Please log in to use this section or select a fragment of text in the page.';
 
         searchLabel = typeof(searchLabel) !== 'undefined' ? searchLabel : '';
         if (searchLabel.length > 2 && 
@@ -90,7 +90,7 @@ angular.module('Pundit2.ResourcePanel')
         }
         if (selectorsLabels.indexOf(tabTitle) !== -1 && 
             searchLabel.length <= 2) {
-            return 'Search any entity in ' + tabTitle +' using the input filed above. When you hover on an entity on the list you see its details in the preview panel on the right.';
+            return 'Search entities in ' + tabTitle +' using the input filed above. You can use the selected entity by clicking the "Use" button below.';
         }
 
         if (myItemsNotLogged) {
@@ -105,7 +105,7 @@ angular.module('Pundit2.ResourcePanel')
         if (filteredItems.length === 0 && 
             searchLabel.length > 2 && 
             !isLoading) {
-            return 'Oops, try again. It looks like your search doesn\'t return anything.';
+            return 'Oops, try again. It looks like your search didn\'t return anything.';
         }
     };
 

@@ -13,7 +13,7 @@
     <!-- show welcome content when preview is empty -->
     <div class="pnd-panel-tab-content-content pnd-inner-scrollable">
         <div>
-            <span class="pnd-dashboard-welcome" ng-if="isItemEmpty() && !useInKorbo">{{getWelcomeBodyMessage()}}</span>
+            <span class="pnd-dashboard-welcome pnd-ui-message" ng-if="isItemEmpty() && !useInKorbo">{{getWelcomeBodyMessage()}}</span>
             <item-preview ng-if="!isItemEmpty() && !isNotebook()" uri="{{itemDashboardPreview.uri}}" sticking="true"></item-preview>
             <notebook-preview ng-if="!isItemEmpty() && isNotebook()" id="{{itemDashboardPreview.id}}"></notebook-preview>
         </div>

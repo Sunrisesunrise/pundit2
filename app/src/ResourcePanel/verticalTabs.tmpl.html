@@ -83,7 +83,9 @@
                 </li>
 
                 <li ng-if="showContentMessage5">
-                    {{getMessageText(contentTabs[$index].title, contentTabs[$index].items, $parent.tabItemsFiltered[$index], label, showContentMessage5, pane.isLoading)}}
+                    <span class="pnd-ui-message">
+                        {{getMessageText(contentTabs[$index].title, contentTabs[$index].items, $parent.tabItemsFiltered[$index], label, showContentMessage5, pane.isLoading)}}
+                    </span>
                 </li>
 
                 <!-- Korbo -->

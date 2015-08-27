@@ -43,7 +43,7 @@ angular.module('Pundit2.Preview')
      * Default value:
      * <pre> welcomeBodyMessage: "Enjoy it" </pre>
      */
-    welcomeBodyMessage: "This is the preview area of Pundit. Just click on an element in a list to select it and see its details here. Enjoy using Pundit.",
+    welcomeBodyMessage: "This is the preview panel of Pundit. Just click on an element in a list and see its details here. Enjoy using Pundit.",
     /**
      * @module punditConfig
      * @ngdoc property
