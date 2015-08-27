@@ -20,6 +20,7 @@ angular.module('Pundit2.TripleComposer')
     $scope.objectTypeLabel = '';
     $scope.objectFound = false;
     $scope.objectLiteral = false;
+    $scope.objectDate = false;
     // fixed by template
     $scope.objectFixed = false;
 
@@ -411,7 +412,7 @@ angular.module('Pundit2.TripleComposer')
 
         if (triple.object === null || 
             (!$scope.objectLiteral && !$scope.objectDate) ||
-            TripleComposer.limitToSuggestedTypes === false) {
+            (TripleComposer.limitToSuggestedTypes === false && $scope.objectLabel === '')) {
             ResourcePanel.showItemsForObject(triple, $event.target).then($scope.setObject);
             // Deprecating.
             ResourcePanel.lastPromiseThen = $scope.setObject;
