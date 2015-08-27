@@ -163,7 +163,7 @@ angular.module('Pundit2.Vocabularies')
             params.basketId = self.config.basketID;
         }
 
-        var requestUrl = (typeof self.config.url === 'undefined' ? Config.annotationServerBaseURL + 'api/korbo' : self.config.url) + "/search/items";
+        var requestUrl = (typeof self.config.url === 'undefined' ? Config.annotationServerBaseURL + 'open/korbo' : self.config.url) + "/search/items";
         $http({
             //headers: { 'Content-Type': 'application/json' },
             method: 'GET',
