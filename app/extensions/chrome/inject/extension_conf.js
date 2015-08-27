@@ -18,6 +18,9 @@ var punditConfig = {
                     language: 'en'
                 }
             ]
+        },
+        'AnnotationsCommunication': {
+            loadMultipleAnnotations: true
         }
     },
     templates: [],

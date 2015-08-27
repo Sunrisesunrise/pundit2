@@ -236,7 +236,11 @@ angular.module('Pundit2.GeneralItemsContainer')
             }
         } else if (generalItemsContainer.isMyNotebooksType(type)) {
             if (str === '') {
-                return 'No notebook found.';
+                if (MyPundit.isUserLogged() === false) {
+                    return 'Please log in to see your notebooks';
+                } else {
+                    return 'No notebook found.';
+                }
             } else {
                 return noItemsFound;
             }

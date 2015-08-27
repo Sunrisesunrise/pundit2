@@ -254,7 +254,7 @@ angular.module('Pundit2.AnnotationSidebar')
      * Default value:
      * <pre> maxHits: 20 </pre>
      */
-    maxHits: 25,
+    maxHits: 20,
 
     /**
      * @module punditConfig
@@ -267,9 +267,9 @@ angular.module('Pundit2.AnnotationSidebar')
      * Delay in ms for the refresh of the buffer
      *
      * Default value:
-     * <pre> bufferDelay: 200 </pre>
+     * <pre> bufferDelay: 400 </pre>
      */
-    bufferDelay: 350,
+    bufferDelay: 400,
 
     /**
      * @module punditConfig
