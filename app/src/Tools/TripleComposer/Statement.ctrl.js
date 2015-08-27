@@ -399,12 +399,13 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.onClickObject = function($event) {
+        var target = $event.target;
         if ($scope.templateMode && $scope.objectFixed) {
             Preview.setItemDashboardSticky(triple.object);
             return;
         }
 
-        if (!checkOpenResourcePanel($event.target)) {
+        if (!checkOpenResourcePanel(target)) {
             return;
         }
 
@@ -437,7 +438,7 @@ angular.module('Pundit2.TripleComposer')
 
     $scope.onClickObjectCalendar = function($event) {
         // TODO: improve parent selection
-        var target = $event.target.parentNode.parentNode.parentNode;
+        var target = $event.target;
         var d = {};
 
         if ($scope.objectDate) {
@@ -461,7 +462,7 @@ angular.module('Pundit2.TripleComposer')
 
     $scope.onClickObjectLiteral = function($event) {
         // TODO: improve parent selection
-        var target = $event.target.parentNode.parentNode.parentNode;
+        var target = $event.target;
         var str = '';
 
         if (typeof(triple.object) === 'string') {
