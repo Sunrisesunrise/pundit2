@@ -149,7 +149,7 @@ angular.module('Pundit2.AlertSystem')
      * @param {alertClass}
      *
      */
-    alertSystem.addAlert = function(type, message, timeout, top, dismissible, alertClass) {
+    alertSystem.addAlert = function(type, message, title, timeout, top, dismissible, alertClass) {
         var newId,
             alert;
 
@@ -169,7 +169,11 @@ angular.module('Pundit2.AlertSystem')
             alertClass: alertClass,
             message: message,
             timeout: timeout,
-            dismissible: dismissible
+            dismissible: dismissible,
+            title: title,
+            showTitle: function() {
+                return true;
+            }
         };
 
         if (top) {
@@ -270,15 +274,16 @@ angular.module('Pundit2.AlertSystem')
     EventDispatcher.addListener('Pundit.alert', function(evt) {
         var alertConfig = angular.copy(alertSystem.AlertType.ALERT);
         var message = evt.args;
+        var title;
         if (typeof evt.args !== 'string') {
             if (typeof evt.args.id !== 'undefined' && typeof alertSystem.AlertType[evt.args.id] !== 'undefined') {
                 alertConfig = alertSystem.AlertType[evt.args.id];
             }
             angular.merge(alertConfig, evt.args);
             message = evt.args.message || '--no-message--';
+            title = evt.args.title;
         }
-        //alertSystem.addAlert = function(type, message, timeout, top, dismissible, alertClass)
-        alertSystem.addAlert(alertConfig, message, alertConfig.timeout, alertConfig.top, alertConfig.dismissible, alertConfig.alertClass);
+        alertSystem.addAlert(alertConfig, message, title, alertConfig.timeout, alertConfig.top, alertConfig.dismissible, alertConfig.alertClass);
     });
 
     return alertSystem;

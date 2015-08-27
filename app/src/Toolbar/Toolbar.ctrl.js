@@ -8,7 +8,7 @@ angular.module('Pundit2.Toolbar')
     Analytics, PageHandler, EventDispatcher, $timeout) {
 
     $scope.triggerAlert = function(type) {
-        EventDispatcher.sendEvent('Pundit.alert', {message: type + ' Lorem Ipsum is simply dummy text of the printing and typesetting industry. ' + type + ' - ' + (new Date()).getTime(), id: type, timeout: null, dismissible: true, top: false});
+        EventDispatcher.sendEvent('Pundit.alert', {title: 'Test title', message: type + ' Lorem Ipsum is simply dummy text of the printing and typesetting industry. ' + type + ' - ' + (new Date()).getTime(), id: type, timeout: null, dismissible: true, top: false});
     };
 
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
