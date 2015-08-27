@@ -13,6 +13,8 @@ angular.module('Pundit2.Annotators')
     // Added by TextFragmentIcon directive, ignored when building xpointers
     textFragmentIconClass: "pnd-text-fragment-icon",
 
+    textFragmentHiddenClass: "pnd-textfragment-hidden",
+
     // Nodes with these classes will be ignored when building xpointers
     // and consolidating annotations. Add here any other UI element class which
     // is not considered in the isConsolidationNode() method. wrapNodeClass and
@@ -482,6 +484,7 @@ angular.module('Pundit2.Annotators')
         var element = $document[0].createElement(htmlTag),
             currentElement = angular.element(element);
         currentElement.addClass(htmlClass);
+        currentElement.addClass(xp.options.textFragmentHiddenClass);
 
         // TODO: make this directive name configurable??
         currentElement.attr('text-fragment-bit', '');

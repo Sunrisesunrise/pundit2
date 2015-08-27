@@ -254,7 +254,7 @@ angular.module('Pundit2.AnnotationSidebar')
      * Default value:
      * <pre> maxHits: 20 </pre>
      */
-    maxHits: 20,
+    maxHits: 25,
 
     /**
      * @module punditConfig
@@ -269,7 +269,7 @@ angular.module('Pundit2.AnnotationSidebar')
      * Default value:
      * <pre> bufferDelay: 200 </pre>
      */
-    bufferDelay: 200,
+    bufferDelay: 350,
 
     /**
      * @module punditConfig
@@ -1208,6 +1208,10 @@ angular.module('Pundit2.AnnotationSidebar')
 
     annotationSidebar.getAllAnnotations = function() {
         return state.allAnnotations;
+    };
+
+    annotationSidebar.getAllAnnotationsPositioned = function() {
+        return annotationsByPosition;
     };
 
     // Get the object of filtered annotations

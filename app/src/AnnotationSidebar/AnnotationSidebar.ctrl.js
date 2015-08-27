@@ -1,7 +1,7 @@
 angular.module('Pundit2.AnnotationSidebar')
 
 .controller('AnnotationSidebarCtrl', function($scope, $filter, $document, $window, $timeout,
-    EventDispatcher, AnnotationSidebar, AnnotationsExchange, Dashboard, Config, Analytics) {
+    EventDispatcher, AnnotationSidebar, AnnotationsExchange, Dashboard, Config, Analytics, TextFragmentAnnotator) {
 
     var bodyClasses = AnnotationSidebar.options.bodyExpandedClass + ' ' + AnnotationSidebar.options.bodyCollapsedClass;
     var sidebarClasses = AnnotationSidebar.options.sidebarExpandedClass + ' ' + AnnotationSidebar.options.sidebarCollapsedClass;
@@ -66,6 +66,12 @@ angular.module('Pundit2.AnnotationSidebar')
         container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
     }
 
+    var activateFragments = function(items) {
+        angular.forEach(items, function(item) {
+            TextFragmentAnnotator.showByUri(item.uri);
+        });
+    };
+
     var addAnnotation = function(annotation) {
         $scope.annotations[annotation.id] = annotation;
     };
@@ -85,6 +91,7 @@ angular.module('Pundit2.AnnotationSidebar')
             while (currentHits < maxHits && annotationsCache.length !== 0) {
                 var currentAnnotation = annotationsCache.shift();
                 addAnnotation(currentAnnotation);
+                activateFragments(currentAnnotation.items);
                 currentHits++;
             }
             addAnnotations();
@@ -284,6 +291,7 @@ angular.module('Pundit2.AnnotationSidebar')
         return AnnotationSidebar.getAllAnnotations();
     }, function(currentAnnotations) {
         var currentAnnotation, currentId, annotations, annotationsKey;
+        var annotationsByPosition = AnnotationSidebar.getAllAnnotationsPositioned();
 
         $scope.consolidationInProgress = false;
 
@@ -322,9 +330,13 @@ angular.module('Pundit2.AnnotationSidebar')
             deletedIdQueue = [];
         } else {
             removeAnnotations(annotations);
-            annotationsCache = annotationsKey.map(function(k) {
-                return annotations[k];
+
+            angular.forEach(annotationsByPosition, function(annotation) {
+                if (typeof annotations[annotation.id] !== 'undefined') {
+                    annotationsCache.push(annotation);
+                }
             });
+            
             addAnnotations();
         }
     });
