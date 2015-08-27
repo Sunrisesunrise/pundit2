@@ -62,9 +62,27 @@
 
                 <!-- Trigger alert -->
                 <li class=""
-                    ng-click="triggerAlert()">
+                    ng-click="triggerAlert('OK')">
                     <a href="javascript:void(0)">
-                        <span>Trigger all alerts</span>
+                        <span>Trigger OK</span>
+                    </a>
+                </li>
+                <li class=""
+                    ng-click="triggerAlert('ERROR')">
+                    <a href="javascript:void(0)">
+                        <span>Trigger ERROR</span>
+                    </a>
+                </li>
+                <li class=""
+                    ng-click="triggerAlert('ALERT')">
+                    <a href="javascript:void(0)">
+                        <span>Trigger ALERT</span>
+                    </a>
+                </li>
+                <li class=""
+                    ng-click="triggerAlert('CUSTOM')">
+                    <a href="javascript:void('CUSTOM')">
+                        <span>Trigger CUSTOM</span>
                     </a>
                 </li>
                 <!-- Annotate page button -->
