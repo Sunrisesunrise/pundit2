@@ -1,6 +1,7 @@
 <div class="pnd-alert-wrp">
     <div
-        class="pnd-alert {{alert.alertClass}}"
+        class="pnd-alert {{alert.alertClass}} pnd-alert-closable"
+        ng-class="'pnd-alert-closable': alert.dismissible"
         role="alert"
         ng-repeat="alert in alerts"
         ng-click="alertClick(alert)">
@@ -10,8 +11,10 @@
             aria-label="Close"
             ng-click="dismissAlert(alert)"
             ng-show="alert.dismissible">
-            <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true" class="pnd-icon-close"></span>
         </button>
-        {{alert.message}}
+        <p class="pnd-alert-text">
+            {{alert.message}}
+        </p>
     </div>
 </div>

@@ -9,8 +9,8 @@
 \* ------------------------------------ */
 .pnd-alert-wrp {
     position: fixed;
-    bottom: 0;
-    left: 10px;
+    bottom: 20px;
+    left: 20px;
     z-index: @zindex-pnd-alert-system;
 }
 
@@ -21,12 +21,34 @@
 .pnd-alert {
     width: 350px;
     min-height: 70px;
-    padding: 20px;
-    margin-bottom: 10px;
+    padding: 18px;
+    margin-bottom: 20px;
+
     background-color: @color-background-light;
-    box-shadow: 0 1px 2px rgba(0,0,0,.35);
-    border-radius: 0 0 2px 2px;
-    border-bottom: 2px solid #ccc;
-    border-top: 4px solid #48bb58;
-    color: @color-text;
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    border-radius: 0 0 3px 3px;
+    border-bottom: 3px solid @color-background-medium;
+    border-top: 5px solid @color-alert-info;
+
+    .pnd-alert-text {
+        font-size: 12px;
+        color: @color-text;
+    }
+
+    &.pnd-alert-success {
+        border-top-color: @color-alert-success;
+    }
+
+    &.pnd-alert-info {
+            border-top-color: @color-alert-info;
+    }
+
+    &.pnd-alert-warning {
+            border-top-color: @color-alert-warning;
+    }
+
+    &.pnd-alert-danger {
+            border-top-color: @color-alert-danger;
+    }
+
 }
