@@ -110,7 +110,7 @@
 
 .pnd-annotation-sidebar-filters-list {
     // background-color: rgba(255,255,255,.95);
-    #gradient > .horizontal-three-colors(darken(rgba(255,255,255,.95), 5); rgba(255,255,255,.95); 1%; rgba(255,255,255,.95));
+    #gradient > .horizontal-three-colors(darken(rgba(255,255,255,.95), 4); rgba(255,255,255,.95); 1%; rgba(255,255,255,.95));
     text-align: left;
 
     /* Each filter parameter */
@@ -340,7 +340,7 @@
         height: @annotation-header-height;
         width: @annotation-sidebar-exp-width;
         background-color: @color-annotation-header;
-        // #gradient > .horizontal-three-colors(darken(@color-annotation-header, 5); @color-annotation-header; 1%; @color-annotation-header);
+        #gradient > .horizontal-three-colors(darken(@color-annotation-header, 4); @color-annotation-header; 1%; @color-annotation-header);
         color: @color-annotation-header-text;
         cursor: pointer;
 
@@ -351,29 +351,27 @@
                 display: inline-block;
                 margin-top: 7px;
                 opacity: .7;
-                // vertical-align: top; // Redundant... to be removed
             }
 
             .pnd-item-title {
                 display: inline-block;
                 margin-top: 1px;
-                // vertical-align: top; // Redundant... to be removed
                 .text-dark-emboss();
             }
         }
 
         &:hover {
             background-color: darken(@color-annotation-header, 5%);
-            // #gradient > .horizontal-three-colors(darken(darken(@color-annotation-header, 5%), 5); darken(@color-annotation-header, 5%); 1%; darken(@color-annotation-header, 5%));
+            #gradient > .horizontal-three-colors(darken(darken(@color-annotation-header, 5%), 4); darken(@color-annotation-header, 5%); 1%; darken(@color-annotation-header, 5%));
         }
 
         &.pnd-annotation-details-broken {
             background-color: @color-annotation-broken-header;
-            // #gradient > .horizontal-three-colors(darken(darken(@color-annotation-broken-header, 5%), 5); darken(@color-annotation-broken-header, 5%); 1%; darken(@color-annotation-broken-header, 5%));
+            #gradient > .horizontal-three-colors(darken(darken(@color-annotation-broken-header, 5%), 4); darken(@color-annotation-broken-header, 5%); 1%; darken(@color-annotation-broken-header, 5%));
 
             &:hover {
                 background-color: darken(@color-annotation-broken-header, 5%);
-                // #gradient > .horizontal-three-colors(darken(darken(@color-annotation-broken-header, 5%), 5); darken(@color-annotation-broken-header, 5%); 1%; darken(@color-annotation-broken-header, 5%));
+                #gradient > .horizontal-three-colors(darken(darken(@color-annotation-broken-header, 5%), 4); darken(@color-annotation-broken-header, 5%); 1%; darken(@color-annotation-broken-header, 5%));
             }
         }
 
@@ -399,13 +397,13 @@
     .pnd-annotation-details-container {
         width: @annotation-sidebar-exp-width;
         background-color: #fff;
-        // #gradient > .horizontal-three-colors(#e8e8e8; #fff; 2%; #fff);
+        #gradient > .horizontal-three-colors(darken(#fff, 4); #fff; 1%; #fff);
 
         /* Meta toggle */
         .pnd-annotation-details-meta {
             width: @annotation-sidebar-exp-width;
             background-color: @gray-lighter;
-            // #gradient > .horizontal-three-colors(#e3e3e3; @gray-lighter; 2%; @gray-lighter);
+            #gradient > .horizontal-three-colors(darken(@gray-lighter, 4); @gray-lighter; 1%; @gray-lighter);
             border-bottom: 1px solid @color-border-light;
             box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08) inset;
 
@@ -417,7 +415,6 @@
                 /* When it's open */
                 &.pnd-annotation-details-sub-open {
                     border-bottom: 1px solid @color-border-light;
-                    // box-shadow: 0 1px 0 #F7F7F7;
                 }
 
                 .pnd-annotation-item-header-text {
@@ -451,7 +448,8 @@
                 /* Separator between more triples */
                 border-bottom: 3px double @color-border-light;
                 &:last-child {
-                    border-bottom: 0;
+                    // border-bottom: 0;
+                    border-bottom: 1px solid @color-border-light;
                 }
 
                 .pnd-annotation-details-item-header {
@@ -460,7 +458,7 @@
                     cursor: pointer;
 
                     &.pnd-annotation-details-sub-open {
-                        border-bottom: 1px solid @color-border-light;
+                        border-bottom: 1px solid @color-border-ultralight;
                     }
 
                     .pnd-annotation-item-header-text {
@@ -503,15 +501,17 @@
                     .pnd-annotation-details-item-header {
                         .pnd-icon {
                             color: @predicate-color;
+                            margin-left: 4px;
                         }
                     }
                 }
 
                 .pnd-annotation-details-object {
-
+                    // border-bottom: 1px solid @color-border-light;
                     .pnd-annotation-details-item-header {
                         .pnd-icon {
                             color: @object-color;
+                            margin-left: 8px;
                         }
                     }
                 }
