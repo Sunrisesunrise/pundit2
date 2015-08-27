@@ -42,12 +42,12 @@
                 doMixpanel: true,
                 trackingCode: "UA-53237248-3"
             },
-            'DbpediaSelector': {
-                active: true
-            },
-            'FreebaseSelector': {
-                active: true
-            },
+            //'DbpediaSelector': {
+            //    active: true
+            //},
+            //'FreebaseSelector': {
+            //    active: true
+            //},
             'AnnotationDetails': {
                 moreInfo: true
             },
@@ -75,6 +75,29 @@
             },
             'VocabulariesContainer': {
                 active: true
+            },
+            'Korbo2Selector': {
+                active: true,
+                instances: [
+                    {
+                        container: 'dbpedia',
+                        infiniteScrolling: false,
+                        label: 'DBPedia',
+                        active: true,
+                        basketID: null,
+                        //url: 'http://dev.korbo2.org/v1',
+                        language: 'en'
+                    },
+                    {
+                        container: 'freebase',
+                        infiniteScrolling: false,
+                        label: 'FreeBase',
+                        active: true,
+                        basketID: null,
+                        //url: 'http://dev.korbo2.org/v1',
+                        language: 'en'
+                    }
+                ]
             }
         }
     }
