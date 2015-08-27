@@ -9,7 +9,7 @@
 \* ------------------------------------ */
 .pnd-alert-wrp {
     position: fixed;
-    bottom: 20px;
+    bottom: 4px;
     left: 20px;
     z-index: @zindex-pnd-alert-system;
 }
@@ -19,24 +19,35 @@
    #ALERTS-DETAILS
 \* ------------------------------------ */
 .pnd-alert {
+    position: relative;
     width: 350px;
     min-height: 70px;
     padding: 18px;
-    margin-bottom: 20px;
-
+    margin-bottom: 16px;
     background-color: @color-background-light;
     box-shadow: 0 1px 2px rgba(0,0,0,.2);
     border-radius: 0 0 3px 3px;
     border-bottom: 3px solid @color-background-medium;
     border-top: 5px solid @color-alert-info;
 
+    h1 {
+        margin-bottom: 10px;
+        color: @color-alert-text-heading;
+        font-size: 15px;
+        font-weight: bold;
+        line-height: 1.3;
+    }
+
     .pnd-alert-text {
         font-size: 12px;
-        color: @color-text;
+        color: @color-alert-text;
     }
 
     &.pnd-alert-success {
         border-top-color: @color-alert-success;
+        h1 {
+            color: @color-alert-success;
+        }
     }
 
     &.pnd-alert-info {
@@ -44,11 +55,34 @@
     }
 
     &.pnd-alert-warning {
-            border-top-color: @color-alert-warning;
+        border-top-color: @color-alert-warning;
+        h1 {
+            color: @color-alert-warning;
+        }
     }
 
     &.pnd-alert-danger {
-            border-top-color: @color-alert-danger;
+        border-top-color: @color-alert-danger;
+        h1 {
+            color: @color-alert-danger;
+        }
     }
 
+    &.pnd-alert-closable {
+        cursor: pointer;
+
+        button {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+        }
+
+        h1 {
+            margin-right: 20px;
+        }
+
+        .pnd-alert-text {
+            margin-right: 20px;
+        }
+    }
 }
