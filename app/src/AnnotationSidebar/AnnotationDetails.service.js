@@ -378,11 +378,14 @@ angular.module('Pundit2.AnnotationSidebar')
         TextFragmentAnnotator.ghostRemoveAll();
     };
 
-    annotationDetails.closeAllAnnotationView = function(skipId) {
+    annotationDetails.closeAllAnnotationView = function(skipId, skipPositioning) {
+        skipPositioning = typeof skipPositioning !== 'undefined' ? skipPositioning : false;
         for (var id in state.annotations) {
             if (id !== skipId) {
                 state.annotations[id].expanded = false;
-                AnnotationSidebar.setAnnotationHeight(id, AnnotationSidebar.options.annotationHeight);
+                if (skipPositioning === false) {
+                    AnnotationSidebar.setAnnotationHeight(id, AnnotationSidebar.options.annotationHeight);
+                }
             }
         }
     };
@@ -561,6 +564,7 @@ angular.module('Pundit2.AnnotationSidebar')
     EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
         state.isUserLogged = e.args;
         state.userData = MyPundit.getUserData();
+        annotationDetails.closeAllAnnotationView(undefined, true);
     });
 
     EventDispatcher.addListener('Client.hide', function(/*e*/) {
