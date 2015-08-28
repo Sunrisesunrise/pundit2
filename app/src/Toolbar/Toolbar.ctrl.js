@@ -5,7 +5,7 @@ angular.module('Pundit2.Toolbar')
 .controller('ToolbarCtrl', function($scope, $rootScope, $modal, $http, $window, NameSpace, Config, 
     Toolbar, SelectorsManager, Fp3, MyPundit, Dashboard, TripleComposer, AnnotationSidebar, 
     Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, 
-    Analytics, PageHandler, EventDispatcher, $timeout) {
+    Analytics, PageHandler, EventDispatcher, $timeout, Keyboard) {
 
     $scope.triggerAlert = function(type) {
         var t = (new Date()).getTime();
@@ -133,7 +133,8 @@ angular.module('Pundit2.Toolbar')
         templateUrl: 'src/Core/Templates/info.modal.tmpl.html',
         show: false,
         backdrop: 'static',
-        scope: infoModalScope
+        scope: infoModalScope,
+        keyboard: false
     });
 
     var sendModal = $modal({
@@ -141,7 +142,8 @@ angular.module('Pundit2.Toolbar')
         templateUrl: 'src/Core/Templates/send.modal.tmpl.html',
         show: false,
         backdrop: 'static',
-        scope: sendModalScope
+        scope: sendModalScope,
+        keyboard: false
     });
 
     infoModalScope.titleMessage = "About Pundit";
@@ -235,6 +237,10 @@ angular.module('Pundit2.Toolbar')
 
     sendModalScope.cancel = function() {
         sendModal.hide();
+        if (typeof modalEscapeHandler !== 'undefined') {
+            Keyboard.unregisterHandler(modalEscapeHandler);
+            modalEscapeHandler = undefined;
+        }
         Analytics.track('buttons', 'click', 'toolbar--reportBug--cancel');
     };
 
@@ -265,16 +271,37 @@ angular.module('Pundit2.Toolbar')
     // close btn
     infoModalScope.close = function() {
         infoModal.hide();
+        if (typeof modalEscapeHandler !== 'undefined') {
+            Keyboard.unregisterHandler(modalEscapeHandler);
+            modalEscapeHandler = undefined;
+        }
+    };
+
+    var modalEscapeHandler;
+    var addModalEscapeHandler = function(callback) {
+        modalEscapeHandler = Keyboard.registerHandler('ToolbarController', {
+            keyCode: 27,
+            ignoreOnInput: false,
+            stopPropagation: true
+        }, callback);
     };
 
     // open info modal
     var showInfo = function() {
+        ResourcePanel.hide();
+        addModalEscapeHandler(function() {
+            infoModalScope.close();
+        });
         infoModal.$promise.then(infoModal.show);
         Analytics.track('buttons', 'click', 'toolbar--aboutPundit');
     };
 
     // open bug modal
     var showBug = function() {
+        ResourcePanel.hide();
+        addModalEscapeHandler(function() {
+            sendModalScope.cancel();
+        });
         infoModalScope.send();
         Analytics.track('buttons', 'click', 'toolbar--reportBug');
     };
