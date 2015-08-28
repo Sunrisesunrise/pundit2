@@ -215,10 +215,12 @@ angular.module('Pundit2.Annotators')
 
     var placeIcon = function(id, bit) {
         // TODO: put this name in .options ?
-        var directive = annomaticIsRunning ? 'suggestion-fragment-icon' : 'text-fragment-icon';
+        var directive = annomaticIsRunning ? 'suggestion-fragment-icon' : 'text-fragment-icon',
+            element = angular.element('<' + directive + ' fragment="' + id + '"></' + directive + '>');
 
         tfa.log('Placing fragment icon ' + n++, id, bit.attr('fragments'));
-        bit.after('<' + directive + ' fragment="' + id + '"></' + directive + '>');
+        bit.after(element);
+        $compile(element)($rootScope);
     };
 
     // For each fragment ID it will place an icon after the last BIT belonging
@@ -446,6 +448,8 @@ angular.module('Pundit2.Annotators')
             elementReferce = elementInfo.reference,
             currentFragment;
 
+        $compile(elementReferce)($rootScope);
+
         var patt = new RegExp(/fr\-[0-9]+/)
         for (var i in elementFragments) {
             currentFragment = elementFragments[i];
@@ -459,10 +463,6 @@ angular.module('Pundit2.Annotators')
                 fragmentsRefsById[currentFragment].push(elementReferce);
             }
         }
-    });
-
-    EventDispatcher.addListener('XpointersHelper.DOMUpdated', function() {
-        activateFragments();
     });
 
     $rootScope.$on('annomatic-run', function() {

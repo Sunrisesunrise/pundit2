@@ -252,9 +252,9 @@ angular.module('Pundit2.AnnotationSidebar')
      * Number of annotation operations for time
      *
      * Default value:
-     * <pre> maxHits: 20 </pre>
+     * <pre> maxHits: 10 </pre>
      */
-    maxHits: 20,
+    maxHits: 10,
 
     /**
      * @module punditConfig
@@ -267,9 +267,9 @@ angular.module('Pundit2.AnnotationSidebar')
      * Delay in ms for the refresh of the buffer
      *
      * Default value:
-     * <pre> bufferDelay: 400 </pre>
+     * <pre> bufferDelay: 210 </pre>
      */
-    bufferDelay: 400,
+    bufferDelay: 210,
 
     /**
      * @module punditConfig
