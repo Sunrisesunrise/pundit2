@@ -7,6 +7,8 @@ angular.module('Pundit2.Toolbar')
     Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, 
     Analytics, PageHandler, EventDispatcher, $timeout, $interval, Keyboard, Status) {
 
+    var progressBar = angular.element('.pnd-progress-bar');
+
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
     $scope.dropdownTemplateMyNotebook = "src/Toolbar/myNotebooksDropdown.tmpl.html";
     $scope.dropdownTemplateTemplates = "src/Toolbar/templatesDropdown.tmpl.html";
@@ -35,13 +37,13 @@ angular.module('Pundit2.Toolbar')
     };
 
     EventDispatcher.addListener('Status.progress', function(evt) {
-        $('.pnd-progress-bar').css('opacity', 1);
+        progressBar.css('opacity', 1);
         $scope.needsProgressBar = evt.args.needsProgressBar;
         progressState.dest = evt.args.progress;
         $scope.progress = evt.args.progress + '%';
         if (evt.args.progress >= 100) {
             $timeout(function(){
-                $('.pnd-progress-bar').animate({
+                progressBar.animate({
                     'opacity': 0
                 }, 500, function() {
                     Status.needsProgressBar = $scope.needsProgressBar = false;

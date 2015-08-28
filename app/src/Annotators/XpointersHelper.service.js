@@ -29,9 +29,9 @@ angular.module('Pundit2.Annotators')
     namedContentClasses: ['pundit-content'],
 
     // Number of node wrapping for time
-    maxHits: 20,
+    maxHits: 8,
     // Delay in ms for the refresh of the buffer
-    bufferDelay: 200,
+    bufferDelay: 60,
     // undefined / true / false
     preventDelay: undefined,
 

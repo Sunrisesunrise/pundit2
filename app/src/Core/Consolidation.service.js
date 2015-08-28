@@ -2,9 +2,9 @@ angular.module('Pundit2.Core')
 
 .constant('CONSOLIDATIONDEFAULTS', {
     // Number of item operations for time
-    maxHits: 20,
+    maxHits: 15,
     // Delay in ms for the refresh of the buffer
-    bufferDelay: 40,
+    bufferDelay: 35,
     // undefined / true / false
     preventDelay: undefined
 })

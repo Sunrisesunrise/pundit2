@@ -111,7 +111,8 @@ angular.module('Pundit2.ResourcePanel')
  */
 .service('ResourcePanel', function(BaseComponent, EventDispatcher, RESOURCEPANELDEFAULTS,
     ItemsExchange, MyItems, PageItemsContainer, Client, NameSpace, SelectorsManager,
-    $filter, $rootScope, $popover, $q, $timeout, Preview, $window, Config, Item, Utils, Analytics, Keyboard, MyPundit) {
+    $filter, $rootScope, $popover, $q, $timeout, Preview, $window, Config, Item, 
+    Utils, Analytics, Keyboard) {
 
     var resourcePanel = new BaseComponent('ResourcePanel', RESOURCEPANELDEFAULTS);
 

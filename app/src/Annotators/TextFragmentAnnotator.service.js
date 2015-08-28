@@ -220,7 +220,7 @@ angular.module('Pundit2.Annotators')
 
         tfa.log('Placing fragment icon ' + n++, id, bit.attr('fragments'));
         bit.after(element);
-        
+
         return element;
     };
 
@@ -447,9 +447,9 @@ angular.module('Pundit2.Annotators')
         var elementInfo = e.args,
             elementFragments = elementInfo.fragments,
             elementReferce = elementInfo.reference,
-            currentFragment, currenIcon;
+            currentFragment, currentIcon;
 
-        var patt = new RegExp(/fr\-[0-9]+/)
+        var patt = new RegExp(/fr\-[0-9]+/);
         for (var i in elementFragments) {
             currentFragment = elementFragments[i];
             if (!patt.test(currentFragment)) {
