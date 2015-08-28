@@ -7,20 +7,6 @@ angular.module('Pundit2.Toolbar')
     Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, 
     Analytics, PageHandler, EventDispatcher, $timeout, Keyboard) {
 
-    $scope.triggerAlert = function(type) {
-        var t = (new Date()).getTime();
-        EventDispatcher.sendEvent('Pundit.alert', {title: 'Test title', message: type + ' Lorem Ipsum is simply dummy text of the printing and typesetting industry. ' + type + ' - ' + (new Date()).getTime(), id: type, timeout: 2000 + 200*(t%10), dismissible: true, top: false});
-        $timeout(function() {
-            EventDispatcher.sendEvent('Pundit.alert', {message: type + ' Lorem Ipsum is simply dummy text of the printing and typesetting industry. ' + type + ' - ' + (new Date()).getTime(), id: type, timeout: null, dismissible: true, top: false});
-        }, 800);
-        $timeout(function() {
-            EventDispatcher.sendEvent('Pundit.alert', {title: "TOP!", message: type + ' TOP TOP Lorem Ipsum is simply dummy text of the printing and typesetting industry. ' + type + ' - ' + (new Date()).getTime(), id: type, timeout: null, dismissible: true, top: true});
-        }, 800);
-        $timeout(function() {
-            EventDispatcher.sendEvent('Pundit.alert', {message: type + ' NON ANIMATO Lorem Ipsum is simply dummy text of the printing and typesetting industry. ' + type + ' - ' + (new Date()).getTime(), id: type, timeout: null, dismissible: true, top: false});
-        }, 1200);
-    };
-
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
     $scope.dropdownTemplateMyNotebook = "src/Toolbar/myNotebooksDropdown.tmpl.html";
     $scope.dropdownTemplateTemplates = "src/Toolbar/templatesDropdown.tmpl.html";
