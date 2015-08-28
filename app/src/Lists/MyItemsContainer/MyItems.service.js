@@ -62,7 +62,7 @@ angular.module("Pundit2.MyItemsContainer")
 })
 
 .service("MyItems", function(MYITEMSDEFAULTS, BaseComponent, EventDispatcher, NameSpace, Item, ItemsExchange,
-    ContextualMenu, MyPundit, Config, Consolidation,
+    ContextualMenu, MyPundit, Config, Consolidation, TextFragmentAnnotator,
     $http, $rootScope, $q) {
 
     var myItems = new BaseComponent("MyItems", MYITEMSDEFAULTS);
@@ -101,6 +101,8 @@ angular.module("Pundit2.MyItemsContainer")
             },
             action: function(item) {
                 myItems.addItem(item).then(function() {
+                    EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
+                    EventDispatcher.sendEvent('MyItems.itemAdded', item);
                     Consolidation.consolidateAll();
                 });
                 return true;
@@ -118,6 +120,7 @@ angular.module("Pundit2.MyItemsContainer")
             },
             action: function(item) {
                 myItems.deleteItem(item).then(function() {
+                    EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
                     Consolidation.consolidateAll();
                 });
                 return true;

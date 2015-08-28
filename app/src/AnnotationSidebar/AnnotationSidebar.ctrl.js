@@ -1,7 +1,7 @@
 angular.module('Pundit2.AnnotationSidebar')
 
 .controller('AnnotationSidebarCtrl', function($scope, $filter, $document, $window, $timeout,
-    EventDispatcher, AnnotationSidebar, AnnotationsExchange, Dashboard, 
+    EventDispatcher, AnnotationSidebar, AnnotationsExchange, ItemsExchange, Dashboard,
     Config, Analytics, TextFragmentAnnotator, Status) {
 
     var bodyClasses = AnnotationSidebar.options.bodyExpandedClass + ' ' + AnnotationSidebar.options.bodyCollapsedClass;
@@ -70,6 +70,12 @@ angular.module('Pundit2.AnnotationSidebar')
     var activateFragments = function(items) {
         angular.forEach(items, function(item) {
             TextFragmentAnnotator.showByUri(item.uri);
+        });
+    };
+
+    var activateAnnotationsFragments = function(annotations) {
+        angular.forEach(annotations, function(annotation) {
+            activateFragments(annotation.items);
         });
     };
 
@@ -305,13 +311,11 @@ angular.module('Pundit2.AnnotationSidebar')
             annotations = AnnotationSidebar.getAllAnnotationsFiltered();
         } else {
             annotations = currentAnnotations;
+            activateFragments(ItemsExchange.getItemsByContainer(Config.modules.MyItems.container));
         }
 
         annotationsKey = Object.keys(annotations);
         $scope.annotationsLength = annotationsKey.length;
-
-        $scope.allAnnotations = currentAnnotations;
-        $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
 
         if (savedOrEditedAnnotationQueque.length > 0) {
             for (var i in savedOrEditedAnnotationQueque) {
@@ -323,7 +327,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 EventDispatcher.sendEvent('AnnotationSidebar.updateAnnotation', currentId);
             }
             savedOrEditedAnnotationQueque = [];
-            TextFragmentAnnotator.showAll();
+            activateAnnotationsFragments(annotations);
         } else if (deletedIdQueue.length > 0) {
             // TODO: avoid in communication the download of all annotations when one is deleted
             removeAnnotations(annotations);
@@ -335,7 +339,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 removeAnnotation(deletedIdQueue[j]);
             }
             deletedIdQueue = [];
-            TextFragmentAnnotator.showAll();
+            activateAnnotationsFragments(annotations);
         } else {
             removeAnnotations(annotations);
 
@@ -347,6 +351,9 @@ angular.module('Pundit2.AnnotationSidebar')
 
             addAnnotations(true);
         }
+
+        $scope.allAnnotations = currentAnnotations;
+        $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
     });
 
     // Using JSON.strigify to avoid deep watch (, true) on AnnotationSidebar filters 
@@ -372,6 +379,10 @@ angular.module('Pundit2.AnnotationSidebar')
         addAnnotations();
 
         $scope.annotationsLength = annotationsKey.length;
+
+        if (AnnotationSidebar.needToFilter() === false) {
+            activateFragments(ItemsExchange.getItemsByContainer(Config.modules.MyItems.container));
+        }
     });
 
     // Watch dashboard height for top of sidebar

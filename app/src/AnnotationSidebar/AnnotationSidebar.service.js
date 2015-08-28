@@ -1361,6 +1361,11 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     });
 
+    // TODO: find a better flow for user experience
+    EventDispatcher.addListener('MyItems.itemAdded', function() {
+        annotationSidebar.resetFilters();
+    });
+
     EventDispatcher.addListener('Client.hide', function(/*e*/) {
         if (state.isSidebarExpanded) {
             annotationSidebar.toggle();
