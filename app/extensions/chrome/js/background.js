@@ -220,7 +220,7 @@ var setLoading = function(loading, tabId, stopLoadingText) {
         iconIndex++;
         iconIndex = iconIndex % 3;
     }, 250);
-}
+};
 
 var onUpdate = function(tabId) {
     delete state.tabs[tabId];
@@ -268,6 +268,7 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 });
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    var tabId;
     switch (request.action) {
         case 'updateAnnotationsNumber':
             if (isLoading(sender.tab.id)) {
@@ -293,8 +294,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             break;
 
         case 'userProfileUpdated':
-            for (var tabId in state.tabsOnOff) {
-                tabId = parseInt(tabId);
+            for (var i in state.tabsOnOff) {
+                tabId = parseInt(i);
                 if (tabId === sender.tab.id) {
                     continue;
                 }
@@ -305,8 +306,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             break;
 
         case 'userLoggedStatusChanged':
-            for (var tabId in state.tabsOnOff) {
-                tabId = parseInt(tabId);
+            for (var j in state.tabsOnOff) {
+                tabId = parseInt(j);
                 if (tabId === sender.tab.id) {
                     continue;
                 }
