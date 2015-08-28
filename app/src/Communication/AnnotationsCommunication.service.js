@@ -78,7 +78,7 @@ angular.module('Pundit2.Communication')
                     Consolidation.consolidateAll();
                     EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
                     setLoading(false);
-                    EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation edited', id: "SUCCESS", timeout: null, message: "Your annotation has been correctly edited."});
+                    EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation edited', id: "SUCCESS", timeout: 3000, message: "Your annotation has been correctly saved."});
                     promise.resolve();
                 });
             }
@@ -124,7 +124,7 @@ angular.module('Pundit2.Communication')
                 Consolidation.consolidateAll();
                 EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
                 setLoading(false);
-                EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation edited', id: "SUCCESS", timeout: null, message: "Your annotation has been correctly edited."});
+                EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation edited', id: "SUCCESS", timeout: 3000, message: "Your annotation has been correctly saved."});
                 promise.resolve();
             });
             annotationsCommunication.log("Items correctly updated: " + annID);
@@ -423,7 +423,7 @@ angular.module('Pundit2.Communication')
                         data: AnnotationsExchange.getAnnotations().length
                     });
 
-                    EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation saved', id: "SUCCESS", timeout: null, message: "Congratulations, your new annotation has been correctly saved."});
+                    EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation saved', id: "SUCCESS", timeout: 3000, message: "Congratulations, your new annotation has been correctly saved."});
 
                     // TODO move inside notebook then?
                     setLoading(false);
