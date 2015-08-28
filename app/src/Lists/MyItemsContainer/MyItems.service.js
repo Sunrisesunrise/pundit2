@@ -121,6 +121,7 @@ angular.module("Pundit2.MyItemsContainer")
             action: function(item) {
                 myItems.deleteItem(item).then(function() {
                     EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
+                    EventDispatcher.sendEvent('MyItems.itemRemoved', item);
                     Consolidation.consolidateAll();
                 });
                 return true;

@@ -33,7 +33,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
     var updateHitsTimer,
         annotationsCache = [],
-        preventDelay = AnnotationSidebar.options.preventDelay ? true : false;
+        preventDelay = AnnotationSidebar.options.preventDelay ? true : false,
+        myItemsPrevent = false;
 
     var savedOrEditedAnnotationQueque = [],
         deletedIdQueue = [];
@@ -109,13 +110,15 @@ angular.module('Pundit2.AnnotationSidebar')
             addAnnotations(showProgress);
         };
 
-        if (preventDelay) {
+        if (preventDelay || myItemsPrevent) {
             doAdd();
         } else {
             updateHitsTimer = $timeout(function() {
                 doAdd();
             }, delay);
         }
+
+        myItemsPrevent = false;
     };
 
     var removeAnnotation = function(annotationId) {
@@ -479,6 +482,10 @@ angular.module('Pundit2.AnnotationSidebar')
         var annotationId = e.args,
             currentAnnotation = AnnotationsExchange.getAnnotationById(annotationId);
         savedOrEditedAnnotationQueque.push(currentAnnotation);
+    });
+
+    EventDispatcher.addListeners(['MyItems.itemAdded', 'MyItems.itemRemoved'], function() {
+        myItemsPrevent = true;
     });
 
     EventDispatcher.addListener('AnnotationsCommunication.annotationDeleted', function(e) {
