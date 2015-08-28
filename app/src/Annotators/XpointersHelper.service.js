@@ -33,7 +33,9 @@ angular.module('Pundit2.Annotators')
     // Delay in ms for the refresh of the buffer
     bufferDelay: 200,
     // undefined / true / false
-    preventDelay: undefined
+    preventDelay: undefined,
+
+    avoidInitialHide: false
 })
 
 .config(function($locationProvider) {
@@ -484,7 +486,9 @@ angular.module('Pundit2.Annotators')
         var element = $document[0].createElement(htmlTag),
             currentElement = angular.element(element);
         currentElement.addClass(htmlClass);
-        currentElement.addClass(xp.options.textFragmentHiddenClass);
+        if (xp.options.avoidInitialHide === false) {
+            currentElement.addClass(xp.options.textFragmentHiddenClass);
+        }
 
         // TODO: make this directive name configurable??
         currentElement.attr('text-fragment-bit', '');
