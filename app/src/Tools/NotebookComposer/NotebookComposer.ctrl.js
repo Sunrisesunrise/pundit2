@@ -71,7 +71,7 @@ angular.module('Pundit2.NotebookComposer')
         warnShortMsg = "Warning!";
 
     var loadIcon = "pnd-icon-refresh pnd-icon-spin",
-        successIcon = "pnd-icon-check-circle",
+        successIcon = "pnd-icon-check",
         warnIcon = "pnd-icon-exclamation";
 
     var loadMessageClass = "pnd-message",
