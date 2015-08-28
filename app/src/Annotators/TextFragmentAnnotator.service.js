@@ -220,7 +220,8 @@ angular.module('Pundit2.Annotators')
 
         tfa.log('Placing fragment icon ' + n++, id, bit.attr('fragments'));
         bit.after(element);
-        $compile(element)($rootScope);
+        
+        return element;
     };
 
     // For each fragment ID it will place an icon after the last BIT belonging
@@ -446,7 +447,7 @@ angular.module('Pundit2.Annotators')
         var elementInfo = e.args,
             elementFragments = elementInfo.fragments,
             elementReferce = elementInfo.reference,
-            currentFragment;
+            currentFragment, currenIcon;
 
         $compile(elementReferce)($rootScope);
 
@@ -458,7 +459,8 @@ angular.module('Pundit2.Annotators')
             }
             if (typeof fragmentsRefsById[currentFragment] === 'undefined') {
                 fragmentsRefsById[currentFragment] = [elementReferce];
-                placeIcon(currentFragment, elementReferce);
+                currentIcon = placeIcon(currentFragment, elementReferce);
+                $compile(currentIcon)($rootScope);
             } else {
                 fragmentsRefsById[currentFragment].push(elementReferce);
             }
