@@ -357,11 +357,11 @@ angular.module('Pundit2.ResourcePanel')
         }
     };
 
-    $scope.escapeEvent = function(e) {
-        if (e.which === 27) {
-            e.stopPropagation();
-        }
-    };
+    //$scope.escapeEvent = function(e) {
+    //    if (e.which === 27) {
+    //        e.stopPropagation();
+    //    }
+    //};
 
     //function colled on list scroll
     $scope.infiniteScroll = function(pane, label) {
