@@ -15,3 +15,36 @@
     font-size: 14px;
     text-align: center;
 }
+
+
+/* ------------------------------------ *\
+   #ANIMATIONS
+\* ------------------------------------ */
+.pnd-pulse {
+    animation: pulse 1s linear infinite;
+    -webkit-animation: pulse 1s linear infinite;
+}
+
+@keyframes "pulse" {
+    0% {
+        opacity: .2;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: .2;
+    }
+}
+
+@-webkit-keyframes "pulse" {
+    0% {
+        opacity: .2;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: .2;
+    }
+}

@@ -11,14 +11,16 @@
                 
                 <!-- OK button -->
                 <li ng-show="showStatusButtonOk()" class="pnd-toolbar-status-button-ok pnd-toolbar-first-button">
-                    <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="infoDropdown"><span class="pnd-icon pnd-icon-logo-1"></span></a>
+                    <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="infoDropdown">
+                        <span class="pnd-icon pnd-icon-logo-1"></span>
+                    </a>
                 </li>
 
                 <!-- Loading button -->
-                <li ng-show="showStatusButtonLoading()" class="pnd-toolbar-loading-button pnd-toolbar-first-button">
+                <li ng-show="showStatusButtonLoading()" class="pnd-toolbar-status-button-ok pnd-toolbar-first-button">
                     <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="infoDropdown">
                         <!-- <span></span> -->
-                        <span class="pnd-icon pnd-icon-refresh pnd-icon-spin"></span>
+                        <span class="pnd-icon pnd-icon-logo-1 pnd-pulse"></span>
                     </a>
                 </li>
 
