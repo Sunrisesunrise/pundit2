@@ -153,7 +153,7 @@ angular.module('Pundit2.Core')
             allItems = allItems.concat(ItemsExchange.getItemsByContainer(Config.modules.MyItems.container));
         }
 
-        Status.progress = 0;
+        Status.resetProgress();
         EventDispatcher.sendEvent('Consolidation.StartConsolidate');
         EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.consolidation', data: true});
         cc.log('Consolidating ALL items');

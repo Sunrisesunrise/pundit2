@@ -16,7 +16,9 @@ angular.module('Pundit2.Core')
             clientBoot: false,
             userLogged: false,
             loading: false,
-            templateMode: false
+            templateMode: false,
+            needsProgressBar: false,
+            progress: 0
         }
     };
 
@@ -131,9 +133,9 @@ angular.module('Pundit2.Core')
         return errorLog;
     };
 
-    status.needsProgressBar = false;
-
-    status.progress = 0;
+    status.resetProgress = function() {
+        state.Pundit.progress = 0;
+    };
 
     status.hitProgress = function(phase, relativePerc) {
         var phases = {
@@ -143,20 +145,16 @@ angular.module('Pundit2.Core')
             'phase3': 50,
         };
 
-        console.log("hit");
-        console.log(arguments);
         var init = 0;
         for (var i = 0; i < phase; i++) {
             init += phases['phase'+i];
         }
         var p = phases['phase'+phase] / 100 * relativePerc;
-        console.log('p: '+ p)
-        console.log('init:' + init)
-        status.progress = init + p;
+        state.Pundit.progress = init + p;
 
         EventDispatcher.sendEvent('Status.progress', {
-            needsProgressBar: (status.needsProgressBar = true),
-            progress: status.progress
+            needsProgressBar: (state.Pundit.needsProgressBar = true),
+            progress: state.Pundit.progress
         });
     };
 
