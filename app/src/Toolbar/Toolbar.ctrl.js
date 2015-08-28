@@ -45,8 +45,9 @@ angular.module('Pundit2.Toolbar')
                     progressState.current = progressState.dest
                     $interval.cancel(progressState.interval);
                     progressState.interval = undefined;
+                    $scope.progress = progressState.current + '%';
                 }
-            }, 50);
+            }, 10);
         }
     });
 
