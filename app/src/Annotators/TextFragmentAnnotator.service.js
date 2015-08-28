@@ -449,13 +449,11 @@ angular.module('Pundit2.Annotators')
             elementReferce = elementInfo.reference,
             currentFragment, currenIcon;
 
-        $compile(elementReferce)($rootScope);
-
         var patt = new RegExp(/fr\-[0-9]+/)
         for (var i in elementFragments) {
             currentFragment = elementFragments[i];
             if (!patt.test(currentFragment)) {
-                continue;
+                return;
             }
             if (typeof fragmentsRefsById[currentFragment] === 'undefined') {
                 fragmentsRefsById[currentFragment] = [elementReferce];
@@ -465,6 +463,8 @@ angular.module('Pundit2.Annotators')
                 fragmentsRefsById[currentFragment].push(elementReferce);
             }
         }
+
+        $compile(elementReferce)($rootScope);
     });
 
     $rootScope.$on('annomatic-run', function() {
