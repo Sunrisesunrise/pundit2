@@ -1,7 +1,8 @@
 angular.module('Pundit2.AnnotationSidebar')
 
 .controller('AnnotationSidebarCtrl', function($scope, $filter, $document, $window, $timeout,
-    EventDispatcher, AnnotationSidebar, AnnotationsExchange, Dashboard, Config, Analytics, TextFragmentAnnotator) {
+    EventDispatcher, AnnotationSidebar, AnnotationsExchange, Dashboard, 
+    Config, Analytics, TextFragmentAnnotator, Status) {
 
     var bodyClasses = AnnotationSidebar.options.bodyExpandedClass + ' ' + AnnotationSidebar.options.bodyCollapsedClass;
     var sidebarClasses = AnnotationSidebar.options.sidebarExpandedClass + ' ' + AnnotationSidebar.options.sidebarCollapsedClass;
@@ -76,8 +77,9 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.annotations[annotation.id] = annotation;
     };
 
-    var addAnnotations = function() {
+    var addAnnotations = function(showProgress) {
         $timeout.cancel(updateHitsTimer);
+        showProgress = typeof showProgress !== 'undefined' ? showProgress : false;
 
         if (annotationsCache.length === 0) {
             return;
@@ -94,7 +96,11 @@ angular.module('Pundit2.AnnotationSidebar')
                 activateFragments(currentAnnotation.items);
                 currentHits++;
             }
-            addAnnotations();
+            if (showProgress) {
+                var percVal = 100 * ($scope.allAnnotationsLength - annotationsCache.length) / $scope.allAnnotationsLength;
+                Status.hitProgress(3, percVal);
+            }
+            addAnnotations(showProgress);
         };
 
         if (preventDelay) {
@@ -338,8 +344,8 @@ angular.module('Pundit2.AnnotationSidebar')
                     annotationsCache.push(annotation);
                 }
             });
-            
-            addAnnotations();
+
+            addAnnotations(true);
         }
     });
 
@@ -475,7 +481,7 @@ angular.module('Pundit2.AnnotationSidebar')
         delete $scope.allAnnotations[annotationId];
         $scope.annotationsLength = Object.keys($scope.annotations).length;
         $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
-    });    
+    });
 
     angular.element($window).bind('resize', function() {
         resizeSidebarHeight();
