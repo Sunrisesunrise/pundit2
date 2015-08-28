@@ -16,7 +16,7 @@
     /* Hover effect */
     &.pnd-textfragment-highlight {
         background-color: @text-fragment-color-hover !important;
-
+        /* icon following text fragment */
         & + .pnd-text-fragment-icon {
             color: @text-fragment-color-hover !important;
         }
@@ -27,7 +27,7 @@
     This style is for ghosted elements that are NOT also hidden */
     &.pnd-textfragment-ghosted:not(.pnd-textfragment-hidden) {
         background-color: @text-fragment-ghosted !important;
-
+        /* icon following text fragment */
         & + .pnd-text-fragment-icon {
             color: @text-fragment-icon-color-ghosted !important;
         }
@@ -37,7 +37,6 @@
     The text fragment is not shown to the user */
     &.pnd-textfragment-hidden {
         background-color: inherit !important;
-
         /* Hides icons related to hidden text fragments */
         & + .pnd-text-fragment-icon {
             display: none;
@@ -87,25 +86,9 @@
  both as subject or object */
 .pnd-cons-temp {
     background-color: @text-fragment-color-hover !important;
-    // background-color: rgba(184, 255, 153, 0.4);
-
-    // TODO Please check the following styles...
-
-    &.pnd-textfragment-highlight {
-        background-color: @text-fragment-color-hover;
-        color: darken(@brand-warning, 35%);
-    }
-
-    &.pnd-textfragment-hidden {
-        background-color: inherit;
-        color: inherit;
-    }
-
-    &.pnd-textfragment-ghosted {
-        opacity: 0.6;
-    }
 }
 
+/* The small icon next to each text fragment */
 .pnd-text-fragment-icon {
     display: inline-block;
     margin-left: 0.1em;
@@ -114,7 +97,6 @@
     margin-bottom: -0.18em;
     color: @text-fragment-icon-color; //  @brand-warning;
     font-size: 1.18em;
-    // line-height: 1.3;
     vertical-align: top;
     text-decoration: none;
     cursor: context-menu;
@@ -153,7 +135,6 @@ a {
 }
 
 sup {
-
     .pnd-text-fragment-icon {
         font-size: 12px;
         position: absolute;
