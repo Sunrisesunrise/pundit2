@@ -9,6 +9,9 @@
         data-alert-id="{{alert.id}}"
         style="{{::alert.initStyle}}"
         >
+        <div class="pnd-alert-progress"
+             ng-show="alert.timeout !== null"
+                ></div>
         <button
             type="button"
             class="close"

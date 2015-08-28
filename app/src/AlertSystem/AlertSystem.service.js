@@ -120,6 +120,17 @@ angular.module('Pundit2.AlertSystem')
                     doClearAlert(alert);
                     $rootScope.$$phase || $rootScope.$digest();
                 }
+                else {
+                    if (alert.timeout) {
+                        var td = alert.timeout / 1000;
+                        alert.progress = $('div[data-alert-id="'+alert.id+'"] .pnd-alert-progress');
+                        alert.progress.css('-webkit-transition-duration', td + 's')
+                        .css('transition-duration', td + 's')
+                        .css('width', '100%');
+                        alert.animating = false;
+                        alertSystem.resetAlertTimeout(alert);
+                    }
+                }
                 alert.animating = false;
                 processAnimQueue();
             });
@@ -369,6 +380,25 @@ angular.module('Pundit2.AlertSystem')
     alertSystem.resetTimeout = function(id) {
         alertSystem.removeTimeout(id);
         var alert = getAlert(id);
+        if (alert.timeout && !alert.animating) {
+            setTimeout(alert);
+        }
+    };
+
+    /**
+     * @ngdoc method
+     * @name AlertSystem#resetTimeout
+     * @module Pundit2.AlertSystem
+     * @function
+     *
+     * @description
+     * Reset the timeout associated to the alert
+     *
+     * @param {id}
+     *
+     */
+    alertSystem.resetAlertTimeout = function(alert) {
+        alertSystem.removeTimeout(alert.id);
         if (alert.timeout && !alert.animating) {
             setTimeout(alert);
         }

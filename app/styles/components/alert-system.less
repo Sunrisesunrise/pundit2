@@ -49,6 +49,23 @@
         color: rgba(255,255,255,0.95);
     }
 
+    .pnd-alert-progress {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 1px;
+        background-color: white;
+        -webkit-box-shadow: 0px 2px 6px 0px rgba(245,240,245,1);
+        -moz-box-shadow: 0px 2px 6px 0px rgba(245,240,245,1);
+        box-shadow: 0px 2px 6px 0px rgba(245,240,245,1);
+        opacity: 1;
+        -webkit-transition-property: width;
+        transition-property: width;
+        -webkit-transition-timing-function: linear;
+        transition-timing-function: linear;
+        width: 0%;
+    }
+
     .pnd-alert-text {
         font-size: 12px;
         color: @color-alert-text;
