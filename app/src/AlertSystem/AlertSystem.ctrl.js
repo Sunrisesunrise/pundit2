@@ -16,14 +16,13 @@ angular.module('Pundit2.AlertSystem')
         // Using ng-show as trigger to start animation.
         AlertSystem.show(alert);
         return true;
-    }
+    };
 
     $scope.mouseEnter = function(alert) {
         AlertSystem.mouseEnter(alert);
-    }
+    };
 
     $scope.mouseLeave = function(alert) {
         AlertSystem.mouseLeave(alert);
-    }
-
+    };
 });

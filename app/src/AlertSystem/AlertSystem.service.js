@@ -84,20 +84,19 @@ angular.module('Pundit2.AlertSystem')
             elem;
 
         if (alert.animShow) {
-            elem = $('alert-system div[data-alert-id="' + alert.id + '"]');
+            elem = angular.element('alert-system div[data-alert-id="' + alert.id + '"]');
             var h = elem.height() + parseInt(elem.css('paddingTop')) + parseInt(elem.css('paddingBottom')) + parseInt(elem.css('borderTop'));
 
             animObject.marginBottom = elem.css('marginBottom');
             animObject.opacity = 1;
 
-            elem.css('margin-bottom', '-' + h +'px')
-                .css('display', 'block');//
-        }
-        else if (alert.animHide) {
-            elem = $('alert-system div[data-alert-id="' + alert.id + '"]');
-            var width = elem.width();
-            elem.css('margin-bottom', '-' + h +'px')
-                .css('min-height', '0px');
+            elem.css('margin-bottom', '-' + h + 'px')
+                .css('display', 'block'); //
+        } else if (alert.animHide) {
+            elem = angular.element('alert-system div[data-alert-id="' + alert.id + '"]');
+            // var width = elem.width();
+            elem.css('min-height', '0px');
+            // .css('margin-bottom', '-' + h +'px'); // 'h' used out of scope.
 
             animObject.opacity = 0;
             animObject.marginBottom = '0px';
@@ -119,14 +118,13 @@ angular.module('Pundit2.AlertSystem')
                 if (alert.animHide) {
                     doClearAlert(alert);
                     $rootScope.$$phase || $rootScope.$digest();
-                }
-                else {
+                } else {
                     if (alert.timeout) {
                         var td = alert.timeout / 1000;
-                        alert.progress = $('div[data-alert-id="'+alert.id+'"] .pnd-alert-progress');
+                        alert.progress = angular.element('div[data-alert-id="' + alert.id + '"] .pnd-alert-progress');
                         alert.progress.css('-webkit-transition-duration', td + 's')
-                        .css('transition-duration', td + 's')
-                        .css('width', '100%');
+                            .css('transition-duration', td + 's')
+                            .css('width', '100%');
                         alert.animating = false;
                         alertSystem.resetAlertTimeout(alert);
                     }
@@ -134,8 +132,7 @@ angular.module('Pundit2.AlertSystem')
                 alert.animating = false;
                 processAnimQueue();
             });
-        }
-        else {
+        } else {
             processAnimQueue();
         }
     };
@@ -171,15 +168,14 @@ angular.module('Pundit2.AlertSystem')
         }
         if (!alert.timeout) {
             return;
-        }
-        else {
+        } else {
             alert.progress.css('-webkit-transition-duration', '0s')
-            .css('transition-duration', '0s')
-            .css('width', '0%');
+                .css('transition-duration', '0s')
+                .css('width', '0%');
             alert.animating = false;
             alertSystem.removeTimeout(alert.id);
         }
-    }
+    };
 
     alertSystem.mouseLeave = function(alert) {
         if (alert.animating) {
@@ -187,16 +183,15 @@ angular.module('Pundit2.AlertSystem')
         }
         if (!alert.timeout) {
             return;
-        }
-        else {
+        } else {
             var td = alert.timeout / 1000;
             alert.progress.css('-webkit-transition-duration', td + 's')
-            .css('transition-duration', td + 's')
-            .css('width', '100%');
+                .css('transition-duration', td + 's')
+                .css('width', '100%');
             alert.animating = false;
             alertSystem.resetAlertTimeout(alert);
         }
-    }
+    };
 
 
 
@@ -322,8 +317,8 @@ angular.module('Pundit2.AlertSystem')
             alertSystem.log('Pushed alert on bottom');
         }
         $rootScope.$$phase || $rootScope.$apply(function() {
-            console.log("after apply");
-            console.log($('[data-alert-id="'+alert.id+'"]'));
+            alertSystem.log("After apply - alert added");
+            alertSystem.log(angular.element('[data-alert-id="' + alert.id + '"]'));
         });
         if (timeout) {
             setTimeout(alert);
