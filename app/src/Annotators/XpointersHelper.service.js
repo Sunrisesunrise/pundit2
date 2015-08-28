@@ -331,9 +331,11 @@ angular.module('Pundit2.Annotators')
                     i--;
                 }
 
-                var currentLength = xpathsCache.length === 1 ? 0 : xpathsCache.length;
-                var percVal = 100 * (startLength - currentLength) / startLength;
-                Status.hitProgress(2, percVal);
+                if (!preventDelay) {
+                    var currentLength = xpathsCache.length === 1 ? 0 : xpathsCache.length;
+                    var percVal = 100 * (startLength - currentLength) / startLength;
+                    Status.hitProgress(2, percVal);
+                }
 
                 deferredUpdate(promise);
             };

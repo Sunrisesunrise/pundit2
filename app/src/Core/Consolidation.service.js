@@ -112,8 +112,10 @@ angular.module('Pundit2.Core')
 
                     currentHits++;
                 }
-                var percVal = 100 * (startLength - itemsCache.length) / startLength;
-                Status.hitProgress(1, percVal);
+                if (!preventDelay) {
+                    var percVal = 100 * (startLength - itemsCache.length) / startLength;
+                    Status.hitProgress(1, percVal);
+                }
                 deferredAddItems(promise);
             };
 
