@@ -309,6 +309,9 @@ angular.module('Pundit2.Annotators')
             if (xpathsCache.length <= 1) {
                 xp.log("Dom successfully updated!");
                 EventDispatcher.sendEvent('XpointersHelper.DOMUpdated');
+                // if (!preventDelay) {
+                    // Status.hitProgress(2, 100);
+                // }
                 promise.resolve();
                 return;
             }

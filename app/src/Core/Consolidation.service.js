@@ -60,7 +60,6 @@ angular.module('Pundit2.Core')
             updateAddTimer,
             startLength = items.length;
 
-
         var deferredAddItems = function(promise) {
             $timeout.cancel(updateAddTimer);
 
