@@ -24,8 +24,8 @@ var state = {
     consolidationBadgeBackgroundColor = [255, 191, 0, 128], //#1E2E43
     loadingBadgeBackgroundColor = [127, 127, 127, 255]; // [72, 187, 88, 128];//[255, 191, 0, 128]; //#FFBF00
 
-var injectScripts = function(tab, force, callback) {
-    if (typeof state.injections[tab.id] !== 'undefined') {
+var injectScripts = function(tabId, force, callback) {
+    if (typeof state.injections[tabId] !== 'undefined') {
         if (typeof callback !== 'undefined') {
             callback();
         }
@@ -38,31 +38,31 @@ var injectScripts = function(tab, force, callback) {
 
     var doInjection = function(includeContentScript, executeCallback) {
         console.log("doing injection");
-        state.injections[tab.id] = true;
+        state.injections[tabId] = true;
 
         if (includeContentScript) {
-            chrome.tabs.insertCSS(tab.id, {
+            chrome.tabs.insertCSS(tabId, {
                 file: 'inject/pundit2-ce.css',
                 runAt: "document_start"
             });
         }
 
         // Run the css.
-        chrome.tabs.insertCSS(tab.id, {
+        chrome.tabs.insertCSS(tabId, {
             file: 'inject/css/pundit.css',
             runAt: "document_start"
         });
 
         // Run the JavaScript with a specific configuration.
-        chrome.tabs.executeScript(tab.id, {
+        chrome.tabs.executeScript(tabId, {
             file: 'inject/extension_conf.js',
             runAt: "document_start"
         });
-        chrome.tabs.executeScript(tab.id, {
+        chrome.tabs.executeScript(tabId, {
             file: 'inject/scripts/libs.js',
             runAt: "document_start"
         });
-        chrome.tabs.executeScript(tab.id, {
+        chrome.tabs.executeScript(tabId, {
                 file: 'inject/scripts/pundit2.js',
                 runAt: "document_start"
             },
@@ -74,7 +74,7 @@ var injectScripts = function(tab, force, callback) {
         );
 
         if (includeContentScript) {
-            chrome.tabs.executeScript(tab.id, {
+            chrome.tabs.executeScript(tabId, {
                 file: 'inject/content_script.js',
                 runAt: "document_start"
             });
@@ -82,27 +82,29 @@ var injectScripts = function(tab, force, callback) {
     };
 
     var doCheck = function() {
-        chrome.tabs.sendMessage(tab.id, {action: 'checkPundit'}, function(response) {
+        chrome.tabs.sendMessage(tabId, {
+            action: 'checkPundit'
+        }, function(response) {
             if (response) {
                 if (response.isPresent) {
                     console.log("already present, just set flag");
-                    state.injections[tab.id] = true;
-                    state.tabsOnOff[tab.id] = true;
-                    state.tabs[tab.id] = true;
-                    showOnIcon(tab.id);
-                    setLoading(false, tab.id);
-                    chrome.tabs.sendMessage(tab.id, {action: 'requestAnnotationsNumber'});
-                }
-                else {
+                    state.injections[tabId] = true;
+                    state.tabsOnOff[tabId] = true;
+                    state.tabs[tabId] = true;
+                    showOnIcon(tabId);
+                    setLoading(false, tabId);
+                    chrome.tabs.sendMessage(tabId, {
+                        action: 'requestAnnotationsNumber'
+                    });
+                } else {
                     doInjection(false, true);
                 }
-            }
-            else {
-                chrome.tabs.insertCSS(tab.id, {
+            } else {
+                chrome.tabs.insertCSS(tabId, {
                     file: 'inject/pundit2-ce.css',
                     runAt: "document_start"
                 });
-                chrome.tabs.executeScript(tab.id, {
+                chrome.tabs.executeScript(tabId, {
                         file: 'inject/content_script.js',
                         runAt: "document_start"
                     },
@@ -116,8 +118,7 @@ var injectScripts = function(tab, force, callback) {
 
     if (!force) {
         doCheck();
-    }
-    else {
+    } else {
         doInjection(true, true);
     }
 };
@@ -129,50 +130,67 @@ var setBadgeText = function(tabId, text, backgroundColor) {
     if (typeof backgroundColor === 'undefined') {
         backgroundColor = defaultBadgeBackgroundColor;
     }
-    chrome.browserAction.setBadgeBackgroundColor({tabId: tabId, color: backgroundColor});
-    chrome.browserAction.setBadgeText({tabId: tabId, text: text});
+    chrome.browserAction.setBadgeBackgroundColor({
+        tabId: tabId,
+        color: backgroundColor
+    });
+    chrome.browserAction.setBadgeText({
+        tabId: tabId,
+        text: text
+    });
 };
 
 var showOnIcon = function(tabId) {
-    chrome.browserAction.setIcon({path: onIcon, tabId: tabId});
+    chrome.browserAction.setIcon({
+        path: onIcon,
+        tabId: tabId
+    });
 };
 
 var showOffIcon = function(tabId) {
     setBadgeText(tabId, '');
-    chrome.browserAction.setIcon({path: offIcon, tabId: tabId});
+    chrome.browserAction.setIcon({
+        path: offIcon,
+        tabId: tabId
+    });
 };
 
-var switchOn = function(tab) {
-    showOnIcon(tab.id);
-    setLoading(true, tab.id);
-    injectScripts(tab, false, function() {
-        setTimeout(function(){
-            chrome.tabs.sendMessage(tab.id, {action: 'switchOn'});
-            state.tabs[tab.id] = true;
-            state.tabsOnOff[tab.id] = true;
+var switchOn = function(tabId) {
+    showOnIcon(tabId);
+    setLoading(true, tabId);
+    injectScripts(tabId, false, function() {
+        setTimeout(function() {
+            chrome.tabs.sendMessage(tabId, {
+                action: 'switchOn'
+            });
+            state.tabs[tabId] = true;
+            state.tabsOnOff[tabId] = true;
         }, 350);
     });
 };
 
-var switchOff = function(tab) {
-    chrome.tabs.sendMessage(tab.id, {action: 'switchOff'});
-    setBadgeText(tab.id, '');
-    state.tabs[tab.id] = false;
-    state.tabsOnOff[tab.id] = false;
-    showOffIcon(tab.id);
-    setLoading(false, tab.id);
+var switchOff = function(tabId) {
+    chrome.tabs.sendMessage(tabId, {
+        action: 'switchOff'
+    });
+    setBadgeText(tabId, '');
+    state.tabs[tabId] = false;
+    state.tabsOnOff[tabId] = false;
+    showOffIcon(tabId);
+    setLoading(false, tabId);
 };
 
 var switchPundit = function(tab) {
-    if (isLoading(tab.id)) {
+    var tabId = tab.id;
+    if (isLoading(tabId)) {
         return;
     }
-    if (typeof state.tabs[tab.id] === 'undefined' || !state.tabs[tab.id]) {
+    if (typeof state.tabs[tabId] === 'undefined' || !state.tabs[tabId]) {
         // Turn on.
-        switchOn(tab);
-    }
-    else {
-        switchOff(tab);
+        switchOn(tabId);
+    } else {
+        // Turn off.
+        switchOff(tabId);
     }
 };
 
@@ -194,42 +212,57 @@ var setLoading = function(loading, tabId, stopLoadingText) {
         return;
     }
     var iconIndex = 0;
-    state.loading[tabId] = window.setInterval(function(){
+    state.loading[tabId] = window.setInterval(function() {
         var dots = Array(2 + iconIndex % 3);
         var spaces = Array(3 - dots.length + 2);
-        var text = dots.join('.')+spaces.join(' ');
+        var text = dots.join('.') + spaces.join(' ');
         setBadgeText(tabId, text, loadingBadgeBackgroundColor);
-        iconIndex ++;
+        iconIndex++;
         iconIndex = iconIndex % 3;
     }, 250);
 }
 
+var onUpdate = function(tabId) {
+    delete state.tabs[tabId];
+    delete state.injections[tabId];
+    setLoading(false, tabId);
+
+    if (state.tabsOnOff[tabId]) {
+        switchOn(tabId);
+    }
+};
+
 chrome.browserAction.onClicked.addListener(switchPundit);
 
-chrome.tabs.onUpdated.addListener(function(tabId , info, tab) {
+chrome.tabs.onReplaced.addListener(function(addedTabId, removedTabId) {
+    console.log("chrome.tabs.onReplaced");
+    for (var i in state) {
+        if (typeof state[i][removedTabId] !== 'undefined') {
+            state[i][addedTabId] = state[i][removedTabId];
+            delete state[i][removedTabId];
+        }
+    }
+    onUpdate(addedTabId);
+});
+
+chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
     console.log("chrome.tabs.onUpdated");
-    console.log(arguments);
     if (info.status == "complete") {
         if (tab.url === "chrome://newtab/") {
             return;
         }
-
-        delete state.tabs[tabId];
-        delete state.injections[tabId];
-        setLoading(false, tab.id);
-
-        if (state.tabsOnOff[tabId]) {
-            switchOn(tab);
-        }
+        onUpdate(tabId);
     }
 });
 
 chrome.tabs.onActivated.addListener(function(activeInfo) {
+    console.log("chrome.tabs.onActivated");
     if (state.tabsOnOff[activeInfo.tabId]) {
-        chrome.tabs.sendMessage(activeInfo.tabId, {action: 'requestAnnotationsNumber'});
+        chrome.tabs.sendMessage(activeInfo.tabId, {
+            action: 'requestAnnotationsNumber'
+        });
         showOnIcon(activeInfo.tabId);
-    }
-    else {
+    } else {
         showOffIcon(activeInfo.tabId);
     }
 });
@@ -251,9 +284,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         case 'setLoading':
             if (!request.loading) {
                 state.stopLoading[sender.tab.id] = true;
-                chrome.tabs.sendMessage(sender.tab.id, {action: 'requestAnnotationsNumber'});
-            }
-            else {
+                chrome.tabs.sendMessage(sender.tab.id, {
+                    action: 'requestAnnotationsNumber'
+                });
+            } else {
                 setLoading(request.loading, sender.tab.id);
             }
             break;
@@ -264,7 +298,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 if (tabId === sender.tab.id) {
                     continue;
                 }
-                chrome.tabs.sendMessage(tabId, {action: 'requestUserProfileUpdate'});
+                chrome.tabs.sendMessage(tabId, {
+                    action: 'requestUserProfileUpdate'
+                });
             }
             break;
 
@@ -274,7 +310,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 if (tabId === sender.tab.id) {
                     continue;
                 }
-                chrome.tabs.sendMessage(tabId, {action: 'requestUserLoggedStatus'});
+                chrome.tabs.sendMessage(tabId, {
+                    action: 'requestUserLoggedStatus'
+                });
             }
             break;
 
