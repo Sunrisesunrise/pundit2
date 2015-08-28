@@ -165,6 +165,41 @@ angular.module('Pundit2.AlertSystem')
         processAnimQueue();
     };
 
+    alertSystem.mouseEnter = function(alert) {
+        if (alert.animating) {
+            return;
+        }
+        if (!alert.timeout) {
+            return;
+        }
+        else {
+            alert.progress.css('-webkit-transition-duration', '0s')
+            .css('transition-duration', '0s')
+            .css('width', '0%');
+            alert.animating = false;
+            alertSystem.removeTimeout(alert.id);
+        }
+    }
+
+    alertSystem.mouseLeave = function(alert) {
+        if (alert.animating) {
+            return;
+        }
+        if (!alert.timeout) {
+            return;
+        }
+        else {
+            var td = alert.timeout / 1000;
+            alert.progress.css('-webkit-transition-duration', td + 's')
+            .css('transition-duration', td + 's')
+            .css('width', '100%');
+            alert.animating = false;
+            alertSystem.resetAlertTimeout(alert);
+        }
+    }
+
+
+
     /**
      * Enumeration of alert type with relatives default values
      * @type {{OK: {id: string, alertClass: string, timeout: number, top: boolean, dismissible: boolean}, ERROR: {id: string, alertClass: string, timeout: null, top: boolean, dismissible: boolean}, ALERT: {id: string, alertClass: string, timeout: null, top: boolean, dismissible: boolean}, CUSTOM: {id: string, alertClass: string, timeout: null, top: boolean, dismissible: boolean}}}

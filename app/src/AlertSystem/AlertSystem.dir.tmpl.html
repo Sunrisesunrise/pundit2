@@ -8,6 +8,8 @@
         ng-click="alertClick(alert)"
         data-alert-id="{{alert.id}}"
         style="{{::alert.initStyle}}"
+        ng-mouseenter="mouseEnter(alert)"
+        ng-mouseleave="mouseLeave(alert)"
         >
         <div class="pnd-alert-progress"
              ng-show="alert.timeout !== null"

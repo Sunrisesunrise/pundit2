@@ -18,4 +18,12 @@ angular.module('Pundit2.AlertSystem')
         return true;
     }
 
+    $scope.mouseEnter = function(alert) {
+        AlertSystem.mouseEnter(alert);
+    }
+
+    $scope.mouseLeave = function(alert) {
+        AlertSystem.mouseLeave(alert);
+    }
+
 });
