@@ -431,63 +431,66 @@ angular.module('Pundit2.AnnotationSidebar')
         var currentId = scope.id;
         var isBroken = scope.broken;
         var notebookName = "Downloading in progress";
-        var currentAnnotation;
+        var currentAnnotation = AnnotationsExchange.getAnnotationById(currentId);
         var expandedState;
         var template;
         var currentColor;
+        
+        if (typeof(currentId) === 'undefined' ||
+            typeof(currentAnnotation) === 'undefined') {
+            EventDispatcher.sendEvent('AnnotationDetails.wrongAnnotation', currentId);
+            return;
+        }
 
-        if (typeof(currentId) !== 'undefined') {
-            currentAnnotation = AnnotationsExchange.getAnnotationById(currentId);
-            expandedState = (force ? true : state.defaultExpanded);
-            template = TemplatesExchange.getTemplateById(currentAnnotation.hasTemplate);
+        expandedState = (force ? true : state.defaultExpanded);
+        template = TemplatesExchange.getTemplateById(currentAnnotation.hasTemplate);
 
-            if (typeof(template) !== 'undefined') {
-                currentColor = template.hasColor;
-            }
+        if (typeof(template) !== 'undefined') {
+            currentColor = template.hasColor;
+        }
 
-            if (typeof(state.annotations[currentId]) === 'undefined') {
-                state.annotations[currentId] = {
-                    id: currentId,
-                    creator: currentAnnotation.creator,
-                    creatorName: currentAnnotation.creatorName,
-                    created: currentAnnotation.created,
-                    notebookId: currentAnnotation.isIncludedIn,
-                    notebookName: notebookName,
-                    scopeReference: scope,
-                    mainItem: buildMainItem(currentAnnotation),
-                    itemsArray: buildItemsArray(currentAnnotation),
-                    itemsUriArray: buildItemsUriArray(currentAnnotation),
-                    broken: isBroken,
-                    expanded: expandedState,
-                    ghosted: false,
-                    color: currentColor,
-                    hasTemplate: template
-                };
+        if (typeof(state.annotations[currentId]) === 'undefined') {
+            state.annotations[currentId] = {
+                id: currentId,
+                creator: currentAnnotation.creator,
+                creatorName: currentAnnotation.creatorName,
+                created: currentAnnotation.created,
+                notebookId: currentAnnotation.isIncludedIn,
+                notebookName: notebookName,
+                scopeReference: scope,
+                mainItem: buildMainItem(currentAnnotation),
+                itemsArray: buildItemsArray(currentAnnotation),
+                itemsUriArray: buildItemsUriArray(currentAnnotation),
+                broken: isBroken,
+                expanded: expandedState,
+                ghosted: false,
+                color: currentColor,
+                hasTemplate: template
+            };
 
-                var cancelWatchNotebookName = $rootScope.$watch(function() {
-                    return NotebookExchange.getNotebookById(currentAnnotation.isIncludedIn);
-                }, function(nb) {
-                    if (typeof(nb) !== 'undefined') {
-                        notebookName = nb.label;
-                        state.annotations[currentId].notebookName = notebookName;
-                        cancelWatchNotebookName();
-                    }
-                });
-            } else {
-                state.annotations[currentId].expanded = expandedState;
-
-                if (typeof(force) !== 'undefined' && force) {
-                    state.annotations[currentId].created = currentAnnotation.created;
-                    state.annotations[currentId].created = currentAnnotation.created;
-                    state.annotations[currentId].notebookId = currentAnnotation.isIncludedIn;
-                    state.annotations[currentId].scopeReference = scope;
-                    state.annotations[currentId].mainItem = buildMainItem(currentAnnotation);
-                    state.annotations[currentId].itemsArray = buildItemsArray(currentAnnotation);
-                    state.annotations[currentId].itemsUriArray = buildItemsUriArray(currentAnnotation);
-                    state.annotations[currentId].broken = isBroken;
-                    state.annotations[currentId].ghosted = false;
-                    state.annotations[currentId].expanded = true;
+            var cancelWatchNotebookName = $rootScope.$watch(function() {
+                return NotebookExchange.getNotebookById(currentAnnotation.isIncludedIn);
+            }, function(nb) {
+                if (typeof(nb) !== 'undefined') {
+                    notebookName = nb.label;
+                    state.annotations[currentId].notebookName = notebookName;
+                    cancelWatchNotebookName();
                 }
+            });
+        } else {
+            state.annotations[currentId].expanded = expandedState;
+
+            if (typeof(force) !== 'undefined' && force) {
+                state.annotations[currentId].created = currentAnnotation.created;
+                state.annotations[currentId].created = currentAnnotation.created;
+                state.annotations[currentId].notebookId = currentAnnotation.isIncludedIn;
+                state.annotations[currentId].scopeReference = scope;
+                state.annotations[currentId].mainItem = buildMainItem(currentAnnotation);
+                state.annotations[currentId].itemsArray = buildItemsArray(currentAnnotation);
+                state.annotations[currentId].itemsUriArray = buildItemsUriArray(currentAnnotation);
+                state.annotations[currentId].broken = isBroken;
+                state.annotations[currentId].ghosted = false;
+                state.annotations[currentId].expanded = true;
             }
         }
     };
@@ -567,11 +570,11 @@ angular.module('Pundit2.AnnotationSidebar')
         annotationDetails.closeAllAnnotationView(undefined, true);
     });
 
-    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
         $document.off('mousedown', mouseDownHandler);
     });
 
-    EventDispatcher.addListener('Client.show', function(/*e*/) {
+    EventDispatcher.addListener('Client.show', function( /*e*/ ) {
         $document.on('mousedown', mouseDownHandler);
     });
 

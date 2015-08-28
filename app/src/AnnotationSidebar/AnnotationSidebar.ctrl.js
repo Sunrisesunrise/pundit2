@@ -462,10 +462,18 @@ angular.module('Pundit2.AnnotationSidebar')
         savedOrEditedAnnotationQueque.push(currentAnnotation);
     });
 
-    EventDispatcher.addListeners(['AnnotationsCommunication.annotationDeleted'], function(e) {
+    EventDispatcher.addListener('AnnotationsCommunication.annotationDeleted', function(e) {
         var annotationId = e.args;
         deletedIdQueue.push(annotationId);
     });
+
+    EventDispatcher.addListener('AnnotationDetails.wrongAnnotation', function(e) {
+        var annotationId = e.args;
+        delete $scope.annotations[annotationId];
+        delete $scope.allAnnotations[annotationId];
+        $scope.annotationsLength = Object.keys($scope.annotations).length;
+        $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
+    });    
 
     angular.element($window).bind('resize', function() {
         resizeSidebarHeight();
