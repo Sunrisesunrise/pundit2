@@ -446,9 +446,11 @@
         .pnd-annotation-details-content {
             .pnd-annotation-details-item {
                 /* Separator between more triples */
-                border-bottom: 3px double @color-border-light;
+                padding-bottom: 1px;
+                border-bottom: 1px solid @color-border-light;
                 &:last-child {
-                    border-bottom: 1px solid @color-border-light;
+                    border-bottom: 0;
+                    padding-bottom: 0;
                 }
 
                 .pnd-annotation-details-item-header {
@@ -506,7 +508,7 @@
                 }
 
                 .pnd-annotation-details-object {
-                    // border-bottom: 1px solid @color-border-light;
+                    border-bottom: 1px solid @color-border-light;
                     .pnd-annotation-details-item-header {
                         .pnd-icon {
                             color: @object-color;

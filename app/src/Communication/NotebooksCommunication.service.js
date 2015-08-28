@@ -64,7 +64,7 @@ angular.module('Pundit2.Communication')
                 setLoading(false);
                 promise.reject("Error from server while retrieving list of my notebooks: " + statusCode);
                 notebookCommunication.err("Error from server while retrieving list of my notebooks: " + statusCode);
-                EventDispatcher.sendEvent('Pundit.alert', {title: 'Error loading notebooks', id: "ERROR", timeout: 3000, message: "There was an error loading your notebooks, please try again in 5 minutes reloading the page."});
+                EventDispatcher.sendEvent('Pundit.alert', {title: 'Error loading notebooks', id: "ERROR", timeout: null, message: "There was an error loading your notebooks, please try again in 5 minutes reloading the page."});
                 Analytics.track('api', 'error', 'get notebook owned', statusCode);
             });
         } else {

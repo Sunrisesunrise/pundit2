@@ -307,7 +307,7 @@ angular.module('Pundit2.Communication')
                 // wipe all annotations (are in cache)
                 AnnotationsExchange.wipe();
 
-                EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation deleted', id: "SUCCESS", timeout: null, message: "Your annotation has been correctly deleted."});
+                EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation deleted', id: "SUCCESS", timeout: 3000, message: "Your annotation has been correctly deleted."});
 
                 // Dispatch event
                 EventDispatcher.sendEvent('AnnotationsCommunication.annotationDeleted', annID);
@@ -322,7 +322,7 @@ angular.module('Pundit2.Communication')
             }).error(function() {
                 setLoading(false);
                 annotationsCommunication.log("Error impossible to delete annotation: " + annID + " please retry.");
-                EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong', id: "WARNING", timeout: null, message: 'Pundit couldn\'t delete your annotation, please try again in 5 minutes'});
+                EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong', id: "WARNING", timeout: 3000, message: 'Pundit couldn\'t delete your annotation, please try again in 5 minutes'});
                 promise.reject("Error impossible to delete annotation: " + annID);
             });
         } else {

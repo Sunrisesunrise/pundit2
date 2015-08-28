@@ -246,7 +246,7 @@ angular.module('Pundit2.Core')
             }
         }).error(function() {
             myPundit.err('Server error');
-            EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong.', id: 'ERROR', timeout: 3000, message: 'There was an error while trying to communicate with server. Please reaload the page in few minutes'});
+            EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong.', id: 'ERROR', timeout: null, message: 'There was an error while trying to communicate with server. Please reaload the page in few minutes'});
             promise.reject('check logged in promise error');
         });
 
