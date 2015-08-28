@@ -5,7 +5,7 @@ angular.module('Pundit2.Toolbar')
 .controller('ToolbarCtrl', function($scope, $rootScope, $modal, $http, $window, NameSpace, Config, 
     Toolbar, SelectorsManager, Fp3, MyPundit, Dashboard, TripleComposer, AnnotationSidebar, 
     Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, 
-    Analytics, PageHandler, EventDispatcher, $timeout, Keyboard) {
+    Analytics, PageHandler, EventDispatcher, $timeout, $interval, Keyboard) {
 
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
     $scope.dropdownTemplateMyNotebook = "src/Toolbar/myNotebooksDropdown.tmpl.html";
@@ -28,12 +28,26 @@ angular.module('Pundit2.Toolbar')
     $scope.needsProgressBar = false;
     $scope.progress = '0%';
 
-    var progressBarInterval;
+    var progressState = {
+        'interval': undefined,
+        'current': 0,
+        'dest': 0
+    };
 
     EventDispatcher.addListener('Status.progress', function(evt) {
         $scope.needsProgressBar = evt.args.needsProgressBar;
-        $scope.progress = evt.args.progress + '%';
-        console.log(evt.args.progress);
+        progressState.dest = evt.args.progress;
+        if (typeof progressState.interval === 'undefined') {
+            progressState.interval = $interval(function(){
+                $scope.progress = progressState.current + '%';
+                progressState.current ++;
+                if (progressState.current >= progressState.dest) {
+                    progressState.current = progressState.dest
+                    $interval.cancel(progressState.interval);
+                    progressState.interval = undefined;
+                }
+            }, 50);
+        }
     });
 
     var menuCustom = Toolbar.options.menuCustom;
