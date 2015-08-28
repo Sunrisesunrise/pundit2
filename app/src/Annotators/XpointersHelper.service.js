@@ -47,7 +47,7 @@ angular.module('Pundit2.Annotators')
 })
 
 .service('XpointersHelper', function(XPOINTERSHELPERDEFAULTS, NameSpace, BaseComponent, EventDispatcher,
-    $document, $location, $window, $q, $timeout) {
+    $document, $location, $window, $q, $timeout, Status) {
 
     var xp = new BaseComponent('XpointersHelper', XPOINTERSHELPERDEFAULTS);
     var preventDelay = xp.options.preventDelay ? true : false;
@@ -299,7 +299,9 @@ angular.module('Pundit2.Annotators')
         var xpathsCache = sortedXpaths,
             i = sortedXpaths.length - 1,
             deferred = $q.defer(),
-            updateTimer;
+            updateTimer,
+            startLength = sortedXpaths.length;
+
 
         var deferredUpdate = function(promise) {
             $timeout.cancel(updateTimer);
@@ -328,6 +330,11 @@ angular.module('Pundit2.Annotators')
                     currentHits++;
                     i--;
                 }
+
+                var currentLength = xpathsCache.length === 1 ? 0 : xpathsCache.length;
+                var percVal = 100 * (startLength - currentLength) / startLength;
+                Status.hitProgress(2, percVal);
+
                 deferredUpdate(promise);
             };
 

@@ -25,6 +25,16 @@ angular.module('Pundit2.Toolbar')
     $scope.menuCustomBtn = false;
     $scope.menuCustomDropdown = [];
     $scope.menuCustomBtn = [];
+    $scope.needsProgressBar = false;
+    $scope.progress = '0%';
+
+    var progressBarInterval;
+
+    EventDispatcher.addListener('Status.progress', function(evt) {
+        $scope.needsProgressBar = evt.args.needsProgressBar;
+        $scope.progress = evt.args.progress + '%';
+        console.log(evt.args.progress);
+    });
 
     var menuCustom = Toolbar.options.menuCustom;
 

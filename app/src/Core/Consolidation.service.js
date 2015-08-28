@@ -2,15 +2,15 @@ angular.module('Pundit2.Core')
 
 .constant('CONSOLIDATIONDEFAULTS', {
     // Number of item operations for time
-    maxHits: 40,
+    maxHits: 20,
     // Delay in ms for the refresh of the buffer
-    bufferDelay: 80,
+    bufferDelay: 40,
     // undefined / true / false
     preventDelay: undefined
 })
 
 .service('Consolidation', function($rootScope, $location, $q, $timeout, $window, CONSOLIDATIONDEFAULTS, BaseComponent, EventDispatcher, NameSpace, Config,
-    Item, ItemsExchange, XpointersHelper) {
+    Item, ItemsExchange, XpointersHelper, Status) {
 
     var cc = new BaseComponent('Consolidation', CONSOLIDATIONDEFAULTS),
         state = {};
@@ -57,7 +57,9 @@ angular.module('Pundit2.Core')
     var addItems = function(items) {
         var deferred = $q.defer(),
             itemsCache = [],
-            updateAddTimer;
+            updateAddTimer,
+            startLength = items.length;
+
 
         var deferredAddItems = function(promise) {
             $timeout.cancel(updateAddTimer);
@@ -110,6 +112,8 @@ angular.module('Pundit2.Core')
 
                     currentHits++;
                 }
+                var percVal = 100 * (startLength - itemsCache.length) / startLength;
+                Status.hitProgress(1, percVal);
                 deferredAddItems(promise);
             };
 
@@ -149,6 +153,7 @@ angular.module('Pundit2.Core')
             allItems = allItems.concat(ItemsExchange.getItemsByContainer(Config.modules.MyItems.container));
         }
 
+        Status.progress = 0;
         EventDispatcher.sendEvent('Consolidation.StartConsolidate');
         EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.consolidation', data: true});
         cc.log('Consolidating ALL items');

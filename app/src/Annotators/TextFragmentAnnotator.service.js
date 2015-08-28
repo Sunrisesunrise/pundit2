@@ -444,6 +444,7 @@ angular.module('Pundit2.Annotators')
     };
 
     EventDispatcher.addListener('XpointersHelper.NodeAdded', function(e) {
+        return;
         var elementInfo = e.args,
             elementFragments = elementInfo.fragments,
             elementReferce = elementInfo.reference,
