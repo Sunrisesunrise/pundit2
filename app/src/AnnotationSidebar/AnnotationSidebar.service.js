@@ -343,6 +343,7 @@ angular.module('Pundit2.AnnotationSidebar')
     var toolbarHeight = 30;
 
     var tempBrokenList = {};
+    var firstSendBrokenAlert = true;
 
     var isEntitiesActive = annotationSidebar.isEntitesActive = PageItemsContainer.options.active;
 
@@ -821,8 +822,9 @@ angular.module('Pundit2.AnnotationSidebar')
         });
 
         orderAndSetPos();
-        if (BrokenHelper.getBrokenAnnotations().length) {
+        if (BrokenHelper.getBrokenAnnotations().length && firstSendBrokenAlert) {
             EventDispatcher.sendEvent('Pundit.alert', {title: 'Broken annotations!', id: "WARNING", timeout: 12000, message: "It looks like some annotations on the page are broken: this can happen if the <strong>text of the page has changed in the last days</strong>.<br /><br />See if you can fix the broken annotations by editing them.<br /><br />Broken annotations are shown on the top right of the sidebar and are highlighted in red."});
+            firstSendBrokenAlert = false;
         }
         BrokenHelper.sendQueques();
 
