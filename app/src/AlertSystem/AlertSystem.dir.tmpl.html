@@ -20,8 +20,7 @@
         <h1 ng-show="alert.title && alert.title.length > 0">
             {{alert.title}}
         </h1>
-        <p class="pnd-alert-text">
-            {{alert.message}}
+        <p class="pnd-alert-text" ng-bind-html="alert.message">
         </p>
     </div>
 </div>
