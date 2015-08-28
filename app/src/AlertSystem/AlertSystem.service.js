@@ -169,9 +169,10 @@ angular.module('Pundit2.AlertSystem')
         if (!alert.timeout) {
             return;
         } else {
+            var currentWidth = alert.progress.css('width');
             alert.progress.css('-webkit-transition-duration', '0s')
                 .css('transition-duration', '0s')
-                .css('width', '0%');
+                .css('width', currentWidth);
             alert.animating = false;
             alertSystem.removeTimeout(alert.id);
         }
