@@ -1204,6 +1204,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 state.isFiltersExpanded = false;
             }
             Consolidation.wipe();
+            EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
             Annomatic.run();
         }
 

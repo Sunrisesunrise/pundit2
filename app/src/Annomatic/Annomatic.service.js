@@ -130,7 +130,7 @@ angular.module('Pundit2.Annomatic')
 .service('Annomatic', function(ANNOMATICDEFAULTS, BaseComponent, EventDispatcher, NameSpace,
     DataTXTResource, XpointersHelper, ItemsExchange, TextFragmentHandler, ImageHandler, TypesHelper,
     Toolbar, DBPediaSpotlightResource, Item, AnnotationsCommunication, NameEntityRecognitionResource,
-    $rootScope, $timeout, $document, $window, $q, Consolidation, ContextualMenu) {
+    $rootScope, $timeout, $document, $window, $q, Consolidation, ContextualMenu, TextFragmentAnnotator) {
 
     var annomatic = new BaseComponent('Annomatic', ANNOMATICDEFAULTS);
 
@@ -1389,6 +1389,9 @@ angular.module('Pundit2.Annomatic')
             // AnnotationSidebar.toggleLoading();
             EventDispatcher.sendEvent('Annomatic.loading', false);
             Consolidation.consolidate(ItemsExchange.getItemsByContainer(annomatic.options.container));
+            setTimeout(function() {
+                TextFragmentAnnotator.showAll();
+            }, 10);
         });
     };
 

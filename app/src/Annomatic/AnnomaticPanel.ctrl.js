@@ -43,6 +43,9 @@ angular.module('Pundit2.Annomatic')
             // TOOD: add loading check
             AnnotationSidebar.toggleLoading();
             Consolidation.consolidate(ItemsExchange.getItemsByContainer(Annomatic.options.container));
+            setTimeout(function() {
+                TextFragmentAnnotator.showAll();
+            }, 10);
         });
     };
 
