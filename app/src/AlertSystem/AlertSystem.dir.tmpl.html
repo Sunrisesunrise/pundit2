@@ -1,11 +1,14 @@
 <div class="pnd-alert-wrp">
     <div
         class="pnd-alert pnd-animate-repeat {{alert.alertClass}}"
-        ng-animate="{enter: 'pnd-animate-repeat-enter', leave: 'pnd-animate-repeat-leave'}"
         ng-class="{'pnd-alert-closable': alert.dismissible}"
+        ng-show="::animateShowAlert(alert)"
         role="alert"
         ng-repeat="alert in alerts"
-        ng-click="alertClick(alert)">
+        ng-click="alertClick(alert)"
+        data-alert-id="{{alert.id}}"
+        style="{{::alert.initStyle}}"
+        >
         <button
             type="button"
             class="close"

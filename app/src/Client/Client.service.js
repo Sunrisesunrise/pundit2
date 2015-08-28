@@ -610,6 +610,9 @@ angular.module('Pundit2.Client')
                 NotebookCommunication.getMyNotebooks();
                 NotebookCommunication.getCurrent();
             }
+            else {
+                EventDispatcher.sendEvent('Pundit.alert', {title: 'Please log in', id: "INFO", timeout: 3000, message: "Log in or register to Pundit to save your annotations and see your private notebooks."});
+            }
 
             // Now that we know if we're logged in or not, we can download the right
             // annotations: auth or non-auth form the server

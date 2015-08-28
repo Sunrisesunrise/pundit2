@@ -9,7 +9,13 @@ angular.module('Pundit2.AlertSystem')
     };
 
     $scope.dismissAlert = function(alert) {
-        AlertSystem.clearAlert(alert.id);
+        AlertSystem.clearAlert(alert);
     };
+
+    $scope.animateShowAlert = function(alert) {
+        // Using ng-show as trigger to start animation.
+        AlertSystem.show(alert);
+        return true;
+    }
 
 });

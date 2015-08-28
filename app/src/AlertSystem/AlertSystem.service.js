@@ -28,6 +28,8 @@ angular.module('Pundit2.AlertSystem')
      */
     defaultDismissTime: 5000,
 
+    forceAnimationOnClose: true,
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -61,7 +63,7 @@ angular.module('Pundit2.AlertSystem')
 
 // TODO Add method documentation in JSDoc
 
-.service('AlertSystem', function(BaseComponent, $timeout, ALERTSYSTEMDEFAULTS, EventDispatcher) {
+.service('AlertSystem', function(BaseComponent, $timeout, ALERTSYSTEMDEFAULTS, EventDispatcher, $rootScope) {
 
     var alertSystem = new BaseComponent('AlertSystem', ALERTSYSTEMDEFAULTS);
 
@@ -69,38 +71,129 @@ angular.module('Pundit2.AlertSystem')
     var id = 0;
     var timeouts = {};
 
+    var animQueue = [];
+    var animating = false;
+
+    var processAnimQueue = function() {
+        if (animQueue.length === 0) {
+            animating = false;
+            return;
+        }
+        var alert = animQueue.shift(),
+            animObject = {},
+            elem;
+
+        if (alert.animShow) {
+            elem = $('alert-system div[data-alert-id="' + alert.id + '"]');
+            var h = elem.height() + parseInt(elem.css('paddingTop')) + parseInt(elem.css('paddingBottom')) + parseInt(elem.css('borderTop'));
+
+            animObject.marginBottom = elem.css('marginBottom');
+            animObject.opacity = 1;
+
+            elem.css('margin-bottom', '-' + h +'px')
+                .css('display', 'block');//
+        }
+        else if (alert.animHide) {
+            elem = $('alert-system div[data-alert-id="' + alert.id + '"]');
+            var width = elem.width();
+            elem.css('margin-bottom', '-' + h +'px')
+                .css('min-height', '0px');
+
+            animObject.opacity = 0;
+            animObject.marginBottom = '0px';
+            //animObject.marginLeft = '-'+width+'px';
+            animObject.height = '0px';
+            animObject.paddingTop = '0px';
+            animObject.paddingBottom = '0px';
+            animObject.borderTopWidth = '0px';
+            animObject.borderBottomWidth = '0px';
+
+            if (alertSystem.options.forceAnimationOnClose && !alert.animate) {
+                alert.animDelay = alertSystem.AlertType.INFO.animDelay;
+            }
+        }
+
+        if (typeof elem !== 'undefined') {
+            alert.animating = true;
+            elem.animate(animObject, alert.animDelay, function() {
+                if (alert.animHide) {
+                    doClearAlert(alert);
+                    $rootScope.$$phase || $rootScope.$digest();
+                }
+                alert.animating = false;
+                processAnimQueue();
+            });
+        }
+        else {
+            processAnimQueue();
+        }
+    };
+
+    alertSystem.show = function(alert) {
+        if (alert.animShow || alert.animHide) {
+            return;
+        }
+        alert.animShow = true;
+        animQueue.push(alert);
+        if (animating) {
+            return;
+        }
+        animating = true;
+        alert.animating = true;
+        processAnimQueue();
+    };
+
+    alertSystem.animHide = function(alert) {
+        alert.animHide = true;
+        animQueue.push(alert);
+        if (animating) {
+            return;
+        }
+        animating = true;
+        alert.animating = true;
+        processAnimQueue();
+    };
+
     /**
      * Enumeration of alert type with relatives default values
      * @type {{OK: {id: string, alertClass: string, timeout: number, top: boolean, dismissible: boolean}, ERROR: {id: string, alertClass: string, timeout: null, top: boolean, dismissible: boolean}, ALERT: {id: string, alertClass: string, timeout: null, top: boolean, dismissible: boolean}, CUSTOM: {id: string, alertClass: string, timeout: null, top: boolean, dismissible: boolean}}}
      */
     alertSystem.AlertType = {
-        OK: {
+        SUCCESS: {
             id: 'SUCCESS',
             alertClass: 'pnd-alert-success',
             timeout: alertSystem.options.defaultDismissTime,
             top: true,
-            dismissible: true
+            dismissible: true,
+            animate: true,
+            animDelay: 400
         },
         ERROR: {
             id: 'ERROR',
-            alertClass: 'pnd-alert-danger',
+            alertClass: 'pnd-alert-error',
             timeout: null,
             top: true,
-            dismissible: true
+            dismissible: true,
+            animate: true,
+            animDelay: 400
         },
-        ALERT: {
-            id: 'ALERT',
+        INFO: {
+            id: 'INFO',
             alertClass: 'pnd-alert-info',
             timeout: null,
             top: true,
-            dismissible: true
+            dismissible: true,
+            animate: true,
+            animDelay: 400
         },
-        CUSTOM: {
-            id: 'CUSTOM',
+        WARNING: {
+            id: 'WARNING',
             alertClass: 'pnd-alert-warning',
             timeout: null,
             top: true,
-            dismissible: true
+            dismissible: true,
+            animate: true,
+            animDelay: 400
         }
     };
 
@@ -117,7 +210,7 @@ angular.module('Pundit2.AlertSystem')
     var setTimeout = function(alert) {
         var key = getTimeoutKey(alert.id);
         var promise = $timeout(function() {
-            alertSystem.clearAlert(alert.id);
+            alertSystem.clearAlert(alert);
         }, alert.timeout);
         timeouts[key] = promise;
     };
@@ -171,9 +264,8 @@ angular.module('Pundit2.AlertSystem')
             timeout: timeout,
             dismissible: dismissible,
             title: title,
-            showTitle: function() {
-                return true;
-            }
+            initStyle: type.animate ? 'display: none; opacity: 0' : '',
+            animDelay: type.animate ? isNaN(type.animDelay) ? alertSystem.AlertType.INFO.animDelay : type.animDelay : 1
         };
 
         if (top) {
@@ -183,6 +275,10 @@ angular.module('Pundit2.AlertSystem')
             alerts.push(alert);
             alertSystem.log('Pushed alert on bottom');
         }
+        $rootScope.$$phase || $rootScope.$apply(function() {
+            console.log("after apply");
+            console.log($('[data-alert-id="'+alert.id+'"]'));
+        });
         if (timeout) {
             setTimeout(alert);
         }
@@ -218,12 +314,17 @@ angular.module('Pundit2.AlertSystem')
      * @param {id} id of the alert
      *
      */
-    alertSystem.clearAlert = function(id) {
-        alertSystem.removeTimeout(id);
+    alertSystem.clearAlert = function(alert) {
+        delete alert.animShow;
+        alert.animHide = true;
+        alertSystem.animHide(alert);
+    };
+
+    var doClearAlert = function(alert) {
+        alertSystem.removeTimeout(alert.id);
         var alertToRemove = -1;
         for (var i = 0; i < alerts.length; i++) {
-            var alert = alerts[i];
-            if (alert.id === id) {
+            if (alerts[i].id === alert.id) {
                 alertToRemove = i;
                 break;
             }
@@ -268,11 +369,13 @@ angular.module('Pundit2.AlertSystem')
     alertSystem.resetTimeout = function(id) {
         alertSystem.removeTimeout(id);
         var alert = getAlert(id);
-        setTimeout(alert);
+        if (alert.timeout && !alert.animating) {
+            setTimeout(alert);
+        }
     };
 
     EventDispatcher.addListener('Pundit.alert', function(evt) {
-        var alertConfig = angular.copy(alertSystem.AlertType.ALERT);
+        var alertConfig = angular.copy(alertSystem.AlertType.INFO);
         var message = evt.args;
         var title;
         if (typeof evt.args !== 'string') {

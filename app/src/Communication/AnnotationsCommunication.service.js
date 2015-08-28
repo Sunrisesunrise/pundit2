@@ -57,6 +57,7 @@ angular.module('Pundit2.Communication')
             annotationsCommunication.log("Graph correctly updated: " + annID);
         }).error(function() {
             setLoading(false);
+            EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong', id: "ERROR", timeout: null, message: "Pundit couldn't save your annotation, please try again in 5 minutes."});
             promise.reject();
             annotationsCommunication.log("Error during graph editing of " + annID);
         });
@@ -77,6 +78,7 @@ angular.module('Pundit2.Communication')
                     Consolidation.consolidateAll();
                     EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
                     setLoading(false);
+                    EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation edited', id: "SUCCESS", timeout: null, message: "Your annotation has been correctly edited."});
                     promise.resolve();
                 });
             }
@@ -84,6 +86,7 @@ angular.module('Pundit2.Communication')
             annotationsCommunication.log("Items correctly updated: " + annID);
         }).error(function() {
             setLoading(false);
+            EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong', id: "ERROR", timeout: null, message: "Pundit couldn't save your annotation, please try again in 5 minutes."});
             promise.reject();
             annotationsCommunication.log("Error during items editing of " + annID);
         });
@@ -121,12 +124,14 @@ angular.module('Pundit2.Communication')
                 Consolidation.consolidateAll();
                 EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
                 setLoading(false);
+                EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation edited', id: "SUCCESS", timeout: null, message: "Your annotation has been correctly edited."});
                 promise.resolve();
             });
             annotationsCommunication.log("Items correctly updated: " + annID);
 
         }).error(function(msg) {
             // TODO
+            EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong', id: "ERROR", timeout: null, message: "Pundit couldn't save your annotation, please try again in 5 minutes."});
             annotationsCommunication.log("Error: impossible to update annotation", msg);
             setLoading(false);
             promise.reject();
@@ -256,13 +261,15 @@ angular.module('Pundit2.Communication')
                         });
                     }
                 }).error(function( /*data, statusCode*/ ) {
+                    annotationsCommunication.err("Error during load multiple annotations.");
+                    EventDispatcher.sendEvent('Pundit.alert', {title: 'Sorry there was a problem', id: "ERROR", timeout: null, message: 'The system might be too busy and we couldn\'t load the annotations, please try again in 5 minutes.'});
                     setLoading(false);
                 });
             }
         }, function(msg) {
             annotationsCommunication.err("Could not search for annotations, error from the server: " + msg);
             EventDispatcher.sendEvent('Pundit.error', 'Could not search for annotations, error from the server!');
-            EventDispatcher.sendEvent('Pundit.alert', {id: "ERROR", timeout: 3000, message: 'Could not search for annotations, error from the server!'});
+            EventDispatcher.sendEvent('Pundit.alert', {title: 'Sorry there was a problem', id: "ERROR", timeout: null, message: 'The system might be too busy and we couldn\'t load the annotations, please try again in 5 minutes.'});
             promise.reject(msg);
         });
 
@@ -300,6 +307,8 @@ angular.module('Pundit2.Communication')
                 // wipe all annotations (are in cache)
                 AnnotationsExchange.wipe();
 
+                EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation deleted', id: "SUCCESS", timeout: null, message: "Your annotation has been correctly deleted."});
+
                 // Dispatch event
                 EventDispatcher.sendEvent('AnnotationsCommunication.annotationDeleted', annID);
 
@@ -313,11 +322,12 @@ angular.module('Pundit2.Communication')
             }).error(function() {
                 setLoading(false);
                 annotationsCommunication.log("Error impossible to delete annotation: " + annID + " please retry.");
-                EventDispatcher.sendEvent('Pundit.alert', {id: "ERROR", timeout: 3000, message: "Error impossible to delete annotation: " + annID + " please retry."});
+                EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong', id: "WARNING", timeout: null, message: 'Pundit couldn\'t delete your annotation, please try again in 5 minutes'});
                 promise.reject("Error impossible to delete annotation: " + annID);
             });
         } else {
             annotationsCommunication.log("Error impossible to delete annotation: " + annID + " you are not logged");
+            EventDispatcher.sendEvent('Pundit.alert', {title: 'Please log in', id: "WARNING", timeout: 3000, message: 'Please log in to Pundit to delete an annotation.'});
             promise.reject("Error impossible to delete annotation: " + annID + " you are not logged");
         }
 
@@ -413,6 +423,8 @@ angular.module('Pundit2.Communication')
                         data: AnnotationsExchange.getAnnotations().length
                     });
 
+                    EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation saved', id: "SUCCESS", timeout: null, message: "Congratulations, your new annotation has been correctly saved."});
+
                     // TODO move inside notebook then?
                     setLoading(false);
                     promise.resolve(ann.id);
@@ -433,12 +445,13 @@ angular.module('Pundit2.Communication')
             }).error(function(msg) {
                 setLoading(false);
                 annotationsCommunication.log("Error: impossible to save annotation", msg);
-                EventDispatcher.sendEvent('Pundit.alert', {id: "ERROR", timeout: 3000, message: "Error: impossible to save annotation, " + msg});
+                EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong', id: "ERROR", timeout: null, message: "Pundit couldn't save your annotation, please try again in 5 minutes."});
                 promise.reject();
             });
 
         } else {
             annotationsCommunication.log("Error impossible to save annotation you are not logged");
+            EventDispatcher.sendEvent('Pundit.alert', {title: 'Please log in', id: "WARNING", timeout: 3000, message: 'Please log in to Pundit to save your annotation.'});
             promise.reject("Error impossible to save annotation you are not logged");
         }
 
@@ -465,7 +478,7 @@ angular.module('Pundit2.Communication')
 
         } else {
             annotationsCommunication.log("Error impossible to edit annotation: " + annID + " you are not logged");
-            EventDispatcher.sendEvent('Pundit.alert', {id: "ERROR", timeout: 3000, message: "Error impossible to edit annotation: " + annID + " you are not logged"});
+            EventDispatcher.sendEvent('Pundit.alert', {title: 'Please log in', id: "WARNING", timeout: 3000, message: 'Please log in to Pundit to edit your annotation.'});
             promise.reject("Error impossible to edit annotation: " + annID + " you are not logged");
         }
 
