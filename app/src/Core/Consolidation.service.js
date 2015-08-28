@@ -146,22 +146,38 @@ angular.module('Pundit2.Core')
             return;
         }
 
-        var allItems = [];
+        var allItems = [],
+            pageItems = [],
+            myItems = [];
         if (typeof(Config.modules.PageItemsContainer) !== 'undefined') {
-            allItems = allItems.concat(ItemsExchange.getItemsByContainer(Config.modules.PageItemsContainer.container));
+            pageItems = ItemsExchange.getItemsByContainer(Config.modules.PageItemsContainer.container);
+            allItems = allItems.concat(pageItems);
         }
         if (typeof(Config.modules.MyItems) !== 'undefined') {
-            allItems = allItems.concat(ItemsExchange.getItemsByContainer(Config.modules.MyItems.container));
+            myItems = ItemsExchange.getItemsByContainer(Config.modules.MyItems.container);
+            allItems = allItems.concat(myItems);
         }
 
         Status.resetProgress();
         EventDispatcher.sendEvent('Consolidation.StartConsolidate');
-        EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.consolidation', data: true});
+        EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
+            event: 'Pundit2.consolidation',
+            data: true
+        });
+
         cc.log('Consolidating ALL items');
+        
         consolidatePromise = cc.consolidate(allItems);
         consolidatePromise.then(function() {
+            if (pageItems.length === 0) {
+                // There are no annotations with valid page items
+                Status.hitProgress(3, 100);
+            }
             EventDispatcher.sendEvent('Consolidation.consolidateAll');
-            EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.consolidation', data: false});
+            EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
+                event: 'Pundit2.consolidation',
+                data: false
+            });
         });
     };
 
