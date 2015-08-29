@@ -411,9 +411,9 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
-    annotationDetails.toggleAnnotationView = function(currentId) {
+    annotationDetails.toggleAnnotationView = function(currentId, forceTo) {
         annotationDetails.closeAllAnnotationView(currentId);
-        state.annotations[currentId].expanded = !state.annotations[currentId].expanded;
+        state.annotations[currentId].expanded = typeof forceTo !== 'undefined' ? forceTo : !state.annotations[currentId].expanded;
     };
 
     annotationDetails.isAnnotationGhosted = function(currentId) {
@@ -574,7 +574,7 @@ angular.module('Pundit2.AnnotationSidebar')
     // Watch annotation sidebar expanded or collapsed
     EventDispatcher.addListener('AnnotationSidebar.toggleAnnotation', function(e) {
         var annId = e.args;
-        annotationDetails.toggleAnnotationView(annId);
+        annotationDetails.toggleAnnotationView(annId, true);
     });
 
     EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
