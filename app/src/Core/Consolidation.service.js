@@ -204,7 +204,7 @@ angular.module('Pundit2.Core')
         }
 
         Status.resetProgress();
-        EventDispatcher.sendEvent('Consolidation.StartConsolidate');
+        EventDispatcher.sendEvent('Consolidation.startConsolidate');
         EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
             event: 'Pundit2.consolidation',
             data: true
@@ -324,7 +324,7 @@ angular.module('Pundit2.Core')
     };
 
     if (cc.options.preventDelay === undefined) {
-        EventDispatcher.addListener('AnnotationsCommunication.PreventDelay', function(e) {
+        EventDispatcher.addListener('Pundit.preventDelay', function(e) {
             preventDelay = e.args;
         });
     }

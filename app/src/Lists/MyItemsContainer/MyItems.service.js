@@ -100,8 +100,9 @@ angular.module("Pundit2.MyItemsContainer")
                     !ItemsExchange.isItemInContainer(item, myItems.options.container);
             },
             action: function(item) {
+                EventDispatcher.sendEvent('MyItems.action');
                 myItems.addItem(item).then(function() {
-                    EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
+                    EventDispatcher.sendEvent('Pundit.preventDelay', true);
                     EventDispatcher.sendEvent('MyItems.itemAdded', item);
                     Consolidation.consolidateAll();
                 });
@@ -119,8 +120,9 @@ angular.module("Pundit2.MyItemsContainer")
                     ItemsExchange.isItemInContainer(item, myItems.options.container);
             },
             action: function(item) {
+                EventDispatcher.sendEvent('MyItems.action');
                 myItems.deleteItem(item).then(function() {
-                    EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
+                    EventDispatcher.sendEvent('Pundit.preventDelay', true);
                     EventDispatcher.sendEvent('MyItems.itemRemoved', item);
                     Consolidation.consolidateAll();
                 });

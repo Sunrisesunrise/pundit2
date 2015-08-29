@@ -140,9 +140,9 @@ angular.module('Pundit2.Core')
     status.hitProgress = function(phase, relativePerc) {
         var phases = {
             'phase0': 0,
-            'phase1': 10,
-            'phase2': 40,
-            'phase3': 50,
+            'phase1': 20,
+            'phase2': 35,
+            'phase3': 45,
         };
 
         var init = 0;

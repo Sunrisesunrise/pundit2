@@ -156,7 +156,7 @@ angular.module('Pundit2.Communication')
             return;
         }
 
-        EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', preventDelay);
+        EventDispatcher.sendEvent('Pundit.preventDelay', preventDelay);
 
         setLoading(true);
 
@@ -283,7 +283,7 @@ angular.module('Pundit2.Communication')
 
         var promise = $q.defer();
 
-        EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
+        EventDispatcher.sendEvent('Pundit.preventDelay', true);
 
         if (MyPundit.isUserLogged()) {
             setLoading(true);
@@ -338,7 +338,7 @@ angular.module('Pundit2.Communication')
         // var completed = 0;
         var promise = $q.defer();
 
-        EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
+        EventDispatcher.sendEvent('Pundit.preventDelay', true);
 
         var postSaveSend = function(url, annotationId) {
             $http({
@@ -466,7 +466,7 @@ angular.module('Pundit2.Communication')
 
         var promise = $q.defer();
 
-        EventDispatcher.sendEvent('AnnotationsCommunication.PreventDelay', true);
+        EventDispatcher.sendEvent('Pundit.preventDelay', true);
 
         if (MyPundit.isUserLogged()) {
 

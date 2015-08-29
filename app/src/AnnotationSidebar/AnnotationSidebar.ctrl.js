@@ -458,7 +458,7 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.isLoading = e.args;
     });
 
-    EventDispatcher.addListener('Consolidation.StartConsolidate', function() {
+    EventDispatcher.addListener('Consolidation.startConsolidate', function() {
         $scope.consolidationInProgress = true;
     });
 

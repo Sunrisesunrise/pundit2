@@ -73,6 +73,7 @@ angular.module('Pundit2.AnnotationSidebar')
         annotations: [],
         defaultExpanded: annotationDetails.options.defaultExpanded,
         isUserLogged: false,
+        isSidebarExpanded: false,
         isGhostedActive: false,
         userData: {}
     };
@@ -435,7 +436,7 @@ angular.module('Pundit2.AnnotationSidebar')
         var expandedState;
         var template;
         var currentColor;
-        
+
         if (typeof(currentId) === 'undefined' ||
             typeof(currentAnnotation) === 'undefined') {
             EventDispatcher.sendEvent('AnnotationDetails.wrongAnnotation', currentId);
@@ -558,8 +559,14 @@ angular.module('Pundit2.AnnotationSidebar')
 
     // Watch annotation sidebar expanded or collapsed
     EventDispatcher.addListener('AnnotationSidebar.toggle', function(e) {
-        var isSidebarExpanded = e.args;
-        if (isSidebarExpanded === false) {
+        state.isSidebarExpanded = e.args;
+        if (state.isSidebarExpanded === false) {
+            annotationDetails.closeAllAnnotationView();
+        }
+    });
+
+    EventDispatcher.addListener('MyItems.action', function() {
+        if (state.isSidebarExpanded) {
             annotationDetails.closeAllAnnotationView();
         }
     });

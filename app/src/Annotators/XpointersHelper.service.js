@@ -701,7 +701,7 @@ angular.module('Pundit2.Annotators')
     };
 
     if (xp.options.preventDelay === undefined) {
-        EventDispatcher.addListener('AnnotationsCommunication.PreventDelay', function(e) {
+        EventDispatcher.addListener('Pundit.preventDelay', function(e) {
             preventDelay = e.args;
         });
     }

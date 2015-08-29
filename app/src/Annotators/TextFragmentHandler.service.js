@@ -638,7 +638,7 @@ angular.module('Pundit2.Annotators')
         return '';
     }; // getContentURLFromXPath()
 
-    EventDispatcher.addListener('Consolidation.StartConsolidate', function(/*e*/) {
+    EventDispatcher.addListener('Consolidation.startConsolidate', function(/*e*/) {
         checkTemporaryConsolidated(true);
     });
 

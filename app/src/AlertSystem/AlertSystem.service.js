@@ -452,7 +452,7 @@ angular.module('Pundit2.AlertSystem')
     };
 
     EventDispatcher.addListener('Pundit.alert', function(evt) {
-        var alertConfig = angular.copy(alertSystem.AlertType.INFO);
+        var alertConfig = angular.extend({}, alertSystem.AlertType.INFO);
         var message = evt.args;
         var title;
         if (typeof evt.args !== 'string') {
