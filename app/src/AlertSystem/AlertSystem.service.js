@@ -162,6 +162,14 @@ angular.module('Pundit2.AlertSystem')
         processAnimQueue();
     };
 
+    alertSystem.click = function(alert) {
+        delete alert.newTimeoutValue;
+        alert.mouseEnterTime = alert.timerStartTime = 0;
+        alert.progress.css('-webkit-transition-duration', '0s')
+        .css('transition-duration', '0s')
+        .css('width', '0%');
+    };
+
     alertSystem.mouseEnter = function(alert) {
         if (alert.animating) {
             return;
@@ -169,11 +177,11 @@ angular.module('Pundit2.AlertSystem')
         if (!alert.timeout) {
             return;
         } else {
-            // Width needs to be reset to 0%,
-            // or timeout needs to be recalculated.
+            alert.mouseEnterTime = (new Date()).getTime();
+            var currentWidth = alert.progress.css('width');
             alert.progress.css('-webkit-transition-duration', '0s')
                 .css('transition-duration', '0s')
-                .css('width', '0%');
+                .css('width', currentWidth);
             alert.animating = false;
             alertSystem.removeTimeout(alert.id);
         }
@@ -186,9 +194,10 @@ angular.module('Pundit2.AlertSystem')
         if (!alert.timeout) {
             return;
         } else {
-            var td = alert.timeout / 1000;
-            alert.progress.css('-webkit-transition-duration', td + 's')
-                .css('transition-duration', td + 's')
+            var timeout = alert.newTimeoutValue || alert.timeout;
+            alert.newTimeoutValue = timeout - alert.mouseEnterTime + alert.timerStartTime;
+            alert.progress.css('-webkit-transition-duration', (alert.newTimeoutValue / 1000) + 's')
+                .css('transition-duration', (alert.newTimeoutValue / 1000) + 's')
                 .css('width', '100%');
             alert.animating = false;
             alertSystem.resetAlertTimeout(alert);
@@ -252,9 +261,12 @@ angular.module('Pundit2.AlertSystem')
 
     var setTimeout = function(alert) {
         var key = getTimeoutKey(alert.id);
+        var t = typeof alert.newTimeoutValue !== 'undefined' ? alert.newTimeoutValue : alert.timeout;
         var promise = $timeout(function() {
             alertSystem.clearAlert(alert);
-        }, alert.timeout);
+        }, t);
+        alert.timerStartTime = (new Date()).getTime();
+        alert.mouseEnterTime = 0;
         timeouts[key] = promise;
     };
 
@@ -322,9 +334,9 @@ angular.module('Pundit2.AlertSystem')
             alertSystem.log("After apply - alert added");
             alertSystem.log(angular.element('[data-alert-id="' + alert.id + '"]'));
         });
-        if (timeout) {
-            setTimeout(alert);
-        }
+        //if (timeout) {
+        //    setTimeout(alert);
+        //}
     };
 
     /**

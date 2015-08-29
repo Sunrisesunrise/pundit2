@@ -5,7 +5,7 @@ angular.module('Pundit2.AlertSystem')
     $scope.alerts = AlertSystem.alerts;
 
     $scope.alertClick = function(alert) {
-        AlertSystem.resetTimeout(alert.id);
+        AlertSystem.click(alert);
     };
 
     $scope.dismissAlert = function(alert) {
