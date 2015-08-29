@@ -611,7 +611,18 @@ angular.module('Pundit2.Client')
                 NotebookCommunication.getCurrent();
             }
             else {
-                EventDispatcher.sendEvent('Pundit.alert', {title: 'Please log in', id: "INFO", timeout: 3000, message: "Log in or register to Pundit to save your annotations and see your private notebooks."});
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'Please log in',
+                    id: "INFO",
+                    timeout: 3000,
+                    message: "<a href=\"javascript:void(0)\" data-inner-callback=\"0\">Log in or register</a> to Pundit to save your annotations and see your private notebooks.",
+                    callbacks: [
+                        function(/*alert*/) {
+                            MyPundit.login();
+                            return true;
+                        }
+                    ]
+                });
             }
 
             // Now that we know if we're logged in or not, we can download the right
