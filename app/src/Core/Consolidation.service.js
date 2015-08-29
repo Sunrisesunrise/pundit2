@@ -138,6 +138,51 @@ angular.module('Pundit2.Core')
         return deferred.promise;
     };
 
+    // TODO: why is empty the annomatic container in itemsExchange (also with delaytimer) when 
+    // we use deferred version of addItems?! 
+    var addAnnomaticItems = function(items) {
+        if (!angular.isArray(items)) {
+            items = [items];
+        }
+
+        for (var l = items.length; l--;) {
+            var item = items[l];
+
+            var fragmentType = cc.isConsolidable(item);
+            if (fragmentType === false) {
+                cc.log("Not adding, item is not consolidable: " + item.label);
+                continue;
+            } else if (item.uri in state.itemListByURI) {
+                cc.log("Item already present: " + item.label);
+                continue;
+            }
+
+            // Add or create a new element for the indexes
+            if (fragmentType in state.itemListByType) {
+                state.itemListByType[fragmentType][item.uri] = item;
+                state.typeUriMap[fragmentType].push(item.uri);
+            } else {
+                state.typeUriMap[fragmentType] = [];
+                state.itemListByType[fragmentType] = {};
+                state.itemListByType[fragmentType][item.uri] = item;
+            }
+
+            // Create or update parent list of fragments
+            if (typeof(item.parentItemXP) !== 'undefined') {
+                if (item.parentItemXP in state.fragmentsItemListByParentURI) {
+                    state.fragmentsItemListByParentURI[item.parentItemXP].push(item);
+                } else {
+                    state.fragmentsItemListByParentURI[item.parentItemXP] = [item];
+                }
+            }
+
+            state.itemListByURI[item.uri] = item;
+            state.uriTypeMap[item.uri] = fragmentType;
+
+            cc.log("Added item: " + item.label + " (" + fragmentType + ")");
+        }
+    };
+
     // Will consolidate every possible item found in the ItemsExchange
     cc.consolidateAll = function() {
         var consolidatePromise;
@@ -166,7 +211,7 @@ angular.module('Pundit2.Core')
         });
 
         cc.log('Consolidating ALL items');
-        
+
         consolidatePromise = cc.consolidate(allItems);
         consolidatePromise.then(function() {
             if (pageItems.length === 0) {
@@ -197,9 +242,9 @@ angular.module('Pundit2.Core')
 
         cc.log('Will try to consolidate ' + items.length + ' items');
         cc.wipe();
-        addItemsPromise = addItems(items);
+        addItemsPromise = state.isRunningAnnomatic ? addAnnomaticItems(items) : addItems(items);
 
-        addItemsPromise.then(function() {
+        $q.all([addItemsPromise]).then(function() {
             for (var a in state.annotators) {
                 if (a in state.itemListByType) {
                     currentPromise = state.annotators[a].consolidate(state.itemListByType[a]);
