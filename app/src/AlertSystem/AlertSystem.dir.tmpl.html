@@ -5,7 +5,7 @@
         ng-show="::animateShowAlert(alert)"
         role="alert"
         ng-repeat="alert in alerts"
-        ng-click="alertClick(alert)"
+        ng-click="alertClick(alert, $event)"
         data-alert-id="{{alert.id}}"
         style="{{::alert.initStyle}}"
         ng-mouseenter="mouseEnter(alert)"

@@ -63,7 +63,7 @@ angular.module('Pundit2.AlertSystem')
 
 // TODO Add method documentation in JSDoc
 
-.service('AlertSystem', function(BaseComponent, $timeout, ALERTSYSTEMDEFAULTS, EventDispatcher, $rootScope) {
+.service('AlertSystem', function(BaseComponent, $sce, $timeout, ALERTSYSTEMDEFAULTS, EventDispatcher, $rootScope) {
 
     var alertSystem = new BaseComponent('AlertSystem', ALERTSYSTEMDEFAULTS);
 
@@ -73,6 +73,8 @@ angular.module('Pundit2.AlertSystem')
 
     var animQueue = [];
     var animating = false;
+
+    var maxWidth;
 
     var processAnimQueue = function() {
         if (animQueue.length === 0) {
@@ -114,6 +116,7 @@ angular.module('Pundit2.AlertSystem')
 
         if (typeof elem !== 'undefined') {
             alert.animating = true;
+            alert.progress = alert.progress || angular.element('div[data-alert-id="' + alert.id + '"] .pnd-alert-progress');
             elem.animate(animObject, alert.animDelay, function() {
                 if (alert.animHide) {
                     doClearAlert(alert);
@@ -121,7 +124,6 @@ angular.module('Pundit2.AlertSystem')
                 } else {
                     if (alert.timeout) {
                         var td = alert.timeout / 1000;
-                        alert.progress = angular.element('div[data-alert-id="' + alert.id + '"] .pnd-alert-progress');
                         alert.progress.css('-webkit-transition-duration', td + 's')
                             .css('transition-duration', td + 's')
                             .css('width', '100%');
@@ -165,9 +167,16 @@ angular.module('Pundit2.AlertSystem')
         processAnimQueue();
     };
 
-    alertSystem.click = function(alert) {
+    alertSystem.click = function(alert, callBack) {
+        if (typeof callBack !== 'undefined' && typeof alert.callbacks[callBack] === 'function') {
+            var ret = alert.callbacks[callBack](alert);
+            if (ret) {
+                alertSystem.clearAlert(alert);
+                return;
+            }
+        }
         delete alert.newTimeoutValue;
-        alert.mouseEnterTime = alert.timerStartTime = 0;
+        //alert.mouseEnterTime = alert.timerStartTime = 0;
         alert.progress.css('-webkit-transition-duration', '0s')
         .css('transition-duration', '0s')
         .css('width', '0%');
@@ -198,7 +207,10 @@ angular.module('Pundit2.AlertSystem')
             return;
         } else {
             var timeout = alert.newTimeoutValue || alert.timeout;
-            alert.newTimeoutValue = timeout - alert.mouseEnterTime + alert.timerStartTime;
+            maxWidth = maxWidth || alert.progress.closest('.pnd-alert-wrp').width();
+            var p = alert.progress.width() / maxWidth;
+            alert.newTimeoutValue = alert.timeout - (alert.timeout*p);
+            //alert.newTimeoutValue = timeout - alert.mouseEnterTime + alert.timerStartTime;
             alert.progress.css('-webkit-transition-duration', (alert.newTimeoutValue / 1000) + 's')
                 .css('transition-duration', (alert.newTimeoutValue / 1000) + 's')
                 .css('width', '100%');
@@ -268,8 +280,8 @@ angular.module('Pundit2.AlertSystem')
         var promise = $timeout(function() {
             alertSystem.clearAlert(alert);
         }, t);
-        alert.timerStartTime = (new Date()).getTime();
-        alert.mouseEnterTime = 0;
+        //alert.timerStartTime = (new Date()).getTime();
+        //alert.mouseEnterTime = 0;
         timeouts[key] = promise;
     };
 
@@ -300,7 +312,7 @@ angular.module('Pundit2.AlertSystem')
      * @param {alertClass}
      *
      */
-    alertSystem.addAlert = function(type, message, title, timeout, top, dismissible, alertClass) {
+    alertSystem.addAlert = function(type, message, title, timeout, top, dismissible, alertClass, callbacks) {
         var newId,
             alert;
 
@@ -318,10 +330,11 @@ angular.module('Pundit2.AlertSystem')
             id: newId,
             type: type.id,
             alertClass: alertClass,
-            message: message,
+            message: $sce.trustAsHtml(message),
             timeout: timeout,
             dismissible: dismissible,
             title: title,
+            callbacks: angular.merge([], type.callbacks, callbacks),
             initStyle: type.animate ? 'display: none; opacity: 0' : '',
             animDelay: type.animate ? isNaN(type.animDelay) ? alertSystem.AlertType.INFO.animDelay : type.animDelay : 1
         };

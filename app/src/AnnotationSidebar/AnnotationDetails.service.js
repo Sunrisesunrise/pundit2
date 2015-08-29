@@ -571,6 +571,12 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     });
 
+    // Watch annotation sidebar expanded or collapsed
+    EventDispatcher.addListener('AnnotationSidebar.toggleAnnotation', function(e) {
+        var annId = e.args;
+        annotationDetails.toggleAnnotationView(annId);
+    });
+
     EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
         state.isUserLogged = e.args;
         state.userData = MyPundit.getUserData();

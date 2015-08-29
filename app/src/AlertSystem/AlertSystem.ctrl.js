@@ -4,8 +4,9 @@ angular.module('Pundit2.AlertSystem')
 
     $scope.alerts = AlertSystem.alerts;
 
-    $scope.alertClick = function(alert) {
-        AlertSystem.click(alert);
+    $scope.alertClick = function(alert, $event) {
+        var callBack = $($event.target).data('inner-callback');
+        AlertSystem.click(alert, callBack);
     };
 
     $scope.dismissAlert = function(alert) {
@@ -25,4 +26,9 @@ angular.module('Pundit2.AlertSystem')
     $scope.mouseLeave = function(alert) {
         AlertSystem.mouseLeave(alert);
     };
+
+    $scope.innerClick = function(i) {
+        console.log("innerclick " +i)
+    };
+
 });
