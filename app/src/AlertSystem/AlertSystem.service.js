@@ -138,6 +138,9 @@ angular.module('Pundit2.AlertSystem')
     };
 
     alertSystem.show = function(alert) {
+        if (alertSystem.options.active === false) {
+            return;
+        }
         if (alert.animShow || alert.animHide) {
             return;
         }
