@@ -146,9 +146,11 @@ angular.module('Pundit2.Annotators')
     // consolidation service, gathering all annotators
     // TODO: better check twice? :|
     tfa.consolidate = function(items, promise) {
+        var deferred = $q.defer();
+
         if (!angular.isObject(items)) {
             tfa.err('Items not valid: malformed object', items);
-            return promise.resolve();
+            return deferred.resolve();
         }
 
         tfa.log('Consolidating!');
@@ -207,8 +209,10 @@ angular.module('Pundit2.Annotators')
 
         $q.all([updateDOMPromise, compilePromise]).then(function() {
             tfa.log(tfa.label + ' consolidation: done!');
-            promise.resolve();
+            deferred.resolve();
         });
+
+        return deferred.promise;
     };
 
     var n = 0;

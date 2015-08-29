@@ -185,9 +185,8 @@ angular.module('Pundit2.Core')
     // an image or something?
     cc.consolidate = function(items) {
         var deferred = $q.defer(),
-            deferredArray = [],
-            defIndex = 0,
-            promises = [];
+            promises = [],
+            currentPromise;
 
         if (!angular.isArray(items)) {
             cc.err('Items not valid: malformed array', items);
@@ -203,18 +202,13 @@ angular.module('Pundit2.Core')
         addItemsPromise.then(function() {
             for (var a in state.annotators) {
                 if (a in state.itemListByType) {
-                    deferredArray.push($q.defer());
+                    currentPromise = state.annotators[a].consolidate(state.itemListByType[a]);
+                    promises.push(currentPromise);
                     cc.log('Consolidating annotator type ' + a + ', ' + state.typeUriMap[a].length + ' items');
-                    state.annotators[a].consolidate(state.itemListByType[a], deferredArray[defIndex]);
-                    defIndex++;
                 } else {
                     cc.log('Skipping annotator type ' + a + ': no item to consolidate.');
                 }
             }
-
-            promises = deferredArray.map(function(p) {
-                return p.promise;
-            });
 
             $q.all(promises).then(function() {
                 EventDispatcher.sendEvent('Consolidation.consolidate');
