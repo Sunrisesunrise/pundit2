@@ -1,58 +1,76 @@
 angular.module('Pundit2.Core')
 
 .constant('CONSOLIDATIONDEFAULTS', {
-    // Number of item operations for time
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Consolidation
+     *
+     * @description
+     * `object`
+     *
+     * Configuration object for Consolidation service.
+     */
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Consolidation.maxHits
+     *
+     * @description
+     * `number`
+     *
+     * Number of item operations for time
+     *
+     * Default value:
+     * <pre> maxHits: 15 </pre>
+     */
     maxHits: 15,
-    // Delay in ms for the refresh of the buffer
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Consolidation.bufferDelay
+     *
+     * @description
+     * `number`
+     *
+     * Delay in ms for the refresh of the buffer
+     *
+     * Default value:
+     * <pre> bufferDelay: 35 </pre>
+     */
     bufferDelay: 35,
-    // undefined / true / false
+    
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Consolidation.bufferDelay
+     *
+     * @description
+     * `boolean`
+     *
+     * undefined / true / false
+     *
+     * Default value:
+     * <pre> bufferDelay: undefined </pre>
+     */
     preventDelay: undefined
 })
 
 .service('Consolidation', function($rootScope, $location, $q, $timeout, $window, CONSOLIDATIONDEFAULTS, BaseComponent, EventDispatcher, NameSpace, Config,
     Item, ItemsExchange, XpointersHelper, Status) {
 
-    var cc = new BaseComponent('Consolidation', CONSOLIDATIONDEFAULTS),
+    var consolidation = new BaseComponent('Consolidation', CONSOLIDATIONDEFAULTS),
         state = {};
 
-    var preventDelay = cc.options.preventDelay ? true : false;
+    var preventDelay = consolidation.options.preventDelay ? true : false;
 
-    // Wipes out every item, map, uri etc .. ready to get new items
-    cc.wipe = function() {
-        state.itemListByType = {};
-        state.typeUriMap = {};
-        state.uriTypeMap = {};
-        state.itemListByURI = {};
-        state.fragmentsItemListByParentURI = {};
-
-        for (var a in state.annotators) {
-            state.annotators[a].wipe();
-        }
-
-        cc.log('Wiped up!');
-        EventDispatcher.sendEvent('Consolidation.wipe');
-    };
-    cc.wipe();
+    state.isRunningAnnomatic = false;
 
     // These two MUST NOT be wiped, or Consolidation will lose track of annotators
     state.annotableTypes = [];
     state.annotators = {};
-
-    state.isRunningAnnomatic = false;
-    $rootScope.$on('annomatic-run', function() {
-        state.isRunningAnnomatic = true;
-    });
-    $rootScope.$on('annomatic-stop', function() {
-        state.isRunningAnnomatic = false;
-    });
-
-    cc.getItems = function() {
-        return state.itemListByURI;
-    };
-
-    cc.getFragmentParentList = function() {
-        return state.fragmentsItemListByParentURI;
-    };
 
     var addItems = function(items) {
         var deferred = $q.defer(),
@@ -69,19 +87,19 @@ angular.module('Pundit2.Core')
             }
 
             var currentHits = 0,
-                maxHits = preventDelay ? 1000 : cc.options.maxHits,
-                delay = preventDelay ? 0 : cc.options.bufferDelay;
+                maxHits = preventDelay ? 1000 : consolidation.options.maxHits,
+                delay = preventDelay ? 0 : consolidation.options.bufferDelay;
 
             var doAdd = function()  {
                 while (currentHits < maxHits && itemsCache.length !== 0) {
                     var item = itemsCache.pop();
 
-                    var fragmentType = cc.isConsolidable(item);
+                    var fragmentType = consolidation.isConsolidable(item);
                     if (fragmentType === false) {
-                        cc.log("Not adding, item is not consolidable: " + item.label);
+                        consolidation.log("Not adding, item is not consolidable: " + item.label);
                         continue;
                     } else if (item.uri in state.itemListByURI) {
-                        cc.log("Item already present: " + item.label);
+                        consolidation.log("Item already present: " + item.label);
                         continue;
                     }
 
@@ -107,7 +125,7 @@ angular.module('Pundit2.Core')
                     state.itemListByURI[item.uri] = item;
                     state.uriTypeMap[item.uri] = fragmentType;
 
-                    cc.log("Added item: " + item.label + " (" + fragmentType + ")");
+                    consolidation.log("Added item: " + item.label + " (" + fragmentType + ")");
 
                     currentHits++;
                 }
@@ -148,12 +166,12 @@ angular.module('Pundit2.Core')
         for (var l = items.length; l--;) {
             var item = items[l];
 
-            var fragmentType = cc.isConsolidable(item);
+            var fragmentType = consolidation.isConsolidable(item);
             if (fragmentType === false) {
-                cc.log("Not adding, item is not consolidable: " + item.label);
+                consolidation.log("Not adding, item is not consolidable: " + item.label);
                 continue;
             } else if (item.uri in state.itemListByURI) {
-                cc.log("Item already present: " + item.label);
+                consolidation.log("Item already present: " + item.label);
                 continue;
             }
 
@@ -179,12 +197,37 @@ angular.module('Pundit2.Core')
             state.itemListByURI[item.uri] = item;
             state.uriTypeMap[item.uri] = fragmentType;
 
-            cc.log("Added item: " + item.label + " (" + fragmentType + ")");
+            consolidation.log("Added item: " + item.label + " (" + fragmentType + ")");
         }
     };
 
+    // Wipes out every item, map, uri etc .. ready to get new items
+    consolidation.wipe = function() {
+        state.itemListByType = {};
+        state.typeUriMap = {};
+        state.uriTypeMap = {};
+        state.itemListByURI = {};
+        state.fragmentsItemListByParentURI = {};
+
+        for (var a in state.annotators) {
+            state.annotators[a].wipe();
+        }
+
+        consolidation.log('Wiped up!');
+        EventDispatcher.sendEvent('Consolidation.wipe');
+    };
+    consolidation.wipe();
+
+    consolidation.getItems = function() {
+        return state.itemListByURI;
+    };
+
+    consolidation.getFragmentParentList = function() {
+        return state.fragmentsItemListByParentURI;
+    };
+
     // Will consolidate every possible item found in the ItemsExchange
-    cc.consolidateAll = function() {
+    consolidation.consolidateAll = function() {
         var consolidatePromise;
 
         if (state.isRunningAnnomatic) {
@@ -210,9 +253,9 @@ angular.module('Pundit2.Core')
             data: true
         });
 
-        cc.log('Consolidating ALL items');
+        consolidation.log('Consolidating ALL items');
 
-        consolidatePromise = cc.consolidate(allItems);
+        consolidatePromise = consolidation.consolidate(allItems);
         consolidatePromise.then(function() {
             if (pageItems.length === 0) {
                 // There are no annotations with valid page items
@@ -228,20 +271,20 @@ angular.module('Pundit2.Core')
 
     // TODO: pass an element and consolidate just that element? or a named content?
     // an image or something?
-    cc.consolidate = function(items) {
+    consolidation.consolidate = function(items) {
         var deferred = $q.defer(),
             promises = [],
             currentPromise;
 
         if (!angular.isArray(items)) {
-            cc.err('Items not valid: malformed array', items);
+            consolidation.err('Items not valid: malformed array', items);
             return;
         }
 
         var addItemsPromise;
 
-        cc.log('Will try to consolidate ' + items.length + ' items');
-        cc.wipe();
+        consolidation.log('Will try to consolidate ' + items.length + ' items');
+        consolidation.wipe();
         addItemsPromise = state.isRunningAnnomatic ? addAnnomaticItems(items) : addItems(items);
 
         $q.all([addItemsPromise]).then(function() {
@@ -249,9 +292,9 @@ angular.module('Pundit2.Core')
                 if (a in state.itemListByType) {
                     currentPromise = state.annotators[a].consolidate(state.itemListByType[a]);
                     promises.push(currentPromise);
-                    cc.log('Consolidating annotator type ' + a + ', ' + state.typeUriMap[a].length + ' items');
+                    consolidation.log('Consolidating annotator type ' + a + ', ' + state.typeUriMap[a].length + ' items');
                 } else {
-                    cc.log('Skipping annotator type ' + a + ': no item to consolidate.');
+                    consolidation.log('Skipping annotator type ' + a + ': no item to consolidate.');
                 }
             }
 
@@ -267,8 +310,8 @@ angular.module('Pundit2.Core')
     };
 
     // Adds a new annotator to the Consolidation service
-    cc.addAnnotator = function(annotator) {
-        cc.log("Adding annotable type ", annotator.label);
+    consolidation.addAnnotator = function(annotator) {
+        consolidation.log("Adding annotable type ", annotator.label);
         state.annotableTypes.push(annotator.label);
         state.annotators[annotator.label] = annotator;
     };
@@ -276,7 +319,7 @@ angular.module('Pundit2.Core')
     // Calls every annotator and ask them if the given item is a
     // valid fragment. If it is, returns the fragment type.
     // This method must be implemented by every Annotator
-    cc.isConsolidable = function(item) {
+    consolidation.isConsolidable = function(item) {
         for (var a in state.annotators) {
             if (state.annotators[a].isConsolidable(item)) {
                 return a;
@@ -285,7 +328,7 @@ angular.module('Pundit2.Core')
         return false;
     };
 
-    cc.isConsolidated = function(item) {
+    consolidation.isConsolidated = function(item) {
         if (item instanceof Item) {
             return item.uri in state.itemListByURI;
         }
@@ -294,7 +337,7 @@ angular.module('Pundit2.Core')
 
     // Gets the available targets or resources on the current page. They will most likely
     // be passed to the server looking for annotations.
-    cc.getAvailableTargets = function(onlyNamedContents) {
+    consolidation.getAvailableTargets = function(onlyNamedContents) {
         var ret = [],
             nc = XpointersHelper.options.namedContentClasses;
 
@@ -323,13 +366,21 @@ angular.module('Pundit2.Core')
         return ret;
     };
 
-    if (cc.options.preventDelay === undefined) {
+    if (consolidation.options.preventDelay === undefined) {
         EventDispatcher.addListener('Pundit.preventDelay', function(e) {
             preventDelay = e.args;
         });
     }
 
-    $window.punditConolidationWipe = cc.wipe;
+    $rootScope.$on('annomatic-run', function() {
+        state.isRunningAnnomatic = true;
+    });
+    $rootScope.$on('annomatic-stop', function() {
+        state.isRunningAnnomatic = false;
+    });
 
-    return cc;
+    // TODO: we need it?
+    $window.punditConolidationWipe = consolidation.wipe;
+
+    return consolidation;
 });
