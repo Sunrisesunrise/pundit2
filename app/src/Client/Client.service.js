@@ -454,10 +454,9 @@ angular.module('Pundit2.Client')
     Toolbar, Annomatic, NotebookCommunication, NotebookExchange, TemplatesExchange,
     SelectorsManager, FreebaseSelector, MurucaSelector, KorboBasketSelector, Korbo2Selector, EuropeanaSelector, DbpediaSelector, GeonamesSelector, PredicateSelector,
     TemplatesSelector, TripleComposer, ImageFragmentAnnotatorHelper,
-    $injector, $templateCache, $rootScope, $compile, $window, $document) {
+    $injector, $templateCache, $rootScope, $compile, $window) {
 
     var client = new BaseComponent('Client', CLIENTDEFAULTS),
-
         // Node which will contain every other component
         root;
 
@@ -582,102 +581,6 @@ angular.module('Pundit2.Client')
         }
     };
 
-    // Reads the conf and initializes the active components, bootstrap what needs to be
-    // bootstrapped (gets annotations, check if the user is logged in, etc)
-    client.boot = function() {
-
-        fixRootNode();
-
-        addComponents();
-
-        if (Config.useBasicRelations) {
-            loadBasicRelations();
-        }
-        loadConfiguredRelations();
-
-        loadTemplate();
-
-        if (Config.disableImageAnnotation) {
-            ImageHandler.turnOff();
-        }
-
-        // Check if we're logged in, other components should $watch MyPundit
-        // and get notified automatically when logged in, if needed
-        MyPundit.checkLoggedIn().then(function(value) {
-
-            if (value === true) {
-                MyItems.getAllItems();
-                NotebookCommunication.getMyNotebooks();
-                NotebookCommunication.getCurrent();
-            }
-            else {
-                EventDispatcher.sendEvent('Pundit.alert', {
-                    title: 'Please log in',
-                    id: "INFO",
-                    timeout: 3000,
-                    message: "<a href=\"javascript:void(0)\" data-inner-callback=\"0\">Log in or register</a> to Pundit to save your annotations and see your private notebooks.",
-                    callbacks: [
-                        function(/*alert*/) {
-                            MyPundit.login();
-                            return true;
-                        }
-                    ]
-                });
-            }
-
-            // Now that we know if we're logged in or not, we can download the right
-            // annotations: auth or non-auth form the server
-            AnnotationsCommunication.getAnnotations();
-
-            $rootScope.$watch(function() {
-                return MyPundit.isUserLogged();
-            }, function(newStatus, oldStatus) {
-                if (newStatus === oldStatus) {
-                    return;
-                }
-                if (newStatus === true) {
-                    client.log("User just logged in");
-                    onLogin();
-                } else {
-                    client.log("User just logged out");
-                    onLogout();
-                }
-            });
-
-        });
-
-        // to add a selector must to inject it in the dependency
-        // otherwise the SelectorsManager.addSelector() is never called
-        // and the selector manager can't show the selector
-        // es: FreebaseSelector, MurucaSelector, KorboBasketSelector
-
-        // IF KORBO.ACTIVE IS TRUE, ADD KORBO DIRECTIVE
-        if (typeof(Config.korbo) !== 'undefined' && Config.korbo.active) {
-            var dir = "<korbo-entity-editor conf-name='" + Config.korbo.confName + "'></korbo-entity-editor>";
-            addKorbo(dir);
-        }
-
-        if (client.options.addDefaultKorbooEESelector) {
-            addKorboEESelector();
-        }
-        SelectorsManager.init();
-
-        client.log('Boot is completed, emitting pundit-boot-done event');
-        EventDispatcher.sendEvent('Client.boot');
-        Analytics.track('main-events', 'client--endBootstrap');
-
-        // TODO:
-        // * Lists (My, page?, vocabs?, selectors?)
-        // * Selectors
-        // LATERS: image annotator handler, named content handler, page handler
-        //         entity editor helper
-        //         Notebook Manager
-        //         Tool: comment tag, triple composer
-
-    };
-
-
-
     // Called when the user completed the login process with the modal etc, NOT if the user
     // was already logged in on boot etc
     var onLogin = function() {
@@ -751,74 +654,124 @@ angular.module('Pundit2.Client')
         delete keeSelector;
     };
 
-    EventDispatcher.addListener('Client.dispatchDocumentEvent', function(data) {
-        dispatchDocumentEvent(data.args.event, data.args.data);
-    });
-
-    var dispatchDocumentEvent = function(eventName, details) {
-        var evt;
-        if (document.createEventObject) {
-            // dispatch for IE
-            evt = document.createEventObject();
-            evt.detail = details;
-            document.fireEvent(eventName, evt);
-        }
-        else {
-            // dispatch for firefox + others
-            evt = document.createEvent("Event");
-            evt.initEvent(eventName, true, true); // event type,bubbling,cancelable
-            evt.detail = details;
-            evt = new CustomEvent(eventName, {detail: details});
-            document.dispatchEvent(evt);
-        }
-    };
-
-    var hideClient = function() {
+    client.hideClient = function() {
         EventDispatcher.sendEvent('Client.hide');
-        $rootScope.$$phase || $rootScope.$digest();
         angular.element('body').css({
             'marginTop': 0
         });
-        angular.element('div[data-ng-app="Pundit2"]').css('display','none');
-    };
-
-    var showClient = function() {
-        angular.element('div[data-ng-app="Pundit2"]').css('display','inherit');
-        EventDispatcher.sendEvent('Client.show');
+        root.css('display', 'none');
         $rootScope.$$phase || $rootScope.$digest();
     };
 
-    var requestAnnotationsNumber = function() {
-        if (Status.getLoading()) {
+    client.showClient = function() {
+        EventDispatcher.sendEvent('Client.show');
+        root.css('display', 'inherit');
+        $rootScope.$$phase || $rootScope.$digest();
+    };
 
+    // Reads the conf and initializes the active components, bootstrap what needs to be
+    // bootstrapped (gets annotations, check if the user is logged in, etc)
+    client.boot = function() {
+
+        fixRootNode();
+
+        addComponents();
+
+        if (Config.useBasicRelations) {
+            loadBasicRelations();
         }
-        EventDispatcher.sendEvent('Client.requestAnnotationsNumber');
+        loadConfiguredRelations();
+
+        loadTemplate();
+
+        if (Config.disableImageAnnotation) {
+            ImageHandler.turnOff();
+        }
+
+        // Check if we're logged in, other components should $watch MyPundit
+        // and get notified automatically when logged in, if needed
+        MyPundit.checkLoggedIn().then(function(value) {
+
+            if (value === true) {
+                MyItems.getAllItems();
+                NotebookCommunication.getMyNotebooks();
+                NotebookCommunication.getCurrent();
+            } else {
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'Please log in',
+                    id: "INFO",
+                    timeout: 3000,
+                    message: "<a href=\"javascript:void(0)\" data-inner-callback=\"0\">Log in or register</a> to Pundit to save your annotations and see your private notebooks.",
+                    callbacks: [
+                        function( /*alert*/ ) {
+                            MyPundit.login();
+                            return true;
+                        }
+                    ]
+                });
+            }
+
+            // Now that we know if we're logged in or not, we can download the right
+            // annotations: auth or non-auth form the server
+            AnnotationsCommunication.getAnnotations();
+
+            $rootScope.$watch(function() {
+                return MyPundit.isUserLogged();
+            }, function(newStatus, oldStatus) {
+                if (newStatus === oldStatus) {
+                    return;
+                }
+                if (newStatus === true) {
+                    client.log("User just logged in");
+                    onLogin();
+                } else {
+                    client.log("User just logged out");
+                    onLogout();
+                }
+            });
+
+        });
+
+        // to add a selector must to inject it in the dependency
+        // otherwise the SelectorsManager.addSelector() is never called
+        // and the selector manager can't show the selector
+        // es: FreebaseSelector, MurucaSelector, KorboBasketSelector
+
+        // IF KORBO.ACTIVE IS TRUE, ADD KORBO DIRECTIVE
+        if (typeof(Config.korbo) !== 'undefined' && Config.korbo.active) {
+            var dir = "<korbo-entity-editor conf-name='" + Config.korbo.confName + "'></korbo-entity-editor>";
+            addKorbo(dir);
+        }
+
+        if (client.options.addDefaultKorbooEESelector) {
+            addKorboEESelector();
+        }
+        SelectorsManager.init();
+
+        client.log('Boot is completed, emitting pundit-boot-done event');
+        EventDispatcher.sendEvent('Client.boot');
+        Analytics.track('main-events', 'client--endBootstrap');
+
+        // TODO:
+        // * Lists (My, page?, vocabs?, selectors?)
+        // * Selectors
+        // LATERS: image annotator handler, named content handler, page handler
+        //         entity editor helper
+        //         Notebook Manager
+        //         Tool: comment tag, triple composer
+
     };
 
-    var userStatusUpdate = function() {
-        MyPundit.checkLoggedIn(true, false);
-    };
-
-    $document.on('Pundit2.hide', hideClient);
-    $document.on('Pundit2.show', showClient);
-    $document.on('Pundit2.requestAnnotationsNumber', requestAnnotationsNumber);
-    $document.on('Pundit2.requestUserProfileUpdate', userStatusUpdate);
-    $document.on('Pundit2.requestUserLoggedStatus', userStatusUpdate);
-
-    document.addEventListener('Pundit2.requestAnnotationsNumberRaw', requestAnnotationsNumber);
-
+    // TODO: find a better place for this check? 
     client.OS = '';
-    if (navigator.appVersion.indexOf("Win") !== -1){
-        client.OS="Windows";
-    }
-    else if (navigator.appVersion.indexOf("Mac") !== -1) {
-        client.OS="MacOS";
-    }
-    else if (navigator.appVersion.indexOf("X11") !== -1) {
-        client.OS="UNIX";
-    }
-    else if (navigator.appVersion.indexOf("Linux") !== -1) {
-        client.OS="Linux";
+    if (navigator.appVersion.indexOf("Win") !== -1) {
+        client.OS = "Windows";
+    } else if (navigator.appVersion.indexOf("Mac") !== -1) {
+        client.OS = "MacOS";
+    } else if (navigator.appVersion.indexOf("X11") !== -1) {
+        client.OS = "UNIX";
+    } else if (navigator.appVersion.indexOf("Linux") !== -1) {
+        client.OS = "Linux";
     }
 
     client.log("Component up and running");

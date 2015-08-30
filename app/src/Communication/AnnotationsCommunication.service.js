@@ -166,8 +166,8 @@ angular.module('Pundit2.Communication')
         annotationsCommunication.log('Getting annotations for available targets', uris);
         annPromise.then(function(ids) {
             annotationsCommunication.log('Found ' + ids.length + ' annotations on the current page.');
-            EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
-                event: 'Pundit2.updateAnnotationsNumber',
+            EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                event: 'Pundit.updateAnnotationsNumber',
                 data: ids.length
             });
             if (ids.length === 0) {
@@ -418,8 +418,8 @@ angular.module('Pundit2.Communication')
                         Consolidation.consolidateAll();
                     }
 
-                    EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
-                        event: 'Pundit2.updateAnnotationsNumber',
+                    EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                        event: 'Pundit.updateAnnotationsNumber',
                         data: AnnotationsExchange.getAnnotations().length
                     });
 
@@ -524,13 +524,6 @@ angular.module('Pundit2.Communication')
 
     EventDispatcher.addListener('BrokenHelper.sendFixed', function(e) {
         annotationsCommunication.setAnnotationsBroken(e.args, false, e.promise);
-    });
-
-    EventDispatcher.addListener('Client.requestAnnotationsNumber', function() {
-        EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
-            event: 'Pundit2.updateAnnotationsNumber',
-            data: AnnotationsExchange.getAnnotations().length
-        });
     });
 
     return annotationsCommunication;

@@ -8,9 +8,9 @@ var switchPundit = function(on) {
 
     if (on) {
         if (document.getElementById('pundit2') !== null) {
-            angular.element(document).trigger('Pundit2.show');
+            angular.element(document).trigger('Pundit.show');
             chrome.runtime.sendMessage({action: "setLoading", loading: false});
-            angular.element(document).trigger('Pundit2.requestAnnotationsNumber');
+            angular.element(document).trigger('Pundit.requestAnnotationsNumber');
             angular.element('span[text-fragment-bit]').addClass('pnd-cons');
             angular.element('span.pnd-text-fragment-icon').removeClass('pnd-text-fragment-icon-hidden');
             return;
@@ -55,7 +55,7 @@ var switchPundit = function(on) {
         // Turn off.
         if (typeof angular !== 'undefined') {
             //angular.element('div[data-ng-app="Pundit2"]').remove();
-            angular.element(document).trigger('Pundit2.hide');
+            angular.element(document).trigger('Pundit.hide');
             angular.element('span[text-fragment-bit]').removeClass('pnd-cons');
             angular.element('span.pnd-text-fragment-icon').addClass('pnd-text-fragment-icon-hidden');
         }
@@ -95,49 +95,49 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             switchPundit(false);
             break;
         case "requestUserProfileUpdate":
-            angular.element(document).trigger('Pundit2.requestUserProfileUpdate');
+            angular.element(document).trigger('Pundit.requestUserProfileUpdate');
             break;
         case "requestUserLoggedStatus":
-            angular.element(document).trigger('Pundit2.requestUserLoggedStatus');
+            angular.element(document).trigger('Pundit.requestUserLoggedStatus');
             break;
         case "requestAnnotationsNumber":
             if (typeof angular !== 'undefined') {
-                angular.element(document).trigger('Pundit2.requestAnnotationsNumber');
+                angular.element(document).trigger('Pundit.requestAnnotationsNumber');
             }
             else {
-                dispatchDocumentEvent('Pundit2.requestAnnotationsNumberRaw', 0);
+                dispatchDocumentEvent('Pundit.requestAnnotationsNumberRaw', 0);
             }
             break;
     }
 });
 
-document.addEventListener("Pundit2.updateAnnotationsNumber", function(evt){
+document.addEventListener("Pundit.updateAnnotationsNumber", function(evt){
     chrome.runtime.sendMessage({action: "updateAnnotationsNumber", number: evt.detail}, function(response) {
         /*NO OP*/
     });
 });
 
-document.addEventListener("Pundit2.consolidation", function(evt){
+document.addEventListener("Pundit.consolidation", function(evt){
     chrome.runtime.sendMessage({action: "consolidation", active: evt.detail}, function(response) {
         /*NO OP*/
     });
 });
 
-document.addEventListener("Pundit2.loading", function(evt){
+document.addEventListener("Pundit.loading", function(evt){
     chrome.runtime.sendMessage({action: "setLoading", loading: evt.detail}, function(response) {
         if (response.action === 'updateAnnotationsNumber') {
-            angular.element(document).trigger('Pundit2.requestAnnotationsNumber');
+            angular.element(document).trigger('Pundit.requestAnnotationsNumber');
         }
     });
 });
 
-document.addEventListener("Pundit2.userProfileUpdated", function(evt){
+document.addEventListener("Pundit.userProfileUpdated", function(evt){
     chrome.runtime.sendMessage({action: "userProfileUpdated", number: evt.detail}, function(response) {
         /*NO OP*/
     });
 });
 
-document.addEventListener("Pundit2.userLoggedStatusChanged", function(evt){
+document.addEventListener("Pundit.userLoggedStatusChanged", function(evt){
     chrome.runtime.sendMessage({action: "userLoggedStatusChanged", number: evt.detail}, function(response) {
         /*NO OP*/
     });

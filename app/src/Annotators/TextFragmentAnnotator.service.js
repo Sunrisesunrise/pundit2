@@ -145,7 +145,7 @@ angular.module('Pundit2.Annotators')
     // All of the items passed should be consolidable (checked by isConsolidable), in the
     // consolidation service, gathering all annotators
     // TODO: better check twice? :|
-    tfa.consolidate = function(items, promise) {
+    tfa.consolidate = function(items) {
         var deferred = $q.defer();
 
         if (!angular.isObject(items)) {

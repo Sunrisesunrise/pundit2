@@ -39,7 +39,6 @@ angular.module('Pundit2.Core')
         if (currentState) {
             state.Pundit.loading = true;
             updateLoading(true);
-            EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.loading', data: true});
             loadingCount[eventName] ++;
         } else {
             loadingCount[eventName] --;
@@ -52,7 +51,6 @@ angular.module('Pundit2.Core')
             if (loadingState.length === 0) {
                 state.Pundit.loading = false;
                 updateLoading(false);
-                EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.loading', data: false});
                 loadingCount[eventName] = 0;
             }
         }

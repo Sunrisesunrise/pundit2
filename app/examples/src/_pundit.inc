@@ -14,6 +14,7 @@
 
     <script src="../src/Client/Client.js"></script>
     <script src="../src/Client/Client.service.js"></script>
+    <script src="../src/Client/MessageHandler.service.js"></script>
 
     <script src="../src/SimplifiedClient/SimplifiedClient.js"></script>
     <script src="../src/SimplifiedClient/SimplifiedClient.service.js"></script>

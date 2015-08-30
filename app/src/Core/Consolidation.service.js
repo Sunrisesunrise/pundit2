@@ -205,8 +205,8 @@ angular.module('Pundit2.Core')
 
         Status.resetProgress();
         EventDispatcher.sendEvent('Consolidation.startConsolidate');
-        EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
-            event: 'Pundit2.consolidation',
+        EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+            event: 'Pundit.consolidation',
             data: true
         });
 
@@ -219,8 +219,8 @@ angular.module('Pundit2.Core')
                 Status.hitProgress(3, 100);
             }
             EventDispatcher.sendEvent('Consolidation.consolidateAll');
-            EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {
-                event: 'Pundit2.consolidation',
+            EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                event: 'Pundit.consolidation',
                 data: false
             });
         });

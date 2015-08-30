@@ -242,7 +242,7 @@ angular.module('Pundit2.Core')
                 promise.resolve(true);
             }
             if (dispatchDocumentEvent) {
-                EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.userLoggedStatusChanged', data: null});
+                EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {event: 'Pundit.userLoggedStatusChanged', data: null});
             }
         }).error(function() {
             myPundit.err('Server error');
@@ -412,7 +412,7 @@ angular.module('Pundit2.Core')
             userData = {};
             logoutPromise.resolve(true);
             Analytics.track('main-events', 'user--logout');
-            EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.userProfileUpdated', data: null});
+            EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {event: 'Pundit.userProfileUpdated', data: null});
         }).error(function() {
             logoutPromise.reject('logout promise error');
         });
@@ -488,7 +488,7 @@ angular.module('Pundit2.Core')
                 $timeout(function() {
                     myPundit.closeLoginPopover();
                 }, 2500);
-                EventDispatcher.sendEvent('Client.dispatchDocumentEvent', {event: 'Pundit2.userProfileUpdated', data: null});
+                EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {event: 'Pundit.userProfileUpdated', data: null});
                 myPundit.checkLoggedIn(true);
             } else if (params.data === 'userLoggedIn') {
                 popoverState.popover.$scope.postLoginPreCheck = true;
