@@ -5,7 +5,7 @@ angular.module('Pundit2.AlertSystem')
     $scope.alerts = AlertSystem.alerts;
 
     $scope.alertClick = function(alert, $event) {
-        var callBack = $($event.target).data('inner-callback');
+        var callBack = angular.element($event.target).data('inner-callback');
         AlertSystem.click(alert, callBack);
     };
 
@@ -28,7 +28,7 @@ angular.module('Pundit2.AlertSystem')
     };
 
     $scope.innerClick = function(i) {
-        console.log("innerclick " +i)
+        AlertSystem.log("innerclick " +i);
     };
 
 });

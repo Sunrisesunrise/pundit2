@@ -206,7 +206,7 @@ angular.module('Pundit2.AlertSystem')
         if (!alert.timeout) {
             return;
         } else {
-            var timeout = alert.newTimeoutValue || alert.timeout;
+            // var timeout = alert.newTimeoutValue || alert.timeout;
             maxWidth = maxWidth || alert.progress.closest('.pnd-alert-wrp').width();
             var p = alert.progress.width() / maxWidth;
             alert.newTimeoutValue = alert.timeout - (alert.timeout*p);

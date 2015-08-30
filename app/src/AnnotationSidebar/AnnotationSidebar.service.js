@@ -829,7 +829,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 timeout: 12000,
                 message: "It looks like some annotations on the page are broken: this can happen if the <strong>text of the page has changed in the last days</strong>.<br /><br />See if you can fix the broken annotations by editing them.<br /><br />Broken annotations are shown on the top right of the sidebar and are highlighted in red.<br /><a href=\"javascript:void(0)\" data-inner-callback=\"0\">Click here</a> to open first broken annotation",
                 callbacks: [
-                    function(alert) {
+                    function() {
                         var ba = BrokenHelper.getBrokenAnnotations();
                         if (ba.length > 0) {
                             var currentElement = angular.element('annotation-details[id="'+ba[0]+'"] .pnd-annotation-details-header');
@@ -1370,7 +1370,8 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationSidebar.showAnnotation = function(annId) {
-        $('annotation-details[id="'+annId+'"] .pnd-annotation-details-header').trigger('click');
+        // TODO: nain nain nain!!!
+        angular.element('annotation-details[id="'+annId+'"] .pnd-annotation-details-header').trigger('click');
     };
 
     EventDispatcher.addListener('Consolidation.consolidateAll', function() {
