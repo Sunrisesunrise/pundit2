@@ -73,6 +73,10 @@ angular.module("Pundit2.MyItemsContainer")
         EventDispatcher.sendEvent('MyItems.loading', state);
     };
 
+    var preventDelay = function() {
+        EventDispatcher.sendEvent('Pundit.preventDelay', true);
+    };
+
     var initContextualMenu = function() {
 
         // TODO: sanity checks on Config.modules.* ? Are they active? Think so??
@@ -102,7 +106,6 @@ angular.module("Pundit2.MyItemsContainer")
             action: function(item) {
                 EventDispatcher.sendEvent('MyItems.action');
                 myItems.addItem(item).then(function() {
-                    EventDispatcher.sendEvent('Pundit.preventDelay', true);
                     EventDispatcher.sendEvent('MyItems.itemAdded', item);
                     Consolidation.consolidateAll();
                 });
@@ -122,7 +125,6 @@ angular.module("Pundit2.MyItemsContainer")
             action: function(item) {
                 EventDispatcher.sendEvent('MyItems.action');
                 myItems.deleteItem(item).then(function() {
-                    EventDispatcher.sendEvent('Pundit.preventDelay', true);
                     EventDispatcher.sendEvent('MyItems.itemRemoved', item);
                     Consolidation.consolidateAll();
                 });
@@ -280,6 +282,8 @@ angular.module("Pundit2.MyItemsContainer")
             myItems.err('Cant delete my items on server: ', msg);
         });
 
+        preventDelay();
+
         return promise.promise;
     };
 
@@ -347,11 +351,14 @@ angular.module("Pundit2.MyItemsContainer")
             myItems.err('Cant delete a my item on the server: ', msg);
         });
 
+        preventDelay();
+
         return promise.promise;
     };
 
     myItems.deleteItemAndConsolidate = function(item) {
         myItems.deleteItem(item).then(function() {
+            preventDelay();
             Consolidation.consolidateAll();
         });
     };
@@ -425,11 +432,14 @@ angular.module("Pundit2.MyItemsContainer")
             myItems.err('Cant add item to my items on the server: ', msg);
         });
 
+        preventDelay();
+
         return promise.promise;
     };
 
     myItems.addItemAndConsolidate = function(item) {
         myItems.addItem(item).then(function() {
+            preventDelay();
             Consolidation.consolidateAll();
         });
     };
