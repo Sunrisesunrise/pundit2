@@ -93,42 +93,10 @@ angular.module('Pundit2.Annotators')
     XpointersHelper, ItemsExchange, Config, EventDispatcher, $compile, $q, $rootScope) {
 
     // Create the component and declare what we deal with: text
-    var tfa = new BaseComponent('TextFragmentAnnotator', TEXTFRAGMENTANNOTATORDEFAULTS);
+    var textFragmentAnnotator = new BaseComponent('TextFragmentAnnotator', TEXTFRAGMENTANNOTATORDEFAULTS);
 
     var annomaticIsRunning = false;
-
-    tfa.label = 'text';
-    tfa.type = NameSpace.fragments[tfa.label];
-
-    // The orchestrator will be called by the consolidation service as single point of
-    // interaction when it comes to deal with fragments. Let's subscribe the text type.
-    Consolidation.addAnnotator(tfa);
-
-    tfa.isConsolidable = function(item) {
-        if (!angular.isArray(item.type)) {
-            tfa.log('Item not valid: malformed');
-            return false;
-        } else if (item.type.length === 0) {
-            tfa.log('Item not valid: types len 0');
-            return false;
-        } else if (item.type.indexOf(tfa.type) === -1) {
-            tfa.log('Item not valid: not a ' + tfa.type);
-            return false;
-        } else if (!XpointersHelper.isValidXpointerURI(item.getXPointer())) {
-            tfa.log('Item not valid: not a valid xpointer uri: ' + item.getXPointer());
-            return false;
-        } else if (!XpointersHelper.isValidXpointer(item.getXPointer())) {
-            tfa.log('Item not valid: not consolidable on this page: ' + item.getXPointer());
-            return false;
-        }
-
-        // TODO: it's a valid text fragment if:
-        // - has a part of
-        // - has a page context
-
-        tfa.log('Item valid: try to consolidate ' + item.label);
-        return true;
-    };
+    var n = 0;
 
     // Each fragment will be split into bits, each bit will carry a relation
     // to the parent fragment through this id
@@ -142,18 +110,92 @@ angular.module('Pundit2.Annotators')
         // .item: Item belonging to this id
         fragmentById = {};
 
+    textFragmentAnnotator.label = 'text';
+    textFragmentAnnotator.type = NameSpace.fragments[textFragmentAnnotator.label];
+
+    var placeIcon = function(id, bit) {
+        // TODO: put this name in .options ?
+        var directive = annomaticIsRunning ? 'suggestion-fragment-icon' : 'text-fragment-icon',
+            element = angular.element('<' + directive + ' fragment="' + id + '"></' + directive + '>');
+
+        textFragmentAnnotator.log('Placing fragment icon ' + n++, id, bit.attr('fragments'));
+        bit.after(element);
+
+        return element;
+    };
+
+    // For each fragment ID it will place an icon after the last BIT belonging
+    // to the given fragment
+    var placeIcons = function() {
+        n = 0;
+        // To see what kind of fragment item is it, check which container it belongs to
+        //amContainer = Config.modules.Annomatic.container;
+
+        for (var c in fragmentIds) {
+            var id = fragmentIds[c],
+                fragments = angular.element('.' + id),
+                firstBit = fragments.first(),
+                lastBit = fragments.last();
+
+            fragmentsRefs[c] = [lastBit, firstBit];
+            placeIcon(id, lastBit);
+        }
+    };
+
+    // TODO: Move this to XpointersHelper .something() ?
+    var activateFragments = function() {
+        // var deferred = $q.defer();
+
+        var consolidated = angular.element('.pnd-cons:not(.ng-scope)');
+        $compile(consolidated)($rootScope);
+
+        var icons = angular.element('text-fragment-icon, suggestion-fragment-icon');
+        $compile(icons)($rootScope);
+
+        $rootScope.$$phase || $rootScope.$digest();
+
+        // deferred.resolve();
+        // return deferred.promise;
+    };
+
+    textFragmentAnnotator.isConsolidable = function(item) {
+        if (!angular.isArray(item.type)) {
+            textFragmentAnnotator.log('Item not valid: malformed');
+            return false;
+        } else if (item.type.length === 0) {
+            textFragmentAnnotator.log('Item not valid: types len 0');
+            return false;
+        } else if (item.type.indexOf(textFragmentAnnotator.type) === -1) {
+            textFragmentAnnotator.log('Item not valid: not a ' + textFragmentAnnotator.type);
+            return false;
+        } else if (!XpointersHelper.isValidXpointerURI(item.getXPointer())) {
+            textFragmentAnnotator.log('Item not valid: not a valid xpointer uri: ' + item.getXPointer());
+            return false;
+        } else if (!XpointersHelper.isValidXpointer(item.getXPointer())) {
+            textFragmentAnnotator.log('Item not valid: not consolidable on this page: ' + item.getXPointer());
+            return false;
+        }
+
+        // TODO: it's a valid text fragment if:
+        // - has a part of
+        // - has a page context
+
+        textFragmentAnnotator.log('Item valid: try to consolidate ' + item.label);
+        return true;
+    };
+
     // All of the items passed should be consolidable (checked by isConsolidable), in the
     // consolidation service, gathering all annotators
     // TODO: better check twice? :|
-    tfa.consolidate = function(items) {
+    textFragmentAnnotator.consolidate = function(items) {
         var deferred = $q.defer();
 
         if (!angular.isObject(items)) {
-            tfa.err('Items not valid: malformed object', items);
+            textFragmentAnnotator.err('Items not valid: malformed object', items);
             return deferred.resolve();
         }
 
-        tfa.log('Consolidating!');
+        textFragmentAnnotator.log('Consolidating!');
 
         var updateDOMPromise, compilePromise;
 
@@ -198,7 +240,7 @@ angular.module('Pundit2.Annotators')
                     fragmentsRefs[uri] = fragmentsRefsById[fragmentId];
                 }
             } else {
-                if (tfa.options.addIcon) {
+                if (textFragmentAnnotator.options.addIcon) {
                     placeIcons();
                 }
 
@@ -208,64 +250,17 @@ angular.module('Pundit2.Annotators')
         });
 
         $q.all([updateDOMPromise, compilePromise]).then(function() {
-            tfa.log(tfa.label + ' consolidation: done!');
+            textFragmentAnnotator.log(textFragmentAnnotator.label + ' consolidation: done!');
             deferred.resolve();
         });
 
         return deferred.promise;
     };
 
-    var n = 0;
-
-    var placeIcon = function(id, bit) {
-        // TODO: put this name in .options ?
-        var directive = annomaticIsRunning ? 'suggestion-fragment-icon' : 'text-fragment-icon',
-            element = angular.element('<' + directive + ' fragment="' + id + '"></' + directive + '>');
-
-        tfa.log('Placing fragment icon ' + n++, id, bit.attr('fragments'));
-        bit.after(element);
-
-        return element;
-    };
-
-    // For each fragment ID it will place an icon after the last BIT belonging
-    // to the given fragment
-    var placeIcons = function() {
-        n = 0;
-        // To see what kind of fragment item is it, check which container it belongs to
-        //amContainer = Config.modules.Annomatic.container;
-
-        for (var c in fragmentIds) {
-            var id = fragmentIds[c],
-                fragments = angular.element('.' + id),
-                firstBit = fragments.first(),
-                lastBit = fragments.last();
-
-            fragmentsRefs[c] = [lastBit, firstBit];
-            placeIcon(id, lastBit);
-        }
-    };
-
-    // TODO: Move this to XpointersHelper .something() ?
-    var activateFragments = function() {
-        // var deferred = $q.defer();
-
-        var consolidated = angular.element('.pnd-cons:not(.ng-scope)');
-        $compile(consolidated)($rootScope);
-
-        var icons = angular.element('text-fragment-icon, suggestion-fragment-icon');
-        $compile(icons)($rootScope);
-
-        $rootScope.$$phase || $rootScope.$digest();
-
-        // deferred.resolve();
-        // return deferred.promise;
-    };
-
     // Wipes everything done by the annotator:
     // - removes the icons, if present
     // - unwraps the fragments
-    tfa.wipe = function() {
+    textFragmentAnnotator.wipe = function() {
 
         fragmentIds = {};
         fragmentsRefs = {};
@@ -292,17 +287,17 @@ angular.module('Pundit2.Annotators')
 
     // Called by TextFragmentIcon directives: they will be placed after each consolidated
     // fragment.
-    tfa.addFragmentIcon = function(icon) {
+    textFragmentAnnotator.addFragmentIcon = function(icon) {
         fragmentById[icon.fragment].icon = icon;
         icon.item = fragmentById[icon.fragment].item;
 
-        tfa.log('Adding fragment icon for fragment id=' + icon.fragment);
+        textFragmentAnnotator.log('Adding fragment icon for fragment id=' + icon.fragment);
     };
 
     // Called by TextFragmentBit directives: they will wrap every bit of annotated content
     // for every xpointer we save an array of those bits. Each bit can belong to more
     // than one xpointer (overlaps!)
-    tfa.addFragmentBit = function(bit) {
+    textFragmentAnnotator.addFragmentBit = function(bit) {
         var fragments = bit.fragments;
 
         // Fragment ids are split by a comma, gather them back in a array. Otherwise
@@ -317,68 +312,68 @@ angular.module('Pundit2.Annotators')
             var current = fragmentById[fragments[l]];
             current.bits.push(bit);
         }
-        tfa.log('Adding consolidated fragment bit', fragments);
+        textFragmentAnnotator.log('Adding consolidated fragment bit', fragments);
     };
 
-    tfa.getFragmentReferenceByUri = function(uri) {
+    textFragmentAnnotator.getFragmentReferenceByUri = function(uri) {
         if (typeof(fragmentsRefs[uri]) !== 'undefined') {
             return fragmentsRefs[uri];
         }
     };
 
-    tfa.getFragmentIdByUri = function(uri) {
+    textFragmentAnnotator.getFragmentIdByUri = function(uri) {
         if (typeof(fragmentIds[uri]) !== 'undefined') {
             return fragmentIds[uri];
         }
     };
 
-    tfa.getFragmentIconScopeById = function(id) {
+    textFragmentAnnotator.getFragmentIconScopeById = function(id) {
         if (typeof(fragmentById[id]) !== 'undefined') {
             return fragmentById[id].icon;
         }
     };
 
-    tfa.getBitsById = function(id) {
+    textFragmentAnnotator.getBitsById = function(id) {
         if (typeof(fragmentById[id]) !== 'undefined') {
             return fragmentById[id].bits;
         }
     };
 
-    tfa.highlightByUri = function(uri) {
+    textFragmentAnnotator.highlightByUri = function(uri) {
         if (typeof(fragmentIds[uri]) === 'undefined') {
-            tfa.log('Not highlighting given URI: fragment id not found');
+            textFragmentAnnotator.log('Not highlighting given URI: fragment id not found');
             return;
         }
-        tfa.highlightById(fragmentIds[uri][0]);
+        textFragmentAnnotator.highlightById(fragmentIds[uri][0]);
     };
 
-    tfa.highlightById = function(id) {
+    textFragmentAnnotator.highlightById = function(id) {
         for (var l = fragmentById[id].bits.length; l--;) {
             fragmentById[id].bits[l].high();
         }
-        tfa.log('Highlighting fragment id=' + id + ', # bits: ' + fragmentById[id].bits.length);
+        textFragmentAnnotator.log('Highlighting fragment id=' + id + ', # bits: ' + fragmentById[id].bits.length);
     };
 
 
-    tfa.clearHighlightByUri = function(uri) {
+    textFragmentAnnotator.clearHighlightByUri = function(uri) {
         if (typeof(fragmentIds[uri]) === 'undefined') {
-            tfa.log('Not clearing highlight on given URI: fragment id not found');
+            textFragmentAnnotator.log('Not clearing highlight on given URI: fragment id not found');
             return;
         }
-        tfa.clearHighlightById(fragmentIds[uri]);
+        textFragmentAnnotator.clearHighlightById(fragmentIds[uri]);
     };
 
-    tfa.clearHighlightById = function(id) {
+    textFragmentAnnotator.clearHighlightById = function(id) {
         for (var l = fragmentById[id].bits.length; l--;) {
             fragmentById[id].bits[l].clear();
         }
-        tfa.log('Clear highlight on fragment id=' + id + ', # bits: ' + fragmentById[id].bits.length);
+        textFragmentAnnotator.log('Clear highlight on fragment id=' + id + ', # bits: ' + fragmentById[id].bits.length);
     };
 
     // Hides and shows a single fragment (identified by its item's URI)
-    tfa.showByUri = function(uri) {
+    textFragmentAnnotator.showByUri = function(uri) {
         if (typeof(fragmentIds[uri]) === 'undefined') {
-            tfa.log('Not showing fragment for given URI: fragment id not found');
+            textFragmentAnnotator.log('Not showing fragment for given URI: fragment id not found');
             return;
         }
         var id = fragmentIds[uri];
@@ -387,9 +382,9 @@ angular.module('Pundit2.Annotators')
         }
     };
 
-    tfa.hideByUri = function(uri) {
+    textFragmentAnnotator.hideByUri = function(uri) {
         if (typeof(fragmentIds[uri]) === 'undefined') {
-            tfa.log('Not hiding fragment for given URI: fragment id not found');
+            textFragmentAnnotator.log('Not hiding fragment for given URI: fragment id not found');
             return;
         }
         var id = fragmentIds[uri];
@@ -399,22 +394,22 @@ angular.module('Pundit2.Annotators')
     };
 
     // Hides and shows every fragment
-    tfa.hideAll = function() {
+    textFragmentAnnotator.hideAll = function() {
         for (var uri in fragmentIds) {
-            tfa.hideByUri(uri);
+            textFragmentAnnotator.hideByUri(uri);
         }
     };
 
-    tfa.showAll = function() {
+    textFragmentAnnotator.showAll = function() {
         for (var uri in fragmentIds) {
-            tfa.showByUri(uri);
+            textFragmentAnnotator.showByUri(uri);
         }
     };
 
     // Ghost and remove ghost from a single fragment (identified by its item's URI)
-    tfa.ghostByUri = function(uri) {
+    textFragmentAnnotator.ghostByUri = function(uri) {
         if (typeof(fragmentIds[uri]) === 'undefined') {
-            tfa.log('Fragment id not found');
+            textFragmentAnnotator.log('Fragment id not found');
             return;
         }
         var id = fragmentIds[uri];
@@ -423,9 +418,9 @@ angular.module('Pundit2.Annotators')
         }
     };
 
-    tfa.ghostRemoveByUri = function(uri) {
+    textFragmentAnnotator.ghostRemoveByUri = function(uri) {
         if (typeof(fragmentIds[uri]) === 'undefined') {
-            tfa.log('Fragment id not found');
+            textFragmentAnnotator.log('Fragment id not found');
             return;
         }
         var id = fragmentIds[uri];
@@ -435,17 +430,21 @@ angular.module('Pundit2.Annotators')
     };
 
     // Hides and shows every fragment
-    tfa.ghostAll = function() {
+    textFragmentAnnotator.ghostAll = function() {
         for (var uri in fragmentIds) {
-            tfa.ghostByUri(uri);
+            textFragmentAnnotator.ghostByUri(uri);
         }
     };
 
-    tfa.ghostRemoveAll = function() {
+    textFragmentAnnotator.ghostRemoveAll = function() {
         for (var uri in fragmentIds) {
-            tfa.ghostRemoveByUri(uri);
+            textFragmentAnnotator.ghostRemoveByUri(uri);
         }
     };
+
+    // The orchestrator will be called by the consolidation service as single point of
+    // interaction when it comes to deal with fragments. Let's subscribe the text type.
+    Consolidation.addAnnotator(textFragmentAnnotator);
 
     EventDispatcher.addListener('XpointersHelper.NodeAdded', function(e) {
         var elementInfo = e.args,
@@ -478,6 +477,6 @@ angular.module('Pundit2.Annotators')
         annomaticIsRunning = false;
     });
 
-    tfa.log('Component up and running');
-    return tfa;
+    textFragmentAnnotator.log('Component up and running');
+    return textFragmentAnnotator;
 });

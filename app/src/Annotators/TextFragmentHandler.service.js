@@ -102,19 +102,11 @@ angular.module('Pundit2.Annotators')
     ContextualMenu, XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, EventDispatcher,
     $document) {
 
+    var textFragmentHandler = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
     var clientHidden = false;
 
-    var tfh = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
-
-    // If we are configured to remove the selection, we cannot preventDefault() or
-    // we will interfere with other clicks inside ignored containers (search inputs?!!).
-    // So we bind this up handler and just remove the selection on mouseup, if there is one.
-    var mouseUpHandlerToRemove = function() {
-        $document.off('mouseup', mouseUpHandlerToRemove);
-        if (tfh.getSelectedRange() !== null) {
-            removeSelection();
-        }
-    };
+    var lastTemporaryConsolidable,
+        temporaryConsolidated = {};
 
     var checkTemporaryConsolidated = function(forceWipe) {
         if (typeof forceWipe === 'undefined') {
@@ -170,214 +162,6 @@ angular.module('Pundit2.Annotators')
         }
     };
 
-    EventDispatcher.addListeners(['TripleComposer.useAsObject', 'TripleComposer.useAsSubject'], function(){
-        addTemporarySelection();
-    });
-
-    EventDispatcher.addListeners(['TripleComposer.statementChange', 'TripleComposer.statementChanged', 'TripleComposer.reset'], function(){
-        checkTemporaryConsolidated();
-    });
-
-    EventDispatcher.addListener('AnnotationsCommunication.annotationSaved', function(){
-        checkTemporaryConsolidated(true);
-    });
-
-    var lastTemporaryConsolidable,
-        temporaryConsolidated = {};
-
-    var mouseUpHandler = function(upEvt) {
-        lastTemporaryConsolidable = undefined;
-        if (clientHidden) {
-            return;
-        }
-
-        $document.off('mouseup', mouseUpHandler);
-
-        var target = upEvt.target;
-        if (tfh.isToBeIgnored(target)) {
-            tfh.log('ABORT: ignoring mouse UP event on document: ignore class spotted.');
-            removeSelection();
-            return;
-        }
-
-        var range = tfh.getSelectedRange();
-        if (range === null) {
-            return;
-        }
-
-        // Check every node contained in this range: if we select something which starts
-        // and ends inside the same text node the length will be 0: everything is ok.
-        // Otherwise check that every contained node must not be ignored
-        var nodes = range.cloneContents().querySelectorAll("*"),
-            nodesLen = nodes.length;
-        while (nodesLen--) {
-            if (tfh.isToBeIgnored(nodes[nodesLen])) {
-                tfh.log('ABORT: ignoring range: ignore class spotted inside it, somewhere.');
-                removeSelection();
-                return;
-            }
-        }
-
-        // TODO: this will create a new item in our container at each valid user selection.
-        // how to wipe them up? If the user keeps selecting stuff we end up with LOADS and
-        // LOADS of unused items.
-        // Problem: the item might be used by the triple composer, or added to my items or
-        // discarded at all.
-        // Possible solution: wipe the container when triple composer is empty, ctx menu is
-        // NOT shown on every dashboard open/close ?
-        var item = tfh.createItemFromRange(range);
-        ItemsExchange.addItemToContainer(item, tfh.options.container);
-
-        lastTemporaryConsolidable = {
-            offset: range.endOffset,
-            range: range,
-            xpointer: item.getXPointer(),
-            fragmentId: 'frt-' + (new Date()).getTime(),
-            itemUri: item.uri
-        };
-
-        //XpointersHelper.wrapElement(range.commonAncestorContainer, range, 'span', "pnd-cons-temp", [lastTemporaryConsolidable.fragmentId]);
-        //temporaryConsolidated[item.uri] = lastTemporaryConsolidable;
-
-        tfh.log('Valid selection ended on document. Text fragment Item produced: ' + item.label);
-
-        if (Toolbar.isActiveTemplateMode()) {
-            tfh.log('Item used as subject inside triple composer (template mode active).');
-            TripleComposer.addToAllSubject(item);
-            TripleComposer.closeAfterOp();
-            EventDispatcher.sendEvent('Annotators.saveAnnotation');
-            return;
-        }
-
-        ContextualMenu.show(upEvt.pageX, upEvt.pageY, item, tfh.options.cMenuType);
-
-    }; // mouseUpHandler()
-
-    var mouseDownHandler = function(downEvt) {
-        if (clientHidden) {
-            return;
-        }
-
-        var target = downEvt.target;
-        if (tfh.isToBeIgnored(target)) {
-            tfh.log('ABORT: ignoring mouse DOWN event on document: ignore class spotted.');
-            if (tfh.options.removeSelectionOnAbort) {
-                $document.on('mouseup', mouseUpHandlerToRemove);
-            }
-            return;
-        }
-
-        $document.on('mouseup', mouseUpHandler);
-        tfh.log('Selection started on document, waiting for mouse up.');
-    }; // mouseDownHandler()
-
-    $document.on('mousedown', mouseDownHandler);
-
-    tfh.turnOn = function() {
-        $document.on('mousedown', mouseDownHandler);
-    };
-
-    tfh.turnOff = function() {
-        $document.off('mousedown', mouseDownHandler);
-    };
-
-    // Creates a proper Item from a range .. it must be a valid range, kktnx.
-    tfh.createItemFromRange = function(range) {
-        var values = {};
-
-        values.uri = tfh.range2xpointer(range);
-        values.type = [NameSpace.fragments.text];
-        values.description = range.toString();
-
-        values.label = values.description;
-        if (values.label.length > tfh.options.labelMaxLength) {
-            values.label = values.label.substr(0, tfh.options.labelMaxLength) + ' ..';
-        }
-
-        values.pageContext = XpointersHelper.getSafePageContext();
-        values.isPartOf = values.uri.split('#')[0];
-
-        return new Item(values.uri, values);
-    };
-
-
-    // Gets the user's selected range on the page, checking if it's valid.
-    // Will return a DIRTY range: a valid range in the current DOM the user
-    // is viewing and interacting with
-    tfh.getSelectedRange = function() {
-        var doc = $document[0],
-            range;
-
-        if (doc.getSelection().rangeCount === 0) {
-            tfh.log("getSelection().rangeCount is 0: no selected range.");
-            return null;
-        }
-
-        range = doc.getSelection().getRangeAt(0);
-
-        // If the selected range is empty (this happens when the user clicks on something)...
-        if (range !== null &&
-            range.startContainer === range.endContainer &&
-            range.startOffset === range.endOffset) {
-
-            tfh.log("Range is not null, but start/end containers and offsets match: no selected range.");
-            return null;
-        }
-
-        tfh.log("GetSelectedRange returning a DIRTY range: " +
-            range.startContainer.nodeName + "[" + range.startOffset + "] > " +
-            range.endContainer.nodeName + "[" + range.endOffset + "]");
-
-        return range;
-    }; // getSelectedRange()
-
-    // If configured to do so, removes the user's selection from the browser
-    var removeSelection = function() {
-        if (tfh.options.removeSelectionOnAbort) {
-            $document[0].getSelection().removeAllRanges();
-        }
-    };
-
-    // Checks if the node (or any parent) is a node which needs to be ignored
-    tfh.isToBeIgnored = function(node) {
-        var classes = tfh.options.ignoreClasses,
-            ignoreLen = classes.length;
-
-        // Traverse every parent and check if it has one of the classes we
-        // need to ignore. As soon as we find one, return true: must ignore.
-        while (node.nodeName.toLowerCase() !== 'body') {
-            for (var i = ignoreLen; i--;) {
-                if (angular.element(node).hasClass(classes[i])) {
-                    return true;
-                }
-            }
-
-            // If there's no parent node .. even better, we didnt find anything wrong!
-            if (node.parentNode === null) {
-                return false;
-            }
-            node = node.parentNode;
-        }
-        return false;
-    };
-
-    // Takes a (dirty) range and returns a clean xpointer:
-    // - translate a dirty range into a clean one
-    // - correct any wrong number inside xpaths (node number, offsets)
-    // - build the xpointer starting from a named content, if present
-    // - build the xpointer strings
-    tfh.range2xpointer = function(dirtyRange) {
-        var cleanRange = dirtyRange2cleanRange(dirtyRange),
-            cleanStartXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.startContainer), cleanRange.cleanStartNumber),
-            cleanEndXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.endContainer), cleanRange.cleanEndNumber),
-            xpointerURL = getContentURLFromXPath(cleanStartXPath),
-            xpointer = getXPointerString(xpointerURL, cleanStartXPath, cleanRange.startOffset, cleanEndXPath, cleanRange.endOffset);
-
-        tfh.log("range2xpointer returning an xpointer: " + xpointer);
-
-        return xpointer;
-    }; // range2xpointer
-
     var getXPointerString = function(startUrl, startXPath, startOffset, endXPath, endOffset) {
         return startUrl + "#xpointer(start-point(string-range(" + startXPath + ",''," + startOffset + "))" +
             "/range-to(string-range(" + endXPath + ",''," + endOffset + ")))";
@@ -390,7 +174,7 @@ angular.module('Pundit2.Annotators')
 
         var cleanRange = {};
 
-        tfh.log("dirty2cleanRange DIRTY: " +
+        textFragmentHandler.log("dirty2cleanRange DIRTY: " +
             range.startContainer.nodeName + "[" + range.startOffset + "] > " +
             range.endContainer.nodeName + "[" + range.endOffset + "]");
 
@@ -406,7 +190,7 @@ angular.module('Pundit2.Annotators')
         cleanRange.cleanStartNumber = calculateCleanNodeNumber(cleanRange.startContainer);
         cleanRange.cleanEndNumber = calculateCleanNodeNumber(cleanRange.endContainer);
 
-        tfh.log("dirty2cleanRange CLEAN: " +
+        textFragmentHandler.log("dirty2cleanRange CLEAN: " +
             cleanRange.startContainer.nodeName + "[" + cleanRange.startOffset + "] > " +
             cleanRange.endContainer.nodeName + "[" + cleanRange.endOffset + "]");
 
@@ -634,23 +418,239 @@ angular.module('Pundit2.Annotators')
         }
 
         // We found too many div[@about= ... whaaaaat?
-        tfh.log('ERROR: getContentURLFromXPath returning something weird? xpath = ' + xpath);
+        textFragmentHandler.log('ERROR: getContentURLFromXPath returning something weird? xpath = ' + xpath);
         return '';
     }; // getContentURLFromXPath()
 
-    EventDispatcher.addListener('Consolidation.startConsolidate', function(/*e*/) {
+
+    // Creates a proper Item from a range .. it must be a valid range, kktnx.
+    textFragmentHandler.createItemFromRange = function(range) {
+        var values = {};
+
+        values.uri = textFragmentHandler.range2xpointer(range);
+        values.type = [NameSpace.fragments.text];
+        values.description = range.toString();
+
+        values.label = values.description;
+        if (values.label.length > textFragmentHandler.options.labelMaxLength) {
+            values.label = values.label.substr(0, textFragmentHandler.options.labelMaxLength) + ' ..';
+        }
+
+        values.pageContext = XpointersHelper.getSafePageContext();
+        values.isPartOf = values.uri.split('#')[0];
+
+        return new Item(values.uri, values);
+    };
+
+
+    // Gets the user's selected range on the page, checking if it's valid.
+    // Will return a DIRTY range: a valid range in the current DOM the user
+    // is viewing and interacting with
+    textFragmentHandler.getSelectedRange = function() {
+        var doc = $document[0],
+            range;
+
+        if (doc.getSelection().rangeCount === 0) {
+            textFragmentHandler.log("getSelection().rangeCount is 0: no selected range.");
+            return null;
+        }
+
+        range = doc.getSelection().getRangeAt(0);
+
+        // If the selected range is empty (this happens when the user clicks on something)...
+        if (range !== null &&
+            range.startContainer === range.endContainer &&
+            range.startOffset === range.endOffset) {
+
+            textFragmentHandler.log("Range is not null, but start/end containers and offsets match: no selected range.");
+            return null;
+        }
+
+        textFragmentHandler.log("GetSelectedRange returning a DIRTY range: " +
+            range.startContainer.nodeName + "[" + range.startOffset + "] > " +
+            range.endContainer.nodeName + "[" + range.endOffset + "]");
+
+        return range;
+    }; // getSelectedRange()
+
+    // If configured to do so, removes the user's selection from the browser
+    var removeSelection = function() {
+        if (textFragmentHandler.options.removeSelectionOnAbort) {
+            $document[0].getSelection().removeAllRanges();
+        }
+    };
+
+    // Checks if the node (or any parent) is a node which needs to be ignored
+    textFragmentHandler.isToBeIgnored = function(node) {
+        var classes = textFragmentHandler.options.ignoreClasses,
+            ignoreLen = classes.length;
+
+        // Traverse every parent and check if it has one of the classes we
+        // need to ignore. As soon as we find one, return true: must ignore.
+        while (node.nodeName.toLowerCase() !== 'body') {
+            for (var i = ignoreLen; i--;) {
+                if (angular.element(node).hasClass(classes[i])) {
+                    return true;
+                }
+            }
+
+            // If there's no parent node .. even better, we didnt find anything wrong!
+            if (node.parentNode === null) {
+                return false;
+            }
+            node = node.parentNode;
+        }
+        return false;
+    };
+
+    // Takes a (dirty) range and returns a clean xpointer:
+    // - translate a dirty range into a clean one
+    // - correct any wrong number inside xpaths (node number, offsets)
+    // - build the xpointer starting from a named content, if present
+    // - build the xpointer strings
+    textFragmentHandler.range2xpointer = function(dirtyRange) {
+        var cleanRange = dirtyRange2cleanRange(dirtyRange),
+            cleanStartXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.startContainer), cleanRange.cleanStartNumber),
+            cleanEndXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.endContainer), cleanRange.cleanEndNumber),
+            xpointerURL = getContentURLFromXPath(cleanStartXPath),
+            xpointer = getXPointerString(xpointerURL, cleanStartXPath, cleanRange.startOffset, cleanEndXPath, cleanRange.endOffset);
+
+        textFragmentHandler.log("range2xpointer returning an xpointer: " + xpointer);
+
+        return xpointer;
+    }; // range2xpointer
+
+    textFragmentHandler.turnOn = function() {
+        $document.on('mousedown', mouseDownHandler);
+    };
+
+    textFragmentHandler.turnOff = function() {
+        $document.off('mousedown', mouseDownHandler);
+    };
+
+    EventDispatcher.addListeners(['TripleComposer.useAsObject', 'TripleComposer.useAsSubject'], function() {
+        addTemporarySelection();
+    });
+
+    EventDispatcher.addListeners(['TripleComposer.statementChange', 'TripleComposer.statementChanged', 'TripleComposer.reset'], function() {
+        checkTemporaryConsolidated();
+    });
+
+    EventDispatcher.addListener('AnnotationsCommunication.annotationSaved', function() {
         checkTemporaryConsolidated(true);
     });
 
-    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+    EventDispatcher.addListener('Consolidation.startConsolidate', function( /*e*/ ) {
+        checkTemporaryConsolidated(true);
+    });
+
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
         clientHidden = true;
         checkTemporaryConsolidated(true);
     });
 
-    EventDispatcher.addListener('Client.show', function(/*e*/) {
+    EventDispatcher.addListener('Client.show', function( /*e*/ ) {
         clientHidden = false;
     });
 
-    tfh.log('Component up and running');
-    return tfh;
+    $document.on('mousedown', mouseDownHandler);
+
+    function mouseUpHandler(upEvt) {
+        lastTemporaryConsolidable = undefined;
+        if (clientHidden) {
+            return;
+        }
+
+        $document.off('mouseup', mouseUpHandler);
+
+        var target = upEvt.target;
+        if (textFragmentHandler.isToBeIgnored(target)) {
+            textFragmentHandler.log('ABORT: ignoring mouse UP event on document: ignore class spotted.');
+            removeSelection();
+            return;
+        }
+
+        var range = textFragmentHandler.getSelectedRange();
+        if (range === null) {
+            return;
+        }
+
+        // Check every node contained in this range: if we select something which starts
+        // and ends inside the same text node the length will be 0: everything is ok.
+        // Otherwise check that every contained node must not be ignored
+        var nodes = range.cloneContents().querySelectorAll("*"),
+            nodesLen = nodes.length;
+        while (nodesLen--) {
+            if (textFragmentHandler.isToBeIgnored(nodes[nodesLen])) {
+                textFragmentHandler.log('ABORT: ignoring range: ignore class spotted inside it, somewhere.');
+                removeSelection();
+                return;
+            }
+        }
+
+        // TODO: this will create a new item in our container at each valid user selection.
+        // how to wipe them up? If the user keeps selecting stuff we end up with LOADS and
+        // LOADS of unused items.
+        // Problem: the item might be used by the triple composer, or added to my items or
+        // discarded at all.
+        // Possible solution: wipe the container when triple composer is empty, ctx menu is
+        // NOT shown on every dashboard open/close ?
+        var item = textFragmentHandler.createItemFromRange(range);
+        ItemsExchange.addItemToContainer(item, textFragmentHandler.options.container);
+
+        lastTemporaryConsolidable = {
+            offset: range.endOffset,
+            range: range,
+            xpointer: item.getXPointer(),
+            fragmentId: 'frt-' + (new Date()).getTime(),
+            itemUri: item.uri
+        };
+
+        //XpointersHelper.wrapElement(range.commonAncestorContainer, range, 'span', "pnd-cons-temp", [lastTemporaryConsolidable.fragmentId]);
+        //temporaryConsolidated[item.uri] = lastTemporaryConsolidable;
+
+        textFragmentHandler.log('Valid selection ended on document. Text fragment Item produced: ' + item.label);
+
+        if (Toolbar.isActiveTemplateMode()) {
+            textFragmentHandler.log('Item used as subject inside triple composer (template mode active).');
+            TripleComposer.addToAllSubject(item);
+            TripleComposer.closeAfterOp();
+            EventDispatcher.sendEvent('Annotators.saveAnnotation');
+            return;
+        }
+
+        ContextualMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType);
+
+    } // mouseUpHandler()
+
+    // If we are configured to remove the selection, we cannot preventDefault() or
+    // we will interfere with other clicks inside ignored containers (search inputs?!!).
+    // So we bind this up handler and just remove the selection on mouseup, if there is one.
+    function mouseUpHandlerToRemove() {
+        $document.off('mouseup', mouseUpHandlerToRemove);
+        if (textFragmentHandler.getSelectedRange() !== null) {
+            removeSelection();
+        }
+    }
+
+    function mouseDownHandler(downEvt) {
+        if (clientHidden) {
+            return;
+        }
+
+        var target = downEvt.target;
+        if (textFragmentHandler.isToBeIgnored(target)) {
+            textFragmentHandler.log('ABORT: ignoring mouse DOWN event on document: ignore class spotted.');
+            if (textFragmentHandler.options.removeSelectionOnAbort) {
+                $document.on('mouseup', mouseUpHandlerToRemove);
+            }
+            return;
+        }
+
+        $document.on('mouseup', mouseUpHandler);
+        textFragmentHandler.log('Selection started on document, waiting for mouse up.');
+    } // mouseDownHandler()
+
+    textFragmentHandler.log('Component up and running');
+    return textFragmentHandler;
 });
