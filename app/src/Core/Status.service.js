@@ -37,8 +37,10 @@ angular.module('Pundit2.Core')
         }
 
         if (currentState) {
-            state.Pundit.loading = true;
-            updateLoading(true);
+            if (state.Pundit.loading === false) {
+                state.Pundit.loading = true;
+                updateLoading(true);
+            }
             loadingCount[eventName] ++;
         } else {
             loadingCount[eventName] --;
