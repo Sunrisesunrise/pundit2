@@ -230,7 +230,7 @@ angular.module('Pundit2.Toolbar')
         value: str
     });
 
-    sendModalScope.titleMessage = "Found a bug? tell us!";
+    sendModalScope.titleMessage = "Need help? Contact us!";
     sendModalScope.text = {
         msg: "",
         subject: ""
@@ -377,7 +377,7 @@ angular.module('Pundit2.Toolbar')
         text: 'About Pundit',
         click: showInfo
     }, {
-        text: 'Report a bug',
+        text: 'Help',
         click: showBug
     }, ];
     if (Fp3.options.active) {
