@@ -135,6 +135,8 @@ angular.module('Pundit2.Core')
 
     status.resetProgress = function() {
         state.Pundit.progress = 0;
+        state.Pundit.needsProgressBar = false;
+        EventDispatcher.sendEvent('Status.progressReset');
     };
 
     status.hitProgress = function(phase, relativePerc) {

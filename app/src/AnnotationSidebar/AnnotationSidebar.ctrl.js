@@ -503,6 +503,10 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
     });
 
+    EventDispatcher.addListener('Consolidation.newRequest', function(e) {
+        $timeout.cancel(updateHitsTimer);
+    });
+
     angular.element($window).bind('resize', function() {
         resizeSidebarHeight();
     });

@@ -2,9 +2,9 @@
 
 angular.module('Pundit2.Toolbar')
 
-.controller('ToolbarCtrl', function($scope, $rootScope, $modal, $http, $window, NameSpace, Config, 
-    Toolbar, SelectorsManager, Fp3, MyPundit, Dashboard, TripleComposer, AnnotationSidebar, 
-    Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, 
+.controller('ToolbarCtrl', function($scope, $rootScope, $modal, $http, $window, NameSpace, Config,
+    Toolbar, SelectorsManager, Fp3, MyPundit, Dashboard, TripleComposer, AnnotationSidebar,
+    Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange,
     Analytics, PageHandler, EventDispatcher, $timeout, $interval, Keyboard, Status) {
 
     var progressBar = angular.element('.pnd-progress-bar');
@@ -35,36 +35,6 @@ angular.module('Pundit2.Toolbar')
         'current': 0,
         'dest': 0
     };
-
-    EventDispatcher.addListener('Status.progress', function(evt) {
-        progressBar.css('opacity', 1);
-        $scope.needsProgressBar = evt.args.needsProgressBar;
-        progressState.dest = evt.args.progress;
-        $scope.progress = evt.args.progress + '%';
-        if (evt.args.progress >= 100) {
-            $timeout(function(){
-                progressBar.animate({
-                    'opacity': 0
-                }, 500, function() {
-                    Status.needsProgressBar = $scope.needsProgressBar = false;
-                });
-            }, 1000);
-        }
-        /*
-        if (typeof progressState.interval === 'undefined') {
-            progressState.interval = $interval(function(){
-                $scope.progress = progressState.current + '%';
-                progressState.current ++;
-                if (progressState.current >= progressState.dest) {
-                    progressState.current = progressState.dest
-                    $interval.cancel(progressState.interval);
-                    progressState.interval = undefined;
-                    $scope.progress = progressState.current + '%';
-                }
-            }, 10);
-        }
-        */
-    });
 
     var menuCustom = Toolbar.options.menuCustom;
 
@@ -389,29 +359,23 @@ angular.module('Pundit2.Toolbar')
 
     if (lodLive) {
         $scope.userLoggedInDropdown = [{
-                text: 'Open your graph',
-                click: lodliveOpen
-            },
-            {
-                text: 'Edit your profile',
-                click: editYourProfile
-            },
-            {
-                text: 'Log out',
-                click: logout
-            }
-        ];
+            text: 'Open your graph',
+            click: lodliveOpen
+        }, {
+            text: 'Edit your profile',
+            click: editYourProfile
+        }, {
+            text: 'Log out',
+            click: logout
+        }];
     } else {
-        $scope.userLoggedInDropdown = [
-            {
-                text: 'Edit your profile',
-                click: editYourProfile
-            },
-            {
-                text: 'Log out',
-                click: logout
-            }
-        ];
+        $scope.userLoggedInDropdown = [{
+            text: 'Edit your profile',
+            click: editYourProfile
+        }, {
+            text: 'Log out',
+            click: logout
+        }];
     }
 
 
@@ -575,13 +539,13 @@ angular.module('Pundit2.Toolbar')
 
     // Handles userdata changes after edit profile, maybe we can remove the above
     // $watch.
-    EventDispatcher.addListener('MyPundit.isUserLogged', function (e) {
+    EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
         $scope.isUserLogged = e.args;
         $scope.userData = MyPundit.getUserData();
     });
 
     // Handle changes in triple composer.
-    EventDispatcher.addListeners(['TripleComposer.statementChanged', 'TripleComposer.reset'], function (e) {
+    EventDispatcher.addListeners(['TripleComposer.statementChanged', 'TripleComposer.reset'], function(e) {
         if (e.name === 'TripleComposer.reset') {
             $scope.canUsePageAsSubject = true;
             return;
@@ -679,7 +643,44 @@ angular.module('Pundit2.Toolbar')
         $window.open(url, '_self');
     };
 
-    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+
+    EventDispatcher.addListener('Status.progress', function(evt) {
+        progressBar.css('opacity', 1);
+        $scope.needsProgressBar = evt.args.needsProgressBar;
+        progressState.dest = evt.args.progress;
+        $scope.progress = evt.args.progress + '%';
+        if (evt.args.progress >= 100) {
+            $timeout(function() {
+                progressBar.animate({
+                    'opacity': 0
+                }, 500, function() {
+                    $scope.needsProgressBar = false;
+                    Status.resetProgress();
+                });
+            }, 1000);
+        }
+        /*
+        if (typeof progressState.interval === 'undefined') {
+            progressState.interval = $interval(function(){
+                $scope.progress = progressState.current + '%';
+                progressState.current ++;
+                if (progressState.current >= progressState.dest) {
+                    progressState.current = progressState.dest
+                    $interval.cancel(progressState.interval);
+                    progressState.interval = undefined;
+                    $scope.progress = progressState.current + '%';
+                }
+            }, 10);
+        }
+        */
+    });
+
+    EventDispatcher.addListener('Status.progressReset', function(evt) {
+        $scope.progress = 0 + '%';
+        progressBar.css('opacity', 0);
+    });
+
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
         MyPundit.closeLoginPopover();
         angular.element('.dropdown-menu').dropdown("toggle");
     });

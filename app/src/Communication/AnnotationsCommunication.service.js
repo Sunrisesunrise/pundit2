@@ -26,6 +26,9 @@ angular.module('Pundit2.Communication')
     var updateAnnotationV1 = function(promise, annID, graph, items, targets) {
         var completed = 0;
 
+        setLoading(true);
+        Consolidation.requestConsolidateAll();
+
         $http({
             headers: {
                 'Content-Type': 'application/json'
@@ -57,6 +60,7 @@ angular.module('Pundit2.Communication')
             annotationsCommunication.log("Graph correctly updated: " + annID);
         }).error(function() {
             setLoading(false);
+            Consolidation.rejectConsolidateAll();
             EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong', id: "ERROR", timeout: null, message: "Pundit couldn't save your annotation, please try again in 5 minutes."});
             promise.reject();
             annotationsCommunication.log("Error during graph editing of " + annID);
@@ -86,6 +90,7 @@ angular.module('Pundit2.Communication')
             annotationsCommunication.log("Items correctly updated: " + annID);
         }).error(function() {
             setLoading(false);
+            Consolidation.rejectConsolidateAll();
             EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong', id: "ERROR", timeout: null, message: "Pundit couldn't save your annotation, please try again in 5 minutes."});
             promise.reject();
             annotationsCommunication.log("Error during items editing of " + annID);
@@ -94,6 +99,7 @@ angular.module('Pundit2.Communication')
 
     var updateAnnotationV2 = function(promise, annID, graph, items, flatTargets, targets, types) {
         setLoading(true);
+        Consolidation.requestConsolidateAll();
 
         var postData = {
             graph: graph,
@@ -134,6 +140,7 @@ angular.module('Pundit2.Communication')
             EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong', id: "ERROR", timeout: null, message: "Pundit couldn't save your annotation, please try again in 5 minutes."});
             annotationsCommunication.log("Error: impossible to update annotation", msg);
             setLoading(false);
+            Consolidation.rejectConsolidateAll();
             promise.reject();
         });
     };
@@ -157,7 +164,7 @@ angular.module('Pundit2.Communication')
         }
 
         EventDispatcher.sendEvent('Pundit.preventDelay', preventDelay);
-
+        Consolidation.requestConsolidateAll();
         setLoading(true);
 
         var uris = Consolidation.getAvailableTargets(),
@@ -263,11 +270,14 @@ angular.module('Pundit2.Communication')
                 }).error(function( /*data, statusCode*/ ) {
                     annotationsCommunication.err("Error during load multiple annotations.");
                     EventDispatcher.sendEvent('Pundit.alert', {title: 'Sorry there was a problem', id: "ERROR", timeout: null, message: 'The system might be too busy and we couldn\'t load the annotations, please try again in 5 minutes.'});
+                    Consolidation.rejectConsolidateAll();
                     setLoading(false);
                 });
             }
         }, function(msg) {
             annotationsCommunication.err("Could not search for annotations, error from the server: " + msg);
+            Consolidation.rejectConsolidateAll();
+            setLoading(false);
             EventDispatcher.sendEvent('Pundit.error', 'Could not search for annotations, error from the server!');
             EventDispatcher.sendEvent('Pundit.alert', {title: 'Sorry there was a problem', id: "ERROR", timeout: null, message: 'The system might be too busy and we couldn\'t load the annotations, please try again in 5 minutes.'});
             promise.reject(msg);
@@ -361,6 +371,7 @@ angular.module('Pundit2.Communication')
         if (MyPundit.isUserLogged()) {
 
             setLoading(true);
+            Consolidation.requestConsolidateAll();
 
             var postData = {
                 graph: graph,
@@ -416,6 +427,8 @@ angular.module('Pundit2.Communication')
                     if (typeof(skipConsolidation) === 'undefined' || !skipConsolidation) {
                         EventDispatcher.sendEvent('AnnotationsCommunication.saveAnnotation', data.AnnotationID);
                         Consolidation.consolidateAll();
+                    } else {
+                        Consolidation.rejectConsolidateAll();
                     }
 
                     EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
@@ -432,6 +445,7 @@ angular.module('Pundit2.Communication')
                     // rejected, impossible to download annotation from server
                     annotationsCommunication.log("Error: impossible to get annotation from server after save");
                     setLoading(false);
+                    Consolidation.rejectConsolidateAll();
                     promise.reject();
                 });
 
@@ -444,6 +458,7 @@ angular.module('Pundit2.Communication')
                 }
             }).error(function(msg) {
                 setLoading(false);
+                Consolidation.rejectConsolidateAll();
                 annotationsCommunication.log("Error: impossible to save annotation", msg);
                 EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong', id: "ERROR", timeout: null, message: "Pundit couldn't save your annotation, please try again in 5 minutes."});
                 promise.reject();

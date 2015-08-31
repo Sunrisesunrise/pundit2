@@ -66,8 +66,9 @@ angular.module('Pundit2.Core')
 
     var preventDelay = consolidation.options.preventDelay ? true : false,
         updateAddTimer;
-        
-    var consolidationStack = [];
+
+    var consolidationStack = [],
+        requestCount = [];
 
     state.isRunningAnnomatic = false;
 
@@ -228,49 +229,6 @@ angular.module('Pundit2.Core')
         return state.fragmentsItemListByParentURI;
     };
 
-    // Will consolidate every possible item found in the ItemsExchange
-    consolidation.consolidateAll = function() {
-        var consolidatePromise;
-
-        if (state.isRunningAnnomatic) {
-            return;
-        }
-
-        var allItems = [],
-            pageItems = [],
-            myItems = [];
-        if (typeof(Config.modules.PageItemsContainer) !== 'undefined') {
-            pageItems = ItemsExchange.getItemsByContainer(Config.modules.PageItemsContainer.container);
-            allItems = allItems.concat(pageItems);
-        }
-        if (typeof(Config.modules.MyItems) !== 'undefined') {
-            myItems = ItemsExchange.getItemsByContainer(Config.modules.MyItems.container);
-            allItems = allItems.concat(myItems);
-        }
-
-        Status.resetProgress();
-        EventDispatcher.sendEvent('Consolidation.startConsolidate');
-        EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
-            event: 'Pundit.consolidation',
-            data: true
-        });
-
-        consolidation.log('Consolidating ALL items');
-
-        consolidatePromise = consolidation.consolidate(allItems);
-        consolidatePromise.then(function() {
-            if (pageItems.length === 0) {
-                // There are no annotations with valid page items
-                Status.hitProgress(3, 100);
-            }
-            EventDispatcher.sendEvent('Consolidation.consolidateAll');
-            EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
-                event: 'Pundit.consolidation',
-                data: false
-            });
-        });
-    };
-
     // TODO: pass an element and consolidate just that element? or a named content?
     // an image or something?
     consolidation.consolidate = function(items) {
@@ -319,6 +277,71 @@ angular.module('Pundit2.Core')
         return deferred.promise;
         // TODO: ImageConsolidator ? (polygons, areas, whatever: on images?)
         // TODO: More consolidator types? Video? Maps? ..
+    };
+
+    // Will consolidate every possible item found in the ItemsExchange
+    consolidation.consolidateAll = function() {
+        var consolidatePromise;
+
+        requestCount--;
+        if (requestCount > 0) {
+            return;
+        }
+
+        if (state.isRunningAnnomatic) {
+            return;
+        }
+
+        var allItems = [],
+            pageItems = [],
+            myItems = [];
+        if (typeof(Config.modules.PageItemsContainer) !== 'undefined') {
+            pageItems = ItemsExchange.getItemsByContainer(Config.modules.PageItemsContainer.container);
+            allItems = allItems.concat(pageItems);
+        }
+        if (typeof(Config.modules.MyItems) !== 'undefined') {
+            myItems = ItemsExchange.getItemsByContainer(Config.modules.MyItems.container);
+            allItems = allItems.concat(myItems);
+        }
+
+        EventDispatcher.sendEvent('Consolidation.startConsolidate');
+        EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+            event: 'Pundit.consolidation',
+            data: true
+        });
+
+        consolidation.log('Consolidating ALL items');
+
+        consolidatePromise = consolidation.consolidate(allItems);
+        consolidatePromise.then(function() {
+            if (pageItems.length === 0) {
+                // There are no annotations with valid page items
+                Status.hitProgress(3, 100);
+            }
+            EventDispatcher.sendEvent('Consolidation.consolidateAll');
+            EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                event: 'Pundit.consolidation',
+                data: false
+            });
+        });
+    };
+
+    consolidation.requestConsolidateAll = function() {
+        requestCount++;
+        EventDispatcher.sendEvent('Consolidation.newRequest');
+        Status.resetProgress();
+        $timeout.cancel(updateAddTimer);
+        consolidation.log('ConsolidateAll request');
+    };    
+
+    consolidation.rejectConsolidateAll = function() {
+        if (requestCount <= 1) {
+            requestCount = 1;
+            consolidation.consolidateAll();
+        } else {
+            requestCount--;
+        }
+        consolidation.log('ConsolidateAll reject');
     };
 
     // Adds a new annotator to the Consolidation service

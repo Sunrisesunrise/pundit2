@@ -105,6 +105,7 @@ angular.module("Pundit2.MyItemsContainer")
             },
             action: function(item) {
                 EventDispatcher.sendEvent('MyItems.action');
+                Consolidation.requestConsolidateAll();
                 myItems.addItem(item).then(function() {
                     EventDispatcher.sendEvent('MyItems.itemAdded', item);
                     Consolidation.consolidateAll();
@@ -124,6 +125,7 @@ angular.module("Pundit2.MyItemsContainer")
             },
             action: function(item) {
                 EventDispatcher.sendEvent('MyItems.action');
+                Consolidation.requestConsolidateAll();
                 myItems.deleteItem(item).then(function() {
                     EventDispatcher.sendEvent('MyItems.itemRemoved', item);
                     Consolidation.consolidateAll();
@@ -241,6 +243,7 @@ angular.module("Pundit2.MyItemsContainer")
         opInProgress = true;
 
         setLoading(true);
+        Consolidation.requestConsolidateAll();
 
         // remove all my item on pundit server
         // setting it to []
@@ -277,6 +280,7 @@ angular.module("Pundit2.MyItemsContainer")
             myItems.log('Deleted all my items on server', data);
         }).error(function(msg) {
             setLoading(false);
+            Consolidation.rejectConsolidateAll();
             opInProgress = false;
             promise.reject();
             myItems.err('Cant delete my items on server: ', msg);
@@ -346,6 +350,7 @@ angular.module("Pundit2.MyItemsContainer")
 
         }).error(function(msg) {
             opInProgress = false;
+            Consolidation.rejectConsolidateAll();
             setLoading(false);
             promise.reject();
             myItems.err('Cant delete a my item on the server: ', msg);
@@ -357,6 +362,7 @@ angular.module("Pundit2.MyItemsContainer")
     };
 
     myItems.deleteItemAndConsolidate = function(item) {
+        Consolidation.requestConsolidateAll();
         myItems.deleteItem(item).then(function() {
             preventDelay();
             Consolidation.consolidateAll();
@@ -428,7 +434,7 @@ angular.module("Pundit2.MyItemsContainer")
             opInProgress = false;
             setLoading(false);
             promise.reject();
-
+            Consolidation.rejectConsolidateAll();
             myItems.err('Cant add item to my items on the server: ', msg);
         });
 
@@ -438,6 +444,7 @@ angular.module("Pundit2.MyItemsContainer")
     };
 
     myItems.addItemAndConsolidate = function(item) {
+        Consolidation.requestConsolidateAll();
         myItems.addItem(item).then(function() {
             preventDelay();
             Consolidation.consolidateAll();

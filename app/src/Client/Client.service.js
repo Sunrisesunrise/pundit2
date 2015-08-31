@@ -584,6 +584,7 @@ angular.module('Pundit2.Client')
     // Called when the user completed the login process with the modal etc, NOT if the user
     // was already logged in on boot etc
     var onLogin = function() {
+        Status.resetProgress();
 
         NotebookExchange.wipe();
         ItemsExchange.wipe();
@@ -606,6 +607,7 @@ angular.module('Pundit2.Client')
 
     // Called when the user completed the logout process, clicking on logout
     var onLogout = function() {
+        Status.resetProgress();
 
         NotebookExchange.wipe();
         ItemsExchange.wipe();
