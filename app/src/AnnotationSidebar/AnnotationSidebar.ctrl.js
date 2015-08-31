@@ -330,6 +330,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 EventDispatcher.sendEvent('AnnotationSidebar.updateAnnotation', currentId);
             }
             savedOrEditedAnnotationQueque = [];
+            Status.hitProgress(3, 100);
             activateAnnotationsFragments(annotations);
         } else if (deletedIdQueue.length > 0) {
             // TODO: avoid in communication the download of all annotations when one is deleted
@@ -342,6 +343,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 removeAnnotation(deletedIdQueue[j]);
             }
             deletedIdQueue = [];
+            Status.hitProgress(3, 100);
             activateAnnotationsFragments(annotations);
         } else {
             removeAnnotations(annotations);

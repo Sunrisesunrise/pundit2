@@ -289,7 +289,7 @@ angular.module('Pundit2.Annotators')
     // fragment.
     textFragmentAnnotator.addFragmentIcon = function(icon) {
         if (typeof fragmentById[icon.fragment] === 'undefined') {
-            console.log("fragmentById["+icon.fragment+"] is undefined - skipping textFragmentAnnotator.addFragmentIcon()");
+            textFragmentAnnotator.err("fragmentById["+icon.fragment+"] is undefined - skipping textFragmentAnnotator.addFragmentIcon()");
             return;
         }
         fragmentById[icon.fragment].icon = icon;
@@ -315,7 +315,7 @@ angular.module('Pundit2.Annotators')
         for (var l = fragments.length; l--;) {
             var current = fragmentById[fragments[l]];
             if (typeof current === 'undefined') {
-                console.log("fragmentById["+fragments[l]+"] is undefined - skipping textFragmentAnnotator.addFragmentBit()");
+                textFragmentAnnotator.err("fragmentById["+fragments[l]+"] is undefined - skipping textFragmentAnnotator.addFragmentBit()");
                 continue;
             }
             current.bits.push(bit);

@@ -41,7 +41,7 @@ angular.module('Pundit2.Core')
      * <pre> bufferDelay: 35 </pre>
      */
     bufferDelay: 35,
-    
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -64,7 +64,10 @@ angular.module('Pundit2.Core')
     var consolidation = new BaseComponent('Consolidation', CONSOLIDATIONDEFAULTS),
         state = {};
 
-    var preventDelay = consolidation.options.preventDelay ? true : false;
+    var preventDelay = consolidation.options.preventDelay ? true : false,
+        updateAddTimer;
+        
+    var consolidationStack = [];
 
     state.isRunningAnnomatic = false;
 
@@ -75,7 +78,6 @@ angular.module('Pundit2.Core')
     var addItems = function(items) {
         var deferred = $q.defer(),
             itemsCache = [],
-            updateAddTimer,
             startLength = items.length;
 
         var deferredAddItems = function(promise) {
@@ -287,7 +289,7 @@ angular.module('Pundit2.Core')
         consolidation.wipe();
         addItemsPromise = state.isRunningAnnomatic ? addAnnomaticItems(items) : addItems(items);
 
-        $q.all([addItemsPromise]).then(function() {
+        consolidationStack.push(function() {
             for (var a in state.annotators) {
                 if (a in state.itemListByType) {
                     currentPromise = state.annotators[a].consolidate(state.itemListByType[a]);
@@ -302,6 +304,16 @@ angular.module('Pundit2.Core')
                 EventDispatcher.sendEvent('Consolidation.consolidate');
                 deferred.resolve();
             });
+        });
+
+        $q.all([addItemsPromise]).then(function() {
+            var lastCall;
+            if (consolidationStack.length > 1) {
+                consolidationStack.shift();
+                return;
+            }
+            lastCall = consolidationStack.pop();
+            lastCall();
         });
 
         return deferred.promise;
