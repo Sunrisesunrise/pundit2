@@ -392,7 +392,9 @@ angular.module('Pundit2.TripleComposer')
             editAnnID: undefined,
             closeAfterOp: false,
             showHeader: true,
-            showFooter: true
+            showFooter: true,
+            saving: false,
+            afterSave: undefined
         };
     };
 
@@ -453,6 +455,30 @@ angular.module('Pundit2.TripleComposer')
         state[name].closeAfterOp = true;
     };
 
+    tripleComposer.setSaving = function(saving, name) {
+        name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
+        state[name].saving = saving;
+    };
+
+    tripleComposer.isSaving = function(name) {
+        name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
+        return state[name].saving;
+    };
+
+    tripleComposer.setAfterSave = function(callback, name) {
+        name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
+        state[name].afterSave = callback;
+    };
+
     tripleComposer.closeAfterOpOff = function(name) {
         name = fixName(name);
         if (typeof state[name] === 'undefined') {
@@ -463,7 +489,11 @@ angular.module('Pundit2.TripleComposer')
 
     tripleComposer.updateVisibility = function(name) {
         name = fixName(name);
-        if (state[name].closeAfterOp && Dashboard.isDashboardVisible()) {
+        if (typeof state[name].afterSave !== 'undefined') {
+            state[name].afterSave();
+            state[name].afterSave = undefined;
+        }
+        else if (state[name].closeAfterOp && Dashboard.isDashboardVisible()) {
             Dashboard.toggle();
         }
         state[name].closeAfterOp = false;

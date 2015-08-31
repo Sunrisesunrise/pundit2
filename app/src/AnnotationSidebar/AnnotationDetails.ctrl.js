@@ -91,23 +91,34 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.editAnnotation = function() {
-        if (TripleComposer.isEditMode()) {
-            TripleComposer.reset();
+
+        var doEditAnnotation = function() {
+            if (TripleComposer.isEditMode()) {
+                TripleComposer.reset();
+            }
+
+            // TODO fix tripleComposer.editAnnotation removing watch to add statement and remove this timeout
+            $timeout(function() {
+                TripleComposer.editAnnotation($scope.annotation.id);
+                if (!Dashboard.isDashboardVisible()) {
+                    TripleComposer.closeAfterOp();
+                    Dashboard.toggle();
+                } else {
+                    TripleComposer.closeAfterOpOff();
+                }
+                EventDispatcher.sendEvent('AnnotationDetails.editAnnotation', TripleComposer.options.clientDashboardTabTitle);
+
+                Analytics.track('buttons', 'click', 'annotation--details--edit');
+            }, 1);
         }
 
-        // TODO fix tripleComposer.editAnnotation removing watch to add statement and remove this timeout
-        $timeout(function() {
-            TripleComposer.editAnnotation($scope.annotation.id);
-            if (!Dashboard.isDashboardVisible()) {
-                TripleComposer.closeAfterOp();
-                Dashboard.toggle();
-            } else {
-                TripleComposer.closeAfterOpOff();
-            }
-            EventDispatcher.sendEvent('AnnotationDetails.editAnnotation', TripleComposer.options.clientDashboardTabTitle);
-
-            Analytics.track('buttons', 'click', 'annotation--details--edit');
-        }, 1);
+        if (TripleComposer.isSaving()) {
+            console.log("Still saving .. wait !!");
+            TripleComposer.setAfterSave(doEditAnnotation);
+        }
+        else {
+            doEditAnnotation();
+        }
     };
 
     $scope.isUserToolShowed = function() {

@@ -22,6 +22,7 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.saving = false;
+    TripleComposer.setSaving(false, $scope.name);
     $scope.textMessage = TripleComposer.options.savingMsg;
 
     $scope.headerMessage = "Create new annotation";
@@ -213,6 +214,7 @@ angular.module('Pundit2.TripleComposer')
             TripleComposer.setEditMode(false, $scope.name);
             angular.element('.pnd-triplecomposer-cancel').removeClass('disabled');
             $scope.saving = false;
+            TripleComposer.setSaving(false, $scope.name);
             TripleComposer.updateVisibility($scope.name);
         }, time);
     };
@@ -231,6 +233,7 @@ angular.module('Pundit2.TripleComposer')
         promiseResolved = false;
         //savePromise = $timeout(function(){ promiseResolved = true; }, TripleComposer.options.savingMsgTime);
         $scope.saving = true;
+        TripleComposer.setSaving(true, $scope.name);
         return $timeout(function() {
             promiseResolved = true;
         }, TripleComposer.options.savingMsgTime);
