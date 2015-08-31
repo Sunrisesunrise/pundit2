@@ -288,6 +288,10 @@ angular.module('Pundit2.Annotators')
     // Called by TextFragmentIcon directives: they will be placed after each consolidated
     // fragment.
     textFragmentAnnotator.addFragmentIcon = function(icon) {
+        if (typeof fragmentById[icon.fragment] === 'undefined') {
+            console.log("fragmentById["+icon.fragment+"] is undefined - skipping textFragmentAnnotator.addFragmentIcon()");
+            return;
+        }
         fragmentById[icon.fragment].icon = icon;
         icon.item = fragmentById[icon.fragment].item;
 
@@ -310,6 +314,10 @@ angular.module('Pundit2.Annotators')
 
         for (var l = fragments.length; l--;) {
             var current = fragmentById[fragments[l]];
+            if (typeof current === 'undefined') {
+                console.log("fragmentById["+fragments[l]+"] is undefined - skipping textFragmentAnnotator.addFragmentBit()");
+                continue;
+            }
             current.bits.push(bit);
         }
         textFragmentAnnotator.log('Adding consolidated fragment bit', fragments);

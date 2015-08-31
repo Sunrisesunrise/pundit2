@@ -33,6 +33,11 @@ angular.module('Pundit2.Core')
             return false;
         }
 
+        if (typeof(item) === "undefined") {
+            itemsExchange.log('itemsExchange.isItemInContainer has been called with undefined item, that shouldn\'t happen');
+            return false;
+        }
+
         var list = itemContainers[item.uri];
 
         // Item not found .. !!?!
