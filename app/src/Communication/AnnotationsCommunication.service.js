@@ -419,10 +419,11 @@ angular.module('Pundit2.Communication')
                     'Content-Type': 'application/json'
                 },
                 method: 'POST',
-                //url: NameSpace.get('asNBCurrent'),
-                url: NameSpace.get('asNBForcedCurrent', {
-                    current: NotebookExchange.getCurrentNotebooks().id
-                }),
+                url: NameSpace.get('asNBCurrent'),
+                // TODO: when the user is not logged, the current notebook is undefined
+                // url: NameSpace.get('asNBForcedCurrent', {
+                //     current: NotebookExchange.getCurrentNotebooks().id
+                // }),
                 params: {
                     context: angular.toJson({
                         targets: flatTargets,
