@@ -221,7 +221,7 @@ angular.module('Pundit2.Core')
     };
     consolidation.wipe();
 
-    consolidation.wipeItems = function(items) {
+    consolidation.wipeItems = function(items)  {
         var currentItem, currentType;
         for (var i in items) {
             currentItem = items[i];
@@ -344,7 +344,7 @@ angular.module('Pundit2.Core')
         Status.resetProgress();
         $timeout.cancel(updateAddTimer);
         consolidation.log('ConsolidateAll request');
-    };    
+    };
 
     consolidation.rejectConsolidateAll = function() {
         if (requestCount <= 1) {
@@ -358,7 +358,7 @@ angular.module('Pundit2.Core')
 
     consolidation.getConsolidationRequestNumber = function() {
         return requestCount;
-    }
+    };
 
     // Adds a new annotator to the Consolidation service
     consolidation.addAnnotator = function(annotator) {

@@ -873,7 +873,7 @@ angular.module('Pundit2.Annotators')
         });
     }
 
-    EventDispatcher.addListener('Consolidation.newRequest', function(e) {
+    EventDispatcher.addListener('Consolidation.newRequest', function() {
         $timeout.cancel(updateTimer);
     });
 

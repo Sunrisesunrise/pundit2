@@ -832,7 +832,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     function() {
                         var ba = BrokenHelper.getBrokenAnnotations();
                         if (ba.length > 0) {
-                            var currentElement = angular.element('annotation-details[id="'+ba[0]+'"] .pnd-annotation-details-header');
+                            var currentElement = angular.element('annotation-details[id="' + ba[0] + '"] .pnd-annotation-details-header');
                             if (!annotationSidebar.isAnnotationSidebarExpanded()) {
                                 if (annotationSidebar.isFiltersExpanded()) {
                                     annotationSidebar.toggleFiltersContent();
@@ -1371,7 +1371,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     annotationSidebar.showAnnotation = function(annId) {
         // TODO: nain nain nain!!!
-        angular.element('annotation-details[id="'+annId+'"] .pnd-annotation-details-header').trigger('click');
+        angular.element('annotation-details[id="' + annId + '"] .pnd-annotation-details-header').trigger('click');
     };
 
     EventDispatcher.addListeners(['Consolidation.consolidateAll', 'AnnotationSidebar.forceUpdate'], function() {
@@ -1405,7 +1405,7 @@ angular.module('Pundit2.AnnotationSidebar')
         annotationSidebar.resetFilters();
     });
 
-    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
         if (state.isSidebarExpanded) {
             annotationSidebar.toggle();
         }

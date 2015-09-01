@@ -113,7 +113,7 @@ angular.module('Pundit2.Communication')
     annotationExchange.getAnnotations = function() {
         return annList;
     };
-    
+
     annotationExchange.getAnnotationsHash = function() {
         return annListById;
     };

@@ -371,7 +371,7 @@ angular.module("Pundit2.MyItemsContainer")
 
     myItems.isItemPresent = function(item) {
         var items = ItemsExchange.getItemsByContainer(myItems.options.container),
-        index = items.indexOf(item);
+            index = items.indexOf(item);
         return index !== -1;
     };
 

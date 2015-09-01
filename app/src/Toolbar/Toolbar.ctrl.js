@@ -675,7 +675,7 @@ angular.module('Pundit2.Toolbar')
         */
     });
 
-    EventDispatcher.addListener('Status.progressReset', function(evt) {
+    EventDispatcher.addListener('Status.progressReset', function() {
         $scope.progress = 0 + '%';
         progressBar.css('opacity', 0);
     });

@@ -110,13 +110,12 @@ angular.module('Pundit2.AnnotationSidebar')
 
                 Analytics.track('buttons', 'click', 'annotation--details--edit');
             }, 1);
-        }
+        };
 
         if (TripleComposer.isSaving()) {
             console.log("Still saving .. wait !!");
             TripleComposer.setAfterSave(doEditAnnotation);
-        }
-        else {
+        } else {
             doEditAnnotation();
         }
     };

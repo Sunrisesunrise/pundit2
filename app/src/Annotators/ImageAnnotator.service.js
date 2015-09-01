@@ -95,7 +95,7 @@ angular.module('Pundit2.Annotators')
         // imgCons.siblings('svg.pnd-polygon-layer').remove();
     };
 
-    ia.wipeItem = function(item) {
+    ia.wipeItem = function( /*item*/ ) {
         //TODO: ...
     };
 
@@ -112,7 +112,7 @@ angular.module('Pundit2.Annotators')
         }
     };
 
-    ia.svgClearHighlightByItem = function(/*item*/) {
+    ia.svgClearHighlightByItem = function( /*item*/ ) {
         angular.element('.' + imgConsClass).siblings('span.pnd-cons-svg').remove();
         // var currentUri, imgReference, xpaths = [];
         // if ((item.type.indexOf(ia.typeIF) !== -1) && (typeof(item.polygon) !== 'undefined')){
