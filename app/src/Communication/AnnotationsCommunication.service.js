@@ -413,12 +413,16 @@ angular.module('Pundit2.Communication')
                 };
             }
 
+            //TODO: to test new save with notbook id in URL.
             $http({
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 method: 'POST',
-                url: NameSpace.get('asNBCurrent'),
+                //url: NameSpace.get('asNBCurrent'),
+                url: NameSpace.get('asNBForcedCurrent', {
+                    current: NotebookExchange.getCurrentNotebooks().id
+                }),
                 params: {
                     context: angular.toJson({
                         targets: flatTargets,

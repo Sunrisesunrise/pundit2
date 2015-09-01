@@ -165,6 +165,7 @@ angular.module('Pundit2.Core')
     ns.asNBEditMeta = ns.as + 'api/notebooks/{{id}}';
     ns.asNBOwned = ns.as + 'api/notebooks/owned';
     ns.asNBCurrent = ns.as + 'api/notebooks/current';
+    ns.asNBForcedCurrent = ns.as + 'api/notebooks/{{current}}';
     ns.asNBPrivate = ns.as + 'api/notebooks/private/{{id}}';
     ns.asNBPublic = ns.as + 'api/notebooks/public/{{id}}';
     ns.asNBMeta = ns.as + 'api/notebooks/{{id}}/metadata';
