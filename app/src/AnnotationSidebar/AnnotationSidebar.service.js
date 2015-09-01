@@ -662,8 +662,8 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     // Updates the list of filters and annotation positions when the consolidation is completed
-    var initializeFiltersAndPositions = function() {
-        if (Object.keys(state.allAnnotations).length === 0) {
+    var initializeFiltersAndPositions = function(annotations) {
+        if (Object.keys(annotations).length === 0) {
             return;
         }
 
@@ -678,7 +678,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         startPosition = annotationSidebar.options.startTop;
 
-        angular.forEach(state.allAnnotations, function(annotation) {
+        angular.forEach(annotations, function(annotation) {
             var uriList = {};
 
             annotation.firstConsolidableItem = findFirstConsolidateItem(annotation);
@@ -855,7 +855,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
         BrokenHelper.sendQueques();
 
-        annotationsFilters.broken['uri:broken'].annotationsList = removeBroken(angular.extend({}, state.allAnnotations), tempBrokenList);
+        annotationsFilters.broken['uri:broken'].annotationsList = removeBroken(angular.extend({}, annotations), tempBrokenList);
     };
 
     var findBackward = function(index, annotations) {
@@ -1374,17 +1374,20 @@ angular.module('Pundit2.AnnotationSidebar')
         angular.element('annotation-details[id="'+annId+'"] .pnd-annotation-details-header').trigger('click');
     };
 
-    EventDispatcher.addListener('Consolidation.consolidateAll', function() {
+    //TODO: single management  AnnotationsCommunication.annotationDeleted.
+    EventDispatcher.addListeners(['Consolidation.consolidateAll', 'AnnotationsCommunication.annotationDeleted'], function() {
         annotationSidebar.log('Update annotations in sidebar');
 
         var annotations = AnnotationsExchange.getAnnotations();
         var annotationsList = AnnotationsExchange.getAnnotationsHash();
+        var allAnnotations = angular.extend({}, annotationsList);
 
         annotationsByPosition = angular.extend([], annotations);
         annotationsByDate = angular.extend([], annotations);
         annotationsByDate = sortByKey(annotationsByDate, 'created');
-        state.allAnnotations = angular.extend({}, annotationsList);
-        initializeFiltersAndPositions();
+        initializeFiltersAndPositions(allAnnotations);
+
+        state.allAnnotations = allAnnotations;
     });
 
     EventDispatcher.addListener('ResizeManager.resize', function() {

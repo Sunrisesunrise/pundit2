@@ -304,31 +304,55 @@ angular.module('Pundit2.Communication')
                 }),
                 withCredentials: true
             }).success(function() {
-                setLoading(false);
+                var itemsToKeep = {},
+                    itemsToDelete = [];
+
                 annotationsCommunication.log("Success annotation: " + annID + " correctly deleted");
+
+                var annotation = AnnotationsExchange.getAnnotationById(annID);
+
                 // remove annotation from relative notebook
-                var notebookID = AnnotationsExchange.getAnnotationById(annID).isIncludedIn;
+                var notebookID = annotation.isIncludedIn;
                 var nt = NotebookExchange.getNotebookById(notebookID);
                 if (typeof(nt) !== 'undefined') {
                     nt.removeAnnotation(annID);
                 }
-                // wipe page items
-                ItemsExchange.wipeContainer(Config.modules.PageItemsContainer.container);
-                // wipe all annotations (are in cache)
-                AnnotationsExchange.wipe();
+
+                // Check and remove annotation items from ItemsExchange.
+                var annotations = AnnotationsExchange.getAnnotations();
+                for (var a in annotations) {
+                    if (annotation.id === annotations[a].id) {
+                        continue;
+                    }
+                    for (var i in annotations[a].items) {
+                        var uri = annotations[a].items[i].uri;
+                        itemsToKeep[uri] = annotations[a].items[i];
+                    }
+                }
+
+                for (var i in annotation.items) {
+                    if (typeof itemsToKeep[annotation.items[i].uri] === 'undefined') {
+                        if (ItemsExchange.isItemInContainer(annotation.items[i], Config.modules.PageItemsContainer.container)) {
+                            ItemsExchange.removeItemFromContainer(annotation.items[i], Config.modules.PageItemsContainer.container);
+                            itemsToDelete.push(annotation.items[i]);
+                        }
+                    }
+                }
+
+                AnnotationsExchange.removeAnnotation(annotation.id);
+                Consolidation.wipeItems(itemsToDelete);
 
                 EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation deleted', id: "SUCCESS", timeout: 3000, message: "Your annotation has been correctly deleted."});
-
-                // Dispatch event
+                EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                    event: 'Pundit.updateAnnotationsNumber',
+                    data: AnnotationsExchange.getAllAnnotations().length
+                });
+                // Used in annotationSidebar, add annotation to delete queue.
                 EventDispatcher.sendEvent('AnnotationsCommunication.annotationDeleted', annID);
 
-                // reload all annotation
-                annotationsCommunication.getAnnotations(true).then(function() {
-                    promise.resolve(annID);
-                }, function() {
-                    promise.reject("Error during getAnnotations after a delete of: " + annID);
-                });
 
+                setLoading(false);
+                promise.resolve(annID);
             }).error(function() {
                 setLoading(false);
                 annotationsCommunication.log("Error impossible to delete annotation: " + annID + " please retry.");

@@ -148,6 +148,18 @@ angular.module('Pundit2.Communication')
         return true;
     };
 
+    Annotation.prototype.containsItem = function(item) {
+        if (typeof item === 'undefined') {
+            return false;
+        }
+        for (var i in this.items) {
+            if (this.items[i].uri === item.uri) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     // Returns true if the annotation has been parsed correctly and entirely
     var readAnnotationData = function(ann, data) {
         // Data _must_ contain .graph, .metadata and .items .. and be defined.

@@ -95,6 +95,10 @@ angular.module('Pundit2.Annotators')
         // imgCons.siblings('svg.pnd-polygon-layer').remove();
     };
 
+    ia.wipeItem = function(item) {
+        //TODO: ...
+    };
+
     ia.svgHighlightByItem = function(item) {
         // TODO check if the svg is yet built
         var currentUri, imgReference, xpaths = [];

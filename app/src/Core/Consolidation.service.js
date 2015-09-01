@@ -221,6 +221,17 @@ angular.module('Pundit2.Core')
     };
     consolidation.wipe();
 
+    consolidation.wipeItems = function(items) {
+        var currentItem, currentType;
+        for (var i in items) {
+            currentItem = items[i];
+            currentType = state.uriTypeMap[currentItem.uri];
+            if (currentType in state.annotators) {
+                state.annotators[currentType].wipeItem(currentItem);
+            }
+        }
+    };
+
     consolidation.getItems = function() {
         return state.itemListByURI;
     };

@@ -284,6 +284,29 @@ angular.module('Pundit2.Annotators')
         XpointersHelper.mergeTextNodes(angular.element('body')[0]);
     };
 
+    textFragmentAnnotator.wipeItem = function(item) {
+        var atLeastOne = false;
+        var references = fragmentsRefs[item.uri];
+        var uriFragmentId = fragmentIds[item.uri][0];
+        var iconReference = fragmentById[uriFragmentId].icon;
+        for (var i in references) {
+            if (references[i].attr('fragments') === uriFragmentId) {
+                var node = references[i][0],
+                parent = node.parentNode;
+                while (node.firstChild) {
+                    parent.insertBefore(node.firstChild, node);
+                }
+                references[i].remove();
+                atLeastOne = true;
+            }
+        }
+        if (atLeastOne) {
+            iconReference.element.remove();
+            // Finally merge splitted text nodes
+            XpointersHelper.mergeTextNodes(angular.element('body')[0]);
+        }
+    };
+
 
     // Called by TextFragmentIcon directives: they will be placed after each consolidated
     // fragment.
