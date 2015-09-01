@@ -662,8 +662,8 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     // Updates the list of filters and annotation positions when the consolidation is completed
-    var initializeFiltersAndPositions = function(annotations) {
-        if (Object.keys(annotations).length === 0) {
+    var initializeFiltersAndPositions = function() {
+        if (Object.keys(state.allAnnotations).length === 0) {
             return;
         }
 
@@ -678,7 +678,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         startPosition = annotationSidebar.options.startTop;
 
-        angular.forEach(annotations, function(annotation) {
+        angular.forEach(state.allAnnotations, function(annotation) {
             var uriList = {};
 
             annotation.firstConsolidableItem = findFirstConsolidateItem(annotation);
@@ -855,7 +855,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
         BrokenHelper.sendQueques();
 
-        annotationsFilters.broken['uri:broken'].annotationsList = removeBroken(angular.extend({}, annotations), tempBrokenList);
+        annotationsFilters.broken['uri:broken'].annotationsList = removeBroken(angular.extend({}, state.allAnnotations), tempBrokenList);
     };
 
     var findBackward = function(index, annotations) {
@@ -1380,14 +1380,13 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var annotations = AnnotationsExchange.getAnnotations();
         var annotationsList = AnnotationsExchange.getAnnotationsHash();
-        var allAnnotations = angular.extend({}, annotationsList);
 
         annotationsByPosition = angular.extend([], annotations);
         annotationsByDate = angular.extend([], annotations);
         annotationsByDate = sortByKey(annotationsByDate, 'created');
-        initializeFiltersAndPositions(allAnnotations);
-
-        state.allAnnotations = allAnnotations;
+        state.allAnnotations = angular.extend({}, annotationsList);
+        // TODO: inizialize as first operation
+        initializeFiltersAndPositions();
     });
 
     EventDispatcher.addListener('ResizeManager.resize', function() {
