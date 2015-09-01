@@ -377,7 +377,7 @@ angular.module('Pundit2.TripleComposer')
         }
     }));
 
-    evtHandlers.push(EventDispatcher.addListener('AnnotationsCommunication.annotationDeleted', function(e) {
+    evtHandlers.push(EventDispatcher.addListener('AnnotationsCommunication.deleteAnnotation', function(e) {
         var currentAnnId = TripleComposer.getEditAnnID($scope.name);
         if (e.args === currentAnnId) {
             TripleComposer.reset($scope.name);

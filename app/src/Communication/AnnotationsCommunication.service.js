@@ -345,10 +345,10 @@ angular.module('Pundit2.Communication')
                 EventDispatcher.sendEvent('Pundit.alert', {title: 'Annotation deleted', id: "SUCCESS", timeout: 3000, message: "Your annotation has been correctly deleted."});
                 EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
                     event: 'Pundit.updateAnnotationsNumber',
-                    data: AnnotationsExchange.getAllAnnotations().length
+                    data: AnnotationsExchange.getAnnotations().length
                 });
                 // Used in annotationSidebar, add annotation to delete queue.
-                EventDispatcher.sendEvent('AnnotationsCommunication.annotationDeleted', annID);
+                EventDispatcher.sendEvent('AnnotationsCommunication.deleteAnnotation', annID);
 
 
                 setLoading(false);

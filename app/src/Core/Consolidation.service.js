@@ -298,6 +298,7 @@ angular.module('Pundit2.Core')
         if (requestCount > 0) {
             return;
         }
+        requestCount = 0;
 
         if (state.isRunningAnnomatic) {
             return;
@@ -354,6 +355,10 @@ angular.module('Pundit2.Core')
         }
         consolidation.log('ConsolidateAll reject');
     };
+
+    consolidation.getConsolidationRequestNumber = function() {
+        return requestCount;
+    }
 
     // Adds a new annotator to the Consolidation service
     consolidation.addAnnotator = function(annotator) {

@@ -1374,8 +1374,12 @@ angular.module('Pundit2.AnnotationSidebar')
         angular.element('annotation-details[id="'+annId+'"] .pnd-annotation-details-header').trigger('click');
     };
 
-    //TODO: single management  AnnotationsCommunication.annotationDeleted.
-    EventDispatcher.addListeners(['Consolidation.consolidateAll', 'AnnotationsCommunication.annotationDeleted'], function() {
+    EventDispatcher.addListeners(['Consolidation.consolidateAll', 'AnnotationSidebar.forceUpdate'], function() {
+        if (Consolidation.getConsolidationRequestNumber() !== 0) {
+            annotationSidebar.log('Waiting for consolidation');
+            return;
+        }
+
         annotationSidebar.log('Update annotations in sidebar');
 
         var annotations = AnnotationsExchange.getAnnotations();

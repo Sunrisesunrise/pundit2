@@ -36,8 +36,11 @@ angular.module('Pundit2.AnnotationSidebar')
         preventDelay = AnnotationSidebar.options.preventDelay ? true : false,
         myItemsPrevent = false;
 
-    var savedOrEditedAnnotationQueque = [],
-        deletedIdQueue = [];
+    var annotationsQueques = {
+        saveAnnotation: [],
+        editAnnotation: [],
+        deleteAnnotation: []
+    };
 
     $scope.annotationSidebar = AnnotationSidebar;
     $scope.filters = AnnotationSidebar.getAnnotationsFilters();
@@ -121,7 +124,12 @@ angular.module('Pundit2.AnnotationSidebar')
         myItemsPrevent = false;
     };
 
-    var removeAnnotation = function(annotationId) {
+    var removeAnnotation = function(annotation) {
+        if (typeof annotation === 'undefined') {
+            return;
+        }
+
+        var annotationId = annotation.id;
         if (typeof $scope.annotations[annotationId] !== 'undefined') {
             delete $scope.annotations[annotationId];
         }
@@ -130,7 +138,7 @@ angular.module('Pundit2.AnnotationSidebar')
     var removeAnnotations = function(filteredAnnotations) {
         angular.forEach($scope.annotations, function(annotation) {
             if (typeof filteredAnnotations[annotation.id] === 'undefined') {
-                removeAnnotation(annotation.id);
+                removeAnnotation(annotation);
             }
         });
     };
@@ -305,7 +313,8 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.$watch(function() {
         return AnnotationSidebar.getAllAnnotations();
     }, function(currentAnnotations) {
-        var currentAnnotation, currentId, annotations, annotationsKey;
+        var currentAnnotationId, currentAnnotation, annotations, annotationsKey;
+        var oldLength, newLength;
         var annotationsByPosition = AnnotationSidebar.getAllAnnotationsPositioned();
 
         $scope.consolidationInProgress = false;
@@ -320,32 +329,7 @@ angular.module('Pundit2.AnnotationSidebar')
         annotationsKey = Object.keys(annotations);
         $scope.annotationsLength = annotationsKey.length;
 
-        if (savedOrEditedAnnotationQueque.length > 0) {
-            for (var i in savedOrEditedAnnotationQueque) {
-                currentAnnotation = savedOrEditedAnnotationQueque[i];
-                currentId = currentAnnotation.id;
-                if (typeof annotations[currentId] !== 'undefined') {
-                    addAnnotation(currentAnnotation);
-                }
-                EventDispatcher.sendEvent('AnnotationSidebar.updateAnnotation', currentId);
-            }
-            savedOrEditedAnnotationQueque = [];
-            Status.hitProgress(3, 100);
-            activateAnnotationsFragments(annotations);
-        } else if (deletedIdQueue.length > 0) {
-            // TODO: avoid in communication the download of all annotations when one is deleted
-            removeAnnotations(annotations);
-            angular.forEach(annotations, function(annotation) {
-                addAnnotation(annotation);
-            });
-
-            for (var j in deletedIdQueue) {
-                removeAnnotation(deletedIdQueue[j]);
-            }
-            deletedIdQueue = [];
-            Status.hitProgress(3, 100);
-            activateAnnotationsFragments(annotations);
-        } else {
+        var updateAllAnnotations = function() {
             removeAnnotations(annotations);
 
             angular.forEach(annotationsByPosition, function(annotation) {
@@ -355,6 +339,58 @@ angular.module('Pundit2.AnnotationSidebar')
             });
 
             addAnnotations(true);
+        };
+
+        var updateAnnotationsByQueque = function(queque, updateOrDelete) {
+            for (var i in queque) {
+                currentAnnotationId = queque[i];
+
+                if (updateOrDelete === 'deleteAnnotation') {
+                    currentAnnotation = $scope.allAnnotations[currentAnnotationId];
+                    removeAnnotation(currentAnnotation);
+                } else if (updateOrDelete === 'updateAnnotation') {
+                    currentAnnotation = AnnotationsExchange.getAnnotationById(annotationId);
+                    addAnnotation(currentAnnotation);
+                }
+
+                EventDispatcher.sendEvent('AnnotationSidebar.' + updateOrDelete, currentAnnotationId); // updateAnnotation or deleteAnnotation
+            }
+
+            Status.hitProgress(3, 100);
+            activateAnnotationsFragments(annotations);
+        };
+
+        // TODO: add some comments
+        if (annotationsQueques['saveAnnotation'].length > 0) {
+            oldLength = $scope.allAnnotationsLength;
+            newLength = annotationsByPosition.length;
+            if (newLength !== oldLength + annotationsQueques['saveAnnotation'].length) {
+                updateAllAnnotations();
+                EventDispatcher.sendEvent('AnnotationSidebar.updateAnnotation', annotationsQueques['saveAnnotation'][0]);
+            } else {
+                updateAnnotationsByQueque(annotationsQueques['saveAnnotation'], 'updateAnnotation');
+            }
+            annotationsQueques['saveAnnotation'] = [];
+        } else if (annotationsQueques['editAnnotation'].length > 0) {
+            oldLength = $scope.allAnnotationsLength;
+            newLength = annotationsByPosition.length;
+            if (newLength !== oldLength) {
+                updateAllAnnotations();
+            } else {
+                updateAnnotationsByQueque(annotationsQueques['editAnnotation'], 'updateAnnotation');
+            }
+            annotationsQueques['editAnnotation'] = [];
+        } else if (annotationsQueques['deleteAnnotation'].length > 0) {
+            oldLength = $scope.allAnnotationsLength;
+            newLength = annotationsByPosition.length;
+            if (newLength !== oldLength - annotationsQueques['deleteAnnotation'].length) {
+                updateAllAnnotations();
+            } else {
+                updateAnnotationsByQueque(annotationsQueques['deleteAnnotation'], 'deleteAnnotation');
+            }
+            annotationsQueques['deleteAnnotation'] = [];
+        } else {
+            updateAllAnnotations();
         }
 
         $scope.allAnnotations = currentAnnotations;
@@ -480,19 +516,23 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.isFiltersShowed = e.args;
     });
 
-    EventDispatcher.addListeners(['AnnotationsCommunication.saveAnnotation', 'AnnotationsCommunication.editAnnotation'], function(e) {
-        var annotationId = e.args,
-            currentAnnotation = AnnotationsExchange.getAnnotationById(annotationId);
-        savedOrEditedAnnotationQueque.push(currentAnnotation);
-    });
+    EventDispatcher.addListeners(
+        [
+            'AnnotationsCommunication.saveAnnotation',
+            'AnnotationsCommunication.editAnnotation',
+            'AnnotationsCommunication.deleteAnnotation'
+        ],
+        function(e) {
+            var eventType = e.name.split('.')[1];
+                annotationId = e.args;
+
+            annotationsQueques[eventType].push(annotationId);
+            EventDispatcher.sendEvent('AnnotationSidebar.forceUpdate');
+        }
+    );
 
     EventDispatcher.addListeners(['MyItems.itemAdded', 'MyItems.itemRemoved'], function() {
         myItemsPrevent = true;
-    });
-
-    EventDispatcher.addListener('AnnotationsCommunication.annotationDeleted', function(e) {
-        var annotationId = e.args;
-        deletedIdQueue.push(annotationId);
     });
 
     EventDispatcher.addListener('AnnotationDetails.wrongAnnotation', function(e) {
