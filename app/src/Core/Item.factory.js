@@ -123,7 +123,7 @@ angular.module('Pundit2.Core')
         }
 
         if (annotationServerVersion === 'v2' && uri.indexOf('#xpointer(') !== -1) {
-            this.uri = 'http://purl.org/pundit/local/target/' + md5.createHash(uri);
+            this.uri = NameSpace.urlPrefix + 'target/' + md5.createHash(uri);
             if (angular.isObject(values)) {
                 values.uri = this.uri;
             }

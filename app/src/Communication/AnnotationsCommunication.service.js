@@ -632,6 +632,26 @@ angular.module('Pundit2.Communication')
         });
     };
 
+    annotationsCommunication.setUrlPrefix = function() {
+        if (annotationServerVersion === 'v1') {
+            return;
+        }
+
+        // TODO: check the error
+        // $http({
+        //     method: 'GET',
+        //     url: NameSpace.asUrlPrefix,
+        //     cache: false,
+        //     withCredentials: false
+        // }).success(function(data) {
+        //     NameSpace.urlPrefix = data;
+        //     console.log(data);
+        //     annotationsCommunication.log("Url prefix setted to : " + data);
+        // }).error(function(data, statusCode) {
+        //     annotationsCommunication.err("Error from server while setting the url prefix: " + statusCode);
+        // });
+    };
+
     EventDispatcher.addListener('BrokenHelper.sendBroken', function(e) {
         annotationsCommunication.setAnnotationsBroken(e.args, true, e.promise);
     });

@@ -683,8 +683,9 @@ angular.module('Pundit2.Client')
             loadBasicRelations();
         }
         loadConfiguredRelations();
-
         loadTemplate();
+
+        AnnotationsCommunication.setUrlPrefix();
 
         if (Config.disableImageAnnotation) {
             ImageHandler.turnOff();

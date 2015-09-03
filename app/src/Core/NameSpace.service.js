@@ -13,6 +13,8 @@ angular.module('Pundit2.Core')
 
     $window.PUNDIT.ns = ns;
 
+    ns.urlPrefix = 'http://purl.org/pundit/local/';
+
     // BaseURL of every Pundit-created item, fragment, predicate etc. Will be used
     // to deal with special cases like TypesHelper labels for our fragment types.
     ns.punditOntologyBaseURL = _pnd;
@@ -184,6 +186,7 @@ angular.module('Pundit2.Core')
     ns.asAnnBroken = ns.as + 'api/annotations/broken';
 
     ns.asPref = ns.as + 'api/services/preferences/{{key}}';
+    ns.asUrlPrefix = ns.as + 'api/open/urlprefix';
 
 
     // Gets a key of the namespace, interpolating variables if needed

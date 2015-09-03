@@ -1,7 +1,7 @@
 angular.module('Pundit2.Model')
 
 .constant('MODELHELPERDEFAULTS', {
-    annotationServerPrefix: 'http://purl.org/pundit/local/'
+    debug: false
 })
 
 .service('ModelHelper', function(BaseComponent, Config, MODELHELPERDEFAULTS, Consolidation, XpointersHelper, MyPundit, NameSpace, TypesHelper, md5) {
@@ -16,8 +16,8 @@ angular.module('Pundit2.Model')
     var targetURIs = function(xpointer) {
         var md5URI = md5.createHash(xpointer);
         return {
-            'target': modelHelper.options.annotationServerPrefix + 'target/' + md5URI,
-            'selector': modelHelper.options.annotationServerPrefix + 'selector/' + md5URI
+            'target': NameSpace.urlPrefix + 'target/' + md5URI,
+            'selector': NameSpace.urlPrefix + 'selector/' + md5URI
         };
     };
 
