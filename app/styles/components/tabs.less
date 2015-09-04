@@ -10,7 +10,8 @@
    #TABS
 \* ------------------------------------ */
 
-/* in order to avoid overwritings */
+/* start styles for css conflicts */
+
 .tabs {
     position: static;
     overflow: visible;
@@ -20,6 +21,11 @@
         width: auto;
         padding: 0;
 
+    }
+
+    li {
+        margin-right: 0;
+        margin-left: 0;
     }
 
     .pnd-panel-tab-content-content li {
@@ -51,11 +57,22 @@
 
 
     a {
+        padding-bottom: 0;
+        border-bottom: none;
         position: static;
-        top: 0; /* for css conflicts */
+        top: 0;
         font-size: inherit;
+        transition: initial;
     }
 }
+
+div.tabs {
+    margin-bottom: 0;
+    padding: 0;
+    border: none;
+}
+
+/* end css conflicts */
 
 .tab-content .tab-pane {
     display: none;
@@ -65,6 +82,8 @@
 .tab-content .active {
     display: block;
 }
+
+
 
 /* ------------------------------------ *\
    #VERTICAL-TABS

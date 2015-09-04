@@ -23,17 +23,16 @@
 html, body, div, span, iframe,
 h1, h2, h3, h4, h5, h6, p, img, strong,
 b, i, ul, li, form {
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     position: static;
-    border:0;
-    outline:0; 
-    vertical-align:baseline;
-    background:transparent;
+    border: 0;
+    outline: 0; 
+    vertical-align: baseline;
+    background: transparent;
     background-image: none;
     text-align: left;
 }
-
 
 // Display declaration
 div, h1, h2, h3, h4, h5, h6, p, ul {
@@ -54,13 +53,30 @@ a {
     }
 }
 
+p, blockquote {
+    line-height: 1.5;
+}
+
+table {
+    font-size: inherit;
+}
+
+h1 {
+    font-style: normal;
+    text-transform: none;
+}
+
+input[type='text'] {
+    font-family: inherit;
+}
+
 // Lists
-ol, ul {
+ol, ul, li{
     list-style: none;
 }
 
-p, blockquote {
-    line-height: 1.5;
+ul li {
+    list-style: none;
 }
 
 button {
@@ -74,5 +90,22 @@ button {
 }
 
 table {
-    font-size: inherit;
+    display: table;
 }
+
+thead {
+    display: table-header-group;
+}
+
+tbody {
+    display: table-footer-group;
+}
+
+tr {
+    display: table-row;
+}
+
+td, th {
+    display: table-cell;
+}
+

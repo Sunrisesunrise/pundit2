@@ -232,7 +232,7 @@ can be extended to support more buttons
 }
 
 /* ------------------------------------ *\
-   #OVERWRITING SOME GENERIC STYLES 
+   #STYLES FOR CSS CONFLICTS
 \* ------------------------------------ */
 
 /* for disabled buttons*/
@@ -255,4 +255,15 @@ button.close {
 .pnd-wrap button {
     position: static;
     overflow: hidden;
+}
+
+.btn {
+    padding: 0 !important;
+    border: none !important;
+    color: inherit !important;
+    -moz-border-radius: none;
+    -webkit-border-radius: none;
+    border-radius: none;
+    background: none;
+    background-image: none !important;
 }
