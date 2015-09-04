@@ -17,6 +17,7 @@
 
     ul {
         display: block;
+        width: auto;
         padding: 0;
 
     }
@@ -25,14 +26,23 @@
         display: block;
         float: none;
     }
-    
+
     .pnd-panel-tab-content .nav-tabs li {
-        float:left;
+        float: left;
     }
+
+    .nav-tabs .dropdown-menu {
+
+        li {
+            float: none;
+        }
+    }
+
 
     a {
         position: static;
         top: 0; /* for css conflicts */
+        font-size: inherit;
     }
 }
 
