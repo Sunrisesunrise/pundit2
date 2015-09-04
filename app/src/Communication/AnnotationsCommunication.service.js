@@ -637,19 +637,18 @@ angular.module('Pundit2.Communication')
             return;
         }
 
-        // TODO: check the error
-        // $http({
-        //     method: 'GET',
-        //     url: NameSpace.asUrlPrefix,
-        //     cache: false,
-        //     withCredentials: false
-        // }).success(function(data) {
-        //     NameSpace.urlPrefix = data;
-        //     console.log(data);
-        //     annotationsCommunication.log("Url prefix setted to : " + data);
-        // }).error(function(data, statusCode) {
-        //     annotationsCommunication.err("Error from server while setting the url prefix: " + statusCode);
-        // });
+        $http({
+            method: 'GET',
+            url: NameSpace.asUrlPrefix,
+            cache: false,
+            withCredentials: false,
+            transformResponse: undefined
+        }).success(function(data) {
+            NameSpace.urlPrefix = data;
+            annotationsCommunication.log("Url prefix setted to : " + data);
+        }).error(function(data, statusCode) {
+            annotationsCommunication.err("Error from server while setting the url prefix: " + statusCode);
+        });
     };
 
     EventDispatcher.addListener('BrokenHelper.sendBroken', function(e) {
