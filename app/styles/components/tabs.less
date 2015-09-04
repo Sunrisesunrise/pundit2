@@ -10,6 +10,18 @@
    #TABS
 \* ------------------------------------ */
 
+/* in order to avoid overwritings */
+.tabs {
+    position: static;
+    overflow: visible;
+
+    ul {
+        display: block;
+        padding: 0;
+
+    }
+}
+
 .tab-content .tab-pane {
     display: none;
     margin-bottom: 30px;
