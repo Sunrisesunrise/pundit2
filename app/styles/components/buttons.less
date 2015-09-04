@@ -232,12 +232,20 @@ can be extended to support more buttons
 }
 
 /* ------------------------------------ *\
-   #GENERIC DISABLED BUTTON STYLE
+   #OVERWRITING SOME GENERIC STYLES 
 \* ------------------------------------ */
 
+/* for disabled buttons*/
 button.disabled,
 button[disabled], 
 .button.disabled, 
 .button[disabled] {
     opacity: 1;
+}
+
+/* close button in alerts*/
+button.close {
+    padding: 0;
+    border: none;
+    background: none;
 }
