@@ -205,8 +205,7 @@ module.exports = function(grunt) {
                     patterns: [{
                         match: /\(fonts/g,
                         replacement: '(chrome-extension://__MSG_@@extension_id__/inject/css/fonts'
-                    },
-                    {
+                    }, {
                         match: /image:url\(img/g,
                         replacement: 'image:url(chrome-extension://__MSG_@@extension_id__/inject/css/img'
                     }]
@@ -223,8 +222,7 @@ module.exports = function(grunt) {
                     patterns: [{
                         match: /fonts\//g,
                         replacement: 'chrome-extension://__MSG_@@extension_id__/inject/css/fonts/'
-                    },
-                    {
+                    }, {
                         match: /url\(img/g,
                         replacement: 'url(chrome-extension://__MSG_@@extension_id__/inject/css/img'
                     }]
@@ -234,8 +232,7 @@ module.exports = function(grunt) {
                     flatten: true,
                     src: ['<%= conf.app %>/examples/extensions/chrome/inject/css/style.css'],
                     dest: '<%= conf.app %>/examples/extensions/chrome/inject/css/'
-                },
-                {
+                }, {
                     expand: true,
                     flatten: true,
                     src: ['<%= conf.app %>/examples/extensions/chrome/inject/css/pundit2.css'],
@@ -745,28 +742,21 @@ module.exports = function(grunt) {
 
     grunt.registerTask('docNoOpen', 'create documentation', ['clean:docs', 'dgeni', 'copy:docs', 'concat:docApp']);
 
-    grunt.registerTask('install', 'Installs js (non-node) dependencies like bower etc',
-        ['bower', 'shell:protractorInstall']);
+    grunt.registerTask('install', 'Installs js (non-node) dependencies like bower etc', ['bower', 'shell:protractorInstall']);
 
     grunt.registerTask('build', 'Builds a production-ready version of the application', ['clean:dist', 'copy:fonts', 'html2js:main', 'html2js:korboee', 'examples', 'useminPrepare', 'less:dist', 'copy:css', 'imagemin',
         'htmlmin', 'concat', 'copy:dist', 'ngAnnotate', 'cssmin', 'uglify',
         'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet', 'copy:chrome', 'replace:chrome'
     ]);
 
-    grunt.registerTask('dev', 'Live dev workflow: watches app files and reloads the browser automatically',
-        ['less:dev', 'copy:fonts', 'copy:dev_chrome', 'copy:dev_chrome_modules', 'copy:dev_chrome_css', 'replace:dev_chrome', 'imagemin:dev', 'html2js:main', 'html2js:korboee', 'examples', 'connect:livereload', 'open:server', 'watch']);
-    grunt.registerTask('dev:unit', 'Live dev UNIT tests workflow: watches for test files and runs unit tests automatically',
-        ['test:unit', 'watch:unit']);
+    grunt.registerTask('dev', 'Live dev workflow: watches app files and reloads the browser automatically', ['less:dev', 'copy:fonts', 'copy:dev_chrome', 'copy:dev_chrome_modules', 'copy:dev_chrome_css', 'replace:dev_chrome', 'imagemin:dev', 'html2js:main', 'html2js:korboee', 'examples', 'connect:livereload', 'open:server', 'watch']);
+    grunt.registerTask('dev:unit', 'Live dev UNIT tests workflow: watches for test files and runs unit tests automatically', ['test:unit', 'watch:unit']);
     grunt.registerTask('dev:chrome', 'Live dev Chrome', ['watch:chrome']);
 
-    grunt.registerTask('test', 'Executes unit and e2e tests',
-        ['jshint', 'karma:unit', 'connect:testserver', 'protractor:singlerun']);
-    grunt.registerTask('test:unit', 'Executes unit tests',
-        ['jshint:tests', 'karma:unit']);
-    grunt.registerTask('test:cov', 'Produces test coverage reports',
-        ['karma:unitCoverage']);
-    grunt.registerTask('test:e2e', 'Executes the e2e tests',
-        [/*'jshint',*/ 'connect:testserver', 'protractor:singlerun']);
+    grunt.registerTask('test', 'Executes unit and e2e tests', ['jshint', 'karma:unit', 'connect:testserver', 'protractor:singlerun']);
+    grunt.registerTask('test:unit', 'Executes unit tests', ['jshint:tests', 'karma:unit']);
+    grunt.registerTask('test:cov', 'Produces test coverage reports', ['karma:unitCoverage']);
+    grunt.registerTask('test:e2e', 'Executes the e2e tests', [ /*'jshint',*/ 'connect:testserver', 'protractor:singlerun']);
 
     grunt.registerTask('test:headless', ['jshint', 'karma:headless']);
 
