@@ -227,7 +227,7 @@ angular.module('Pundit2.Model')
 
                             // Label
                             selector[NameSpace.rdfs.label] = [{
-                                "value": statementPart.label,
+                                "value": statementPart.description, // Save the description as full label
                                 "type": "literal"
                                 // "lang": "it"
                             }];

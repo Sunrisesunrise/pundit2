@@ -103,6 +103,22 @@ angular.module('Pundit2.Core')
      */
     container: 'pageItems',
 
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Item.labelMaxLength
+     *
+     * @description
+     * `number`
+     *
+     * Maximum characters number of selected text used to create the target label
+     *
+     * Default value:
+     * <pre> labelMaxLength: 40 </pre>
+     */
+    labelMaxLength: 40,
+
+    // TODO: add documentation
     classDefault: 'pnd-item-default',
     classImage: 'pnd-item-image',
     classText: 'pnd-item-text',
@@ -416,6 +432,10 @@ angular.module('Pundit2.Core')
                 values.xpointer = selector[NameSpace.rdf.value][0].value;
                 values.label = selector[NameSpace.rdfs.label][0].value;
                 values.description = values.label;
+
+                if (values.label.length > itemComponent.options.labelMaxLength) {
+                    values.label = values.label.substr(0, itemComponent.options.labelMaxLength) + ' ..';
+                }
                 break;
         }
 
