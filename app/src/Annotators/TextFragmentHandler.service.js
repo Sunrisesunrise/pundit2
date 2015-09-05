@@ -51,6 +51,21 @@ angular.module('Pundit2.Annotators')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#TextFragmentHandler.useTemporarySelection
+     *
+     * @description
+     * `boolean`
+     *
+     * Activate listeners for temporary selections
+     *
+     * Default value:
+     * <pre> useTemporarySelection: false </pre>
+     */
+    useTemporarySelection: true,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#TextFragmentHandler.container
      *
      * @description
@@ -528,25 +543,29 @@ angular.module('Pundit2.Annotators')
         $document.off('mousedown', mouseDownHandler);
     };
 
-    EventDispatcher.addListeners(['TripleComposer.useAsObject', 'TripleComposer.useAsSubject'], function() {
-        addTemporarySelection();
-    });
+    if (textFragmentHandler.options.useTemporarySelection) {
+        EventDispatcher.addListeners(['TripleComposer.useAsObject', 'TripleComposer.useAsSubject'], function() {
+            addTemporarySelection();
+        });
 
-    EventDispatcher.addListeners(['TripleComposer.statementChange', 'TripleComposer.statementChanged', 'TripleComposer.reset'], function() {
-        checkTemporaryConsolidated();
-    });
+        EventDispatcher.addListeners(['TripleComposer.statementChange', 'TripleComposer.statementChanged', 'TripleComposer.reset'], function() {
+            checkTemporaryConsolidated();
+        });
 
-    EventDispatcher.addListener('AnnotationsCommunication.annotationSaved', function() {
-        checkTemporaryConsolidated(true);
-    });
-
-    EventDispatcher.addListener('Consolidation.startConsolidate', function( /*e*/ ) {
-        checkTemporaryConsolidated(true);
-    });
+        EventDispatcher.addListeners(
+            [
+                'AnnotationsCommunication.annotationSaved',
+                'Consolidation.startConsolidate',
+                'Client.hide',
+            ],
+            function() {
+                checkTemporaryConsolidated(true);
+            }
+        );
+    }
 
     EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
         clientHidden = true;
-        checkTemporaryConsolidated(true);
     });
 
     EventDispatcher.addListener('Client.show', function( /*e*/ ) {
