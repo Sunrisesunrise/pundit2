@@ -48,30 +48,42 @@ var injectScripts = function(tabId, force, callback) {
         }
 
         // Run the css.
-        chrome.tabs.insertCSS(tabId, {
-            file: 'inject/css/pundit.css',
-            runAt: "document_start"
-        });
+        for (var c in cssInject) {
+            chrome.tabs.insertCSS(tabId, {
+                file: cssInject[c],
+                runAt: "document_start"
+            });
+        }
 
         // Run the JavaScript with a specific configuration.
         chrome.tabs.executeScript(tabId, {
             file: 'inject/extension_conf.js',
             runAt: "document_start"
         });
-        chrome.tabs.executeScript(tabId, {
-            file: 'inject/scripts/libs.js',
-            runAt: "document_start"
-        });
-        chrome.tabs.executeScript(tabId, {
-                file: 'inject/scripts/pundit2.js',
-                runAt: "document_start"
-            },
-            function() {
-                if (executeCallback && typeof callback !== 'undefined') {
-                    callback();
-                }
+
+        for (var s in scriptInject) {
+            var currentUrl = scriptInject[s],
+                details = developMode ? {
+                    code: incsScript[currentUrl],
+                    runAt: "document_start"
+                } : {
+                    file: currentUrl,
+                    runAt: "document_start"
+                };
+
+            // Execute le callback after the last script injection
+            if (parseInt(s) === scriptInject.length - 1) {
+                chrome.tabs.executeScript(tabId, details,
+                    function() {
+                        if (executeCallback && typeof callback !== 'undefined') {
+                            callback();
+                        }
+                    }
+                );
+            } else {
+                chrome.tabs.executeScript(tabId, details);
             }
-        );
+        }
 
         if (includeContentScript) {
             chrome.tabs.executeScript(tabId, {
@@ -246,12 +258,16 @@ chrome.tabs.onReplaced.addListener(function(addedTabId, removedTabId) {
 });
 
 chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
-    console.log("chrome.tabs.onUpdated");
     if (info.status == "complete") {
         if (tab.url === "chrome://newtab/") {
             return;
         }
-        onUpdate(tabId);
+
+        if (developMode) {
+            updateScript(tabId, onUpdate);
+        } else {
+            onUpdate(tabId);
+        }
     }
 });
 

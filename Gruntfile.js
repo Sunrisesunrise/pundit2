@@ -217,6 +217,30 @@ module.exports = function(grunt) {
                     src: ['<%= conf.build %>/extensions/chrome/inject/css/pundit.css'],
                     dest: '<%= conf.build %>/extensions/chrome/inject/css/'
                 }]
+            },
+            dev_chrome: {
+                options: {
+                    patterns: [{
+                        match: /fonts\//g,
+                        replacement: 'chrome-extension://__MSG_@@extension_id__/inject/css/fonts/'
+                    },
+                    {
+                        match: /url\(img/g,
+                        replacement: 'url(chrome-extension://__MSG_@@extension_id__/inject/css/img'
+                    }]
+                },
+                files: [{
+                    expand: true,
+                    flatten: true,
+                    src: ['<%= conf.app %>/examples/extensions/chrome/inject/css/style.css'],
+                    dest: '<%= conf.app %>/examples/extensions/chrome/inject/css/'
+                },
+                {
+                    expand: true,
+                    flatten: true,
+                    src: ['<%= conf.app %>/examples/extensions/chrome/inject/css/pundit2.css'],
+                    dest: '<%= conf.app %>/examples/extensions/chrome/inject/css/'
+                }]
             }
         },
 
@@ -365,6 +389,40 @@ module.exports = function(grunt) {
                     src: 'fonts/*'
                 }]
             },
+            dev_chrome: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= conf.app %>/extensions/chrome/',
+                    dest: '<%= conf.app %>/examples/extensions/chrome/',
+                    src: '**/*'
+                }]
+            },
+            dev_chrome_modules: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= conf.app %>/examples/src_crx/',
+                    dest: '<%= conf.app %>/examples/extensions/chrome/js/',
+                    src: 'modules_conf.js'
+                }]
+            },
+            dev_chrome_css: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= conf.app %>/css/',
+                    dest: '<%= conf.app %>/examples/extensions/chrome/inject/css/',
+                    src: '{,*/}*.css'
+                }, {
+                    expand: true,
+                    cwd: '<%= conf.app %>/styles/',
+                    dest: '<%= conf.app %>/examples/extensions/chrome/inject/css/',
+                    src: 'img/*'
+                }, {
+                    expand: true,
+                    cwd: '<%= conf.app %>/fonts/pundit-icon-font/',
+                    dest: '<%= conf.app %>/examples/extensions/chrome/inject/css/',
+                    src: 'fonts/*'
+                }]
+            },
             css: {
                 expand: true,
                 cwd: '<%= conf.app %>/css',
@@ -454,7 +512,7 @@ module.exports = function(grunt) {
         watch: {
             less: {
                 files: ['<%= conf.app %>/styles/*/*.less'],
-                tasks: ['less:dev', 'copy:fonts']
+                tasks: ['less:dev', 'copy:fonts', 'copy:dev_chrome_css', 'replace:dev_chrome']
             },
             unit: {
                 files: [
@@ -468,7 +526,7 @@ module.exports = function(grunt) {
                     '<%= conf.app %>/extensions/chrome/*',
                     '<%= conf.app %>/extensions/chrome/**/*'
                 ],
-                tasks: ['copy:chrome']
+                tasks: ['copy:dev_chrome']
             },
             buildhtml: {
                 files: [
@@ -503,6 +561,10 @@ module.exports = function(grunt) {
 
             doc: {
                 url: 'http://localhost:<%= connect.options.port %>/build/docs/'
+            },
+
+            inc: {
+                url: 'http://localhost:<%= connect.options.port %>/app/examples/src'
             }
         },
 
@@ -688,11 +750,11 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', 'Builds a production-ready version of the application', ['clean:dist', 'copy:fonts', 'html2js:main', 'html2js:korboee', 'examples', 'useminPrepare', 'less:dist', 'copy:css', 'imagemin',
         'htmlmin', 'concat', 'copy:dist', 'ngAnnotate', 'cssmin', 'uglify',
-        'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet', 'copy:chrome', 'replace'
+        'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet', 'copy:chrome', 'replace:chrome'
     ]);
 
     grunt.registerTask('dev', 'Live dev workflow: watches app files and reloads the browser automatically',
-        ['less:dev', 'copy:fonts', 'imagemin:dev', 'html2js:main', 'html2js:korboee', 'examples', 'connect:livereload', 'open:server', 'watch']);
+        ['less:dev', 'copy:fonts', 'copy:dev_chrome', 'copy:dev_chrome_modules', 'copy:dev_chrome_css', 'replace:dev_chrome', 'imagemin:dev', 'html2js:main', 'html2js:korboee', 'examples', 'connect:livereload', 'open:server', 'watch']);
     grunt.registerTask('dev:unit', 'Live dev UNIT tests workflow: watches for test files and runs unit tests automatically',
         ['test:unit', 'watch:unit']);
     grunt.registerTask('dev:chrome', 'Live dev Chrome', ['watch:chrome']);
