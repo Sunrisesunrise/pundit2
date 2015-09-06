@@ -558,7 +558,8 @@ module.exports = function(grunt) {
             chrome: {
                 files: [
                     '<%= conf.app %>/extensions/chrome/*',
-                    '<%= conf.app %>/extensions/chrome/**/*'
+                    '<%= conf.app %>/extensions/chrome/**/*',
+                    '<%= conf.app %>/examples/src_crx/*'
                 ],
                 tasks: [
                     'newer:copy:dev_chrome',
