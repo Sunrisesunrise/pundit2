@@ -437,6 +437,19 @@ module.exports = function(grunt) {
                     src: '**/*'
                 }]
             },
+            dev_chrome_templates: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= conf.app %>/src/',
+                    dest: '<%= conf.app %>/examples/extensions/chrome/inject/scripts',
+                    src: 'templates.js'
+                }, {
+                    expand: true,
+                    cwd: '<%= conf.app %>/src/',
+                    dest: '<%= conf.app %>/examples/extensions/chrome/inject/scripts',
+                    src: 'korboee-template.js'
+                }]
+            },
             dev_chrome_css: {
                 files: [{
                     expand: true,
@@ -559,16 +572,28 @@ module.exports = function(grunt) {
                     livereload: 31331
                 },
                 files: [
+                    // '<%= conf.app %>/**/*.html', // Skip the html exaples mod
+                    // '!<%= conf.app %>/examples/extensions/chrome/inject/scripts/**/*.html',
+                    // '!<%= conf.app %>/examples/extensions/chrome/html/*.html'
+                    '<%= conf.app %>/examples/src/*.html',
                     '<%= conf.app %>/src/**/*.js',
-                    '<%= conf.app %>/**/*.html',
                     '<%= conf.app %>/css/*.css',
                     '<%= conf.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                    '!<%= conf.app %>/examples/extensions/chrome/inject/scripts/**/*.html',
-                    '!<%= conf.app %>/examples/extensions/chrome/html/*.html'
+                    '!<%= conf.app %>/src/templates.js',
+                    '!<%= conf.app %>/src/korboee-template.js'
                 ],
                 tasks: ['copy:dev_chrome_script'] // It's possibile remove this task and use useServerFile = true in modules_conf for the chrome extension development
+            },
+            templates: {
+                options: {
+                    livereload: 31331
+                },
+                files: [
+                    '<%= conf.app %>/src/templates.js',
+                    '<%= conf.app %>/src/korboee-template.js'
+                ],
+                tasks: ['copy:dev_chrome_templates']
             }
-
         },
 
         open: {
@@ -784,7 +809,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('chrome_examples', 'Chrome extension', [
         'copy:dev_chrome', 'copy:dev_chrome_modules', 'copy:dev_chrome_script',
-        'copy:dev_chrome_css', 'replace:dev_chrome'
+        'copy:dev_chrome_templates', 'copy:dev_chrome_css', 'replace:dev_chrome'
     ]);
 
     grunt.registerTask('dev', 'Live dev workflow: watches app files and reloads the browser automatically', [
