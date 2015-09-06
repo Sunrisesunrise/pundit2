@@ -13,12 +13,12 @@ var state = {
     //offIcon = devicePixelRatio !== 1 ? 'pundit-icon-38.png' : 'pundit-icon-19.png',
     //onIcon = devicePixelRatio !== 1 ? 'pundit-icon-38-close.png' : 'pundit-icon-19-close.png',
     offIcon = {
-        "19": chrome.extension.getURL("icons/pundit-icon-19.png"),
-        "38": chrome.extension.getURL("icons/pundit-icon-38.png")
+        '19': chrome.extension.getURL('icons/pundit-icon-19.png'),
+        '38': chrome.extension.getURL('icons/pundit-icon-38.png')
     },
     onIcon = {
-        "19": chrome.extension.getURL("icons/pundit-icon-19-close.png"),
-        "38": chrome.extension.getURL("icons/pundit-icon-38-close.png")
+        '19': chrome.extension.getURL('icons/pundit-icon-19-close.png'),
+        '38': chrome.extension.getURL('icons/pundit-icon-38-close.png')
     },
     defaultBadgeBackgroundColor = [127, 127, 127, 255], // [75, 112, 165, 255], //#1E2E43
     consolidationBadgeBackgroundColor = [255, 191, 0, 128], //#1E2E43
@@ -37,13 +37,13 @@ var injectScripts = function(tabId, force, callback) {
     }
 
     var doInjection = function(includeContentScript, executeCallback) {
-        console.log("doing injection");
+        console.log('doing injection');
         state.injections[tabId] = true;
 
         if (includeContentScript) {
             chrome.tabs.insertCSS(tabId, {
                 file: 'inject/pundit2-ce.css',
-                runAt: "document_start"
+                runAt: 'document_start'
             });
         }
 
@@ -51,24 +51,24 @@ var injectScripts = function(tabId, force, callback) {
         for (var c in cssInject) {
             chrome.tabs.insertCSS(tabId, {
                 file: cssInject[c],
-                runAt: "document_start"
+                runAt: 'document_start'
             });
         }
 
         // Run the JavaScript with a specific configuration.
         chrome.tabs.executeScript(tabId, {
             file: 'inject/extension_conf.js',
-            runAt: "document_start"
+            runAt: 'document_start'
         });
 
         for (var s in scriptInject) {
             var currentUrl = scriptInject[s],
                 details = currentUrl.indexOf('http://') !== -1 ? {
                     code: incsScript[currentUrl],
-                    runAt: "document_start"
+                    runAt: 'document_start'
                 } : {
                     file: currentUrl,
-                    runAt: "document_start"
+                    runAt: 'document_start'
                 };
 
             // Execute le callback after the last script injection
@@ -88,7 +88,7 @@ var injectScripts = function(tabId, force, callback) {
         if (includeContentScript) {
             chrome.tabs.executeScript(tabId, {
                 file: 'inject/content_script.js',
-                runAt: "document_start"
+                runAt: 'document_start'
             });
         }
     };
@@ -99,7 +99,7 @@ var injectScripts = function(tabId, force, callback) {
         }, function(response) {
             if (response) {
                 if (response.isPresent) {
-                    console.log("already present, just set flag");
+                    console.log('already present, just set flag');
                     state.injections[tabId] = true;
                     state.tabsOnOff[tabId] = true;
                     state.tabs[tabId] = true;
@@ -114,11 +114,11 @@ var injectScripts = function(tabId, force, callback) {
             } else {
                 chrome.tabs.insertCSS(tabId, {
                     file: 'inject/pundit2-ce.css',
-                    runAt: "document_start"
+                    runAt: 'document_start'
                 });
                 chrome.tabs.executeScript(tabId, {
                         file: 'inject/content_script.js',
-                        runAt: "document_start"
+                        runAt: 'document_start'
                     },
                     function() {
                         doCheck();
@@ -255,7 +255,7 @@ var onUpdate = function(tabId) {
 chrome.browserAction.onClicked.addListener(switchPundit);
 
 chrome.tabs.onReplaced.addListener(function(addedTabId, removedTabId) {
-    console.log("chrome.tabs.onReplaced");
+    console.log('chrome.tabs.onReplaced');
     for (var i in state) {
         if (typeof state[i][removedTabId] !== 'undefined') {
             state[i][addedTabId] = state[i][removedTabId];
@@ -266,8 +266,8 @@ chrome.tabs.onReplaced.addListener(function(addedTabId, removedTabId) {
 });
 
 chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
-    if (info.status == "complete") {
-        if (tab.url === "chrome://newtab/") {
+    if (info.status == 'complete') {
+        if (tab.url === 'chrome://newtab/') {
             return;
         }
 
@@ -280,7 +280,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
 });
 
 chrome.tabs.onActivated.addListener(function(activeInfo) {
-    console.log("chrome.tabs.onActivated");
+    console.log('chrome.tabs.onActivated');
     if (state.tabsOnOff[activeInfo.tabId]) {
         chrome.tabs.sendMessage(activeInfo.tabId, {
             action: 'requestAnnotationsNumber'
@@ -297,12 +297,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         case 'updateAnnotationsNumber':
             if (isLoading(sender.tab.id)) {
                 if (typeof state.stopLoading[sender.tab.id] !== 'undefined' && state.stopLoading[sender.tab.id]) {
-                    setLoading(false, sender.tab.id, "" + request.number);
+                    setLoading(false, sender.tab.id, '' + request.number);
                 }
                 break;
             }
             if (state.tabsOnOff[sender.tab.id]) {
-                setBadgeText(sender.tab.id, "" + request.number);
+                setBadgeText(sender.tab.id, '' + request.number);
             }
             break;
 
