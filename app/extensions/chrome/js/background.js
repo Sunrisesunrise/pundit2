@@ -177,6 +177,14 @@ var switchOn = function(tabId) {
             });
             state.tabs[tabId] = true;
             state.tabsOnOff[tabId] = true;
+
+            if (developMode) {
+                if (useLivereload) {
+                    chrome.tabs.sendMessage(tabId, {
+                        action: 'livereload'
+                    });
+                }
+            }
         }, 350);
     });
 };

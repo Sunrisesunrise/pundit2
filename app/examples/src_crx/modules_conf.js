@@ -1,4 +1,5 @@
 var developMode = true,
+    useLivereload = true,
     useServerFile = false,
     serverUrl = 'http://localhost:9000/';
 

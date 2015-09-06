@@ -539,7 +539,7 @@ module.exports = function(grunt) {
                     '<%= conf.app %>/extensions/chrome/*',
                     '<%= conf.app %>/extensions/chrome/**/*'
                 ],
-                tasks: ['copy:dev_chrome']
+                tasks: ['copy:dev_chrome', 'copy:dev_chrome_modules']
             },
             buildhtml: {
                 files: [
