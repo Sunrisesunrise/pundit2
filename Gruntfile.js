@@ -50,7 +50,10 @@ module.exports = function(grunt) {
             chrome: {
                 files: {
                     '<%= conf.build %>/extensions/chrome/inject/scripts/libs.js': ['.tmp/concat/scripts/libs.js'],
-                    '<%= conf.build %>/extensions/chrome/inject/scripts/pundit2.js': ['.tmp/concat/scripts/pundit2.js']
+                    '<%= conf.build %>/extensions/chrome/inject/scripts/pundit2.js': ['.tmp/concat/scripts/pundit2.js'],
+                    '<%= conf.build %>/extensions/chrome/inject/content_script.js': ['<%= conf.build %>/extensions/chrome/inject/content_script.js'],
+                    '<%= conf.build %>/extensions/chrome/js/background.js': ['<%= conf.build %>/extensions/chrome/js/background.js'],
+                    '<%= conf.build %>/extensions/chrome/js/modules_conf.js': ['<%= conf.build %>/extensions/chrome/js/modules_conf.js']
                 }
             }
         },
@@ -370,6 +373,11 @@ module.exports = function(grunt) {
             },
             chrome: {
                 files: [{
+                    expand: true,
+                    cwd: '<%= conf.build %>/scripts/',
+                    dest: '<%= conf.build %>/extensions/chrome/inject/scripts/',
+                    src: '**/*'
+                }, {
                     expand: true,
                     cwd: '<%= conf.app %>/extensions/chrome/',
                     dest: '<%= conf.build %>/extensions/chrome/',
@@ -770,8 +778,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', 'Builds a production-ready version of the application', [
         'clean:dist', 'copy:fonts', 'html2js:main', 'html2js:korboee', 'examples', 'useminPrepare',
-        'less:dist', 'copy:css', 'imagemin', 'htmlmin', 'concat', 'copy:dist', 'ngAnnotate', 'cssmin',
-        'uglify', 'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet', 'copy:chrome', 'replace:chrome'
+        'less:dist', 'copy:css', 'imagemin', 'htmlmin', 'concat', 'copy:dist', 'ngAnnotate', 'cssmin', 
+        'copy:chrome', 'replace:chrome', 'uglify', 'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet'
     ]);
 
     grunt.registerTask('chrome_examples', 'Chrome extension', [
