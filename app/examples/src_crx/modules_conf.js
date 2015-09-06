@@ -32,7 +32,7 @@ var fileRequest = function(url, callback, lastCall) {
     if (method == 'POST') {
         xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     }
-    xhttp.send(null); // null || data
+    xhttp.send(null);
 
     return true;
 };
@@ -92,7 +92,8 @@ var updateScript = function(tabId, callback) {
     scriptInject = [];
     fileRequest(_pundit, extractUrl);
 
-    if (typeof tabId !== 'undefined') {
+    if (typeof tabId !== 'undefined' &&
+        typeof callback !== 'undefined') {
         updateCallback = function() {
             callback(tabId);
         };
