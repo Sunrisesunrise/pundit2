@@ -63,7 +63,7 @@ var injectScripts = function(tabId, force, callback) {
 
         for (var s in scriptInject) {
             var currentUrl = scriptInject[s],
-                details = developMode ? {
+                details = currentUrl.indexOf('http://') !== -1 ? {
                     code: incsScript[currentUrl],
                     runAt: "document_start"
                 } : {
