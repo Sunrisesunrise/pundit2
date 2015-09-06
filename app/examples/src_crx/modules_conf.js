@@ -35,11 +35,11 @@ var fileRequest = function(url, callback, lastCall) {
     xhttp.send(null); // null || data
 
     return true;
-}
+};
 
 var extractScript = function(url, script) {
     incsScript[url] = script;
-}
+};
 
 var updateCurrentTab = function(url, script) {
     extractScript(url, script);
@@ -49,15 +49,15 @@ var updateCurrentTab = function(url, script) {
         updateCallback = undefined;
     }
 
-}
+};
 
 var extractUrl = function(file, text) {
     var referenceMatch = text.match(srcRegExp),
-        baseUrl, currentUrl;
+        baseUrl, currentUrl, i;
 
     if (file === _lib) {
         baseUrl = serverUrl;
-        for (var i in referenceMatch) {
+        for (i in referenceMatch) {
             currentUrl = referenceMatch[i].replace('src="../../', baseUrl);
             libInject.push(currentUrl);
             fileRequest(currentUrl, extractScript);
@@ -66,7 +66,7 @@ var extractUrl = function(file, text) {
         baseUrl = useServerFile ? serverUrl + 'app/' : 'inject/scripts/';
         scriptInject = scriptInject.concat(libInject);
         if (useServerFile) {
-            for (var i in referenceMatch) {
+            for (i in referenceMatch) {
                 currentUrl = referenceMatch[i].replace('src="../', baseUrl);
                 scriptInject.push(currentUrl);
                 if (parseInt(i) === referenceMatch.length - 1) {
@@ -76,7 +76,7 @@ var extractUrl = function(file, text) {
                 }
             }
         } else {
-            for (var i in referenceMatch) {
+            for (i in referenceMatch) {
                 currentUrl = referenceMatch[i].replace('src="../src/', baseUrl);
                 scriptInject.push(currentUrl);
             }
@@ -94,7 +94,7 @@ var updateScript = function(tabId, callback) {
 
     if (typeof tabId !== 'undefined') {
         updateCallback = function() {
-            callback(tabId)
+            callback(tabId);
         };
     }
 };
