@@ -371,6 +371,25 @@ module.exports = function(grunt) {
                     src: 'InitBookmarkletFeed.js'
                 }]
             },
+            css: {
+                expand: true,
+                cwd: '<%= conf.app %>/css',
+                dest: '.tmp/css/',
+                src: '{,*/}*.css'
+            },
+            fonts: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= conf.app %>/fonts/pundit-icon-font/',
+                    dest: '<%= conf.app %>/css/',
+                    src: 'fonts/*'
+                }, {
+                    expand: true,
+                    cwd: '<%= conf.app %>/fonts/pundit-icon-font/',
+                    dest: '<%= conf.app %>/css/',
+                    src: 'style.css'
+                }]
+            },
             chrome: {
                 files: [{
                     expand: true,
@@ -434,25 +453,6 @@ module.exports = function(grunt) {
                     cwd: '<%= conf.app %>/fonts/pundit-icon-font/',
                     dest: '<%= conf.app %>/examples/extensions/chrome/inject/css/',
                     src: 'fonts/*'
-                }]
-            },
-            css: {
-                expand: true,
-                cwd: '<%= conf.app %>/css',
-                dest: '.tmp/css/',
-                src: '{,*/}*.css'
-            },
-            fonts: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= conf.app %>/fonts/pundit-icon-font/',
-                    dest: '<%= conf.app %>/css/',
-                    src: 'fonts/*'
-                }, {
-                    expand: true,
-                    cwd: '<%= conf.app %>/fonts/pundit-icon-font/',
-                    dest: '<%= conf.app %>/css/',
-                    src: 'style.css'
                 }]
             }
         },
@@ -551,7 +551,6 @@ module.exports = function(grunt) {
                 files: [
                     '<%= conf.app %>/**/*.tmpl.html',
                     '!<%= conf.app %>/examples/extensions/chrome/inject/scripts/**/*.tmpl.html'
-
                 ],
                 tasks: ['html2js']
             },
@@ -564,7 +563,8 @@ module.exports = function(grunt) {
                     '<%= conf.app %>/**/*.html',
                     '<%= conf.app %>/css/*.css',
                     '<%= conf.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                    '!<%= conf.app %>/examples/extensions/chrome/inject/scripts/**/*.html'
+                    '!<%= conf.app %>/examples/extensions/chrome/inject/scripts/**/*.html',
+                    '!<%= conf.app %>/examples/extensions/chrome/html/*.html'
                 ],
                 tasks: ['copy:dev_chrome_script'] // It's possibile remove this task and use useServerFile = true in modules_conf for the chrome extension development
             }
@@ -778,7 +778,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', 'Builds a production-ready version of the application', [
         'clean:dist', 'copy:fonts', 'html2js:main', 'html2js:korboee', 'examples', 'useminPrepare',
-        'less:dist', 'copy:css', 'imagemin', 'htmlmin', 'concat', 'copy:dist', 'ngAnnotate', 'cssmin', 
+        'less:dist', 'copy:css', 'imagemin', 'htmlmin', 'concat', 'copy:dist', 'ngAnnotate', 'cssmin',
         'copy:chrome', 'replace:chrome', 'uglify', 'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet'
     ]);
 
