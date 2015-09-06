@@ -43,6 +43,7 @@
     "winston": "~0.7.2",
     "marked": "~0.3.0",
     "grunt-html-build": "~0.3.1",
+    "grunt-newer": "^1.1.1",
     "grunt-replace": "^0.8.0"
   },
   "devDependencies": {

@@ -12,7 +12,8 @@ module.exports = function(grunt) {
     var conf = {
         app: 'app',
         build: 'build',
-        tests: 'test'
+        tests: 'test',
+        liveport: 31331
     };
 
     grunt.initConfig({
@@ -223,8 +224,8 @@ module.exports = function(grunt) {
             dev_chrome: {
                 options: {
                     patterns: [{
-                        match: /fonts\//g,
-                        replacement: 'chrome-extension://__MSG_@@extension_id__/inject/css/fonts/'
+                        match: /'fonts\//g,
+                        replacement: '\'chrome-extension://__MSG_@@extension_id__/inject/css/fonts/'
                     }, {
                         match: /url\(img/g,
                         replacement: 'url(chrome-extension://__MSG_@@extension_id__/inject/css/img'
@@ -537,8 +538,15 @@ module.exports = function(grunt) {
 
         watch: {
             less: {
+                options: {
+                    livereload: conf.liveport // to force the reload after less modifications
+                },
                 files: ['<%= conf.app %>/styles/*/*.less'],
-                tasks: ['less:dev', 'copy:fonts', 'copy:dev_chrome_css', 'replace:dev_chrome']
+                tasks: [
+                    'less:dev', 'newer:copy:fonts',
+                    'newer:copy:dev_chrome_css',
+                    'replace:dev_chrome'
+                ]
             },
             unit: {
                 files: [
@@ -552,7 +560,11 @@ module.exports = function(grunt) {
                     '<%= conf.app %>/extensions/chrome/*',
                     '<%= conf.app %>/extensions/chrome/**/*'
                 ],
-                tasks: ['copy:dev_chrome', 'copy:dev_chrome_modules']
+                tasks: [
+                    'newer:copy:dev_chrome',
+                    'newer:copy:dev_chrome_modules'
+                    // 'open:reload' // Use this to force the extension files reaload
+                ]
             },
             buildhtml: {
                 files: [
@@ -569,30 +581,30 @@ module.exports = function(grunt) {
             },
             livereload: {
                 options: {
-                    livereload: 31331
+                    livereload: conf.liveport
                 },
                 files: [
                     // '<%= conf.app %>/**/*.html', // Skip the html exaples mod
                     // '!<%= conf.app %>/examples/extensions/chrome/inject/scripts/**/*.html',
                     // '!<%= conf.app %>/examples/extensions/chrome/html/*.html'
+                    // '<%= conf.app %>/css/*.css', // Use this if the less force reload is removed 
                     '<%= conf.app %>/examples/src/*.html',
                     '<%= conf.app %>/src/**/*.js',
-                    '<%= conf.app %>/css/*.css',
                     '<%= conf.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
                     '!<%= conf.app %>/src/templates.js',
                     '!<%= conf.app %>/src/korboee-template.js'
                 ],
-                tasks: ['copy:dev_chrome_script'] // It's possibile remove this task and use useServerFile = true in modules_conf for the chrome extension development
+                tasks: ['newer:copy:dev_chrome_script'] // It's possibile remove this task and use useServerFile = true in modules_conf for the chrome extension development
             },
             templates: {
                 options: {
-                    livereload: 31331
+                    livereload: conf.liveport
                 },
                 files: [
                     '<%= conf.app %>/src/templates.js',
                     '<%= conf.app %>/src/korboee-template.js'
                 ],
-                tasks: ['copy:dev_chrome_templates']
+                tasks: ['newer:copy:dev_chrome_templates']
             }
         },
 
@@ -600,14 +612,18 @@ module.exports = function(grunt) {
             server: {
                 url: 'http://localhost:<%= connect.options.port %>/app/examples/'
             },
-
             doc: {
                 url: 'http://localhost:<%= connect.options.port %>/build/docs/'
             },
-
             inc: {
-                url: 'http://localhost:<%= connect.options.port %>/app/examples/src'
+                url: 'http://localhost:<%= connect.options.port %>/app/src/'
             }
+            // Use this task to force the extensions file reload,
+            // but you have to install this extension:
+            // https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid
+            // reload: {
+            //     url: 'http://reload.extensions'
+            // }
         },
 
         jshint: {
@@ -753,9 +769,7 @@ module.exports = function(grunt) {
                 }
             }
         }
-
     });
-
 
     grunt.registerTask('examples', 'creates examples', [
         'listExamples', 'htmlbuild:pre', 'htmlbuild:dev'
