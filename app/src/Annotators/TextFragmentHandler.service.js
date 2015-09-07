@@ -639,6 +639,7 @@ angular.module('Pundit2.Annotators')
         }
 
         if (Config.commentPopover) {
+            console.log(range);
             EventDispatcher.sendEvent('CommentPopover.show', {
                 mouseX: upEvt.pageX,
                 mouseY: upEvt.pageY,

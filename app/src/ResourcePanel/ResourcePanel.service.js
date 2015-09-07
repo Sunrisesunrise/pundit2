@@ -251,7 +251,8 @@ angular.module('Pundit2.ResourcePanel')
                 state.popoverOptions.scope.save(true);
                 $rootScope.$$phase || $rootScope.$digest();
             });
-        } else if (type === 'literal') { // initialize a literal popover
+        }
+        else if (type === 'literal') { // initialize a literal popover
 
             state.popoverOptions.templateUrl = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
             state.popoverOptions.scope.arrowLeft = '24px';
@@ -301,7 +302,8 @@ angular.module('Pundit2.ResourcePanel')
             });
 
             // initialize a resource panel popover
-        } else if (type === 'resourcePanel') {
+        }
+        else if (type === 'resourcePanel') {
 
             if (typeof(Config.korbo) !== 'undefined' && Config.korbo.active) {
                 var name = $window[Config.korbo.confName].globalObjectName;
