@@ -559,6 +559,21 @@ angular.module('Pundit2.Core')
     timeline: {
         active: false,
         baseUrl: 'http://metasound.dibet.univpm.it/timelinejs/examples/pundit.html?'
-    }
+    },
 
+    /**
+     * @module punditConfig
+     * @ngdoc bool
+     * @name commentPopover
+     *
+     * @description
+     * `boolean`
+     *
+     * On text selection a popover with textarea and notebook selection will be displayed
+     * instead of classic contextual menu.
+     *
+     * Default value:
+     * <pre> commentPopover: false </pre>
+     */
+    commentPopover: false
 });

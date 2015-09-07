@@ -114,6 +114,10 @@
     <script src="../src/ContextualMenu/ContextualMenu.js"></script>
     <script src="../src/ContextualMenu/ContextualMenu.service.js"></script>
 
+    <script src="../src/CommentPopover/CommentPopover.js"></script>
+    <script src="../src/CommentPopover/CommentPopover.ctrl.js"></script>
+    <script src="../src/CommentPopover/CommentPopover.service.js"></script>
+
     <script src="../src/Item/Item.js"></script>
     <script src="../src/Item/Item.dir.js"></script>
     <script src="../src/Item/Item.ctrl.js"></script>

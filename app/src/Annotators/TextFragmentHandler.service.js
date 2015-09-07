@@ -115,7 +115,7 @@ angular.module('Pundit2.Annotators')
 
 .service('TextFragmentHandler', function($rootScope, TEXTFRAGMENTHANDLERDEFAULTS, NameSpace, BaseComponent,
     ContextualMenu, XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, EventDispatcher,
-    $document) {
+    $document, Config) {
 
     var textFragmentHandler = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
     var clientHidden = false;
@@ -630,7 +630,7 @@ angular.module('Pundit2.Annotators')
 
         textFragmentHandler.log('Valid selection ended on document. Text fragment Item produced: ' + item.label);
 
-        if (Toolbar.isActiveTemplateMode()) {
+        if (Toolbar.isActiveTemplateMode() && !Config.commentPopover) {
             textFragmentHandler.log('Item used as subject inside triple composer (template mode active).');
             TripleComposer.addToAllSubject(item);
             TripleComposer.closeAfterOp();
@@ -638,7 +638,16 @@ angular.module('Pundit2.Annotators')
             return;
         }
 
-        ContextualMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType);
+        if (Config.commentPopover) {
+            EventDispatcher.sendEvent('CommentPopover.show', {
+                mouseX: upEvt.pageX,
+                mouseY: upEvt.pageY,
+                item: item
+            });
+        }
+        else {
+            ContextualMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType);
+        }
 
     } // mouseUpHandler()
 

@@ -454,7 +454,7 @@ angular.module('Pundit2.Client')
     Toolbar, Annomatic, NotebookCommunication, NotebookExchange, TemplatesExchange,
     SelectorsManager, FreebaseSelector, MurucaSelector, KorboBasketSelector, Korbo2Selector, EuropeanaSelector, DbpediaSelector, GeonamesSelector, PredicateSelector,
     TemplatesSelector, TripleComposer, ImageFragmentAnnotatorHelper,
-    $injector, $templateCache, $rootScope, $compile, $window) {
+    $injector, $templateCache, $rootScope, $compile, $window, CommentPopover) {
 
     var client = new BaseComponent('Client', CLIENTDEFAULTS),
         // Node which will contain every other component
