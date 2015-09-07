@@ -15,6 +15,10 @@
         vertical-align: text-top;
     }
 
+    p {
+        font-family: inherit;
+    }
+
     input[type="text"] {
         margin: 10px 0 20px 0;
         width: 100%;
@@ -22,9 +26,13 @@
 
     input[type="radio"],
     input[type="checkbox"] {
+        width: initial;
+        height: initial;
         margin: 0;
         margin-left: -18px !important;
         padding: 0;
+        top: 0;
+        opacity: 1;
     }
 
     .radio + .radio,
@@ -34,6 +42,13 @@
 
     .radio {
         display: inline-block;
+        width: initial;
+        height: initial;
+        vertical-align: initial;
+
+        span {
+            background-image: none;
+        }
     }
 
     .checkbox {

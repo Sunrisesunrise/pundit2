@@ -22,7 +22,7 @@
 //== Common tags reset
 html, body, div, span, iframe,
 h1, h2, h3, h4, h5, h6, p, img, strong,
-b, i, ul, li, form {
+b, i, ul, li, form{
     margin: 0;
     padding: 0;
     position: static;
@@ -70,6 +70,11 @@ input[type='text'] {
     font-family: inherit;
 }
 
+nav {
+    font-family: inherit;
+    text-transform: initial;
+}
+
 // Lists
 ol, ul, li{
     list-style: none;
@@ -80,6 +85,7 @@ ul li {
 }
 
 button {
+    min-height: initial;
     position: static;
     overflow: hidden;
     background-color: transparent;
@@ -95,6 +101,7 @@ table {
 
 thead {
     display: table-header-group;
+
 }
 
 tbody {
@@ -103,9 +110,12 @@ tbody {
 
 tr {
     display: table-row;
+    border: none;
 }
 
 td, th {
     display: table-cell;
+    border: none;
 }
+
 
