@@ -107,6 +107,11 @@ module.exports = function(grunt) {
                 files: [{
                     src: ['<%= conf.build %>/docs/*']
                 }]
+            },
+            chrome: {
+                files: [{
+                    src: ['<%= conf.app %>/examples/extensions']
+                }]
             }
         },
 
@@ -419,6 +424,14 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: '<%= conf.app %>/extensions/chrome/',
                     dest: '<%= conf.app %>/examples/extensions/chrome/',
+                    src: '**/*'
+                }]
+            },
+            dev_chrome_components: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= conf.app %>/../bower_components/',
+                    dest: '<%= conf.app %>/examples/extensions/chrome/inject/bower_components/',
                     src: '**/*'
                 }]
             },
@@ -823,8 +836,8 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('chrome_examples', 'Chrome extension', [
-        'copy:dev_chrome', 'copy:dev_chrome_modules', 'copy:dev_chrome_script',
-        'copy:dev_chrome_templates', 'copy:dev_chrome_css', 'replace:dev_chrome'
+        'clean:chrome', 'copy:dev_chrome', 'copy:dev_chrome_modules', 'copy:dev_chrome_components', 
+        'copy:dev_chrome_script', 'copy:dev_chrome_templates', 'copy:dev_chrome_css', 'replace:dev_chrome'
     ]);
 
     grunt.registerTask('dev', 'Live dev workflow: watches app files and reloads the browser automatically', [

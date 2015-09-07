@@ -1,5 +1,5 @@
 var developMode = true,
-    useLivereload = true,
+    useLivereload = false,
     useServerFile = false,
     serverUrl = 'http://localhost:9000/';
 
@@ -56,11 +56,18 @@ var extractUrl = function(file, text) {
         baseUrl, currentUrl, i;
 
     if (file === _lib) {
-        baseUrl = serverUrl;
-        for (i in referenceMatch) {
-            currentUrl = referenceMatch[i].replace('src="../../', baseUrl);
-            libInject.push(currentUrl);
-            fileRequest(currentUrl, extractScript);
+        baseUrl = useServerFile ? serverUrl : 'inject/';
+        if (useServerFile) {
+            for (i in referenceMatch) {
+                currentUrl = referenceMatch[i].replace('src="../../', baseUrl);
+                libInject.push(currentUrl);
+                fileRequest(currentUrl, extractScript);
+            }
+        } else {
+            for (i in referenceMatch) {
+                currentUrl = referenceMatch[i].replace('src="../../', baseUrl);
+                libInject.push(currentUrl);
+            }
         }
     } else if (file === _pundit) {
         baseUrl = useServerFile ? serverUrl + 'app/' : 'inject/scripts/';
@@ -101,4 +108,4 @@ var updateScript = function(tabId, callback) {
 };
 
 fileRequest(_lib, extractUrl);
-updateScript();
+fileRequest(_pundit, extractUrl);

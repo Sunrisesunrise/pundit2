@@ -71,7 +71,7 @@ var injectScripts = function(tabId, force, callback) {
                     runAt: 'document_start'
                 };
 
-            // Execute le callback after the last script injection
+            // Execute the callback after the last script injection
             if (parseInt(s) === scriptInject.length - 1) {
                 chrome.tabs.executeScript(tabId, details,
                     function() {
@@ -248,6 +248,12 @@ var onUpdate = function(tabId) {
     setLoading(false, tabId);
 
     if (state.tabsOnOff[tabId]) {
+        if (developMode) {
+            if (useServerFile) {
+                updateScript(tabId, switchOn);
+                return;
+            }
+        }
         switchOn(tabId);
     }
 };
@@ -271,11 +277,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
             return;
         }
 
-        if (developMode) {
-            updateScript(tabId, onUpdate);
-        } else {
-            onUpdate(tabId);
-        }
+        onUpdate(tabId);
     }
 });
 
