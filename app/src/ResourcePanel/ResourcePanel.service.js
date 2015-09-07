@@ -749,6 +749,10 @@ angular.module('Pundit2.ResourcePanel')
             'left': newLeft,
             'top': newTop
         });
+
+        // TODO: update angular strap and check the #871 issues on codebase 
+        // Temporary angularstrap fix 
+        angular.element('.popover .arrow').css({'left': '50%'});
     };
 
     /**
