@@ -65,6 +65,9 @@
 }
 
 .btn {
+
+    width: auto; /* for css conflicts */
+    height: auto; /* for css conflicts */
     outline: 0 !important;
     box-shadow: none;
 
@@ -226,6 +229,7 @@
 .dropdown-menu > li > a:focus {
     //#gradient > .vertical(@start-color: @dropdown-link-hover-bg; @end-color: darken(@dropdown-link-hover-bg, 5%));
     background-color: lighten(@dropdown-link-hover-bg, 10);
+    background-image: none;
 }
 
 .dropdown-menu > .active > a,
@@ -233,6 +237,7 @@
 .dropdown-menu > .active > a:focus {
     //#gradient > .vertical(@start-color: @dropdown-link-active-bg; @end-color: darken(@dropdown-link-active-bg, 5%));
     //background-color: darken(@dropdown-link-active-bg, 5%);
+    background: none;
 }
 
 .dropdown-menu > .disabled.active > a,
@@ -253,7 +258,6 @@
     font-size: inherit;
 }
 
-
 /* ------------------------------------ *\
    #NAV
 \* ------------------------------------ */
@@ -265,9 +269,11 @@ This style are mainly for avoiding interferences with loaded pages */
 ul.nav {
     display: block;
     width: auto;
+    margin: 0;
     background: transparent;
 
     > li {
+    width: initial;
         > a {
             float: none;
             margin: 0;
@@ -276,6 +282,11 @@ ul.nav {
             font-family: @font;
             font-size: 12px;
             font-weight: normal;
+            text-transform: none;
+
+            &:hover {
+            background: none;
+            }
         }
 
         // Active state, and its :hover to override normal :hover
@@ -291,9 +302,6 @@ ul.nav {
         }
     }
 }
-
-
-
 
 /* ------------------------------------ *\
    #NAVBAR
@@ -337,6 +345,11 @@ ul.nav {
     border-radius: 0;
 }
 
+.navbar-nav.navbar-right:last-child {
+    margin-right: -15px; /* Remove margin for right toolbar menu */
+}
+
+
 .nav .open > a,
 .nav .open > a:hover,
 .nav .open > a:focus {
@@ -350,7 +363,10 @@ ul.nav {
     background-color: #ffffff;
 }
 
-
+.nav li a:hover {
+    background: none;
+    border: none;
+}
 
 /* ------------------------------------ *\
    #TABS

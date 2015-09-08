@@ -8,6 +8,18 @@
    #PUNDIT-BUTTON
 \* ------------------------------------ */
 
+/* For generics btn without pnd-btn class -  !IMPORTANT rules here are needed for css overwritings */
+//TO DO: find a better way to fix the padding with !important rule issue
+ .btn {
+    //padding-top: 0 !important;
+    //padding-left: 0 !important;
+    border: none !important;
+    color: inherit !important;
+    border-radius: none;
+    background: none;
+    background-image: none !important;
+}
+
 /* Default button */
 .pnd-btn {
     display: inline-block;
@@ -232,45 +244,18 @@ can be extended to support more buttons
     width: 33.3333%;
 }
 
-/* ------------------------------------ *\
-   #STYLES FOR CSS CONFLICTS
-\* ------------------------------------ */
 
-/* for disabled buttons*/
+/* For disabled buttons */
 button.disabled,
-button[disabled], 
-.button.disabled, 
-.button[disabled] {
+button[disabled] {
     opacity: 1;
 }
 
-/* close button in alerts*/
-button.close {
-    padding: 0;
-    border: none;
-    webkit-border-radius: 0;
-    border-radius: 0;
-    background: none;
-}
-
-.pnd-wrap button {
-    position: static;
-    overflow: hidden;
-}
-
-.btn {
-    width: auto;
-    height: auto;
-}
-
-// TODO: be careful with the !important rule ;) 
-// .btn {
-//     padding: 0 !important;
-//     border: none !important;
-//     color: inherit !important;
-//     -moz-border-radius: none;
-//     -webkit-border-radius: none;
-//     border-radius: none;
-//     background: none;
-//     background-image: none !important;
-// }
+/* Close button in alerts */
+//button.close {
+//   padding: 0;
+//   border: none;
+//   webkit-border-radius: 0;
+//   border-radius: 0;
+//   background: none;
+//}

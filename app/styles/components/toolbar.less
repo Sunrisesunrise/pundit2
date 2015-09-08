@@ -15,25 +15,26 @@ body.pnd-toolbar-active {
     background-position-y: @toolbar-height;
 }
 
+/*  .navbar .nav {
+        margin: 0;
+    }
 
-/* ------------------------------------ *\
-   #NAV STYLES FOR OVERWRITING CONFLICTS
-\* ------------------------------------ */
-nav.navbar {
-    width: 100%;
-}
+    nav.navbar {
+        width: 100%;
+    }
 
-.nav li {
-    width: initial;
-}
+    .nav li {
+        width: initial;
+    }
 
-.nav > ul > li > a {
-    text-transform: none;
-}
+    .nav > ul > li > a {
+        text-transform: none;
+    }
 
-.nav li a:hover {
-    background: none;
-}
+    .nav li a:hover {
+        background: none;
+    }
+*/
 
 /* ------------------------------------ *\
    #TOOLBAR-STYLE
@@ -41,6 +42,7 @@ nav.navbar {
 
 .pnd-toolbar-navbar {
     min-width: 960px;
+    width: 100%; /* For css overwritings */
     padding-top: 0;
     z-index: @zindex-pnd-toolbar;
     background-color: @color-toolbar-bg;

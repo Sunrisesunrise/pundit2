@@ -10,17 +10,16 @@
    #TABS
 \* ------------------------------------ */
 
-/* start styles for css conflicts */
-
 .tabs {
+    margin-bottom: 0;
+    padding: 0;
     position: static;
     overflow: visible;
+    border: none;
 
     ul {
         display: block;
         width: auto;
-       // padding: 0;
-
     }
 
     li {
@@ -60,20 +59,11 @@
         padding-bottom: 0;
         border-bottom: none;
         position: static;
-        top: 0;
+        top: 0; /* In case of position overwriting */
         font-size: inherit;
         transition: initial;
     }
 }
-
-// TODO: check this rule 
-// div.tabs {
-//     margin-bottom: 0;
-//     padding: 0;
-//     border: none;
-// }
-
-/* end css conflicts */
 
 .tab-content .tab-pane {
     display: none;
@@ -83,8 +73,6 @@
 .tab-content .active {
     display: block;
 }
-
-
 
 /* ------------------------------------ *\
    #VERTICAL-TABS
