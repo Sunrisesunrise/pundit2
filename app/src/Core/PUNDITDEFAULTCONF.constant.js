@@ -5,6 +5,22 @@ angular.module('Pundit2.Core')
     /**
      * @module punditConfig
      * @ngdoc object
+     * @name clientMode
+     * @description
+     * `string`
+     *
+     * Determines the client mode: pro|lite
+     *
+     * Default:
+     * <pre>
+     * clientMode: 'pro'
+     * </pre>
+     */
+    clientMode: 'pro',
+
+    /**
+     * @module punditConfig
+     * @ngdoc object
      * @name korbo
      * @description
      * `object`
@@ -559,21 +575,5 @@ angular.module('Pundit2.Core')
     timeline: {
         active: false,
         baseUrl: 'http://metasound.dibet.univpm.it/timelinejs/examples/pundit.html?'
-    },
-
-    /**
-     * @module punditConfig
-     * @ngdoc bool
-     * @name commentPopover
-     *
-     * @description
-     * `boolean`
-     *
-     * On text selection a popover with textarea and notebook selection will be displayed
-     * instead of classic contextual menu.
-     *
-     * Default value:
-     * <pre> commentPopover: false </pre>
-     */
-    commentPopover: false
+    }
 });

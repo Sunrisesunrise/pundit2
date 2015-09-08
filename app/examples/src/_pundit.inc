@@ -13,6 +13,8 @@
     <script src="../src/version.js"></script>
 
     <script src="../src/Client/Client.js"></script>
+    <script src="../src/Client/ClientPro.service.js"></script>
+    <script src="../src/Client/ClientLite.service.js"></script>
     <script src="../src/Client/Client.service.js"></script>
     <script src="../src/Client/MessageHandler.service.js"></script>
 

@@ -112,16 +112,18 @@ angular.module('Pundit2.Annotators')
     labelMaxLength: 40
 
 })
-
+// TODO: remove toolbar and triplecomposer dependency 
 .service('TextFragmentHandler', function($rootScope, TEXTFRAGMENTHANDLERDEFAULTS, NameSpace, BaseComponent,
-    ContextualMenu, XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, EventDispatcher,
-    $document, Config) {
+    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, EventDispatcher, $document, $injector, Config) {
 
     var textFragmentHandler = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
     var clientHidden = false;
 
     var lastTemporaryConsolidable,
         temporaryConsolidated = {};
+
+    var menuType = Config.clientMode === 'pro' ? 'ContextualMenu' : 'CommentPopover',
+        handlerMenu = $injector.get(menuType);
 
     var checkTemporaryConsolidated = function(forceWipe) {
         if (typeof forceWipe === 'undefined') {
@@ -630,7 +632,7 @@ angular.module('Pundit2.Annotators')
 
         textFragmentHandler.log('Valid selection ended on document. Text fragment Item produced: ' + item.label);
 
-        if (Toolbar.isActiveTemplateMode() && !Config.commentPopover) {
+        if (Toolbar.isActiveTemplateMode() && Config.clientMode === 'pro') {
             textFragmentHandler.log('Item used as subject inside triple composer (template mode active).');
             TripleComposer.addToAllSubject(item);
             TripleComposer.closeAfterOp();
@@ -638,18 +640,7 @@ angular.module('Pundit2.Annotators')
             return;
         }
 
-        if (Config.commentPopover) {
-            console.log(range);
-            EventDispatcher.sendEvent('CommentPopover.show', {
-                mouseX: upEvt.pageX,
-                mouseY: upEvt.pageY,
-                item: item
-            });
-        }
-        else {
-            ContextualMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType);
-        }
-
+        handlerMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType);
     } // mouseUpHandler()
 
     // If we are configured to remove the selection, we cannot preventDefault() or
