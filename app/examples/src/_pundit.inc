@@ -168,6 +168,9 @@
     <script src="../src/ResourcePanel/ResourcePanel.ctrl.js"></script>
     <script src="../src/ResourcePanel/ResourceCalendar.dir.js"></script>
 
+    <script src="../src/PndPopover/PndPopover.js"></script>
+    <script src="../src/PndPopover/PndPopover.service.js"></script>
+
     <script src="../src/Tools/NotebookComposer/NotebookComposer.js"></script>
     <script src="../src/Tools/NotebookComposer/NotebookComposer.dir.js"></script>
     <script src="../src/Tools/NotebookComposer/NotebookComposer.ctrl.js"></script>

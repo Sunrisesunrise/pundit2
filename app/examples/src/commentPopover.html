@@ -9,7 +9,7 @@
 <script>
 
     var punditConfig = {
-        commentPopover: true,
+        clientMode: 'lite',
         modules: {
             'CommentPopover': {
                 debug: true,
@@ -17,9 +17,18 @@
             }
         }
     }
+
+    var commentPopoverDemoCtrl = function($scope, MyPundit, NotebookCommunication) {
+        MyPundit.checkLoggedIn().then(function() {
+            NotebookCommunication.getCurrent();
+            NotebookCommunication.getMyNotebooks();
+        });
+    };
 </script>
 
-<div data-ng-app="Pundit2" class="pundit2"></div>
+<div data-ng-app="Pundit2" class="pundit2 pnd-wrp">
+    <div ng-controller="commentPopoverDemoCtrl" ></div>
+</div>
 
 <link rel="stylesheet" href="//bits.wikimedia.org/it.wikipedia.org/load.php?debug=false&amp;lang=it&amp;modules=ext.rtlcite%2Cwikihiero%7Cext.uls.nojs%7Cext.visualEditor.viewPageTarget.noscript%7Cmediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.skinning.interface%7Cmediawiki.ui.button%7Cskins.vector.styles%7Cwikibase.client.init&amp;only=styles&amp;skin=vector&amp;*" />
 <link rel="stylesheet" href="//bits.wikimedia.org/it.wikipedia.org/load.php?debug=false&amp;lang=it&amp;modules=site&amp;only=styles&amp;skin=vector&amp;*" />
@@ -30,7 +39,7 @@
     /* cache key: itwiki:resourceloader:filter:minify-css:7:29fac8f8e3c72fe3be678699f8a6d0c6 */</style>
     <link rel="dns-prefetch" href="//meta.wikimedia.org" />
 
-    <div id="content" class="mw-body pundit-content" about="http://it.wikipedia.org/wiki/Palaia" role="main" style="margin-left: auto;">
+    <div id="content" class="mw-body pundit-content" about="http://it.wikipedia.org/wiki/Palaia11" role="main" style="margin-left: auto;">
         <a id="top"></a>
 
         <div id="mw-js-message" style="display:none;"></div>

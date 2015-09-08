@@ -640,7 +640,12 @@ angular.module('Pundit2.Annotators')
             return;
         }
 
-        handlerMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType);
+        var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType);
+        if (typeof promise !== 'undefined') {
+            promise.then(function() {
+                console.log("textFragmentHandler handlerMenu.show promise resolved");
+            });
+        }
     } // mouseUpHandler()
 
     // If we are configured to remove the selection, we cannot preventDefault() or

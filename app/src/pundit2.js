@@ -12,6 +12,7 @@ angular.module('Pundit2', [
     'Pundit2.Annotators',
     'Pundit2.ContextualMenu',
     'Pundit2.CommentPopover',
+    'Pundit2.PndPopover',
     'Pundit2.Preview',
     'Pundit2.Client',
     'Pundit2.GeneralItemsContainer',
