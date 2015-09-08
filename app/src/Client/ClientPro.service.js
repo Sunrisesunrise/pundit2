@@ -259,8 +259,8 @@ angular.module('Pundit2.Client')
      */
     basicRelations: [{
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "has comment (free text)",
-        "description": "Any comment related to the selected fragment of text or image",
+        "label": "comment",
+        "description": "Leave a comment related to the selected text fragment or web page.",
         "suggestedSubjectTypes": [
             "http://purl.org/pundit/ont/ao#fragment-image",
             "http://purl.org/pundit/ont/ao#fragment-text",
@@ -269,170 +269,105 @@ angular.module('Pundit2.Client')
         ],
         "suggestedObjectTypes": ["http://www.w3.org/2000/01/rdf-schema#Literal"],
         "vocabulary": "Basic Relation",
-        "uri": "http://schema.org/comment"
+        "uri": "http://www.w3.org/2000/01/rdf-schema#comment"
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "depicts",
-        "description": "An image or part of an image depicts something",
+        "label": "identifies",
+        "description": "The selected text fragment or web page is a representation of a linked data entity. Select the right entity as object.",
         "suggestedSubjectTypes": [
-            "http://xmlns.com/foaf/0.1/Image",
-            "http://purl.org/pundit/ont/ao#fragment-image"
+            "http://purl.org/pundit/ont/ao#fragment-text",
+            "http://schema.org/WebPage"
         ],
         "suggestedObjectTypes": [],
         "vocabulary": "Basic Relation",
-        "uri": "http://xmlns.com/foaf/0.1/depicts"
+        "uri": "http://www.w3.org/2000/01/rdf-schema#isDefinedBy"
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "is similar to",
-        "description": "The selected fragment (text or image fragment) is similar to another fragment (of the same or of different types)",
+        "label": "is related to",
+        "description": "The selected text fragment or web page is somehow related to another text fragment, work, person or linked data entity.",
         "suggestedSubjectTypes": [
             "http://purl.org/pundit/ont/ao#fragment-text",
-            "http://purl.org/pundit/ont/ao#fragment-image",
-            "http://xmlns.com/foaf/0.1/Image",
             "http://schema.org/WebPage"
         ],
-        "suggestedObjectTypes": [
-            "http://purl.org/pundit/ont/ao#fragment-text",
-            "http://purl.org/pundit/ont/ao#fragment-image",
-            "http://xmlns.com/foaf/0.1/Image",
-            "http://schema.org/WebPage"
-        ],
+        "suggestedObjectTypes": [],
         "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/pundit/vocab#similarTo"
+        "uri": "http://purl.org/pundit/ont/oa#isRelatedTo" // TODO Deve rispondere??? Come si fa???
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "has creator",
-        "description": "The selected text fragment has been created by a specific Person",
+        "label": "describes",
+        "description": "The selected fragment or web page describes another text fragment, work, person or linked data entity.",
+        "suggestedSubjectTypes": [
+            "http://purl.org/pundit/ont/ao#fragment-text",
+            "http://schema.org/WebPage"
+        ],
+        "suggestedObjectTypes": [],
+        "vocabulary": "Basic Relation",
+        "uri": "http://purl.org/spar/cito/describes"
+    }, {
+        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+        "label": "has author",
+        "description": "The selected text fragment or web page was written or created by a specific person. Select the right person as object",
         "suggestedSubjectTypes": [
             "http://purl.org/pundit/ont/ao#fragment-text",
             "http://purl.org/pundit/ont/ao#fragment-image",
             "http://xmlns.com/foaf/0.1/Image",
             "http://schema.org/WebPage"
         ],
-        "suggestedObjectTypes": [
-            "http://www.freebase.com/schema/people/person",
-            "http://xmlns.com/foaf/0.1/Person",
-            "http://dbpedia.org/ontology/Person"
-        ],
+        "suggestedObjectTypes": [],
         "vocabulary": "Basic Relation",
         "uri": "http://purl.org/dc/terms/creator"
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "cites",
-        "description": "The selected text fragment cites another text fragment, or a Work or a Person",
-        "suggestedSubjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
-        "suggestedObjectTypes": [
+        "label": "has type",
+        "description": "The selected text fragment or web page has a specified type. Select the right type as object.",
+        "suggestedSubjectTypes": [
             "http://purl.org/pundit/ont/ao#fragment-text",
-            "http://www.freebase.com/schema/people/person",
-            "http://xmlns.com/foaf/0.1/Person",
-            "http://dbpedia.org/ontology/Person",
-            "http://www.freebase.com/schema/book/written_work",
-            "http://www.freebase.com/schema/book/book"
+            "http://schema.org/WebPage"
         ],
+        "suggestedObjectTypes": [],
+        "vocabulary": "Basic Relation",
+        "uri": "http://purl.org/dc/terms/type"
+    }, {
+        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+        "label": "replies to",
+        "description": "The selected fragment or web page is a reply to another text fragment, work, person or linked data entity.",
+        "suggestedSubjectTypes": [
+            "http://purl.org/pundit/ont/ao#fragment-text",
+            "http://schema.org/WebPage"
+        ],
+        "suggestedObjectTypes": [],
+        "vocabulary": "Basic Relation",
+        "uri": "http://purl.org/spar/cito/repliesTo"
+    }, {
+        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+        "label": "cites",
+        "description": "The selected text fragment or web page cites another text fragment, work or person.",
+        "suggestedSubjectTypes": [
+            "http://purl.org/pundit/ont/ao#fragment-text",
+            "http://schema.org/WebPage"
+        ],
+        "suggestedObjectTypes": [],
         "vocabulary": "Basic Relation",
         "uri": "http://purl.org/spar/cito/cites"
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
         "label": "quotes",
-        "description": "The selected text fragment is a sentence from a Person or a Work, usually enclosed by quotations (eg: '')",
-        "suggestedSubjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
-        "suggestedObjectTypes": [
-            "http://www.freebase.com/schema/people/person",
-            "http://xmlns.com/foaf/0.1/Person",
-            "http://dbpedia.org/ontology/Person",
-            "http://www.freebase.com/schema/book/written_work",
-            "http://www.freebase.com/schema/book/book"
+        "description": "The selected text fragment or web page is a sentence from a person or a work, usually enclosed by quotations (eg: '')",
+        "suggestedSubjectTypes": [
+            "http://purl.org/pundit/ont/ao#fragment-text",
+            "http://schema.org/WebPage"
         ],
+        "suggestedObjectTypes": [],
         "vocabulary": "Basic Relation",
         "uri": "http://purl.org/spar/cito/includesQuotationFrom"
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "talks about",
-        "description": "The selected text fragment talks about some other text, Entity, Person or any other kind of concept",
-        "suggestedSubjectTypes": [
-            "http://purl.org/pundit/ont/ao#fragment-text",
-            "http://schema.org/WebPage"
-        ],
-        "suggestedObjectTypes": [],
-        "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/pundit/ont/oa#talksAbout"
-    }, {
-        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "is related to",
-        "description": "The selected text fragment is someway related to another text, Entity, Person or any other kind of concept",
-        "suggestedSubjectTypes": [
-            "http://purl.org/pundit/ont/ao#fragment-text",
-            "http://schema.org/WebPage"
-        ],
-        "suggestedObjectTypes": [],
-        "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/pundit/ont/oa#isRelatedTo"
-    }, {
-        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "identifies",
-        "description": "The selected text fragment is a Person, a Work, a Place or a well defined Entity",
-        "suggestedSubjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
-        "suggestedObjectTypes": [
-            "http://www.freebase.com/schema/location/location",
-            "http://dbpedia.org/ontology/Place",
-            "http://schema.org/Place",
-            "http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing",
-            "http://www.freebase.com/schema/people/person",
-            "http://dbpedia.org/ontology/Person",
-            "http://xmlns.com/foaf/0.1/Person",
-            "http://www.freebase.com/schema/book/written_work",
-            "http://www.freebase.com/schema/book/book"
-        ],
-        "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/pundit/ont/oa#identifies"
-    }, {
-        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "is date",
-        "description": "The selected text fragment corresponds to the specified Date",
+        "label": "represents the date",
+        "description": "The selected text fragment corresponds to a date that can be defined by a year, a month, a day or a time. Use the calendar to select the right date as object.",
         "suggestedSubjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
         "suggestedObjectTypes": ["http://www.w3.org/2001/XMLSchema#dateTime"],
         "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/pundit/ont/oa#isDate"
-    }, {
-        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "period of dates starts at",
-        "description": "The selected text fragment corresponds to the specified date period which starts at the specified Date",
-        "suggestedSubjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
-        "suggestedObjectTypes": ["http://www.w3.org/2001/XMLSchema#dateTime"],
-        "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/pundit/ont/oa#periodStartDate"
-    }, {
-        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "period of dates ends at",
-        "description": "The selected text fragment corresponds to the specified date period which ends at the specified Date",
-        "suggestedSubjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
-        "suggestedObjectTypes": ["http://www.w3.org/2001/XMLSchema#dateTime"],
-        "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/pundit/ont/oa#periodEndDate"
-    }, {
-        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "translates to",
-        "description": "The selected text fragment translation is given as free text",
-        "suggestedSubjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
-        "suggestedObjectTypes": ["http://www.w3.org/2000/01/rdf-schema#Literal"],
-        "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/pundit/ont/oa#translatesTo"
-    }, {
-        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "is translation of",
-        "description": "The selected text fragment is the translation of another text fragment",
-        "suggestedSubjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
-        "suggestedObjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
-        "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/pundit/ont/oa#isTranslationOf"
-    }, {
-        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "is written in",
-        "description": "The selected text fragment is written in the specified language (french, german, english etc)",
-        "suggestedSubjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
-        "suggestedObjectTypes": ["http://www.freebase.com/schema/language/human_language"],
-        "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/pundit/ont/oa#isWrittenIn"
+        "uri": "http://purl.org/dc/terms/date"
     }]
 })
 
