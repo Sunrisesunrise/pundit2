@@ -25,16 +25,27 @@
     li {
         margin-right: 0;
         margin-left: 0;
-        padding-top: 3px;
+
+        //&.show-tabs a {
+        //    padding-bottom: 5px;
+        //}
+    }
+
+    &.pnd-dashboard-panel-content > .pnd-tab-header {
+            padding-top: 3px;
+        }
+
+    .pnd-panel-tab-content {
+
+        .nav-tabs li {
+            float: left;
+        }
+
     }
 
     .pnd-panel-tab-content-content li {
         display: block;
         float: none;
-    }
-
-    .pnd-panel-tab-content .nav-tabs li {
-        float: left;
     }
 
     .dropdown-menu {
@@ -65,11 +76,6 @@
         transition: initial;
     }
 }
-
- div.tabs {
-
-   
- }
 
 .tab-content .tab-pane {
     display: none;
