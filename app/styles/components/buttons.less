@@ -11,13 +11,20 @@
 /* For generics btn without pnd-btn class -  !IMPORTANT rules here are needed for css overwritings */
 //TO DO: find a better way to fix the padding with !important rule issue
  .btn {
-//  padding-top: 0 !important;
-//  padding-left: 0 !important;
-//  border: none !important;
-//  color: inherit !important;
+    padding: 6px 12px !important;
+    border: none !important;
+    color: inherit !important;
     border-radius: none;
-//  background: none;
-//  background-image: none !important;
+    background: none;
+    background-image: none !important;
+}
+
+.btn-xs {
+    padding: 1px 5px !important;
+}
+
+.pnd-dashboard-footer-handler + .btn-xs {
+    background-color: rgb(255,255,255) !important;
 }
 
 /* Default button */
