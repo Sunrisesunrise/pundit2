@@ -70,8 +70,8 @@ angular.module('Pundit2.Client')
 
 .service('ClientLite', function(CLIENTLITEDEFAULTS, BaseComponent, Config, EventDispatcher, Analytics, MyPundit,
     TextFragmentAnnotator, AnnotationsCommunication, AnnotationsExchange, Item, ItemsExchange, Status, TextFragmentHandler, 
-    AnnotationSidebar, AnnotationDetails, ResizeManager, NotebookCommunication, NotebookExchange, SelectorsManager, DbpediaSelector, 
-    $injector, $templateCache, $rootScope, $compile, $window, CommentPopover) {
+    AnnotationSidebar, AnnotationDetails, ResizeManager, NotebookCommunication, NotebookExchange, CommentPopover,
+    $injector, $templateCache, $rootScope, $compile, $window) {
 
     var client = new BaseComponent('Client', CLIENTLITEDEFAULTS),
         // Node which will contain every other component
@@ -88,14 +88,6 @@ angular.module('Pundit2.Client')
 
     // Reads the list of components which needs to be bootstrapped.. and bootstrap
     // them as specified in their .options.
-    // .clientDomTemplate: path to a template which will get appended to Pundit2 root node
-    //                     (eg: Dashboard, Toolbar .. )
-    // .clientDashboardTemplate: path to a template which will get appended to a
-    //                           dashboard panel, specified in clientDashboardPanel
-    //                           (eg: Preview, MyItems, ...)
-    // .clientDashboardPanel: name of the panel the template will get appended to. See
-    //                        Dashboard configuration for the list of legal panel names
-    // .clientDashboardTabTitle: title of the tab shown inside the panel
     var addComponents = function() {
         for (var i = 0, l = client.options.bootModules.length; i < l; i++) {
             var name = client.options.bootModules[i];
@@ -120,29 +112,6 @@ angular.module('Pundit2.Client')
                     // DEBUG: Not compiling the templates, or stuff gets initialized twice
                     root.append(tmpl);
                     client.log('Appending to DOM ' + mod.name, tmpl);
-                }
-                continue;
-            }
-
-            // Second case: add to some Dashboard panel
-            if ("clientDashboardTemplate" in mod.options &&
-                "clientDashboardPanel" in mod.options &&
-                "clientDashboardTabTitle" in mod.options &&
-                Config.isModuleActive("Dashboard")) {
-
-                tmpl = $templateCache.get(mod.options.clientDashboardTemplate);
-
-                if (typeof(tmpl) === "undefined") {
-                    client.err('Can not bootstrap module ' + mod.name + ', template not found: ' + mod.options.clientDashboardTemplate);
-                } else {
-
-                    $injector.get("Dashboard")
-                        .addContent(
-                            mod.options.clientDashboardPanel,
-                            mod.options.clientDashboardTabTitle,
-                            mod.options.clientDashboardTemplate
-                        );
-                    client.log('Adding to Dashboard: ' + mod.name + ' to panel ' + mod.options.clientDashboardPanel);
                 }
                 continue;
             }
@@ -227,7 +196,6 @@ angular.module('Pundit2.Client')
     client.boot = function() {
 
         fixRootNode();
-
         addComponents();
 
         if (Config.useBasicRelations) {
@@ -241,7 +209,6 @@ angular.module('Pundit2.Client')
         MyPundit.checkLoggedIn().then(function(value) {
 
             if (value === true) {
-                // MyItems.getAllItems();
                 NotebookCommunication.getMyNotebooks();
                 NotebookCommunication.getCurrent();
             } else {
@@ -279,13 +246,6 @@ angular.module('Pundit2.Client')
             });
 
         });
-
-        // to add a selector must to inject it in the dependency
-        // otherwise the SelectorsManager.addSelector() is never called
-        // and the selector manager can't show the selector
-        // es: FreebaseSelector, MurucaSelector, KorboBasketSelector
-
-        SelectorsManager.init();
 
         client.log('Boot is completed, emitting pundit-boot-done event');
         EventDispatcher.sendEvent('Client.boot');
