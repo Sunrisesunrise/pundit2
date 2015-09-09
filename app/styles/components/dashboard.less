@@ -12,6 +12,8 @@
 .pnd-dashboard-container {
     position: fixed;
     top: @toolbar-height;
+    right: 0; /* For css overwritings in case body has some padding, margin or border */
+    left: 0; /* For css overwritings in case body has some padding, margin or border */
     overflow: hidden;
     z-index: @zindex-pnd-dashboard;
 }
