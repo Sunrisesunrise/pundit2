@@ -633,6 +633,9 @@ angular.module('Pundit2.GeneralItemsContainer')
 
             if ($scope.isMyNotebooks) {
                 $scope.displayedItems = allItems.filter(function(ns) {
+                    if (typeof ns.label !== 'string') {
+                        return false;
+                    }
                     return ns.label.toLowerCase().match(reg) !== null;
                 });
             } else if ($scope.isPredicates) {
