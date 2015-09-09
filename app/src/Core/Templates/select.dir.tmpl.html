@@ -21,7 +21,7 @@
             data-value="{{option.value}}" 
             ng-repeat="option in optionList" 
             ng-click="selectOption(option)" 
-            ng-class="{'selected': isOptionSelected(option)}">
+            ng-class="{'selected': isOptionSelected(option), 'custom-action': option.isAction}">
             {{option.label}}
          </div>
       </div>

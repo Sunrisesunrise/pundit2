@@ -27,7 +27,8 @@ angular.module('Pundit2.Core')
                 scope.optionList.push({
                     label: label,
                     title: '',
-                    value: scope.deferredAction
+                    value: scope.deferredAction,
+                    isAction: true
                 });
                 scope.placeholderAction = title;
             }
@@ -81,7 +82,7 @@ angular.module('Pundit2.Core')
             };
 
             scope.selectOption = function(option) {
-                if (typeof option.value === 'function') {
+                if (option.isAction) {
                     setAction(option);
                 } else {
                     scope.optionSelected = option;
