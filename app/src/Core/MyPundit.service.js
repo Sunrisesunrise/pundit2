@@ -580,10 +580,19 @@ angular.module('Pundit2.Core')
 
         // popoverState.anchor = angular.element('.pnd-toolbar-login-button');
         // popoverState.popover = $popover(angular.element(".pnd-toolbar-toggle-button"), popoverState.options);
+        var anchor;
         if (where === 'login') {
-            popoverState.popover = $popover(angular.element(".pnd-toolbar-login-button"), popoverState.options);
+            anchor = angular.element(".pnd-toolbar-login-button");
+            if (anchor.length === 0) {
+                return loginPromise.promise;
+            }
+            popoverState.popover = $popover(anchor, popoverState.options);
         } else if (where === 'editProfile') {
-            popoverState.popover = $popover(angular.element(".pnd-toolbar-user-button"), popoverState.options);
+            anchor = angular.element(".pnd-toolbar-user-button");
+            popoverState.popover = $popover(anchor, popoverState.options);
+            if (anchor.length === 0) {
+                return;
+            }
         }
 
         popoverState.popover.$scope.isLoading = true;
