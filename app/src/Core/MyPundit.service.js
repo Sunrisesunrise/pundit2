@@ -584,6 +584,7 @@ angular.module('Pundit2.Core')
         if (where === 'login') {
             anchor = angular.element(".pnd-toolbar-login-button");
             if (anchor.length === 0) {
+                loginPromise.reject();
                 return loginPromise.promise;
             }
             popoverState.popover = $popover(anchor, popoverState.options);

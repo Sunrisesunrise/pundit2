@@ -1,27 +1,46 @@
 <div class="pnd-select">
-   <span 
-      class="label-selected" 
-      title="{{optionSelected.title}}"
-      data-value="{{optionSelected.value}}"
-      ng-click="toggleExpand()">
-      {{optionSelected.label}}
-   </span>
-   <div 
-      class="open-options" 
-      ng-click="toggleExpand()">
-      <i class="fa fa-something"></i>
-   </div>
-   <div 
-      class="option-container"
-      ng-class="{'expanded':expanded}" >
+   <div ng-show="!actionInProgress">
+      <span 
+         class="label-selected" 
+         title="{{optionSelected.title}}"
+         data-value="{{optionSelected.value}}"
+         ng-click="toggleExpand()">
+         {{optionSelected.label}}
+      </span>
       <div 
-         class="option" 
-         title="{{option.title}}" 
-         data-value="{{option.value}}" 
-         ng-repeat="option in optionList" 
-         ng-click="selectOption(option)" 
-         ng-class="{'selected': isOptionSelected(option)}">
-         {{option.label}}
+         class="open-options" 
+         ng-click="toggleExpand()">
+         <i class="fa fa-something"></i>
       </div>
+      <div 
+         class="option-container"
+         ng-class="{'expanded':expanded}" >
+         <div 
+            class="option" 
+            title="{{option.title}}" 
+            data-value="{{option.value}}" 
+            ng-repeat="option in optionList" 
+            ng-click="selectOption(option)" 
+            ng-class="{'selected': isOptionSelected(option)}">
+            {{option.label}}
+         </div>
+      </div>
+   </div>
+
+   <div ng-show="actionInProgress">
+       <div ng-show="!savingInProgress">
+           <input type="text"
+                  class="creation-input"
+                  ng-model="inputAction"
+                  placeholder="{{placeholderAction}}"/>
+           <button class="pnd-btn pnd-btn-calltoaction"
+                   ng-class="{disabled: inputAction == ''}"
+                   ng-click="runAction(inputAction)">OK</button>
+           <button class="pnd-btn"
+                   ng-click="abortAction()">CANCEL</button>
+       </div>
+       <div ng-show="savingInProgress">
+           Saving ...
+       </div>
    </div>
 </div>

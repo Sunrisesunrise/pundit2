@@ -268,6 +268,8 @@ angular.module('Pundit2.Communication')
                 notebookCommunication.err("Error from server while retrieving list of my notebooks: " + statusCode);
                 Analytics.track('api', 'error', 'get notebook owned', statusCode);
             });
+        }, function() {
+            promise.reject('Popover creation error, possible anchor missing');
         });
 
         return promise.promise;
