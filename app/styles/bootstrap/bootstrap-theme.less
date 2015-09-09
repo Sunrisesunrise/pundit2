@@ -269,16 +269,17 @@ This style are mainly for avoiding interferences with loaded pages */
 ul.nav {
     display: block;
     width: auto;
-    //margin: 0;
     background: transparent;
 
     > li {
-    width: initial;
+        width: initial;
+
         > a {
             float: none;
             margin: 0;
             padding: 5px 8px;
             border: 0;
+            border-radius: 0;
             font-family: @font;
             font-size: 12px;
             font-weight: normal;
@@ -286,6 +287,16 @@ ul.nav {
 
             &:hover {
             background: none;
+            }
+
+            > span {
+                float: initial;
+                font-size: inherit;
+                font-weight: normal;
+
+                &:after {
+                    content: none;
+                }
             }
         }
 
@@ -302,6 +313,25 @@ ul.nav {
         }
     }
 }
+
+.nav .open > a,
+.nav .open > a:hover,
+.nav .open > a:focus {
+    border-color: transparent;
+    border-right: 1px @gray solid;
+}
+
+.nav > li > a:hover,
+.nav > li > a:focus {
+    text-decoration: none;
+    background-color: #ffffff;
+}
+
+.nav li a:hover {
+    background: none;
+    border: none;
+}
+
 
 /* ------------------------------------ *\
    #NAVBAR
@@ -347,25 +377,6 @@ ul.nav {
 
 .navbar-nav.navbar-right:last-child {
     margin-right: -15px; /* Remove margin for right toolbar menu */
-}
-
-
-.nav .open > a,
-.nav .open > a:hover,
-.nav .open > a:focus {
-    border-color: transparent;
-    border-right: 1px @gray solid;
-}
-
-.nav > li > a:hover,
-.nav > li > a:focus {
-    text-decoration: none;
-    background-color: #ffffff;
-}
-
-.nav li a:hover {
-    background: none;
-    border: none;
 }
 
 /* ------------------------------------ *\
