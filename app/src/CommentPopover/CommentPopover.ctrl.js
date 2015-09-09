@@ -51,6 +51,10 @@ angular.module('Pundit2.CommentPopover')
                 $scope.savingComment = false;
                 $scope.errorSaving = false;
                 CommentPopover.lastUsedNotebookID = lastSelectedNotebookId;
+                var currentNotebook = NotebookExchange.getCurrentNotebooks();
+                if (typeof currentNotebook === 'undefined' || currentNotebook.id !== lastSelectedNotebookId) {
+                    NotebookCommunication.setCurrent(lastSelectedNotebookId);
+                }
                 PndPopover.hide();
             }
             else {
