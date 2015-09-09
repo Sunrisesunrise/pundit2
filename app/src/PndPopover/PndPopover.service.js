@@ -8,6 +8,7 @@ angular.module('Pundit2.PndPopover')
     };
 
     var state = {
+        selection: undefined,
         data: undefined,
         x: 0,
         y: 0,
@@ -34,22 +35,20 @@ angular.module('Pundit2.PndPopover')
     };
 
     var mouseUpHandler = function(evt) {
-        console.log(evt);
         var tagName = angular.element(evt.target).prop('tagName').toLowerCase();
         console.log(tagName);
         if (angular.element(evt.target).closest('.popover').length === 0 && tagName !== 'select') {
-            console.log("faccio l'hide");
             hide();
         }
         else {
             evt.stopImmediatePropagation();
             //evt.stopPropagation();
-            console.log("stopImmediatePropagation");
             return false;
         }
     };
 
     var show = function() {
+        state.selection = $document[0].getSelection();
         state.popover.show();
         $document.on('mouseup', mouseUpHandler);
     };
@@ -102,6 +101,10 @@ angular.module('Pundit2.PndPopover')
 
     pndPopover.getData = function() {
         return state.data;
+    }
+
+    pndPopover.getState = function() {
+        return state;
     }
 
     return pndPopover;

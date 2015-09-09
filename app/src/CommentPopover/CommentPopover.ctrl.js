@@ -5,6 +5,8 @@ angular.module('Pundit2.CommentPopover')
 
     $scope.selectedNotebookId = undefined;
     $scope.createNewNotebook = false;
+    $scope.savingNewNotebook = false;
+    $scope.newNotebookName = '';
     $scope.availableNotebooks = [];
 
     var updateAvailableNotebooks = function() {
