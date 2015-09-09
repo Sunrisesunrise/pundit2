@@ -79,6 +79,22 @@
 
 .tab-content {
     clear: none; /* CSS conflicts fix */
+
+    .pnd-tab-header {
+
+        &.pnd-hidden-tabs {
+
+            .show-tabs a {
+                padding-top: 5px;
+                padding-bottom: 2px;
+            }
+
+            .show-tabs.active a {
+                padding-top: 3px;
+                padding-bottom: 2px;
+            }
+        }
+    }
 }
 
 .tab-content .tab-pane {
@@ -89,7 +105,6 @@
 .tab-content .active {
     display: block;
 }
-
 
 
 /* ------------------------------------ *\
