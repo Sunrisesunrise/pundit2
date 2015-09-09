@@ -19,7 +19,7 @@
     }
 
     var commentPopoverDemoCtrl = function($scope, MyPundit, NotebookCommunication) {
-        MyPundit.checkLoggedIn().then(function() {
+        MyPundit.checkLoggedIn(true).then(function() {
             NotebookCommunication.getCurrent();
             NotebookCommunication.getMyNotebooks();
         });
