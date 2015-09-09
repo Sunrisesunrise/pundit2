@@ -426,6 +426,7 @@ angular.module('Pundit2.Core')
     var popoverState = {
         autoCloseWait: 2,
         autoCloseIntervall: null,
+        autoCloseTimeout: null,
         anchor: undefined,
         loginSrc: loginServer, //myPundit.options.popoverLoginURL,//'http://dev.thepund.it/connect/index.php',
         options: {
@@ -480,24 +481,38 @@ angular.module('Pundit2.Core')
             if (params.data === 'loginPageLoaded' || params.data === 'pageLoaded') {
                 popoverState.popover.$scope.isLoading = false;
                 popoverState.popover.$scope.$digest();
-            } else if (params.data === 'loginCheck') {
+            }
+            else if (params.data === 'loginCheck') {
                 popoverState.popover.$scope.isLoading = true;
                 popoverState.popover.$scope.postLoginPreCheck = true;
                 popoverState.popover.$scope.$digest();
-            } else if (params.data === 'profileSuccessfullyUpdated') {
-                $timeout(function() {
+            }
+            else if (params.data === 'profileSuccessfullyUpdated') {
+                $timeout.cancel(popoverState.autoCloseTimeout);
+                popoverState.autoCloseTimeout = $timeout(function() {
                     myPundit.closeLoginPopover();
                 }, 2500);
                 EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {event: 'Pundit.userProfileUpdated', data: null});
                 myPundit.checkLoggedIn(true);
-            } else if (params.data === 'userLoggedIn') {
+            }
+            else if (params.data === 'forcePopoverClose') {
+                if (typeof popoverState.autoCloseTimeout !== 'undefined' && popoverState.autoCloseTimeout !== null) {
+                    $timeout.cancel(popoverState.autoCloseTimeout);
+                }
+                if (typeof popoverState.autoCloseIntervall !== 'undefined' && popoverState.autoCloseIntervall !== null) {
+                    $interval.cancel(popoverState.autoCloseIntervall);
+                }
+                myPundit.closeLoginPopover();
+            }
+            else if (params.data === 'userLoggedIn') {
                 popoverState.popover.$scope.postLoginPreCheck = true;
                 myPundit.checkLoggedIn().then(function(status) {
                     popoverState.popover.$scope.isLoading = false;
                     if (status) {
                         popoverState.loginSuccess();
                         loginPromise.resolve(true);
-                    } else {
+                    }
+                    else {
                         popoverState.popover.$scope.loginSomeError = true;
                         loginPromise.resolve(false);
                     }
