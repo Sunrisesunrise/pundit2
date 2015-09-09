@@ -266,10 +266,38 @@
 This style are mainly for avoiding interferences with loaded pages */
 
 // Need this for normalizing
+// Declarations with > selector for css overwritings
+
 ul.nav {
     display: block;
     width: auto;
     background: transparent;
+
+    li {
+
+        a {
+            border-radius: none; /* Needs overwritings for webkit vendor prefix */
+        }
+
+        > a {
+
+            span {
+                float: initial;
+                font-size: inherit;
+                font-weight: normal;
+
+                &:after {
+                    content: none;
+                }
+            }
+
+            &:hover {
+                > span {
+                    color: inherit;
+                }
+            }
+        }
+    }
 
     > li {
         width: initial;
@@ -286,8 +314,12 @@ ul.nav {
             font-weight: normal;
             text-transform: none;
 
-            &:hover {
-            background: none;
+            &,
+            &:hover,
+            &:focus {
+                background: none;
+                text-decoration: none;
+                background-color: #ffffff;
             }
 
             > span {
@@ -313,26 +345,14 @@ ul.nav {
             }
         }
     }
-}
 
-.nav .open > a,
-.nav .open > a:hover,
-.nav .open > a:focus {
-    border-color: transparent;
-    border-right: 1px @gray solid;
+    .nav .open > a,
+    .nav .open > a:hover,
+    .nav .open > a:focus {
+        border-color: transparent;
+        border-right: 1px @gray solid;
+    }
 }
-
-.nav > li > a:hover,
-.nav > li > a:focus {
-    text-decoration: none;
-    background-color: #ffffff;
-}
-
-.nav li a:hover {
-    background: none;
-    border: none;
-}
-
 
 /* ------------------------------------ *\
    #NAVBAR
