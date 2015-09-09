@@ -464,16 +464,17 @@ angular.module('Pundit2.Communication')
             }
 
             //TODO: to test new save with notbook id in URL.
+            var currentNotebook = NotebookExchange.getCurrentNotebooks();
+            var url = NameSpace.get('asNBCurrent');
+            if (typeof currentNotebook !== 'undefined' && typeof currentNotebook.id !== 'undefined') {
+                url = NameSpace.get('asNBForcedCurrent', {current: NotebookExchange.getCurrentNotebooks().id});
+            }
             $http({
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 method: 'POST',
-                url: NameSpace.get('asNBCurrent'),
-                // TODO: when the user is not logged, the current notebook is undefined
-                // url: NameSpace.get('asNBForcedCurrent', {
-                //     current: NotebookExchange.getCurrentNotebooks().id
-                // }),
+                url: url,
                 params: {
                     context: angular.toJson({
                         targets: flatTargets,
