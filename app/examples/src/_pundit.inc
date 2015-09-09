@@ -41,6 +41,8 @@
     <script src="../src/Core/BrokenHelper.service.js"></script>
     <script src="../src/Core/FocusOn.dir.js"></script>
     <script src="../src/Core/UnlimitedScroll.dir.js"></script>
+    <script src="../src/Core/PndSelect.dir.js"></script>
+    <script src="../src/Core/PndPopover.service.js"></script>
 
     <script src="../src/Core/Template.factory.js"></script>
     <script src="../src/Core/Item.factory.js"></script>
@@ -167,9 +169,6 @@
     <script src="../src/ResourcePanel/ResourcePanel.service.js"></script>
     <script src="../src/ResourcePanel/ResourcePanel.ctrl.js"></script>
     <script src="../src/ResourcePanel/ResourceCalendar.dir.js"></script>
-
-    <script src="../src/PndPopover/PndPopover.js"></script>
-    <script src="../src/PndPopover/PndPopover.service.js"></script>
 
     <script src="../src/Tools/NotebookComposer/NotebookComposer.js"></script>
     <script src="../src/Tools/NotebookComposer/NotebookComposer.dir.js"></script>

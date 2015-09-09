@@ -1,0 +1,27 @@
+<div class="pnd-select">
+   <span 
+      class="label-selected" 
+      title="{{optionSelected.title}}"
+      data-value="{{optionSelected.value}}"
+      ng-click="toggleExpand()">
+      {{optionSelected.label}}
+   </span>
+   <div 
+      class="open-options" 
+      ng-click="toggleExpand()">
+      <i class="fa fa-something"></i>
+   </div>
+   <div 
+      class="option-container"
+      ng-class="{'expanded':expanded}" >
+      <div 
+         class="option" 
+         title="{{option.title}}" 
+         data-value="{{option.value}}" 
+         ng-repeat="option in optionList" 
+         ng-click="selectOption(option)" 
+         ng-class="{'selected': isOptionSelected(option)}">
+         {{option.label}}
+      </div>
+   </div>
+</div>

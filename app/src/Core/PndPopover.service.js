@@ -1,4 +1,5 @@
-angular.module('Pundit2.PndPopover')
+angular.module('Pundit2.Core')
+
 .service('PndPopover', function(BaseComponent, $rootScope, $popover, $document, EventDispatcher, $compile) {
     var pndPopover = new BaseComponent('PndPopover');
 
@@ -12,8 +13,7 @@ angular.module('Pundit2.PndPopover')
         data: undefined,
         x: 0,
         y: 0,
-        popoverOptions: {
-        },
+        popoverOptions: {},
         popover: null,
         anchor: null
     };
@@ -39,8 +39,7 @@ angular.module('Pundit2.PndPopover')
         console.log(tagName);
         if (angular.element(evt.target).closest('.popover').length === 0 && tagName !== 'select') {
             hide();
-        }
-        else {
+        } else {
             evt.stopImmediatePropagation();
             //evt.stopPropagation();
             return false;
@@ -101,11 +100,11 @@ angular.module('Pundit2.PndPopover')
 
     pndPopover.getData = function() {
         return state.data;
-    }
+    };
 
     pndPopover.getState = function() {
         return state;
-    }
+    };
 
     return pndPopover;
 });

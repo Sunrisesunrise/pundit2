@@ -1,0 +1,56 @@
+<!-- buildexamples:section header --><!-- /buildexamples -->
+
+<style>
+    .pnd-cons {
+        background: #fc0;
+    }
+    pre {
+        float: left;
+    }
+</style>
+
+<script type="text/javascript">
+
+    var punditConfig = {
+            
+        };
+
+    var SelectDemoCtrl = function($rootScope, $scope) {
+        $scope.options = [{
+            label: 'gatto',
+            title: 'gatto',
+            value: 'matto'
+        }, {
+            label: 'capra',
+            title: 'capra',
+            value: 'canta'
+        }];
+
+        $scope.options2 = [{
+            label: 'gatto',
+            title: 'gatto',
+            value: 'matto'
+        }, {
+            label: 'capra',
+            title: 'capra',
+            value: 'canta'
+        }];
+
+        $scope.boom = function() {
+            console.log('boooom');
+        }
+    }
+</script>
+
+<div data-ng-app="Pundit2" class="pundit2 pnd-wrp" ng-controller="SelectDemoCtrl">
+    <pnd-select options="options"></pnd-select>
+    <br/>
+    <br/>
+    <br/>
+    <pnd-select 
+        options="options2"
+        action="boom"
+        actionLabel="Boom"></pnd-select>
+</div>
+
+<!-- buildexamples:section footer --><!-- /buildexamples -->
