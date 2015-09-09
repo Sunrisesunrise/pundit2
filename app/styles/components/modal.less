@@ -11,6 +11,15 @@
     width: auto; /* For css overwritings */
     min-height: 210px;
     z-index: @zindex-pnd-modal;
+
+    &.top {
+        height: auto;
+    }
+
+    a,
+    a:visited {
+        color: @color-text-link;
+    }
 }
 
 .modal-header {
@@ -20,6 +29,10 @@
 
 .modal-content {
     height: auto; /* For css overwritings */
+
+    table {
+        margin: 0;
+    }
 }
 
 .modal-title {

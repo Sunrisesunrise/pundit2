@@ -207,21 +207,23 @@
 // Z-indexes for nested elements (inside components) are defined inside each file and have
 // lower values as they should be relative
 
-@zindex-pnd-base: 1000000000; // Increment for pnd-wrap z-index value
+@zindex-pnd-base: 2147483627; // Increment for z-index values. The sum of this value and the highest element must not be > 2147483647
 
-@zindex-pnd:                        1000 + @zindex-pnd-base; // Used only once by .pnd-wrp
+//initial z-index 1000000000 changed for css overwritings
 
-@zindex-pnd-annotation-sidebar:     500 + @zindex-pnd-base;
-@zindex-pnd-dashboard:              600 + @zindex-pnd-base;
-@zindex-pnd-toolbar:                700 + @zindex-pnd-base;
-@zindex-pnd-login:                  800 + @zindex-pnd-base;
-@zindex-pnd-modal-background:       900 + @zindex-pnd-base;
-@zindex-pnd-image-fragment-tool:    1000 + @zindex-pnd-base;
-@zindex-pnd-modal:                  1100 + @zindex-pnd-base;
-@zindex-pnd-contextual-menu:        1200 + @zindex-pnd-base;
-@zindex-pnd-popver:                 1300 + @zindex-pnd-base;
-@zindex-pnd-resource-panel:         1400 + @zindex-pnd-base;
-@zindex-pnd-alert-system:           1500 + @zindex-pnd-base;
+@zindex-pnd:                        2147483647; // Used only once by .pnd-wrp but ignored since the element has position: static that doesn't support z-index
+
+@zindex-pnd-annotation-sidebar:     10 + @zindex-pnd-base;
+@zindex-pnd-dashboard:              11 + @zindex-pnd-base;
+@zindex-pnd-toolbar:                12 + @zindex-pnd-base;
+@zindex-pnd-login:                  13 + @zindex-pnd-base;
+@zindex-pnd-modal-background:       14 + @zindex-pnd-base;
+@zindex-pnd-image-fragment-tool:    15 + @zindex-pnd-base;
+@zindex-pnd-modal:                  16 + @zindex-pnd-base;
+@zindex-pnd-contextual-menu:        17 + @zindex-pnd-base;
+@zindex-pnd-popver:                 18 + @zindex-pnd-base;
+@zindex-pnd-resource-panel:         19 + @zindex-pnd-base;
+@zindex-pnd-alert-system:           20 + @zindex-pnd-base;
 
 
 // ------------------------------------ //
