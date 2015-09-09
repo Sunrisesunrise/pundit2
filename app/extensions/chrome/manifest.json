@@ -1,8 +1,8 @@
 {
-  "name": "Pundit",
-  "version": "0.0.1",
+  "name": "Pundit Annotator Pro",
+  "version": "0.0.2",
   "manifest_version": 2,
-  "description": "Pundit Chrome Extension",
+  "description": "Pundit Annotator Pro allows you to create semantic annotations on web pages.",
   "background": {
     "page": "html/background.html"
   },
@@ -17,7 +17,7 @@
       "19": "icons/pundit-icon-19.png",
       "38": "icons/pundit-icon-38.png"
     },
-    "default_title": "Launch Pundit"
+    "default_title": "Launch Pundit Annotator Pro"
   },
   "permissions": [
     "tabs", "http://*/*", "https://*/*"

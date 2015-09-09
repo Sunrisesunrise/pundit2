@@ -266,70 +266,29 @@
 This style are mainly for avoiding interferences with loaded pages */
 
 // Need this for normalizing
-// Declarations with > selector for css overwritings
-
 ul.nav {
     display: block;
     width: auto;
+    //margin: 0;
     background: transparent;
 
     li {
-
-        a {
-            border-radius: none; /* Needs overwritings for webkit vendor prefix */
-        }
-
-        > a {
-
-            span {
-                float: initial;
-                font-size: inherit;
-                font-weight: normal;
-
-                &:after {
-                    content: none;
-                }
-            }
-
-            &:hover {
-                > span {
-                    color: inherit;
-                }
-            }
-        }
-    }
-
-    > li {
         width: initial;
-        margin-top: 0;
+        letter-spacing: 0;
+        text-transform: none;
 
         > a {
             float: none;
             margin: 0;
             padding: 5px 8px;
             border: 0;
-            border-radius: 0;
             font-family: @font;
             font-size: 12px;
             font-weight: normal;
             text-transform: none;
 
-            &,
-            &:hover,
-            &:focus {
-                background: none;
-                text-decoration: none;
-                background-color: #ffffff;
-            }
-
-            > span {
-                float: initial;
-                font-size: inherit;
-                font-weight: normal;
-
-                &:after {
-                    content: none;
-                }
+            &:hover {
+            background: none;
             }
         }
 
@@ -344,17 +303,6 @@ ul.nav {
                 font-weight: normal;
             }
         }
-    }
-
-    .nav .open > a,
-    .nav .open > a:hover,
-    .nav .open > a:focus {
-        border-color: transparent;
-        border-right: 1px @gray solid;
-    }
-
-    > ul > li > a {
-        text-transform: none;
     }
 }
 
@@ -402,6 +350,25 @@ ul.nav {
 
 .navbar-nav.navbar-right:last-child {
     margin-right: -15px; /* Remove margin for right toolbar menu */
+}
+
+
+.nav .open > a,
+.nav .open > a:hover,
+.nav .open > a:focus {
+    border-color: transparent;
+    border-right: 1px @gray solid;
+}
+
+.nav > li > a:hover,
+.nav > li > a:focus {
+    text-decoration: none;
+    background-color: #ffffff;
+}
+
+.nav li a:hover {
+    background: none;
+    border: none;
 }
 
 /* ------------------------------------ *\
