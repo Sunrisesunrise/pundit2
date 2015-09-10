@@ -6,7 +6,7 @@ angular.module('Pundit2.Core')
         replace: true,
         scope: {
             optionList: '=options',
-            optionSelected: '=selected',
+            optionSelectedValue: '=selectedValue',
             expanded: '=expanded',
             deferredAction: '=deferredAction',
             labelAction: '=labelAction',
@@ -15,6 +15,8 @@ angular.module('Pundit2.Core')
         templateUrl: 'src/Core/Templates/select.dir.tmpl.html',
         link: function(scope, element) {
             var fncAction;
+
+            var inputElement = element.find('.creation-input').eq(0);
 
             if (angular.isArray(scope.optionList) === false &&
                 scope.optionList <= 0) {
@@ -33,7 +35,22 @@ angular.module('Pundit2.Core')
                 scope.placeholderAction = title;
             }
 
-            scope.optionSelected = scope.optionSelected ? scope.optionSelected : scope.optionList[0];
+            var findOption = function(value) {
+                if (typeof value === 'undefined') {
+                    value = scope.optionSelectedValue;
+                }
+                var res = scope.optionList[0];
+                for (var i in scope.optionList) {
+                    if (scope.optionList[i].value == value) {
+                        return scope.optionList[i];
+                    }
+                }
+                return res;
+            };
+
+
+            scope.optionSelectedValue = scope.optionSelectedValue ? scope.optionSelectedValue : scope.optionList[0].value;
+            scope.optionSelected = findOption();
             scope.expanded = scope.expanded ? scope.expanded : false;
             scope.actionInProgress = false;
             scope.savingInProgress = false;
@@ -43,7 +60,7 @@ angular.module('Pundit2.Core')
                 scope.inputAction = '';
                 scope.actionInProgress = true;
                 $timeout(function() {
-                    element.find('.creation-input')[0].focus();
+                    inputElement.focus();
                 });
             };
 
@@ -54,6 +71,9 @@ angular.module('Pundit2.Core')
                         var actionRef = scope.optionList.pop();
                         scope.optionList.push(option);
                         scope.optionList.push(actionRef);
+                        if (typeof option !== 'object') {
+                            option = findOption(option);
+                        }
                         scope.optionSelected = option;
                     }
                     scope.actionInProgress = false;
