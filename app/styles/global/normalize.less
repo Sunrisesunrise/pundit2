@@ -43,6 +43,14 @@ span, img, strong, b, i {
     display: inline;    
 }
 
+input[type='radio'] {
+    -webkit-appearance : radio; /* For css overwritings */
+}
+
+input[type='checkbox'] {
+    -webkit-appearance : checkbox; /* For css overwritings */
+}
+
 // Typography resets
 a {
     border-bottom: none;
@@ -61,9 +69,14 @@ p, blockquote, table,  table tr th, table tr td {
     line-height: 1.5;
 }
 
+table, thead, tbody, tr, td, th {
+    color: inherit;
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-style: normal;
     text-transform: none;
+    text-shadow: none;
 }
 
 input[type='text'], label, nav, th,  h1, h2, h3, h4, h5, h6, strong, table, p, blockquote, table, td {
@@ -101,10 +114,18 @@ table {
 thead {
     display: table-header-group;
 
+    tr:hover {
+        background: none;
+    }
+
 }
 
 tbody {
     display: table-footer-group;
+
+    tr:hover {
+        background: none;
+    }
 }
 
 tr {
