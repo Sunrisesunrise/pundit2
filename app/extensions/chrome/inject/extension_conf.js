@@ -25,5 +25,7 @@ var punditConfig = {
         }
     },
     templates: [],
-    debugAllModules: true
+    debugAllModules: true,
+    limitToSuggestedTypes: true,
+    disableImageAnnotation: true
 }

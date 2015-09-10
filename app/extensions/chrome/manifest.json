@@ -1,6 +1,6 @@
 {
   "name": "Pundit Annotator Pro",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "manifest_version": 2,
   "description": "Pundit Annotator Pro allows you to create semantic annotations on web pages.",
   "background": {
