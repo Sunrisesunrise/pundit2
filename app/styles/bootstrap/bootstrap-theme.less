@@ -274,20 +274,28 @@ ul.nav {
 
     li {
         width: initial;
+        border: none;
         letter-spacing: 0;
         text-transform: none;
+
         a {
+            height: auto;
+            min-height: auto;
+            margin: 0;
             border-radius: none; /* Needs overwritings for webkit vendor prefix */
         }
+
         > a {
             span {
                 float: initial;
                 font-size: inherit;
                 font-weight: normal;
+
                 &:after {
                     content: none;
                 }
             }
+
             &:hover {
                 > span {
                     color: inherit;
@@ -719,6 +727,7 @@ input {
     padding: 0;
     border-radius: 3px;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+    color: inherit;
 
     .popover-content {
         padding: 10px;

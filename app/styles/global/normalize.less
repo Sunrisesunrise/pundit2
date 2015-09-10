@@ -32,6 +32,8 @@ b, i, ul, li, form {
     background: transparent;
     background-image: none;
     text-align: left;
+    -webkit-text-stroke: initial;
+    //-webkit-font-smoothing: initial;
 }
 
 // Display declaration
@@ -41,6 +43,11 @@ div, h1, h2, h3, h4, h5, h6, p, ul {
 
 span, img, strong, b, i {
     display: inline;    
+}
+
+[role="navigation"] {
+    padding-right: 0;
+    padding-left: 0;
 }
 
 input[type='radio'] {
