@@ -221,7 +221,8 @@ angular.module('Pundit2.Toolbar')
             "%0A" + "User name: " + user.fullName +
             "%0A" + "User mail: " + user.email;
 
-        window.location.href = link;
+        //window.location.href = link;
+        window.open(link);
     };
 
     sendModalScope.send = function() {
