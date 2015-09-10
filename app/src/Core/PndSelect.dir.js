@@ -41,7 +41,7 @@ angular.module('Pundit2.Core')
                 }
                 var res = scope.optionList[0];
                 for (var i in scope.optionList) {
-                    if (scope.optionList[i].value == value) {
+                    if (scope.optionList[i].value === value) {
                         return scope.optionList[i];
                     }
                 }

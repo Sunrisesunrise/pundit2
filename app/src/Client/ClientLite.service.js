@@ -71,7 +71,7 @@ angular.module('Pundit2.Client')
 .service('ClientLite', function(CLIENTLITEDEFAULTS, BaseComponent, Config, EventDispatcher, Analytics, MyPundit,
     TextFragmentAnnotator, AnnotationsCommunication, AnnotationsExchange, Item, ItemsExchange, Status, TextFragmentHandler, 
     AnnotationSidebar, AnnotationDetails, ResizeManager, NotebookCommunication, NotebookExchange, CommentPopover,
-    $injector, $templateCache, $rootScope, $compile, $window) {
+    $injector, $templateCache, $rootScope) {
 
     var client = new BaseComponent('Client', CLIENTLITEDEFAULTS),
         // Node which will contain every other component
@@ -142,17 +142,12 @@ angular.module('Pundit2.Client')
         NotebookExchange.wipe();
         ItemsExchange.wipe();
         AnnotationsExchange.wipe();
-        TemplatesExchange.wipe();
 
         // There could be private annotations we want to show, get them again
         AnnotationsCommunication.getAnnotations();
         if (Config.useBasicRelations) {
             loadBasicRelations();
         }
-        loadConfiguredRelations();
-        loadTemplate();
-
-        MyItems.getAllItems();
 
         NotebookCommunication.getMyNotebooks();
         NotebookCommunication.getCurrent();
@@ -165,15 +160,12 @@ angular.module('Pundit2.Client')
         NotebookExchange.wipe();
         ItemsExchange.wipe();
         AnnotationsExchange.wipe();
-        TemplatesExchange.wipe();
 
         // There might have been private annotations we dont want to show anymore
         AnnotationsCommunication.getAnnotations();
         if (Config.useBasicRelations) {
             loadBasicRelations();
         }
-        loadConfiguredRelations();
-        loadTemplate();
     };
 
     client.hideClient = function() {
