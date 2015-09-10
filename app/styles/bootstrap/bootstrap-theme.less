@@ -299,6 +299,10 @@ ul.nav {
     > li {
         margin-top: 0;
 
+        &.show-tabs.active {
+            margin-bottom: -4px;
+        }
+
         > a {
             float: none;
             margin: 0;
@@ -624,16 +628,20 @@ ul.nav-tabs {
 \* ------------------------------------ */
 
 textarea.form-control {
-    height: auto;
+    min-height: 150px;
 }
 
-.form-control {
-    border-color: @gray-extra-light;
+.form-control, .form-group .form-control input[type="text"] {
     padding: 4px 5px;
     height: 26px;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    border-radius: none;
+    border-color: @gray-extra-light;
+    //border: inherit;
+    font-size: inherit;
+
 
     &:focus {
         outline: 0;
@@ -641,6 +649,11 @@ textarea.form-control {
         -webkit-box-shadow: none;
         box-shadow: none;
     }
+}
+
+.form-group .form-control {
+    border-radius: none;
+    font-size: inherit;
 }
 
 a {

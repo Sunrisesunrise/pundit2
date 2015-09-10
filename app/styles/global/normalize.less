@@ -51,6 +51,13 @@ input[type='checkbox'] {
     -webkit-appearance : checkbox; /* For css overwritings */
 }
 
+input[type='radio'] ,input[type='checkbox'] {
+    top: initial;
+    right: intial;
+    bottom: initial;
+    left: initial;
+}
+
 // Typography resets
 a {
     border-bottom: none;
@@ -61,11 +68,11 @@ a {
     }
 }
 
-p, blockquote, label, table, table tr th, table tr td, {
+p, ul, li, blockquote, label, table, table tr th, table tr td, {
     font-size: inherit;
 }
 
-p, blockquote, table,  table tr th, table tr td {
+p, ul, li, blockquote, table,  table tr th, table tr td {
     line-height: 1.5;
 }
 
@@ -77,13 +84,14 @@ h1, h2, h3, h4, h5, h6 {
     font-style: normal;
     text-transform: none;
     text-shadow: none;
+    letter-spacing: initial;
 }
 
 input[type='text'], label, nav, th,  h1, h2, h3, h4, h5, h6, strong, table, p, blockquote, table, td {
     font-family: inherit;
 }
 
-nav {
+nav, label {
     text-transform: initial;
 }
 
