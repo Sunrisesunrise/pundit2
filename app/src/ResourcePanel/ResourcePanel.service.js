@@ -687,9 +687,9 @@ angular.module('Pundit2.ResourcePanel')
                                 var remoteItemCount = ItemsExchange.getRemoteItemCount(container);
                                 if (predicate !== null) {
                                     if (caller === 'subject') {
-                                        itemsList = filterSubjectItems(itemsList, predicate);
+                                        itemsList = limitToSuggestedTypes ? filterSubjectItems(itemsList, predicate) : itemsList;
                                     } else if (caller === 'object') {
-                                        itemsList = filterObjectItems(itemsList, predicate);
+                                        itemsList = limitToSuggestedTypes ? filterObjectItems(itemsList, predicate) : itemsList;
                                     }
                                 }
 
