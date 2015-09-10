@@ -1,14 +1,11 @@
 angular.module('Pundit2.CommentPopover')
-.controller('CommentPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange, NotebookCommunication, CommentPopover, $timeout) {
+.controller('CommentPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange, NotebookCommunication, CommentPopover, $timeout, $q) {
 
     $scope.literalText = '';
 
     $scope.selectedNotebookId = undefined;
-    $scope.createNewNotebook = false;
-    $scope.savingNewNotebook = false;
     $scope.savingComment = false;
     $scope.errorSaving = false;
-    $scope.newNotebookName = '';
     $scope.availableNotebooks = [];
     $scope.isUserLogged = MyPundit.isUserLogged();
 
@@ -18,9 +15,12 @@ angular.module('Pundit2.CommentPopover')
         $scope.availableNotebooks = [];
         var notebooks = NotebookExchange.getMyNotebooks();
         for (var i in notebooks) {
-            $scope.availableNotebooks.push({id: notebooks[i].id, name: notebooks[i].label});
+            $scope.availableNotebooks.push({
+                value: notebooks[i].id,
+                label: notebooks[i].label,
+                title: notebooks[i].label
+            });
         }
-        $scope.availableNotebooks.push({id: 0, name: "Create new notebook"});
         return $scope.availableNotebooks;
     };
 
@@ -46,15 +46,12 @@ angular.module('Pundit2.CommentPopover')
     $scope.save = function() {
         $scope.savingComment = true;
         $timeout(function() {
-            var res = parseInt((Math.random(4)*100) % 2) === 1;
+            var res = parseInt((Math.random()*100) % 2) === 1;
             if (res) {
                 $scope.savingComment = false;
                 $scope.errorSaving = false;
                 CommentPopover.lastUsedNotebookID = lastSelectedNotebookId;
-                var currentNotebook = NotebookExchange.getCurrentNotebooks();
-                if (typeof currentNotebook === 'undefined' || currentNotebook.id !== lastSelectedNotebookId) {
-                    NotebookCommunication.setCurrent(lastSelectedNotebookId);
-                }
+                NotebookCommunication.setCurrent(lastSelectedNotebookId);
                 PndPopover.hide();
             }
             else {
@@ -68,39 +65,22 @@ angular.module('Pundit2.CommentPopover')
 
     };
 
-    $scope.notebookSelectionChanged = function() {
-        if (parseInt($scope.selectedNotebookId) === 0) {
-            $scope.createNewNotebook = true;
-        }
-        else {
-            lastSelectedNotebookId = $scope.selectedNotebookId;
-        }
-    }
+    $scope.doCreateNewNotebook = function(notebookName) {
+        var deferred = $q.defer();
 
-    $scope.createNewNotebookClick = function() {
-        $scope.savingNewNotebook = true;
-        NotebookCommunication.createNotebook($scope.newNotebookName).then(function(notebookID){
+        NotebookCommunication.createNotebook(notebookName).then(function(notebookID){
             if (typeof notebookID !== 'undefined') {
                 lastSelectedNotebookId = notebookID;
                 updateAvailableNotebooks();
                 $scope.selectedNotebookId = lastSelectedNotebookId;
+                deferred.resolve(notebookID);
             }
-            $scope.savingNewNotebook = false;
-            $scope.createNewNotebook = false;
-            $scope.newNotebookName = '';
         }, function() {
             // TODO: handle errors during noteebook save, maybe Alert System is enough ?
-            $scope.savingNewNotebook = false;
-            $scope.createNewNotebook = false;
-            $scope.newNotebookName = '';
+            deferred.reject();
         });
-    };
 
-    $scope.cancelCreationNewNotebookClick = function() {
-        $scope.createNewNotebook = false;
-        $scope.savingNewNotebook = false;
-        $scope.newNotebookName = '';
-        $scope.selectedNotebookId = lastSelectedNotebookId;
+        return deferred.promise;
     };
 
     updateCurrentNotebook();

@@ -1,6 +1,6 @@
 angular.module('Pundit2.Core')
 
-.service('PndPopover', function(BaseComponent, $rootScope, $popover, $document, EventDispatcher, $compile) {
+.service('PndPopover', function(BaseComponent, $rootScope, $popover, $document, $q) {
     var pndPopover = new BaseComponent('PndPopover');
 
     var initPopoverOptions = {
@@ -47,9 +47,15 @@ angular.module('Pundit2.Core')
     };
 
     var show = function() {
-        state.selection = $document[0].getSelection();
+        var selection = $document[0].getSelection();
+        if (selection.baseNode === null) {
+            console.log("skipping show .. no valid selection");
+            return false;
+        }
+        state.selection = selection;
         state.popover.show();
         $document.on('mouseup', mouseUpHandler);
+        return true;
     };
 
     var hide = function() {
@@ -69,11 +75,17 @@ angular.module('Pundit2.Core')
             hide();
         }
         state.popover = initPopover(x, y, options, data);
+        var innerPromise = $q.defer();
         var promise = state.popover.$promise;
         promise.then(function() {
-            show();
+            if (show()) {
+                innerPromise.resolve();
+            }
+            else {
+                innerPromise.reject();
+            }
         });
-        return promise;
+        return innerPromise.promise;
     };
 
     pndPopover.hide = function() {

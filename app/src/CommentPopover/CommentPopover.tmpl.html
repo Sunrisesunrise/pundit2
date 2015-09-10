@@ -20,6 +20,13 @@
 
         <div class="popover-notebooks"
              ng-show="isUserLogged">
+            <pnd-select
+                    options="availableNotebooks"
+                    selected-value="selectedNotebookId"
+                    deferred-action="doCreateNewNotebook"
+                    label-action="'Create new notebook'"
+                    placeholder-action="'Type new notebook name here'"></pnd-select>
+            <!--
             <div ng-show="!createNewNotebook">
                 <select name="notebooks"
                         ng-model="selectedNotebookId"
@@ -43,6 +50,7 @@
                     Saving ...
                 </div>
             </div>
+            -->
         </div>
 
         <div class="popover-footer"

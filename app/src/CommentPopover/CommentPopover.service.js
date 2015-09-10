@@ -12,6 +12,9 @@ angular.module('Pundit2.CommentPopover')
         var promise = PndPopover.show(x, y, options, item);
         promise.then(function() {
             console.log("commentPopover.show promise resolved");
+        }, function() {
+            console.log("reject commentPopover.show");
+            console.log(arguments);
         });
         return promise;
     };
