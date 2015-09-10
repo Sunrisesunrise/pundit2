@@ -2,7 +2,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
 .controller('GeneralItemsContainerCtrl', function($scope, $rootScope, $modal, $timeout, $element, $injector, $q,
     GeneralItemsContainer, ItemsExchange, MyItems, MyPundit, NotebookComposer, Preview, TypesHelper, PageHandler,
-    TripleComposer, SelectorsManager, EventDispatcher, Status, Analytics) {
+    TripleComposer, XpointersHelper, SelectorsManager, EventDispatcher, Status, Analytics) {
 
     $scope.isMyItems = GeneralItemsContainer.isMyItemsType($scope.type);
     $scope.isMyPageItems = GeneralItemsContainer.isPageItemsType($scope.type);
@@ -382,10 +382,12 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     //TODO: only on myitems
     if ($scope.isMyItems) {
+        var tempWebPageItem = {
+            uri: XpointersHelper.getSafePageContext()
+        };
 
         var isCurrentPageInMyItems = function() {
-            var item = PageHandler.createItemFromPage();
-            return ItemsExchange.isItemInContainer(item, MyItems.options.container);
+            return ItemsExchange.isItemInContainer(tempWebPageItem, MyItems.options.container);
         };
 
         $scope.dropdownOrdering.push({
