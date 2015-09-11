@@ -132,8 +132,8 @@ angular.module('Pundit2.Annotators')
         if (Object.keys(temporaryConsolidated).length === 0) {
             return;
         }
-        var statements = TripleComposer.getStatements();
         var validUris = {};
+        var statements = TripleComposer.getStatements();
         statements.forEach(function(el) {
             if (typeof el.scope === 'undefined') {
                 return;
@@ -550,7 +550,7 @@ angular.module('Pundit2.Annotators')
             addTemporarySelection();
         });
 
-        EventDispatcher.addListeners(['TripleComposer.statementChange', 'TripleComposer.statementChanged', 'TripleComposer.reset'], function() {
+        EventDispatcher.addListeners(['TextFragmentHandler.removeTemporarySelection', 'TripleComposer.statementChange', 'TripleComposer.statementChanged', 'TripleComposer.reset'], function() {
             checkTemporaryConsolidated();
         });
 
