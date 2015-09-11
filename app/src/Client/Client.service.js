@@ -1,6 +1,10 @@
-/*jshint -W051 */ //Only properties should be deleted
-
 angular.module('Pundit2.Client')
+
+.config(function($locationProvider) {
+    // TODO: temporary fix: an error occurs if the server rewrites the base url,
+    // there is a related open issue: https://github.com/angular/angular.js/issues/11091
+    $locationProvider.html5Mode(false);
+})
 
 .run(function($injector, Config) {
     if (Config.isValid()) {
