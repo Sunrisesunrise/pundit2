@@ -1,6 +1,6 @@
 angular.module('Pundit2.Core')
 
-.service('PndPopover', function(BaseComponent, $rootScope, $popover, $document, $q) {
+.service('PndPopover', function(BaseComponent, EventDispatcher, $rootScope, $popover, $document, $q, $window) {
     var pndPopover = new BaseComponent('PndPopover');
 
     var initPopoverOptions = {
@@ -10,12 +10,93 @@ angular.module('Pundit2.Core')
 
     var state = {
         selection: undefined,
+        selectionStart: {},
+        selectionEnd: {},
         data: undefined,
         x: 0,
         y: 0,
         popoverOptions: {},
         popover: null,
-        anchor: null
+        anchor: null,
+        fragmentId: ''
+    };
+
+    // TODO: remove deprecated code after testing and validation!!!!
+    // TODO: remove deprecated code after testing and validation!!!!
+    // TODO: remove deprecated code after testing and validation!!!!
+    // TODO: remove deprecated code after testing and validation!!!!
+    // TODO: remove deprecated code after testing and validation!!!!
+    // TODO: remove deprecated code after testing and validation!!!!
+    // TODO: remove deprecated code after testing and validation!!!!
+    // TODO: remove deprecated code after testing and validation!!!!
+    // TODO: remove deprecated code after testing and validation!!!!
+    // TODO: remove deprecated code after testing and validation!!!!
+    // TODO: remove deprecated code after testing and validation!!!!
+    var eventHandler = null;
+
+    var calculateSelectionCoordinates = function() {
+        var range = state.selection.getRangeAt(0),
+            ts = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>'),
+            te = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>'),
+            b = angular.element('<div class="pnd-range-boundary"></div>'),
+            rangeRect = range.getBoundingClientRect();
+        b.css({
+            position: 'absolute',
+            top: $window.scrollY + rangeRect.top,
+            left: $window.scrollX + rangeRect.left,
+            width: rangeRect.width,
+            height: rangeRect.height,
+            border: '1px solid red'
+        });
+
+        angular.element('body').append(b);
+
+        var fragmentElements = angular.element('span.' + state.fragmentId);
+        var i = 0;
+        for (; i < fragmentElements.length; i++) {
+            if (fragmentElements.eq(i).text().trim().length === 0) {
+                continue;
+            }
+            fragmentElements.eq(0).before(ts);
+            break;
+        }
+        for (i = fragmentElements.length - 1; i >= 0; i--) {
+            if (fragmentElements.eq(i).text().trim().length === 0) {
+                continue;
+            }
+            fragmentElements.eq(i).after(te);
+            break;
+        }
+
+        var clonedRange = range.cloneRange();
+        clonedRange.endContainer = clonedRange.startContainer;
+        clonedRange.endOffset = clonedRange.startOffset;
+        //clonedRange.insertNode(ts[0]);
+        var parentTStart = ts.parent();
+
+        range.collapse(false);
+        //range.insertNode(te[0]);
+        var parentTEnd = te.parent();
+
+        state.selectionStart = {
+            offset: angular.copy(ts.offset()),
+            //offset: ts.offset(),
+            width: ts.width(),
+            height: ts.height(),
+        };
+        state.selectionEnd = {
+            offset: angular.copy(te.offset()),
+            //offset: te.offset(),
+            width: te.width(),
+            height: te.height(),
+        };
+
+        return;
+
+        ts.remove();
+        parentTStart[0].normalize();
+        te.remove();
+        parentTEnd[0].normalize();
     };
 
     var initPopover = function(x, y, options, data) {
@@ -53,12 +134,28 @@ angular.module('Pundit2.Core')
             return false;
         }
         state.selection = selection;
+        if (eventHandler !== null) {
+            EventDispatcher.removeListener(eventHandler);
+        }
+        eventHandler = EventDispatcher.addListener('XpointersHelper.NodeAdded', function(evt) {
+            state.fragmentId = evt.args.fragments[0];
+            EventDispatcher.removeListener(eventHandler);
+            eventHandler = null;
+        });
+        EventDispatcher.sendEvent('TextFragmentHandler.addTemporarySelection');
         state.popover.show();
         $document.on('mouseup', mouseUpHandler);
         return true;
     };
 
     var hide = function() {
+        // TODO: REMOVE THIS LINE !!!
+        angular.element('.pnd-range-boundary').remove();
+
+        if (eventHandler !== null) {
+            EventDispatcher.removeListener(eventHandler);
+            eventHandler = null;
+        }
         $document.off('mouseup', mouseUpHandler);
         if (state.popover === null) {
             return;
@@ -79,6 +176,7 @@ angular.module('Pundit2.Core')
         var promise = state.popover.$promise;
         promise.then(function() {
             if (show()) {
+                calculateSelectionCoordinates();
                 innerPromise.resolve();
             }
             else {
@@ -117,6 +215,26 @@ angular.module('Pundit2.Core')
     pndPopover.getState = function() {
         return state;
     };
+
+    /**
+    pndPopover.setArrowMargin = function(marginLeft, marginTop, marginRight, marginBottom) {
+        if (state.popover === null || typeof state.popover.$scope === 'undefined') {
+            return;
+        }
+        var margin = {
+            "arrowMarginLeft": marginLeft,
+            "arrowMarginTop": marginTop,
+            "arrowMarginRight": marginRight,
+            "arrowMarginBottom": marginBottom
+        };
+        for (var i in margin) {
+            if (typeof margin[i] === 'undefined' || margin[i] === null) {
+                margin[i] = 'initial';
+            }
+            state.popover.$scope[i] = margin[i];
+        }
+    }
+     */
 
     return pndPopover;
 });
