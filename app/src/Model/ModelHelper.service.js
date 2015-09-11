@@ -21,6 +21,20 @@ angular.module('Pundit2.Model')
         };
     };
 
+    var addTypeElem = function(types, dest) {
+        types.forEach(function(e, i) {
+            var type = types[i];
+            if (typeof dest[type] !== 'undefined') {
+                return;
+            }
+            dest[type] = {};
+            dest[type][NameSpace.rdfs.label] = [{
+                type: 'literal',
+                value: TypesHelper.getLabel(e)
+            }];
+        });
+    };
+
     var addGraphElem = function(el, res) {
         var triple = el.scope.get();
         // skip incomplete triple
@@ -51,6 +65,38 @@ angular.module('Pundit2.Model')
                 }
             }
         }
+    };
+
+    var addBlankNode = function(el, res) {
+        var triple = el.scope.get(),
+            blankNodeUri = '_:blanknode',
+            blanknode;
+
+        if (typeof triple.object !== 'string' ||
+            angular.isObject(res) === false) {
+            return;
+        }
+
+        blanknode = res[blankNodeUri] = {};
+        blanknode[NameSpace.rdf.type] = [{
+            'value': 'TYPE',
+            'type': 'uri'
+        }];
+        blanknode['NameSpace.FORMAT'] = [{
+            'type': 'literal',
+            'datatype': 'http://www.w3.org/2001/XMLSchema#string',
+            'value': 'text/plain'
+        }];
+        // blanknode[NameSpace.LANGUAGE] = [{
+        //     'type': 'literal',
+        //     'datatype': 'http://www.w3.org/2001/XMLSchema#string',
+        //     'value': 'it'
+        // }];
+        blanknode['NameSpace.VALUE'] = [{
+            'type': 'literal',
+            'datatype': 'http://www.w3.org/2001/XMLSchema#string',
+            'value': triple.object
+        }];
     };
 
     var addItemElem = function(el, res, types) {
@@ -134,7 +180,10 @@ angular.module('Pundit2.Model')
             return;
         }
 
-        addTypeElem([NameSpace.target.specificResource].concat(triple.predicate.type), types);
+        // TODO: move the predicate type management in a better place
+        if (typeof triple.predicate.type !== 'undefined') {
+            addTypeElem([NameSpace.target.specificResource].concat(triple.predicate.type), types);
+        }
 
         [triple.subject, triple.object].forEach(function(a, i, arr) {
             // TODO: add code to handle imageFragments.
@@ -218,8 +267,8 @@ angular.module('Pundit2.Model')
                             "type": "uri"
                         }];
 
-                        // Type
                         if (statementPart.isTextFragment() || statementPart.isImage()) {
+                            // Type
                             selector[NameSpace.rdf.type] = [{
                                 "value": NameSpace.target.fragmentSelector,
                                 "type": "uri"
@@ -227,16 +276,16 @@ angular.module('Pundit2.Model')
 
                             // Label
                             selector[NameSpace.rdfs.label] = [{
+                                // "lang": "it"
                                 "value": statementPart.description, // Save the description as full label
                                 "type": "literal"
-                                // "lang": "it"
                             }];
 
                             // Value
                             selector[NameSpace.rdf.value] = [{
+                                // "lang": "it"
                                 "value": statementPart.getXPointer(),
                                 "type": "literal"
-                                    // "lang": "it"
                             }];
                         } else {
                             // TODO check other types.
@@ -257,20 +306,6 @@ angular.module('Pundit2.Model')
                     flat.push(statementPart.uri);
                 }
             }
-        });
-    };
-
-    var addTypeElem = function(types, dest) {
-        types.forEach(function(e, i) {
-            var type = types[i];
-            if (typeof dest[type] !== 'undefined') {
-                return;
-            }
-            dest[type] = {};
-            dest[type][NameSpace.rdfs.label] = [{
-                type: 'literal',
-                value: TypesHelper.getLabel(e)
-            }];
         });
     };
 
@@ -345,12 +380,12 @@ angular.module('Pundit2.Model')
         error = false;
         errorMessage = '';
         var res = {
-                'graph': {},
-                'items': {},
-                'target': {},
-                'flatTargets': [],
-                'type': {}
-            };
+            'graph': {},
+            'items': {},
+            'target': {},
+            'flatTargets': [],
+            'type': {}
+        };
 
         statements.forEach(function(el) {
             addGraphElem(el, res.graph);
@@ -362,6 +397,23 @@ angular.module('Pundit2.Model')
         if (annotationServerVersion === 'v1') {
             res.target = undefined;
         }
+
+        return res;
+    };
+
+    modelHelper.buildCommentData = function(statement) {
+        error = false;
+        errorMessage = '';
+        var res = {
+            'graph': {},
+            'items': {},
+            'target': {},
+            'flatTargets': [],
+            'type': {}
+        };
+
+        addBlankNode(statement, res.graph);
+        addTargetElem(statement, res.target, res.flatTargets, res.type);
 
         return res;
     };

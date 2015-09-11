@@ -418,7 +418,7 @@ angular.module('Pundit2.Communication')
         return promise.promise;
     };
 
-    annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, skipConsolidation, postDataTargets, types) {
+    annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, skipConsolidation, postDataTargets, types, annotationType) {
         // var completed = 0;
         var promise = $q.defer();
 
@@ -466,8 +466,21 @@ angular.module('Pundit2.Communication')
             //TODO: to test new save with notbook id in URL.
             var currentNotebook = NotebookExchange.getCurrentNotebooks();
             var url = NameSpace.get('asNBCurrent');
+            var params = {
+                context: angular.toJson({
+                    targets: flatTargets,
+                    pageContext: XpointersHelper.getSafePageContext()
+                })
+            };
+
+            if (typeof annotationType !== 'undefined') {
+                params.annotationType = annotationType;
+            }
+
             if (typeof currentNotebook !== 'undefined' && typeof currentNotebook.id !== 'undefined') {
-                url = NameSpace.get('asNBForcedCurrent', {current: NotebookExchange.getCurrentNotebooks().id});
+                url = NameSpace.get('asNBForcedCurrent', {
+                    current: NotebookExchange.getCurrentNotebooks().id
+                });
             }
             $http({
                 headers: {
@@ -475,12 +488,7 @@ angular.module('Pundit2.Communication')
                 },
                 method: 'POST',
                 url: url,
-                params: {
-                    context: angular.toJson({
-                        targets: flatTargets,
-                        pageContext: XpointersHelper.getSafePageContext()
-                    })
-                },
+                params: params,
                 withCredentials: true,
                 data: postData
             }).success(function(data) {

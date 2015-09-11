@@ -292,7 +292,7 @@ angular.module('Pundit2.TripleComposer')
                         modelData.items,
                         modelData.flatTargets,
                         TemplatesExchange.getCurrent().id,
-                        undefined,
+                        undefined, // skipConsolidation
                         modelData.target, // Can be undefined if ModelHelper is acting in mode1
                         modelData.type
                     );

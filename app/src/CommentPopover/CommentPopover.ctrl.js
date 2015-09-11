@@ -1,5 +1,7 @@
 angular.module('Pundit2.CommentPopover')
-.controller('CommentPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange, NotebookCommunication, CommentPopover, $timeout, $q) {
+
+.controller('CommentPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange,
+    NotebookCommunication, CommentPopover, ModelHelper, $timeout, $q) {
 
     $scope.literalText = '';
 
@@ -46,29 +48,53 @@ angular.module('Pundit2.CommentPopover')
     $scope.save = function() {
         $scope.savingComment = true;
         $timeout(function() {
-            var res = parseInt((Math.random()*100) % 2) === 1;
+            var res = parseInt((Math.random() * 100) % 2) === 1;
             if (res) {
                 $scope.savingComment = false;
                 $scope.errorSaving = false;
                 CommentPopover.lastUsedNotebookID = lastSelectedNotebookId;
                 NotebookCommunication.setCurrent(lastSelectedNotebookId);
                 PndPopover.hide();
-            }
-            else {
+            } else {
                 $scope.savingComment = false;
                 $scope.errorSaving = true;
             }
         }, 3000);
 
 
+        var currentTarget = PndPopover.getData(),
+            currentStatement = {
+                scope: {
+                    get: function() {
+                        return {
+                            subject: currentTarget,
+                            predicate: '',
+                            object: $scope.literalText
+                        }
+                    }
+                }
+            };
+
+        // console.log(ModelHelper.buildCommentData(currentStatement));
+
         // TODO: SAVE
+        // var httpPromise = AnnotationsCommunication.saveAnnotation(
+        //     modelData.graph,
+        //     modelData.items,
+        //     modelData.flatTargets,
+        //     undefined, // templateID
+        //     undefined, // skipConsolidation
+        //     modelData.target,
+        //     modelData.type,
+        //     'comment'
+        // );
 
     };
 
     $scope.doCreateNewNotebook = function(notebookName) {
         var deferred = $q.defer();
 
-        NotebookCommunication.createNotebook(notebookName).then(function(notebookID){
+        NotebookCommunication.createNotebook(notebookName).then(function(notebookID) {
             if (typeof notebookID !== 'undefined') {
                 lastSelectedNotebookId = notebookID;
                 updateAvailableNotebooks();
