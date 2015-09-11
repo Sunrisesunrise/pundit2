@@ -476,6 +476,7 @@ angular.module('Pundit2.Core')
         popover: null
     };
 
+    var updateUser = false;
     var popoverLoginPostMessageHandler = function(params) {
         if (typeof params.data !== 'undefined') {
             if (params.data === 'loginPageLoaded' || params.data === 'pageLoaded') {
@@ -492,8 +493,15 @@ angular.module('Pundit2.Core')
                 popoverState.autoCloseTimeout = $timeout(function() {
                     myPundit.closeLoginPopover();
                 }, 2500);
-                EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {event: 'Pundit.userProfileUpdated', data: null});
-                myPundit.checkLoggedIn(true);
+                if (!updateUser) {
+                    console.log("updating user name by event");
+                    updateUser = true;
+                    EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {event: 'Pundit.userProfileUpdated', data: null});
+                    myPundit.checkLoggedIn(true).then(function() {
+                        updateUser = false;
+                        $rootScope.$$phase || $rootScope.$digest();
+                    });
+                }
             }
             else if (params.data === 'forcePopoverClose') {
                 if (typeof popoverState.autoCloseTimeout !== 'undefined' && popoverState.autoCloseTimeout !== null) {
@@ -501,6 +509,17 @@ angular.module('Pundit2.Core')
                 }
                 if (typeof popoverState.autoCloseIntervall !== 'undefined' && popoverState.autoCloseIntervall !== null) {
                     $interval.cancel(popoverState.autoCloseIntervall);
+                }
+                if (!updateUser) {
+                    console.log("updating user name by force close");
+                    updateUser = true;
+                    $timeout(function() {
+                        EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {event: 'Pundit.userProfileUpdated', data: null});
+                        myPundit.checkLoggedIn(true).then(function() {
+                            updateUser = false;
+                            $rootScope.$$phase || $rootScope.$digest();
+                        });
+                    }, 50);
                 }
                 myPundit.closeLoginPopover();
             }
