@@ -546,7 +546,7 @@ angular.module('Pundit2.Annotators')
     };
 
     if (textFragmentHandler.options.useTemporarySelection) {
-        EventDispatcher.addListeners(['TripleComposer.useAsObject', 'TripleComposer.useAsSubject'], function() {
+        EventDispatcher.addListeners(['TextFragmentHandler.addTemporarySelection', 'TripleComposer.useAsObject', 'TripleComposer.useAsSubject'], function() {
             addTemporarySelection();
         });
 
