@@ -96,6 +96,7 @@ angular.module('Pundit2.ResourcePanel')
             };
 
             var isValidTime = function(input) {
+                // TODO: add support to BC date 
                 var regExpTime = /^\d{1,2}:\d{2}([ap]m)?$/;
 
                 if (typeof(input) === 'undefined') {
@@ -108,10 +109,20 @@ angular.module('Pundit2.ResourcePanel')
                 return true;
             };
 
+            var normalizeYear = function(year) {
+                // TODO: add support to BC date 
+                year = typeof year !== 'string' ? year.toString() : year;
+                year = year.indexOf('-') !== -1 ? '0000' : year;
+                while (year.length < 4) {
+                    year = '0' + year;
+                }
+                return year;
+            };
+
             var updateModel = function() {
                 var currentDate = scope.currentDate,
                     momentDate = moment(currentDate),
-                    year = momentDate.year(),
+                    year = normalizeYear(momentDate.year()),
                     month = momentDate.format('MM'),
                     day = momentDate.format('DD'),
                     time = momentDate.format('HH:mm');
