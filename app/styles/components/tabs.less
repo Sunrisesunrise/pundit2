@@ -81,37 +81,40 @@
         width: auto;
         padding: 0;
     }
-}
 
-.tab-content {
-    clear: none; /* CSS conflicts fix */
+    .tab-content {
+        display: initial;
+        clear: none; /* CSS conflicts fix */
 
-    .pnd-tab-header {
+        .pnd-tab-header {
 
-        &.pnd-hidden-tabs {
+            &.pnd-hidden-tabs {
 
-            .show-tabs a {
-                padding-top: 5px;
-                padding-bottom: 2px;
-            }
+                .show-tabs a {
+                    padding-top: 5px;
+                    padding-bottom: 2px;
+                }
 
-            .show-tabs.active a {
-                padding-top: 3px;
-                padding-bottom: 2px;
+                .show-tabs.active a {
+                    padding-top: 3px;
+                    padding-bottom: 2px;
+                }
             }
         }
-    }
 
-    .tab-pane {
-        display: none;
-        margin-bottom: 30px;
-    }
+        .tab-pane {
+            display: none;
+            margin-bottom: 30px;
+        }
 
-    .active {
-        display: block;
-    }
+        .active {
+            display: block;
+        }
 
+    }
 }
+
+
 
 /* ------------------------------------ *\
    #VERTICAL-TABS
