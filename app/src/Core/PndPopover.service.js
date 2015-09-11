@@ -49,7 +49,7 @@ angular.module('Pundit2.Core')
             border: '1px solid red'
         });
 
-        angular.element('body').append(b);
+        //angular.element('body').append(b);
 
         var fragmentElements = angular.element('span.' + state.fragmentId);
         var i = 0;
@@ -165,6 +165,7 @@ angular.module('Pundit2.Core')
             state.popover.destroy();
         }
         state.popover = null;
+        EventDispatcher.sendEvent('TextFragmentHandler.removeTemporarySelection');
     };
 
     pndPopover.show = function(x, y, options, data) {

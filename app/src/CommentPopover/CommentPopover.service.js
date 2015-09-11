@@ -79,23 +79,34 @@ angular.module('Pundit2.CommentPopover')
         }
         else */if (distanceFromSelectionEnd <= distanceFromSelectionStart) {
             state.anchor.css({
-                top: (state.selectionEnd.offset.top + state.selectionEnd.height / 2)+'px',
+                top: (state.selectionEnd.offset.top + state.selectionEnd.height)+'px',
                 left: state.selectionEnd.offset.left+'px'
             });
             popoverRect = changePopoverPlacement(state, 'bottom');
-            checkFromBottom();
+            checkFromBottom({
+                right: (state.selectionEnd.offset.top + state.selectionEnd.height / 2),
+                top: state.selectionEnd.offset.top
+            });
         }
         else {
             state.anchor.css({
-                top: (state.selectionStart.offset.top + state.selectionStart.height / 2)+'px',
+                top: (state.selectionStart.offset.top)+'px',
                 left: state.selectionStart.offset.left+'px'
             });
             popoverRect = changePopoverPlacement(state, 'top');
             var pageVisibleTop = $window.scrollY;
             if ($window.scrollY + popoverRect.top < pageVisibleTop) {
+                state.anchor.css({
+                    top: (state.selectionStart.offset.top + state.selectionStart.height / 2)+'px',
+                    left: state.selectionStart.offset.left+'px'
+                });
                 popoverRect = changePopoverPlacement(state, 'left');
                 var pageVisibleLeft = $window.scrollX;
                 if ($window.scrollX + popoverRect.left < pageVisibleLeft) {
+                    state.anchor.css({
+                        top: (state.selectionStart.offset.top + state.selectionStart.height)+'px',
+                        left: state.selectionStart.offset.left+'px'
+                    });
                     popoverRect = changePopoverPlacement(state, 'bottom');
                 }
             }
