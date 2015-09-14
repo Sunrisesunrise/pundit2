@@ -444,6 +444,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
     if ($scope.isMyPageItems || $scope.isVocabularies) {
         EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
+            $scope.search.term = '';
             $scope.isUserLogged = e.args;
         });
     }
