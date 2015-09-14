@@ -22,7 +22,7 @@
 //== Common tags reset
 html, body, div, span, iframe,
 h1, h2, h3, h4, h5, h6, p, img, strong,
-b, i, ul, li, form, table, table thead, table tbody, table tr, table tr td, table tr th, {
+b, i, ul, li, form, table, table thead, table tbody, table tr, table tr td, table tr th, nav {
     margin: 0;
     padding: 0;
     position: static;
@@ -65,21 +65,30 @@ input[type='radio'] ,input[type='checkbox'] {
     left: initial;
 }
 
+button, input[type="button"], input[type="submit"] {
+    background-image: none;
+    background-position: initial;
+}
+
+
+
 // Typography resets
 a {
     border-bottom: none;
     font-family: @font;
+    color: @color-text-link;
 
     &:hover {
     border-bottom: none;
     }
+
+    &:link, &:visited {
+        color: @color-text-link;
+    }
 }
 
-p, ul, li, blockquote, label, table, table tr, table tr th, table tr td, {
+div, p, ul, li, blockquote, label, table, table tr, table tr th, table tr td, {
     font-size: inherit;
-}
-
-p, ul, li, blockquote, table, table tr, table tr th, table tr td {
     line-height: 1.5;
 }
 
@@ -94,8 +103,12 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: initial;
 }
 
-input, select, label, nav, th,  h1, h2, h3, h4, h5, h6, strong, table, p, blockquote, table, td {
-    font-family: inherit;
+textarea, select, input[type="date"], input[type="datetime"], 
+input[type="datetime-local"], input[type="email"], input[type="month"], 
+input[type="number"], input[type="password"], input[type="search"], input[type="tel"], 
+input[type="text"], input[type="time"], input[type="url"], input[type="week"], label, nav, ul, ul li, th,  h1, h2, h3, h4, h5, h6, strong, table, p, blockquote, 
+table, td {
+    font-family: @font;
 }
 
 nav, label {
@@ -103,12 +116,12 @@ nav, label {
 }
 
 // Lists
-ol, ul, li{
+ol, ul, li, ul li {
     list-style: none;
 }
 
 ul li {
-    list-style: none;
+    min-height: auto;
 }
 
 button {

@@ -24,12 +24,25 @@
     }
 
     li {
+        height: auto;
         margin-right: 0;
         margin-left: 0;
+        border-radius: 0;
+        line-height: inherit;
 
         //&.show-tabs a {
         //    padding-bottom: 5px;
         //}
+
+        a {
+        position: static;
+        top: 0; /* In case of position overwriting */
+        background: none;
+        border: none;
+        border-radius: 0;
+        font-size: inherit;
+        transition: initial;
+        }
     }
 
     &.pnd-dashboard-panel-content > .pnd-tab-header {
@@ -68,14 +81,7 @@
     }
 
 
-    a {
-        padding-bottom: 0;
-        border-bottom: none;
-        position: static;
-        top: 0; /* In case of position overwriting */
-        font-size: inherit;
-        transition: initial;
-    }
+
 
     > div {
         width: auto;
