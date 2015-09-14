@@ -442,7 +442,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         };
     }
 
-    if ($scope.isMyPageItems) {
+    if ($scope.isMyPageItems || $scope.isVocabularies) {
         EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
             $scope.isUserLogged = e.args;
         });

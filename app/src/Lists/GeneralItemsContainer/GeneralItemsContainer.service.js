@@ -305,12 +305,13 @@ angular.module('Pundit2.GeneralItemsContainer')
             title = 'Add to  My Items';
             text = 'Add to My Items';
             action = 'add';
+            requireLoggedUser = true;
             btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isVocabulariesType(type)) {
             title = 'Add to My Items';
             text = 'Add to My Items';
             action = 'add';
-            requireLoggedUser = false;
+            requireLoggedUser = true;
             btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isMyNotebooksType(type)) {
             title = 'Create new notebook';
