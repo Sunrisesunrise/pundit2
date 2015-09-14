@@ -172,17 +172,42 @@ angular.module('Pundit2.MyNotebooksContainer')
 
         // remove notebook and all annotation contained in it
         NotebookCommunication.deleteNotebook(modalScope.notebook.id).then(function() {
+            var annotations = AnnotationsExchange.getAnnotations();
+            var itemsToKeep = {},
+                itemsToDelete = [];
+
             // success
             modalScope.notifyMessage = "Notebook " + modalScope.notebook.label + " correctly deleted.";
-            // remove annotations that belong to the notebook deleted
-            AnnotationsExchange.wipe();
-            // wipe page items
-            ItemsExchange.wipeContainer(PageItemsContainer.options.container);
-            // update page items by update all annotations info
-            // item can belong to more than one annotation or to my items
-            // this function use cache to skip real http calls
-            // all the informations is cache at initialization time
-            AnnotationsCommunication.getAnnotations(true);
+
+            angular.forEach(annotations, function(annotation) {
+                if (annotation.isIncludedIn === modalScope.notebook.id) {
+                    // Check and remove annotation items from ItemsExchange.
+                    for (var a in annotations) {
+                        if (annotation.id === annotations[a].id) {
+                            continue;
+                        }
+                        for (var i in annotations[a].items) {
+                            var uri = annotations[a].items[i].uri;
+                            itemsToKeep[uri] = annotations[a].items[i];
+                        }
+                    }
+
+                    for (var j in annotation.items) {
+                        if (typeof itemsToKeep[annotation.items[j].uri] === 'undefined') {
+                            if (ItemsExchange.isItemInContainer(annotation.items[j], Config.modules.PageItemsContainer.container)) {
+                                ItemsExchange.removeItemFromContainer(annotation.items[j], Config.modules.PageItemsContainer.container);
+                                itemsToDelete.push(annotation.items[j]);
+                            }
+                        }
+                    }
+
+                    AnnotationsExchange.removeAnnotation(annotation.id);
+                    Consolidation.wipeItems(itemsToDelete);
+
+                }
+            });
+
+            // TODO: update positions in sidebar (?)
 
             $timeout(function() {
                 confirmModal.hide();
