@@ -864,7 +864,7 @@ angular.module('Pundit2.Annotators')
             uri += '#' + fragment;
         }
 
-        return decodeURIComponent(uri);
+        return encodeURI(decodeURIComponent(uri));
     };
 
     if (xpointersHelper.options.preventDelay === undefined) {
