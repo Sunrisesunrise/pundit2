@@ -79,20 +79,20 @@ angular.module('Pundit2.Model')
 
         blanknode = res[blankNodeUri] = {};
         blanknode[NameSpace.rdf.type] = [{
-            'value': 'TYPE',
+            'value': NameSpace.types.embeddedContent,
             'type': 'uri'
         }];
-        blanknode['NameSpace.FORMAT'] = [{
+        blanknode[NameSpace.dce.format] = [{
             'type': 'literal',
             'datatype': 'http://www.w3.org/2001/XMLSchema#string',
             'value': 'text/plain'
         }];
-        // blanknode[NameSpace.LANGUAGE] = [{
+        // blanknode[NameSpace.dce.language] = [{
         //     'type': 'literal',
         //     'datatype': 'http://www.w3.org/2001/XMLSchema#string',
         //     'value': 'it'
         // }];
-        blanknode['NameSpace.VALUE'] = [{
+        blanknode[NameSpace.rdf.value] = [{
             'type': 'literal',
             'datatype': 'http://www.w3.org/2001/XMLSchema#string',
             'value': triple.object

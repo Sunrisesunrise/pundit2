@@ -19,6 +19,8 @@ angular.module('Pundit2.Core')
     // to deal with special cases like TypesHelper labels for our fragment types.
     ns.punditOntologyBaseURL = _pnd;
 
+    ns.dce = {};
+
     // RDF namespace uris
     ns.rdf = {};
     ns.rdf.type = _rdf + 'type';
@@ -32,6 +34,9 @@ angular.module('Pundit2.Core')
     ns.rdfs.resource = _rdfs + 'Resource';
     ns.rdfs.literal = _rdfs + 'Literal';
     ns.rdfs.seeAlso = _rdfs + 'seeAlso';
+
+    ns.dce.format = _dce + 'format';
+    ns.dce.language = _dce + 'language';
 
     ns.gYear = _xsd + 'gYear';
     ns.gYearMonth = _xsd + 'gYearMonth';
@@ -136,7 +141,8 @@ angular.module('Pundit2.Core')
     ns.types = {
         page: 'http://schema.org/WebPage',
         image: 'http://xmlns.com/foaf/0.1/Image',
-        named: _pnd + 'named-content'
+        named: _pnd + 'named-content',
+        embeddedContent: _oa + 'EmbeddedContent'
     };
 
     // Our types labels, will be read by the TypesHelper
