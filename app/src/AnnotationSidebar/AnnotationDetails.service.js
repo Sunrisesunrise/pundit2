@@ -62,12 +62,15 @@ angular.module('Pundit2.AnnotationSidebar')
     debug: false
 })
 
-.service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $modal,
-    BaseComponent, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, TemplatesExchange, TripleComposer,
-    Consolidation, ContextualMenu, Dashboard, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
+.service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $modal, $injector,
+    BaseComponent, Config, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, TemplatesExchange,
+    Consolidation, ContextualMenu, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
     ImageAnnotator, AnnotationsCommunication, NotebookExchange, TypesHelper, Analytics, NameSpace) {
 
     var annotationDetails = new BaseComponent('AnnotationDetails', ANNOTATIONDETAILSDEFAULTS);
+
+    var clientMode = Config.clientMode,
+        Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined;
 
     var state = {
         annotations: [],
@@ -158,7 +161,6 @@ angular.module('Pundit2.AnnotationSidebar')
             currentElement.addClass('pnd-annotation-details-delete-in-progress');
             AnnotationsCommunication.deleteAnnotation(currentId).then(function() {
                 modalScope.notifyMessage = "Your annotation has been deleted successfully";
-                TripleComposer.reset();
             }, function() {
                 currentElement.removeClass('pnd-annotation-details-delete-in-progress');
                 modalScope.notifyMessage = 'Impossible to delete the annotation. Please reatry later.';
@@ -547,7 +549,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
             $timeout(function() {
                 var currentElement = angular.element('#' + annotationId);
-                var dashboardHeight = Dashboard.isDashboardVisible() ? Dashboard.getContainerHeight() : 0;
+                var dashboardHeight = clientMode === 'pro' ? Dashboard.getContainerHeight() : 0;
                 if (currentElement.length > 0) {
                     angular.element('body').animate({
                         scrollTop: currentElement.offset().top - dashboardHeight - 60

@@ -402,16 +402,6 @@ angular.module('Pundit2.TripleComposer')
         delete state[name];
     };
 
-    // When all modules have been initialized, services are up, Config are setup etc..
-    EventDispatcher.addListener('Client.boot', function() {
-        initContextualMenu();
-    });
-
-    // When all modules have been initialized, services are up, Config are setup etc..
-    EventDispatcher.addListener('Client.hide', function() {
-        tripleComposer.reset();
-    });
-
     tripleComposer.showHeader = function(newVal, name) {
         name = fixName(name);
         if (typeof newVal === 'boolean') {
@@ -1263,6 +1253,15 @@ angular.module('Pundit2.TripleComposer')
 
         return res;
     };
+
+    // When all modules have been initialized, services are up, Config are setup etc..
+    EventDispatcher.addListener('Client.boot', function() {
+        initContextualMenu();
+    });
+
+    EventDispatcher.addListeners(['Client.hide', 'AnnotationsCommunication.deleteAnnotation'], function() {
+        TripleComposer.reset();
+    });
 
     return tripleComposer;
 });
