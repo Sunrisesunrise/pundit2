@@ -70,6 +70,12 @@ button, input[type="button"], input[type="submit"] {
     background-position: initial;
 }
 
+select, textarea, input[type="date"], input[type="datetime"], 
+input[type="datetime-local"], input[type="email"], input[type="month"], 
+input[type="number"], input[type="password"], input[type="search"], input[type="tel"], 
+input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
+    float: initial;
+}
 
 
 // Typography resets
@@ -109,6 +115,7 @@ input[type="number"], input[type="password"], input[type="search"], input[type="
 input[type="text"], input[type="time"], input[type="url"], input[type="week"], label, nav, ul, ul li, th,  h1, h2, h3, h4, h5, h6, strong, table, p, blockquote, 
 table, td {
     font-family: @font;
+    text-indent: inherit;
 }
 
 nav, label {
