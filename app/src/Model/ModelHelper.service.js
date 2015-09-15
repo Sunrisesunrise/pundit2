@@ -67,7 +67,7 @@ angular.module('Pundit2.Model')
         }
     };
 
-    var addBlankNode = function(el, res) {
+    var addBlankNode = function(el, res, types) {
         var triple = el.scope.get(),
             blankNodeUri = '_:blanknode',
             blanknode;
@@ -76,6 +76,8 @@ angular.module('Pundit2.Model')
             angular.isObject(res) === false) {
             return;
         }
+
+        addTypeElem([NameSpace.types.embeddedContent], types);
 
         blanknode = res[blankNodeUri] = {};
         blanknode[NameSpace.rdf.type] = [{
@@ -412,7 +414,7 @@ angular.module('Pundit2.Model')
             'type': {}
         };
 
-        addBlankNode(statement, res.graph);
+        addBlankNode(statement, res.graph, res.type);
         addTargetElem(statement, res.target, res.flatTargets, res.type);
 
         return res;
