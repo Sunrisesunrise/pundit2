@@ -317,10 +317,10 @@ angular.module('Pundit2.AnnotationSidebar')
     debug: false
 })
 
-.service('AnnotationSidebar', function(ANNOTATIONSIDEBARDEFAULTS, $rootScope, $filter, $timeout,
-    BaseComponent, EventDispatcher, AnnotationsExchange, Annomatic, Consolidation, Dashboard,
-    BrokenHelper, ItemsExchange, NotebookExchange, TypesHelper, TextFragmentAnnotator,
-    PageItemsContainer, XpointersHelper, Analytics) {
+.service('AnnotationSidebar', function(ANNOTATIONSIDEBARDEFAULTS, $rootScope, $filter, $timeout, $injector,
+    BaseComponent, EventDispatcher, AnnotationsExchange, Annomatic, Consolidation, TypesHelper,
+    BrokenHelper, ItemsExchange, NotebookExchange, TextFragmentAnnotator,
+    PageItemsContainer, XpointersHelper, Analytics, Config) {
 
     var annotationSidebar = new BaseComponent('AnnotationSidebar', ANNOTATIONSIDEBARDEFAULTS);
 
@@ -355,6 +355,9 @@ angular.module('Pundit2.AnnotationSidebar')
         types: {},
         broken: {}
     };
+
+    var clientMode = Config.clientMode,
+        Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined;
 
     // Contains the values ​​of active filters
     annotationSidebar.filters = {
@@ -422,7 +425,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var getDashboardHeight = function() {
-        return Dashboard.isDashboardVisible() ? Dashboard.getContainerHeight() : 0;
+        return clientMode === 'pro' ? Dashboard.getContainerHeight() : 0;
     };
 
     var sortByKey = function(array, key) {
@@ -839,7 +842,7 @@ angular.module('Pundit2.AnnotationSidebar')
                                 }
                                 annotationSidebar.toggle();
                                 $timeout(function() {
-                                    var dashboardHeight = Dashboard.isDashboardVisible() ? Dashboard.getContainerHeight() : 0;
+                                    var dashboardHeight = getDashboardHeight();
                                     angular.element('body').animate({
                                         scrollTop: currentElement.offset().top - dashboardHeight - 60
                                     }, 'slow');

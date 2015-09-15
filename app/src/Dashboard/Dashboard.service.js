@@ -313,7 +313,7 @@ angular.module('Pundit2.Dashboard')
 
     /**** CONTAINER ****/
     dashboard.getContainerHeight = function() {
-        return state.containerHeight;
+        return state.isDashboardVisible ? state.containerHeight : 0;
     };
 
     dashboard.increaseContainerHeight = function(dy) {

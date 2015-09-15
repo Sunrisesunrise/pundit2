@@ -1,8 +1,11 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.controller('AnnotationSidebarCtrl', function($scope, $filter, $document, $window, $timeout,
-    EventDispatcher, AnnotationSidebar, AnnotationsExchange, ItemsExchange, Dashboard,
-    Config, Analytics, TextFragmentAnnotator, Status) {
+.controller('AnnotationSidebarCtrl', function($scope, $filter, $document, $window, $timeout, $injector,
+    EventDispatcher, AnnotationSidebar, AnnotationsExchange, ItemsExchange, TextFragmentAnnotator,
+    Config, Analytics, Status) {
+
+    var clientMode = Config.clientMode,
+        Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined;
 
     var bodyClasses = AnnotationSidebar.options.bodyExpandedClass + ' ' + AnnotationSidebar.options.bodyCollapsedClass;
     var sidebarClasses = AnnotationSidebar.options.sidebarExpandedClass + ' ' + AnnotationSidebar.options.sidebarCollapsedClass;
@@ -13,7 +16,7 @@ angular.module('Pundit2.AnnotationSidebar')
     var header = angular.element('.pnd-annotation-sidebar-header');
     // var content = angular.element('.pnd-annotation-sidebar-content');
 
-    var toolbarHeight = parseInt(angular.element('toolbar nav').css('height'), 10);
+    var toolbarHeight = clientMode === 'pro' ? parseInt(angular.element('toolbar nav').css('height'), 10) : 0;
 
     var state = {
         toolbarHeight: toolbarHeight,
@@ -61,6 +64,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
     body.css('position', 'static');
     container.css('height', body.innerHeight() + 'px');
+    container.css('margin-top', state.newMarginTopSidebar + 'px');
+    header.css('top', state.newMarginTopSidebar + 'px');
 
     // Start reading the default
     if (AnnotationSidebar.options.isAnnotationSidebarExpanded) {
@@ -154,7 +159,7 @@ angular.module('Pundit2.AnnotationSidebar')
         state.sidebarNewHeight = Math.max(bodyHeight, documentHeight, minHeightSidebar);
         state.sidebarCurrentHeight = container.innerHeight();
 
-        if (Dashboard.isDashboardVisible()) {
+        if (clientMode === 'pro' && Dashboard.isDashboardVisible()) {
             difference = state.toolbarHeight + Dashboard.getContainerHeight();
         } else {
             difference = state.toolbarHeight;
@@ -397,55 +402,57 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.allAnnotationsLength = Object.keys($scope.allAnnotations).length;
     });
 
-    // Using JSON.strigify to avoid deep watch (, true) on AnnotationSidebar filters 
-    $scope.$watch(function() {
-        return JSON.stringify(AnnotationSidebar.filters);
-    }, function() {
-        if (AnnotationSidebar.filters.freeText.expression === '') {
-            $scope.freeText = '';
-        }
-        if (AnnotationSidebar.filters.fromDate.expression === '' &&
-            AnnotationSidebar.filters.toDate.expression === '') {
-            updateMinDate(AnnotationSidebar.getMinDate());
-            updateMaxDate(AnnotationSidebar.getMaxDate());
-        }
+    if (clientMode === 'pro') {
+        // Using JSON.strigify to avoid deep watch (, true) on AnnotationSidebar filters 
+        $scope.$watch(function() {
+            return JSON.stringify(AnnotationSidebar.filters);
+        }, function() {
+            if (AnnotationSidebar.filters.freeText.expression === '') {
+                $scope.freeText = '';
+            }
+            if (AnnotationSidebar.filters.fromDate.expression === '' &&
+                AnnotationSidebar.filters.toDate.expression === '') {
+                updateMinDate(AnnotationSidebar.getMinDate());
+                updateMaxDate(AnnotationSidebar.getMaxDate());
+            }
 
-        var annotations = AnnotationSidebar.getAllAnnotationsFiltered(),
-            annotationsKey = Object.keys(annotations);
+            var annotations = AnnotationSidebar.getAllAnnotationsFiltered(),
+                annotationsKey = Object.keys(annotations);
 
-        removeAnnotations(annotations);
-        annotationsCache = annotationsKey.map(function(k) {
-            return annotations[k];
+            removeAnnotations(annotations);
+            annotationsCache = annotationsKey.map(function(k) {
+                return annotations[k];
+            });
+            addAnnotations();
+
+            $scope.annotationsLength = annotationsKey.length;
+
+            if (AnnotationSidebar.needToFilter() === false) {
+                activateFragments(ItemsExchange.getItemsByContainer(Config.modules.MyItems.container));
+            }
         });
-        addAnnotations();
 
-        $scope.annotationsLength = annotationsKey.length;
-
-        if (AnnotationSidebar.needToFilter() === false) {
-            activateFragments(ItemsExchange.getItemsByContainer(Config.modules.MyItems.container));
-        }
-    });
-
-    // Watch dashboard height for top of sidebar
-    $scope.$watch(function() {
-        return Dashboard.getContainerHeight();
-    }, function(dashboardHeight) {
-        state.newMarginTopSidebar = state.toolbarHeight + dashboardHeight;
-        container.css('margin-top', state.newMarginTopSidebar + 'px');
-        header.css('top', state.newMarginTopSidebar + 'px');
-    });
-    $scope.$watch(function() {
-        return Dashboard.isDashboardVisible();
-    }, function(dashboardVisibility) {
-        if (dashboardVisibility) {
-            state.newMarginTopSidebar = state.toolbarHeight + Dashboard.getContainerHeight();
+        // Watch dashboard height for top of sidebar
+        $scope.$watch(function() {
+            return Dashboard.getContainerHeight();
+        }, function(dashboardHeight) {
+            state.newMarginTopSidebar = state.toolbarHeight + dashboardHeight;
             container.css('margin-top', state.newMarginTopSidebar + 'px');
             header.css('top', state.newMarginTopSidebar + 'px');
-        } else {
-            container.css('margin-top', state.toolbarHeight + 'px');
-            header.css('top', state.toolbarHeight + 'px');
-        }
-    });
+        });
+        $scope.$watch(function() {
+            return Dashboard.isDashboardVisible();
+        }, function(dashboardVisibility) {
+            if (dashboardVisibility) {
+                state.newMarginTopSidebar = state.toolbarHeight + Dashboard.getContainerHeight();
+                container.css('margin-top', state.newMarginTopSidebar + 'px');
+                header.css('top', state.newMarginTopSidebar + 'px');
+            } else {
+                container.css('margin-top', state.toolbarHeight + 'px');
+                header.css('top', state.toolbarHeight + 'px');
+            }
+        });
+    }
 
     $scope.$watch(function() {
         return AnnotationSidebar.minHeightRequired;
