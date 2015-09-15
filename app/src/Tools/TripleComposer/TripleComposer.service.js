@@ -1260,7 +1260,7 @@ angular.module('Pundit2.TripleComposer')
     });
 
     EventDispatcher.addListeners(['Client.hide', 'AnnotationsCommunication.deleteAnnotation'], function() {
-        TripleComposer.reset();
+        tripleComposer.reset();
     });
 
     return tripleComposer;
