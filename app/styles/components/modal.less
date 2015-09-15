@@ -10,7 +10,12 @@
 .modal {
     width: auto; /* For css overwritings */
     min-height: 210px;
-    z-index: @zindex-pnd-modal;
+    z-index: @zindex-pnd-modal !important; /* For css overwritings */
+
+    .modal-dialog {
+        right: 0;
+        left: 0;
+    }
 
     &.top {
         height: auto;

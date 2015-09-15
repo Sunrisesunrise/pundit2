@@ -19,7 +19,7 @@
 @import "../bootstrap/bootstrap-variables";
 
 // Wrap every bs rule under one of our nodes
-.pnd-wrp {
+body.pnd-toolbar-active .pnd-wrp {
     @import "@{bspath}normalize.less";
     @import "@{bspath}scaffolding.less";
     @import "@{bspath}type.less";
@@ -45,7 +45,7 @@
 // ------------------------------------
 
 // Customizing the default Bootstrap theme
-.pnd-wrp {
+body.pnd-toolbar-active .pnd-wrp {
     @import "../bootstrap/bootstrap-theme";
 }
 
@@ -65,7 +65,7 @@
 // scaffolding.less, line 27.
 
 // Was html
-.pnd-wrp {
+body.pnd-toolbar-active .pnd-wrp {
     font-size: 62.5%;
     -webkit-font-smoothing: subpixel-antialiased; // Could be antialiased
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -73,7 +73,7 @@
 }
 
 // Was body
-.pnd-wrp {
+body.pnd-toolbar-active .pnd-wrp {
     position: static !important; /* Rule for in-line css overwriting */
     font-family: @font;
     font-size: @font-size-base;
@@ -130,7 +130,7 @@
 @import "../global/consolidation.less";
 
 // Components
-.pnd-wrp {
+body.pnd-toolbar-active .pnd-wrp {
     @import "../global/normalize.less";
     @import "../global/global.less";
     @import "../components/select";

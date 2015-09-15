@@ -74,210 +74,217 @@ body.pnd-toolbar-active {
 /* ------------------------------------ *\
    #BUTTONS
 \* ------------------------------------ */
-.pnd-toolbar-navbar .navbar-nav li {
-    margin: 0;
+.pnd-toolbar-navbar .navbar-nav {
+    width: auto;
 
-    /* Normal buttons */
-    > a {
-        height: @toolbar-height - @toolbar-border-bottom !important; //!important for css overwritings
-        padding: 0 10px;
+    li {
+        height: auto;
+        margin: 0;
 
-        background-color: @color-toolbar-button;
-        border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 25);
-        border-left: 0;
+        /* Normal buttons */
+        > a {
+            height: @toolbar-height - @toolbar-border-bottom !important; //!important for css overwritings
+            padding: 0 10px;
 
-        color: @color-toolbar-text;
-        line-height: 32px;
-        // .text-dark-emboss();
-        transition: none !important; /* Delete any transition */
-
-        &:focus {
             background-color: @color-toolbar-button;
-        }
+            border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 25);
+            border-left: 0;
 
-        &:hover {
-            background-color: @color-toolbar-button-hover;
-        }
-    }
-
-    /* Icons inside buttons */
-    .pnd-icon {
-        font-size: 14px;
-        display: inline-block;
-        vertical-align: text-bottom;
-    }
-
-    /* Toggle buttons like Dashboard and Sidebar: active state */
-    &.pnd-toolbar-toggle-button {
-
-        &.pnd-toolbar-button-active {
-
-            a {
-                background-color: @color-toolbar-button-open;
-                .text-dark-emboss();
-
-                &:focus {
-                    background-color: @color-toolbar-button-open;
-                }
-
-                &:hover {
-                    background-color: @color-toolbar-button-open;
-                }
-            }
-        }
-    }
-
-    /* Call to action buttons */
-    &.pnd-calltoaction-btn {
-
-        a {
-            background-color: @color-button-bg-cta;
-            border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 16);
-            .text-dark-emboss();
+            font-size: 12px;
+            color: @color-toolbar-text;
+            line-height: 32px;
+            // .text-dark-emboss();
+            transition: none !important; /* Delete any transition */
 
             &:focus {
-                background-color: @color-button-bg-cta;
+                background-color: @color-toolbar-button;
             }
 
             &:hover {
-                background-color: saturate(lighten(@color-button-bg-cta, 5), 10);
+                background-color: @color-toolbar-button-hover;
             }
         }
-    }
 
-    /* Triangular right border buttons... now ask the pundit */
-    /* Currently not used */
-    &.pnd-triangular-btn {
+        /* Icons inside buttons */
+        .pnd-icon {
+            font-size: 14px;
+            display: inline-block;
+            vertical-align: text-bottom;
+        }
 
-        a {
-            position: relative;
-            padding-left: 10px;
-            border-right: 0;
+        /* Toggle buttons like Dashboard and Sidebar: active state */
+        &.pnd-toolbar-toggle-button {
 
-            &:after {
-                left: 100%;
-                top: 50%;
-                border: solid transparent;
-                content: " ";
-                height: 0;
-                width: 0;
-                position: absolute;
-                pointer-events: none;
-                border-color: rgba(0, 0, 0, 0);
-                border-left-color: @brand-success;
-                border-width: 15px;
-                margin-top: -15px;
-                z-index: 100;
-            }
+            &.pnd-toolbar-button-active {
 
-            &:hover:after {
-                border-left-color: darken(@brand-success, 8) !important;
-            }
+                a {
+                    background-color: @color-toolbar-button-open;
+                    .text-dark-emboss();
 
-            &:focus:after {
-                border-left-color: @brand-success;
+                    &:focus {
+                        background-color: @color-toolbar-button-open;
+                    }
+
+                    &:hover {
+                        background-color: @color-toolbar-button-open;
+                    }
+                }
             }
         }
-        /* Any button following a triangular button */
-        & + li a {
-            padding-left: 23px;
-        }
-    }
 
-    /* Disabled buttons */
-    &.disabled > a, .pnd-toolbar-not-active-element {
-        color: darken(@color-toolbar-text, 30) !important; // Specificity war against bootstrap
+        /* Call to action buttons */
+        &.pnd-calltoaction-btn {
+
+            a {
+                background-color: @color-button-bg-cta;
+                border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 16);
+                .text-dark-emboss();
+
+                &:focus {
+                    background-color: @color-button-bg-cta;
+                }
+
+                &:hover {
+                    background-color: saturate(lighten(@color-button-bg-cta, 5), 10);
+                }
+            }
+        }
+
+        /* Triangular right border buttons... now ask the pundit */
+        /* Currently not used */
+        &.pnd-triangular-btn {
+
+            a {
+                position: relative;
+                padding-left: 10px;
+                border-right: 0;
+
+                &:after {
+                    left: 100%;
+                    top: 50%;
+                    border: solid transparent;
+                    content: " ";
+                    height: 0;
+                    width: 0;
+                    position: absolute;
+                    pointer-events: none;
+                    border-color: rgba(0, 0, 0, 0);
+                    border-left-color: @brand-success;
+                    border-width: 15px;
+                    margin-top: -15px;
+                    z-index: 100;
+                }
+
+                &:hover:after {
+                    border-left-color: darken(@brand-success, 8) !important;
+                }
+
+                &:focus:after {
+                    border-left-color: @brand-success;
+                }
+            }
+            /* Any button following a triangular button */
+            & + li a {
+                padding-left: 23px;
+            }
+        }
+
+        /* Disabled buttons */
+        &.disabled > a, .pnd-toolbar-not-active-element {
+            color: darken(@color-toolbar-text, 30) !important; // Specificity war against bootstrap
+        }
     }
 }
-
 
 /* ------------------------------------ *\
    #SPECIAL-BUTTONS-STYLES
 \* ------------------------------------ */
 
-/* First button on the left (loading, pundit logo, error */
-.pnd-toolbar-navbar .pnd-toolbar-first-button {
-    width: 40px;
-    text-align: center;
 
-    a {
-        padding-left: 0;
-        padding-right: 0;
-    }
+    /* First button on the left (loading, pundit logo, error */
+    .pnd-toolbar-navbar .pnd-toolbar-first-button {
+        width: 40px;
+        text-align: center;
 
-    /* First button with Pundit Logo and error icon when necessary */
-    &.pnd-toolbar-status-button-ok {
         a {
-            padding-top: 4px;
+            padding-left: 0;
+            padding-right: 0;
         }
 
+        /* First button with Pundit Logo and error icon when necessary */
+        &.pnd-toolbar-status-button-ok {
+            a {
+                padding-top: 4px;
+            }
+
+            .pnd-icon {
+                font-size: 24px;
+            }
+        }
+    }
+
+    /* Dashboard button */
+    .pnd-toolbar-dashboard-toogle-button {
+        &.pnd-toolbar-button-active a {
+            box-shadow: 0 3px 0 @color-toolbar-button-open; /* Covers the toolbar shadow */
+        }
+    }
+
+    /* Buttons on the right */
+    .pnd-toolbar-navbar .navbar-right li {
+        a {
+            border-left: 0; // border-left: 1px solid lighten(@color-toolbar-button, 25);
+            border-right: 0;
+        }
+    }
+
+    /* Template selection button: special border color */
+    .pnd-toolbar-navbar .navbar-right li {
+        &.pnd-toolbar-template-menu-button {
+            a {
+                border-left: 0; // border-left: 1px solid lighten(@color-toolbar-button, 8);
+            }
+        }
+    }
+
+    /* Error buttons */
+    .pnd-toolbar-navbar .navbar-nav .pnd-toolbar-error-button {
+        > a {
+            background-color: @brand-warning;
+            border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 25);
+
+            &:hover {
+                background-color: darken(@brand-warning, 12%);
+            }
+
+            &:focus {
+                // Do we need this?
+            }
+        }
+    }
+
+    /* Sidebar button icon */
+    .pnd-toolbar-navbar .navbar-nav .pnd-toolbar-annotations-button {
         .pnd-icon {
-            font-size: 24px;
+            margin-left: 3px;
+            color: @color-toolbar-disabled;
+
+            &.pnd-filter-active {
+                color: @brand-primary;
+            }
         }
     }
-}
 
-/* Dashboard button */
-.pnd-toolbar-dashboard-toogle-button {
-    &.pnd-toolbar-button-active a {
-        box-shadow: 0 3px 0 @color-toolbar-button-open; /* Covers the toolbar shadow */
-    }
-}
-
-/* Buttons on the right */
-.pnd-toolbar-navbar .navbar-right li {
-    a {
-        border-left: 0; // border-left: 1px solid lighten(@color-toolbar-button, 25);
-        border-right: 0;
-    }
-}
-
-/* Template selection button: special border color */
-.pnd-toolbar-navbar .navbar-right li {
-    &.pnd-toolbar-template-menu-button {
+    /* Notebook selection button */
+    .pnd-toolbar-notebook-menu-button {
         a {
-            border-left: 0; // border-left: 1px solid lighten(@color-toolbar-button, 8);
+            max-width: 230px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     }
-}
 
-/* Error buttons */
-.pnd-toolbar-navbar .navbar-nav .pnd-toolbar-error-button {
-    > a {
-        background-color: @brand-warning;
-        border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 25);
-
-        &:hover {
-            background-color: darken(@brand-warning, 12%);
-        }
-
-        &:focus {
-            // Do we need this?
-        }
-    }
-}
-
-/* Sidebar button icon */
-.pnd-toolbar-navbar .navbar-nav .pnd-toolbar-annotations-button {
-    .pnd-icon {
-        margin-left: 3px;
-        color: @color-toolbar-disabled;
-
-        &.pnd-filter-active {
-            color: @brand-primary;
-        }
-    }
-}
-
-/* Notebook selection button */
-.pnd-toolbar-notebook-menu-button {
-    a {
-        max-width: 230px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-}
 
 
 /* ------------------------------------ *\
