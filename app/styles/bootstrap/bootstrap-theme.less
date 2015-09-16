@@ -455,6 +455,7 @@ ul.nav-tabs {
             &:hover {
                 border-color: transparent;
                 background-color: @tab-bg-hover-color;
+                text-decoration: none !important; /* For css overwritings */
                 cursor: pointer;
             }
         }
@@ -473,11 +474,6 @@ ul.nav-tabs {
         }
     }
 }
-
-.pnd-dashboard-panel-last .nav-tabs {
-    margin-right: 0;
-}
-
 
 /* ------------------------------------ *\
    #ALERTS

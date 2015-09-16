@@ -21,9 +21,12 @@
     ul {
         display: block;
         width: auto;
+        height: auto;
+        white-space: normal;
     }
 
     li {
+        display: inline-block;
         height: auto;
         margin-right: 0;
         margin-left: 0;
@@ -34,14 +37,25 @@
         //    padding-bottom: 5px;
         //}
 
-        a {
-        position: static;
-        top: 0; /* In case of position overwriting */
-        background: none;
-        border: none;
-        border-radius: 0;
-        font-size: inherit;
-        transition: initial;
+        a { 
+            display: inline-block;
+            float: none;
+            position: static;
+            top: 0; /* In case of position overwriting */
+            background: none;
+            border: none;
+            border-radius: 0;
+            font-size: inherit;
+            text-align: left;
+            transition: initial;
+        }
+
+        strong {
+            display: inline;
+            padding: 0;
+            float: none;
+            background: none;
+            background-image: none;
         }
     }
 
@@ -53,13 +67,29 @@
 
         .nav-tabs li {
             float: left;
+
+            a:hover {
+                text-decoration: none !important;
+            }
+        }
+
+        .pnd-tab-content ul {
+            overflow: visible;
         }
 
     }
 
-    .pnd-panel-tab-content-content li {
-        display: block;
-        float: none;
+    .pnd-panel-tab-content-content {
+
+        ul.list-group {
+            overflow: visible;
+        }
+
+        li {
+            display: block;
+            float: none;
+        }
+
     }
 
     .dropdown-menu {
@@ -129,7 +159,12 @@
     }
 }
 
+/* For overwritings on preview page links */
 
+.pnd-annotation-preview-item-container ul a:hover {
+    color: @color-text-link-hover;
+    text-decoration: underline !important; 
+}
 
 /* ------------------------------------ *\
    #VERTICAL-TABS
@@ -208,4 +243,5 @@
 .pnd-tab-header {
     height: 27px;
     overflow-y: hidden;
+    overflow-x: visible;
 }
