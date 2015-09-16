@@ -108,7 +108,7 @@ angular.module('Pundit2.Communication')
                 readAnnotationData(self, data);
             } else {
                 ModelHandler.makeTargetsAndItems(data, true);
-                // ModelHandler.makeGraph(data);
+                ModelHandler.makeGraph(data);
                 readAnnotationMetadataAndGraph(self, data);
             }
 
