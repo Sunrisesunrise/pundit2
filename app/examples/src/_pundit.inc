@@ -40,6 +40,7 @@
     <script src="../src/Core/ImageFragmentAnnotatorHelper.service.js"></script>
     <script src="../src/Core/BrokenHelper.service.js"></script>
     <script src="../src/Core/FocusOn.dir.js"></script>
+    <script src="../src/Core/IncludeReplace.dir.js"></script>
     <script src="../src/Core/UnlimitedScroll.dir.js"></script>
     <script src="../src/Core/PndSelect.dir.js"></script>
     <script src="../src/Core/PndPopover.service.js"></script>
