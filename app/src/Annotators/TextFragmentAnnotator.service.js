@@ -491,8 +491,10 @@ angular.module('Pundit2.Annotators')
             }
             if (typeof fragmentsRefsById[currentFragment] === 'undefined') {
                 fragmentsRefsById[currentFragment] = [elementReferce];
-                currentIcon = placeIcon(currentFragment, elementReferce);
-                $compile(currentIcon)($rootScope);
+                if (textFragmentAnnotator.options.addIcon) {
+                    currentIcon = placeIcon(currentFragment, elementReferce);
+                    $compile(currentIcon)($rootScope);
+                }
             } else {
                 fragmentsRefsById[currentFragment].push(elementReferce);
             }
