@@ -64,7 +64,7 @@
     &[disabled],
     fieldset[disabled] & {
         cursor: @cursor-disabled;
-        color: fade(@color-button-text-dark, 50%);
+        color: fade(@color-button-text-dark, 50%) !important;
         pointer-events: none; // Future-proof disabling of clicks
         .vertical-gradient(lighten(@color-button-bg, 20), @button-gradient-level);
     }
@@ -96,7 +96,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%);
+        color: fade(@color-button-text-light, 60%) !important;
         text-shadow: none;
         .vertical-gradient(lighten(@color-button-bg-cta, 20), @button-gradient-level);
     }
@@ -121,7 +121,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 20%);
+        color: fade(@color-button-text-light, 20%) !important;
         text-shadow: none;
         .vertical-gradient(darken(@color-button-bg-dark, 7), @button-gradient-level);
     }
@@ -149,7 +149,7 @@
     fieldset[disabled] & {
         background-color: transparent;
         background-image: none;
-        color: fade(@color-text, 60%);
+        color: fade(@color-text, 60%) !important;
         text-shadow: none;
     }
 }
@@ -174,7 +174,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%);
+        color: fade(@color-button-text-light, 60%) !important;
         text-shadow: none;
         .vertical-gradient(lighten(@subject-color, 20), @button-gradient-level);
     }
@@ -196,7 +196,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%);
+        color: fade(@color-button-text-light, 60%) !important;
         text-shadow: none;
         .vertical-gradient(lighten(@predicate-color, 20), @button-gradient-level);
     }
@@ -218,7 +218,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%);
+        color: fade(@color-button-text-light, 60%) !important;
         text-shadow: none;
         .vertical-gradient(lighten(@object-color, 20), @button-gradient-level);
     }

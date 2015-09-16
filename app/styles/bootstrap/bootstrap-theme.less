@@ -450,6 +450,7 @@ ul.nav-tabs {
             border-radius: @tab-border-radius @tab-border-radius 0 0;
             color: @nav-tabs-active-link-hover-color;
             line-height: @line-height-base;
+            overflow: visible;
             // margin-right: 2px;
 
             &:hover {
@@ -659,6 +660,11 @@ textarea.form-control {
 .form-group .form-control {
     border-radius: 0;
     font-size: inherit;
+        
+    input[type="text"] {
+        height: 26px;
+    }
+    
 }
 
 a {
@@ -732,6 +738,7 @@ input {
 
     .form-group {
         margin-bottom: 0;
+
     }
 
     textarea {

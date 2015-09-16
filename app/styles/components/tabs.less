@@ -128,24 +128,28 @@
 
             &.pnd-hidden-tabs {
 
-                .show-tabs a {
-                    padding-top: 5px;
-                    padding-bottom: 5px;
+                .show-tabs {
+                    a {
+                        padding-top: 5px;
+                        padding-bottom: 5px;
 
-                    .pnd-icon {
-                        margin: 0;
-                        padding-bottom: 3px;
+                        .pnd-icon {
+                            margin: 0;
+                            padding-bottom: 3px;
+                        }
                     }
+
+                    &.active a {
+                        padding-top: 3px;
+                        padding-bottom: 5px;
+
+                        .pnd-icon {
+                            margin-top: 2px;
+                        }
+                    }
+
                 }
 
-                .show-tabs.active a {
-                    padding-top: 3px;
-                    padding-bottom: 5px;
-
-                    .pnd-icon {
-                        margin-top: 2px;
-                    }
-                }
             }
         }
 
@@ -159,6 +163,10 @@
         }
 
     }
+}
+
+.show-tabs.pull-right {
+    top: initial;
 }
 
 /* For overwritings on preview page links */
