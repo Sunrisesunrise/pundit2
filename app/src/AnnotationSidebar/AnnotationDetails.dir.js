@@ -5,6 +5,7 @@ angular.module('Pundit2.AnnotationSidebar')
         restrict: 'E',
         scope: {
             id: '@',
+            motivation: '@motivation',
             broken: '=broken'
         },
         templateUrl: 'src/AnnotationSidebar/AnnotationDetails.dir.tmpl.html',

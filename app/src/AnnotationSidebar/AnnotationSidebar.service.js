@@ -319,7 +319,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
 .service('AnnotationSidebar', function(ANNOTATIONSIDEBARDEFAULTS, $rootScope, $filter, $timeout, $injector,
     BaseComponent, EventDispatcher, AnnotationsExchange, Annomatic, Consolidation, TypesHelper,
-    BrokenHelper, ItemsExchange, NotebookExchange, TextFragmentAnnotator,
+    BrokenHelper, ItemsExchange, NotebookExchange, TextFragmentAnnotator, NameSpace,
     PageItemsContainer, XpointersHelper, Analytics, Config) {
 
     var annotationSidebar = new BaseComponent('AnnotationSidebar', ANNOTATIONSIDEBARDEFAULTS);
@@ -641,6 +641,160 @@ angular.module('Pundit2.AnnotationSidebar')
         return list;
     };
 
+    var inizializeSemanticAnnotationFilters = function(annotation) {
+        if (clientMode !== 'pro') {
+            return;
+        }
+
+        var uriList = {};
+
+        // Predicates
+        angular.forEach(annotation.predicates, function(predicateUri) {
+            if (typeof(uriList[predicateUri]) === 'undefined') {
+                uriList[predicateUri] = {
+                    uri: predicateUri
+                };
+                if (typeof(annotationsFilters.predicates[predicateUri]) === 'undefined') {
+                    annotationsFilters.predicates[predicateUri] = {
+                        uri: predicateUri,
+                        label: annotation.items[predicateUri].label,
+                        active: false,
+                        partial: 1,
+                        annotationsList: {}
+                    };
+                } else {
+                    annotationsFilters.predicates[predicateUri].partial++;
+                }
+                annotationsFilters.predicates[predicateUri].annotationsList[annotation.id] = annotation;
+            }
+        });
+
+        // Entities
+        if (isEntitiesActive) {
+            angular.forEach(annotation.entities, function(entUri) {
+                if (typeof(uriList[entUri]) === 'undefined') {
+                    uriList[entUri] = {
+                        uri: entUri
+                    };
+                    if (typeof(annotationsFilters.entities[entUri]) === 'undefined') {
+                        annotationsFilters.entities[entUri] = {
+                            uri: entUri,
+                            label: annotation.items[entUri].label, // TODO add check ?
+                            active: false,
+                            partial: 1,
+                            annotationsList: {}
+                        };
+                    } else {
+                        annotationsFilters.entities[entUri].partial++;
+                    }
+                    annotationsFilters.entities[entUri].annotationsList[annotation.id] = annotation;
+                }
+            });
+        }
+
+        // Types
+        angular.forEach(annotation.items, function(singleItem) {
+            angular.forEach(singleItem.type, function(typeUri) {
+                if (typeof(uriList[typeUri]) === 'undefined') {
+                    uriList[typeUri] = {
+                        uri: typeUri
+                    };
+                    if (typeof(annotationsFilters.types[typeUri]) === 'undefined') {
+                        annotationsFilters.types[typeUri] = {
+                            uri: typeUri,
+                            label: TypesHelper.getLabel(typeUri),
+                            active: false,
+                            partial: 1,
+                            annotationsList: {}
+                        };
+                    } else {
+                        annotationsFilters.types[typeUri].partial++;
+                    }
+                    annotationsFilters.types[typeUri].annotationsList[annotation.id] = annotation;
+                }
+            });
+        });
+
+        // FreeText 
+        annotation.allLabels = '';
+
+        for (var i in annotation.items) {
+            var label = annotation.items[i].label,
+                description = annotation.items[i].description;
+
+            label = label.toLowerCase();
+            description = typeof description !== 'undefined' ? description.toLowerCase() : '';
+            annotation.allLabels = annotation.allLabels.concat(' ', label, description);
+        }
+        for (var subject in annotation.graph) {
+            for (var predicate in annotation.graph[subject]) {
+                for (var object in annotation.graph[subject][predicate]) {
+                    var currentObject = annotation.graph[subject][predicate][object];
+                    if (currentObject.type === 'literal') {
+                        var literal = currentObject.value;
+                        literal = literal.toLowerCase();
+                        annotation.allLabels = annotation.allLabels.concat(' ', literal);
+                    }
+                }
+            }
+        }
+    };
+
+    var inizializeAuthorAndNotebookFilter = function(annotation) {
+        if (clientMode !== 'pro') {
+            return;
+        }
+
+        // Annotation authors
+        if (typeof(annotationsFilters.authors[annotation.creator]) === 'undefined') {
+            annotationsFilters.authors[annotation.creator] = {
+                uri: annotation.creator,
+                label: annotation.creatorName,
+                active: false,
+                partial: 1,
+                annotationsList: {}
+            };
+        } else {
+            annotationsFilters.authors[annotation.creator].partial++;
+        }
+        annotationsFilters.authors[annotation.creator].annotationsList[annotation.id] = annotation;
+
+        // Annotation notebook
+        var notebookId = annotation.isIncludedIn;
+        var notebookUri = annotation.isIncludedInUri;
+        if (typeof(annotationsFilters.notebooks[notebookUri]) === 'undefined') {
+            var notebookName = "Downloading in progress";
+            var cancelWatchNotebookName = $rootScope.$watch(function() {
+                return NotebookExchange.getNotebookById(notebookId);
+            }, function(nb) {
+                if (typeof(nb) !== 'undefined') {
+                    notebookName = nb.label;
+                    annotationsFilters.notebooks[notebookUri].label = notebookName;
+                    cancelWatchNotebookName();
+                }
+            });
+
+            annotationsFilters.notebooks[notebookUri] = {
+                uri: notebookUri,
+                label: notebookName,
+                notebookId: notebookId,
+                active: false,
+                partial: 1,
+                annotationsList: {}
+            };
+        } else {
+            annotationsFilters.notebooks[notebookUri].partial++;
+        }
+        annotationsFilters.notebooks[notebookUri].annotationsList[annotation.id] = annotation;
+    };
+
+    var inizializeCommentFilter = function(annotation) {
+        if (clientMode !== 'pro') {
+            return;
+        }
+        annotation.allLabels = annotation.graph[NameSpace.rdf.value][0].value;
+    };
+
     // Updates the list of filters and annotation positions when the consolidation is completed
     var initializeFiltersAndPositions = function() {
         if (Object.keys(state.allAnnotations).length === 0) {
@@ -659,145 +813,14 @@ angular.module('Pundit2.AnnotationSidebar')
         startPosition = annotationSidebar.options.startTop;
 
         angular.forEach(state.allAnnotations, function(annotation) {
-            var uriList = {};
-
             annotation.firstConsolidableItem = findFirstConsolidateItem(annotation);
             setBrokenInfo(annotation);
-
-            // Annotation authors
-            if (typeof(annotationsFilters.authors[annotation.creator]) === 'undefined') {
-                annotationsFilters.authors[annotation.creator] = {
-                    uri: annotation.creator,
-                    label: annotation.creatorName,
-                    active: false,
-                    partial: 1,
-                    annotationsList: {}
-                };
+            inizializeAuthorAndNotebookFilter(annotation);
+            if (annotation.motivatedBy.indexOf('commenting') === -1) {
+                inizializeSemanticAnnotationFilters(annotation);
             } else {
-                annotationsFilters.authors[annotation.creator].partial++;
+                inizializeCommentFilter(annotation);
             }
-            annotationsFilters.authors[annotation.creator].annotationsList[annotation.id] = annotation;
-
-            // Annotation notebook
-            var notebookId = annotation.isIncludedIn;
-            var notebookUri = annotation.isIncludedInUri;
-            if (typeof(annotationsFilters.notebooks[notebookUri]) === 'undefined') {
-                var notebookName = "Downloading in progress";
-                var cancelWatchNotebookName = $rootScope.$watch(function() {
-                    return NotebookExchange.getNotebookById(notebookId);
-                }, function(nb) {
-                    if (typeof(nb) !== 'undefined') {
-                        notebookName = nb.label;
-                        annotationsFilters.notebooks[notebookUri].label = notebookName;
-                        cancelWatchNotebookName();
-                    }
-                });
-
-                annotationsFilters.notebooks[notebookUri] = {
-                    uri: notebookUri,
-                    label: notebookName,
-                    notebookId: notebookId,
-                    active: false,
-                    partial: 1,
-                    annotationsList: {}
-                };
-            } else {
-                annotationsFilters.notebooks[notebookUri].partial++;
-            }
-            annotationsFilters.notebooks[notebookUri].annotationsList[annotation.id] = annotation;
-
-
-            // Predicates
-            angular.forEach(annotation.predicates, function(predicateUri) {
-                if (typeof(uriList[predicateUri]) === 'undefined') {
-                    uriList[predicateUri] = {
-                        uri: predicateUri
-                    };
-                    if (typeof(annotationsFilters.predicates[predicateUri]) === 'undefined') {
-                        annotationsFilters.predicates[predicateUri] = {
-                            uri: predicateUri,
-                            label: annotation.items[predicateUri].label,
-                            active: false,
-                            partial: 1,
-                            annotationsList: {}
-                        };
-                    } else {
-                        annotationsFilters.predicates[predicateUri].partial++;
-                    }
-                    annotationsFilters.predicates[predicateUri].annotationsList[annotation.id] = annotation;
-                }
-            });
-
-            // Entities
-            if (isEntitiesActive) {
-                angular.forEach(annotation.entities, function(entUri) {
-                    if (typeof(uriList[entUri]) === 'undefined') {
-                        uriList[entUri] = {
-                            uri: entUri
-                        };
-                        if (typeof(annotationsFilters.entities[entUri]) === 'undefined') {
-                            annotationsFilters.entities[entUri] = {
-                                uri: entUri,
-                                label: annotation.items[entUri].label, // TODO add check ?
-                                active: false,
-                                partial: 1,
-                                annotationsList: {}
-                            };
-                        } else {
-                            annotationsFilters.entities[entUri].partial++;
-                        }
-                        annotationsFilters.entities[entUri].annotationsList[annotation.id] = annotation;
-                    }
-                });
-            }
-
-            // Types
-            angular.forEach(annotation.items, function(singleItem) {
-                angular.forEach(singleItem.type, function(typeUri) {
-                    if (typeof(uriList[typeUri]) === 'undefined') {
-                        uriList[typeUri] = {
-                            uri: typeUri
-                        };
-                        if (typeof(annotationsFilters.types[typeUri]) === 'undefined') {
-                            annotationsFilters.types[typeUri] = {
-                                uri: typeUri,
-                                label: TypesHelper.getLabel(typeUri),
-                                active: false,
-                                partial: 1,
-                                annotationsList: {}
-                            };
-                        } else {
-                            annotationsFilters.types[typeUri].partial++;
-                        }
-                        annotationsFilters.types[typeUri].annotationsList[annotation.id] = annotation;
-                    }
-                });
-            });
-
-            // FreeText 
-            annotation.allLabels = '';
-
-            for (var i in annotation.items) {
-                var label = annotation.items[i].label,
-                    description = annotation.items[i].description;
-
-                label = label.toLowerCase();
-                description = typeof description !== 'undefined' ? description.toLowerCase() : '';
-                annotation.allLabels = annotation.allLabels.concat(' ', label, description);
-            }
-            for (var subject in annotation.graph) {
-                for (var predicate in annotation.graph[subject]) {
-                    for (var object in annotation.graph[subject][predicate]) {
-                        var currentObject = annotation.graph[subject][predicate][object];
-                        if (currentObject.type === 'literal') {
-                            var literal = currentObject.value;
-                            literal = literal.toLowerCase();
-                            annotation.allLabels = annotation.allLabels.concat(' ', literal);
-                        }
-                    }
-                }
-            }
-
             setAnnotationPosition(annotation, dashboardHeight);
         });
 

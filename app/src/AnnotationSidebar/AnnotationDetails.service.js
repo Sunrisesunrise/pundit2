@@ -63,14 +63,15 @@ angular.module('Pundit2.AnnotationSidebar')
 })
 
 .service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $modal, $injector,
-    BaseComponent, Config, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, TemplatesExchange,
+    BaseComponent, Config, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange,
     Consolidation, ContextualMenu, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
     ImageAnnotator, AnnotationsCommunication, NotebookExchange, TypesHelper, Analytics, NameSpace) {
 
     var annotationDetails = new BaseComponent('AnnotationDetails', ANNOTATIONDETAILSDEFAULTS);
 
     var clientMode = Config.clientMode,
-        Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined;
+        Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined,
+        TemplatesExchange = clientMode === 'pro' ? $injector.get('TemplatesExchange') : undefined;
 
     var state = {
         annotations: [],
@@ -439,6 +440,108 @@ angular.module('Pundit2.AnnotationSidebar')
         var template;
         var currentColor;
 
+        var buildSemantic = function() {
+            template = TemplatesExchange.getTemplateById(currentAnnotation.hasTemplate);
+
+            if (typeof(template) !== 'undefined') {
+                currentColor = template.hasColor;
+            }
+
+            if (typeof(state.annotations[currentId]) === 'undefined') {
+                state.annotations[currentId] = {
+                    id: currentId,
+                    creator: currentAnnotation.creator,
+                    creatorName: currentAnnotation.creatorName,
+                    created: currentAnnotation.created,
+                    notebookId: currentAnnotation.isIncludedIn,
+                    notebookName: notebookName,
+                    scopeReference: scope,
+                    mainItem: buildMainItem(currentAnnotation),
+                    itemsArray: buildItemsArray(currentAnnotation),
+                    itemsUriArray: buildItemsUriArray(currentAnnotation),
+                    broken: isBroken,
+                    expanded: expandedState,
+                    ghosted: false,
+                    color: currentColor,
+                    hasTemplate: template
+                };
+
+                var cancelWatchNotebookName = $rootScope.$watch(function() {
+                    return NotebookExchange.getNotebookById(currentAnnotation.isIncludedIn);
+                }, function(nb) {
+                    if (typeof(nb) !== 'undefined') {
+                        notebookName = nb.label;
+                        state.annotations[currentId].notebookName = notebookName;
+                        cancelWatchNotebookName();
+                    }
+                });
+            } else {
+                state.annotations[currentId].expanded = expandedState;
+
+                if (typeof(force) !== 'undefined' && force) {
+                    state.annotations[currentId].created = currentAnnotation.created;
+                    state.annotations[currentId].created = currentAnnotation.created;
+                    state.annotations[currentId].notebookId = currentAnnotation.isIncludedIn;
+                    state.annotations[currentId].scopeReference = scope;
+                    state.annotations[currentId].mainItem = buildMainItem(currentAnnotation);
+                    state.annotations[currentId].itemsArray = buildItemsArray(currentAnnotation);
+                    state.annotations[currentId].itemsUriArray = buildItemsUriArray(currentAnnotation);
+                    state.annotations[currentId].broken = isBroken;
+                    state.annotations[currentId].ghosted = false;
+                    state.annotations[currentId].expanded = true;
+                }
+            }
+        };
+
+        var buildComment = function() {
+            var firstTargetUri = currentAnnotation.hasTarget[0],
+                firstItem = currentAnnotation.items[firstTargetUri];
+
+            if (typeof(state.annotations[currentId]) === 'undefined') {
+                state.annotations[currentId] = {
+                    id: currentId,
+                    creator: currentAnnotation.creator,
+                    creatorName: currentAnnotation.creatorName,
+                    created: currentAnnotation.created,
+                    notebookId: currentAnnotation.isIncludedIn,
+                    notebookName: notebookName,
+                    scopeReference: scope,
+                    mainItem: firstItem,
+                    // itemsArray: [firstItem],
+                    // itemsUriArray: [firstTargetUri],
+                    comment: currentAnnotation.graph[NameSpace.rdf.value][0].value,
+                    broken: isBroken,
+                    expanded: expandedState,
+                    ghosted: false
+                };
+
+                var cancelWatchNotebookName = $rootScope.$watch(function() {
+                    return NotebookExchange.getNotebookById(currentAnnotation.isIncludedIn);
+                }, function(nb) {
+                    if (typeof(nb) !== 'undefined') {
+                        notebookName = nb.label;
+                        state.annotations[currentId].notebookName = notebookName;
+                        cancelWatchNotebookName();
+                    }
+                });
+            } else {
+                state.annotations[currentId].expanded = expandedState;
+
+                if (typeof(force) !== 'undefined' && force) {
+                    state.annotations[currentId].created = currentAnnotation.created;
+                    state.annotations[currentId].created = currentAnnotation.created;
+                    state.annotations[currentId].notebookId = currentAnnotation.isIncludedIn;
+                    state.annotations[currentId].scopeReference = scope;
+                    state.annotations[currentId].mainItem = firstItem;
+                    // state.annotations[currentId].itemsArray = [firstItem];
+                    // state.annotations[currentId].itemsUriArray = [firstTargetUri];
+                    state.annotations[currentId].broken = isBroken;
+                    state.annotations[currentId].ghosted = false;
+                    state.annotations[currentId].expanded = true;
+                }
+            }
+        };
+
         if (typeof(currentId) === 'undefined' ||
             typeof(currentAnnotation) === 'undefined') {
             EventDispatcher.sendEvent('AnnotationDetails.wrongAnnotation', currentId);
@@ -446,56 +549,14 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         expandedState = (force ? true : state.defaultExpanded);
-        template = TemplatesExchange.getTemplateById(currentAnnotation.hasTemplate);
 
-        if (typeof(template) !== 'undefined') {
-            currentColor = template.hasColor;
-        }
-
-        if (typeof(state.annotations[currentId]) === 'undefined') {
-            state.annotations[currentId] = {
-                id: currentId,
-                creator: currentAnnotation.creator,
-                creatorName: currentAnnotation.creatorName,
-                created: currentAnnotation.created,
-                notebookId: currentAnnotation.isIncludedIn,
-                notebookName: notebookName,
-                scopeReference: scope,
-                mainItem: buildMainItem(currentAnnotation),
-                itemsArray: buildItemsArray(currentAnnotation),
-                itemsUriArray: buildItemsUriArray(currentAnnotation),
-                broken: isBroken,
-                expanded: expandedState,
-                ghosted: false,
-                color: currentColor,
-                hasTemplate: template
-            };
-
-            var cancelWatchNotebookName = $rootScope.$watch(function() {
-                return NotebookExchange.getNotebookById(currentAnnotation.isIncludedIn);
-            }, function(nb) {
-                if (typeof(nb) !== 'undefined') {
-                    notebookName = nb.label;
-                    state.annotations[currentId].notebookName = notebookName;
-                    cancelWatchNotebookName();
-                }
-            });
+        if (currentAnnotation.motivatedBy === 'commenting') {
+            buildComment();
         } else {
-            state.annotations[currentId].expanded = expandedState;
-
-            if (typeof(force) !== 'undefined' && force) {
-                state.annotations[currentId].created = currentAnnotation.created;
-                state.annotations[currentId].created = currentAnnotation.created;
-                state.annotations[currentId].notebookId = currentAnnotation.isIncludedIn;
-                state.annotations[currentId].scopeReference = scope;
-                state.annotations[currentId].mainItem = buildMainItem(currentAnnotation);
-                state.annotations[currentId].itemsArray = buildItemsArray(currentAnnotation);
-                state.annotations[currentId].itemsUriArray = buildItemsUriArray(currentAnnotation);
-                state.annotations[currentId].broken = isBroken;
-                state.annotations[currentId].ghosted = false;
-                state.annotations[currentId].expanded = true;
-            }
+            buildSemantic();
         }
+
+
     };
 
     annotationDetails.activateTextFragmentHighlight = function(broken, annotationId, items) {

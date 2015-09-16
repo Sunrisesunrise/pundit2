@@ -2,7 +2,7 @@ angular.module('Pundit2.Model')
 
 .constant('MODELHANDLERDEFAULTS', {})
 
-.service('ModelHandler', function(BaseComponent, MODELHANDLERDEFAULTS, Item, ItemsExchange, TypesHelper) {
+.service('ModelHandler', function(BaseComponent, MODELHANDLERDEFAULTS, Item, ItemsExchange, TypesHelper, NameSpace) {
 
     var modelHandler = new BaseComponent("ModelHandler", MODELHANDLERDEFAULTS);
 
@@ -34,6 +34,16 @@ angular.module('Pundit2.Model')
             Item.createFromTarget(targetUri, data.target, forceAdd);
         }
 
+    };
+
+    modelHandler.makeGraph = function(data) {
+        for (var metadataURI in data.metadata) {
+            var metadata = data.metadata[metadataURI],
+                bodyReferences = metadata[NameSpace.annotation.hasBody],
+                graphURI = bodyReferences[0].type === 'uri' ? bodyReferences[0].value : bodyReferences[1].value;
+
+            data.graph = data.graph[graphURI];
+        }
     };
 
     return modelHandler;

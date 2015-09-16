@@ -335,9 +335,10 @@
             ng-show="isAnnotationsPanelActive()"
             class="pnd-annotation-sidebar-annotations">         
             <annotation-details
-                id="{{::ann.id}}"
-                broken="ann.broken"
                 class="pnd-annotation-details"
+                id="{{::ann.id}}"
+                motivation="{{ann.motivatedBy}}"
+                broken="ann.broken"
                 ng-style="{'top': ann.realTop}"
                 ng-repeat="ann in annotations track by ann.id">
             </annotation-details>

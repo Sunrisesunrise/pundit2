@@ -62,6 +62,7 @@ angular.module('Pundit2.Communication')
                 readAnnotationData(self, data);
             } else {
                 ModelHandler.makeTargetsAndItems(data, true);
+                // TODO: add support to comment?
                 var parsedData = {
                     metadata: data.metadata,
                     graph: data.graph[self.hasBody]
@@ -107,6 +108,7 @@ angular.module('Pundit2.Communication')
                 readAnnotationData(self, data);
             } else {
                 ModelHandler.makeTargetsAndItems(data, true);
+                // ModelHandler.makeGraph(data);
                 readAnnotationMetadataAndGraph(self, data);
             }
 
@@ -326,6 +328,7 @@ angular.module('Pundit2.Communication')
         var ns = NameSpace.annotation,
             annData = data.metadata[ann.uri],
             item;
+
         var bodyUri = annData[NameSpace.annotation.hasBody][0].value;
         if (typeof ann.graph[bodyUri] !== 'undefined') {
             ann.graph = ann.graph[bodyUri];
@@ -377,15 +380,26 @@ angular.module('Pundit2.Communication')
         ann.entities = [];
         ann.predicates = [];
 
-        if (ann.motivatedBy === NameSpace.motivation.commenting) {
-            var firstTarget = ann.hasTarget[0]
-            ann.entities.push(firstTarget);
-            item = ItemsExchange.getItemByUri(firstTarget);
-            if (typeof(item) !== 'undefined') {
-                ann.items[firstTarget] = item;
+        for (var m in NameSpace.motivation) {
+            var motivationURI = NameSpace.motivation[m];
+
+            if (m === 'linking') {
+                continue;
             }
-            return;
+
+            if (motivationURI === ann.motivatedBy) {
+                var firstTarget = ann.hasTarget[0]
+                ann.entities.push(firstTarget);
+                item = ItemsExchange.getItemByUri(firstTarget);
+                if (typeof(item) !== 'undefined') {
+                    ann.items[firstTarget] = item;
+                }
+                ann.motivatedBy = m;
+                return;
+            }
         }
+
+        ann.motivatedBy = ann.motivatedBy === NameSpace.motivation.linking || '' ? 'linking' : ann.motivatedBy;
 
         for (var s in ann.graph) {
 
