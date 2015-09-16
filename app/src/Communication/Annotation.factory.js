@@ -326,11 +326,11 @@ angular.module('Pundit2.Communication')
         var ns = NameSpace.annotation,
             annData = data.metadata[ann.uri],
             item;
-
         var bodyUri = annData[NameSpace.annotation.hasBody][0].value;
         if (typeof ann.graph[bodyUri] !== 'undefined') {
             ann.graph = ann.graph[bodyUri];
         }
+
         // Those properties are a single value inside an array, read them
         // one by one by using the correct URI taken from the NameSpace,
         // doing some sanity checks
@@ -341,6 +341,10 @@ angular.module('Pundit2.Communication')
                 ann[property] = annData[propertyURI][0].value;
             } else {
                 ann[property] = '';
+            }
+
+            if (property === 'hasBody') {
+                ann[property] = annData[propertyURI][0].type === 'uri' ? annData[propertyURI][0].value : annData[propertyURI][1].value;
             }
         }
 
@@ -359,11 +363,11 @@ angular.module('Pundit2.Communication')
         }
 
         // .target is always an array
-        if (ns.target in annData) {
-            ann.target = [];
+        if (ns.hasTarget in annData) {
+            ann.hasTarget = [];
 
-            for (var t = 0; t < annData[ns.target].length; t++) {
-                ann.target.push(annData[ns.target][t].value);
+            for (var t = 0; t < annData[ns.hasTarget].length; t++) {
+                ann.hasTarget.push(annData[ns.hasTarget][t].value);
             }
         }
 
@@ -372,6 +376,17 @@ angular.module('Pundit2.Communication')
         // involved too
         ann.entities = [];
         ann.predicates = [];
+
+        if (ann.motivatedBy === NameSpace.motivation.commenting) {
+            var firstTarget = ann.hasTarget[0]
+            ann.entities.push(firstTarget);
+            item = ItemsExchange.getItemByUri(firstTarget);
+            if (typeof(item) !== 'undefined') {
+                ann.items[firstTarget] = item;
+            }
+            return;
+        }
+
         for (var s in ann.graph) {
 
             if (ann.entities.indexOf(s) === -1) {
