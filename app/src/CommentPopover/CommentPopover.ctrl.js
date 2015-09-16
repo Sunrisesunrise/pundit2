@@ -1,7 +1,7 @@
 angular.module('Pundit2.CommentPopover')
 
 .controller('CommentPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange,
-    NotebookCommunication, CommentPopover, ModelHelper, $timeout, $q) {
+    NotebookCommunication, AnnotationsCommunication, CommentPopover, ModelHelper, $timeout, $q) {
 
     $scope.literalText = '';
 
@@ -75,19 +75,18 @@ angular.module('Pundit2.CommentPopover')
                 }
             };
 
-        // console.log(ModelHelper.buildCommentData(currentStatement));
+        var modelData = ModelHelper.buildCommentData(currentStatement);
 
-        // TODO: SAVE
-        // var httpPromise = AnnotationsCommunication.saveAnnotation(
-        //     modelData.graph,
-        //     modelData.items,
-        //     modelData.flatTargets,
-        //     undefined, // templateID
-        //     undefined, // skipConsolidation
-        //     modelData.target,
-        //     modelData.type,
-        //     'comment'
-        // );
+        var httpPromise = AnnotationsCommunication.saveAnnotation(
+            modelData.graph,
+            modelData.items,
+            modelData.flatTargets,
+            undefined, // templateID
+            undefined, // skipConsolidation
+            modelData.target,
+            modelData.type,
+            'commenting'
+        );
 
     };
 

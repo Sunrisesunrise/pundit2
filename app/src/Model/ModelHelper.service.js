@@ -69,7 +69,7 @@ angular.module('Pundit2.Model')
 
     var addBlankNode = function(el, res, types) {
         var triple = el.scope.get(),
-            blankNodeUri = '_:blanknode',
+            blankNodeUri,
             blanknode;
 
         if (typeof triple.object !== 'string' ||
@@ -78,6 +78,8 @@ angular.module('Pundit2.Model')
         }
 
         addTypeElem([NameSpace.types.embeddedContent], types);
+
+        blankNodeUri = '_:' + md5.createHash(triple.object);
 
         blanknode = res[blankNodeUri] = {};
         blanknode[NameSpace.rdf.type] = [{
