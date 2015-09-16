@@ -441,40 +441,13 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var findFirstConsolidateItem = function(currentAnnotation) {
-        var graph = currentAnnotation.graph;
-        var list;
         var currentItem;
-        var objectValue;
-        var objectType;
 
-        for (var subject in graph) {
-            currentItem = ItemsExchange.getItemByUri(subject);
-            if (currentItem &&
-                (currentItem.isTextFragment() ||
-                    currentItem.isImageFragment() ||
-                    currentItem.isImage() ||
-                    currentItem.isWebPage())) {
-                if (Consolidation.isConsolidated(currentItem)) {
-                    return currentItem;
-                }
-            }
-
-            for (var predicate in graph[subject]) {
-
-                list = graph[subject][predicate];
-                for (var object in list) {
-                    objectValue = list[object].value;
-                    objectType = list[object].type;
-
-                    if (objectType === 'uri') {
-                        currentItem = ItemsExchange.getItemByUri(objectValue);
-                        if (currentItem && currentItem.isTextFragment() || currentItem.isImageFragment() || currentItem.isImage() || currentItem.isWebPage()) {
-                            if (Consolidation.isConsolidated(currentItem)) {
-                                return currentItem;
-                            }
-                        }
-                    }
-                }
+        for (var t in currentAnnotation.hasTarget) {
+            currentItem = ItemsExchange.getItemByUri(currentAnnotation.hasTarget[t]);
+            if (typeof currentItem !== 'undefined' &&
+                Consolidation.isConsolidated(currentItem)) {
+                return currentItem;
             }
         }
     };
