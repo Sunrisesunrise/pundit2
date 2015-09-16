@@ -436,7 +436,7 @@ angular.module('Pundit2.Model')
     /**
      * @ngdoc method
      * @name ModelHelper#parseAnnotations
-     * @module Pundit2.Communication
+     * @module Pundit2.ModelHelper
      * @function
      *
      * @description
@@ -470,7 +470,8 @@ angular.module('Pundit2.Model')
             var annotationID = metadataURIParts[metadataURIParts.length - 1];
 
             // Get graph URI.
-            var graphURI = metadata[NameSpace.annotation.hasBody][0].value;
+            var bodyReferences = metadata[NameSpace.annotation.hasBody],
+                graphURI = bodyReferences[0].type === 'uri' ? bodyReferences[0].value : bodyReferences[1].value;
 
             var metadataContent = {};
             metadataContent[metadataURI] = metadata;

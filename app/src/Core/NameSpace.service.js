@@ -129,6 +129,11 @@ angular.module('Pundit2.Core')
         isBrokenYet: _pnd + 'isBroken'
     };
 
+    ns.motivation = {
+        linking: _oa + 'linking',
+        commenting: _oa + 'commenting'
+    }
+
     // TODO: move to Consolidation.options ??
     // Consolidation use this to know what items are consolidable
     ns.fragments = {
