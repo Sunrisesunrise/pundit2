@@ -18,38 +18,19 @@ angular.module('Pundit2.Core')
         popoverOptions: {},
         popover: null,
         anchor: null,
-        fragmentId: ''
+        fragmentId: '',
+        scroll: {
+            top: undefined,
+            left: undefined
+        }
     };
 
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
     var eventHandler = null;
 
     var calculateSelectionCoordinates = function() {
         var range = state.selection.getRangeAt(0),
             ts = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>'),
-            te = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>'),
-            b = angular.element('<div class="pnd-range-boundary"></div>'),
-            rangeRect = range.getBoundingClientRect();
-        b.css({
-            position: 'absolute',
-            top: $window.scrollY + rangeRect.top,
-            left: $window.scrollX + rangeRect.left,
-            width: rangeRect.width,
-            height: rangeRect.height,
-            border: '1px solid red'
-        });
-
-        //angular.element('body').append(b);
+            te = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>');
 
         var fragmentElements = angular.element('span.' + state.fragmentId);
         var i = 0;
@@ -68,25 +49,16 @@ angular.module('Pundit2.Core')
             break;
         }
 
-        var clonedRange = range.cloneRange();
-        clonedRange.endContainer = clonedRange.startContainer;
-        clonedRange.endOffset = clonedRange.startOffset;
-        //clonedRange.insertNode(ts[0]);
         var parentTStart = ts.parent();
-
-        range.collapse(false);
-        //range.insertNode(te[0]);
         var parentTEnd = te.parent();
 
         state.selectionStart = {
             offset: angular.copy(ts.offset()),
-            //offset: ts.offset(),
             width: ts.width(),
             height: ts.height(),
         };
         state.selectionEnd = {
             offset: angular.copy(te.offset()),
-            //offset: te.offset(),
             width: te.width(),
             height: te.height(),
         };
@@ -125,13 +97,19 @@ angular.module('Pundit2.Core')
         }
     };
 
+    var scrollHandler = function() {
+        $(this).scrollTop(state.scroll.top).scrollLeft(state.scroll.left);
+    };
+
     var show = function() {
         var selection = $document[0].getSelection();
         if (selection.baseNode === null) {
             console.log("skipping show .. no valid selection");
             return false;
         }
+
         state.selection = selection;
+
         if (eventHandler !== null) {
             EventDispatcher.removeListener(eventHandler);
         }
@@ -140,9 +118,20 @@ angular.module('Pundit2.Core')
             EventDispatcher.removeListener(eventHandler);
             eventHandler = null;
         });
+
         EventDispatcher.sendEvent('TextFragmentHandler.addTemporarySelection');
+
         state.popover.show();
+
+        var win = angular.element($window);
+        state.scroll.top = win.scrollTop(),
+        state.scroll.left = win.scrollLeft();
+
+        if (state.popoverOptions.lockPageScroll) {
+            win.on('scroll', scrollHandler);
+        }
         $document.on('mouseup', mouseUpHandler);
+
         return true;
     };
 
@@ -163,6 +152,9 @@ angular.module('Pundit2.Core')
             state.popover.destroy();
         }
         state.popover = null;
+
+        angular.element($window).off('scroll', scrollHandler);
+
         EventDispatcher.sendEvent('TextFragmentHandler.removeTemporarySelection');
     };
 
@@ -214,26 +206,6 @@ angular.module('Pundit2.Core')
     pndPopover.getState = function() {
         return state;
     };
-
-    /**
-    pndPopover.setArrowMargin = function(marginLeft, marginTop, marginRight, marginBottom) {
-        if (state.popover === null || typeof state.popover.$scope === 'undefined') {
-            return;
-        }
-        var margin = {
-            "arrowMarginLeft": marginLeft,
-            "arrowMarginTop": marginTop,
-            "arrowMarginRight": marginRight,
-            "arrowMarginBottom": marginBottom
-        };
-        for (var i in margin) {
-            if (typeof margin[i] === 'undefined' || margin[i] === null) {
-                margin[i] = 'initial';
-            }
-            state.popover.$scope[i] = margin[i];
-        }
-    }
-     */
 
     return pndPopover;
 });
