@@ -169,6 +169,7 @@ angular.module('Pundit2.MyNotebooksContainer')
 
     // confirm btn click
     modalScope.confirm = function() {
+        var notebookAnnotations = modalScope.notebook.includes;
 
         // remove notebook and all annotation contained in it
         NotebookCommunication.deleteNotebook(modalScope.notebook.id).then(function() {
@@ -179,32 +180,31 @@ angular.module('Pundit2.MyNotebooksContainer')
             // success
             modalScope.notifyMessage = "Notebook " + modalScope.notebook.label + " correctly deleted.";
 
-            angular.forEach(annotations, function(annotation) {
-                if (annotation.isIncludedIn === modalScope.notebook.id) {
-                    // Check and remove annotation items from ItemsExchange.
-                    for (var a in annotations) {
-                        if (annotation.id === annotations[a].id) {
-                            continue;
-                        }
-                        for (var i in annotations[a].items) {
-                            var uri = annotations[a].items[i].uri;
-                            itemsToKeep[uri] = annotations[a].items[i];
-                        }
+            angular.forEach(notebookAnnotations, function(annID) {
+                var annotation = AnnotationsExchange.getAnnotationById(annID);
+
+                // Check and remove annotation items from ItemsExchange.
+                for (var a in annotations) {
+                    if (annotation.id === annotations[a].id) {
+                        continue;
                     }
-
-                    for (var j in annotation.items) {
-                        if (typeof itemsToKeep[annotation.items[j].uri] === 'undefined') {
-                            if (ItemsExchange.isItemInContainer(annotation.items[j], Config.modules.PageItemsContainer.container)) {
-                                ItemsExchange.removeItemFromContainer(annotation.items[j], Config.modules.PageItemsContainer.container);
-                                itemsToDelete.push(annotation.items[j]);
-                            }
-                        }
+                    for (var i in annotations[a].items) {
+                        var uri = annotations[a].items[i].uri;
+                        itemsToKeep[uri] = annotations[a].items[i];
                     }
-
-                    AnnotationsExchange.removeAnnotation(annotation.id);
-                    Consolidation.wipeItems(itemsToDelete);
-
                 }
+
+                for (var j in annotation.items) {
+                    if (typeof itemsToKeep[annotation.items[j].uri] === 'undefined') {
+                        if (ItemsExchange.isItemInContainer(annotation.items[j], Config.modules.PageItemsContainer.container)) {
+                            ItemsExchange.removeItemFromContainer(annotation.items[j], Config.modules.PageItemsContainer.container);
+                            itemsToDelete.push(annotation.items[j]);
+                        }
+                    }
+                }
+
+                AnnotationsExchange.removeAnnotation(annotation.id);
+                Consolidation.wipeItems(itemsToDelete);
             });
 
             // TODO: update positions in sidebar (?)
