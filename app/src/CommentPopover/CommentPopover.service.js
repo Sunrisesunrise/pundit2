@@ -10,26 +10,11 @@ angular.module('Pundit2.CommentPopover')
         return popoverRect;
     };
 
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
-    // TODO: remove deprecated code after testing and validation!!!!
     var changePopoverPosition = function(mouseX, mouseY){
         var state = PndPopover.getState(),
             distanceFromSelectionStart = Math.pow(parseInt(mouseX - state.selectionStart.offset.left), 2) + Math.pow(parseInt(mouseY - state.selectionStart.offset.top), 2),
             distanceFromSelectionEnd = Math.pow(parseInt(mouseX - state.selectionEnd.offset.left), 2) + Math.pow(parseInt(mouseY - state.selectionEnd.offset.top), 2),
-            popoverRect = state.popover.$element[0].getClientRects()[0],
-            range = state.selection.getRangeAt(0),
-            rangeRect = range.getBoundingClientRect(),
-            distanceFromSelectionTopRect = Math.pow(parseInt(mouseY - ($window.scrollY + rangeRect.top)), 2),
-            distanceFromSelectionBottomRect = Math.pow(parseInt(mouseY - ($window.scrollY + rangeRect.bottom)), 2);
+            popoverRect = state.popover.$element[0].getClientRects()[0];
 
         function checkFromBottom(topInfoWhen) {
             var pageVisibleBottom = $window.innerHeight + $window.scrollY;
@@ -51,33 +36,7 @@ angular.module('Pundit2.CommentPopover')
             return false;
         }
 
-        /*if (distanceFromSelectionTopRect < distanceFromSelectionBottomRect && distanceFromSelectionTopRect <= distanceFromSelectionEnd && distanceFromSelectionTopRect <= distanceFromSelectionStart)  {
-            state.anchor.css({
-                top: state.selectionStart.offset.top+'px',
-                left: state.selectionStart.offset.left+'px'
-            });
-            popoverRect = changePopoverPlacement(state, 'top');
-            var pageVisibleTop = $window.scrollY;
-            if ($window.scrollY + popoverRect.top < pageVisibleTop) {
-                var y = state.selectionStart.offset.top + state.selectionStart.height;
-                state.anchor.css('top', (y)+'px');
-                popoverRect = changePopoverPlacement(state, 'bottom');
-            }
-        }
-        else if (distanceFromSelectionBottomRect <= distanceFromSelectionEnd && distanceFromSelectionBottomRect <= distanceFromSelectionStart)  {
-            state.anchor.css({
-                top: (state.selectionEnd.offset.top + state.selectionEnd.height)+'px',
-                left: state.selectionEnd.offset.left+'px'
-            });
-            popoverRect = changePopoverPlacement(state, 'bottom');
-            checkFromBottom({
-                top: (state.selectionEnd.offset.top - state.selectionEnd.height*3/2),
-                right: (state.selectionEnd.offset.top + state.selectionEnd.height/2)
-            });
-            //state.anchor.css('top', (state.selectionEnd.offset.top - state.selectionEnd.height)+'px');
-            //popoverRect = changePopoverPlacement(state, 'top');
-        }
-        else */if (distanceFromSelectionEnd <= distanceFromSelectionStart) {
+        if (distanceFromSelectionEnd <= distanceFromSelectionStart) {
             state.anchor.css({
                 top: (state.selectionEnd.offset.top + state.selectionEnd.height)+'px',
                 left: state.selectionEnd.offset.left+'px'
@@ -121,7 +80,8 @@ angular.module('Pundit2.CommentPopover')
             templateUrl: 'src/CommentPopover/CommentPopover.tmpl.html',
             controller: 'CommentPopoverCtrl',
             placement: 'bottom',
-            alphaRollover: true
+            alphaRollover: true,
+            lockPageScroll: true
         };
         var promise = PndPopover.show(x, y, options, item);
         promise.then(function() {
