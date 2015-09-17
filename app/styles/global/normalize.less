@@ -81,6 +81,14 @@ input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
     float: initial;
 }
 
+[type=radio]::before {
+    background-image: none;
+}
+
+[type=checkbox]::before, [type=radio]::before {
+    width: auto;
+    height: auto;
+}
 
 // Typography resets
 

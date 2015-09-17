@@ -270,6 +270,7 @@ Declarations with > selector for css overwritings */
 ul.nav {
     display: block;
     width: auto;
+    height: auto;
     background: transparent;
 
     li {
@@ -448,7 +449,7 @@ ul.nav-tabs {
         > a {
             background-color: @gray-light;
             border-radius: @tab-border-radius @tab-border-radius 0 0;
-            color: @nav-tabs-active-link-hover-color;
+            color: @nav-tabs-active-link-hover-color !important; /* For css overwritings */
             line-height: @line-height-base;
             overflow: visible;
             // margin-right: 2px;
@@ -637,7 +638,7 @@ textarea.form-control {
     min-height: 150px;
 }
 
-.form-control, .form-group .form-control input[type="text"] {
+.form-control, .form-group input[type="text"] {
     padding: 4px 5px;
     height: 26px;
     -moz-box-sizing: border-box;
@@ -657,15 +658,17 @@ textarea.form-control {
     }
 }
 
-.form-group .form-control {
-    border-radius: 0;
-    font-size: inherit;
-        
-    input[type="text"] {
-        height: 26px;
+.form-group {
+
+    float: none;
+    width: auto;
+
+    .form-control {
+        border-radius: 0;
+        font-size: inherit;
     }
-    
 }
+
 
 a {
     &:hover,
@@ -733,6 +736,7 @@ input {
     color: inherit;
 
     .popover-content {
+        width: auto;
         padding: 10px;
     }
 
@@ -763,6 +767,10 @@ input {
     &.pnd-popover-literal {
         width: 300px;
         max-width: 300px;
+    }
+
+    &.bottom > .arrow::after {
+        margin-left: -10px;
     }
 }
 

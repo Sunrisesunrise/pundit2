@@ -59,6 +59,11 @@
         }
     }
 
+
+    .nav-tabs > li {
+        margin-bottom: -1px !important; /* For css overwritings */
+    }
+
     &.pnd-dashboard-panel-content > .pnd-tab-header {
             padding-top: 3px;
         }
@@ -83,6 +88,8 @@
 
         ul.list-group {
             overflow: visible;
+            -webkit-box-shadow: none; /* For css overwritings  - VENDOR PREFIX */
+            box-shadow: none;
         }
 
         li {
@@ -172,8 +179,8 @@
 /* For overwritings on preview page links */
 
 .pnd-annotation-preview-item-container ul a:hover {
-    color: @color-text-link-hover;
-    text-decoration: underline !important; 
+    color: @color-text-link-hover !important; /* For css overwritings */
+    text-decoration: underline !important; /* For css overwritings */
 }
 
 /* ------------------------------------ *\

@@ -54,7 +54,21 @@
     }
 
     .checkbox {
+        width: auto;
+        height: auto;
         margin: 5px 0 5px 0;
+
+        label {
+            display: inline;
+            width: auto;
+            height: auto;
+            background-color: transparent;
+        }
+
+        input[type="checkbox"] {
+            left: initial; /* For css overwritings */
+            visibility: visible; /* For css overwritings */
+        }
     }
 
     .radio,
