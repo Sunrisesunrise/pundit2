@@ -10,7 +10,8 @@ angular.module('Pundit2.Core')
             expanded: '=expanded',
             deferredAction: '=deferredAction',
             labelAction: '=labelAction',
-            titleAction: '=titleAction'
+            titleAction: '=titleAction',
+            placeholderAction: '=placeholderAction'
         },
         templateUrl: 'src/Core/Templates/select.dir.tmpl.html',
         link: function(scope, element) {
@@ -25,14 +26,13 @@ angular.module('Pundit2.Core')
 
             if (typeof scope.deferredAction === 'function') {
                 var label = scope.labelAction ? scope.labelAction : 'Default action',
-                    title = scope.titleAction ? scope.titleAction : 'Default placeholder';
+                    title = scope.titleAction ? scope.titleAction : 'Default title';
                 scope.optionList.push({
                     label: label,
-                    title: '',
+                    title: title,
                     value: scope.deferredAction,
                     isAction: true
                 });
-                scope.placeholderAction = title;
             }
 
             var findOption = function(value) {
@@ -52,6 +52,7 @@ angular.module('Pundit2.Core')
             scope.optionSelectedValue = scope.optionSelectedValue ? scope.optionSelectedValue : scope.optionList[0].value;
             scope.optionSelected = findOption();
             scope.expanded = scope.expanded ? scope.expanded : false;
+            scope.placeholderAction = scope.placeholderAction ? scope.placeholderAction : 'Default placeholder';
             scope.actionInProgress = false;
             scope.savingInProgress = false;
 

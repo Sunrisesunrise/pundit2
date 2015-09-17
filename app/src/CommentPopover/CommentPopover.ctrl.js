@@ -91,7 +91,11 @@ angular.module('Pundit2.CommentPopover')
                 lastSelectedNotebookId = notebookID;
                 updateAvailableNotebooks();
                 $scope.selectedNotebookId = lastSelectedNotebookId;
-                deferred.resolve(notebookID);
+                deferred.resolve({
+                    label: notebookName,
+                    title: notebookName,
+                    value: notebookID
+                });
             }
         }, function() {
             // TODO: handle errors during noteebook save, maybe Alert System is enough ?
