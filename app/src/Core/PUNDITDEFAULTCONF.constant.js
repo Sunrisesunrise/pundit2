@@ -487,6 +487,9 @@ angular.module('Pundit2.Core')
         Toolbar: {
             active: true
         },
+        LiteTool: {
+            active: true
+        },
         AnnotationSidebar: {
             active: true
         },

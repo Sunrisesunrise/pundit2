@@ -143,6 +143,11 @@
     <script src="../src/Lists/VocabulariesContainer/VocabulariesContainer.js"></script>
     <script src="../src/Lists/VocabulariesContainer/VocabulariesContainer.service.js"></script>
 
+    <script src="../src/LiteTool/LiteTool.js"></script>
+    <script src="../src/LiteTool/LiteTool.dir.js"></script>
+    <script src="../src/LiteTool/LiteTool.ctrl.js"></script>
+    <script src="../src/LiteTool/LiteTool.service.js"></script>
+
     <script src="../src/Tools/TripleComposer/TripleComposer.js"></script>
     <script src="../src/Tools/TripleComposer/TripleComposer.dir.js"></script>
     <script src="../src/Tools/TripleComposer/TripleComposer.ctrl.js"></script>
@@ -153,7 +158,7 @@
     <script src="../src/Toolbar/Toolbar.js"></script>
     <script src="../src/Toolbar/Toolbar.dir.js"></script>
     <script src="../src/Toolbar/Toolbar.ctrl.js"></script>
-    <script src="../src/Toolbar/Toolbar.service.js"></script>
+    <script src="../src/Toolbar/Toolbar.service.js"></script>    
 
     <script src="../src/Preview/Preview.js"></script>
     <script src="../src/Preview/Preview.dir.js"></script>

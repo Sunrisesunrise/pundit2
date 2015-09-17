@@ -8,6 +8,7 @@ angular.module('Pundit2', [
     'Pundit2.Dashboard',
     'Pundit2.Model', 
     'Pundit2.Toolbar',
+    'Pundit2.LiteTool',
     'Pundit2.Communication',
     'Pundit2.Annotators',
     'Pundit2.ContextualMenu',
