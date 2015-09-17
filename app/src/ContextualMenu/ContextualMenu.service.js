@@ -28,6 +28,11 @@ angular.module('Pundit2.ContextualMenu')
 
     var contextualMenu = new BaseComponent('ContextualMenu', CONTEXTUALMENUDEFAULTS);
 
+    var scoll = {
+        top: undefined,
+        left: undefined
+    };
+
     var state = {
         // angular strap menu reference
         menu: null,
@@ -48,6 +53,10 @@ angular.module('Pundit2.ContextualMenu')
         // and to define the real menu placement to prevent window scrool
         mockMenu: null,
         init: false
+    };
+
+    var scrollHandler = function() {
+        $(this).scrollTop(scroll.top).scrollLeft(scroll.left);
     };
 
     // var overflowContentClass = contextualMenu.options.overflowContentClass;
@@ -282,17 +291,15 @@ angular.module('Pundit2.ContextualMenu')
         state.menu.$promise.then(state.menu.show);
 
         // Find current scroll positions
-        var wTop = angular.element($window).scrollTop(),
-            wLeft = angular.element($window).scrollLeft();
+        scroll.top = angular.element($window).scrollTop();
+        scroll.left = angular.element($window).scrollLeft();
         // Force scroll back to original positions
-        angular.element($window).bind("scroll", function() {
-            $(this).scrollTop(wTop).scrollLeft(wLeft);
-        });
+        angular.element($window).on("scroll", scrollHandler);
         angular.element('body').addClass(contextualMenu.options.overflowClass);
     });
 
     mockOptions.scope.$on('dropdown.hide', function() {
-        angular.element($window).unbind("scroll");
+        angular.element($window).off("scroll", scrollHandler);
         angular.element('body').removeClass(contextualMenu.options.overflowClass);
     });
 
