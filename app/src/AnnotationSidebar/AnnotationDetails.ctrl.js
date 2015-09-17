@@ -19,6 +19,8 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.moreInfo = AnnotationDetails.options.moreInfo;
     $scope.notebookLink = Config.askThePundit;
 
+    $scope.editMode = false;
+
     if (typeof($scope.annotation) !== 'undefined') {
         if (AnnotationDetails.isUserToolShowed($scope.annotation.creator)) {
             $scope.askLink = Config.askBaseURL + '#/myNotebooks/';
@@ -49,6 +51,8 @@ angular.module('Pundit2.AnnotationSidebar')
     }
 
     $scope.toggleAnnotation = function() {
+        $scope.editMode = false;
+
         if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
             if (AnnotationSidebar.isFiltersExpanded()) {
                 AnnotationSidebar.toggleFiltersContent();
@@ -119,6 +123,14 @@ angular.module('Pundit2.AnnotationSidebar')
             doEditAnnotation();
         }
     };
+
+    $scope.editComment = function() {
+        $scope.editMode = true;
+    };
+
+    $scope.cancelEdit = function() {
+        $scope.editMode = false;
+    }
 
     $scope.isUserToolShowed = function() {
         return (AnnotationDetails.isUserToolShowed($scope.annotation.creator) || ($scope.forceEdit && MyPundit.isUserLogged())) && AnnotationSidebar.isAnnotationsPanelActive();

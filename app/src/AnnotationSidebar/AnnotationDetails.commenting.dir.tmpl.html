@@ -76,20 +76,44 @@
             </div>
             <!-- // END Meta -->
 
-            <div class="pnd-comment">{{annotation.comment}}</div>
+            <div 
+                class="pnd-comment"
+                ng-if="!editMode">{{annotation.comment}}</div>
+            <div
+                ng-if="editMode">
+                <textarea
+                    class="form-control pnd-popover-literal-textarea"
+                    rows="6"
+                    ng-model="annotation.comment"></textarea>
+            </div>
 
         </div>
 
         <!-- Footer -->
-        <div class="pnd-annotation-details-footer" ng-show="isUserToolShowed()">
+        <div 
+            class="pnd-annotation-details-footer" 
+            ng-show="isUserToolShowed()"
+            ng-if="!editMode">
             <button 
                 type="button" 
                 ng-if="showEdit()" 
                 class="pnd-btn pnd-btn-small pnd-btn-fill-width pnd-edit"
-                ng-click="editAnnotation()">Edit</button><button
+                ng-click="editComment()">Edit</button><button
                 type="button" 
                 class="pnd-btn pnd-btn-small pnd-btn-fill-width pnd-delete"
                 ng-click="deleteAnnotation()">Delete</button>
+        </div>
+        <div 
+            class="pnd-annotation-details-footer" 
+            ng-show="isUserToolShowed()"
+            ng-if="editMode">
+            <button 
+                type="button" 
+                class="pnd-btn pnd-btn-small pnd-btn-fill-width"
+                ng-click="accept()">Save</button><button
+                type="button" 
+                class="pnd-btn pnd-btn-small pnd-btn-fill-width"
+                ng-click="cancelEdit()">Cancel</button>
         </div>
         <!-- // END Footer -->
 

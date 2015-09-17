@@ -62,6 +62,8 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.fromMaxDate = new Date();
     $scope.fromToDate = new Date();
 
+    $scope.proMode = clientMode === 'pro'; 
+
     body.css('position', 'static');
     container.css('height', body.innerHeight() + 'px');
     container.css('margin-top', state.newMarginTopSidebar + 'px');

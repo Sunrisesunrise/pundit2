@@ -507,8 +507,8 @@ angular.module('Pundit2.AnnotationSidebar')
                     notebookName: notebookName,
                     scopeReference: scope,
                     mainItem: firstItem,
-                    // itemsArray: [firstItem],
-                    // itemsUriArray: [firstTargetUri],
+                    itemsArray: [firstItem],
+                    itemsUriArray: [firstTargetUri],
                     comment: currentAnnotation.graph[NameSpace.rdf.value][0].value,
                     broken: isBroken,
                     expanded: expandedState,
@@ -533,8 +533,8 @@ angular.module('Pundit2.AnnotationSidebar')
                     state.annotations[currentId].notebookId = currentAnnotation.isIncludedIn;
                     state.annotations[currentId].scopeReference = scope;
                     state.annotations[currentId].mainItem = firstItem;
-                    // state.annotations[currentId].itemsArray = [firstItem];
-                    // state.annotations[currentId].itemsUriArray = [firstTargetUri];
+                    state.annotations[currentId].itemsArray = [firstItem];
+                    state.annotations[currentId].itemsUriArray = [firstTargetUri];
                     state.annotations[currentId].broken = isBroken;
                     state.annotations[currentId].ghosted = false;
                     state.annotations[currentId].expanded = true;

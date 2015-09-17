@@ -28,7 +28,10 @@
                 </div>
 
                 <!-- Button to show filters -->
-                <div class="pnd-annotation-sidebar-filter-content" ng-show="isAnnotationsPanelActive()">
+                <div 
+                    class="pnd-annotation-sidebar-filter-content" 
+                    ng-show="isAnnotationsPanelActive()"
+                    ng-if="proMode">
                     <div ng-class="{'pnd-btn-sidebar-full': !annotationSidebar.needToFilter()}">
 
                         <button
