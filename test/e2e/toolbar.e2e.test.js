@@ -10,7 +10,7 @@ describe("The toolbar module", function() {
         });
 
         // login button should be visible
-        p.findElements(protractor.By.css('.pnd-toolbar-login-button')).then(function(loginButton) {
+        p.findElements(protractor.By.css('.pnd-login-button')).then(function(loginButton) {
             expect(loginButton.length).toBe(1);
 
             // click login button
@@ -75,7 +75,7 @@ describe("The toolbar module", function() {
         });
 
         // login button should be hide
-        p.findElements(protractor.By.css('.pnd-toolbar-login-button.ng-hide')).then(function(loginButton) {
+        p.findElements(protractor.By.css('.pnd-login-button.ng-hide')).then(function(loginButton) {
             expect(loginButton.length).toBe(1);
         });
 
