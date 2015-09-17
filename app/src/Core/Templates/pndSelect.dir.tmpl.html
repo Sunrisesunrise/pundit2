@@ -24,6 +24,13 @@
             ng-class="{'selected': isOptionSelected(option), 'custom-action': option.isAction}">
             {{option.label}}
          </div>
+         <div
+            class="option custom-action"
+            ng-if="optionAction"
+            data-value="{{optionAction.value}}"
+            ng-click="showAction()">
+           {{optionAction.label}}
+         </div>
       </div>
    </div>
 

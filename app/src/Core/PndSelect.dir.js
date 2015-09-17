@@ -13,11 +13,12 @@ angular.module('Pundit2.Core')
             titleAction: '=titleAction',
             placeholderAction: '=placeholderAction'
         },
-        templateUrl: 'src/Core/Templates/select.dir.tmpl.html',
+        templateUrl: 'src/Core/Templates/pndSelect.dir.tmpl.html',
         link: function(scope, element) {
-            var fncAction;
+            var inputElement = element.find('.creation-input').eq(0),
+                fncAction;
 
-            var inputElement = element.find('.creation-input').eq(0);
+            scope.optionAction = false;
 
             if (angular.isArray(scope.optionList) === false &&
                 scope.optionList <= 0) {
@@ -27,12 +28,11 @@ angular.module('Pundit2.Core')
             if (typeof scope.deferredAction === 'function') {
                 var label = scope.labelAction ? scope.labelAction : 'Default action',
                     title = scope.titleAction ? scope.titleAction : 'Default title';
-                scope.optionList.push({
+                scope.optionAction = {
                     label: label,
                     title: title,
-                    value: scope.deferredAction,
-                    isAction: true
-                });
+                    value: scope.deferredAction
+                };
             }
 
             var findOption = function(value) {
@@ -56,22 +56,10 @@ angular.module('Pundit2.Core')
             scope.actionInProgress = false;
             scope.savingInProgress = false;
 
-            var setAction = function(option) {
-                fncAction = option.value;
-                scope.inputAction = '';
-                scope.actionInProgress = true;
-                $timeout(function() {
-                    inputElement.focus();
-                });
-            };
-
             scope.runAction = function(input) {
                 scope.savingInProgress = true;
                 fncAction(input).then(function(option) {
                     if (typeof option !== 'undefined') {
-                        var actionRef = scope.optionList.pop();
-                        scope.optionList.push(option);
-                        scope.optionList.push(actionRef);
                         if (typeof option !== 'object') {
                             option = findOption(option);
                         }
@@ -102,12 +90,18 @@ angular.module('Pundit2.Core')
                 scope.expanded = !scope.expanded;
             };
 
+            scope.showAction = function() {
+                scope.expanded = false;
+                fncAction = scope.optionAction.value;
+                scope.inputAction = '';
+                scope.actionInProgress = true;
+                $timeout(function() {
+                    inputElement.focus();
+                });
+            };
+
             scope.selectOption = function(option) {
-                if (option.isAction) {
-                    setAction(option);
-                } else {
-                    scope.optionSelected = option;
-                }
+                scope.optionSelected = option;
 
                 if (scope.expanded) {
                     scope.toggleExpand();

@@ -26,31 +26,6 @@
                     deferred-action="doCreateNewNotebook"
                     label-action="'Create new notebook'"
                     placeholder-action="'Type new notebook name here'"></pnd-select>
-            <!--
-            <div ng-show="!createNewNotebook">
-                <select name="notebooks"
-                        ng-model="selectedNotebookId"
-                        ng-change="notebookSelectionChanged()">
-                    <option ng-repeat="option in availableNotebooks"
-                            value="{{option.id}}">{{option.name}}</option>
-                </select>
-            </div>
-            <div ng-show="createNewNotebook">
-                <div ng-show="!savingNewNotebook">
-                    <input type="text"
-                           ng-model="newNotebookName"
-                           placeholder="Type new notebook name here"/>
-                    <button class="pnd-btn pnd-btn-calltoaction"
-                            ng-class="{disabled: newNotebookName == ''}"
-                            ng-click="createNewNotebookClick()">OK</button>
-                    <button class="pnd-btn"
-                            ng-click="cancelCreationNewNotebookClick()">CANCEL</button>
-                </div>
-                <div ng-show="savingNewNotebook">
-                    Saving ...
-                </div>
-            </div>
-            -->
         </div>
 
         <div class="popover-footer"
@@ -63,7 +38,7 @@
             </button><button
                 class="pnd-btn"
                 ng-click="cancel()">
-                OK
+                Cancel
             </button>
         </div>
     </div>
