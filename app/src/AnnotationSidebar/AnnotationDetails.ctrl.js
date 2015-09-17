@@ -131,7 +131,8 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.saveEdit = function() {
-        var promise = AnnotationDetails.saveEditedComment(currentId, $scope.annotation.mainItem, $scope.editCommentValue);
+        console.log($scope.annotation.comment);
+        var promise = AnnotationDetails.saveEditedComment(currentId, $scope.annotation.mainItem, $scope.annotation.comment);
 
         promise.then(function() {
             $scope.editMode = false;

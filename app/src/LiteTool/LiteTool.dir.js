@@ -4,6 +4,7 @@ angular.module('Pundit2.LiteTool')
     return {
         restrict: 'E',
         scope: {},
+        controller: 'LiteToolCtrl',
         templateUrl: "src/LiteTool/LiteTool.dir.tmpl.html",
         link: function( /*scope, el  attrs, ctrl */ ) {}
     };
