@@ -10,12 +10,8 @@ rendered. It needs to push down any existing content making space for us.
 (@toolbar-height is defined in pundit2.less)
 */
 
-body.pnd-toolbar-active {
-    margin-top: @toolbar-height;
-    background-position-y: @toolbar-height;
-}
 
- /*.navbar .nav {
+/*.navbar .nav {
         margin: 0;
     }
 
@@ -37,8 +33,13 @@ body.pnd-toolbar-active {
 */
 
 /* ------------------------------------ *\
-   #TOOLBAR-STYLE
+   #TOOLBAR
 \* ------------------------------------ */
+
+body.pnd-toolbar-active {
+    margin-top: @toolbar-height;
+    background-position-y: @toolbar-height;
+}
 
 .pnd-toolbar-navbar {
     width: 100%; /* For css overwritings */
