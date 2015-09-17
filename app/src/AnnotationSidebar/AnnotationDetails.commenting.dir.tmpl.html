@@ -84,7 +84,7 @@
                 <textarea
                     class="form-control pnd-popover-literal-textarea"
                     rows="6"
-                    ng-model="annotation.comment"></textarea>
+                    ng-model="editCommentValue"></textarea>
             </div>
 
         </div>
@@ -110,7 +110,7 @@
             <button 
                 type="button" 
                 class="pnd-btn pnd-btn-small pnd-btn-fill-width"
-                ng-click="accept()">Save</button><button
+                ng-click="saveEdit()">Save</button><button
                 type="button" 
                 class="pnd-btn pnd-btn-small pnd-btn-fill-width"
                 ng-click="cancelEdit()">Cancel</button>

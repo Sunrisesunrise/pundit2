@@ -112,7 +112,7 @@ angular.module('Pundit2.Communication')
         });
     };
 
-    var updateAnnotationV2 = function(promise, annID, graph, items, flatTargets, targets, types) {
+    var updateAnnotationV2 = function(promise, annID, graph, items, flatTargets, targets, types, motivation) {
         setLoading(true);
         Consolidation.requestConsolidateAll();
 
@@ -123,6 +123,17 @@ angular.module('Pundit2.Communication')
             target: targets
         };
 
+        var params = {
+            context: angular.toJson({
+                targets: flatTargets,
+                pageContext: XpointersHelper.getSafePageContext()
+            })
+        };
+
+        if (typeof motivation !== 'undefined') {
+            params.motivatedBy = motivation;
+        }
+
         $http({
             headers: {
                 'Content-Type': 'application/json'
@@ -131,12 +142,7 @@ angular.module('Pundit2.Communication')
             url: NameSpace.get('asAnn', {
                 id: annID
             }),
-            params: {
-                context: angular.toJson({
-                    targets: flatTargets,
-                    pageContext: XpointersHelper.getSafePageContext()
-                })
-            },
+            params: params,
             withCredentials: true,
             data: postData
         }).success(function() {
@@ -580,7 +586,7 @@ angular.module('Pundit2.Communication')
 
     // this API not work correctly sometimese save correctly the items sometimes not save correctly
     // TODO : safety check if we get an error in one of the two http calls
-    annotationsCommunication.editAnnotation = function(annID, graph, items, flatTargets, targets, types) {
+    annotationsCommunication.editAnnotation = function(annID, graph, items, flatTargets, targets, types, motivation) {
 
         var promise = $q.defer();
 
@@ -591,7 +597,7 @@ angular.module('Pundit2.Communication')
             if (Config.annotationServerVersion === 'v1') {
                 updateAnnotationV1(promise, annID, graph, items, flatTargets);
             } else {
-                updateAnnotationV2(promise, annID, graph, items, flatTargets, targets, types);
+                updateAnnotationV2(promise, annID, graph, items, flatTargets, targets, types, motivation);
             }
 
         } else {

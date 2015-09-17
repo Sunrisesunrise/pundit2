@@ -91,8 +91,6 @@ angular.module('Pundit2.Core')
             height: te.height(),
         };
 
-        return;
-
         ts.remove();
         parentTStart[0].normalize();
         te.remove();

@@ -20,6 +20,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.notebookLink = Config.askThePundit;
 
     $scope.editMode = false;
+    $scope.editCommentValue = '';
 
     if (typeof($scope.annotation) !== 'undefined') {
         if (AnnotationDetails.isUserToolShowed($scope.annotation.creator)) {
@@ -126,6 +127,18 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.editComment = function() {
         $scope.editMode = true;
+        $scope.editCommentValue = $scope.annotation.comment;
+    };
+
+    $scope.saveEdit = function() {
+        var promise = AnnotationDetails.saveEditedComment(currentId, $scope.annotation.mainItem, $scope.annotation.comment);
+
+        promise.then(function() {
+            $scope.editMode = false;
+        }, function() {
+            $scope.editCommentValue = '';
+            $scope.editMode = false;
+        });
     };
 
     $scope.cancelEdit = function() {

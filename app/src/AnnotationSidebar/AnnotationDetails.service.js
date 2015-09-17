@@ -62,8 +62,8 @@ angular.module('Pundit2.AnnotationSidebar')
     debug: false
 })
 
-.service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $modal, $injector,
-    BaseComponent, Config, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange,
+.service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $modal, $injector, $q,
+    BaseComponent, Config, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, ModelHelper,
     Consolidation, ContextualMenu, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
     ImageAnnotator, AnnotationsCommunication, NotebookExchange, TypesHelper, Analytics, NameSpace) {
 
@@ -180,14 +180,6 @@ angular.module('Pundit2.AnnotationSidebar')
     modalScope.cancel = function() {
         confirmModal.hide();
         Analytics.track('buttons', 'click', 'annotation--details--delete--cancel');
-    };
-
-    annotationDetails.openConfirmModal = function(currentElement, currentId)  {
-        // promise is needed to open modal when template is ready
-        modalScope.notifyMessage = 'Are you sure you want to delete this annotation? Please be aware that deleted annotations cannot be recovered.';
-        modalScope.elementReference = currentElement;
-        modalScope.annotationId = currentId;
-        confirmModal.$promise.then(confirmModal.show);
     };
 
     var activateTextFragmentHighlight = function(items) {
@@ -345,6 +337,43 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         return results;
+    };
+
+    annotationDetails.openConfirmModal = function(currentElement, currentId)  {
+        // promise is needed to open modal when template is ready
+        modalScope.notifyMessage = 'Are you sure you want to delete this annotation? Please be aware that deleted annotations cannot be recovered.';
+        modalScope.elementReference = currentElement;
+        modalScope.annotationId = currentId;
+        confirmModal.$promise.then(confirmModal.show);
+    };
+
+    annotationDetails.saveEditedComment = function(annID, item, comment) {
+        var currentTarget = item,
+            currentStatement = {
+                scope: {
+                    get: function() {
+                        return {
+                            subject: currentTarget,
+                            predicate: '',
+                            object: comment
+                        }
+                    }
+                }
+            };
+
+        var modelData = ModelHelper.buildCommentData(currentStatement);
+
+        var editPromise = AnnotationsCommunication.editAnnotation(
+            annID,
+            modelData.graph,
+            modelData.items,
+            modelData.flatTargets,
+            modelData.target,
+            modelData.type,
+            'commenting'
+        );
+
+        return editPromise;
     };
 
     annotationDetails.getAnnotationDetails = function(currentId) {
