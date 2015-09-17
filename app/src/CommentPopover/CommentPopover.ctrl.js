@@ -47,20 +47,6 @@ angular.module('Pundit2.CommentPopover')
 
     $scope.save = function() {
         $scope.savingComment = true;
-        $timeout(function() {
-            var res = parseInt((Math.random() * 100) % 2) === 1;
-            if (res) {
-                $scope.savingComment = false;
-                $scope.errorSaving = false;
-                CommentPopover.lastUsedNotebookID = lastSelectedNotebookId;
-                NotebookCommunication.setCurrent(lastSelectedNotebookId);
-                PndPopover.hide();
-            } else {
-                $scope.savingComment = false;
-                $scope.errorSaving = true;
-            }
-        }, 3000);
-
 
         var currentTarget = PndPopover.getData(),
             currentStatement = {
@@ -87,6 +73,13 @@ angular.module('Pundit2.CommentPopover')
             modelData.type,
             'commenting'
         );
+
+        httpPromise.then(function() {
+            // OK.
+            PndPopover.hide();
+        }, function() {
+            // Epic FAIL.
+        });
 
     };
 
