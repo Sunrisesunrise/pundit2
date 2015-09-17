@@ -132,6 +132,8 @@ angular.module('Pundit2.Communication')
 
         if (typeof motivation !== 'undefined') {
             params.motivatedBy = motivation;
+        } else {
+            params.motivatedBy = 'linking';
         }
 
         $http({
