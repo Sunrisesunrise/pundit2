@@ -270,14 +270,14 @@ angular.module('Pundit2.Core')
      * @returns {Promise} the promise will be resolved as true when user has finished authentication and is logged in correctly, false otherwise
      *
      */
-    myPundit.login = function() {
+    myPundit.login = function(popoverPlacement) {
         loginPromise = $q.defer();
 
         if (myPundit.isUserLogged()) {
             loginPromise.resolve(true);
         } else {
             loginStatus = 'loggedOff';
-            myPundit.popoverLogin('login');
+            myPundit.popoverLogin('login', popoverPlacement);
         }
 
         return loginPromise.promise;
@@ -582,7 +582,7 @@ angular.module('Pundit2.Core')
     myPundit.addPostMessageListener();
 
     // TODO This is not really a popoverLogin but more a popover toggler
-    myPundit.popoverLogin = function(where) {
+    myPundit.popoverLogin = function(where, popoverPlacement) {
         if (typeof(loginPromise) === 'undefined' && where !== 'editProfile') {
             return;
             // loginPromise = $q.defer();
@@ -599,17 +599,23 @@ angular.module('Pundit2.Core')
 
         // popoverState.anchor = angular.element('.pnd-toolbar-login-button');
         // popoverState.popover = $popover(angular.element(".pnd-toolbar-toggle-button"), popoverState.options);
+        
+        var popoverOptions = popoverState.options;
+        if (typeof popoverPlacement !== 'undefined') {
+            popoverOptions = angular.copy(popoverState.options);
+            popoverOptions.placement = popoverPlacement;
+        }
         var anchor;
         if (where === 'login') {
-            anchor = angular.element(".pnd-toolbar-login-button");
+            anchor = angular.element(".pnd-login-button");
             if (anchor.length === 0) {
                 loginPromise.reject();
                 return loginPromise.promise;
             }
-            popoverState.popover = $popover(anchor, popoverState.options);
+            popoverState.popover = $popover(anchor, popoverOptions);
         } else if (where === 'editProfile') {
             anchor = angular.element(".pnd-toolbar-user-button");
-            popoverState.popover = $popover(anchor, popoverState.options);
+            popoverState.popover = $popover(anchor, popoverOptions);
             if (anchor.length === 0) {
                 return;
             }
@@ -633,10 +639,22 @@ angular.module('Pundit2.Core')
         popoverState.popover.$promise.then(function() {
             popoverState.popover.show();
             popoverState.renderIFrame(where);
+            checkPopoverPosition();
         });
 
         if (typeof loginPromise !== 'undefined'){
             return loginPromise.promise;
+        }
+    };
+
+    var checkPopoverPosition = function() {
+        var popoverRect = popoverState.popover.$element[0].getClientRects()[0];
+        var pageVisibleRight = $window.innerWidth + $window.scrollX;
+        if ($window.scrollX + popoverRect.right > pageVisibleRight) {
+            popoverState.popover.$options.placement = 'left';
+            popoverState.popover.$element.removeClass('left').removeClass('top').removeClass('right').removeClass('bottom');
+            popoverState.popover.$element.find('.arrow-top').removeClass('arrow-top').addClass('arrow-right');
+            popoverState.popover.$applyPlacement();
         }
     };
 
