@@ -96,7 +96,9 @@ var extractUrl = function(file, text) {
 };
 
 var updateScript = function(tabId, callback) {
+    libInject = [];
     scriptInject = [];
+    fileRequest(_lib, extractUrl);
     fileRequest(_pundit, extractUrl);
 
     if (typeof tabId !== 'undefined' &&
@@ -107,5 +109,4 @@ var updateScript = function(tabId, callback) {
     }
 };
 
-fileRequest(_lib, extractUrl);
-fileRequest(_pundit, extractUrl);
+updateScript();
