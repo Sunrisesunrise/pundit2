@@ -10,7 +10,7 @@ angular.module('Pundit2.Core')
 .directive('includeReplace', function() {
     return {
         require: 'ngInclude',
-        link: function(scope, el, attrs) {
+        link: function(scope, el) {
             el.replaceWith(el.children());
         }
     };

@@ -56,7 +56,7 @@ angular.module('Pundit2.CommentPopover')
                             subject: currentTarget,
                             predicate: '',
                             object: $scope.literalText
-                        }
+                        };
                     }
                 }
             };

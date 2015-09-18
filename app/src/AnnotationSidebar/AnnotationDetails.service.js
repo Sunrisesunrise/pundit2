@@ -356,7 +356,7 @@ angular.module('Pundit2.AnnotationSidebar')
                             subject: currentTarget,
                             predicate: '',
                             object: comment
-                        }
+                        };
                     }
                 }
             };

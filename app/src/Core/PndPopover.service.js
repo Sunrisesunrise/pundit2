@@ -28,8 +28,8 @@ angular.module('Pundit2.Core')
     var eventHandler = null;
 
     var calculateSelectionCoordinates = function() {
-        var range = state.selection.getRangeAt(0),
-            ts = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>'),
+        // var range = state.selection.getRangeAt(0)
+        var ts = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>'),
             te = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>');
 
         var fragmentElements = angular.element('span.' + state.fragmentId);
@@ -98,7 +98,7 @@ angular.module('Pundit2.Core')
     };
 
     var scrollHandler = function() {
-        $(this).scrollTop(state.scroll.top).scrollLeft(state.scroll.left);
+        angular.element(this).scrollTop(state.scroll.top).scrollLeft(state.scroll.left);
     };
 
     var show = function() {
@@ -125,7 +125,7 @@ angular.module('Pundit2.Core')
 
         var win = angular.element($window);
         state.scroll.top = win.scrollTop(),
-        state.scroll.left = win.scrollLeft();
+            state.scroll.left = win.scrollLeft();
 
         if (state.popoverOptions.lockPageScroll) {
             win.on('scroll', scrollHandler);
