@@ -2,6 +2,7 @@
 
 angular.module('Pundit2.Annotators')
 
+// TODO: why?! 
 .config(function($locationProvider) {
     // $locationProvider.html5Mode(true);
     $locationProvider.html5Mode({
@@ -86,7 +87,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> textFragmentIconClass: "pnd-text-fragment-icon" </pre>
      */
-    textFragmentIconClass: "pnd-text-fragment-icon",
+    textFragmentIconClass: 'pnd-text-fragment-icon',
 
     /**
      * @module punditConfig
@@ -99,9 +100,9 @@ angular.module('Pundit2.Annotators')
      * Hidden fragment class
      *
      * Default value:
-     * <pre> textFragmentHiddenClass: "pnd-textfragment-hidden" </pre>
+     * <pre> textFragmentHiddenClass: 'pnd-textfragment-hidden' </pre>
      */
-    textFragmentHiddenClass: "pnd-textfragment-hidden",
+    textFragmentHiddenClass: 'pnd-textfragment-hidden',
 
     /**
      * @module punditConfig
@@ -252,7 +253,7 @@ angular.module('Pundit2.Annotators')
                 // TODO: here we could pass back the list of invalid xpointers, but they
                 // should have been checked already by consolidation .. BEFORE the consolidation
                 // process actually starts .... !
-                xpointersHelper.err("Invalid xpointer passed to getXPathsFromXPointers: THIS SHOULD NOT HAPPEN!", xpointer);
+                xpointersHelper.err('Invalid xpointer passed to getXPathsFromXPointers: THIS SHOULD NOT HAPPEN!', xpointer);
             }
         } // for i
 
@@ -263,7 +264,7 @@ angular.module('Pundit2.Annotators')
     xpointersHelper.isValidXpointerURI = function(xpointer) {
         // TODO: perché in client.html si verifica xpointer undefined?! 
         if (typeof(xpointer) === 'undefined') {
-            xpointersHelper.err("Xpointer is undefined: this should not happend!");
+            xpointersHelper.err('Xpointer is undefined: this should not happend!');
             return false;
         }
         if (xpointer.match(/#xpointer\(start-point\(string-range\(/) === null || xpointer.match(/range-to\(string-range\(/) === null) {
@@ -289,7 +290,7 @@ angular.module('Pundit2.Annotators')
             foo;
 
         if (!xpointersHelper.isValidXpointerURI(xpointer)) {
-            xpointersHelper.log("xPointerToXPath() Invalid xpointer! ", xpointer);
+            xpointersHelper.log('xPointerToXPath() Invalid xpointer! ', xpointer);
             return {
                 startNode: null,
                 startOffset: null,
@@ -302,15 +303,15 @@ angular.module('Pundit2.Annotators')
         // Split the xpointer two times, to extract a string
         // like //xpath1[n1],'',o1,//xpath2[n2],'',o2
         // where o1 and o2 are the offsets
-        splittedString = xpointer.split("#xpointer(start-point(string-range(")[1].split("))/range-to(string-range(");
+        splittedString = xpointer.split('#xpointer(start-point(string-range(')[1].split('))/range-to(string-range(');
 
         // Then extract xpath and offset of the starting point
-        foo = splittedString[0].split(",'',");
+        foo = splittedString[0].split(",'',"); // jshint ignore:line
         ret.startXpath = foo[0];
         ret.startOffset = foo[1];
 
         // .. and of the ending point of the xpointer
-        foo = splittedString[1].substr(0, splittedString[1].length - 3).split(",'',");
+        foo = splittedString[1].substr(0, splittedString[1].length - 3).split(",'',"); // jshint ignore:line
         ret.endXpath = foo[0];
         ret.endOffset = foo[1];
 
@@ -476,7 +477,7 @@ angular.module('Pundit2.Annotators')
             $timeout.cancel(updateTimer);
 
             if (xpathsCache.length <= 1) {
-                xpointersHelper.log("Dom successfully updated!");
+                xpointersHelper.log('Dom successfully updated!');
                 EventDispatcher.sendEvent('XpointersHelper.DOMUpdated');
                 promise.resolve();
                 return;
@@ -492,7 +493,7 @@ angular.module('Pundit2.Annotators')
                         start = xpathsCache[xpathsCache.length - 1];
 
                     if (xpathsFragmentIds[i].length > 0) {
-                        xpointersHelper.log("## Updating DOM, xpath " + i + ": " + xpathsFragmentIds[i].join(" "));
+                        xpointersHelper.log('## Updating DOM, xpath ' + i + ': ' + xpathsFragmentIds[i].join(' '));
                         xpointersHelper.wrapXPaths(start, end, xpointersHelper.options.wrapNodeName, htmlClass, xpathsFragmentIds[i]);
                     }
 
@@ -582,7 +583,8 @@ angular.module('Pundit2.Annotators')
 
         if (doQueue && nodesQueque.length > 0) {
             EventDispatcher.sendEvent('XpointersHelper.temporaryWrap', {
-                uri: itemUri, fragments: nodesQueque
+                uri: itemUri,
+                fragments: nodesQueque
             });
         }
 
@@ -599,8 +601,8 @@ angular.module('Pundit2.Annotators')
         }
 
         // Check: the content must not be empty
-        content = node.textContent.replace(/ /g, "").replace(/\n/, "");
-        if (!node.data || content === "" || content === " ") {
+        content = node.textContent.replace(/ /g, '').replace(/\n/, '');
+        if (!node.data || content === '' || content === ' ') {
             return false;
         }
 
@@ -641,7 +643,7 @@ angular.module('Pundit2.Annotators')
     xpointersHelper.wrapNode = function(element, range, htmlTag, htmlClass, parents) {
         var r2 = $document[0].createRange(),
             wrapNode;
-        
+
         var modParents = parents,
             modifyWrapping = false,
             elementLength = 0,
@@ -650,17 +652,19 @@ angular.module('Pundit2.Annotators')
             parentFragmentIds = [];
 
         var updateWrappingNode = function() {
-            var needOtherCheck = false;
+            var needOtherCheck = false,
+                newWrapNode;
+
             for (var i in parentElement.childNodes) {
                 var node = parentElement.childNodes[i];
                 if (node.nodeType === 3) {
                     if (node.length > 0) {
                         // Wrapp text node.
                         var r = $document[0].createRange(),
-                        l = node.length;
+                            l = node.length;
                         r.setStart(node, 0);
                         r.setEnd(node, l);
-                        var newWrapNode = xpointersHelper.createWrapNode(htmlTag, xpointersHelper.options.wrapNodeClass, parentFragmentIds);
+                        newWrapNode = xpointersHelper.createWrapNode(htmlTag, xpointersHelper.options.wrapNodeClass, parentFragmentIds);
                         r.surroundContents(newWrapNode.element);
                         needOtherCheck = true;
                         break;
@@ -706,19 +710,16 @@ angular.module('Pundit2.Annotators')
         r2.surroundContents(wrapNode.element);
 
         if (modifyWrapping) {
-            console.log("Mod wrapping");
-            console.log(r2);
             updateWrappingNode();
 
             wrapNode.jElement
                 .addClass(xpointersHelper.options.wrapNodeClass);
             jParentElement
-                .find("." + xpointersHelper.options.textFragmentHiddenClass)
+                .find('.' + xpointersHelper.options.textFragmentHiddenClass)
                 .removeClass(xpointersHelper.options.textFragmentHiddenClass);
             jParentElement
                 .contents().unwrap();
-        } 
-        else {
+        } else {
             //TODO: check type nodes (images?)
             EventDispatcher.sendEvent('XpointersHelper.NodeAdded', {
                 fragments: parents,
@@ -760,7 +761,7 @@ angular.module('Pundit2.Annotators')
             return;
         }
 
-        if ((typeof(node.childNodes) !== "undefined") && (node.childNodes.length > 0)) {
+        if ((typeof(node.childNodes) !== 'undefined') && (node.childNodes.length > 0)) {
             var i = node.childNodes.length - 1;
 
             var child, sibling;
@@ -905,26 +906,26 @@ angular.module('Pundit2.Annotators')
             fragment, query, queryObject;
 
         // If there's a fragment, save it and remove it from the uri
-        if (uri.indexOf("#") !== -1) {
-            fragment = uri.substring(uri.indexOf("#") + 1, uri.length);
-            uri = uri.substring(0, uri.indexOf("#"));
+        if (uri.indexOf('#') !== -1) {
+            fragment = uri.substring(uri.indexOf('#') + 1, uri.length);
+            uri = uri.substring(0, uri.indexOf('#'));
         }
 
         // If there's a query, decode it and remove it from the uri. Look for the
         // pundit-show parameter and strips it out
-        // TODO: "pundit-show" should be configurable ... ?
-        if (uri.indexOf("?") !== -1) {
-            query = uri.substring(uri.indexOf("?") + 1, uri.length);
-            uri = uri.substring(0, uri.indexOf("?"));
+        // TODO: 'pundit-show' should be configurable ... ?
+        if (uri.indexOf('?') !== -1) {
+            query = uri.substring(uri.indexOf('?') + 1, uri.length);
+            uri = uri.substring(0, uri.indexOf('?'));
 
             queryObject = $location.search();
             delete queryObject['pundit-show'];
 
             var queryArray = [];
             for (var p in queryObject) {
-                queryArray.push(p + "=" + queryObject[p]);
+                queryArray.push(p + '=' + queryObject[p]);
             }
-            query = queryArray.join("&");
+            query = queryArray.join('&');
         }
 
         // Build back the URI
@@ -948,6 +949,6 @@ angular.module('Pundit2.Annotators')
         $timeout.cancel(updateTimer);
     });
 
-    xpointersHelper.log("Component up and running");
+    xpointersHelper.log('Component up and running');
     return xpointersHelper;
 });

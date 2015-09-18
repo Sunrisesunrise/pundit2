@@ -76,7 +76,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> container: 'createdTextFragments' </pre>
      */
-    container: "createdTextFragments",
+    container: 'createdTextFragments',
 
     // Contextual menu type triggered by the text fragment handler. An Item will
     // be passed as resource
@@ -94,7 +94,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> cMenuType: 'textFragmentHandlerItem' </pre>
      */
-    cMenuType: "textFragmentHandlerItem",
+    cMenuType: 'textFragmentHandlerItem',
 
     /**
      * @module punditConfig
@@ -115,7 +115,7 @@ angular.module('Pundit2.Annotators')
 
 // TODO: remove toolbar and triplecomposer dependency 
 .service('TextFragmentHandler', function($rootScope, TEXTFRAGMENTHANDLERDEFAULTS, NameSpace, BaseComponent,
-    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, EventDispatcher, $document, $injector, Config, $compile) {
+    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, EventDispatcher, $document, $injector, Config) {
 
     var textFragmentHandler = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
     var clientHidden = false;
@@ -174,7 +174,13 @@ angular.module('Pundit2.Annotators')
 
     var addTemporarySelection = function() {
         if (typeof lastTemporaryConsolidable !== 'undefined') {
-            XpointersHelper.wrapElement(lastTemporaryConsolidable.range.commonAncestorContainer, lastTemporaryConsolidable.range, 'span', "pnd-cons-temp", [lastTemporaryConsolidable.fragmentId], true, lastTemporaryConsolidable.itemUri);
+            XpointersHelper.wrapElement(
+                lastTemporaryConsolidable.range.commonAncestorContainer,
+                lastTemporaryConsolidable.range,
+                'span', 'pnd-cons-temp', [lastTemporaryConsolidable.fragmentId],
+                true,
+                lastTemporaryConsolidable.itemUri
+            );
             temporaryConsolidated[lastTemporaryConsolidable.itemUri] = lastTemporaryConsolidable;
             lastTemporaryConsolidable = undefined;
         }
@@ -192,9 +198,9 @@ angular.module('Pundit2.Annotators')
 
         var cleanRange = {};
 
-        textFragmentHandler.log("dirty2cleanRange DIRTY: " +
-            range.startContainer.nodeName + "[" + range.startOffset + "] > " +
-            range.endContainer.nodeName + "[" + range.endOffset + "]");
+        textFragmentHandler.log('dirty2cleanRange DIRTY: ' +
+            range.startContainer.nodeName + '[' + range.startOffset + '] > ' +
+            range.endContainer.nodeName + '[' + range.endOffset + ']');
 
         var cleanStart = calculateCleanOffset(range.startContainer, range.startOffset),
             cleanEnd = calculateCleanOffset(range.endContainer, range.endOffset);
@@ -208,9 +214,9 @@ angular.module('Pundit2.Annotators')
         cleanRange.cleanStartNumber = calculateCleanNodeNumber(cleanRange.startContainer);
         cleanRange.cleanEndNumber = calculateCleanNodeNumber(cleanRange.endContainer);
 
-        textFragmentHandler.log("dirty2cleanRange CLEAN: " +
-            cleanRange.startContainer.nodeName + "[" + cleanRange.startOffset + "] > " +
-            cleanRange.endContainer.nodeName + "[" + cleanRange.endOffset + "]");
+        textFragmentHandler.log('dirty2cleanRange CLEAN: ' +
+            cleanRange.startContainer.nodeName + '[' + cleanRange.startOffset + '] > ' +
+            cleanRange.endContainer.nodeName + '[' + cleanRange.endOffset + ']');
 
         return cleanRange;
     }; // dirtyRange2cleanRange()
@@ -338,7 +344,7 @@ angular.module('Pundit2.Annotators')
     // To build a correct xpath, text nodes must be called text()
     var getXPathNodeName = function(node) {
         if (XpointersHelper.isTextNode(node)) {
-            return "text()";
+            return 'text()';
         } else {
             return node.nodeName.toUpperCase();
         }
@@ -402,9 +408,9 @@ angular.module('Pundit2.Annotators')
 
         // Accumulate the xpath for this node
         if (typeof(partialXpath) !== 'undefined') {
-            partialXpath = nodeName + "[" + num + "]/" + partialXpath;
+            partialXpath = nodeName + '[' + num + ']/' + partialXpath;
         } else {
-            partialXpath = nodeName + "[" + num + "]";
+            partialXpath = nodeName + '[' + num + ']';
         }
 
         // .. and recur into its parent
@@ -418,7 +424,7 @@ angular.module('Pundit2.Annotators')
         var contentUrl = XpointersHelper.getSafePageContext(),
             // TODO: make this attribute configurable in XpointersHelper ?
             index = xpath.indexOf('DIV[@about=\''),
-            tagName = "about";
+            tagName = 'about';
 
         // The given xpath points to a node outside of any @about described node:
         // return window location without its anchor part
@@ -469,7 +475,7 @@ angular.module('Pundit2.Annotators')
             range;
 
         if (doc.getSelection().rangeCount === 0) {
-            textFragmentHandler.log("getSelection().rangeCount is 0: no selected range.");
+            textFragmentHandler.log('getSelection().rangeCount is 0: no selected range.');
             return null;
         }
 
@@ -480,13 +486,13 @@ angular.module('Pundit2.Annotators')
             range.startContainer === range.endContainer &&
             range.startOffset === range.endOffset) {
 
-            textFragmentHandler.log("Range is not null, but start/end containers and offsets match: no selected range.");
+            textFragmentHandler.log('Range is not null, but start/end containers and offsets match: no selected range.');
             return null;
         }
 
-        textFragmentHandler.log("GetSelectedRange returning a DIRTY range: " +
-            range.startContainer.nodeName + "[" + range.startOffset + "] > " +
-            range.endContainer.nodeName + "[" + range.endOffset + "]");
+        textFragmentHandler.log('GetSelectedRange returning a DIRTY range: ' +
+            range.startContainer.nodeName + '[' + range.startOffset + '] > ' +
+            range.endContainer.nodeName + '[' + range.endOffset + ']');
 
         return range;
     }; // getSelectedRange()
@@ -533,7 +539,7 @@ angular.module('Pundit2.Annotators')
             xpointerURL = getContentURLFromXPath(cleanStartXPath),
             xpointer = getXPointerString(xpointerURL, cleanStartXPath, cleanRange.startOffset, cleanEndXPath, cleanRange.endOffset);
 
-        textFragmentHandler.log("range2xpointer returning an xpointer: " + xpointer);
+        textFragmentHandler.log('range2xpointer returning an xpointer: ' + xpointer);
 
         return xpointer;
     }; // range2xpointer
@@ -644,7 +650,7 @@ angular.module('Pundit2.Annotators')
         var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType);
         if (typeof promise !== 'undefined') {
             promise.then(function() {
-                console.log("textFragmentHandler handlerMenu.show promise resolved");
+                textFragmentHandler.log('textFragmentHandler handlerMenu.show promise resolved');
             });
         }
     } // mouseUpHandler()

@@ -292,7 +292,7 @@ angular.module('Pundit2.Annotators')
         for (var i in references) {
             if (references[i].attr('fragments') === uriFragmentId) {
                 var node = references[i][0],
-                parent = node.parentNode;
+                    parent = node.parentNode;
                 while (node.firstChild) {
                     parent.insertBefore(node.firstChild, node);
                 }
@@ -314,7 +314,7 @@ angular.module('Pundit2.Annotators')
     // fragment.
     textFragmentAnnotator.addFragmentIcon = function(icon) {
         if (typeof fragmentById[icon.fragment] === 'undefined') {
-            textFragmentAnnotator.err("fragmentById["+icon.fragment+"] is undefined - skipping textFragmentAnnotator.addFragmentIcon()");
+            textFragmentAnnotator.err("fragmentById[" + icon.fragment + "] is undefined - skipping textFragmentAnnotator.addFragmentIcon()");
             return;
         }
         fragmentById[icon.fragment].icon = icon;
@@ -340,7 +340,7 @@ angular.module('Pundit2.Annotators')
         for (var l = fragments.length; l--;) {
             var current = fragmentById[fragments[l]];
             if (typeof current === 'undefined') {
-                textFragmentAnnotator.err("fragmentById["+fragments[l]+"] is undefined - skipping textFragmentAnnotator.addFragmentBit()");
+                textFragmentAnnotator.err("fragmentById[" + fragments[l] + "] is undefined - skipping textFragmentAnnotator.addFragmentBit()");
                 continue;
             }
             current.bits.push(bit);
