@@ -223,6 +223,7 @@
 
 .dropdown-menu > li > a {
     padding: 3px 10px;
+    border: none;
 }
 
 .dropdown-menu > li > a:hover,
@@ -638,7 +639,7 @@ textarea.form-control {
     min-height: 150px;
 }
 
-.form-control, .form-group input[type="text"] {
+.form-control, .form-group input[type="text"].form-control {
     padding: 4px 5px;
     height: 26px;
     -moz-box-sizing: border-box;
@@ -646,13 +647,11 @@ textarea.form-control {
     box-sizing: border-box;
     border-radius: 0;
     border-color: @gray-extra-light;
-    //border: inherit;
-    font-size: inherit;
+    font-size: 12px;
 
 
     &:focus {
         outline: 0;
-        box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none;
     }

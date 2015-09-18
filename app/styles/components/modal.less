@@ -10,11 +10,16 @@
 .modal {
     width: auto; /* For css overwritings */
     min-height: 210px;
+    margin-right: auto;
+    margin-left: auto; /* For css overwritings */
     z-index: @zindex-pnd-modal !important; /* For css overwritings */
+    background-color: transparent;
 
     .modal-dialog {
         right: 0;
         left: 0;
+        -webkit-transform: none;
+        transform: none;
     }
 
     &.top {
@@ -35,7 +40,7 @@
 .modal-content {
     height: auto; /* For css overwritings */
 
-    table {
+    table, .table {
         margin: 0;
     }
 }
