@@ -63,15 +63,14 @@ angular.module('Pundit2.AnnotationSidebar')
 })
 
 .service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $modal, $injector, $q,
-    BaseComponent, Config, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, ModelHelper,
+    BaseComponent, Config, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, ModelHelper, TemplatesExchange,
     Consolidation, ContextualMenu, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
     ImageAnnotator, AnnotationsCommunication, NotebookExchange, TypesHelper, Analytics, NameSpace) {
 
     var annotationDetails = new BaseComponent('AnnotationDetails', ANNOTATIONDETAILSDEFAULTS);
 
     var clientMode = Config.clientMode,
-        Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined,
-        TemplatesExchange = clientMode === 'pro' ? $injector.get('TemplatesExchange') : undefined;
+        Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined;
 
     var state = {
         annotations: [],
