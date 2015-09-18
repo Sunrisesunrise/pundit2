@@ -220,6 +220,8 @@ angular.module('Pundit2.Annotators')
     var preventDelay = xpointersHelper.options.preventDelay ? true : false,
         updateTimer;
 
+    var nodesQueque = [];
+
     var addToArray = function(arr, add) {
         return arr.concat(add);
     };
@@ -561,7 +563,9 @@ angular.module('Pundit2.Annotators')
 
     // Wraps childNodes of element, only those which stay inside
     // the given range
-    xpointersHelper.wrapElement = function(element, range, htmlTag, htmlClass, parents) {
+    xpointersHelper.wrapElement = function(element, range, htmlTag, htmlClass, parents, doQueue, itemUri) {
+        nodesQueque = doQueue ? [].concat(parents) : nodesQueque;
+
         // If there's childNodes, wrap them all
         if (element.childNodes && element.childNodes.length > 0) {
             for (var i = (element.childNodes.length - 1); i >= 0 && element.childNodes[i]; i--) {
@@ -574,6 +578,12 @@ angular.module('Pundit2.Annotators')
             // MORE Else: it's an image node.. wrap it up
         } else if (xpointersHelper.isImageNodeInsideRange(element, range)) {
             xpointersHelper.wrapNode(element, range, htmlTag, htmlClass, parents);
+        }
+
+        if (doQueue && nodesQueque.length > 0) {
+            EventDispatcher.sendEvent('XpointersHelper.temporaryWrap', {
+                uri: itemUri, fragments: nodesQueque
+            });
         }
 
     }; // wrapElement()
@@ -630,13 +640,37 @@ angular.module('Pundit2.Annotators')
     // on the edge of the given range and the range starts (or ends) somewhere inside it
     xpointersHelper.wrapNode = function(element, range, htmlTag, htmlClass, parents) {
         var r2 = $document[0].createRange(),
-            wrapNode,
-            modParents = parents,
-            $element = angular.element(element),
+            wrapNode;
+        
+        var modParents = parents,
             modifyWrapping = false,
             elementLength = 0,
             parentElement = element.parentElement,
+            jParentElement = angular.element(parentElement),
             parentFragmentIds = [];
+
+        var updateWrappingNode = function() {
+            var needOtherCheck = false;
+            for (var i in parentElement.childNodes) {
+                var node = parentElement.childNodes[i];
+                if (node.nodeType === 3) {
+                    if (node.length > 0) {
+                        // Wrapp text node.
+                        var r = $document[0].createRange(),
+                        l = node.length;
+                        r.setStart(node, 0);
+                        r.setEnd(node, l);
+                        var newWrapNode = xpointersHelper.createWrapNode(htmlTag, xpointersHelper.options.wrapNodeClass, parentFragmentIds);
+                        r.surroundContents(newWrapNode.element);
+                        needOtherCheck = true;
+                        break;
+                    }
+                }
+            }
+            if (needOtherCheck) {
+                updateWrappingNode();
+            }
+        };
 
         // Select correct sub-range: if the element is the start or end container of the range
         // set the boundaries accordingly: if it's startContainer use it's start offset and set
@@ -651,13 +685,16 @@ angular.module('Pundit2.Annotators')
             r2.selectNode(element);
         }
 
-        if ($element.parent().hasClass('pnd-cons')) {
+        if (jParentElement.hasClass(xpointersHelper.options.wrapNodeClass)) {
             modifyWrapping = true;
-            parentFragmentIds = $element.parent().attr('fragments').split(',');
+            parentFragmentIds = jParentElement.attr('fragments').split(',');
             modParents = modParents.concat([]);
             for (var i in parentFragmentIds) {
-                if (modParents.indexOf(parentFragmentIds[i])) {
+                if (modParents.indexOf(parentFragmentIds[i]) === -1) {
                     modParents.push(parentFragmentIds[i]);
+                }
+                if (nodesQueque.indexOf(parentFragmentIds[i]) === -1) {
+                    nodesQueque.push(parentFragmentIds[i]);
                 }
             }
             elementLength = element.length;
@@ -667,47 +704,26 @@ angular.module('Pundit2.Annotators')
 
         // Finally surround the range contents with an ad-hoc crafted html element
         r2.surroundContents(wrapNode.element);
-        //TODO: check type nodes (images?)
-        EventDispatcher.sendEvent('XpointersHelper.NodeAdded', {
-            fragments: parents,
-            reference: wrapNode.jElement
-        });
-
-        var checkParent = function() {
-            var needOtherCheck = false;
-            //(var startOffset = 0;
-            for (var i in parentElement.childNodes) {
-                var n = parentElement.childNodes[i];
-                if (n.nodeType === 3) {
-                    if (n.length > 0) {
-                        // Wrapp text node.
-                        var r = $document[0].createRange(),
-                        l = n.length;
-                        r.setStart(n, 0);
-                        r.setEnd(n, l);
-                        var wn = xpointersHelper.createWrapNode(htmlTag, 'pnd-cons', parentFragmentIds);
-                        r.surroundContents(wn.element);
-                        //startOffset += l;
-                        needOtherCheck = true;
-                        break;
-                    }
-                }
-                else {
-                    //startOffset += n.lastChild.length;
-                }
-            }
-            if (needOtherCheck) {
-                checkParent();
-            }
-        };
 
         if (modifyWrapping) {
             console.log("Mod wrapping");
             console.log(r2);
-            wrapNode.jElement.addClass(xpointersHelper.options.wrapNodeClass);
-            checkParent();
-            angular.element(parentElement).find("." + xpointersHelper.options.textFragmentHiddenClass).removeClass(xpointersHelper.options.textFragmentHiddenClass);
-            angular.element(parentElement).contents().unwrap();
+            updateWrappingNode();
+
+            wrapNode.jElement
+                .addClass(xpointersHelper.options.wrapNodeClass);
+            jParentElement
+                .find("." + xpointersHelper.options.textFragmentHiddenClass)
+                .removeClass(xpointersHelper.options.textFragmentHiddenClass);
+            jParentElement
+                .contents().unwrap();
+        } 
+        else {
+            //TODO: check type nodes (images?)
+            EventDispatcher.sendEvent('XpointersHelper.NodeAdded', {
+                fragments: parents,
+                reference: wrapNode.jElement
+            });
         }
     }; // wrapNode()
 

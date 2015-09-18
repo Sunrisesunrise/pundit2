@@ -505,6 +505,13 @@ angular.module('Pundit2.Annotators')
         $compile(elementReferce)($rootScope);
     });
 
+    EventDispatcher.addListener('XpointersHelper.temporaryWrap', function(e) {
+        var wrapInfo = e.args,
+            fragments = wrapInfo.fragments,
+            itemUri = wrapInfo.uri;
+        console.log(wrapInfo);
+    });
+
     $rootScope.$on('annomatic-run', function() {
         annomaticIsRunning = true;
     });
