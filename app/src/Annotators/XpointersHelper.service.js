@@ -630,7 +630,13 @@ angular.module('Pundit2.Annotators')
     // on the edge of the given range and the range starts (or ends) somewhere inside it
     xpointersHelper.wrapNode = function(element, range, htmlTag, htmlClass, parents) {
         var r2 = $document[0].createRange(),
-            wrapNode;
+            wrapNode,
+            modParents = parents,
+            $element = angular.element(element),
+            modifyWrapping = false,
+            elementLength = 0,
+            parentElement = element.parentElement,
+            parentFragmentIds = [];
 
         // Select correct sub-range: if the element is the start or end container of the range
         // set the boundaries accordingly: if it's startContainer use it's start offset and set
@@ -645,7 +651,19 @@ angular.module('Pundit2.Annotators')
             r2.selectNode(element);
         }
 
-        wrapNode = xpointersHelper.createWrapNode(htmlTag, htmlClass, parents);
+        if ($element.parent().hasClass('pnd-cons')) {
+            modifyWrapping = true;
+            parentFragmentIds = $element.parent().attr('fragments').split(',');
+            modParents = modParents.concat([]);
+            for (var i in parentFragmentIds) {
+                if (modParents.indexOf(parentFragmentIds[i])) {
+                    modParents.push(parentFragmentIds[i]);
+                }
+            }
+            elementLength = element.length;
+        }
+
+        wrapNode = xpointersHelper.createWrapNode(htmlTag, htmlClass, modParents);
 
         // Finally surround the range contents with an ad-hoc crafted html element
         r2.surroundContents(wrapNode.element);
@@ -654,6 +672,43 @@ angular.module('Pundit2.Annotators')
             fragments: parents,
             reference: wrapNode.jElement
         });
+
+        var checkParent = function() {
+            var needOtherCheck = false;
+            //(var startOffset = 0;
+            for (var i in parentElement.childNodes) {
+                var n = parentElement.childNodes[i];
+                if (n.nodeType === 3) {
+                    if (n.length > 0) {
+                        // Wrapp text node.
+                        var r = $document[0].createRange(),
+                        l = n.length;
+                        r.setStart(n, 0);
+                        r.setEnd(n, l);
+                        var wn = xpointersHelper.createWrapNode(htmlTag, 'pnd-cons', parentFragmentIds);
+                        r.surroundContents(wn.element);
+                        //startOffset += l;
+                        needOtherCheck = true;
+                        break;
+                    }
+                }
+                else {
+                    //startOffset += n.lastChild.length;
+                }
+            }
+            if (needOtherCheck) {
+                checkParent();
+            }
+        };
+
+        if (modifyWrapping) {
+            console.log("Mod wrapping");
+            console.log(r2);
+            wrapNode.jElement.addClass(xpointersHelper.options.wrapNodeClass);
+            checkParent();
+            angular.element(parentElement).find("." + xpointersHelper.options.textFragmentHiddenClass).removeClass(xpointersHelper.options.textFragmentHiddenClass);
+            angular.element(parentElement).contents().unwrap();
+        }
     }; // wrapNode()
 
     // Creates an HTML element to be used to wrap (usually a span?) adding the given

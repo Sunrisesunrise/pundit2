@@ -114,7 +114,7 @@ angular.module('Pundit2.Annotators')
 })
 // TODO: remove toolbar and triplecomposer dependency 
 .service('TextFragmentHandler', function($rootScope, TEXTFRAGMENTHANDLERDEFAULTS, NameSpace, BaseComponent,
-    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, EventDispatcher, $document, $injector, Config) {
+    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, EventDispatcher, $document, $injector, Config, $compile ) {
 
     var textFragmentHandler = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
     var clientHidden = false;
@@ -174,6 +174,8 @@ angular.module('Pundit2.Annotators')
     var addTemporarySelection = function() {
         if (typeof lastTemporaryConsolidable !== 'undefined') {
             XpointersHelper.wrapElement(lastTemporaryConsolidable.range.commonAncestorContainer, lastTemporaryConsolidable.range, 'span', "pnd-cons-temp", [lastTemporaryConsolidable.fragmentId]);
+            var consolidated = angular.element('.pnd-cons:not(.ng-scope)');
+            $compile(consolidated)($rootScope);
             temporaryConsolidated[lastTemporaryConsolidable.itemUri] = lastTemporaryConsolidable;
             lastTemporaryConsolidable = undefined;
         }
