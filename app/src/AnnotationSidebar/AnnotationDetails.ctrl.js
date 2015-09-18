@@ -4,6 +4,12 @@ angular.module('Pundit2.AnnotationSidebar')
     AnnotationSidebar, AnnotationDetails, TripleComposer, Dashboard, EventDispatcher,
     Config, MyPundit, Analytics) {
 
+    // TODO: temporary fix waiting for server consistency
+    if ($scope.motivation !== 'linking' &&
+        $scope.motivation !== 'commenting') {
+        $scope.motivation = 'linking';
+    }
+
     if (AnnotationDetails.getAnnotationDetails($scope.id) === undefined) {
         AnnotationDetails.addAnnotationReference($scope);
     }

@@ -816,7 +816,7 @@ angular.module('Pundit2.AnnotationSidebar')
             annotation.firstConsolidableItem = findFirstConsolidateItem(annotation);
             setBrokenInfo(annotation);
             inizializeAuthorAndNotebookFilter(annotation);
-            if (annotation.motivatedBy.indexOf('commenting') === -1) {
+            if (annotation.motivatedBy !== 'commenting') {
                 inizializeSemanticAnnotationFilters(annotation);
             } else {
                 inizializeCommentFilter(annotation);

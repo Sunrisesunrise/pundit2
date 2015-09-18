@@ -131,6 +131,7 @@ angular.module('Pundit2.Core')
 
     ns.motivation = {
         linking: _oa + 'linking',
+        tagging: _oa + 'tagging',
         commenting: _oa + 'commenting'
     }
 
