@@ -89,13 +89,19 @@
     background-color: @text-fragment-color-hover !important;
 }
 
+/* For css font overwritings on icons */
+.pnd-wrp [class*="icon-"] {
+    font-family: 'pundit-font';
+}
+
 /* The small icon next to each text fragment */
-.pnd-text-fragment-icon {
+span.pnd-text-fragment-icon {
     display: inline-block;
     margin-left: 0.1em;
     margin-right: 0.1em;
     margin-top: 0.18em;
     margin-bottom: -0.18em;
+    font-family: 'pundit-font'; /* For css font overwritings on icons */
     color: @text-fragment-icon-color; //  @brand-warning;
     font-size: 1.18em;
     vertical-align: top;
