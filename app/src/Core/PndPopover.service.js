@@ -64,9 +64,13 @@ angular.module('Pundit2.Core')
         };
 
         ts.remove();
-        parentTStart[0].normalize();
+        if (parentTStart.length) {
+            parentTStart[0].normalize();
+        }
         te.remove();
-        parentTEnd[0].normalize();
+        if (parentTEnd.length) {
+            parentTEnd[0].normalize();
+        }
     };
 
     var initPopover = function(x, y, options, data) {
