@@ -309,6 +309,128 @@ angular.module('Pundit2.Annotators')
         }
     };
 
+    textFragmentAnnotator.wipeFragmentIds = function(frIds) {
+        var mod = [];
+        for (var i in frIds) {
+            var fragmentId = frIds[i],
+                uri = fragmentById[fragmentId].uri,
+                references =  fragmentsRefsById[fragmentId];
+            for (var r in references) {
+                var elem = references[r];
+                wipeReference(elem, fragmentId, mod);
+            }
+
+            delete fragmentsRefsById[fragmentId];
+            delete fragmentById[fragmentId];
+
+            if (fragmentIds[uri][0] === fragmentId) {
+                delete fragmentIds[uri];
+                delete fragmentsRefs[uri];
+            }
+        }
+    };
+
+    var wipeReference = function(elem, fragmentId, mod) {
+        var node = elem[0],
+            prev = node.previousElementSibling,
+            next = node.nextElementSibling,
+            jPrev,
+            jNext,
+            fragments,
+            elemFragments = elem.attr('fragments'),
+            cleanElemFragments = elemFragments.replace(fragmentId, '').split(',').filter(function(s){return s.length>0}).join(','),
+            cleanElemFragmentsA = cleanElemFragments.split(','),
+            mergeTextNode = false,
+            mergeWithPrev = false,
+            frIntersectWithPrev = false,
+            mergeWithNext = false,
+            frIntersectWithNext = false,
+            elemRemoved = false,
+            fragmentIntersection;
+
+        // #1 TEXT<SPAN>TEXT
+        if ((prev === null || prev.nodeType === 3) && (next === null || next.nodeType === 3)) {
+            if (elem.attr('fragments') === fragmentId) {
+                node.parentNode.insertBefore(node.firstChild, node);
+                elem.remove();
+                mergeTextNode = true;
+                elemRemoved = true;
+            }
+        }
+        else {
+            // Now we're going to check if we need to merge element span with
+            // either previous span or next span or both.
+            // First we check prev sibling, if it's present and it's an element node..
+            if (prev !== null && prev.nodeType === 1) {
+                jPrev = angular.element(prev);
+                // .. and if it has "pnd-cons" class we have to check if has the same fragment id(s)
+                if (jPrev.hasClass(XpointersHelper.options.wrapNodeClass)) {
+                    fragments = jPrev.attr('fragments');
+                    if (fragments === cleanElemFragments) {
+                        mergeWithPrev = true;
+                    }
+                    else {
+                        // Check if prev fragments list intersects with current element fragments list purged by fragmentId
+                        fragmentIntersection = fragments.split(',').filter(function(n) {return cleanElemFragmentsA.indexOf(n) !== -1});
+                        frIntersectWithPrev = fragmentIntersection.length !== 0;
+                    }
+                }
+            }
+            // now we do the same check for next sibling.
+            if (next !== null && next.nodeType === 1) {
+                jNext = angular.element(next);
+                if (jNext.hasClass(XpointersHelper.options.wrapNodeClass)) {
+                    fragments = jNext.attr('fragments');
+                    if (fragments === cleanElemFragments) {
+                        mergeWithNext = true;
+                    }
+                    else {
+                        // Check if next fragments list intersects with current element fragments list purged by fragmentId
+                        fragmentIntersection = fragments.split(',').filter(function(n) {return cleanElemFragmentsA.indexOf(n) !== -1});
+                        frIntersectWithNext = fragmentIntersection.length !== 0;
+                    }
+                }
+            }
+        }
+
+        if (!elemRemoved) {
+            if (mergeWithPrev || mergeWithNext){
+                // Crete new node.
+                var wrapNode = XpointersHelper.createWrapNode(XpointersHelper.options.wrapNodeName, XpointersHelper.options.wrapNodeClass, cleanElemFragmentsA);
+                var elementsToRemove = [];
+                if (mergeWithPrev) {
+                    wrapNode.jElement.text(jPrev.text());
+                    elementsToRemove.push(jPrev);
+                }
+                wrapNode.jElement.append(elem.text());
+                elementsToRemove.push(elem);
+                if (mergeWithNext) {
+                    wrapNode.jElement.append(jNext.text());
+                    elementsToRemove.push(jNext);
+                }
+                elem.after(wrapNode.jElement);
+                elementsToRemove.forEach(function(e, i){
+                    e.remove();
+                });
+            }
+            else if (!frIntersectWithNext && !frIntersectWithNext) {
+                node.parentNode.insertBefore(node.firstChild, node);
+                elem.remove();
+                mergeTextNode = true;
+            }
+            else {
+                elem.attr('fragments', cleanElemFragments)
+                    .removeClass(fragmentId);
+            }
+        }
+
+        if (mergeTextNode) {
+            XpointersHelper.mergeTextNodes(angular.element('body')[0]);
+        }
+
+        // TEMPORARY::::
+        $('.pnd-textfragment-hidden').removeClass('pnd-textfragment-hidden');
+    };
 
     // Called by TextFragmentIcon directives: they will be placed after each consolidated
     // fragment.
@@ -511,7 +633,7 @@ angular.module('Pundit2.Annotators')
             newFragmentUri = wrapInfo.uri,
             newFragmentId = fragments[0];
 
-        fragmentIds[newFragmentUri] = [newFragmentId];
+        fragmentIds[newFragmentUri] = typeof fragmentIds[newFragmentUri] === 'undefined' ? [newFragmentId] : fragmentIds[newFragmentUri].push(newFragmentId);
         fragmentById[newFragmentId] = {
             uri: newFragmentUri,
             bits: [],
@@ -524,7 +646,7 @@ angular.module('Pundit2.Annotators')
                 referencesList = [];
 
             currentReferences.each(function(i) {
-                referencesList.push(currentReferences.eq(i));
+                referencesList.unshift(currentReferences.eq(i));
             });
 
             fragmentsRefs[currentUri] = referencesList;

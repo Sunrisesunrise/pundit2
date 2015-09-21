@@ -150,9 +150,10 @@ angular.module('Pundit2.Annotators')
 
         for (var uri in temporaryConsolidated) {
             if (forceWipe || typeof validUris[uri] === 'undefined') {
-                // var temporaryFragmentId = temporaryConsolidated[uri].fragmentId;
+                var temporaryFragmentId = temporaryConsolidated[uri].fragmentId;
 
-                TextFragmentAnnotator.wipeItem({uri: uri});
+                //TextFragmentAnnotator.wipeItem({uri: uri});
+                TextFragmentAnnotator.wipeFragmentIds([temporaryFragmentId]);
 
                 // // Replace wrapped nodes with their content
                 // var bits = angular.element('span[fragments="' + temporaryFragmentId + '"]');
