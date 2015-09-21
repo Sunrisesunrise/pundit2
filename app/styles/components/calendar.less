@@ -356,10 +356,25 @@ This is the original CSS style of the plugin
 }
 
 .datepicker table {
-    thead th tr strong {
-        line-height: 36px;
+    thead {
+
+        tr {
+            strong {
+                line-height: 30px;
+            }
+
+            &:first-child th:hover {
+                background: transparent;
+            }
+            th:first-child, th:last-child {
+                .btn {
+                    padding-top: 15px !important;
+                    padding-bottom: 0 !important;
+                }
+            }
+        }
     }
-    
+
     tr td span {
         width: auto;
         height: auto;
@@ -367,6 +382,3 @@ This is the original CSS style of the plugin
         line-height: 1.5;
     }
 }
-
-
-
