@@ -21,6 +21,8 @@
 
 //== Common tags reset
 *, *:before, *:after {
+    background-image: none;
+    background-color: none;
     transition: none;
 }
 
@@ -79,6 +81,9 @@ input[type="datetime-local"], input[type="email"], input[type="month"],
 input[type="number"], input[type="password"], input[type="search"], input[type="tel"], 
 input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
     float: initial;
+    margin: 0;
+    padding: 4px 5px;
+    border-radius: 0;
 }
 
 select, input[type="date"], input[type="datetime"], 
@@ -108,9 +113,14 @@ a {
     border-bottom: none;
     font-family: @font;
     color: @color-text-link;
+    font-weight: normal;
 
     &:hover {
     border-bottom: none;
+    
+        &:hover:after {
+            width: 0;
+        }
     }
 
     &:link, &:visited {
@@ -140,6 +150,7 @@ input[type="number"], input[type="password"], input[type="search"], input[type="
 input[type="text"], input[type="time"], input[type="url"], input[type="week"], label, nav, ul, ul li, th,  h1, h2, h3, h4, h5, h6, strong, table, p, blockquote, 
 table, td {
     font-family: @font;
+    color: inherit;
     text-indent: inherit;
     letter-spacing: initial;
 }
@@ -157,6 +168,18 @@ input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
     }
 }
 
+button {
+    min-height: initial;
+    position: static;
+    overflow: hidden;
+    background-color: transparent;
+    border: 0;
+    webkit-border-radius: 0;
+    border-radius: 0;
+    text-indent: 0;
+}
+
+
 nav, label {
     text-transform: initial;
 }
@@ -170,17 +193,7 @@ ul li {
     min-height: auto;
 }
 
-button {
-    min-height: initial;
-    position: static;
-    overflow: hidden;
-    background-color: transparent;
-    border: 0;
-    webkit-border-radius: 0;
-    border-radius: 0;
-    text-indent: 0;
-}
-
+// Tables
 table {
     display: table;
 }
