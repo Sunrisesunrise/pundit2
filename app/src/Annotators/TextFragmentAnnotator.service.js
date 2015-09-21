@@ -304,7 +304,7 @@ angular.module('Pundit2.Annotators')
             if (typeof iconReference !== 'undefined') {
                 iconReference.element.remove();
             }
-            // Finally merge splitted text nodes
+            // Finally merge split text nodes
             XpointersHelper.mergeTextNodes(angular.element('body')[0]);
         }
     };
