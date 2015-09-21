@@ -414,9 +414,17 @@ angular.module('Pundit2.Annotators')
                 });
             }
             else if (!frIntersectWithNext && !frIntersectWithNext) {
-                node.parentNode.insertBefore(node.firstChild, node);
-                elem.remove();
-                mergeTextNode = true;
+                if (elem.attr('fragments') === fragmentId) {
+                    node.parentNode.insertBefore(node.firstChild, node);
+                    elem.remove();
+                    mergeTextNode = true;
+                } 
+                else {
+                    elem
+                        .attr('fragments', cleanElemFragments)
+                        .removeClass(fragmentId)
+                        .removeClass('pnd-cons-temp');
+                }
             }
             else {
                 elem.attr('fragments', cleanElemFragments)
