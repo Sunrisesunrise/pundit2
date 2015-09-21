@@ -10,21 +10,21 @@
 
 /* For generics btn without pnd-btn class -  !IMPORTANT rules here are needed for css overwritings */
 //TO DO: find a better way to fix the padding with !important rule issue
- .btn {
-    min-width: auto;
-    padding: 6px 12px !important;
-    border: none !important;
-    color: inherit !important;
-    border-radius: 0 !important; /* For css overwritngs */
-    background: none;
-    background-image: none !important;
+ //.btn {
+    //min-width: auto;
+    //padding: 6px 12px !important;
+    //border: none !important;
+    //color: inherit !important;
+    //border-radius: 0 !important; /* For css overwritngs */
+    //background: none;
+    //background-image: none !important;
 
-    i {
-        color: inherit;
-    }
-}
+    //i {
+    //   color: inherit;
+    //}
+//}
 
-.btn-xs {
+/*.btn-xs {
     padding: 3px 5px !important;
     text-shadow: none;
 }
@@ -32,22 +32,108 @@
 .pnd-dashboard-footer-handler + .btn-xs,
 .pnd-dashboard-panel-collapsed-content + .btn-xs {
     background-color: rgb(255,255,255) !important;
+}*/
+/* ------------------------------------ *\
+   #BUTTONS
+\* ------------------------------------ */
+
+// Common styles
+/*.btn-default,
+.btn-primary,
+.btn-success,
+.btn-info,
+.btn-warning,
+.btn-danger {
+    //text-shadow: none;
+
+    // Reset the shadow
+    &:active,
+    &.active {
+        //box-shadow: none;
+    }
+}
+
+.btn-xs {
+    //line-height: normal;
+
+    .pnd-icon {
+        //font-size: 14px;
+    }
+}*/
+
+// Mixin for generating new styles
+.btn-styles(@btn-color: #555) {
+    .reset-filter(); // Disable gradients for IE9 because filter bleeds through rounded corners
+    background-repeat: repeat-x;
+    outline: 0 !important;
+    box-shadow: none;
+
+    &:hover,
+    &:focus {
+        background-color: darken(@btn-color, 12%);
+        background-position: 0 -15px;
+        outline: 0;
+    }
+
+    &:active,
+    &.active {
+        background-color: darken(@btn-color, 12%);
+        border-color: darken(@btn-color, 14%);
+        outline: 0;
+        box-shadow: none;
+    }
+}
+
+
+// Apply the mixin to the buttons
+//TO DO: CONSIDER IF these classes can be used customized in Pundit
+.pnd-btn-default {
+    .btn-styles(@btn-default-bg);
+    text-shadow: 0 1px 0 #fff;
+    border-color: #ccc;
+}
+
+.pnd-btn-primary {
+    .btn-styles(@btn-primary-bg);
+}
+
+.pnd-btn-success {
+    .btn-styles(@btn-success-bg);
+}
+
+.pnd-btn-info {
+    .btn-styles(@btn-info-bg);
+}
+
+.pnd-btn-warning {
+    .btn-styles(@btn-warning-bg);
+}
+
+.pnd-btn-danger {
+    .btn-styles(@btn-danger-bg);
 }
 
 /* Default button */
 .pnd-btn {
+    width: auto; /* for css conflicts */
+    height: auto; /* for css conflicts */
+    min-width: auto;
     display: inline-block;
     height: 29px;
     margin: 0;
-    padding: 0 10px !important;
+    padding: 0 10px; //    padding: 6px 12px !important;
     .vertical-gradient(@color-button-bg, @button-gradient-level);
     border: 0;
-    outline: 0;
+    border-radius: 0;
+    background: none;
+    background-image: none;
+    outline: 0; //!important
     color: @color-button-text-dark;
     .text-white-emboss();
     font-size: 12px;
     font-weight: @btn-font-weight;
     text-align: center;
+    text-shadow: none;
     vertical-align: middle;
     white-space: nowrap;
     cursor: pointer;
@@ -56,11 +142,15 @@
     &:hover,
     &:focus,
     &.focus {
+        outline: 0;
+        box-shadow: none;
         .vertical-gradient(darken(@color-button-bg, 5), @button-gradient-level);
     }
-
+    // Remove the gradient for the pressed/active state
     &:active,
     &.active {
+        background-image: none;
+        box-shadow: none;
         outline: 0;
     }
 
@@ -68,9 +158,13 @@
     &[disabled],
     fieldset[disabled] & {
         cursor: @cursor-disabled;
-        color: fade(@color-button-text-dark, 50%) !important;
+        color: fade(@color-button-text-dark, 50%); //!important
         pointer-events: none; // Future-proof disabling of clicks
         .vertical-gradient(lighten(@color-button-bg, 20), @button-gradient-level);
+    }
+
+    i {
+        color: inherit;
     }
 }
 
@@ -79,6 +173,22 @@
     height: 22px;
     font-size: 11px;
     padding-bottom: 2px;
+}
+
+/* X-small buttons */
+.pnd-btn-xs {
+    padding: 3px 5px; //!important
+    text-shadow: none;
+    line-height: normal;
+
+    .pnd-icon {
+        font-size: 14px;
+    }
+}
+
+.pnd-dashboard-footer-handler + .pnd-btn-xs,
+.pnd-dashboard-panel-collapsed-content + .pnd-btn-xs {
+    background-color: rgb(255,255,255);//!important
 }
 
 /* ------------------------------------ *\
@@ -100,7 +210,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%) !important;
+        color: fade(@color-button-text-light, 60%);//!important
         text-shadow: none;
         .vertical-gradient(lighten(@color-button-bg-cta, 20), @button-gradient-level);
     }
@@ -125,7 +235,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 20%) !important;
+        color: fade(@color-button-text-light, 20%);//!important
         text-shadow: none;
         .vertical-gradient(darken(@color-button-bg-dark, 7), @button-gradient-level);
     }
@@ -153,7 +263,7 @@
     fieldset[disabled] & {
         background-color: transparent;
         background-image: none;
-        color: fade(@color-text, 60%) !important;
+        color: fade(@color-text, 60%);//!important
         text-shadow: none;
     }
 }
@@ -178,7 +288,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%) !important;
+        color: fade(@color-button-text-light, 60%);//!important
         text-shadow: none;
         .vertical-gradient(lighten(@subject-color, 20), @button-gradient-level);
     }
@@ -200,7 +310,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%) !important;
+        color: fade(@color-button-text-light, 60%);//!important
         text-shadow: none;
         .vertical-gradient(lighten(@predicate-color, 20), @button-gradient-level);
     }
@@ -222,12 +332,35 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%) !important;
+        color: fade(@color-button-text-light, 60%);//!important
         text-shadow: none;
         .vertical-gradient(lighten(@object-color, 20), @button-gradient-level);
     }
 }
 
+/* ------------------------------------ *\
+   #LINK-BUTTONS
+\* ------------------------------------ */
+
+// Make a button look and behave like a link
+.pnd-btn-link {
+    color: @gray;
+    font-weight: normal;
+    cursor: pointer;
+    border-radius: 0;
+    line-height: 0; // PND ADD
+
+    &:hover {
+        color: @color-text;
+        text-decoration: none;
+        background-color: transparent;
+    }
+
+    &:focus {
+        text-decoration: none;
+        background-color: transparent;
+    }
+}
 
 /* ------------------------------------ *\
    #AVAILABLE-WIDTH-FILL-BUTTONS
@@ -257,18 +390,8 @@ can be extended to support more buttons
     width: 33.3333%;
 }
 
-
 /* For disabled buttons */
 button.disabled,
 button[disabled] {
     opacity: 1;
 }
-
-/* Close button in alerts */
-//button.close {
-//   padding: 0;
-//   border: none;
-//   webkit-border-radius: 0;
-//   border-radius: 0;
-//   background: none;
-//}
