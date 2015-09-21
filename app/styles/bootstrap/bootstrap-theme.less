@@ -435,11 +435,6 @@ ul.nav-tabs {
     // Show tabs button
     .show-tabs {
 
-        &.active a {
-            padding: 5px 10px 2px 10px;
-            background-color: @nav-tabs-active-link-hover-bg;
-        }
-
         a {
             padding: 5px 10px 2px 10px;
 
@@ -450,6 +445,11 @@ ul.nav-tabs {
                 font-size: 14px;
                 line-height: normal;
             }
+        }
+
+        &.active a {
+            padding: 5px 10px 2px 10px;
+            background-color: @nav-tabs-active-link-hover-bg;
         }
     }
 
