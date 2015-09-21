@@ -34,10 +34,6 @@
         border-radius: 0;
         line-height: inherit;
 
-        //&.show-tabs a {
-        //    padding-bottom: 5px;
-        //}
-
         a { 
             display: inline-block;
             float: none;
@@ -83,12 +79,50 @@
         }
     }
 
+    .tab-content {
+        display: block;
+        clear: none; /* CSS conflicts fix */
+
+        .tab-pane {
+            display: none;
+            margin-bottom: 30px;
+        }
+
+        .active {
+            display: block;
+        }
+    }
+
     .pnd-panel-tab-content-content {
 
         ul.list-group {
             overflow: visible;
             -webkit-box-shadow: none; /* For css overwritings  - VENDOR PREFIX */
             box-shadow: none;
+
+            &.pnd-hidden-tabs {
+
+                .show-tabs {
+                    a {
+                        padding-top: 5px;
+                        padding-bottom: 5px;
+
+                        .pnd-icon {
+                            margin: 0;
+                            padding-bottom: 3px;
+                        }
+                    }
+
+                    &.active a {
+                        padding-top: 3px;
+                        padding-bottom: 5px;
+
+                        .pnd-icon {
+                            margin-top: 2px;
+                        }
+                    }
+                }
+            }
         }
 
         li {
@@ -120,47 +154,6 @@
     > div {
         width: auto;
         padding: 0;
-    }
-
-    .tab-content {
-        display: block;
-        clear: none; /* CSS conflicts fix */
-
-        .pnd-tab-header {
-
-            &.pnd-hidden-tabs {
-
-                .show-tabs {
-                    a {
-                        padding-top: 5px;
-                        padding-bottom: 5px;
-
-                        .pnd-icon {
-                            margin: 0;
-                            padding-bottom: 3px;
-                        }
-                    }
-
-                    &.active a {
-                        padding-top: 3px;
-                        padding-bottom: 5px;
-
-                        .pnd-icon {
-                            margin-top: 2px;
-                        }
-                    }
-                }
-            }
-        }
-
-        .tab-pane {
-            display: none;
-            margin-bottom: 30px;
-        }
-
-        .active {
-            display: block;
-        }
     }
 }
 
