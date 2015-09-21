@@ -720,11 +720,13 @@ angular.module('Pundit2.Annotators')
             jParentElement
                 .contents().unwrap();
         } else {
-            //TODO: check type nodes (images?)
-            EventDispatcher.sendEvent('XpointersHelper.NodeAdded', {
-                fragments: parents,
-                reference: wrapNode.jElement
-            });
+            if (htmlClass === xpointersHelper.options.wrapNodeClass) {
+                //TODO: check type nodes (images?)
+                EventDispatcher.sendEvent('XpointersHelper.NodeAdded', {
+                    fragments: parents,
+                    reference: wrapNode.jElement
+                });
+            }
         }
     }; // wrapNode()
 

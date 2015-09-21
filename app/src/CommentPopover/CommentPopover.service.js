@@ -75,7 +75,7 @@ angular.module('Pundit2.CommentPopover')
 
     commentPopover.lastUsedNotebookID = undefined;
 
-    commentPopover.show = function(x, y, item) {
+    commentPopover.show = function(x, y, item, unUsed, fragmentId) {
         var options = {
             templateUrl: 'src/CommentPopover/CommentPopover.tmpl.html',
             controller: 'CommentPopoverCtrl',
@@ -83,7 +83,7 @@ angular.module('Pundit2.CommentPopover')
             alphaRollover: true,
             lockPageScroll: true
         };
-        var promise = PndPopover.show(x, y, options, item);
+        var promise = PndPopover.show(x, y, options, {item: item, fragmentId: fragmentId});
         promise.then(function() {
             changePopoverPosition(x, y);
             PndPopover.getState().selection.removeAllRanges();

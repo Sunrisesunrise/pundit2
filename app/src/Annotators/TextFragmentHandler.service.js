@@ -114,7 +114,7 @@ angular.module('Pundit2.Annotators')
 })
 
 // TODO: remove toolbar and triplecomposer dependency 
-.service('TextFragmentHandler', function($rootScope, TEXTFRAGMENTHANDLERDEFAULTS, NameSpace, BaseComponent,
+.service('TextFragmentHandler', function($rootScope, TEXTFRAGMENTHANDLERDEFAULTS, NameSpace, BaseComponent, TextFragmentAnnotator,
     XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, EventDispatcher, $document, $injector, Config) {
 
     var textFragmentHandler = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
@@ -150,18 +150,22 @@ angular.module('Pundit2.Annotators')
 
         for (var uri in temporaryConsolidated) {
             if (forceWipe || typeof validUris[uri] === 'undefined') {
-                var temporaryFragmentId = temporaryConsolidated[uri].fragmentId;
+                // var temporaryFragmentId = temporaryConsolidated[uri].fragmentId;
 
-                // Replace wrapped nodes with their content
-                var bits = angular.element('span[fragments="' + temporaryFragmentId + '"]');
-                angular.forEach(bits, function(node) {
-                    var parent = node.parentNode;
-                    while (node.firstChild) {
-                        parent.insertBefore(node.firstChild, node);
-                    }
-                    angular.element(node).remove();
-                });
-                XpointersHelper.mergeTextNodes(angular.element('body')[0]);
+                TextFragmentAnnotator.wipeItem({uri: uri});
+
+                // // Replace wrapped nodes with their content
+                // var bits = angular.element('span[fragments="' + temporaryFragmentId + '"]');
+                // angular.forEach(bits, function(node) {
+                //     var parent = node.parentNode;
+                //     while (node.firstChild) {
+                //         parent.insertBefore(node.firstChild, node);
+                //     }
+                //     angular.element(node).remove();
+                // });
+                // XpointersHelper.mergeTextNodes(angular.element('body')[0]);
+
+
 
                 delete temporaryConsolidated[uri];
             }
@@ -177,7 +181,7 @@ angular.module('Pundit2.Annotators')
             XpointersHelper.wrapElement(
                 lastTemporaryConsolidable.range.commonAncestorContainer,
                 lastTemporaryConsolidable.range,
-                'span', 'pnd-cons-temp', [lastTemporaryConsolidable.fragmentId],
+                'span', 'pnd-cons-temp pnd-cons', [lastTemporaryConsolidable.fragmentId],
                 true,
                 lastTemporaryConsolidable.itemUri
             );
@@ -623,14 +627,15 @@ angular.module('Pundit2.Annotators')
         // discarded at all.
         // Possible solution: wipe the container when triple composer is empty, ctx menu is
         // NOT shown on every dashboard open/close ?
-        var item = textFragmentHandler.createItemFromRange(range);
+        var item = textFragmentHandler.createItemFromRange(range),
+            currentFr = 'fr-' + (new Date()).getTime();
         ItemsExchange.addItemToContainer(item, textFragmentHandler.options.container);
 
         lastTemporaryConsolidable = {
             offset: range.endOffset,
             range: range,
             xpointer: item.getXPointer(),
-            fragmentId: 'frt-' + (new Date()).getTime(),
+            fragmentId: currentFr,
             itemUri: item.uri
         };
 
@@ -647,7 +652,8 @@ angular.module('Pundit2.Annotators')
             return;
         }
 
-        var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType);
+        // TODO: generalize item in {data}
+        var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType, currentFr);
         if (typeof promise !== 'undefined') {
             promise.then(function() {
                 textFragmentHandler.log('textFragmentHandler handlerMenu.show promise resolved');

@@ -32,7 +32,7 @@ angular.module('Pundit2.Core')
         var ts = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>'),
             te = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>');
 
-        var fragmentElements = angular.element('span.' + state.fragmentId);
+        var fragmentElements = angular.element('span.' + state.data.fragmentId);
         var i = 0;
         for (; i < fragmentElements.length; i++) {
             if (fragmentElements.eq(i).text().trim().length === 0) {
@@ -113,11 +113,11 @@ angular.module('Pundit2.Core')
         if (eventHandler !== null) {
             EventDispatcher.removeListener(eventHandler);
         }
-        eventHandler = EventDispatcher.addListener('XpointersHelper.NodeAdded', function(evt) {
-            state.fragmentId = evt.args.fragments[0];
-            EventDispatcher.removeListener(eventHandler);
-            eventHandler = null;
-        });
+        // eventHandler = EventDispatcher.addListener('XpointersHelper.NodeAdded', function(evt) {
+        //     state.fragmentId = evt.args.fragments[0];
+        //     EventDispatcher.removeListener(eventHandler);
+        //     eventHandler = null;
+        // });
 
         EventDispatcher.sendEvent('TextFragmentHandler.addTemporarySelection');
 

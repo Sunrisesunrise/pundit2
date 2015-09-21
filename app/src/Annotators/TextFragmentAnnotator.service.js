@@ -508,8 +508,30 @@ angular.module('Pundit2.Annotators')
     EventDispatcher.addListener('XpointersHelper.temporaryWrap', function(e) {
         var wrapInfo = e.args,
             fragments = wrapInfo.fragments,
-            itemUri = wrapInfo.uri;
-        console.log(wrapInfo);
+            newFragmentUri = wrapInfo.uri,
+            newFragmentId = fragments[0];
+
+        fragmentIds[newFragmentUri] = [newFragmentId];
+        fragmentById[newFragmentId] = {
+            uri: newFragmentUri,
+            bits: [],
+            item: ItemsExchange.getItemByUri(newFragmentUri)
+        };
+
+        angular.forEach(fragments, function(fr) {
+            var currentUri = fragmentById[fr].uri,
+                currentReferences = angular.element('.' + fr),
+                referencesList = [];
+
+            currentReferences.each(function(i) {
+                referencesList.push(currentReferences.eq(i));
+            });
+
+            fragmentsRefs[currentUri] = referencesList;
+            fragmentsRefsById[fr] = referencesList;
+        });
+
+        activateFragments();
     });
 
     $rootScope.$on('annomatic-run', function() {
