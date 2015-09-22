@@ -84,12 +84,6 @@ angular.module('Pundit2.AnnotationSidebar')
         });
     };
 
-    var disableFragments = function(items) {
-        angular.forEach(items, function(item) {
-            TextFragmentAnnotator.hideByUri(item.uri);
-        });
-    };
-
     var activateAnnotationsFragments = function(annotations) {
         angular.forEach(annotations, function(annotation) {
             activateFragments(annotation.items);
@@ -580,8 +574,6 @@ angular.module('Pundit2.AnnotationSidebar')
         angular.forEach(updatedAnnotations, function(annotation) {
             if (typeof $scope.annotations[annotation.id] !== 'undefined') {
                 activateFragments(annotation.items);
-            } else {
-                disableFragments(annotation.items);
             }
         })
     });
