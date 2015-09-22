@@ -649,7 +649,9 @@ angular.module('Pundit2.Annotators')
             elementLength = 0,
             parentElement = element.parentElement,
             jParentElement = angular.element(parentElement),
-            parentFragmentIds = [];
+            parentFragmentIds = [],
+            tempFragmentIds = [].concat(parents),
+            isTemporary = htmlClass.indexOf(xpointersHelper.options.tempWrapNodeClass) !== -1;
 
         var updateWrappingNode = function() {
             var needOtherCheck = false,
@@ -666,9 +668,15 @@ angular.module('Pundit2.Annotators')
                         r.setEnd(node, l);
                         newWrapNode = xpointersHelper.createWrapNode(htmlTag, xpointersHelper.options.wrapNodeClass, parentFragmentIds);
                         r.surroundContents(newWrapNode.element);
+
+                        newWrapNode.jElement.attr('temp-fragments', newWrapNode.jElement.parent().attr('temp-fragments'));
                         if (!newWrapNode.jElement.parent().hasClass(xpointersHelper.options.textFragmentHiddenClass)) {
                             newWrapNode.jElement.removeClass(xpointersHelper.options.textFragmentHiddenClass);
                         }
+                        if (newWrapNode.jElement.parent().hasClass(xpointersHelper.options.tempWrapNodeClass)) {
+                            newWrapNode.jElement.addClass(xpointersHelper.options.tempWrapNodeClass);
+                        }
+
                         needOtherCheck = true;
                         break;
                     }
@@ -695,6 +703,8 @@ angular.module('Pundit2.Annotators')
         if (jParentElement.hasClass(xpointersHelper.options.wrapNodeClass)) {
             modifyWrapping = true;
             parentFragmentIds = jParentElement.attr('fragments').split(',');
+            var temp = typeof jParentElement.attr('temp-fragments') !== 'undefined' ? jParentElement.attr('temp-fragments').split(',') : [];
+            tempFragmentIds = tempFragmentIds.concat(temp);
             modParents = modParents.concat([]);
             for (var i in parentFragmentIds) {
                 if (modParents.indexOf(parentFragmentIds[i]) === -1) {
@@ -711,6 +721,10 @@ angular.module('Pundit2.Annotators')
 
         // Finally surround the range contents with an ad-hoc crafted html element
         r2.surroundContents(wrapNode.element);
+
+        if (isTemporary) {
+            wrapNode.jElement.attr('temp-fragments', tempFragmentIds.join(','));
+        }
 
         if (modifyWrapping) {
             updateWrappingNode();
