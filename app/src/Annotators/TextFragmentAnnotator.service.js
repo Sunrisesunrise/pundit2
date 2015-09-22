@@ -191,7 +191,9 @@ angular.module('Pundit2.Annotators')
         // #1 TEXT<SPAN>TEXT
         if ((prev === null || prev.nodeType === 3) && (next === null || next.nodeType === 3)) {
             if (elemFragments === fragmentId) {
-                node.parentNode.insertBefore(node.firstChild, node);
+                if (node.firstChild !== null && node.parentNode !== null && node.parentNode !== null) {
+                    node.parentNode.insertBefore(node.firstChild, node);
+                }
                 elem.remove();
                 elemRemoved = true;
             }
@@ -281,7 +283,7 @@ angular.module('Pundit2.Annotators')
                 angular.extend(mod, modObj);
             } else if (!frIntersectWithNext && !frIntersectWithNext) {
                 if (elemFragments === fragmentId) {
-                    if (node.firstChild !== null) {
+                    if (node.firstChild !== null && node.parentNode !== null) {
                         node.parentNode.insertBefore(node.firstChild, node);
                     }
                     elem.remove();
@@ -289,7 +291,7 @@ angular.module('Pundit2.Annotators')
                     elem
                         .attr('fragments', cleanElemFragments)
                         .removeClass(fragmentId);
-                        
+
                     if (typeof elemTempFragments !== 'undefined') {
                         elem.attr('temp-fragments', elemTempFragments)
                             .addClass(XpointersHelper.options.tempWrapNodeClass);
@@ -310,7 +312,7 @@ angular.module('Pundit2.Annotators')
                 elem
                     .attr('fragments', cleanElemFragments)
                     .removeClass(fragmentId);
-                    
+
                 if (typeof elemTempFragments !== 'undefined') {
                     elem.attr('temp-fragments', elemTempFragments)
                         .addClass(XpointersHelper.options.tempWrapNodeClass);
