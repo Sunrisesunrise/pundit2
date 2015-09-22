@@ -353,6 +353,13 @@ This is the original CSS style of the plugin
 .datepicker .pnd-btn {
     margin: 0 auto;
     padding: 5px !important; /* For css overwritings */
+    border: 1px solid @gray-lighter;
+    text-shadow: none;
+
+    &:hover,
+    &:focus {
+        text-shadow: none;
+    }
 }
 
 .datepicker table {

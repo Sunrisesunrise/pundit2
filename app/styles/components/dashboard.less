@@ -36,7 +36,22 @@
      .form-control.input[type="text"] {
         color: @color-text-light;
     }
+
+    .pnd-btn-xs {
+       // height: auto;
+
+        &:hover {
+            background: #fff;
+        }
+    }
 }
+
+.pnd-dashboard-footer-handler + .pnd-btn-xs,
+.pnd-dashboard-panel-collapsed-content + .pnd-btn-xs {
+    background-color: rgb(255,255,255);//!important
+    //background-position: 0 20px;
+}
+
 
 /* Panels: First and second expended panels have
 an internal padding on the right to leave some space to the

@@ -14,131 +14,6 @@
 // TODO: Since this is just to override Bootstrap please remove all PND declarations
 
 /* ------------------------------------ *\
-   #BUTTONS
-\* ------------------------------------ */
-
-// Common styles
-/*.btn-default,
-.btn-primary,
-.btn-success,
-.btn-info,
-.btn-warning,
-.btn-danger {
-    text-shadow: none;
-
-    // Reset the shadow
-    &:active,
-    &.active {
-        box-shadow: none;
-    }
-}
-
-.btn-xs {
-    line-height: normal;
-
-    .pnd-icon {
-        font-size: 14px;
-    }
-}
-
-// Mixin for generating new styles
-.btn-styles(@btn-color: #555) {
-    .reset-filter(); // Disable gradients for IE9 because filter bleeds through rounded corners
-    background-repeat: repeat-x;
-    outline: 0 !important;
-    box-shadow: none;
-
-    &:hover,
-    &:focus {
-        background-color: darken(@btn-color, 12%);
-        background-position: 0 -15px;
-        outline: 0;
-    }
-
-    &:active,
-    &.active {
-        background-color: darken(@btn-color, 12%);
-        border-color: darken(@btn-color, 14%);
-        outline: 0;
-        box-shadow: none;
-    }
-}
-
-.btn {
-
-    width: auto;
-    height: auto;
-    outline: 0 !important;
-    box-shadow: none;
-
-    // Remove the gradient for the pressed/active state
-    &:active,
-    &.active {
-        background-image: none;
-        outline: 0;
-        box-shadow: none;
-    }
-
-    &:hover,
-    &:focus {
-        outline: 0;
-        box-shadow: none;
-    }
-}
-
-// Apply the mixin to the buttons
-.btn-default {
-    .btn-styles(@btn-default-bg);
-    text-shadow: 0 1px 0 #fff;
-    border-color: #ccc;
-}
-
-.btn-primary {
-    .btn-styles(@btn-primary-bg);
-}
-
-.btn-success {
-    .btn-styles(@btn-success-bg);
-}
-
-.btn-info {
-    .btn-styles(@btn-info-bg);
-}
-
-.btn-warning {
-    .btn-styles(@btn-warning-bg);
-}
-
-.btn-danger {
-    .btn-styles(@btn-danger-bg);
-}*/
-
-
-/* ------------------------------------ *\
-   #LINK-BUTTONS
-\* ------------------------------------ */
-
-// Make a button look and behave like a link
-/*.btn-link {
-    color: @gray;
-    font-weight: normal;
-    cursor: pointer;
-    border-radius: 0;
-    line-height: 0; // PND ADD
-
-    &:hover {
-        color: @color-text;
-        text-decoration: none;
-        background-color: transparent;
-    }
-
-    &:focus {
-        text-decoration: none;
-        background-color: transparent;
-    }
-}*/
-
-/* ------------------------------------ *\
    #ICONS
 \* ------------------------------------ */
 
@@ -709,25 +584,25 @@ input {
 .datepicker {
     padding: 3px;
 
-    .btn {
-        border: 1px solid @gray-lighter;
-        text-shadow: none;
+    //.btn {
+    //    border: 1px solid @gray-lighter;
+    //    text-shadow: none;
 
-        &:hover,
-        &:focus {
-            text-shadow: none;
-        }
-    }
+    //    &:hover,
+    //    &:focus {
+    //        text-shadow: none;
+    //    }
+    //}
 
-    .btn-primary {
-        background-color: @brand-success;
+    //.btn-primary {
+    //    background-color: @brand-success;
 
-        &:hover,
-        &:focus {
-            background-color: darken(@brand-success, 12%);
-            border-color: #fff;
-        }
-    }
+    //    &:hover,
+    //    &:focus {
+    //        background-color: darken(@brand-success, 12%);
+    //        border-color: #fff;
+    //    }
+    //}
 }
 
 

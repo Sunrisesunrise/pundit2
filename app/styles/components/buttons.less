@@ -8,111 +8,6 @@
    #PUNDIT-BUTTON
 \* ------------------------------------ */
 
-/* For generics btn without pnd-btn class -  !IMPORTANT rules here are needed for css overwritings */
-//TO DO: find a better way to fix the padding with !important rule issue
- //.btn {
-    //min-width: auto;
-    //padding: 6px 12px !important;
-    //border: none !important;
-    //color: inherit !important;
-    //border-radius: 0 !important; /* For css overwritngs */
-    //background: none;
-    //background-image: none !important;
-
-    //i {
-    //   color: inherit;
-    //}
-//}
-
-/*.btn-xs {
-    padding: 3px 5px !important;
-    text-shadow: none;
-}
-
-.pnd-dashboard-footer-handler + .btn-xs,
-.pnd-dashboard-panel-collapsed-content + .btn-xs {
-    background-color: rgb(255,255,255) !important;
-}*/
-/* ------------------------------------ *\
-   #BUTTONS
-\* ------------------------------------ */
-
-// Common styles
-/*.btn-default,
-.btn-primary,
-.btn-success,
-.btn-info,
-.btn-warning,
-.btn-danger {
-    //text-shadow: none;
-
-    // Reset the shadow
-    &:active,
-    &.active {
-        //box-shadow: none;
-    }
-}
-
-.btn-xs {
-    //line-height: normal;
-
-    .pnd-icon {
-        //font-size: 14px;
-    }
-}*/
-
-// Mixin for generating new styles
-.btn-styles(@btn-color: #555) {
-    .reset-filter(); // Disable gradients for IE9 because filter bleeds through rounded corners
-    background-repeat: repeat-x;
-    outline: 0 !important;
-    box-shadow: none;
-
-    &:hover,
-    &:focus {
-        background-color: darken(@btn-color, 12%);
-        background-position: 0 -15px;
-        outline: 0;
-    }
-
-    &:active,
-    &.active {
-        background-color: darken(@btn-color, 12%);
-        border-color: darken(@btn-color, 14%);
-        outline: 0;
-        box-shadow: none;
-    }
-}
-
-
-// Apply the mixin to the buttons
-//TO DO: CONSIDER IF these classes can be used customized in Pundit
-.pnd-btn-default {
-    .btn-styles(@btn-default-bg);
-    text-shadow: 0 1px 0 #fff;
-    border-color: #ccc;
-}
-
-.pnd-btn-primary {
-    .btn-styles(@btn-primary-bg);
-}
-
-.pnd-btn-success {
-    .btn-styles(@btn-success-bg);
-}
-
-.pnd-btn-info {
-    .btn-styles(@btn-info-bg);
-}
-
-.pnd-btn-warning {
-    .btn-styles(@btn-warning-bg);
-}
-
-.pnd-btn-danger {
-    .btn-styles(@btn-danger-bg);
-}
-
 /* Default button */
 .pnd-btn {
     width: auto; /* for css conflicts */
@@ -177,18 +72,15 @@
 
 /* X-small buttons */
 .pnd-btn-xs {
+    height: auto;
     padding: 3px 5px; //!important
+    background-image: none;
     text-shadow: none;
     line-height: normal;
 
     .pnd-icon {
         font-size: 14px;
     }
-}
-
-.pnd-dashboard-footer-handler + .pnd-btn-xs,
-.pnd-dashboard-panel-collapsed-content + .pnd-btn-xs {
-    background-color: rgb(255,255,255);//!important
 }
 
 /* ------------------------------------ *\
