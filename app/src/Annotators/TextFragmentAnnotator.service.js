@@ -328,6 +328,8 @@ angular.module('Pundit2.Annotators')
                 delete fragmentsRefs[uri];
             }
         }
+
+        activateFragments();
     };
 
     var wipeReference = function(elem, fragmentId, mod) {
@@ -424,11 +426,29 @@ angular.module('Pundit2.Annotators')
                         .attr('fragments', cleanElemFragments)
                         .removeClass(fragmentId)
                         .removeClass('pnd-cons-temp');
+
+                    elem.attr('class').split(' ').forEach(function(c) {
+                        if (c.indexOf('pnd-textfragment-numbers') !== -1) {
+                            elem.removeClass(c);
+                        }
+                    });
+
+                    elem.addClass('pnd-textfragment-numbers-' + cleanElemFragments.split(",").length);
                 }
             }
             else {
-                elem.attr('fragments', cleanElemFragments)
-                    .removeClass(fragmentId);
+                elem
+                    .attr('fragments', cleanElemFragments)
+                    .removeClass(fragmentId)
+                    .removeClass('pnd-cons-temp');
+
+                elem.attr('class').split(' ').forEach(function(c) {
+                    if (c.indexOf('pnd-textfragment-numbers') !== -1) {
+                        elem.removeClass(c);
+                    }
+                });
+
+                elem.addClass('pnd-textfragment-numbers-' + cleanElemFragments.split(",").length);
             }
         }
 
