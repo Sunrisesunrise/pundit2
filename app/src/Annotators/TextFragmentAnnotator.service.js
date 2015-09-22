@@ -171,6 +171,8 @@ angular.module('Pundit2.Annotators')
             cleanElemFragments = elemFragments.replace(fragmentId, '').split(',').filter(function(s) {
                 return s.length > 0
             }).join(','),
+            elemTempFragments = elem.attr('temp-fragments'),
+            cleanTempFragmentsA = [],
             cleanElemFragmentsA = cleanElemFragments.split(','),
             mergeWithPrev = false,
             frIntersectWithPrev = false,
@@ -179,9 +181,16 @@ angular.module('Pundit2.Annotators')
             elemRemoved = false,
             fragmentIntersection;
 
+        if (typeof elemTempFragments !== 'undefined') {
+            elemTempFragments = elemTempFragments.replace(fragmentId, '').split(',').filter(function(s) {
+                return s.length > 0
+            }).join(',')
+            elemTempFragments = elemTempFragments.length == 0 ? undefined : elemTempFragments;
+        }
+
         // #1 TEXT<SPAN>TEXT
         if ((prev === null || prev.nodeType === 3) && (next === null || next.nodeType === 3)) {
-            if (elem.attr('fragments') === fragmentId) {
+            if (elementFragments === fragmentId) {
                 node.parentNode.insertBefore(node.firstChild, node);
                 elem.remove();
                 elemRemoved = true;
@@ -229,6 +238,8 @@ angular.module('Pundit2.Annotators')
                 // Crete new node.
                 var wrapNode = XpointersHelper.createWrapNode(XpointersHelper.options.wrapNodeName, XpointersHelper.options.wrapNodeClass, cleanElemFragmentsA),
                     modObj = {},
+                    temp,
+                    tempFragments = [],
                     elementsToRemove = [];
                 if (mergeWithPrev) {
                     wrapNode.jElement.text(jPrev.text());
@@ -236,6 +247,10 @@ angular.module('Pundit2.Annotators')
                     jPrev.attr('fragments').split(',').map(function(k) {
                         modObj[k] = true;
                     });
+                    temp = jPrev.attr('temp-fragments');
+                    if (typeof temp !== 'undefined') {
+                        tempFragments = tempFragments.concat(temp.split(','));
+                    }
                 }
                 wrapNode.jElement.append(elem.text());
                 elementsToRemove.push(elem);
@@ -245,14 +260,27 @@ angular.module('Pundit2.Annotators')
                     jNext.attr('fragments').split(',').map(function(k) {
                         modObj[k] = true;
                     });
+                    temp = jNext.attr('temp-fragments');
+                    if (typeof temp !== 'undefined') {
+                        tempFragments = tempFragments.concat(temp.split(','));
+                    }
                 }
                 elem.after(wrapNode.jElement);
+                if (tempFragments.length > 0) {
+                    var tempObj = {};
+                    tempFragments.forEach(function(e) {
+                        tempObj[e] = true
+                    });
+                    tempFragments = Object.keys(tempObj);
+                    wrapNode.jElement.attr('temp-fragments', tempFragments.join(','));
+                    wrapNode.jElement.addClass(XpointersHelper.options.tempWrapNodeClass);
+                }
                 elementsToRemove.forEach(function(e, i) {
                     e.remove();
                 });
                 angular.extend(mod, modObj);
             } else if (!frIntersectWithNext && !frIntersectWithNext) {
-                if (elem.attr('fragments') === fragmentId) {
+                if (elemFragments === fragmentId) {
                     if (node.firstChild !== null) {
                         node.parentNode.insertBefore(node.firstChild, node);
                     }
@@ -260,8 +288,15 @@ angular.module('Pundit2.Annotators')
                 } else {
                     elem
                         .attr('fragments', cleanElemFragments)
-                        .removeClass(fragmentId)
-                        .removeClass('pnd-cons-temp');
+                        .removeClass(fragmentId);
+                        
+                    if (typeof elemTempFragments !== 'undefined') {
+                        elem.attr('temp-fragments', elemTempFragments)
+                            .addClass(XpointersHelper.options.tempWrapNodeClass);
+                    } else {
+                        elem.removeClass(XpointersHelper.options.tempWrapNodeClass)
+                            .removeAttr('temp-fragments');
+                    }
 
                     elem.attr('class').split(' ').forEach(function(c) {
                         if (c.indexOf('pnd-textfragment-numbers') !== -1) {
@@ -274,8 +309,15 @@ angular.module('Pundit2.Annotators')
             } else {
                 elem
                     .attr('fragments', cleanElemFragments)
-                    .removeClass(fragmentId)
-                    .removeClass('pnd-cons-temp');
+                    .removeClass(fragmentId);
+                    
+                if (typeof elemTempFragments !== 'undefined') {
+                    elem.attr('temp-fragments', elemTempFragments)
+                        .addClass(XpointersHelper.options.tempWrapNodeClass);
+                } else {
+                    elem.removeClass(XpointersHelper.options.tempWrapNodeClass)
+                        .removeAttr('temp-fragments');
+                }
 
                 elem.attr('class').split(' ').forEach(function(c) {
                     if (c.indexOf('pnd-textfragment-numbers') !== -1) {
