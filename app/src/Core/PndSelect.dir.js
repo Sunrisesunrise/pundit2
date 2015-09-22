@@ -1,6 +1,6 @@
 angular.module('Pundit2.Core')
 
-.directive('pndSelect', function($timeout) {
+.directive('pndSelect', function($timeout, $document) {
     return {
         restrict: 'E',
         replace: true,
@@ -16,7 +16,8 @@ angular.module('Pundit2.Core')
         templateUrl: 'src/Core/Templates/pndSelect.dir.tmpl.html',
         link: function(scope, element) {
             var inputElement = element.find('.creation-input').eq(0),
-                fncAction;
+                fncAction,
+                hasMouseDownHandler = false;
 
             scope.optionAction = false;
 
@@ -46,6 +47,15 @@ angular.module('Pundit2.Core')
                     }
                 }
                 return res;
+            };
+
+            var mouseHandler = function(evt) {
+                var target = angular.element(evt.target);
+                if (target.closest('.pnd-select').length > 0) {
+                    return;
+                }
+                scope.collapse();
+                scope.$$phase || scope.$digest();
             };
 
 
@@ -80,14 +90,27 @@ angular.module('Pundit2.Core')
 
             scope.expand = function() {
                 scope.expanded = true;
+                if (!hasMouseDownHandler) {
+                    $document.on('mousedown', mouseHandler);
+                    hasMouseDownHandler = true;
+                }
             };
 
             scope.collapse = function() {
                 scope.expanded = false;
+                if (hasMouseDownHandler) {
+                    $document.off('mousedown', mouseHandler);
+                    hasMouseDownHandler = false;
+                }
             };
 
             scope.toggleExpand = function() {
-                scope.expanded = !scope.expanded;
+                if (scope.expanded) {
+                    scope.collapse();
+                }
+                else {
+                    scope.expand();
+                }
             };
 
             scope.showAction = function() {
@@ -104,7 +127,7 @@ angular.module('Pundit2.Core')
                 scope.optionSelected = option;
 
                 if (scope.expanded) {
-                    scope.toggleExpand();
+                    scope.collapse();
                 }
             };
 
@@ -114,6 +137,13 @@ angular.module('Pundit2.Core')
                 }
                 return scope.optionSelected.value === option.value;
             };
+
+            scope.$on('$destroy', function() {
+                if (hasMouseDownHandler) {
+                    $document.off('mousedown', mouseHandler);
+                    hasMouseDownHandler = false;
+                }
+            });
         }
     };
 });
