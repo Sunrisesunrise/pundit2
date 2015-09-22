@@ -84,6 +84,12 @@ angular.module('Pundit2.AnnotationSidebar')
         });
     };
 
+    var disableFragments = function(items) {
+        angular.forEach(items, function(item) {
+            TextFragmentAnnotator.hideByUri(item.uri);
+        });
+    };
+
     var activateAnnotationsFragments = function(annotations) {
         angular.forEach(annotations, function(annotation) {
             activateFragments(annotation.items);
@@ -558,6 +564,24 @@ angular.module('Pundit2.AnnotationSidebar')
 
     EventDispatcher.addListener('Consolidation.newRequest', function() {
         $timeout.cancel(updateHitsTimer);
+    });
+
+    EventDispatcher.addListener('TextFragmentAnnotator.updateItems', function(e) {
+        var updatedItems = e.args,
+            updatedAnnotations = {};
+        
+        angular.forEach(updateItems, function(item) {
+            var annList = AnnotationsExchange.getAnnotationsByItem(item.uri);
+            updateAnnotations = angular.extend(updateAnnotations, annList);
+        });
+
+        angular.forEach(updateAnnotations, function(annotation) {
+            if (typeof $scope.annotations[annotation.id] !== 'undefined') {
+                activateFragments(annotation.item);
+            } else {
+                disableFragments(annotation.item);
+            }
+        })
     });
 
     angular.element($window).bind('resize', function() {
