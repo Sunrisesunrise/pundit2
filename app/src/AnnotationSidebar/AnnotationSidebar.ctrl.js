@@ -570,16 +570,18 @@ angular.module('Pundit2.AnnotationSidebar')
         var updatedItems = e.args,
             updatedAnnotations = {};
         
-        angular.forEach(updateItems, function(item) {
-            var annList = AnnotationsExchange.getAnnotationsByItem(item.uri);
-            updateAnnotations = angular.extend(updateAnnotations, annList);
+        angular.forEach(updatedItems, function(itemUri) {
+            var annList = AnnotationsExchange.getAnnotationsByItem(itemUri);
+            for (var i in annList) {
+                updatedAnnotations[annList[i].id] = annList[i];
+            }
         });
 
-        angular.forEach(updateAnnotations, function(annotation) {
+        angular.forEach(updatedAnnotations, function(annotation) {
             if (typeof $scope.annotations[annotation.id] !== 'undefined') {
-                activateFragments(annotation.item);
+                activateFragments(annotation.items);
             } else {
-                disableFragments(annotation.item);
+                disableFragments(annotation.items);
             }
         })
     });
