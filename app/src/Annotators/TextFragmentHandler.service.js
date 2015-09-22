@@ -115,7 +115,7 @@ angular.module('Pundit2.Annotators')
 
 // TODO: remove toolbar and triplecomposer dependency 
 .service('TextFragmentHandler', function($rootScope, TEXTFRAGMENTHANDLERDEFAULTS, NameSpace, BaseComponent, TextFragmentAnnotator,
-    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, EventDispatcher, $document, $injector, Config) {
+    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, Consolidation, EventDispatcher, $document, $injector, Config) {
 
     var textFragmentHandler = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
     var clientHidden = false;
@@ -151,23 +151,7 @@ angular.module('Pundit2.Annotators')
         for (var uri in temporaryConsolidated) {
             if (forceWipe || typeof validUris[uri] === 'undefined') {
                 var temporaryFragmentId = temporaryConsolidated[uri].fragmentId;
-
-                //TextFragmentAnnotator.wipeItem({uri: uri});
                 TextFragmentAnnotator.wipeFragmentIds([temporaryFragmentId]);
-
-                // // Replace wrapped nodes with their content
-                // var bits = angular.element('span[fragments="' + temporaryFragmentId + '"]');
-                // angular.forEach(bits, function(node) {
-                //     var parent = node.parentNode;
-                //     while (node.firstChild) {
-                //         parent.insertBefore(node.firstChild, node);
-                //     }
-                //     angular.element(node).remove();
-                // });
-                // XpointersHelper.mergeTextNodes(angular.element('body')[0]);
-
-
-
                 delete temporaryConsolidated[uri];
             }
         }
@@ -175,6 +159,22 @@ angular.module('Pundit2.Annotators')
         if (forceWipe) {
             lastTemporaryConsolidable = undefined;
         }
+    };
+
+    var consolidateTemporarySelection = function() {
+        for (var uri in temporaryConsolidated) {
+            var temporaryFragmentId = temporaryConsolidated[uri].fragmentId,
+                temporaryFragmentUri = TextFragmentAnnotator.getFragmentUriById(temporaryFragmentId);
+
+            Consolidation.updateItemListAndMap(ItemsExchange.getItemByUri(temporaryFragmentUri), 'text');
+            TextFragmentAnnotator.placeIconByFragmentId(temporaryFragmentId);
+
+            angular.element('.' + temporaryFragmentId)
+                .removeClass(XpointersHelper.options.textFragmentHiddenClass)
+                .removeClass('pnd-cons-temp');
+            delete temporaryConsolidated[uri];
+        }
+        lastTemporaryConsolidable = undefined;
     };
 
     var addTemporarySelection = function() {
@@ -577,7 +577,6 @@ angular.module('Pundit2.Annotators')
 
         EventDispatcher.addListeners(
             [
-                'AnnotationsCommunication.annotationSaved',
                 'Consolidation.startConsolidate',
                 'Client.hide',
             ],
@@ -585,6 +584,13 @@ angular.module('Pundit2.Annotators')
                 checkTemporaryConsolidated(true);
             }
         );
+
+        EventDispatcher.addListeners([
+            'AnnotationsCommunication.annotationSaved',
+            'AnnotationsCommunication.editAnnotation'
+        ], function() {
+            consolidateTemporarySelection();
+        });
     }
 
     EventDispatcher.addListener('Client.hide', function( /*e*/ ) {

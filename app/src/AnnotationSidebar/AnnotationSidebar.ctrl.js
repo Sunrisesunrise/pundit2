@@ -536,11 +536,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 annotationId = e.args;
 
             annotationsQueques[eventType].push(annotationId);
-
-            // TODO: avoid consolidation in save and edit and remove this check
-            if (eventType === 'deleteAnnotation') {
-                EventDispatcher.sendEvent('AnnotationSidebar.forceUpdate');
-            }
+            EventDispatcher.sendEvent('AnnotationSidebar.forceUpdate');                
         }
     );
 
