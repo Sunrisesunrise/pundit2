@@ -659,13 +659,16 @@ angular.module('Pundit2.Annotators')
                 var node = parentElement.childNodes[i];
                 if (node.nodeType === 3) {
                     if (node.length > 0) {
-                        // Wrapp text node.
+                        // Wrap text node.
                         var r = $document[0].createRange(),
                             l = node.length;
                         r.setStart(node, 0);
                         r.setEnd(node, l);
                         newWrapNode = xpointersHelper.createWrapNode(htmlTag, xpointersHelper.options.wrapNodeClass, parentFragmentIds);
                         r.surroundContents(newWrapNode.element);
+                        if (!newWrapNode.jElement.parent().hasClass(xpointersHelper.options.textFragmentHiddenClass)) {
+                            newWrapNode.jElement.removeClass(xpointersHelper.options.textFragmentHiddenClass);
+                        }
                         needOtherCheck = true;
                         break;
                     }
@@ -714,9 +717,6 @@ angular.module('Pundit2.Annotators')
 
             wrapNode.jElement
                 .addClass(xpointersHelper.options.wrapNodeClass);
-            jParentElement
-                .find('.' + xpointersHelper.options.textFragmentHiddenClass)
-                .removeClass(xpointersHelper.options.textFragmentHiddenClass);
             jParentElement
                 .contents().unwrap();
         } else {

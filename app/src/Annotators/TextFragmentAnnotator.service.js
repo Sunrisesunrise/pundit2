@@ -310,7 +310,7 @@ angular.module('Pundit2.Annotators')
     };
 
     textFragmentAnnotator.wipeFragmentIds = function(frIds) {
-        var mod = [];
+        var mod = {};
         for (var i in frIds) {
             var fragmentId = frIds[i],
                 uri = fragmentById[fragmentId].uri,
@@ -331,6 +331,12 @@ angular.module('Pundit2.Annotators')
 
         XpointersHelper.mergeTextNodes(angular.element('body')[0]);
         activateFragments();
+
+        var uris = [];
+        for (var fr in mod) {
+            uris.push(fragmentById[fr].uri);
+        }
+        EventDispatcher.sendEvent('TextFragmentAnnotator.updateItems', uris);
     };
 
     var wipeReference = function(elem, fragmentId, mod) {
@@ -397,26 +403,36 @@ angular.module('Pundit2.Annotators')
         if (!elemRemoved) {
             if (mergeWithPrev || mergeWithNext){
                 // Crete new node.
-                var wrapNode = XpointersHelper.createWrapNode(XpointersHelper.options.wrapNodeName, XpointersHelper.options.wrapNodeClass, cleanElemFragmentsA);
-                var elementsToRemove = [];
+                var wrapNode = XpointersHelper.createWrapNode(XpointersHelper.options.wrapNodeName, XpointersHelper.options.wrapNodeClass, cleanElemFragmentsA),
+                    modObj = {},
+                    elementsToRemove = [];
                 if (mergeWithPrev) {
                     wrapNode.jElement.text(jPrev.text());
                     elementsToRemove.push(jPrev);
+                    jPrev.attr('fragments').split(',').map(function(k) {
+                        modObj[k] = true;
+                    });
                 }
                 wrapNode.jElement.append(elem.text());
                 elementsToRemove.push(elem);
                 if (mergeWithNext) {
                     wrapNode.jElement.append(jNext.text());
                     elementsToRemove.push(jNext);
+                    jNext.attr('fragments').split(',').map(function(k) {
+                        modObj[k] = true;
+                    });
                 }
                 elem.after(wrapNode.jElement);
                 elementsToRemove.forEach(function(e, i){
                     e.remove();
                 });
+                angular.extend(mod, modObj);
             }
             else if (!frIntersectWithNext && !frIntersectWithNext) {
                 if (elem.attr('fragments') === fragmentId) {
-                    node.parentNode.insertBefore(node.firstChild, node);
+                    if (node.firstChild !== null) {
+                        node.parentNode.insertBefore(node.firstChild, node);
+                    }
                     elem.remove();
                 } 
                 else {
@@ -451,7 +467,7 @@ angular.module('Pundit2.Annotators')
         }
 
         // TEMPORARY::::
-        $('.pnd-textfragment-hidden').removeClass('pnd-textfragment-hidden');
+        //$('.pnd-textfragment-hidden').removeClass('pnd-textfragment-hidden');
     };
 
     // Called by TextFragmentIcon directives: they will be placed after each consolidated
