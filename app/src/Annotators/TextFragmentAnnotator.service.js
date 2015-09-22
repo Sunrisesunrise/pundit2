@@ -329,6 +329,7 @@ angular.module('Pundit2.Annotators')
             }
         }
 
+        XpointersHelper.mergeTextNodes(angular.element('body')[0]);
         activateFragments();
     };
 
@@ -342,7 +343,6 @@ angular.module('Pundit2.Annotators')
             elemFragments = elem.attr('fragments'),
             cleanElemFragments = elemFragments.replace(fragmentId, '').split(',').filter(function(s){return s.length>0}).join(','),
             cleanElemFragmentsA = cleanElemFragments.split(','),
-            mergeTextNode = false,
             mergeWithPrev = false,
             frIntersectWithPrev = false,
             mergeWithNext = false,
@@ -355,7 +355,6 @@ angular.module('Pundit2.Annotators')
             if (elem.attr('fragments') === fragmentId) {
                 node.parentNode.insertBefore(node.firstChild, node);
                 elem.remove();
-                mergeTextNode = true;
                 elemRemoved = true;
             }
         }
@@ -419,7 +418,6 @@ angular.module('Pundit2.Annotators')
                 if (elem.attr('fragments') === fragmentId) {
                     node.parentNode.insertBefore(node.firstChild, node);
                     elem.remove();
-                    mergeTextNode = true;
                 } 
                 else {
                     elem
@@ -450,10 +448,6 @@ angular.module('Pundit2.Annotators')
 
                 elem.addClass('pnd-textfragment-numbers-' + cleanElemFragments.split(",").length);
             }
-        }
-
-        if (mergeTextNode) {
-            XpointersHelper.mergeTextNodes(angular.element('body')[0]);
         }
 
         // TEMPORARY::::
