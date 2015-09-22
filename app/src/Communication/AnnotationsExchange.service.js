@@ -104,7 +104,7 @@ angular.module('Pundit2.Communication')
                         if (typeof annByItemUri[uri] === 'undefined') {
                             annByItemUri[uri] = [];
                         }
-                        annByItemUri[uri].push(ann.id);
+                        annByItemUri[uri].push(ann);
                         uris[uri] = true;
                     }
                 }
@@ -118,12 +118,9 @@ angular.module('Pundit2.Communication')
             var ann = annListById[id];
             for (var uri in ann.items) {
                 if (typeof annByItemUri[uri] !== 'undefined') {
-                    index = annByItemUri[uri].indexOf(id);
-                    if (index !== -1) {
-                        annByItemUri[uri].splice(index, 1);
-                        if (annByItemUri[uri].length === 0) {
-                            delete annByItemUri[uri];
-                        }
+                    annByItemUri[uri] = annByItemUri[uri].filter(function(e) {return e.id !== id;});
+                    if (annByItemUri[uri].length === 0) {
+                        delete annByItemUri[uri];
                     }
                 }
             }
@@ -159,11 +156,13 @@ angular.module('Pundit2.Communication')
     annotationExchange.getAnnotationsByItem = function(uri) {
         var ret = [];
 
-        for (var i in annList) {
-            if (typeof(annList[i].items[uri]) !== 'undefined') {
-                ret.push(annList[i]);
-            }
-        }
+        ret = typeof annByItemUri[uri] !== 'undefined' ? annByItemUri[uri] : [];
+
+        //for (var i in annList) {
+        //    if (typeof(annList[i].items[uri]) !== 'undefined') {
+        //        ret.push(annList[i]);
+        //    }
+        //}
 
         return ret;
     };
