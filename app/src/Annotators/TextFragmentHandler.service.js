@@ -171,6 +171,7 @@ angular.module('Pundit2.Annotators')
 
             angular.element('.' + temporaryFragmentId)
                 .removeClass(XpointersHelper.options.textFragmentHiddenClass)
+                .removeAttr('temp-fragments')
                 .removeClass('pnd-cons-temp');
             delete temporaryConsolidated[uri];
         }

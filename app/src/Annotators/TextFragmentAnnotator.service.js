@@ -190,7 +190,7 @@ angular.module('Pundit2.Annotators')
 
         // #1 TEXT<SPAN>TEXT
         if ((prev === null || prev.nodeType === 3) && (next === null || next.nodeType === 3)) {
-            if (elementFragments === fragmentId) {
+            if (elemFragments === fragmentId) {
                 node.parentNode.insertBefore(node.firstChild, node);
                 elem.remove();
                 elemRemoved = true;
