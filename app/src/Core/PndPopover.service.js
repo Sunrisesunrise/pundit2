@@ -119,7 +119,7 @@ angular.module('Pundit2.Core')
         //     eventHandler = null;
         // });
 
-        EventDispatcher.sendEvent('TextFragmentHandler.addTemporarySelection');
+        EventDispatcher.sendEvent('PndPopover.addTemporarySelection');
 
         state.popover.show();
 
@@ -155,7 +155,7 @@ angular.module('Pundit2.Core')
 
         angular.element($window).off('scroll', scrollHandler);
 
-        EventDispatcher.sendEvent('TextFragmentHandler.removeTemporarySelection');
+        EventDispatcher.sendEvent('PndPopover.removeTemporarySelection');
     };
 
     pndPopover.show = function(x, y, options, data) {

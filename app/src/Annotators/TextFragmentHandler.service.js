@@ -558,11 +558,20 @@ angular.module('Pundit2.Annotators')
     };
 
     if (textFragmentHandler.options.useTemporarySelection) {
-        EventDispatcher.addListeners(['TextFragmentHandler.addTemporarySelection', 'TripleComposer.useAsObject', 'TripleComposer.useAsSubject'], function() {
+        EventDispatcher.addListeners([
+            'PndPopover.addTemporarySelection',
+            'TripleComposer.useAsObject',
+            'TripleComposer.useAsSubject'
+        ], function() {
             addTemporarySelection();
         });
 
-        EventDispatcher.addListeners(['TextFragmentHandler.removeTemporarySelection', 'TripleComposer.statementChange', 'TripleComposer.statementChanged', 'TripleComposer.reset'], function() {
+        EventDispatcher.addListeners([
+            'PndPopover.removeTemporarySelection',
+            'TripleComposer.statementChange',
+            'TripleComposer.statementChanged',
+            'TripleComposer.reset'
+        ], function() {
             checkTemporaryConsolidated();
         });
 
