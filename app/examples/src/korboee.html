@@ -151,7 +151,7 @@
         }
     ];
 
-    var KeeDemoCtrl = function($scope, KorboCommunicationService, $window, ItemsExchange, Item, $timeout, EventDispatcher, CLIENTDEFAULTS, PAGEITEMSCONTAINERDEFAULTS, MYITEMSDEFAULTS) {
+    var KeeDemoCtrl = function($scope, KorboCommunicationService, $window, ItemsExchange, Item, $timeout, EventDispatcher, CLIENTPRODEFAULTS, PAGEITEMSCONTAINERDEFAULTS, MYITEMSDEFAULTS) {
 
         var name = $window['myConf'].globalObjectName;
         $scope.openSearch = function(){
@@ -171,7 +171,7 @@
 
         var item = new Item(predicate.uri, predicate);
 
-        ItemsExchange.addItemToContainer(item, CLIENTDEFAULTS.relationsContainer);
+        ItemsExchange.addItemToContainer(item, CLIENTPRODEFAULTS.relationsContainer);
         var loadMockedItems = function(){
             var j, item;
             for (j in pageItems) {
