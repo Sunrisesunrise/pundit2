@@ -646,7 +646,7 @@ angular.module('Pundit2.Annotators')
 
         var modParents = parents,
             modifyWrapping = false,
-            wrappAllTextNode = false,
+            wrapWholeTextNode = false,
             elementLength = 0,
             parentElement = element.parentElement,
             jParentElement = angular.element(parentElement),
@@ -696,10 +696,13 @@ angular.module('Pundit2.Annotators')
             r2.setStart(element, (element === range.startContainer) ? range.startOffset : 0);
             r2.setEnd(element, (element === range.endContainer) ? range.endOffset : element.length);
 
+            if (r2.startContainer === r2.endContainer && r2.startOffset === 0 && r2.endOffset === element.length) {
+                wrapWholeTextNode = true;
+            }
             // Otherwise just select the entire node, and wrap it up
         } else {
             r2.selectNode(element);
-            wrappAllTextNode = true;
+            wrapWholeTextNode = true;
         }
 
         if (jParentElement.hasClass(xpointersHelper.options.wrapNodeClass)) {
@@ -719,7 +722,7 @@ angular.module('Pundit2.Annotators')
             elementLength = element.length;
         }
 
-        if (wrappAllTextNode && modifyWrapping) {
+        if (wrapWholeTextNode && modifyWrapping) {
             jParentElement.attr('fragments', modParents.join(','));
             jParentElement.addClass(modParents.join(' '));
             jParentElement.addClass(htmlClass);
@@ -738,7 +741,7 @@ angular.module('Pundit2.Annotators')
 
 
 
-        if (modifyWrapping && !wrappAllTextNode) {
+        if (modifyWrapping && !wrapWholeTextNode) {
             updateWrappingNode();
 
             wrapNode.jElement
