@@ -159,20 +159,13 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if (MyPundit.isUserLogged()) {
             currentElement.addClass('pnd-annotation-details-delete-in-progress');
-            AnnotationsCommunication.deleteAnnotation(currentId).then(function() {
-                modalScope.notifyMessage = "Your annotation has been deleted successfully";
-            }, function() {
+            AnnotationsCommunication.deleteAnnotation(currentId).finally(function() {
+                confirmModal.hide();
                 currentElement.removeClass('pnd-annotation-details-delete-in-progress');
-                modalScope.notifyMessage = 'Impossible to delete the annotation. Please reatry later.';
             });
         }
 
         Analytics.track('buttons', 'click', 'annotation--details--delete--confirm');
-
-        modalTimeoutPromise = $timeout(function() {
-            confirmModal.hide();
-            $timeout.cancel(modalTimeoutPromise);
-        }, 1000);
     };
 
     // cancel btn click
