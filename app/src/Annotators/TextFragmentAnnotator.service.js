@@ -333,18 +333,25 @@ angular.module('Pundit2.Annotators')
     };
 
     textFragmentAnnotator.wipeFragmentIds = function(frIds) {
-        var mod = {};
+        var modifiedFragmentsId = {},
+            modifiedItemsUri = [];
+
         for (var i in frIds) {
             var fragmentId = frIds[i],
                 uri = fragmentById[fragmentId].uri,
-                references = fragmentsRefsById[fragmentId];
+                references = fragmentsRefsById[fragmentId],
+                iconReference = fragmentById[fragmentId].icon;
             for (var r in references) {
                 var elem = references[r];
-                wipeReference(elem, fragmentId, mod);
+                wipeReference(elem, fragmentId, modifiedFragmentsId);
             }
 
             delete fragmentsRefsById[fragmentId];
             delete fragmentById[fragmentId];
+
+            if (typeof iconReference !== 'undefined') {
+                iconReference.element.remove();
+            }
 
             if (fragmentIds[uri][0] === fragmentId) {
                 delete fragmentIds[uri];
@@ -355,36 +362,16 @@ angular.module('Pundit2.Annotators')
         XpointersHelper.mergeTextNodes(angular.element('body')[0]);
         activateFragments();
 
-        var uris = [];
-        for (var fr in mod) {
-            uris.push(fragmentById[fr].uri);
+        for (var fr in modifiedFragmentsId) {
+            modifiedItemsUri.push(fragmentById[fr].uri);
         }
-        EventDispatcher.sendEvent('TextFragmentAnnotator.updateItems', uris);
+
+        EventDispatcher.sendEvent('TextFragmentAnnotator.updateItems', modifiedItemsUri);
     };
 
     textFragmentAnnotator.wipeItem = function(item) {
-        var atLeastOne = false;
-        var references = fragmentsRefs[item.uri];
-        var uriFragmentId = fragmentIds[item.uri][0];
-        var iconReference = fragmentById[uriFragmentId].icon;
-        for (var i in references) {
-            if (references[i].attr('fragments') === uriFragmentId) {
-                var node = references[i][0],
-                    parent = node.parentNode;
-                while (node.firstChild) {
-                    parent.insertBefore(node.firstChild, node);
-                }
-                references[i].remove();
-                atLeastOne = true;
-            }
-        }
-        if (atLeastOne) {
-            if (typeof iconReference !== 'undefined') {
-                iconReference.element.remove();
-            }
-            // Finally merge splitted text nodes
-            XpointersHelper.mergeTextNodes(angular.element('body')[0]);
-        }
+        var fragmentId = fragmentIds[item.uri][0];
+        textFragmentAnnotator.wipeFragmentIds([fragmentId]);
     };
 
     // Wipes everything done by the annotator:
