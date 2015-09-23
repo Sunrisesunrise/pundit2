@@ -2,7 +2,7 @@
     <!-- Top area -->
     <div class="kee-top-area">
         <div class="kee-top-area-menu pull-right">
-            <button type="button" class="btn btn-xs btn-link" ng-click="showDropdown($event)">
+            <button type="button" class="pnd-btn pnd-btn-xs pnd-btn-link" ng-click="showDropdown($event)">
                 <span class="pnd-icon pnd-icon-gear"></span>
             </button>
         </div>
@@ -38,7 +38,7 @@
             <div class="kee-new-languages">
                 <div kee-languages="tabs"></div>
                 <button
-                        class="btn btn-xs btn-link pull-left"
+                        class="pnd-btn pnd-btn-xs pnd-btn-link pull-left"
                         template-url="{{disactiveLanguagesPopoverTemplate}}"
                         data-animation="am-flip-x"
                         bs-popover>
@@ -152,7 +152,7 @@
                     <div class="form-group">
                         <button
                             type="button"
-                            class="btn btn-xs btn-link pull-right"
+                            class="pnd-btn pnd-btn-xs pnd-btn-link pull-right"
                             ng-show="!activeFilter"
                             ng-click="activeFilter = !activeFilter">
                                 <span class="pnd-icon pnd-icon-filter"></span>
@@ -267,7 +267,7 @@
                     Please go to the <a ng-click="changeInnerPane('advancedOptions')">advanced options</a> and select one or more types.
                     <br /><br />
                     <!-- TODO See if we can remove the button below -->
-                    <button class="btn btn-sm btn-info"
+                    <button class="pnd-btn pnd-btn-sm"
                             ng-show="!loadingStatus"
                             ng-click="changeInnerPane('advancedOptions')">Advanced options</button>
                 </p>

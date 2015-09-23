@@ -4,7 +4,6 @@
  * Styles for dashboard
  */
 
-
 /* ------------------------------------ *\
    #DASHBOARD
 \* ------------------------------------ */
@@ -36,6 +35,16 @@
      .form-control.input[type="text"] {
         color: @color-text-light;
     }
+
+    .pnd-btn-xs {
+        background: #fff;
+    }
+}
+
+.pnd-dashboard-footer-handler + .pnd-btn-xs,
+.pnd-dashboard-panel-collapsed-content + .pnd-btn-xs {
+    background-color: rgb(255,255,255);//!important
+    //background-position: 0 20px;
 }
 
 /* Panels: First and second expended panels have
@@ -56,7 +65,6 @@ vertical draggable bar */
     margin-right: 0;
 }
 
-
 /* ------------------------------------ *\
    #COLLAPSE-EXPAND-BUTTONS
 \* ------------------------------------ */
@@ -69,13 +77,13 @@ vertical draggable bar */
         right: 0; /* This is modified below for not-last panels */
         width: 20px; /* This is modified below for not-last panels */
 
-        &.btn-xs {
+        &.pnd-btn-xs {
             border: 0;
             padding-top: 2px;
+            background-color: #fff;
             text-shadow: 0 1px 0 #fff;
 
             &:hover {
-                background-color: #fff;
                 color: @brand-success;
             }
 

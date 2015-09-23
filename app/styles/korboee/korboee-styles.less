@@ -28,7 +28,7 @@
 // Used in Title/Description view with language selector
 
 // Left column with tab selection
-.pnd-vertical-tabs {
+.tabbable .pnd-vertical-tabs {
     height: @kee-dialog-height - 70px - 30px - 4px;
     margin-bottom: 0;
 }
@@ -53,10 +53,11 @@
 
     // Button for adding or removing languages
     // TODO This should go in the vertical tabs al the last item
-    .btn {
+    .pnd-btn {
         position: absolute;
         left: 8px;
         bottom: 40px;
+        background: transparent;
     }
     .tabs-left > .nav-tabs > li > a {
         min-width: 40px;
@@ -76,7 +77,7 @@
 
     .kee-top-area-message {
         font-size: 16px;
-        padding: 0 10px 10px 10px;
+        padding: 10px;
     }
 
     .kee-top-area-menu {
@@ -171,7 +172,7 @@
     margin: 0;
     clear: both;
 
-    .btn {
+    .pnd-btn {
         float: left;
     }
 }
@@ -404,7 +405,7 @@
             margin: 0;
             clear: both;
 
-            .btn {
+            .pnd-btn {
                 .pnd-icon {
                     font-size: 12px;
                     position: relative;
@@ -609,13 +610,3 @@
     }
 
 }*/
-
-
-
-
-
-
-
-
-
-

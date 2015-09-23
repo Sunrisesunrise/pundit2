@@ -2,7 +2,7 @@
     <div class="pnd-annomatic-content">
         <div class="pnd-btn-annomatic">
             <button 
-                class="btn btn-link pnd-button-suggestion" 
+                class="pnd-btn pnd-btn-link pnd-button-suggestion" 
                 ng-click="getSuggestions()"
                 ng-show="!gotAnnotations || Annomatic.annotationNumber == 0"
                 ng-disabled="targets.length == 0">
@@ -44,7 +44,7 @@
                 Save
             </button> -->
             <button 
-                class="btn btn-success pnd-button-start-review" 
+                class="pnd-btn pnd-button-start-review" 
                 ng-click="startReview()"
                 ng-hide="Annomatic.ann.savedByNum.length > 0">
                 Start review <!-- ({{Annomatic.currAnn}}/{{Annomatic.annotationNumber}}) -->

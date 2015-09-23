@@ -319,13 +319,13 @@
     }
 }
 
-.pnd-annotation-item-header-text + .btn {
+.pnd-annotation-item-header-text + .pnd-btn {
     border: none;
     background-color: transparent;
     line-height: 0;
     height: 24px;
     width: 24px;
-    padding: 0 13px 0 5px !important; /* For css overwritings */
+    padding: 0 13px 0 5px; /* For css overwritings - !important */
     opacity: .5;
 }
 
@@ -381,13 +381,14 @@
         }
 
         /* Caret */
-        .btn {
+        .pnd-btn {
             color: #fff;
             // .text-dark-emboss();
 
             &:hover,
             &:active,
             &:focus {
+                background: transparent;
                 color: #fff;
             }
         }
@@ -423,7 +424,7 @@
                     .text-white-emboss();
                 }
 
-                .btn {
+                .pnd-btn {
                     color: @color-text;
                     .text-white-emboss();
 
@@ -467,7 +468,7 @@
                         padding-left: 8px;
                     }
 
-                    .btn {
+                    .pnd-btn {
                         color: @color-text;
 
                         &:hover {
@@ -520,6 +521,14 @@
 
                 .pnd-annotation-details-deactive {
                     cursor: default;
+                }
+            }
+
+            .pnd-btn {
+                &:hover,
+                &:focus,
+                &:active {
+                    background-color: transparent;
                 }
             }
         }
@@ -584,7 +593,7 @@
             }
         }
 
-        .btn {
+        .pnd-btn {
             display: none;
         }
     }

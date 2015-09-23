@@ -96,6 +96,11 @@
         // problems if we assign position: relative to that element
         top: 43px;
         right: 12px;
+
+        &.pnd-btn:hover,
+        &.pnd-btn:focus {
+            background-image: none;
+        }
     }
 }
 
@@ -198,12 +203,12 @@
     background-color: #fff;
     border-top: 1px solid @color-border-normal;
 
-    .btn {
+    .pnd-btn {
         float: left;
-        border-right: 1px solid #fff;
+        //border-right: 1px solid #fff;
     }
 
-    .pnd-btn-lists.btn {
+    .pnd-btn-lists.pnd-btn {
         float: right;
     }
 }

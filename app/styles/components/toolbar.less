@@ -68,7 +68,6 @@ body.pnd-toolbar-active {
         transition-duration: 1s;
         -webkit-transition-duration: 1s;
     }
-
 }
 
 
@@ -82,6 +81,11 @@ body.pnd-toolbar-active {
     li {
         height: auto;
         margin: 0;
+
+        &:hover {
+            background-color: @color-toolbar-button-hover;
+            text-decoration: none !important; /* For css overwritings */
+        }
 
         /* Normal buttons */
         > a {
@@ -287,6 +291,12 @@ body.pnd-toolbar-active {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+    .pnd-dropdown-contextual-menu {
+        > li:hover {
+            background-color: @color-dropdown-bg-hover;
+        }
     }
 }
 

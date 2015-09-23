@@ -1,0 +1,117 @@
+/* ------------------------------------ *\
+   #SIDEBAR-FILTERS-CALENDAR-WIDGET
+\* ------------------------------------ */
+
+/* Angular strap calendar widget used to select dates in the filters */
+
+.pnd-date-picker-table {
+    text-align: center;
+}
+
+.datepicker.dropdown-menu {
+    margin: 0;
+    padding: 0;
+
+    .pnd-btn, .btn {
+        margin: 0 auto;
+        padding: 5px !important; /* For css overwritings */
+        //border: 1px solid @gray-lighter;
+        border: 0 !important;
+        background-color: transparent !important;
+        background-image: none !important;
+        color: inherit !important;
+        text-shadow: none;
+        overflow: visible;
+
+        &:hover,
+        &:focus {
+            background-color: transparent !important;
+            background-image: none !important;
+            border: 0 !important;
+            text-shadow: none !important;
+            box-shadow: none !important;
+        }
+    }
+
+    table {
+        //margin: 6px;
+        width: @calendar-popover-width - 12; /* Minus padding */
+        vertical-align: middle;
+
+        thead {
+
+            border-top: 1px solid @color-border-light;
+            border-left: 1px solid @color-border-light;
+
+            tr {
+
+                th {
+                    position: relative;
+                    width: auto;
+                    height: 30px;
+                    border-right: 1px solid @color-border-light;
+                    border-bottom: 1px solid @color-border-light;
+
+                    .btn {
+                        height: 20px;
+                        line-height: 20px;
+
+                        strong {
+                            line-height: 20px;
+                        }
+
+                    }
+
+                    &:first-child, &:last-child {
+                        .btn {
+                            width: 100%;
+                            line-height: 22px;
+
+                            i {
+                                font-size: 10px;
+                            }
+                        }
+                    }
+                }
+
+                &:last-child {
+                    th {
+                        padding-top: 5px;
+                    }
+                }
+            }
+        }
+
+        tr td, tr th {
+            //padding: 4px 5px;
+            width: auto;
+            text-align: center;
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            padding: 0;
+            border: none;
+            text-align: center;
+
+            &:hover,
+            &:focus,
+            &:active {
+                background-color: darken(@color-background-light, 2);
+            }
+        }
+        
+        tr td {
+            height: auto;
+            border-top: 1px solid @color-border-light;
+            border-left: 1px solid @color-border-light;
+
+            span {
+                width: auto;
+                height: auto;
+                margin: 0;
+                padding: 0;
+                line-height: 1.5;
+            }
+        }
+    }
+}
