@@ -17,10 +17,10 @@
     height: 29px;
     margin: 0;
     padding: 0 10px; //    padding: 6px 12px !important;
-    .vertical-gradient(@color-button-bg, @button-gradient-level);
+    //.vertical-gradient(@color-button-bg, @button-gradient-level);
     border: 0;
     border-radius: 0;
-    background: none;
+    background: @color-button-bg;
     background-image: none;
     outline: 0; //!important
     color: @color-button-text-dark;
@@ -37,9 +37,10 @@
     &:hover,
     &:focus,
     &.focus {
+        background: darken(@color-button-bg, 5);
         outline: 0;
         box-shadow: none;
-        .vertical-gradient(darken(@color-button-bg, 5), @button-gradient-level);
+        //.vertical-gradient(darken(@color-button-bg, 5), @button-gradient-level);
     }
     // Remove the gradient for the pressed/active state
     &:active,
@@ -52,10 +53,11 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
+        background: lighten(@color-button-bg, 20);
         cursor: @cursor-disabled;
         color: fade(@color-button-text-dark, 50%); //!important
         pointer-events: none; // Future-proof disabling of clicks
-        .vertical-gradient(lighten(@color-button-bg, 20), @button-gradient-level);
+        //.vertical-gradient(lighten(@color-button-bg, 20), @button-gradient-level);
     }
 
     i {
@@ -80,6 +82,10 @@
 
     .pnd-icon {
         font-size: 14px;
+    }
+
+    &:hover {
+        //background-image: none;
     }
 }
 
