@@ -116,21 +116,6 @@ angular.module('Pundit2.Core')
         if (eventHandler !== null) {
             EventDispatcher.removeListener(eventHandler);
         }
-<<<<<<< Updated upstream
-        eventHandler = EventDispatcher.addListener('XpointersHelper.NodeAdded', function(evt) {
-            state.fragmentId = evt.args.fragments[0];
-            EventDispatcher.removeListener(eventHandler);
-            eventHandler = null;
-        });
-
-        EventDispatcher.sendEvent('TextFragmentHandler.addTemporarySelection');
-
-        state.popover.show();
-
-        var win = angular.element($window);
-        state.scroll.top = win.scrollTop(),
-        state.scroll.left = win.scrollLeft();
-=======
 
         if (state.popoverOptions.needsValidSelection) {
             var selection = $document[0].getSelection();
@@ -148,11 +133,7 @@ angular.module('Pundit2.Core')
             var win = angular.element($window);
             state.scroll.top = win.scrollTop(),
             state.scroll.left = win.scrollLeft();
->>>>>>> Stashed changes
-
-            if (state.popoverOptions.lockPageScroll) {
-                win.on('scroll', scrollHandler);
-            }
+            win.on('scroll', scrollHandler);
         }
 
         $document.on('mouseup', mouseUpHandler);
