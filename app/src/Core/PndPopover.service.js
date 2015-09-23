@@ -87,7 +87,6 @@ angular.module('Pundit2.Core')
 
     var mouseUpHandler = function(evt) {
         var tagName = angular.element(evt.target).prop('tagName').toLowerCase();
-        console.log(tagName);
         if (angular.element(evt.target).closest('.popover').length === 0 && tagName !== 'select') {
             hide();
         } else {
@@ -104,7 +103,6 @@ angular.module('Pundit2.Core')
     var show = function() {
         var selection = $document[0].getSelection();
         if (selection.baseNode === null) {
-            console.log("skipping show .. no valid selection");
             return false;
         }
 
