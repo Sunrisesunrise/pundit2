@@ -123,6 +123,10 @@
     <script src="../src/CommentPopover/CommentPopover.ctrl.js"></script>
     <script src="../src/CommentPopover/CommentPopover.service.js"></script>
 
+    <script src="../src/FragmentPopover/FragmentPopover.js"></script>
+    <script src="../src/FragmentPopover/FragmentPopover.ctrl.js"></script>
+    <script src="../src/FragmentPopover/FragmentPopover.service.js"></script>
+
     <script src="../src/Item/Item.js"></script>
     <script src="../src/Item/Item.dir.js"></script>
     <script src="../src/Item/Item.ctrl.js"></script>

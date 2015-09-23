@@ -5,7 +5,9 @@ angular.module('Pundit2.Core')
 
     var initPopoverOptions = {
         trigger: 'manual',
-        container: "[data-ng-app='Pundit2']"
+        container: "[data-ng-app='Pundit2']",
+        needsValidSelection: true,
+        lockPageScroll: true
     };
 
     var state = {
@@ -86,6 +88,11 @@ angular.module('Pundit2.Core')
         pndPopover.setAnchorPosition(x, y);
 
         state.popover = $popover(state.anchor, state.popoverOptions);
+        if (typeof options.scopeData !== 'undefined') {
+            for (var key in options.scopeData) {
+                state.popover.$scope[key] = options.scopeData[key];
+            }
+        }
         return state.popover;
     };
 
@@ -106,17 +113,10 @@ angular.module('Pundit2.Core')
     };
 
     var show = function() {
-        var selection = $document[0].getSelection();
-        if (selection.baseNode === null) {
-            console.log("skipping show .. no valid selection");
-            return false;
-        }
-
-        state.selection = selection;
-
         if (eventHandler !== null) {
             EventDispatcher.removeListener(eventHandler);
         }
+<<<<<<< Updated upstream
         eventHandler = EventDispatcher.addListener('XpointersHelper.NodeAdded', function(evt) {
             state.fragmentId = evt.args.fragments[0];
             EventDispatcher.removeListener(eventHandler);
@@ -130,10 +130,31 @@ angular.module('Pundit2.Core')
         var win = angular.element($window);
         state.scroll.top = win.scrollTop(),
         state.scroll.left = win.scrollLeft();
+=======
+
+        if (state.popoverOptions.needsValidSelection) {
+            var selection = $document[0].getSelection();
+            if (selection.baseNode === null) {
+                console.log("skipping show .. no valid selection");
+                return false;
+            }
+            state.selection = selection;
+            EventDispatcher.sendEvent('PndPopover.addTemporarySelection');
+        }
+
+        state.popover.show();
 
         if (state.popoverOptions.lockPageScroll) {
-            win.on('scroll', scrollHandler);
+            var win = angular.element($window);
+            state.scroll.top = win.scrollTop(),
+            state.scroll.left = win.scrollLeft();
+>>>>>>> Stashed changes
+
+            if (state.popoverOptions.lockPageScroll) {
+                win.on('scroll', scrollHandler);
+            }
         }
+
         $document.on('mouseup', mouseUpHandler);
 
         return true;
@@ -171,12 +192,17 @@ angular.module('Pundit2.Core')
         var promise = state.popover.$promise;
         promise.then(function() {
             if (show()) {
-                calculateSelectionCoordinates();
+                if (state.popoverOptions.needsValidSelection) {
+                    calculateSelectionCoordinates();
+                }
                 innerPromise.resolve();
             }
             else {
                 innerPromise.reject();
             }
+        }, function() {
+            // reject popover creation.
+            console.log(arguments);
         });
         return innerPromise.promise;
     };

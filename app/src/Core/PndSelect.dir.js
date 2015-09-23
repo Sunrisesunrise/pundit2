@@ -59,7 +59,7 @@ angular.module('Pundit2.Core')
             };
 
 
-            scope.optionSelectedValue = scope.optionSelectedValue ? scope.optionSelectedValue : scope.optionList[0].value;
+            scope.optionSelectedValue = scope.optionSelectedValue ? scope.optionSelectedValue : scope.optionList[0] ? scope.optionList[0].value : undefined;
             scope.optionSelected = findOption();
             scope.expanded = scope.expanded ? scope.expanded : false;
             scope.placeholderAction = scope.placeholderAction ? scope.placeholderAction : 'Default placeholder';
