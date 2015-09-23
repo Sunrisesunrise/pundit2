@@ -6,8 +6,35 @@ angular.module('Pundit2.Annotators')
         scope: {
             fragments: '@'
         },
-        link: function(scope, element /*, attrs */ ) {
+        link: function(scope, element) {
             var numberOfTextFragments = scope.fragments.split(",").length;
+            element.addClass('pnd-textfragment-numbers-' + numberOfTextFragments);
+
+            scope.bitId = new Date().getTime() + Math.floor(Math.random() * 100);
+            scope.isHigh = false;
+            
+            scope.high = function() {
+                element.addClass('pnd-textfragment-highlight');
+            };
+            scope.clear = function() {
+                element.removeClass('pnd-textfragment-highlight');
+            };
+
+            scope.hide = function() {
+                element.addClass('pnd-textfragment-hidden');
+            };
+            scope.show = function() {
+                element.removeClass('pnd-textfragment-hidden');
+            };
+
+            scope.ghost = function() {
+                element.addClass('pnd-textfragment-ghosted');
+            };
+            scope.expo = function() {
+                element.removeClass('pnd-textfragment-ghosted');
+            };
+
+            TextFragmentAnnotator.updateFragmentBit(scope, 'add');
 
             if (Config.clientMode === 'lite') {
                 var AnnotationExchange = $injector.get('AnnotationsExchange'),
@@ -45,35 +72,14 @@ angular.module('Pundit2.Annotators')
                 });
             }
 
-            element.on('Pundit.updateFragmentBits', function(evt) {
-                console.log(element);
+            element.on('Pundit.updateFragmentBits', function(e, data) {
+                scope.fragments = data;
+                TextFragmentAnnotator.updateFragmentBit(scope, 'update');
             });
 
-            TextFragmentAnnotator.addFragmentBit(scope);
-
-            element.addClass('pnd-textfragment-numbers-' + numberOfTextFragments);
-
-            scope.isHigh = false;
-            scope.high = function() {
-                element.addClass('pnd-textfragment-highlight');
-            };
-            scope.clear = function() {
-                element.removeClass('pnd-textfragment-highlight');
-            };
-
-            scope.hide = function() {
-                element.addClass('pnd-textfragment-hidden');
-            };
-            scope.show = function() {
-                element.removeClass('pnd-textfragment-hidden');
-            };
-
-            scope.ghost = function() {
-                element.addClass('pnd-textfragment-ghosted');
-            };
-            scope.expo = function() {
-                element.removeClass('pnd-textfragment-ghosted');
-            };
+            element.on('$destroy', function() {
+                TextFragmentAnnotator.updateFragmentBit(scope, 'remove');
+            });
 
         } // link()
     };

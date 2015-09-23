@@ -733,7 +733,7 @@ angular.module('Pundit2.Annotators')
             jParentElement.addClass(modParents.join(' '));
             jParentElement.addClass(htmlClass);
             jParentElement.attr('temp-fragments', tempFragmentIds.join(','));
-            jParentElement.trigger('Pundit.updateFragmentBits');
+            jParentElement.trigger('Pundit.updateFragmentBits', modParents.join(','));
         }
         else {
             wrapNode = xpointersHelper.createWrapNode(htmlTag, htmlClass, modParents);

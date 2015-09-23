@@ -106,9 +106,12 @@ angular.module('Pundit2.Annotators')
         // For the given id it will contain an object with:
         // .uri : uri of the original item
         // .bits: array of scopes of the bit directives for this fragment
+        // .bitsObj: object of scopes of the bit directives for this fragment
         // .icon: scope of the icon directive for this fragment
         // .item: Item belonging to this id
         fragmentById = {};
+
+    var bitsQueque = {};
 
     textFragmentAnnotator.label = 'text';
     textFragmentAnnotator.type = NameSpace.fragments[textFragmentAnnotator.label];
@@ -384,6 +387,8 @@ angular.module('Pundit2.Annotators')
         fragmentsRefsById = {};
         fragmentById = {};
 
+        bitsQueque = {};
+
         // Remove icons
         angular.element('.' + XpointersHelper.options.textFragmentIconClass).remove();
 
@@ -478,6 +483,7 @@ angular.module('Pundit2.Annotators')
             fragmentById['fr-' + i] = {
                 uri: uri,
                 bits: [],
+                bitsObj: {},
                 item: items[uri]
             };
             i++;
@@ -532,8 +538,9 @@ angular.module('Pundit2.Annotators')
     // Called by TextFragmentBit directives: they will wrap every bit of annotated content
     // for every xpointer we save an array of those bits. Each bit can belong to more
     // than one xpointer (overlaps!)
-    textFragmentAnnotator.addFragmentBit = function(bit) {
-        var fragments = bit.fragments;
+    textFragmentAnnotator.updateFragmentBit = function(bit, action) {
+        var fragments = bit.fragments,
+            id = bit.bitId;
 
         // Fragment ids are split by a comma, gather them back in a array. Otherwise
         // they are a string
@@ -545,13 +552,48 @@ angular.module('Pundit2.Annotators')
 
         for (var l = fragments.length; l--;) {
             var current = fragmentById[fragments[l]];
-            if (typeof current === 'undefined') {
-                textFragmentAnnotator.err("fragmentById[" + fragments[l] + "] is undefined - skipping textFragmentAnnotator.addFragmentBit()");
-                continue;
+            switch (action) {
+                case 'add':
+                    if (typeof current === 'undefined') {
+                        textFragmentAnnotator.err("fragmentById[" + fragments[l] + "] is undefined - skipping textFragmentAnnotator.addFragmentBit()");
+                        continue;
+                    }
+                    if (typeof current.bitsObj[id] === 'undefined') {
+                        current.bits.push(bit);
+                        current.bitsObj[id] = bit;
+                    }
+                    break;
+                case 'remove':
+                    if (typeof current === 'undefined') {
+                        continue;
+                    }
+                    if (typeof current.bitsObj[id] !== 'undefined') {
+                        var indexFind = current.bits.map(function(e) {
+                            return e.bitId;
+                        }).indexOf(id);
+                        if (indexFind !== -1) {
+                            current.bits.splice(indexFind, 1);
+                        }
+                        delete current.bitsObj[id];
+                    }
+                    break;
+                case 'update':
+                    if (typeof current === 'undefined') {
+                        if (typeof bitsQueque[fragments[l]] === 'undefined') {
+                            bitsQueque[fragments[l]] = [bit];
+                        } else {
+                            bitsQueque[fragments[l]].push(bit);
+                        }
+                        continue;
+                    }
+                    if (typeof current.bitsObj[id] === 'undefined') {
+                        current.bits.push(bit);
+                        current.bitsObj[id] = bit;
+                    }
+                    break;
             }
-            current.bits.push(bit);
         }
-        textFragmentAnnotator.log('Adding consolidated fragment bit', fragments);
+        textFragmentAnnotator.log('Update consolidated fragment bit references', fragments);
     };
 
     textFragmentAnnotator.getFragmentReferenceByUri = function(uri) {
@@ -723,10 +765,22 @@ angular.module('Pundit2.Annotators')
             newFragmentUri = wrapInfo.uri,
             newFragmentId = fragments[0];
 
+        var bits = [],
+            bitsObj = {};
+
+        if (typeof bitsQueque[newFragmentId] !== 'undefined') {
+            angular.forEach(bitsQueque[newFragmentId], function(bit) {
+                bits.push(bit);
+                bitsObj[bit.bitId] = bit;
+            });
+            delete bitsQueque[newFragmentId];
+        }
+
         fragmentIds[newFragmentUri] = typeof fragmentIds[newFragmentUri] === 'undefined' ? [newFragmentId] : fragmentIds[newFragmentUri].push(newFragmentId);
         fragmentById[newFragmentId] = {
             uri: newFragmentUri,
-            bits: [],
+            bits: bits,
+            bitsObj: bitsObj,
             item: ItemsExchange.getItemByUri(newFragmentUri)
         };
 
