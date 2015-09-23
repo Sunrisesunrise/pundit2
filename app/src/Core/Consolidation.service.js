@@ -241,6 +241,10 @@ angular.module('Pundit2.Core')
     };
 
     consolidation.updateItemListAndMap = function(item, fragmentType) {
+        if (typeof item === 'undefined') {
+            return;
+        }
+
         state.itemListByURI[item.uri] = item;
         state.uriTypeMap[item.uri] = fragmentType;
         consolidation.log("Added item: " + item.label + " (" + fragmentType + ")");
