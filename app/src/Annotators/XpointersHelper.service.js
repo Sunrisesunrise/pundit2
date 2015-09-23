@@ -646,6 +646,7 @@ angular.module('Pundit2.Annotators')
 
         var modParents = parents,
             modifyWrapping = false,
+            wrappAllTextNode = false,
             elementLength = 0,
             parentElement = element.parentElement,
             jParentElement = angular.element(parentElement),
@@ -698,6 +699,7 @@ angular.module('Pundit2.Annotators')
             // Otherwise just select the entire node, and wrap it up
         } else {
             r2.selectNode(element);
+            wrappAllTextNode = true;
         }
 
         if (jParentElement.hasClass(xpointersHelper.options.wrapNodeClass)) {
@@ -717,16 +719,26 @@ angular.module('Pundit2.Annotators')
             elementLength = element.length;
         }
 
-        wrapNode = xpointersHelper.createWrapNode(htmlTag, htmlClass, modParents);
+        if (wrappAllTextNode && modifyWrapping) {
+            jParentElement.attr('fragments', modParents.join(','));
+            jParentElement.addClass(modParents.join(' '));
+            jParentElement.addClass(htmlClass);
+            jParentElement.attr('temp-fragments', tempFragmentIds.join(','));
+        }
+        else {
+            wrapNode = xpointersHelper.createWrapNode(htmlTag, htmlClass, modParents);
+            // Finally surround the range contents with an ad-hoc crafted html element
+            r2.surroundContents(wrapNode.element);
 
-        // Finally surround the range contents with an ad-hoc crafted html element
-        r2.surroundContents(wrapNode.element);
-
-        if (isTemporary) {
-            wrapNode.jElement.attr('temp-fragments', tempFragmentIds.join(','));
+            if (isTemporary) {
+                wrapNode.jElement.attr('temp-fragments', tempFragmentIds.join(','));
+            }
         }
 
-        if (modifyWrapping) {
+
+
+
+        if (modifyWrapping && !wrappAllTextNode) {
             updateWrappingNode();
 
             wrapNode.jElement
