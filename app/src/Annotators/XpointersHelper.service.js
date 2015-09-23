@@ -238,13 +238,17 @@ angular.module('Pundit2.Annotators')
         return ret;
     };
 
-    xpointersHelper.getXPathsFromXPointers = function(xpArray) {
+    xpointersHelper.getXPathsFromXPointers = function(xpArray, temporaryXpointers) {
         var xpointers = [],
             xpaths = {};
 
         for (var i = xpArray.length - 1; i >= 0; i--) {
             var xpointer = xpArray[i],
                 obj = xpointersHelper.xPointerToXPath(xpointer);
+            obj.isTemporary = false;
+            if (typeof temporaryXpointers !== 'undefined' && typeof temporaryXpointers[xpointer] !== 'undefined') {
+                obj.isTemporary = true;
+            }
 
             if (xpointersHelper.isValidXpointer(xpointer)) {
                 xpaths[xpointer] = obj;
@@ -368,7 +372,8 @@ angular.module('Pundit2.Annotators')
                 xpointer: xpointer,
                 xpath: xpaths[xpointer].startXpath,
                 offset: xpaths[xpointer].startOffset,
-                range: rangeStart
+                range: rangeStart,
+                isTemporary: xpaths[xpointer].isTemporary
             });
 
             // Another time for the ending xpath+offset
@@ -381,7 +386,8 @@ angular.module('Pundit2.Annotators')
                 xpointer: xpointer,
                 xpath: xpaths[xpointer].endXpath,
                 offset: xpaths[xpointer].endOffset,
-                range: rangeEnd
+                range: rangeEnd,
+                isTemporary: xpaths[xpointer].isTemporary
             });
 
         } // for xpointer in self.xpaths
@@ -727,6 +733,7 @@ angular.module('Pundit2.Annotators')
             jParentElement.addClass(modParents.join(' '));
             jParentElement.addClass(htmlClass);
             jParentElement.attr('temp-fragments', tempFragmentIds.join(','));
+            jParentElement.trigger('Pundit.updateFragmentBits');
         }
         else {
             wrapNode = xpointersHelper.createWrapNode(htmlTag, htmlClass, modParents);

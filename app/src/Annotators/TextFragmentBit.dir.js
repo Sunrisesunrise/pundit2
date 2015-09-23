@@ -45,6 +45,10 @@ angular.module('Pundit2.Annotators')
                 });
             }
 
+            element.on('Pundit.updateFragmentBits', function(evt) {
+                console.log(element);
+            });
+
             TextFragmentAnnotator.addFragmentBit(scope);
 
             element.addClass('pnd-textfragment-numbers-' + numberOfTextFragments);

@@ -153,12 +153,14 @@ angular.module('Pundit2.Annotators')
             if (forceWipe || typeof validUris[uri] === 'undefined') {
                 var temporaryFragmentId = temporaryConsolidated[uri].fragmentId;
                 TextFragmentAnnotator.wipeFragmentIds([temporaryFragmentId]);
+                ItemsExchange.setItemAsTemporary(uri, false);
                 delete temporaryConsolidated[uri];
             }
         }
 
         if (forceWipe) {
             lastTemporaryConsolidable = undefined;
+            ItemsExchange.wipeTemporaryItems();
         }
     };
 
@@ -182,13 +184,14 @@ angular.module('Pundit2.Annotators')
     var addTemporarySelection = function() {
         if (typeof lastTemporaryConsolidable !== 'undefined') {
             XpointersHelper.wrapElement(
-            lastTemporaryConsolidable.range.commonAncestorContainer,
-            lastTemporaryConsolidable.range,
-            'span', 'pnd-cons-temp pnd-cons', [lastTemporaryConsolidable.fragmentId],
-            true,
-            lastTemporaryConsolidable.itemUri
+                lastTemporaryConsolidable.range.commonAncestorContainer,
+                lastTemporaryConsolidable.range,
+                'span', 'pnd-cons-temp pnd-cons', [lastTemporaryConsolidable.fragmentId],
+                true,
+                lastTemporaryConsolidable.itemUri
             );
             temporaryConsolidated[lastTemporaryConsolidable.itemUri] = lastTemporaryConsolidable;
+            ItemsExchange.setItemAsTemporary(lastTemporaryConsolidable.itemUri, true);
             lastTemporaryConsolidable = undefined;
         }
     };

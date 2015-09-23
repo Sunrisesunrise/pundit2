@@ -17,7 +17,9 @@ angular.module('Pundit2.Core')
         // [ array of ItemFactory objects ]
         itemList = [],
         // item uri : { ItemFactory object }
-        itemListByURI = {};
+        itemListByURI = {},
+
+        temporaryItems = {};
 
     itemsExchange.wipe = function() {
         itemListByContainer = {};
@@ -25,7 +27,33 @@ angular.module('Pundit2.Core')
         itemContainers = {};
         itemList = [];
         itemListByURI = {};
+        temporaryItems = {};
         itemsExchange.log('Wiped every loaded item and every container.');
+    };
+
+    itemsExchange.isTemporary = function(uri) {
+        return typeof temporaryItems[uri] !== 'undefined';
+    };
+
+    itemsExchange.setItemAsTemporary = function(mixed, isTemporary) {
+        var item = mixed;
+        if (typeof item === 'string') {
+            item = itemsExchange.getItemByUri(mixed);
+        }
+        if (isTemporary) {
+            temporaryItems[item.uri] = item;
+        }
+        else {
+            delete temporaryItems[item.uri];
+        }
+    };
+
+    itemsExchange.wipeTemporaryItems = function() {
+        temporaryItems = {};
+    };
+
+    itemsExchange.getTemporaryItems = function() {
+        return temporaryItems;
     };
 
     itemsExchange.isItemInContainer = function(item, container) {
