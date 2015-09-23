@@ -137,6 +137,7 @@ angular.module('Pundit2.Annotators')
                 firstBit = fragments.first(),
                 lastBit = fragments.last();
 
+            // TODO: add all reference in fragmentsRefs
             fragmentsRefs[c] = [lastBit, firstBit];
             placeIcon(id, lastBit);
         }
@@ -156,6 +157,260 @@ angular.module('Pundit2.Annotators')
 
         // deferred.resolve();
         // return deferred.promise;
+    };
+
+
+    var wipeReference = function(elem, fragmentId, mod) {
+        var node = elem[0],
+            prev = node.previousElementSibling,
+            next = node.nextElementSibling,
+            jPrev,
+            jNext,
+            fragments,
+            elemFragments = elem.attr('fragments'),
+            cleanElemFragments = elemFragments.replace(fragmentId, '').split(',').filter(function(s) {
+                return s.length > 0
+            }).join(','),
+            elemTempFragments = elem.attr('temp-fragments'),
+            cleanTempFragmentsA = [],
+            cleanElemFragmentsA = cleanElemFragments.split(','),
+            mergeWithPrev = false,
+            frIntersectWithPrev = false,
+            mergeWithNext = false,
+            frIntersectWithNext = false,
+            elemRemoved = false,
+            fragmentIntersection;
+
+        if (typeof elemTempFragments !== 'undefined') {
+            elemTempFragments = elemTempFragments.replace(fragmentId, '').split(',').filter(function(s) {
+                return s.length > 0
+            }).join(',')
+            elemTempFragments = elemTempFragments.length == 0 ? undefined : elemTempFragments;
+        }
+
+        // #1 TEXT<SPAN>TEXT
+        if ((prev === null || prev.nodeType === 3) && (next === null || next.nodeType === 3)) {
+            if (elemFragments === fragmentId) {
+                if (node.firstChild !== null && node.parentNode !== null && node.parentNode !== null) {
+                    node.parentNode.insertBefore(node.firstChild, node);
+                }
+                elem.remove();
+                elemRemoved = true;
+            }
+        } else {
+            // Now we're going to check if we need to merge element span with
+            // either previous span or next span or both.
+            // First we check prev sibling, if it's present and it's an element node..
+            if (prev !== null && prev.nodeType === 1) {
+                jPrev = angular.element(prev);
+                // .. and if it has "pnd-cons" class we have to check if has the same fragment id(s)
+                if (jPrev.hasClass(XpointersHelper.options.wrapNodeClass)) {
+                    fragments = jPrev.attr('fragments');
+                    if (fragments === cleanElemFragments) {
+                        mergeWithPrev = true;
+                    } else {
+                        // Check if prev fragments list intersects with current element fragments list purged by fragmentId
+                        fragmentIntersection = fragments.split(',').filter(function(n) {
+                            return cleanElemFragmentsA.indexOf(n) !== -1
+                        });
+                        frIntersectWithPrev = fragmentIntersection.length !== 0;
+                    }
+                }
+            }
+            // now we do the same check for next sibling.
+            if (next !== null && next.nodeType === 1) {
+                jNext = angular.element(next);
+                if (jNext.hasClass(XpointersHelper.options.wrapNodeClass)) {
+                    fragments = jNext.attr('fragments');
+                    if (fragments === cleanElemFragments) {
+                        mergeWithNext = true;
+                    } else {
+                        // Check if next fragments list intersects with current element fragments list purged by fragmentId
+                        fragmentIntersection = fragments.split(',').filter(function(n) {
+                            return cleanElemFragmentsA.indexOf(n) !== -1
+                        });
+                        frIntersectWithNext = fragmentIntersection.length !== 0;
+                    }
+                }
+            }
+        }
+
+        if (!elemRemoved) {
+            if (mergeWithPrev || mergeWithNext) {
+                // Crete new node.
+                var wrapNode = XpointersHelper.createWrapNode(XpointersHelper.options.wrapNodeName, XpointersHelper.options.wrapNodeClass, cleanElemFragmentsA),
+                    modObj = {},
+                    temp,
+                    tempFragments = [],
+                    elementsToRemove = [];
+                if (mergeWithPrev) {
+                    wrapNode.jElement.text(jPrev.text());
+                    elementsToRemove.push(jPrev);
+                    jPrev.attr('fragments').split(',').map(function(k) {
+                        modObj[k] = true;
+                    });
+                    temp = jPrev.attr('temp-fragments');
+                    if (typeof temp !== 'undefined') {
+                        tempFragments = tempFragments.concat(temp.split(','));
+                    }
+                }
+                wrapNode.jElement.append(elem.text());
+                elementsToRemove.push(elem);
+                if (mergeWithNext) {
+                    wrapNode.jElement.append(jNext.text());
+                    elementsToRemove.push(jNext);
+                    jNext.attr('fragments').split(',').map(function(k) {
+                        modObj[k] = true;
+                    });
+                    temp = jNext.attr('temp-fragments');
+                    if (typeof temp !== 'undefined') {
+                        tempFragments = tempFragments.concat(temp.split(','));
+                    }
+                }
+                elem.after(wrapNode.jElement);
+                if (tempFragments.length > 0) {
+                    var tempObj = {};
+                    tempFragments.forEach(function(e) {
+                        tempObj[e] = true
+                    });
+                    tempFragments = Object.keys(tempObj);
+                    wrapNode.jElement.attr('temp-fragments', tempFragments.join(','));
+                    wrapNode.jElement.addClass(XpointersHelper.options.tempWrapNodeClass);
+                }
+                elementsToRemove.forEach(function(e, i) {
+                    e.remove();
+                });
+                angular.extend(mod, modObj);
+            } else if (!frIntersectWithNext && !frIntersectWithNext) {
+                if (elemFragments === fragmentId) {
+                    if (node.firstChild !== null && node.parentNode !== null) {
+                        node.parentNode.insertBefore(node.firstChild, node);
+                    }
+                    elem.remove();
+                } else {
+                    elem
+                        .attr('fragments', cleanElemFragments)
+                        .removeClass(fragmentId);
+
+                    if (typeof elemTempFragments !== 'undefined') {
+                        elem.attr('temp-fragments', elemTempFragments)
+                            .addClass(XpointersHelper.options.tempWrapNodeClass);
+                    } else {
+                        elem.removeClass(XpointersHelper.options.tempWrapNodeClass)
+                            .removeAttr('temp-fragments');
+                    }
+
+                    elem.attr('class').split(' ').forEach(function(c) {
+                        if (c.indexOf('pnd-textfragment-numbers') !== -1) {
+                            elem.removeClass(c);
+                        }
+                    });
+
+                    elem.addClass('pnd-textfragment-numbers-' + cleanElemFragments.split(",").length);
+                }
+            } else {
+                elem
+                    .attr('fragments', cleanElemFragments)
+                    .removeClass(fragmentId);
+
+                if (typeof elemTempFragments !== 'undefined') {
+                    elem.attr('temp-fragments', elemTempFragments)
+                        .addClass(XpointersHelper.options.tempWrapNodeClass);
+                } else {
+                    elem.removeClass(XpointersHelper.options.tempWrapNodeClass)
+                        .removeAttr('temp-fragments');
+                }
+
+                elem.attr('class').split(' ').forEach(function(c) {
+                    if (c.indexOf('pnd-textfragment-numbers') !== -1) {
+                        elem.removeClass(c);
+                    }
+                });
+
+                elem.addClass('pnd-textfragment-numbers-' + cleanElemFragments.split(",").length);
+            }
+        }
+    };
+
+    textFragmentAnnotator.wipeFragmentIds = function(frIds) {
+        var modifiedFragmentsId = {},
+            modifiedItemsUri = [];
+
+        for (var i in frIds) {
+            var fragmentId = frIds[i],
+                uri = fragmentById[fragmentId].uri,
+                references = fragmentsRefsById[fragmentId],
+                iconReference = fragmentById[fragmentId].icon;
+            for (var r in references) {
+                var elem = references[r];
+                wipeReference(elem, fragmentId, modifiedFragmentsId);
+            }
+
+            delete fragmentsRefsById[fragmentId];
+            delete fragmentById[fragmentId];
+
+            if (typeof iconReference !== 'undefined') {
+                iconReference.element.remove();
+            }
+
+            if (fragmentIds[uri][0] === fragmentId) {
+                delete fragmentIds[uri];
+                delete fragmentsRefs[uri];
+            }
+        }
+
+        XpointersHelper.mergeTextNodes(angular.element('body')[0]);
+        activateFragments();
+
+        for (var fr in modifiedFragmentsId) {
+            modifiedItemsUri.push(fragmentById[fr].uri);
+        }
+
+        EventDispatcher.sendEvent('TextFragmentAnnotator.updateItems', modifiedItemsUri);
+    };
+
+    textFragmentAnnotator.wipeItem = function(item) {
+        var fragmentId = fragmentIds[item.uri][0];
+        textFragmentAnnotator.wipeFragmentIds([fragmentId]);
+    };
+
+    // Wipes everything done by the annotator:
+    // - removes the icons, if present
+    // - unwraps the fragments
+    textFragmentAnnotator.wipe = function() {
+
+        fragmentIds = {};
+        fragmentsRefs = {};
+        fragmentsRefsById = {};
+        fragmentById = {};
+
+        // Remove icons
+        angular.element('.' + XpointersHelper.options.textFragmentIconClass).remove();
+
+        // Replace wrapped nodes with their content
+        var bits = angular.element('.' + XpointersHelper.options.wrapNodeClass);
+        angular.forEach(bits, function(node) {
+            var parent = node.parentNode;
+            while (node.firstChild) {
+                parent.insertBefore(node.firstChild, node);
+            }
+            angular.element(node).remove();
+        });
+
+        // Finally merge splitted text nodes
+        XpointersHelper.mergeTextNodes(angular.element('body')[0]);
+    };
+
+    textFragmentAnnotator.placeIconByFragmentId = function(fragmentId) {
+        if (textFragmentAnnotator.options.addIcon === false) {
+            return;
+        }
+
+        var currentIcon;
+        if (typeof fragmentById[fragmentId].icon === 'undefined') {
+            currentIcon = placeIcon(fragmentId, fragmentsRefsById[fragmentId][0]);
+            $compile(currentIcon)($rootScope);
+        }
     };
 
     textFragmentAnnotator.isConsolidable = function(item) {
@@ -257,64 +512,11 @@ angular.module('Pundit2.Annotators')
         return deferred.promise;
     };
 
-    // Wipes everything done by the annotator:
-    // - removes the icons, if present
-    // - unwraps the fragments
-    textFragmentAnnotator.wipe = function() {
-
-        fragmentIds = {};
-        fragmentsRefs = {};
-        fragmentsRefsById = {};
-        fragmentById = {};
-
-        // Remove icons
-        angular.element('.' + XpointersHelper.options.textFragmentIconClass).remove();
-
-        // Replace wrapped nodes with their content
-        var bits = angular.element('.' + XpointersHelper.options.wrapNodeClass);
-        angular.forEach(bits, function(node) {
-            var parent = node.parentNode;
-            while (node.firstChild) {
-                parent.insertBefore(node.firstChild, node);
-            }
-            angular.element(node).remove();
-        });
-
-        // Finally merge splitted text nodes
-        XpointersHelper.mergeTextNodes(angular.element('body')[0]);
-    };
-
-    textFragmentAnnotator.wipeItem = function(item) {
-        var atLeastOne = false;
-        var references = fragmentsRefs[item.uri];
-        var uriFragmentId = fragmentIds[item.uri][0];
-        var iconReference = fragmentById[uriFragmentId].icon;
-        for (var i in references) {
-            if (references[i].attr('fragments') === uriFragmentId) {
-                var node = references[i][0],
-                parent = node.parentNode;
-                while (node.firstChild) {
-                    parent.insertBefore(node.firstChild, node);
-                }
-                references[i].remove();
-                atLeastOne = true;
-            }
-        }
-        if (atLeastOne) {
-            if (typeof iconReference !== 'undefined') {
-                iconReference.element.remove();
-            }
-            // Finally merge split text nodes
-            XpointersHelper.mergeTextNodes(angular.element('body')[0]);
-        }
-    };
-
-
     // Called by TextFragmentIcon directives: they will be placed after each consolidated
     // fragment.
     textFragmentAnnotator.addFragmentIcon = function(icon) {
         if (typeof fragmentById[icon.fragment] === 'undefined') {
-            textFragmentAnnotator.err("fragmentById["+icon.fragment+"] is undefined - skipping textFragmentAnnotator.addFragmentIcon()");
+            textFragmentAnnotator.err("fragmentById[" + icon.fragment + "] is undefined - skipping textFragmentAnnotator.addFragmentIcon()");
             return;
         }
         fragmentById[icon.fragment].icon = icon;
@@ -340,7 +542,7 @@ angular.module('Pundit2.Annotators')
         for (var l = fragments.length; l--;) {
             var current = fragmentById[fragments[l]];
             if (typeof current === 'undefined') {
-                textFragmentAnnotator.err("fragmentById["+fragments[l]+"] is undefined - skipping textFragmentAnnotator.addFragmentBit()");
+                textFragmentAnnotator.err("fragmentById[" + fragments[l] + "] is undefined - skipping textFragmentAnnotator.addFragmentBit()");
                 continue;
             }
             current.bits.push(bit);
@@ -357,6 +559,12 @@ angular.module('Pundit2.Annotators')
     textFragmentAnnotator.getFragmentIdByUri = function(uri) {
         if (typeof(fragmentIds[uri]) !== 'undefined') {
             return fragmentIds[uri];
+        }
+    };
+
+    textFragmentAnnotator.getFragmentUriById = function(id) {
+        if (typeof(fragmentById[id]) !== 'undefined') {
+            return fragmentById[id].uri;
         }
     };
 
@@ -503,6 +711,35 @@ angular.module('Pundit2.Annotators')
         }
 
         $compile(elementReferce)($rootScope);
+    });
+
+    EventDispatcher.addListener('XpointersHelper.temporaryWrap', function(e) {
+        var wrapInfo = e.args,
+            fragments = wrapInfo.fragments,
+            newFragmentUri = wrapInfo.uri,
+            newFragmentId = fragments[0];
+
+        fragmentIds[newFragmentUri] = typeof fragmentIds[newFragmentUri] === 'undefined' ? [newFragmentId] : fragmentIds[newFragmentUri].push(newFragmentId);
+        fragmentById[newFragmentId] = {
+            uri: newFragmentUri,
+            bits: [],
+            item: ItemsExchange.getItemByUri(newFragmentUri)
+        };
+
+        angular.forEach(fragments, function(fr) {
+            var currentUri = fragmentById[fr].uri,
+                currentReferences = angular.element('.' + fr),
+                referencesList = [];
+
+            currentReferences.each(function(i) {
+                referencesList.unshift(currentReferences.eq(i));
+            });
+
+            fragmentsRefs[currentUri] = referencesList;
+            fragmentsRefsById[fr] = referencesList;
+        });
+
+        activateFragments();
     });
 
     $rootScope.$on('annomatic-run', function() {

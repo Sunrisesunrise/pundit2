@@ -240,6 +240,16 @@ angular.module('Pundit2.Core')
         return state.fragmentsItemListByParentURI;
     };
 
+    consolidation.updateItemListAndMap = function(item, fragmentType) {
+        if (typeof item === 'undefined') {
+            return;
+        }
+
+        state.itemListByURI[item.uri] = item;
+        state.uriTypeMap[item.uri] = fragmentType;
+        consolidation.log("Added item: " + item.label + " (" + fragmentType + ")");
+    };
+
     // TODO: pass an element and consolidate just that element? or a named content?
     // an image or something?
     consolidation.consolidate = function(items) {

@@ -76,7 +76,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> container: 'createdTextFragments' </pre>
      */
-    container: "createdTextFragments",
+    container: 'createdTextFragments',
 
     // Contextual menu type triggered by the text fragment handler. An Item will
     // be passed as resource
@@ -94,7 +94,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> cMenuType: 'textFragmentHandlerItem' </pre>
      */
-    cMenuType: "textFragmentHandlerItem",
+    cMenuType: 'textFragmentHandlerItem',
 
     /**
      * @module punditConfig
@@ -112,19 +112,21 @@ angular.module('Pundit2.Annotators')
     labelMaxLength: 40
 
 })
+
 // TODO: remove toolbar and triplecomposer dependency 
-.service('TextFragmentHandler', function($rootScope, TEXTFRAGMENTHANDLERDEFAULTS, NameSpace, BaseComponent,
-    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, EventDispatcher, $document, $injector, Config) {
+.service('TextFragmentHandler', function($rootScope, TEXTFRAGMENTHANDLERDEFAULTS, NameSpace, BaseComponent, TextFragmentAnnotator,
+                                         XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, Consolidation, EventDispatcher, $document, $injector, Config) {
 
     var textFragmentHandler = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
     var clientHidden = false;
 
     var lastTemporaryConsolidable,
-        temporaryConsolidated = {};
+    temporaryConsolidated = {};
 
     var menuType = Config.clientMode === 'pro' ? 'ContextualMenu' : 'CommentPopover',
-        handlerMenu = $injector.get(menuType);
+    handlerMenu = $injector.get(menuType);
 
+    // TODO: cambiare nome perche a raffaele da noia.
     var checkTemporaryConsolidated = function(forceWipe) {
         if (typeof forceWipe === 'undefined') {
             forceWipe = false;
@@ -150,18 +152,7 @@ angular.module('Pundit2.Annotators')
         for (var uri in temporaryConsolidated) {
             if (forceWipe || typeof validUris[uri] === 'undefined') {
                 var temporaryFragmentId = temporaryConsolidated[uri].fragmentId;
-
-                // Replace wrapped nodes with their content
-                var bits = angular.element('span[fragments="' + temporaryFragmentId + '"]');
-                angular.forEach(bits, function(node) {
-                    var parent = node.parentNode;
-                    while (node.firstChild) {
-                        parent.insertBefore(node.firstChild, node);
-                    }
-                    angular.element(node).remove();
-                });
-                XpointersHelper.mergeTextNodes(angular.element('body')[0]);
-
+                TextFragmentAnnotator.wipeFragmentIds([temporaryFragmentId]);
                 delete temporaryConsolidated[uri];
             }
         }
@@ -171,9 +162,32 @@ angular.module('Pundit2.Annotators')
         }
     };
 
+    var consolidateTemporarySelection = function() {
+        for (var uri in temporaryConsolidated) {
+            var temporaryFragmentId = temporaryConsolidated[uri].fragmentId,
+            temporaryFragmentUri = TextFragmentAnnotator.getFragmentUriById(temporaryFragmentId);
+
+            Consolidation.updateItemListAndMap(ItemsExchange.getItemByUri(temporaryFragmentUri), 'text');
+            TextFragmentAnnotator.placeIconByFragmentId(temporaryFragmentId);
+
+            angular.element('.' + temporaryFragmentId)
+            .removeClass(XpointersHelper.options.textFragmentHiddenClass)
+            .removeAttr('temp-fragments')
+            .removeClass('pnd-cons-temp');
+            delete temporaryConsolidated[uri];
+        }
+        lastTemporaryConsolidable = undefined;
+    };
+
     var addTemporarySelection = function() {
         if (typeof lastTemporaryConsolidable !== 'undefined') {
-            XpointersHelper.wrapElement(lastTemporaryConsolidable.range.commonAncestorContainer, lastTemporaryConsolidable.range, 'span', "pnd-cons-temp", [lastTemporaryConsolidable.fragmentId]);
+            XpointersHelper.wrapElement(
+            lastTemporaryConsolidable.range.commonAncestorContainer,
+            lastTemporaryConsolidable.range,
+            'span', 'pnd-cons-temp pnd-cons', [lastTemporaryConsolidable.fragmentId],
+            true,
+            lastTemporaryConsolidable.itemUri
+            );
             temporaryConsolidated[lastTemporaryConsolidable.itemUri] = lastTemporaryConsolidable;
             lastTemporaryConsolidable = undefined;
         }
@@ -181,7 +195,7 @@ angular.module('Pundit2.Annotators')
 
     var getXPointerString = function(startUrl, startXPath, startOffset, endXPath, endOffset) {
         return startUrl + "#xpointer(start-point(string-range(" + startXPath + ",''," + startOffset + "))" +
-            "/range-to(string-range(" + endXPath + ",''," + endOffset + ")))";
+        "/range-to(string-range(" + endXPath + ",''," + endOffset + ")))";
     };
 
     // Will get a clean Range out of a dirty range: skipping nodes
@@ -191,12 +205,12 @@ angular.module('Pundit2.Annotators')
 
         var cleanRange = {};
 
-        textFragmentHandler.log("dirty2cleanRange DIRTY: " +
-            range.startContainer.nodeName + "[" + range.startOffset + "] > " +
-            range.endContainer.nodeName + "[" + range.endOffset + "]");
+        textFragmentHandler.log('dirty2cleanRange DIRTY: ' +
+        range.startContainer.nodeName + '[' + range.startOffset + '] > ' +
+        range.endContainer.nodeName + '[' + range.endOffset + ']');
 
         var cleanStart = calculateCleanOffset(range.startContainer, range.startOffset),
-            cleanEnd = calculateCleanOffset(range.endContainer, range.endOffset);
+        cleanEnd = calculateCleanOffset(range.endContainer, range.endOffset);
 
         cleanRange.startContainer = cleanStart.cleanContainer;
         cleanRange.startOffset = cleanStart.cleanOffset;
@@ -207,9 +221,9 @@ angular.module('Pundit2.Annotators')
         cleanRange.cleanStartNumber = calculateCleanNodeNumber(cleanRange.startContainer);
         cleanRange.cleanEndNumber = calculateCleanNodeNumber(cleanRange.endContainer);
 
-        textFragmentHandler.log("dirty2cleanRange CLEAN: " +
-            cleanRange.startContainer.nodeName + "[" + cleanRange.startOffset + "] > " +
-            cleanRange.endContainer.nodeName + "[" + cleanRange.endOffset + "]");
+        textFragmentHandler.log('dirty2cleanRange CLEAN: ' +
+        cleanRange.startContainer.nodeName + '[' + cleanRange.startOffset + '] > ' +
+        cleanRange.endContainer.nodeName + '[' + cleanRange.endOffset + ']');
 
         return cleanRange;
     }; // dirtyRange2cleanRange()
@@ -220,8 +234,8 @@ angular.module('Pundit2.Annotators')
     // we need to check if they must be skipped
     var calculateCleanOffset = function(dirtyContainer, dirtyOffset) {
         var xp = XpointersHelper,
-            parentNode = dirtyContainer.parentNode,
-            currentNode, node, offset;
+        parentNode = dirtyContainer.parentNode,
+        currentNode, node, offset;
 
         // It's an element and it's not added by consolidation, everything is good
         if (xp.isElementNode(dirtyContainer) && !xp.isConsolidationNode(dirtyContainer)) {
@@ -288,14 +302,14 @@ angular.module('Pundit2.Annotators')
     // to skip or count the current node
     var check1 = function(currentNode) {
         return XpointersHelper.isTextNode(currentNode) ||
-            XpointersHelper.isWrappedTextNode(currentNode) ||
-            XpointersHelper.isUIButton(currentNode);
+        XpointersHelper.isWrappedTextNode(currentNode) ||
+        XpointersHelper.isUIButton(currentNode);
     };
 
     var check2 = function(lastNode) {
         return XpointersHelper.isElementNode(lastNode) &&
-            !XpointersHelper.isUIButton(lastNode) &&
-            !XpointersHelper.isWrappedTextNode(lastNode);
+        !XpointersHelper.isUIButton(lastNode) &&
+        !XpointersHelper.isWrappedTextNode(lastNode);
     };
 
     // The node number in an xpath /DIV[1]/P[2]/text()[16] is the number in []. It just counts
@@ -305,11 +319,11 @@ angular.module('Pundit2.Annotators')
     // it would be if the DOM was clean.
     var calculateCleanNodeNumber = function(node) {
         var currentNode,
-            cleanN = 1,
-            xp = XpointersHelper,
-            nodeName = getXPathNodeName(node),
-            parentNode = node.parentNode,
-            lastNode = (xp.isWrapNode(parentNode)) ? parentNode : node;
+        cleanN = 1,
+        xp = XpointersHelper,
+        nodeName = getXPathNodeName(node),
+        parentNode = node.parentNode,
+        lastNode = (xp.isWrapNode(parentNode)) ? parentNode : node;
 
         if (xp.isTextNode(node)) {
 
@@ -337,7 +351,7 @@ angular.module('Pundit2.Annotators')
     // To build a correct xpath, text nodes must be called text()
     var getXPathNodeName = function(node) {
         if (XpointersHelper.isTextNode(node)) {
-            return "text()";
+            return 'text()';
         } else {
             return node.nodeName.toUpperCase();
         }
@@ -359,7 +373,7 @@ angular.module('Pundit2.Annotators')
         }
 
         var xp = XpointersHelper,
-            nodeName = getXPathNodeName(node);
+        nodeName = getXPathNodeName(node);
 
         // We reached a named content, we can build the resulting xpath using it as
         // the starting point
@@ -386,8 +400,8 @@ angular.module('Pundit2.Annotators')
         }
 
         var sibling,
-            num = 1,
-            currentNode = node;
+        num = 1,
+        currentNode = node;
         // If it's not a text node, and there's a siblings with the same
         // nodeName, accumulate their number
         if (!xp.isTextNode(currentNode)) {
@@ -401,9 +415,9 @@ angular.module('Pundit2.Annotators')
 
         // Accumulate the xpath for this node
         if (typeof(partialXpath) !== 'undefined') {
-            partialXpath = nodeName + "[" + num + "]/" + partialXpath;
+            partialXpath = nodeName + '[' + num + ']/' + partialXpath;
         } else {
-            partialXpath = nodeName + "[" + num + "]";
+            partialXpath = nodeName + '[' + num + ']';
         }
 
         // .. and recur into its parent
@@ -415,9 +429,9 @@ angular.module('Pundit2.Annotators')
     // gives window location
     var getContentURLFromXPath = function(xpath) {
         var contentUrl = XpointersHelper.getSafePageContext(),
-            // TODO: make this attribute configurable in XpointersHelper ?
-            index = xpath.indexOf('DIV[@about=\''),
-            tagName = "about";
+        // TODO: make this attribute configurable in XpointersHelper ?
+        index = xpath.indexOf('DIV[@about=\''),
+        tagName = 'about';
 
         // The given xpath points to a node outside of any @about described node:
         // return window location without its anchor part
@@ -428,8 +442,8 @@ angular.module('Pundit2.Annotators')
         // It is a named content tag: get the URL contained in the @about attribute
         if (index < 3) {
             var urlStart = index + 7 + tagName.length,
-                pos = xpath.indexOf('_text\']'),
-                urlLength = ((pos !== -1) ? xpath.indexOf('_text\']') : xpath.indexOf('\']')) - urlStart;
+            pos = xpath.indexOf('_text\']'),
+            urlLength = ((pos !== -1) ? xpath.indexOf('_text\']') : xpath.indexOf('\']')) - urlStart;
 
             return xpath.substr(urlStart, urlLength);
         }
@@ -465,10 +479,10 @@ angular.module('Pundit2.Annotators')
     // is viewing and interacting with
     textFragmentHandler.getSelectedRange = function() {
         var doc = $document[0],
-            range;
+        range;
 
         if (doc.getSelection().rangeCount === 0) {
-            textFragmentHandler.log("getSelection().rangeCount is 0: no selected range.");
+            textFragmentHandler.log('getSelection().rangeCount is 0: no selected range.');
             return null;
         }
 
@@ -476,19 +490,23 @@ angular.module('Pundit2.Annotators')
 
         // If the selected range is empty (this happens when the user clicks on something)...
         if (range !== null &&
-            range.startContainer === range.endContainer &&
-            range.startOffset === range.endOffset) {
+        range.startContainer === range.endContainer &&
+        range.startOffset === range.endOffset) {
 
-            textFragmentHandler.log("Range is not null, but start/end containers and offsets match: no selected range.");
+            textFragmentHandler.log('Range is not null, but start/end containers and offsets match: no selected range.');
             return null;
         }
 
-        textFragmentHandler.log("GetSelectedRange returning a DIRTY range: " +
-            range.startContainer.nodeName + "[" + range.startOffset + "] > " +
-            range.endContainer.nodeName + "[" + range.endOffset + "]");
+        textFragmentHandler.log('GetSelectedRange returning a DIRTY range: ' +
+        range.startContainer.nodeName + '[' + range.startOffset + '] > ' +
+        range.endContainer.nodeName + '[' + range.endOffset + ']');
 
         return range;
     }; // getSelectedRange()
+
+    textFragmentHandler.wipeTemporarySelection = function() {
+        checkTemporaryConsolidated(true);
+    };
 
     // If configured to do so, removes the user's selection from the browser
     var removeSelection = function() {
@@ -500,7 +518,7 @@ angular.module('Pundit2.Annotators')
     // Checks if the node (or any parent) is a node which needs to be ignored
     textFragmentHandler.isToBeIgnored = function(node) {
         var classes = textFragmentHandler.options.ignoreClasses,
-            ignoreLen = classes.length;
+        ignoreLen = classes.length;
 
         // Traverse every parent and check if it has one of the classes we
         // need to ignore. As soon as we find one, return true: must ignore.
@@ -527,12 +545,12 @@ angular.module('Pundit2.Annotators')
     // - build the xpointer strings
     textFragmentHandler.range2xpointer = function(dirtyRange) {
         var cleanRange = dirtyRange2cleanRange(dirtyRange),
-            cleanStartXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.startContainer), cleanRange.cleanStartNumber),
-            cleanEndXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.endContainer), cleanRange.cleanEndNumber),
-            xpointerURL = getContentURLFromXPath(cleanStartXPath),
-            xpointer = getXPointerString(xpointerURL, cleanStartXPath, cleanRange.startOffset, cleanEndXPath, cleanRange.endOffset);
+        cleanStartXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.startContainer), cleanRange.cleanStartNumber),
+        cleanEndXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.endContainer), cleanRange.cleanEndNumber),
+        xpointerURL = getContentURLFromXPath(cleanStartXPath),
+        xpointer = getXPointerString(xpointerURL, cleanStartXPath, cleanRange.startOffset, cleanEndXPath, cleanRange.endOffset);
 
-        textFragmentHandler.log("range2xpointer returning an xpointer: " + xpointer);
+        textFragmentHandler.log('range2xpointer returning an xpointer: ' + xpointer);
 
         return xpointer;
     }; // range2xpointer
@@ -546,24 +564,40 @@ angular.module('Pundit2.Annotators')
     };
 
     if (textFragmentHandler.options.useTemporarySelection) {
-        EventDispatcher.addListeners(['TextFragmentHandler.addTemporarySelection', 'TripleComposer.useAsObject', 'TripleComposer.useAsSubject'], function() {
+        EventDispatcher.addListeners([
+            'PndPopover.addTemporarySelection',
+            'TripleComposer.useAsObject',
+            'TripleComposer.useAsSubject'
+        ], function() {
             addTemporarySelection();
         });
 
-        EventDispatcher.addListeners(['TextFragmentHandler.removeTemporarySelection', 'TripleComposer.statementChange', 'TripleComposer.statementChanged', 'TripleComposer.reset'], function() {
+        EventDispatcher.addListeners([
+            'PndPopover.removeTemporarySelection',
+            'TripleComposer.statementChange',
+            'TripleComposer.statementChanged',
+            'TripleComposer.reset'
+        ], function() {
             checkTemporaryConsolidated();
         });
 
         EventDispatcher.addListeners(
-            [
-                'AnnotationsCommunication.annotationSaved',
-                'Consolidation.startConsolidate',
-                'Client.hide',
-            ],
-            function() {
-                checkTemporaryConsolidated(true);
-            }
+        [
+            'PndPopover.wipeTemporarySelections',
+            'Consolidation.startConsolidate',
+            'Client.hide',
+        ],
+        function() {
+            checkTemporaryConsolidated(true);
+        }
         );
+
+        EventDispatcher.addListeners([
+            'AnnotationsCommunication.annotationSaved',
+            'AnnotationsCommunication.editAnnotation'
+        ], function() {
+            consolidateTemporarySelection();
+        });
     }
 
     EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
@@ -600,7 +634,7 @@ angular.module('Pundit2.Annotators')
         // and ends inside the same text node the length will be 0: everything is ok.
         // Otherwise check that every contained node must not be ignored
         var nodes = range.cloneContents().querySelectorAll("*"),
-            nodesLen = nodes.length;
+        nodesLen = nodes.length;
         while (nodesLen--) {
             if (textFragmentHandler.isToBeIgnored(nodes[nodesLen])) {
                 textFragmentHandler.log('ABORT: ignoring range: ignore class spotted inside it, somewhere.');
@@ -616,14 +650,15 @@ angular.module('Pundit2.Annotators')
         // discarded at all.
         // Possible solution: wipe the container when triple composer is empty, ctx menu is
         // NOT shown on every dashboard open/close ?
-        var item = textFragmentHandler.createItemFromRange(range);
+        var item = textFragmentHandler.createItemFromRange(range),
+        currentFr = 'fr-' + (new Date()).getTime();
         ItemsExchange.addItemToContainer(item, textFragmentHandler.options.container);
 
         lastTemporaryConsolidable = {
             offset: range.endOffset,
             range: range,
             xpointer: item.getXPointer(),
-            fragmentId: 'frt-' + (new Date()).getTime(),
+            fragmentId: currentFr,
             itemUri: item.uri
         };
 
@@ -640,10 +675,11 @@ angular.module('Pundit2.Annotators')
             return;
         }
 
-        var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType);
+        // TODO: generalize item in {data}
+        var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType, currentFr);
         if (typeof promise !== 'undefined') {
             promise.then(function() {
-                console.log("textFragmentHandler handlerMenu.show promise resolved");
+                textFragmentHandler.log('textFragmentHandler handlerMenu.show promise resolved');
             });
         }
     } // mouseUpHandler()

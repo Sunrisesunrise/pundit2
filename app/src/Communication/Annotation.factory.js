@@ -388,7 +388,7 @@ angular.module('Pundit2.Communication')
             }
 
             if (motivationURI === ann.motivatedBy) {
-                var firstTarget = ann.hasTarget[0]
+                var firstTarget = ann.hasTarget[0];
                 ann.entities.push(firstTarget);
                 item = ItemsExchange.getItemByUri(firstTarget);
                 if (typeof(item) !== 'undefined') {

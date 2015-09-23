@@ -149,7 +149,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.cancelEdit = function() {
         $scope.editMode = false;
-    }
+    };
 
     $scope.isUserToolShowed = function() {
         return (AnnotationDetails.isUserToolShowed($scope.annotation.creator) || ($scope.forceEdit && MyPundit.isUserLogged())) && AnnotationSidebar.isAnnotationsPanelActive();

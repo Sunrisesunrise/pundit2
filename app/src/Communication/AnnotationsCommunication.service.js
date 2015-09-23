@@ -453,7 +453,7 @@ angular.module('Pundit2.Communication')
         if (MyPundit.isUserLogged()) {
 
             setLoading(true);
-            Consolidation.requestConsolidateAll();
+            // Consolidation.requestConsolidateAll();
 
             var postData = {
                 graph: graph,
@@ -522,9 +522,9 @@ angular.module('Pundit2.Communication')
 
                     if (typeof(skipConsolidation) === 'undefined' || !skipConsolidation) {
                         EventDispatcher.sendEvent('AnnotationsCommunication.saveAnnotation', data.AnnotationID);
-                        Consolidation.consolidateAll();
+                        // Consolidation.consolidateAll();
                     } else {
-                        Consolidation.rejectConsolidateAll();
+                        // Consolidation.rejectConsolidateAll();
                     }
 
                     EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
@@ -546,7 +546,7 @@ angular.module('Pundit2.Communication')
                     // rejected, impossible to download annotation from server
                     annotationsCommunication.log("Error: impossible to get annotation from server after save");
                     setLoading(false);
-                    Consolidation.rejectConsolidateAll();
+                    // Consolidation.rejectConsolidateAll();
                     promise.reject();
                 });
 
@@ -559,7 +559,7 @@ angular.module('Pundit2.Communication')
                 }
             }).error(function(msg) {
                 setLoading(false);
-                Consolidation.rejectConsolidateAll();
+                // Consolidation.rejectConsolidateAll();
                 annotationsCommunication.log("Error: impossible to save annotation", msg);
                 EventDispatcher.sendEvent('Pundit.alert', {
                     title: 'Oops! Something went wrong',

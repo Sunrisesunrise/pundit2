@@ -28,10 +28,10 @@ angular.module('Pundit2.ContextualMenu')
 
     var contextualMenu = new BaseComponent('ContextualMenu', CONTEXTUALMENUDEFAULTS);
 
-    var scoll = {
-        top: undefined,
-        left: undefined
-    };
+    // var scoll = {
+    //     top: undefined,
+    //     left: undefined
+    // };
 
     var state = {
         // angular strap menu reference

@@ -48,7 +48,7 @@ angular.module('Pundit2.CommentPopover')
     $scope.save = function() {
         $scope.savingComment = true;
 
-        var currentTarget = PndPopover.getData(),
+        var currentTarget = PndPopover.getData().item,
             currentStatement = {
                 scope: {
                     get: function() {
@@ -56,7 +56,7 @@ angular.module('Pundit2.CommentPopover')
                             subject: currentTarget,
                             predicate: '',
                             object: $scope.literalText
-                        }
+                        };
                     }
                 }
             };

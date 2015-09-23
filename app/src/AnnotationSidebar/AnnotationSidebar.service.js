@@ -507,7 +507,7 @@ angular.module('Pundit2.AnnotationSidebar')
             if (currentItem.isTextFragment()) {
                 top = -1;
                 fragRefs = TextFragmentAnnotator.getFragmentReferenceByUri(firstValid.uri);
-                fragRef = fragRefs[fragRefs.length - 1];
+                fragRef = typeof fragRefs !== 'undefined' ? fragRefs[fragRefs.length - 1] : undefined;
 
                 if (typeof(fragRef) !== 'undefined' && typeof(fragRef.offset()) !== 'undefined') {
                     top = fragRef.offset().top - toolbarHeight - dashboardHeight;

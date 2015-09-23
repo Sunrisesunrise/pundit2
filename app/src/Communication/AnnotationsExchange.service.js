@@ -6,7 +6,8 @@ angular.module('Pundit2.Communication')
     var annotationExchange = new BaseComponent("AnnotationsExchange");
 
     var annList = [],
-        annListById = {};
+        annListById = {},
+        annByItemUri = {};
 
     annotationExchange.wipe = function() {
         annotationExchange.log('Wiping every loaded annotation.');
@@ -95,18 +96,45 @@ angular.module('Pundit2.Communication')
                     typeof(a.items) !== "undefined") {
                     annListById[ann.id] = a;
                     annList.push(a);
+                    var uris = {};
+                    for (var uri in a.items) {
+                        if (uris[uri]) {
+                            continue;
+                        }
+                        if (typeof annByItemUri[uri] === 'undefined') {
+                            annByItemUri[uri] = [];
+                        }
+                        annByItemUri[uri].push(ann);
+                        uris[uri] = true;
+                    }
                 }
             });
         }
     };
 
     annotationExchange.removeAnnotation = function(id) {
+        var index;
         if (id in annListById) {
-            var index = annList.indexOf(annListById[id]);
+            var ann = annListById[id];
+            for (var uri in ann.items) {
+                if (typeof annByItemUri[uri] !== 'undefined') {
+                    annByItemUri[uri] = annByItemUri[uri].filter(function(e) {return e.id !== id;});
+                    if (annByItemUri[uri].length === 0) {
+                        delete annByItemUri[uri];
+                    }
+                }
+            }
+            index = annList.indexOf(annListById[id]);
             annList.splice(index, 1);
             delete annListById[id];
         } else {
             annotationExchange.log('Impossible to remove annotation ' + id + ': not exist.');
+        }
+    };
+
+    annotationExchange.updateAnnotationStructureInfo = function(id) {
+        if (id in annListById) {
+            var ann = annListById[id];
         }
     };
 
@@ -128,11 +156,13 @@ angular.module('Pundit2.Communication')
     annotationExchange.getAnnotationsByItem = function(uri) {
         var ret = [];
 
-        for (var i in annList) {
-            if (typeof(annList[i].items[uri]) !== 'undefined') {
-                ret.push(annList[i]);
-            }
-        }
+        ret = typeof annByItemUri[uri] !== 'undefined' ? annByItemUri[uri] : [];
+
+        //for (var i in annList) {
+        //    if (typeof(annList[i].items[uri]) !== 'undefined') {
+        //        ret.push(annList[i]);
+        //    }
+        //}
 
         return ret;
     };

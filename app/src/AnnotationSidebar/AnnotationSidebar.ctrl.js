@@ -536,11 +536,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 annotationId = e.args;
 
             annotationsQueques[eventType].push(annotationId);
-
-            // TODO: avoid consolidation in save and edit and remove this check
-            if (eventType === 'deleteAnnotation') {
-                EventDispatcher.sendEvent('AnnotationSidebar.forceUpdate');
-            }
+            EventDispatcher.sendEvent('AnnotationSidebar.forceUpdate');                
         }
     );
 
@@ -558,6 +554,24 @@ angular.module('Pundit2.AnnotationSidebar')
 
     EventDispatcher.addListener('Consolidation.newRequest', function() {
         $timeout.cancel(updateHitsTimer);
+    });
+
+    EventDispatcher.addListener('TextFragmentAnnotator.updateItems', function(e) {
+        var updatedItems = e.args,
+            updatedAnnotations = {};
+        
+        angular.forEach(updatedItems, function(itemUri) {
+            var annList = AnnotationsExchange.getAnnotationsByItem(itemUri);
+            for (var i in annList) {
+                updatedAnnotations[annList[i].id] = annList[i];
+            }
+        });
+
+        angular.forEach(updatedAnnotations, function(annotation) {
+            if (typeof $scope.annotations[annotation.id] !== 'undefined') {
+                activateFragments(annotation.items);
+            }
+        })
     });
 
     angular.element($window).bind('resize', function() {

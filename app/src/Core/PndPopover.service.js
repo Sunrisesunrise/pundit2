@@ -30,11 +30,11 @@ angular.module('Pundit2.Core')
     var eventHandler = null;
 
     var calculateSelectionCoordinates = function() {
-        var range = state.selection.getRangeAt(0),
-            ts = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>'),
+        // var range = state.selection.getRangeAt(0)
+        var ts = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>'),
             te = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>');
 
-        var fragmentElements = angular.element('span.' + state.fragmentId);
+        var fragmentElements = angular.element('span.' + state.data.fragmentId);
         var i = 0;
         for (; i < fragmentElements.length; i++) {
             if (fragmentElements.eq(i).text().trim().length === 0) {
@@ -98,7 +98,6 @@ angular.module('Pundit2.Core')
 
     var mouseUpHandler = function(evt) {
         var tagName = angular.element(evt.target).prop('tagName').toLowerCase();
-        console.log(tagName);
         if (angular.element(evt.target).closest('.popover').length === 0 && tagName !== 'select') {
             hide();
         } else {
@@ -109,7 +108,7 @@ angular.module('Pundit2.Core')
     };
 
     var scrollHandler = function() {
-        $(this).scrollTop(state.scroll.top).scrollLeft(state.scroll.left);
+        angular.element(this).scrollTop(state.scroll.top).scrollLeft(state.scroll.left);
     };
 
     var show = function() {
@@ -131,7 +130,7 @@ angular.module('Pundit2.Core')
 
         if (state.popoverOptions.lockPageScroll) {
             var win = angular.element($window);
-            state.scroll.top = win.scrollTop(),
+            state.scroll.top = win.scrollTop();
             state.scroll.left = win.scrollLeft();
             win.on('scroll', scrollHandler);
         }
@@ -161,7 +160,7 @@ angular.module('Pundit2.Core')
 
         angular.element($window).off('scroll', scrollHandler);
 
-        EventDispatcher.sendEvent('TextFragmentHandler.removeTemporarySelection');
+        EventDispatcher.sendEvent('PndPopover.removeTemporarySelection');
     };
 
     pndPopover.show = function(x, y, options, data) {
@@ -177,8 +176,7 @@ angular.module('Pundit2.Core')
                     calculateSelectionCoordinates();
                 }
                 innerPromise.resolve();
-            }
-            else {
+            } else {
                 innerPromise.reject();
             }
         }, function() {
