@@ -366,6 +366,9 @@ angular.module('Pundit2.Annotators')
         activateFragments();
 
         for (var fr in modifiedFragmentsId) {
+            if (typeof fragmentById[fr] === 'undefined') {
+                continue;
+            }
             modifiedItemsUri.push(fragmentById[fr].uri);
         }
 
@@ -785,6 +788,11 @@ angular.module('Pundit2.Annotators')
         };
 
         angular.forEach(fragments, function(fr) {
+            if (typeof fragmentById[fr] === 'undefined') {
+                textFragmentAnnotator.err('Something wrog with this fragment ' + fr);
+                return;
+            }
+
             var currentUri = fragmentById[fr].uri,
                 currentReferences = angular.element('.' + fr),
                 referencesList = [];

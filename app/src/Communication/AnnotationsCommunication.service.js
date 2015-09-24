@@ -114,7 +114,7 @@ angular.module('Pundit2.Communication')
 
     var updateAnnotationV2 = function(promise, annID, graph, items, flatTargets, targets, types, motivation) {
         setLoading(true);
-        Consolidation.requestConsolidateAll();
+        // Consolidation.requestConsolidateAll();
 
         var postData = {
             graph: graph,
@@ -150,7 +150,7 @@ angular.module('Pundit2.Communication')
         }).success(function() {
             // TODO if is rejected ???
             AnnotationsExchange.getAnnotationById(annID).update().then(function() {
-                Consolidation.consolidateAll();
+                // Consolidation.consolidateAll();
                 EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
                 setLoading(false);
                 EventDispatcher.sendEvent('Pundit.alert', {
@@ -173,7 +173,7 @@ angular.module('Pundit2.Communication')
             });
             annotationsCommunication.log("Error: impossible to update annotation", msg);
             setLoading(false);
-            Consolidation.rejectConsolidateAll();
+            // Consolidation.rejectConsolidateAll();
             promise.reject();
         });
     };
