@@ -11,26 +11,259 @@ rendered. It needs to push down any existing content making space for us.
 */
 
 
-/*.navbar .nav {
-        margin: 0;
-    }
+/* ------------------------------------ *\
+   #NAV
+\* ------------------------------------ */
 
-    nav.navbar {
-        width: 100%;
-    }
+/* The .nav elements is used by other Bootstrap's elements like the navbar
+This style are mainly for avoiding interferences with loaded pages */
 
-    .nav li {
+/* Need this for normalizing
+Declarations with > selector for css overwritings */
+ul.nav {
+    display: block;
+    width: auto;
+    height: auto;
+    background: transparent;
+
+    li {
+        display: block;
         width: initial;
+        border: none;
+        letter-spacing: 0;
+        text-transform: none;
+
+        a {
+            height: auto;
+            min-height: auto;
+            margin: 0;
+            border-radius: 0; /* Needs overwritings for webkit vendor prefix */
+        }
+
+        > a {
+            span {
+                float: initial;
+                font-size: inherit;
+                font-weight: normal;
+
+                &:after {
+                    content: none;
+                }
+            }
+
+            &:hover {
+                > span {
+                    color: inherit;
+                }
+            }
+        }
     }
 
-    .nav > ul > li > a {
+    > li {
+        margin-top: 0;
+
+        &.show-tabs.active { //TO MOVE IN TABS
+            margin-bottom: -4px;
+        }
+
+        &:hover {
+            background-color: #fff;
+        }
+
+        > a {
+            float: none;
+            margin: 0;
+            padding: 5px 8px;
+            border: 0;
+            border-radius: 0;
+            font-family: @font;
+            font-size: 12px;
+            font-weight: normal;
+            text-transform: none;
+
+            &,
+            &:hover,
+            &:focus {
+                background: none;
+                text-decoration: none;
+                background-color: #ffffff;
+            }
+
+            > span {
+                float: initial;
+                font-size: inherit;
+                font-weight: normal;
+
+                &:after {
+                    content: none;
+                }
+            }
+        }
+
+        // Active state, and its :hover to override normal :hover
+        &.active > a {
+            margin: 0;
+            padding: 5px 8px;
+            border: 0;
+            font-weight: normal;
+
+            &:hover,
+            &:focus {
+                margin: 0;
+                border: 0;
+                font-weight: normal;
+            }
+        }
+    }
+
+    .nav .open > a,
+    .nav .open > a:hover,
+    .nav .open > a:focus {
+        border-color: transparent;
+        border-right: 1px @gray solid;
+    }
+
+    > ul > li > a {
         text-transform: none;
     }
+}
 
-    .nav li a:hover {
-        background: none;
+/* ------------------------------------ *\
+   #NAVBAR
+\* ------------------------------------ */
+
+// Default navbar
+//.navbar-default {
+//   .reset-filter(); // Remove gradient in IE<10 to fix bug where dropdowns don't get triggered
+//}
+
+//.navbar-brand,
+.navbar-nav > li > a {
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .25);
+
+}
+
+// Inverted navbar
+.navbar-inverse {
+
+    /*.navbar-brand {
+        background-color: #51b848;
+        color: #fff;
+        text-shadow: 0 -0px 0 rgba(0, 0, 0, .0);
+
+        &:hover,
+        &:focus {
+            background-color: darken(#51b848, 12%);
+        }
+    }*/
+
+    .navbar-nav > li > a {
+        text-shadow: 0 0 0 rgba(0, 0, 0, .25);
+        border-right: 1px @gray solid;
     }
-*/
+}
+
+/* ------------------------------------ *\
+   #INNER TOOLBARS
+\* ------------------------------------ */
+
+.pnd-inner-nav {
+    display: block;
+    width: auto;
+    height: auto;
+    margin: 0;
+    background: transparent;
+
+        li {
+        display: block;
+        width: initial;
+        border: none;
+        letter-spacing: 0;
+        text-transform: none;
+
+        a {
+            height: auto;
+            min-height: auto;
+            margin: 0;
+            border-radius: 0; /* Needs overwritings for webkit vendor prefix */
+        }
+
+        > a {
+            span {
+                float: initial;
+                font-size: inherit;
+                font-weight: normal;
+
+                &:after {
+                    content: none;
+                }
+            }
+
+            &:hover {
+                > span {
+                    color: inherit;
+                }
+            }
+        }
+    }
+
+     > li {
+        margin-top: 0;
+
+        &:hover {
+            background-color: #fff;
+        }
+
+        > a {
+            float: none;
+            margin: 0;
+            padding: 5px 8px;
+            border: 0;
+            border-radius: 0;
+            font-family: @font;
+            font-size: 12px;
+            font-weight: normal;
+            text-transform: none;
+
+            &,
+            &:hover,
+            &:focus {
+                background: none;
+                text-decoration: none;
+                background-color: #ffffff;
+            }
+
+            > span {
+                float: initial;
+                font-size: inherit;
+                font-weight: normal;
+
+                &:after {
+                    content: none;
+                }
+            }
+        }
+
+        // Active state, and its :hover to override normal :hover
+        &.active > a {
+            margin: 0;
+            padding: 5px 8px;
+            border: 0;
+            font-weight: normal;
+
+            &:hover,
+            &:focus {
+                margin: 0;
+                border: 0;
+                font-weight: normal;
+            }
+        }
+    }
+
+    > ul > li > a {
+        text-transform: none;
+    }
+}
 
 /* ------------------------------------ *\
    #TOOLBAR
@@ -48,13 +281,34 @@ body.pnd-toolbar-active {
     min-height: @toolbar-height;
     margin: 0;
     padding-top: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
     z-index: @zindex-pnd-toolbar;
     background-color: @color-toolbar-bg;
+    border-radius: 0; // Undo rounded corners in static and fixed navbars
     box-shadow: 0 1px 1px rgba(0,0,0,.1);
     border-bottom-width: @toolbar-border-bottom;
 
-    .container-fluid {
+
+    //border-width: 0 0 1px;
+
+    //.container-fluid {
+    .pnd-toolbar-navbar-container {
+
         padding-left: 0;
+
+        > .navbar-header,
+        > .navbar-collapse {
+            margin-right: -@navbar-padding-horizontal;
+            margin-left:  -@navbar-padding-horizontal;
+
+            @media (min-width: @grid-float-breakpoint) {
+                margin-right: 0;
+                margin-left:  0;
+            }
+        }
     }
 
     .pnd-progress-bar {
@@ -68,14 +322,21 @@ body.pnd-toolbar-active {
         transition-duration: 1s;
         -webkit-transition-duration: 1s;
     }
-}
 
+    @media (min-width: @grid-float-breakpoint) {
+        border-radius: 0;
+      }
+
+    @media (max-device-width: @screen-xs-min) and (orientation: landscape) {
+      max-height: 200px;
+    }
+}
 
 /* ------------------------------------ *\
    #BUTTONS
 \* ------------------------------------ */
 
-.pnd-toolbar-navbar .navbar-nav {
+.pnd-toolbar-navbar .navbar-nav { //
     width: auto;
 
     li {
@@ -299,31 +560,6 @@ body.pnd-toolbar-active {
         }
     }
 }
-
-
-/* ------------------------------------ *\
-   #DROPDOWN-MENU
-\* ------------------------------------ */
-
-//TODO Thid can be moved into contextual-menu.less
-/* Error dropdown */
-/*
-.pnd-toolbar-navbar .navbar-nav li {
-    &.pnd-toolbar-error-button .dropdown-menu {
-        border-bottom: 1px lighten(@brand-warning, 30%) solid;
-
-        a {
-            background-color: @brand-warning;
-            border-top: 1px lighten(@brand-warning, 30%) solid;
-
-            &:hover {
-                background-color: @brand-warning;
-            }
-        }
-    }
-}
-*/
-
 
 /* ------------------------------------ *\
    #NOTIFICATION-TEXT

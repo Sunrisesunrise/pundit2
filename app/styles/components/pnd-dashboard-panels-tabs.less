@@ -1,0 +1,80 @@
+/* PND TABS STRUCTURE */
+
+.tabs.pnd-dashboard-panel-content { // whole panel content TO RENAME PND-TABS
+
+    ul.nav.nav-tabs.pnd-tab-header { // principal tabs navigation (My items - predicates - notebooks) TO RENAME NAV
+
+        li {
+            &.active {
+
+            }
+
+            &.pull-right.show-tabs {
+
+            }
+        }
+    }
+
+    .tab-content.pnd-tab-content { // current tab content
+
+        .tab-pane.active { //active tab pane but it can be not active
+
+            .pnd-panel-tab-content {
+
+                .pnd-panel-tab-content-header { //.pnd-panel-tab-content-header-no-border and also pnd-panel-tab-content-header-border
+
+                    .left-inner-icon.pnd-panel-tab-search.pnd-has-options {
+
+                    }
+
+                    .pnd-btn {}
+
+                    ul.pnd-dropdown-contextual-menu.dropdown-menu.pnd-ignore  {
+
+                        &.am-fade {}
+
+                        &.bottom-left {}
+
+                        li {
+                            &.active {}
+                        }
+                    }
+                   
+                }
+
+                .pnd-panel-tab-content-content.pnd-inner {
+
+                    .tabs {
+
+                        ul.nav.nav-tabs.pnd.-tab-header {
+                            li {//.active
+
+                                &.show-tabs {
+
+                                }
+                            }
+                        }
+                    }
+
+                    .tab-content.pnd-tab-content {
+                        .tab-pane { //may be .active
+                            //div con messaggio di benvenuto o lista con items
+                            div {}
+
+                            ul.list-group {
+                                li.list-group-item {
+                                    .pnd-item {}
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                .pnd-panel-tab-content-footer {
+                    button {}
+                }
+            }
+        }
+    }
+}
