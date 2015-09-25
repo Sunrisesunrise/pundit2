@@ -363,6 +363,21 @@ angular.module('Pundit2.Annotators')
         }
 
         XpointersHelper.mergeTextNodes(angular.element('body')[0]);
+
+        // TODO: refactor!!
+        angular.forEach(Object.keys(modifiedFragmentsId), function(fr) {
+            var currentUri = fragmentById[fr].uri,
+            currentReferences = angular.element('.' + fr),
+            referencesList = [];
+
+            currentReferences.each(function(i) {
+                referencesList.unshift(currentReferences.eq(i));
+            });
+
+            fragmentsRefs[currentUri] = referencesList;
+            fragmentsRefsById[fr] = referencesList;
+        });
+
         activateFragments();
 
         for (var fr in modifiedFragmentsId) {
