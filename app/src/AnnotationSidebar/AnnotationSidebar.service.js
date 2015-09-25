@@ -440,10 +440,11 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var findFirstConsolidateItem = function(currentAnnotation) {
-        var currentItem;
+        var currentItem,
+            targetList = clientMode === 'v2' ? currentAnnotation.hasTarget : currentAnnotation.entities;
 
-        for (var t in currentAnnotation.hasTarget) {
-            currentItem = ItemsExchange.getItemByUri(currentAnnotation.hasTarget[t]);
+        for (var t in targetList) {
+            currentItem = ItemsExchange.getItemByUri(targetList[t]);
             if (typeof currentItem !== 'undefined' &&
                 Consolidation.isConsolidated(currentItem)) {
                 return currentItem;
