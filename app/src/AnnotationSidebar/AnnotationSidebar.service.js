@@ -1398,7 +1398,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     EventDispatcher.addListener('ResizeManager.resize', function() {
         if (state.isLoading === false) {
-            orderAndSetPos();
+            setAnnotationsPosition();
             annotationSidebar.log('Position annotations on resize');
         }
     });
