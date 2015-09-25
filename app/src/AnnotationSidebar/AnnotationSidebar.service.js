@@ -337,11 +337,6 @@ angular.module('Pundit2.AnnotationSidebar')
     var annotationsByDate = [],
         annotationsByPosition = [];
 
-    // TODO: take startPosition from element in sidebar
-    // TODO: take toolbar height from service
-    var startPosition = annotationSidebar.options.startTop;
-    var toolbarHeight = 30;
-
     var tempBrokenList = {};
     var firstSendBrokenAlert = true;
 
@@ -358,6 +353,10 @@ angular.module('Pundit2.AnnotationSidebar')
 
     var clientMode = Config.clientMode,
         Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined;
+
+    // TODO: take startPosition from element in sidebar
+    var startPosition = annotationSidebar.options.startTop,
+        toolbarHeight = clientMode === 'pro' ? $injector.get('Toolbar').options.toolbarHeight : 0;
 
     // Contains the values ​​of active filters
     annotationSidebar.filters = {
