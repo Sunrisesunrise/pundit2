@@ -24,6 +24,8 @@ ul.nav {
     display: block;
     width: auto;
     height: auto;
+    margin-bottom: 0;
+    padding-left: 0; // Override default ul/ol
     background: transparent;
 
     li {
@@ -41,6 +43,7 @@ ul.nav {
         }
 
         > a {
+                       
             span {
                 float: initial;
                 font-size: inherit;
@@ -138,13 +141,13 @@ ul.nav {
 //}
 
 //.navbar-brand,
-.navbar-nav > li > a {
-    text-shadow: 0 1px 0 rgba(255, 255, 255, .25);
+//.navbar-nav > li > a {
+//    text-shadow: 0 1px 0 rgba(255, 255, 255, .25);
 
-}
+//}
 
 // Inverted navbar
-.navbar-inverse {
+//.navbar-inverse {
 
     /*.navbar-brand {
         background-color: #51b848;
@@ -157,24 +160,25 @@ ul.nav {
         }
     }*/
 
-    .navbar-nav > li > a {
-        text-shadow: 0 0 0 rgba(0, 0, 0, .25);
-        border-right: 1px @gray solid;
-    }
-}
+    //.navbar-nav > li > a {
+    //    text-shadow: 0 0 0 rgba(0, 0, 0, .25);
+    //    border-right: 1px @gray solid;
+    //}
+//}
 
 /* ------------------------------------ *\
    #INNER TOOLBARS
 \* ------------------------------------ */
 
-.pnd-inner-nav {
+ul.pnd-inner-nav {
     display: block;
     width: auto;
     height: auto;
-    margin: 0;
     background: transparent;
+    margin-bottom: 0px;
+    padding-left: 0px;
 
-        li {
+    li {
         display: block;
         width: initial;
         border: none;
@@ -207,8 +211,13 @@ ul.nav {
         }
     }
 
-     > li {
+    > li {
         margin-top: 0;
+        float: left;
+
+        &.show-tabs.active { //TO MOVE IN TABS
+            margin-bottom: -4px;
+        }
 
         &:hover {
             background-color: #fff;
@@ -224,6 +233,7 @@ ul.nav {
             font-size: 12px;
             font-weight: normal;
             text-transform: none;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, .25);
 
             &,
             &:hover,
@@ -259,9 +269,15 @@ ul.nav {
             }
         }
     }
-
+    
     > ul > li > a {
         text-transform: none;
+
+    }
+
+    .pnd-dropdown-contextual-menu.dropdown-menu {
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
     }
 }
 
@@ -336,7 +352,7 @@ body.pnd-toolbar-active {
    #BUTTONS
 \* ------------------------------------ */
 
-.pnd-toolbar-navbar .navbar-nav { //
+.pnd-toolbar-navbar .pnd-inner-nav { //.navbar-nav
     width: auto;
 
     li {
@@ -501,7 +517,7 @@ body.pnd-toolbar-active {
 }
 
 /* Buttons on the right */
-.pnd-toolbar-navbar .navbar-right li {
+.pnd-toolbar-navbar .pnd-toolbar-navbar-right li {
     a {
         border-left: 0; // border-left: 1px solid lighten(@color-toolbar-button, 25);
         border-right: 0;
@@ -509,7 +525,7 @@ body.pnd-toolbar-active {
 }
 
 /* Template selection button: special border color */
-.pnd-toolbar-navbar .navbar-right li {
+.pnd-toolbar-navbar .pnd-toolbar-navbar-right li { //navbar-right
     &.pnd-toolbar-template-menu-button {
         a {
             border-left: 0; // border-left: 1px solid lighten(@color-toolbar-button, 8);
@@ -518,7 +534,7 @@ body.pnd-toolbar-active {
 }
 
 /* Error buttons */
-.pnd-toolbar-navbar .navbar-nav .pnd-toolbar-error-button {
+.pnd-toolbar-navbar .pnd-inner-nav .pnd-toolbar-error-button { //.navbar-nav
     > a {
         background-color: @brand-warning;
         border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 25);
@@ -534,7 +550,7 @@ body.pnd-toolbar-active {
 }
 
 /* Sidebar button icon */
-.pnd-toolbar-navbar .navbar-nav .pnd-toolbar-annotations-button {
+.pnd-toolbar-navbar .pnd-inner-nav .pnd-toolbar-annotations-button { //.navbar-nav
     .pnd-icon {
         margin-left: 3px;
         color: @color-toolbar-disabled;
