@@ -21,8 +21,11 @@ angular.module('Pundit2.Core')
 
             scope.optionAction = false;
 
-            if (angular.isArray(scope.optionList) === false &&
-                scope.optionList <= 0) {
+            // Be sure that the optionList is an array and there is at least one element
+            if (angular.isArray(scope.optionList) === false) {
+                return;
+            }
+            if (scope.optionList.length <= 0) {
                 return;
             }
 
