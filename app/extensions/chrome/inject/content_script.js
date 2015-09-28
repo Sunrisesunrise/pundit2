@@ -34,9 +34,17 @@ var switchPundit = function(on) {
             div = document.createElement('div'),
             preloadDiv = document.createElement('div');
 
-        bodyStyle[cssTransform] = 'translateY(' + 30 + ')';
+        var toolbarHeight = 30;
+
+        if (punditConfig &&
+            punditConfig.modules &&
+            punditConfig.modules.Toolbar) {
+            toolbarHeight = punditConfig.modules.Toolbar.toolbarHeight || toolbarHeight;
+        }
+
+        bodyStyle[cssTransform] = 'translateY(' + toolbarHeight + ')';
         bodyStyle.position = 'static';
-        bodyStyle.marginTop = '30px';
+        bodyStyle.marginTop = toolbarHeight + 'px';
 
         preloadDiv.setAttribute('id', 'pundit2_preload');
 

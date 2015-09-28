@@ -27,6 +27,9 @@
 // TODO: We must find a way to add the wrapper around the modal backdrop or this style could affect modals outside Pundit
 // Modal backdrop cant be injected into a .pnd-wrp :(
 body .modal-backdrop {
+    // TODO Display:none is a momentary fix. We will disable this backdrop from angularstrap settings
+    display: none;
+    /*
     position: fixed;
     top: 0;
     right: 0;
@@ -36,11 +39,11 @@ body .modal-backdrop {
     background-color: @modal-backdrop-bg;
     opacity: .5 !important; // This is a bad patch
     // Fade for backdrop
-
     &.fade {
         .opacity(0);
     }
     &.in {
         .opacity(@modal-backdrop-opacity);
     }
+    */
 }

@@ -48,6 +48,20 @@ angular.module('Pundit2.Toolbar')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#Toolbar.toolbarHeight
+     *
+     * @description
+     * `number`
+     *
+     * Toolbar height
+     *
+     * Default value:
+     * <pre> toolbarHeight: 30 </pre>
+     */
+    toolbarHeight: 30,
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#Toolbar.menuCustom
      *
      * @description

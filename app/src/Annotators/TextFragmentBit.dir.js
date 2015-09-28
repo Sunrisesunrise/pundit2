@@ -10,7 +10,7 @@ angular.module('Pundit2.Annotators')
             var numberOfTextFragments = scope.fragments.split(",").length;
             element.addClass('pnd-textfragment-numbers-' + numberOfTextFragments);
 
-            scope.bitId = new Date().getTime() + Math.floor(Math.random() * 100);
+            scope.bitId = new Date().getTime() + Math.floor(Math.random() * 100000);
             scope.isHigh = false;
             
             scope.high = function() {

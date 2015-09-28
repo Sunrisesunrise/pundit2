@@ -52,7 +52,7 @@
   "engines": {
     "node": ">=0.9.0"
   },
-  "name": "Pundit2",
+  "name": "pundit2",
   "private": true,
   "scripts": {
     "build": "grunt build",

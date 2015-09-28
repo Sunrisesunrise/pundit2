@@ -756,7 +756,7 @@ angular.module('Pundit2.Annotators')
             jParentElement
                 .contents().unwrap();
         } else {
-            if (htmlClass === xpointersHelper.options.wrapNodeClass) {
+            if (wrapNode && htmlClass === xpointersHelper.options.wrapNodeClass) {
                 //TODO: check type nodes (images?)
                 EventDispatcher.sendEvent('XpointersHelper.NodeAdded', {
                     fragments: parents,

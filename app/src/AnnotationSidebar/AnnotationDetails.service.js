@@ -661,6 +661,10 @@ angular.module('Pundit2.AnnotationSidebar')
         annotationDetails.toggleAnnotationView(annId, true);
     });
 
+    EventDispatcher.addListener('ResizeManager.resize', function() {
+        closeAllAnnotationView();
+    });
+
     EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
         state.isUserLogged = e.args;
         state.userData = MyPundit.getUserData();

@@ -337,11 +337,6 @@ angular.module('Pundit2.AnnotationSidebar')
     var annotationsByDate = [],
         annotationsByPosition = [];
 
-    // TODO: take startPosition from element in sidebar
-    // TODO: take toolbar height from service
-    var startPosition = annotationSidebar.options.startTop;
-    var toolbarHeight = 30;
-
     var tempBrokenList = {};
     var firstSendBrokenAlert = true;
 
@@ -358,6 +353,10 @@ angular.module('Pundit2.AnnotationSidebar')
 
     var clientMode = Config.clientMode,
         Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined;
+
+    // TODO: take startPosition from element in sidebar
+    var startPosition = annotationSidebar.options.startTop,
+        toolbarHeight = clientMode === 'pro' ? $injector.get('Toolbar').options.toolbarHeight : 0;
 
     // Contains the values ​​of active filters
     annotationSidebar.filters = {
@@ -441,10 +440,11 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var findFirstConsolidateItem = function(currentAnnotation) {
-        var currentItem;
+        var currentItem,
+            targetList = clientMode === 'v2' ? currentAnnotation.hasTarget : currentAnnotation.entities;
 
-        for (var t in currentAnnotation.hasTarget) {
-            currentItem = ItemsExchange.getItemByUri(currentAnnotation.hasTarget[t]);
+        for (var t in targetList) {
+            currentItem = ItemsExchange.getItemByUri(targetList[t]);
             if (typeof currentItem !== 'undefined' &&
                 Consolidation.isConsolidated(currentItem)) {
                 return currentItem;
@@ -1398,7 +1398,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     EventDispatcher.addListener('ResizeManager.resize', function() {
         if (state.isLoading === false) {
-            orderAndSetPos();
+            setAnnotationsPosition();
             annotationSidebar.log('Position annotations on resize');
         }
     });
