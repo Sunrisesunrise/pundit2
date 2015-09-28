@@ -6,6 +6,129 @@
 
 // TODO and Important: the style for tabs is dispersed in the code, lets move it here!
 
+
+/* ------------------------------------ *\
+   #NAV
+\* ------------------------------------ */
+
+/* The .nav elements is used by other Bootstrap's elements like the navbar
+This style are mainly for avoiding interferences with loaded pages */
+
+/* Need this for normalizing
+Declarations with > selector for css overwritings */
+ul.nav {
+    display: block;
+    width: auto;
+    height: auto;
+    margin-bottom: 0;
+    padding-left: 0; // Override default ul/ol
+    //background: transparent;
+
+    li {
+        display: block;
+        width: initial;
+        border: none;
+        letter-spacing: 0;
+        text-transform: none;
+
+        a {
+            height: auto;
+            min-height: auto;
+            margin: 0;
+            border-radius: 0; /* Needs overwritings for webkit vendor prefix */
+        }
+
+        > a {
+                       
+            span {
+                float: initial;
+                font-size: inherit;
+                font-weight: normal;
+
+                &:after {   
+                    content: none;
+                }
+            }
+
+            &:hover {
+                > span {
+                    color: inherit;
+                }
+            }
+        }
+    }
+
+    > li {
+        margin-top: 0;
+
+        &.show-tabs.active { //TO MOVE IN TABS
+            margin-bottom: -4px;
+        }
+
+        &:hover {
+            background-color: #fff;
+        }
+
+        > a {
+            float: none;
+            margin: 0;
+            padding: 5px 8px;
+            border: 0;
+            border-radius: 0;
+            font-family: @font;
+            font-size: 12px;
+            font-weight: normal;
+            text-transform: none;
+
+            &,
+            &:hover,
+            &:focus {
+                background: none;
+                text-decoration: none;
+                background-color: #ffffff;
+            }
+
+            > span {
+                float: initial;
+                font-size: inherit;
+                font-weight: normal;
+
+                &:after {
+                    content: none;
+                }
+            }
+        }
+
+        // Active state, and its :hover to override normal :hover
+        &.active > a {
+            margin: 0;
+            padding: 5px 8px;
+            border: 0;
+            font-weight: normal;
+
+            &:hover,
+            &:focus {
+                margin: 0;
+                border: 0;
+                font-weight: normal;
+            }
+        }
+    }
+
+    .nav .open > a,
+    .nav .open > a:hover,
+    .nav .open > a:focus {
+        border-color: transparent;
+        border-right: 1px @gray solid;
+    }
+
+    > ul > li > a {
+        text-transform: none;
+    }
+}
+
+
+
 /* ------------------------------------ *\
    #TABS
 \* ------------------------------------ */
