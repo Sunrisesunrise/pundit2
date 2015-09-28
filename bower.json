@@ -15,7 +15,7 @@
     "lunr.js": "0.4.4",
     "google-code-prettify": "1.0.1",
     "angular-md5": "~0.1.7",
-    "angular-datepicker": "~1.0.11",
+    "angular-datepicker": "~1.0.15",
     "angular-moment": "~0.10.1",
     "ng-resize": "~1.1.0"
   },

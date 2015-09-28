@@ -16,7 +16,7 @@
     <script src="../../bower_components/angular-md5/angular-md5.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="../../bower_components/moment/min/moment.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="../../bower_components/angular-moment/angular-moment.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../../bower_components/angular-datepicker/dist/index.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../bower_components/angular-datepicker/dist/angular-datepicker.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="../../bower_components/angular-animate/angular-animate.js" type="text/javascript" charset="utf-8"></script>
     <script src="../../bower_components/angular-sanitize/angular-sanitize.js" type="text/javascript" charset="utf-8"></script>
     <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
