@@ -296,69 +296,6 @@ ul.nav {
 //   margin-right: -15px; /* Remove margin for right toolbar menu */
 //}
 
-/* ------------------------------------ *\
-   #TABS
-\* ------------------------------------ */
-
-// Give the tabs something to sit on
-ul.nav-tabs {
-    margin: 0; // 0 0 10px 0;
-    background-color: @gray-light;
-
-    // Show tabs button
-    .show-tabs {
-
-        a {
-            padding: 5px 10px 2px 10px;
-
-            .pnd-icon {
-                display: inline-block;
-                padding: 0;
-                margin-top: 3px;
-                font-size: 14px;
-                line-height: normal;
-            }
-        }
-
-        &.active a {
-            padding: 5px 10px 2px 10px;
-            background-color: @nav-tabs-active-link-hover-bg;
-        }
-    }
-
-    > li {
-        // Actual tabs (as links)
-        > a {
-            background-color: @gray-light;
-            border-radius: @tab-border-radius @tab-border-radius 0 0;
-            color: @nav-tabs-active-link-hover-color !important; /* For css overwritings */
-            line-height: @line-height-base;
-            overflow: visible;
-            // margin-right: 2px;
-
-            &:hover {
-                border-color: transparent;
-                background-color: @tab-bg-hover-color;
-                text-decoration: none !important; /* For css overwritings */
-                cursor: pointer;
-            }
-        }
-
-        // Active state, and its :hover to override normal :hover
-        &.active > a {
-            &,
-            &:hover,
-            &:focus {
-                background-color: @nav-tabs-active-link-hover-bg;
-                border-bottom-color: transparent;
-                color: @nav-tabs-active-link-hover-color;
-                cursor: pointer;
-                // box-shadow: 0 -1px 2px rgba(0,0,0,.18);
-            }
-        }
-    }
-}
-
 
 /* ------------------------------------ *\
    #ALERTS
