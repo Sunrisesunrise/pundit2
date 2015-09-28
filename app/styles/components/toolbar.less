@@ -11,26 +11,126 @@ rendered. It needs to push down any existing content making space for us.
 */
 
 
-/*.navbar .nav {
-        margin: 0;
-    }
+/* ------------------------------------ *\
+   #NAV
+\* ------------------------------------ */
 
-    nav.navbar {
-        width: 100%;
-    }
+/* The .nav elements is used by other Bootstrap's elements like the navbar
+This style are mainly for avoiding interferences with loaded pages */
 
-    .nav li {
+/* Need this for normalizing
+Declarations with > selector for css overwritings */
+ul.nav {
+    display: block;
+    width: auto;
+    height: auto;
+    margin-bottom: 0;
+    padding-left: 0; // Override default ul/ol
+    //background: transparent;
+
+    li {
+        display: block;
         width: initial;
+        border: none;
+        letter-spacing: 0;
+        text-transform: none;
+
+        a {
+            height: auto;
+            min-height: auto;
+            margin: 0;
+            border-radius: 0; /* Needs overwritings for webkit vendor prefix */
+        }
+
+        > a {
+                       
+            span {
+                float: initial;
+                font-size: inherit;
+                font-weight: normal;
+
+                &:after {
+                    content: none;
+                }
+            }
+
+            &:hover {
+                > span {
+                    color: inherit;
+                }
+            }
+        }
     }
 
-    .nav > ul > li > a {
+    > li {
+        margin-top: 0;
+
+        &.show-tabs.active { //TO MOVE IN TABS
+            margin-bottom: -4px;
+        }
+
+        &:hover {
+            background-color: #fff;
+        }
+
+        > a {
+            float: none;
+            margin: 0;
+            padding: 5px 8px;
+            border: 0;
+            border-radius: 0;
+            font-family: @font;
+            font-size: 12px;
+            font-weight: normal;
+            text-transform: none;
+
+            &,
+            &:hover,
+            &:focus {
+                background: none;
+                text-decoration: none;
+                background-color: #ffffff;
+            }
+
+            > span {
+                float: initial;
+                font-size: inherit;
+                font-weight: normal;
+
+                &:after {
+                    content: none;
+                }
+            }
+        }
+
+        // Active state, and its :hover to override normal :hover
+        &.active > a {
+            margin: 0;
+            padding: 5px 8px;
+            border: 0;
+            font-weight: normal;
+
+            &:hover,
+            &:focus {
+                margin: 0;
+                border: 0;
+                font-weight: normal;
+            }
+        }
+    }
+
+    .nav .open > a,
+    .nav .open > a:hover,
+    .nav .open > a:focus {
+        border-color: transparent;
+        border-right: 1px @gray solid;
+    }
+
+    > ul > li > a {
         text-transform: none;
     }
+}
 
-    .nav li a:hover {
-        background: none;
-    }
-*/
 
 /* ------------------------------------ *\
    #TOOLBAR
@@ -48,13 +148,19 @@ body.pnd-toolbar-active {
     min-height: @toolbar-height;
     margin: 0;
     padding-top: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
     z-index: @zindex-pnd-toolbar;
     background-color: @color-toolbar-bg;
+    border-radius: 0; // Undo rounded corners in static and fixed navbars
     box-shadow: 0 1px 1px rgba(0,0,0,.1);
     border-bottom-width: @toolbar-border-bottom;
 
-    .container-fluid {
-        padding-left: 0;
+    .pnd-toolbar-navbar-container {
+        margin: 0 auto;
+        padding: 0 15px 0 0;
     }
 
     .pnd-progress-bar {
@@ -68,19 +174,42 @@ body.pnd-toolbar-active {
         transition-duration: 1s;
         -webkit-transition-duration: 1s;
     }
-}
 
+    @media (min-width: @grid-float-breakpoint) {
+        border-radius: 0;
+      }
+
+    @media (max-device-width: @screen-xs-min) and (orientation: landscape) {
+      max-height: 200px;
+    }
+}
 
 /* ------------------------------------ *\
    #BUTTONS
 \* ------------------------------------ */
 
-.pnd-toolbar-navbar .navbar-nav {
+.pnd-toolbar-navbar .pnd-inner-nav { //.navbar-nav
+    display: block;
     width: auto;
+    height: auto;
+    min-height: @toolbar-height;
+    position: relative;
+    background: transparent;
+    margin: 0px;
+    padding-left: 0px;
+    list-style: none;
+    .clearfix();
 
-    li {
+    > li {
+        display: block;
+        width: initial;
         height: auto;
         margin: 0;
+        float: left;
+        position: relative;
+        border: none;
+        letter-spacing: 0;
+        text-transform: none;
 
         &:hover {
             background-color: @color-toolbar-button-hover;
@@ -89,28 +218,51 @@ body.pnd-toolbar-active {
 
         /* Normal buttons */
         > a {
+            display: block;
             height: @toolbar-height - @toolbar-border-bottom !important; //!important for css overwritings
+            margin: 0;
             padding: 0 10px;
+            float: none;
+            position: relative;
 
             background-color: @color-toolbar-button;
-            border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 25);
-            border-left: 0;
+            border: 0;
+            border-radius: 0;
 
             font-size: 12px;
             color: @color-toolbar-text !important; /* For css overwritings */
-            font-family: inherit;
+            font-family: @font;
             line-height: 32px;
+            font-weight: normal;
+            text-transform: none;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, .25);
             // .text-dark-emboss();
             transition: none !important; /* Delete any transition */
 
             &:focus {
                 background-color: @color-toolbar-button;
+                //background-image: none;
                 text-decoration: none !important; /* For css overwritings */
             }
 
             &:hover {
                 background-color: @color-toolbar-button-hover;
+                //background-image: none;
                 text-decoration: none !important; /* For css overwritings */
+
+                > span {
+                    color: inherit;
+                }
+            }
+
+            span {
+                float: initial;
+                font-size: inherit;
+                font-weight: normal;
+
+                &:after {
+                    content: none;
+                }
             }
         }
 
@@ -120,7 +272,7 @@ body.pnd-toolbar-active {
             display: inline-block;
             vertical-align: text-bottom;
         }
-
+        
         /* Toggle buttons like Dashboard and Sidebar: active state */
         &.pnd-toolbar-toggle-button {
 
@@ -202,6 +354,31 @@ body.pnd-toolbar-active {
         &.disabled > a, .pnd-toolbar-not-active-element {
             color: darken(@color-toolbar-text, 30) !important; // Specificity war against bootstrap
         }
+
+        .pnd-dropdown-contextual-menu.dropdown-menu {
+            border-top-right-radius: 0;
+            border-top-left-radius: 0;
+        }
+    }
+
+    /* Left navigation*/
+    &.pnd-toolbar-navbar-left {
+        float: left;
+    }
+
+    /* Right navigation */ 
+    &.pnd-toolbar-navbar-right {
+        float: right !important;
+
+        &:last-child {
+            margin-right: -15px; /* Remove margin for right toolbar menu */
+        }
+    }
+
+    & > li > .dropdown-menu {
+        margin-top: 0;
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
     }
 }
 
@@ -240,7 +417,7 @@ body.pnd-toolbar-active {
 }
 
 /* Buttons on the right */
-.pnd-toolbar-navbar .navbar-right li {
+.pnd-toolbar-navbar .pnd-toolbar-navbar-right li {
     a {
         border-left: 0; // border-left: 1px solid lighten(@color-toolbar-button, 25);
         border-right: 0;
@@ -248,7 +425,7 @@ body.pnd-toolbar-active {
 }
 
 /* Template selection button: special border color */
-.pnd-toolbar-navbar .navbar-right li {
+.pnd-toolbar-navbar .pnd-toolbar-navbar-right li { //navbar-right
     &.pnd-toolbar-template-menu-button {
         a {
             border-left: 0; // border-left: 1px solid lighten(@color-toolbar-button, 8);
@@ -257,7 +434,7 @@ body.pnd-toolbar-active {
 }
 
 /* Error buttons */
-.pnd-toolbar-navbar .navbar-nav .pnd-toolbar-error-button {
+.pnd-toolbar-navbar .pnd-inner-nav .pnd-toolbar-error-button { //.navbar-nav
     > a {
         background-color: @brand-warning;
         border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 25);
@@ -273,7 +450,7 @@ body.pnd-toolbar-active {
 }
 
 /* Sidebar button icon */
-.pnd-toolbar-navbar .navbar-nav .pnd-toolbar-annotations-button {
+.pnd-toolbar-navbar .pnd-inner-nav .pnd-toolbar-annotations-button { //.navbar-nav
     .pnd-icon {
         margin-left: 3px;
         color: @color-toolbar-disabled;
@@ -295,35 +472,10 @@ body.pnd-toolbar-active {
 
     .pnd-dropdown-contextual-menu {
         > li:hover {
-            background-color: @color-dropdown-bg-hover;
+            background-color: transparent;
         }
     }
 }
-
-
-/* ------------------------------------ *\
-   #DROPDOWN-MENU
-\* ------------------------------------ */
-
-//TODO Thid can be moved into contextual-menu.less
-/* Error dropdown */
-/*
-.pnd-toolbar-navbar .navbar-nav li {
-    &.pnd-toolbar-error-button .dropdown-menu {
-        border-bottom: 1px lighten(@brand-warning, 30%) solid;
-
-        a {
-            background-color: @brand-warning;
-            border-top: 1px lighten(@brand-warning, 30%) solid;
-
-            &:hover {
-                background-color: @brand-warning;
-            }
-        }
-    }
-}
-*/
-
 
 /* ------------------------------------ *\
    #NOTIFICATION-TEXT
