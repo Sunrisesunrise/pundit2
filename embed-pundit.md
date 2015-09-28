@@ -105,7 +105,7 @@ providers would have to provide their content accordingly in order to be able to
 scholars working with Pundit. As it cannot be expected that every provider will be able to meet these
 requirements, alternative means of providing content are offered in this section.
 
-### 2.1 Requirements
+### 2.1 Requirements (Pundit Contents)
 
 Provided content is annotatable if:
 
@@ -123,8 +123,9 @@ Provided content is annotatable if:
         -->
         </div>
 
-    The **content URI** is a stable URI that serves as unique identifier for one content segment.
-    The granularity of the annotatable content should be decided by the content provider, but it should be at least on page level in order to be useful.
+    The attribute *class="pundit-content"* defines what is called a **Pundit Content** and it's a part of code to which annotations are reffered to. These Pundit Contents **must not be nested** one into the other. The **content URI** is a stable URI that serves as unique identifier for one content segment. This is where annotations are anchored and it is very important that it is permanent and unique.
+    The granularity of the annotatable content should be decided by the content provider, but it should be at least on page level in order to be useful. It is a good practite to not have too many Pundit Contents in one single page since this could lead to an overload of the server and slow overall performance of Pundit. It's a good advice to not have more that fifty Pundit Content in each page.
+
     The HTML named contents can, however, be further nested below page level (See https://doc.dm2e.huberlin.de/redmine/projects/wp3/wiki/Named_content_markup)
 
 * As an **image file** of a format that can be displayed in a Web Browser (JPG, PNG) under a stable URL (See Section 2.2.2)
