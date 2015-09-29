@@ -12,10 +12,11 @@
     position: fixed;
     top: @toolbar-height;
     //right: 0; /* For css overwritings in case body has some padding, margin or border */
-    left: 0; /* For css overwritings in case body has some padding, margin or border */
+    //left: 0; /* For css overwritings in case body has some padding, margin or border */
     overflow: hidden;
     z-index: @zindex-pnd-dashboard;
     background-color: @gray-light;
+    &:extend(.clearfix all);
 
     .pnd-inner-nav { //also on .nav
         float: initial;
@@ -61,7 +62,7 @@ vertical draggable bar */
     height: 100%;
 }
 
-.pnd-dashboard-panel-last .nav-tabs, .pnd-dashboard-panel-last .pnd-tab-header {
+.pnd-dashboard-panel-last .pnd-tab-header { //.pnd-dashboard-panel-last .nav-tabs
     margin-right: 0;
 }
 
@@ -80,6 +81,7 @@ vertical draggable bar */
         &.pnd-btn-xs {
             border: 0;
             padding-top: 2px;
+            padding-bottom: 0;
             background-color: #fff;
             text-shadow: 0 1px 0 #fff;
 

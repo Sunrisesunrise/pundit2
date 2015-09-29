@@ -6,333 +6,6 @@
 
 // TODO and Important: the style for tabs is dispersed in the code, lets move it here!
 
-// Start boostrap classes style
-
-ul.nav {
-    
-
-    li {
-        display: block;
-        width: initial;
-        border: none;
-        letter-spacing: 0;
-        text-transform: none;
-
-        a {
-            height: auto;
-            min-height: auto;
-            margin: 0;
-            border-radius: 0; /* Needs overwritings for webkit vendor prefix */
-        }
-
-        > a {
-            span {
-                float: initial;
-                font-size: inherit;
-                font-weight: normal;
-
-                &:after {
-                    content: none;
-                }
-            }
-
-            &:hover {
-                > span {
-                    color: inherit;
-                }
-            }
-        }
-    }
-
-    > li {
-        margin-top: 0;
-
-        &.show-tabs.active {
-            margin-bottom: -4px;
-        }
-
-        &:hover {
-            background-color: #fff;
-        }
-
-        > a {
-            float: none;
-            margin: 0;
-            padding: 5px 8px;
-            border: 0;
-            border-radius: 0;
-            font-family: @font;
-            font-size: 12px;
-            font-weight: normal;
-            text-transform: none;
-
-            &,
-            &:hover,
-            &:focus {
-                background: none;
-                text-decoration: none;
-                background-color: #ffffff;
-            }
-
-            > span {
-                float: initial;
-                font-size: inherit;
-                font-weight: normal;
-
-                &:after {
-                    content: none;
-                }
-            }
-        }
-
-        // Active state, and its :hover to override normal :hover
-        &.active > a {
-            margin: 0;
-            padding: 5px 8px;
-            border: 0;
-            font-weight: normal;
-
-            &:hover,
-            &:focus {
-                margin: 0;
-                border: 0;
-                font-weight: normal;
-            }
-        }
-    }
-
-    .nav .open > a,
-    .nav .open > a:hover,
-    .nav .open > a:focus {
-        border-color: transparent;
-        border-right: 1px @gray solid;
-    }
-
-    > ul > li > a {
-        text-transform: none;
-    }
-}
-// End of bootstrap classes
-
-/* ------------------------------------ *\
-   #NAV TABS
-\* ------------------------------------ */
-
-// Give the tabs something to sit on
-ul.nav-tabs { //pnd-tab-header
-    margin: 0; // 0 0 10px 0;
-    background-color: @gray-light;
-
-    // Show tabs button
-    .show-tabs {
-
-        a {
-            padding: 5px 10px 2px 10px;
-
-            .pnd-icon {
-                display: inline-block;
-                padding: 0;
-                margin-top: 3px;
-                font-size: 14px;
-                line-height: normal;
-            }
-        }
-
-        &.active a {
-            padding: 5px 10px 2px 10px;
-            background-color: @nav-tabs-active-link-hover-bg;
-        }
-    }
-
-    > li {
-        // Actual tabs (as links)
-        > a {
-            background-color: @gray-light;
-            border-radius: @tab-border-radius @tab-border-radius 0 0;
-            color: @nav-tabs-active-link-hover-color !important; /* For css overwritings */
-            line-height: @line-height-base;
-            overflow: visible;
-            // margin-right: 2px;
-
-            &:hover {
-                border-color: transparent;
-                background-color: @tab-bg-hover-color;
-                text-decoration: none !important; /* For css overwritings */
-                cursor: pointer;
-            }
-        }
-
-        // Active state, and its :hover to override normal :hover
-        &.active > a {
-            &,
-            &:hover,
-            &:focus {
-                background-color: @nav-tabs-active-link-hover-bg;
-                border-bottom-color: transparent;
-                color: @nav-tabs-active-link-hover-color;
-                cursor: pointer;
-                // box-shadow: 0 -1px 2px rgba(0,0,0,.18);
-            }
-        }
-    }
-}
-
-/* ------------------------------------ *\
-   #TABS
-\* ------------------------------------ */
-
-.tabs {
-    margin: 0 !important; /* For css overwritings */
-    padding: 0;
-    position: static;
-    overflow: visible;
-    border: none;
-    font-family: inherit;
-    color: @color-text;
-
-    ul {
-        display: block;
-        width: auto;
-        height: auto;
-        white-space: normal;
-    }
-
-    li {
-        display: inline-block;
-        height: auto;
-        margin-right: 0;
-        margin-left: 0;
-        border-radius: 0;
-        line-height: inherit;
-
-        a { 
-            display: inline-block;
-            float: none;
-            position: static;
-            top: 0; /* In case of position overwriting */
-            background: none;
-            border: none;
-            border-radius: 0;
-            font-size: inherit;
-            text-align: left;
-            transition: initial;
-        }
-
-        strong {
-            display: inline;
-            padding: 0;
-            float: none;
-            background: none;
-            background-image: none;
-        }
-    }
-
-    //.nav-tabs > li {
-    .nav-tabs > li, .pnd-tab-header > li {
-        margin-bottom: -1px !important; /* For css overwritings */
-    }
-
-    &.pnd-dashboard-panel-content > .pnd-tab-header {
-        padding-top: 3px;
-    }
-
-    .pnd-panel-tab-content {
-
-        .pnd-tab-header li, .nav-tabs li {
-            float: left;
-
-            a:hover {
-                text-decoration: none !important;
-            }
-        }
-
-        .pnd-tab-content ul {
-            overflow: visible;
-        }
-    }
-
-    .pnd-tab-content {
-        display: block;
-        clear: none; /* CSS conflicts fix */
-
-        .pnd-tab-pane {
-            display: none;
-            margin-bottom: 30px;
-        }
-
-        .active {
-            display: block;
-        }
-    }
-
-    .pnd-panel-tab-content-content {
-
-        ul.list-group {
-            overflow: visible;
-            -webkit-box-shadow: none; /* For css overwritings  - VENDOR PREFIX */
-            box-shadow: none;
-
-            &.pnd-hidden-tabs {
-
-                .show-tabs {
-                    a {
-                        padding-top: 5px;
-                        padding-bottom: 5px;
-
-                        .pnd-icon {
-                            margin: 0;
-                            padding-bottom: 3px;
-                        }
-                    }
-
-                    &.active a {
-                        padding-top: 3px;
-                        padding-bottom: 5px;
-
-                        .pnd-icon {
-                            margin-top: 2px;
-                        }
-                    }
-                }
-            }
-        }
-
-        li {
-            display: block;
-            float: none;
-        }
-    }
-
-    .dropdown-menu {
-
-        li {
-            display: block;
-            width: 100%;
-
-            a {
-                display: block;
-                width: 100%;
-            }
-        }
-    }
-
-    .nav-tabs .dropdown-menu, .pnd-tab-header .dropdown-menu {
-
-        li {
-            float: none;
-        }
-    }
-
-    > div {
-        width: auto;
-        padding: 0;
-    }
-}
-
-.show-tabs.pull-right {
-    top: initial;
-}
-
 /* For overwritings on preview page links */
 
 .pnd-annotation-preview-item-container ul a:hover {
@@ -345,17 +18,18 @@ ul.nav-tabs { //pnd-tab-header
 \* ------------------------------------ */
 
 ul.pnd-tab-header {
-    margin: 0; // 0 0 10px 0;
-    background: @gray-light;
     display: block;
     width: auto;
     //height: auto;
+    margin: 0; // 0 0 10px 0;
+    background: @gray-light;
+
     /* Temp fix for tabs list*/
     height: 27px;
     overflow-y: hidden;
     overflow-x: visible;
 
-    border-bottom: 1px solid #999;
+    //border-bottom: 1px solid #999;
 
     &:extend(.clearfix all);
 
@@ -363,25 +37,21 @@ ul.pnd-tab-header {
         // Actual tabs (as links)
         display: block;
         margin-top: 0;
-        margin-bottom: -1px !important;
         float: left;
-        position:  relative;
+        position: relative;
 
         > a {
+            display: block;
             height: auto;
             min-height: auto;
             margin: 0;
-            padding: 5px 8px;
-            //float: none;
+            padding: 6px 8px;
+            position: relative;
             background-color: @gray-light;
             border-radius: @tab-border-radius @tab-border-radius 0 0;
             color: @nav-tabs-active-link-hover-color !important; /* For css overwritings */
             line-height: @line-height-base;
             overflow: visible;
-
-            position: relative;
-            display: block;
-            // margin-right: 2px;
 
             &:hover {
                 border-color: transparent;
@@ -410,21 +80,29 @@ ul.pnd-tab-header {
     .show-tabs {
 
         a { 
-            padding: 5px 10px 2px 10px;
+            padding: 7px 10px 5px;
 
             .pnd-icon {
                 display: inline-block;
                 padding: 0;
-                margin-top: 3px;
+                margin: 0;
                 font-size: 14px;
                 line-height: normal;
             }
         }
 
         &.active a {
-            padding: 5px 10px 2px 10px;
             background-color: @nav-tabs-active-link-hover-bg;
         }
+
+        /* For css overwritings */
+        &.pull-right {
+            top: initial;
+        }
+    }
+
+    .dropdown-menu {
+        margin: 0;
     }
 }
 
@@ -455,10 +133,12 @@ ul.pnd-tab-header {
         }
 
         & > a {
+            display: block;
             min-width: 150px;
             margin-right: 0;
             margin-bottom: 1px;
             padding: 5px 8px;
+            position: relative;
             background-color: @gray-lighter;
             color: @gray;
             border-bottom: 1px solid #fff;
@@ -467,6 +147,7 @@ ul.pnd-tab-header {
                 color: @gray-darker;
                 background-color: darken(@gray-lighter, 3%);
                 border-bottom: 1px solid #fff;
+                text-decoration: none;
 
                 .badge {
                     background-color: lighten(@gray, 20%);
@@ -500,10 +181,13 @@ ul.pnd-tab-header {
     }
 }
 
-/* ------------------------------------ *\
-   #TEMP FIX FOR TABS LIST
-\* ------------------------------------ */
+.pnd-vertical-tab-content {
 
-//.pnd-tab-header {
-    
-//}
+    > .tab-pane {
+        display: none;
+    }
+
+    > .active {
+        display: block;
+    }
+}
