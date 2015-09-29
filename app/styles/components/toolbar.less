@@ -77,7 +77,7 @@ body.pnd-toolbar-active {
     margin: 0px;
     padding-left: 0px;
     list-style: none;
-    .clearfix();
+    &:extend(.clearfix all);
 
     > li {
         display: block;
@@ -315,6 +315,7 @@ body.pnd-toolbar-active {
 /* Error buttons */
 .pnd-toolbar-navbar .pnd-inner-nav .pnd-toolbar-error-button { //.navbar-nav
     > a {
+        padding: 8px 10px;
         background-color: @brand-warning;
         border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 25);
 

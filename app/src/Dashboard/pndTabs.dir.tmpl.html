@@ -1,5 +1,5 @@
 <ul 
-    class="nav pnd-tab-header" 
+    class="pnd-tab-header" 
     ng-class="{'pnd-hidden-tabs': hiddenTabsToShow()}">
     <li 
         ng-repeat="pane in ::panes" 
@@ -23,9 +23,9 @@
         </a>
     </li>
 </ul>
-<div class="tab-content pnd-tab-content">
+<div class="pnd-tab-content">
     <div 
-        class="tab-pane" 
+        class="pnd-tab-pane" 
         ng-repeat="pane in ::panes" 
         ng-class="[$index == active ? 'active' : '']" 
         ng-include="::pane.template" 
