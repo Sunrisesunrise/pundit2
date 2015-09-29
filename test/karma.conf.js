@@ -13,7 +13,7 @@ module.exports = function(config) {
             'bower_components/angular-strap/dist/angular-strap.tpl.min.js',
             'bower_components/moment/min/moment.min.js',
             'bower_components/angular-moment/angular-moment.min.js',
-            'bower_components/angular-datepicker/dist/index.min.js',
+            'bower_components/angular-datepicker/dist/angular-datepicker.min.js',
             'bower_components/angular-md5/angular-md5.min.js',
             'bower_components/ng-resize/ngresize.min.js',
 
@@ -38,6 +38,9 @@ module.exports = function(config) {
             'app/src/Vocabularies/Vocabularies.js',
             'app/src/Tools/TripleComposer/TripleComposer.js',
             'app/src/Tools/NotebookComposer/NotebookComposer.js',
+            'app/src/LiteTool/LiteTool.js',
+            'app/src/CommentPopover/CommentPopover.js',
+            'app/src/FragmentPopover/FragmentPopover.js',
             'app/src/Item/Item.js',
             'app/src/Toolbar/Toolbar.js',
             'app/src/Preview/Preview.js',
