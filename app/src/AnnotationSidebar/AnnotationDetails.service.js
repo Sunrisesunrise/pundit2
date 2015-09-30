@@ -662,7 +662,7 @@ angular.module('Pundit2.AnnotationSidebar')
     });
 
     EventDispatcher.addListener('ResizeManager.resize', function() {
-        closeAllAnnotationView();
+        annotationDetails.closeAllAnnotationView();
     });
 
     EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
