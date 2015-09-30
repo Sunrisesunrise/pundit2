@@ -1,5 +1,5 @@
 angular.module('Pundit2.CommentPopover')
-.service('CommentPopover', function(BaseComponent, PndPopover, $window) {
+.service('CommentPopover', function(BaseComponent, PndPopover, $window, $timeout) {
     var commentPopover = new BaseComponent('CommentPopover');
 
     var changePopoverPlacement = function(state, placement) {
@@ -8,6 +8,52 @@ angular.module('Pundit2.CommentPopover')
         state.popover.$applyPlacement();
         var popoverRect = state.popover.$element[0].getClientRects()[0];
         return popoverRect;
+    };
+
+    var resizeData = {
+        lastSelectionUsed: null,
+        temporaryElement: null,
+        removeTimeout: null
+    };
+
+
+    var resizeCallback = function() {
+        // No last used info.
+        if (resizeData.lastSelectionUsed === null) {
+            return;
+        }
+        // Clear previous timeout.
+        if (resizeData.removeTimeout !== null) {
+            console.log("clear timeout");
+            $timeout.cancel(resizeData.removeTimeout);
+            resizeData.removeTimeout = null;
+        }
+
+        // Create temporary element if not present already.
+        if (resizeData.temporaryElement === null) {
+            resizeData.temporaryElement = angular.element('<span class="pnd-range-pos-calc" style="width: 0px;overflow: hidden;display: inline-flex;">w</span>');
+            // Add temporary element at the and or beginning of fragment ref depending on last used selection.
+            if (resizeData.lastSelectionUsed.label === 'end') {
+                resizeData.lastSelectionUsed.fragmentRef.after(resizeData.temporaryElement);
+            }
+            else {
+                resizeData.lastSelectionUsed.fragmentRef.before(resizeData.temporaryElement);
+            }
+        }
+
+        resizeData.lastSelectionUsed.offset = angular.copy(resizeData.temporaryElement.offset());
+        changePopoverPosition(resizeData.lastSelectionUsed.offset.left, resizeData.lastSelectionUsed.offset.top);
+
+        resizeData.removeTimeout = $timeout(function() {
+            console.log("remove temporary element");
+            var parentTS = resizeData.temporaryElement.parent();
+            resizeData.temporaryElement.remove();
+            resizeData.temporaryElement = null;
+            if (parentTS.length) {
+                parentTS[0].normalize();
+            }
+            resizeData.removeTimeout = null;
+        }, 300);
     };
 
     var changePopoverPosition = function(mouseX, mouseY){
@@ -41,6 +87,7 @@ angular.module('Pundit2.CommentPopover')
                 top: (state.selectionEnd.offset.top + state.selectionEnd.height)+'px',
                 left: state.selectionEnd.offset.left+'px'
             });
+            resizeData.lastSelectionUsed = state.selectionEnd;
             popoverRect = changePopoverPlacement(state, 'bottom');
             checkFromBottom({
                 right: (state.selectionEnd.offset.top + state.selectionEnd.height / 2),
@@ -52,6 +99,7 @@ angular.module('Pundit2.CommentPopover')
                 top: (state.selectionStart.offset.top)+'px',
                 left: state.selectionStart.offset.left+'px'
             });
+            resizeData.lastSelectionUsed = state.selectionStart;
             popoverRect = changePopoverPlacement(state, 'top');
             var pageVisibleTop = $window.scrollY;
             if ($window.scrollY + popoverRect.top < pageVisibleTop) {
@@ -59,6 +107,7 @@ angular.module('Pundit2.CommentPopover')
                     top: (state.selectionStart.offset.top + state.selectionStart.height / 2)+'px',
                     left: state.selectionStart.offset.left+'px'
                 });
+                resizeData.lastSelectionUsed = state.selectionStart;
                 popoverRect = changePopoverPlacement(state, 'left');
                 var pageVisibleLeft = $window.scrollX;
                 if ($window.scrollX + popoverRect.left < pageVisibleLeft) {
@@ -66,6 +115,7 @@ angular.module('Pundit2.CommentPopover')
                         top: (state.selectionStart.offset.top + state.selectionStart.height)+'px',
                         left: state.selectionStart.offset.left+'px'
                     });
+                    resizeData.lastSelectionUsed = state.selectionStart;
                     popoverRect = changePopoverPlacement(state, 'bottom');
                 }
             }
@@ -81,12 +131,17 @@ angular.module('Pundit2.CommentPopover')
             controller: 'CommentPopoverCtrl',
             placement: 'bottom',
             alphaRollover: true,
-            lockPageScroll: true
+            lockPageScroll: true,
+            hideCallback: function() {
+                console.log("comment popover hide");
+                angular.element($window).off('resize', resizeCallback);
+            }
         };
         var promise = PndPopover.show(x, y, options, {item: item, fragmentId: fragmentId});
         promise.then(function() {
             changePopoverPosition(x, y);
             PndPopover.getState().selection.removeAllRanges();
+            angular.element($window).on('resize', resizeCallback);
         }, function() {
             console.log(arguments);
         });
