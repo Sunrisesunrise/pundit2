@@ -37,14 +37,14 @@ angular.module('Pundit2.Core')
         var fragmentElements = angular.element('span.' + state.data.fragmentId);
         var i = 0;
         for (; i < fragmentElements.length; i++) {
-            if (fragmentElements.eq(i).text().trim().length === 0) {
+            if (fragmentElements.eq(i).text().trim().length === 0 || !fragmentElements.eq(i).is(':visible')) {
                 continue;
             }
-            fragmentElements.eq(0).before(ts);
+            fragmentElements.eq(i).before(ts);
             break;
         }
         for (i = fragmentElements.length - 1; i >= 0; i--) {
-            if (fragmentElements.eq(i).text().trim().length === 0) {
+            if (fragmentElements.eq(i).text().trim().length === 0 || !fragmentElements.eq(i).is(':visible')) {
                 continue;
             }
             fragmentElements.eq(i).after(te);
