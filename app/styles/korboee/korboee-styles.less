@@ -6,7 +6,6 @@
  * component
  */
 
-
 /* ------------------------------------ *\
    #DIALOG-STRUCTURE
 \* ------------------------------------ */
@@ -25,6 +24,19 @@
     border-top: 4px solid @gray-light;
 }
 
+/* ------------------------------------ *\
+   #TABS-HEADERS
+\* ------------------------------------ */
+
+.pnd-tab-header > li > a {
+    text-decoration: none;
+    
+    &:hover,
+    &:focus,
+    &:active {
+        text-decoration: none
+    }
+}
 
 /* ------------------------------------ *\
    #VERTICAL-TABS-ELEMENTS
@@ -37,7 +49,7 @@
     margin-bottom: 0;
 }
 
-.tab-content > .tab-pane {
+.pnd-tab-content > .tab-pane {
     margin-bottom: 0; // Resets bottom margin of 30px
 }
 
@@ -63,7 +75,7 @@
         bottom: 40px;
         background: transparent;
     }
-    .tabs-left > .nav-tabs > li > a {
+    .tabs-left > .pnd-vertical-tabs > li > a {
         min-width: 40px;
     }
 }
