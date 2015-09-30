@@ -5,7 +5,7 @@ angular.module('Pundit2.Core')
 
     var initPopoverOptions = {
         trigger: 'manual',
-        container: "[data-ng-app='Pundit2']",
+        container: null,
         needsValidSelection: true,
         lockPageScroll: true
     };
@@ -96,7 +96,9 @@ angular.module('Pundit2.Core')
     var initPopover = function (x, y, options, data) {
         state.data = data;
 
+        var container = angular.element('div[data-ng-app="Pundit2"]');
         state.popoverOptions = angular.merge({}, initPopoverOptions, options);
+        state.popoverOptions.container = container;
 
         if (state.anchor === null) {
             state.anchor = angular.element("<div class='pnd-pnd-popover-anchor' style='position: absolute; left: 0px; top: 0px;'><div>");
