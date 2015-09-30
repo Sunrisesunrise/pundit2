@@ -151,6 +151,12 @@ angular.module('Pundit2.Core')
     var updateHitsTimer;
     var currentHits = analytics.options.maxHits;
 
+    if (analytics.options.doTracking || analytics.options.doMixpanel) {
+        if (angular.element('script').length === 0) {
+            angular.element('head').append('<script type="text/javascript"></script>');
+        }
+    }
+
 
     // Google Analytics code
     if (analytics.options.doTracking) {
