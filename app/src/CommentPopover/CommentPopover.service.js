@@ -24,7 +24,6 @@ angular.module('Pundit2.CommentPopover')
         }
         // Clear previous timeout.
         if (resizeData.removeTimeout !== null) {
-            console.log("clear timeout");
             $timeout.cancel(resizeData.removeTimeout);
             resizeData.removeTimeout = null;
         }
@@ -45,7 +44,7 @@ angular.module('Pundit2.CommentPopover')
         changePopoverPosition(resizeData.lastSelectionUsed.offset.left, resizeData.lastSelectionUsed.offset.top);
 
         resizeData.removeTimeout = $timeout(function() {
-            console.log("remove temporary element");
+            commentPopover.log('Remove temporary element');
             var parentTS = resizeData.temporaryElement.parent();
             resizeData.temporaryElement.remove();
             resizeData.temporaryElement = null;
@@ -133,7 +132,7 @@ angular.module('Pundit2.CommentPopover')
             alphaRollover: true,
             lockPageScroll: true,
             hideCallback: function() {
-                console.log("comment popover hide");
+                commentPopover.log('Comment popover hide');
                 angular.element($window).off('resize', resizeCallback);
             }
         };
@@ -143,7 +142,7 @@ angular.module('Pundit2.CommentPopover')
             PndPopover.getState().selection.removeAllRanges();
             angular.element($window).on('resize', resizeCallback);
         }, function() {
-            console.log(arguments);
+            commentPopover.log(arguments);
         });
         return promise;
     };
