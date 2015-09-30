@@ -71,11 +71,14 @@ angular.module('Pundit2.CommentPopover')
             undefined, // skipConsolidation
             modelData.target,
             modelData.type,
-            'commenting'
+            'commenting',
+            $scope.selectedNotebookId
         );
 
         httpPromise.then(function() {
             // OK.
+            CommentPopover.lastUsedNotebookID = $scope.selectedNotebookId;
+            NotebookCommunication.setCurrent(lastSelectedNotebookId);
             PndPopover.hide();
         }, function() {
             // Epic FAIL.

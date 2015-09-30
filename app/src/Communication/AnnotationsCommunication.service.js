@@ -426,7 +426,7 @@ angular.module('Pundit2.Communication')
         return promise.promise;
     };
 
-    annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, skipConsolidation, postDataTargets, types, motivation) {
+    annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, skipConsolidation, postDataTargets, types, motivation, forceNotebookId) {
         // var completed = 0;
         var promise = $q.defer();
 
@@ -485,9 +485,10 @@ angular.module('Pundit2.Communication')
                 params.motivatedBy = motivation;
             }
 
-            if (typeof currentNotebook !== 'undefined' && typeof currentNotebook.id !== 'undefined') {
+            if ((typeof currentNotebook !== 'undefined' && typeof currentNotebook.id !== 'undefined') || typeof forceNotebookId !== 'undefined' ) {
+                var nbId = forceNotebookId || NotebookExchange.getCurrentNotebooks().id;
                 url = NameSpace.get('asNBForcedCurrent', {
-                    current: NotebookExchange.getCurrentNotebooks().id
+                    current: nbId
                 });
             }
             $http({
