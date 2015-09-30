@@ -166,7 +166,10 @@ angular.module('Pundit2.ResourcePanel')
 
     var setFocus = function(selector) {
         $timeout(function() {
-            angular.element(selector)[0].focus();
+            var elem = angular.element(selector);
+            if (elem.length > 0) {
+                elem[0].focus();
+            }
         });
     };
 
