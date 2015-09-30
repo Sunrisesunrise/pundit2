@@ -17,11 +17,12 @@
         padding: 5px !important; /* For css overwritings */
         //border: 1px solid @gray-lighter;
         border: 0 !important;
+        box-shadow: none;
         background-color: transparent !important;
         background-image: none !important;
         color: inherit !important;
         text-shadow: none;
-        vertical-align: baseline !important;
+        vertical-align: middle !important;
         overflow: visible;
 
         &:hover,
@@ -72,6 +73,13 @@
                                 font-size: 10px;
                             }
                         }
+                    }
+                }
+
+                &:first-child {
+                    th {
+                        padding-top: 5px;
+                        padding-bottom: 12px;
                     }
                 }
 
