@@ -602,11 +602,17 @@ angular.module('Pundit2.Toolbar')
     };
 
     $scope.onClickTemplateDropdown = function() {
+        MyPundit.closeLoginPopover();
         Analytics.track('buttons', 'click', 'toolbar--templateList');
         ResourcePanel.hide();
+    };    
+
+    $scope.infoClickHandler = function() {
+        MyPundit.closeLoginPopover();
     };
 
     $scope.onClickNotebookDropdown = function() {
+        MyPundit.closeLoginPopover();
         Analytics.track('buttons', 'click', 'toolbar--notebooks--' + ($scope.isUserLogged ? 'logged' : 'anonymous'));
     };
 
@@ -643,7 +649,6 @@ angular.module('Pundit2.Toolbar')
     $scope.openUrl = function(url) {
         $window.open(url, '_self');
     };
-
 
     EventDispatcher.addListener('Status.progress', function(evt) {
         progressBar.css('opacity', 1);

@@ -1,24 +1,40 @@
 <nav class="pnd-toolbar-navbar pnd-ignore" role="navigation" ng-controller="ToolbarCtrl">
-    <div class="pnd-toolbar-navbar-container">
+    <div 
+        class="pnd-toolbar-navbar-container"
+        ng-click="toolbarClik($event)">
     
         <div class="pnd-toolbar-navbar-collapse">
             <ul class="pnd-inner-nav pnd-toolbar-navbar-left">
                 
                 <!-- Error button -->
                 <li ng-show="showStatusButtonError()" class="pnd-toolbar-error-button pnd-toolbar-first-button">
-                    <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="errorMessageDropdown"><span class="pnd-icon pnd-icon-exclamation"></span></a>
+                    <a 
+                        href="javascript:void(0)" 
+                        template-url="{{dropdownTemplate}}" 
+                        bs-dropdown="errorMessageDropdown"
+                        ng-click="infoClickHandler()">
+                        <span class="pnd-icon pnd-icon-exclamation"></span>
+                    </a>
                 </li>
                 
                 <!-- OK button -->
                 <li ng-show="showStatusButtonOk()" class="pnd-toolbar-status-button-ok pnd-toolbar-first-button">
-                    <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="infoDropdown">
+                    <a 
+                        href="javascript:void(0)" 
+                        template-url="{{dropdownTemplate}}" 
+                        bs-dropdown="infoDropdown"
+                        ng-click="infoClickHandler()">
                         <span class="pnd-icon pnd-icon-logo-1"></span>
                     </a>
                 </li>
 
                 <!-- Loading button -->
                 <li ng-show="showStatusButtonLoading()" class="pnd-toolbar-status-button-ok pnd-toolbar-first-button">
-                    <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="infoDropdown">
+                    <a 
+                        href="javascript:void(0)" 
+                        template-url="{{dropdownTemplate}}" 
+                        bs-dropdown="infoDropdown"
+                        ng-click="infoClickHandler()">
                         <!-- <span></span> -->
                         <span class="pnd-icon pnd-icon-logo-1 pnd-pulse"></span>
                     </a>
