@@ -13,26 +13,26 @@
         $scope.sendAlert = function(messageType){
             var messageId = id++;
             var timeout = null;
-            var type = AlertSystem.AlertType.CUSTOM;
+            var type = AlertSystem.AlertType.WARNING;
             switch (messageType){
                 case 'SUCCESS':
-                    type = AlertSystem.AlertType.OK;
+                    type = AlertSystem.AlertType.SUCCESS;
                     break;
                 case 'ERROR':
                     type = AlertSystem.AlertType.ERROR;
                     break;
-                case 'ALERT':
-                    type = AlertSystem.AlertType.ALERT;
+                case 'INFO':
+                    type = AlertSystem.AlertType.INFO;
                     break;
-                case 'CUSTOM':
-                    type = AlertSystem.AlertType.CUSTOM;
+                case 'WARNING':
+                    type = AlertSystem.AlertType.WARNING;
                     break;
             }
             if(($scope.useTimeout)){
                 timeout = $scope.timeout;
             }
 
-            AlertSystem.addAlert(type,messageId+': '+$scope.message, timeout, $scope.putTop);
+            AlertSystem.addAlert(type, messageId + ': ' + $scope.message, 'Message title', timeout, $scope.putTop);
         }
         $scope.reset = function() {
             AlertSystem.clearAlerts();
@@ -45,8 +45,8 @@
     <div ng-controller="AlertSystemDemoCtrl" class="pnd-wrp">
         <a class="btn btn-success" ng-click="sendAlert('SUCCESS')">Do Success</a>
         <a class="btn btn-danger" ng-click="sendAlert('ERROR')">Do Error</a>
-        <a class="btn btn-info" ng-click="sendAlert('ALERT')">Do Alert</a>
-        <a class="btn btn-warning" ng-click="sendAlert('CUSTOM')">Do Custom</a>
+        <a class="btn btn-info" ng-click="sendAlert('INFO')">Do Alert</a>
+        <a class="btn btn-warning" ng-click="sendAlert('WARNING')">Do Custom</a>
         <a class="btn btn-default" ng-click="reset()">Reset</a>
         <hr>
         <div>

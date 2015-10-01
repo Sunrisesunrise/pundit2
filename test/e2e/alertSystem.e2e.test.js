@@ -1,5 +1,5 @@
 describe("Alert interaction", function() {
-    var p = protractor.getInstance();
+    var p = browser;
 
     beforeEach(function() {
         p.get('/app/examples/alertSystem.html');
@@ -7,25 +7,26 @@ describe("Alert interaction", function() {
 
     it("should correctly show items", function() {
 
-        var errorAlertButton = p.findElement(protractor.By.css(".btn-danger")),
-            alertAlertButton = p.findElement(protractor.By.css(".btn-info")),
-            customAlertButton = p.findElement(protractor.By.css(".btn-warning")),
-            resetAlertsButton = p.findElement(protractor.By.css(".btn-default"));
+        var errorAlertButton = element(by.css(".btn-danger")),
+            alertAlertButton = element(by.css(".btn-info")),
+            customAlertButton = element(by.css(".btn-warning")),
+            resetAlertsButton = element(by.css(".btn-default"));
+
 
 
         //TEST ERROR
         //adding error alert: Before inserting there will be 0 error alerts, after there will be 1
-        p.findElements(protractor.By.css(".alert-danger")).then(function(items) {
+        element.all(by.css(".pnd-alert-error")).then(function(items) {
             expect(items.length).toBe(0);
         }, function(err) {
             expect(err).toBeUndefined();
         });
 
-        p.actions().mouseMove(errorAlertButton).click().perform();
+        errorAlertButton.click();
         // wait
         p.sleep(200);
 
-        p.findElements(protractor.By.css(".alert-danger")).then(function(items) {
+        element.all(by.css(".pnd-alert-error")).then(function(items) {
             expect(items.length).toBe(1);
         }, function(err) {
             expect(err).toBeUndefined();
@@ -34,17 +35,17 @@ describe("Alert interaction", function() {
 
         //TEST ALERT
         //adding alert: Before inserting there will be 0 alerts, after there will be 1
-        p.findElements(protractor.By.css(".alert-info")).then(function(items) {
+        element.all(by.css(".pnd-alert-info")).then(function(items) {
             expect(items.length).toBe(0);
         }, function(err) {
             expect(err).toBeUndefined();
         });
 
-        p.actions().mouseMove(alertAlertButton).click().perform();
+        alertAlertButton.click();
         // wait
         p.sleep(200);
 
-        p.findElements(protractor.By.css(".alert-info")).then(function(items) {
+        element.all(by.css(".pnd-alert-info")).then(function(items) {
             expect(items.length).toBe(1);
         }, function(err) {
             expect(err).toBeUndefined();
@@ -52,17 +53,17 @@ describe("Alert interaction", function() {
 
         //CUSTOM
         //adding custom alert: Before inserting there will be 0 custom alerts, after there will be 1
-        p.findElements(protractor.By.css(".alert-warning")).then(function(items) {
+        element.all(by.css(".pnd-alert-warning")).then(function(items) {
             expect(items.length).toBe(0);
         }, function(err) {
             expect(err).toBeUndefined();
         });
 
-        p.actions().mouseMove(customAlertButton).click().perform();
+        customAlertButton.click();
         // wait
         p.sleep(200);
 
-        p.findElements(protractor.By.css(".alert-warning")).then(function(items) {
+        element.all(by.css(".pnd-alert-warning")).then(function(items) {
             expect(items.length).toBe(1);
         }, function(err) {
             expect(err).toBeUndefined();
@@ -72,36 +73,36 @@ describe("Alert interaction", function() {
 
         //REMOVE ALERTS
         //Before removing alerts there should be 3 alerts, after there should be none
-        p.findElements(protractor.By.css(".alert-danger")).then(function(items) {
+        element.all(by.css(".pnd-alert-error")).then(function(items) {
             expect(items.length).toBe(1);
         }, function(err) {
             expect(err).toBeUndefined();
         });
-        p.findElements(protractor.By.css(".alert-info")).then(function(items) {
+        element.all(by.css(".pnd-alert-info")).then(function(items) {
             expect(items.length).toBe(1);
         }, function(err) {
             expect(err).toBeUndefined();
         });
-        p.findElements(protractor.By.css(".alert-warning")).then(function(items) {
+        element.all(by.css(".pnd-alert-warning")).then(function(items) {
             expect(items.length).toBe(1);
         }, function(err) {
             expect(err).toBeUndefined();
         });
 
-        p.actions().mouseMove(resetAlertsButton).click().perform();
+        resetAlertsButton.click();
         // wait
         p.sleep(200);
-        p.findElements(protractor.By.css(".alert-danger")).then(function(items) {
+        element.all(by.css(".pnd-alert-error")).then(function(items) {
             expect(items.length).toBe(0);
         }, function(err) {
             expect(err).toBeUndefined();
         });
-        p.findElements(protractor.By.css(".alert-info")).then(function(items) {
+        element.all(by.css(".pnd-alert-info")).then(function(items) {
             expect(items.length).toBe(0);
         }, function(err) {
             expect(err).toBeUndefined();
         });
-        p.findElements(protractor.By.css(".alert-warning")).then(function(items) {
+        element.all(by.css(".pnd-alert-warning")).then(function(items) {
             expect(items.length).toBe(0);
         }, function(err) {
             expect(err).toBeUndefined();
@@ -109,29 +110,32 @@ describe("Alert interaction", function() {
 
     });
 
-    it("should correctly timout alert", function() {
+    it("should correctly timeout alert", function() {
         //Test timeout
         //First we add a success alert and we verify (using ignoreSynchronization) that the alert is inserted
         //Then we reintroduce ignoreSynchronization=false and we verify that the alert has been removed after the timeout
 
-        var successAlertButton = p.findElement(protractor.By.css(".btn-success"));
-        var useTimeout = p.findElement(protractor.By.css(".useTimeout"));
+        var successAlertButton = element(by.css(".btn-success"));
+        var useTimeout = element(by.css(".useTimeout"));
 
         p.ignoreSynchronization = true;
-        p.actions().mouseMove(useTimeout).click().perform();
-        p.actions().mouseMove(successAlertButton).click().perform();
+        useTimeout.click();
+        element(by.model('timeout')).sendKeys("100");
+        successAlertButton.click();
         // wait
+
         p.sleep(200);
 
-        p.findElements(protractor.By.css(".alert-success")).then(function(items) {
+        element.all(by.css(".pnd-alert-success")).then(function(items) {
             expect(items.length).toBe(1);
         }, function(err) {
             expect(err).toBeUndefined();
         });
 
+        p.sleep(1000);
 
         p.ignoreSynchronization = false;
-        p.findElements(protractor.By.css(".alert-success")).then(function(items) {
+        element.all(by.css(".pnd-alert-success")).then(function(items) {
             expect(items.length).toBe(0);
         }, function(err) {
             expect(err).toBeUndefined();
