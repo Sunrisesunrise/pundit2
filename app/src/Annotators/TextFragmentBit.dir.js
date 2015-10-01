@@ -65,7 +65,7 @@ angular.module('Pundit2.Annotators')
                         annotations: annotations,
                         link: link
                     };
-                    FragmentPopover.show(evt.pageX, evt.pageY, data);
+                    FragmentPopover.show(evt.pageX, evt.pageY + 7, data);
 
                     evt.stopImmediatePropagation();
                     return false;

@@ -17,7 +17,8 @@ angular.module('Pundit2.FragmentPopover')
         for (var annId in data.annotations) {
             var ann = data.annotations[annId];
             options.scopeData.annotations.push({
-                id: annId
+                id: annId,
+                entities: ann.entities
             });
         }
         if (typeof data.link !== 'undefined') {

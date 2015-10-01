@@ -4,7 +4,9 @@
     <div class="popover-content-wrapper">
         <ul class="annotations-list">
             <li ng-repeat="annotation in annotations"
-                ng-click="showAnnotation(annotation)">
+                ng-click="showAnnotation(annotation)"
+                ng-mouseover="mouseenter(annotation)" 
+                ng-mouseleave="mouseleave()">
                 {{annotation.id}}
             </li>
         </ul>
