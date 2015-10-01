@@ -33,7 +33,7 @@
     height: 100%;
     overflow: hidden;
 
-     input[type="text"].form-control {
+     input[type="text"].form-control, select.form-control, textarea.form-control {
         color: @color-text-light;
     }
 
@@ -143,6 +143,16 @@ vertical draggable bar */
     height: 100%;
     background-color: #fff;
     border-top: 4px solid @gray-light;
+
+    .dropdown-menu {
+        > li > a {
+            &:hover,
+            &:focus,
+            &:active {
+                color: @color-dropdown-text !important;
+            }
+        }
+    }
 }
 
 .pnd-dashboard-panel-collapsed-content {

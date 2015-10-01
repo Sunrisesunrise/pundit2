@@ -27,19 +27,24 @@
         box-shadow: none;
         background-color: transparent !important;
         background-image: none !important;
+        font-size: inherit;
         color: inherit !important;
         text-shadow: none;
         vertical-align: baseline !important;
         overflow: visible;
 
         &:hover,
-        &:focus {
+        &:focus,
+        &:active {
             background-color: transparent !important;
             background-image: none !important;
             border: 0 !important;
             text-shadow: none !important;
             box-shadow: none !important;
+            -webkit-transform: none;
+            transform: none;
         }
+
     }
 
     table {
@@ -57,11 +62,13 @@
 
                 &:first-child {
                     th {
-                        //padding-top: 6px; //TO FIX
-                        padding-bottom: 15px;
 
                         &:first-child, &:last-child {
-                            padding-bottom: 10px;
+                            padding-bottom: 5px;
+                        }
+
+                        .text-strong {
+                            padding: 0 !important;
                         }
                     }
                 }
@@ -76,7 +83,7 @@
                     position: relative;
                     width: auto;
                     height: 30px;
-                    padding-top: 10px;
+                    padding-top: 5px;
                     border-right: 1px solid @color-border-light;
                     border-bottom: 1px solid @color-border-light;
                     vertical-align: middle;
@@ -115,6 +122,7 @@
             padding: 0;
             border: none;
             text-align: center;
+            color: @color-text;
 
             &:hover,
             &:focus,
@@ -129,10 +137,12 @@
             border-left: 1px solid @color-border-light;
 
             span {
+                display: inline;
                 width: auto;
                 height: auto;
                 margin: 0;
                 padding: 0;
+                float: none;
                 line-height: 1.5;
             }
         }

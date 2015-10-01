@@ -103,6 +103,13 @@ ul.pnd-tab-header {
     }
 }
 
+.tab-pane {
+    .list-group {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+}
+
 /* ------------------------------------ *\
    #VERTICAL-TABS
 \* ------------------------------------ */
@@ -137,14 +144,14 @@ ul.pnd-tab-header {
             padding: 5px 8px;
             position: relative;
             background-color: @gray-lighter;
-            color: @gray;
+            color: @gray !important; /* For css overwritings */
             border-bottom: 1px solid #fff;
 
             &:hover, &:focus {
                 background-color: darken(@gray-lighter, 3%);
                 border-bottom: 1px solid #fff;
                 color: @gray-darker;
-                text-decoration: none;
+                text-decoration: none !important; /* For css overwritings */
 
                 .badge {
                     background-color: lighten(@gray, 20%);
