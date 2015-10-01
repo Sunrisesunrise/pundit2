@@ -1,6 +1,6 @@
 angular.module('Pundit2.Core')
 
-.service('PndPopover', function (BaseComponent, EventDispatcher, $rootScope, $popover, $document, $q, $window) {
+.service('PndPopover', function (BaseComponent, EventDispatcher, $rootScope, $popover, $document, $q, $window, $timeout) {
     var pndPopover = new BaseComponent('PndPopover');
 
     var initPopoverOptions = {
@@ -24,7 +24,9 @@ angular.module('Pundit2.Core')
         scroll: {
             top: undefined,
             left: undefined
-        }
+        },
+        lockShow: false,
+        lockShowRemoveTimeout: null
     };
 
     var eventHandler = null;
@@ -161,6 +163,15 @@ angular.module('Pundit2.Core')
         return true;
     };
 
+    var startLockShowRemoveTimeout = function() {
+        if (state.lockShowRemoveTimeout === null) {
+            state.lockShowRemoveTimeout = $timeout(function(){
+                state.lockShow = false;
+                state.lockShowRemoveTimeout = null;
+            }, 200);
+        }
+    };
+
     var hide = function () {
         // TODO: REMOVE THIS LINE !!!
         angular.element('.pnd-range-boundary').remove();
@@ -190,6 +201,14 @@ angular.module('Pundit2.Core')
     };
 
     pndPopover.show = function (x, y, options, data) {
+        if (state.lockShow) {
+            startLockShowRemoveTimeout();
+            return false;
+        }
+
+        state.lockShow = true;
+        startLockShowRemoveTimeout();
+
         if (state.popover !== null) {
             hide();
         }

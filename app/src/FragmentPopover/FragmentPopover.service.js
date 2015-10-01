@@ -31,11 +31,13 @@ angular.module('Pundit2.FragmentPopover')
         }
 
         var promise = PndPopover.show(x, y, options, data);
-        promise.then(function() {
-            //PndPopover.getState().selection.removeAllRanges();
-        }, function() {
-            console.log(arguments);
-        });
+        if (promise !== false) {
+            promise.then(function() {
+                //PndPopover.getState().selection.removeAllRanges();
+            }, function() {
+                console.log(arguments);
+            });
+        }
         return promise;
     };
 
