@@ -16,8 +16,9 @@
     overflow: hidden;
     z-index: @zindex-pnd-dashboard;
     background-color: @gray-light;
+    &:extend(.clearfix all);
 
-    .nav {
+    .pnd-inner-nav { //also on .nav
         float: initial;
     }
 }
@@ -32,7 +33,7 @@
     height: 100%;
     overflow: hidden;
 
-     .form-control.input[type="text"] {
+     input[type="text"].form-control {
         color: @color-text-light;
     }
 
@@ -61,8 +62,15 @@ vertical draggable bar */
     height: 100%;
 }
 
-.pnd-dashboard-panel-last .nav-tabs {
+.pnd-dashboard-panel-last .pnd-tab-header { //.pnd-dashboard-panel-last .nav-tabs
     margin-right: 0;
+}
+
+/* For overwritings on preview page links */
+
+.pnd-annotation-preview-item-container ul a:hover {
+    color: @color-text-link-hover !important; /* For css overwritings */
+    text-decoration: underline !important; /* For css overwritings */
 }
 
 /* ------------------------------------ *\
@@ -72,14 +80,17 @@ vertical draggable bar */
 .pnd-dashboard-panel {
 
     button.pnd-btn-dashboard {
+        width: 20px; /* This is modified below for not-last panels */
+        padding-bottom: 0;
         position: absolute;
         z-index: 1;
         right: 0; /* This is modified below for not-last panels */
-        width: 20px; /* This is modified below for not-last panels */
+
 
         &.pnd-btn-xs {
             border: 0;
             padding-top: 2px;
+            //padding-bottom: 0;
             background-color: #fff;
             text-shadow: 0 1px 0 #fff;
 

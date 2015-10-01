@@ -86,6 +86,10 @@
             color: @brand-success;
             cursor: pointer;
         }
+
+        & + .pnd-btn-xs {
+            padding: 5px;
+        }
     }
 
     /* Icon to activate the options dropdown with ordering and other stuff */
@@ -95,7 +99,7 @@
         // cannot be relative to .pnd-panel-tab-content-header since there are some overflow
         // problems if we assign position: relative to that element
         top: 43px;
-        right: 12px;
+        right: 14px;
 
         &.pnd-btn:hover,
         &.pnd-btn:focus {
@@ -115,7 +119,7 @@
 .pnd-panel-tab-content {
 
     /* These are the second level tabs, under the search field */
-    .nav-tabs {
+    .pnd-tab-header { //.nav-tabs
         margin-bottom: 0;
         margin-right: 0;
 
@@ -130,14 +134,14 @@
                 background-color: #fff;
                 border: 0;
                 border-top: 2px solid transparent;
-                border-bottom: 1px solid @color-border-normal;
+                //border-bottom: 1px solid @color-border-normal;
 
                 color: @nav-tabs-active-link-hover-color;
                 line-height: @line-height-base;
 
                 &:hover {
                     background-color: transparent;
-                    border-bottom: 1px solid @color-border-normal;
+                    //border-bottom: 1px solid @color-border-normal;
 
                     color: #000;
                     cursor: pointer;
@@ -180,10 +184,16 @@
 .pnd-panel-tab-content-content {
     margin: 0;
 
-    &.pnd-inner {
+    .pnd-tab-header {
+
         .show-tabs {
             margin-right: 7px;
         }
+    }
+
+    .list-group {
+        -webkit-box-shadow: none;
+        box-shadow: none;
     }
 }
 

@@ -241,7 +241,7 @@ angular.module('Pundit2.Dashboard')
     };
 
     // Add base class
-    $element.addClass('tabs');
+    // $element.addClass('tabs');
 
     $scope.active = $scope.activePane = 0;
 

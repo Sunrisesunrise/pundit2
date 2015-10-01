@@ -27,7 +27,7 @@
 }
 
 html, body, div, span, iframe,
-h1, h2, h3, h4, h5, h6, p, img, strong,
+h1, h2, h3, h4, h5, h6, p, a, img, strong,
 b, i, ul, li, form, table, table thead, table tbody, table tr, table tr td, table tr th, nav {
     margin: 0;
     padding: 0;
@@ -86,6 +86,15 @@ input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
     margin: 0;
     padding: 4px 5px;
     border-radius: 0;
+
+    &:hover {
+        border-color: @color-border-normal;
+    }
+    
+    &:focus,
+    &:active {
+        border-color: @input-border-focus;
+    }
 }
 
 select, input[type="date"], input[type="datetime"], 
@@ -113,10 +122,9 @@ input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
 
 a {
     border-bottom: none;
-    font-family: @font;
     color: @color-text-link;
     font-weight: normal;
-
+    font-family: @font !important; /* Consider if this is to declare elsewhere */
     &:hover {
     border-bottom: none;
     

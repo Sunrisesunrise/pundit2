@@ -1,6 +1,6 @@
 <div class="tabbable tabs-left"> <!-- tabs left -->
 
-    <ul class="nav nav-tabs pnd-vertical-tabs">
+    <ul class="pnd-vertical-tabs">
         <li ng-repeat="pane in contentTabs" ng-class="{active: $index == active}">
             <a data-toggle="tab" ng-click="setActive($index, $event)" data-index="{{$index}}" >
                 <span class="badge pull-right" ng-show="!pane.isLoading && pane.items.length>0 && elemToSearch!==''">{{pane.items.length}}</span>
@@ -10,7 +10,7 @@
         </li>
     </ul>
     <div>
-        <div class="pnd-vertical-tab-content tab-content">
+        <div class="pnd-vertical-tab-content">
         	<div ng-repeat="pane in contentTabs" class="tab-pane pnd-vertical-tab-list-content" ng-class="[$index == active ? 'active' : '']">
 		        <div class="kee-server-messages" ng-if="!contentTabs[$index].serverError">
 		        	<!-- messages 1 -->

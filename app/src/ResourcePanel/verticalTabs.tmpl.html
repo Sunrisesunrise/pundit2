@@ -1,6 +1,6 @@
 <!-- List -->
 <ul
-    class="nav nav-tabs pnd-vertical-tabs">
+    class="pnd-vertical-tabs">
     <li
         ng-repeat="pane in contentTabs"
         ng-class="{active: $index == active}">
@@ -27,7 +27,7 @@
 </ul>
 
 <div>
-    <div class="pnd-vertical-tab-content tab-content">
+    <div class="pnd-vertical-tab-content">
         <div 
             ng-repeat="pane in contentTabs" 
             class="tab-pane pnd-vertical-tab-list-content" 

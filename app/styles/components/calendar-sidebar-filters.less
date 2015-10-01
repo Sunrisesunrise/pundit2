@@ -12,15 +12,24 @@
     margin: 0;
     padding: 0;
 
+    /* For overwritings */
+    input[type=button], input[type=reset], input[type=submit], button {
+        min-width: auto;
+    }
+
     .pnd-btn, .btn {
+        width: auto;
         margin: 0 auto;
         padding: 5px !important; /* For css overwritings */
+        float: none;
         //border: 1px solid @gray-lighter;
         border: 0 !important;
+        box-shadow: none;
         background-color: transparent !important;
         background-image: none !important;
         color: inherit !important;
         text-shadow: none;
+        vertical-align: baseline !important;
         overflow: visible;
 
         &:hover,
@@ -37,6 +46,7 @@
         //margin: 6px;
         width: @calendar-popover-width - 12; /* Minus padding */
         vertical-align: middle;
+        font-size: inherit;
 
         thead {
 
@@ -45,19 +55,38 @@
 
             tr {
 
+                &:first-child {
+                    th {
+                        //padding-top: 6px; //TO FIX
+                        padding-bottom: 15px;
+
+                        &:first-child, &:last-child {
+                            padding-bottom: 10px;
+                        }
+                    }
+                }
+
+                &:last-child {
+                    th {
+                        padding-top: 5px;
+                    }
+                }
+
                 th {
                     position: relative;
                     width: auto;
                     height: 30px;
+                    padding-top: 10px;
                     border-right: 1px solid @color-border-light;
                     border-bottom: 1px solid @color-border-light;
+                    vertical-align: middle;
 
                     .btn {
-                        height: 20px;
-                        line-height: 20px;
+                        height: 30px;
+                        line-height: 30px;
 
                         strong {
-                            line-height: 20px;
+                            line-height: 30px;
                         }
 
                     }
@@ -71,12 +100,6 @@
                                 font-size: 10px;
                             }
                         }
-                    }
-                }
-
-                &:last-child {
-                    th {
-                        padding-top: 5px;
                     }
                 }
             }

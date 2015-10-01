@@ -61,7 +61,7 @@
     fieldset[disabled] & {
         background: lighten(@color-button-bg, 20);
         cursor: @cursor-disabled;
-        color: fade(@color-button-text-dark, 50%) !important; // TO FIX
+        color: fade(@color-button-text-dark, 50%) !important; // for ovewritings on .disabled class
         pointer-events: none; // Future-proof disabling of clicks
     }
 
@@ -109,7 +109,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%) !important; // TO FIX
+        color: fade(@color-button-text-light, 60%) !important; // for ovewritings on .disabled class
         text-shadow: none;
         .vertical-gradient(lighten(@color-button-bg-cta, 20), @button-gradient-level);
     }
@@ -134,7 +134,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 20%) !important; // TO FIX
+        color: fade(@color-button-text-light, 20%) !important; // for ovewritings on .disabled class
         text-shadow: none;
         .vertical-gradient(darken(@color-button-bg-dark, 7), @button-gradient-level);
     }
@@ -162,7 +162,7 @@
     fieldset[disabled] & {
         background-color: transparent;
         background-image: none;
-        color: fade(@color-text, 60%) !important; // TO FIX
+        color: fade(@color-text, 60%) !important; // for ovewritings on .disabled class
         text-shadow: none;
     }
 }
@@ -187,7 +187,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%) !important; // TO FIX
+        color: fade(@color-button-text-light, 60%) !important; // for ovewritings on .disabled class
         text-shadow: none;
         .vertical-gradient(lighten(@subject-color, 20), @button-gradient-level);
     }
@@ -209,7 +209,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%) !important; // TO FIX
+        color: fade(@color-button-text-light, 60%) !important; // for ovewritings on .disabled class
         text-shadow: none;
         .vertical-gradient(lighten(@predicate-color, 20), @button-gradient-level);
     }
@@ -231,7 +231,7 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%) !important; // TO FIX
+        color: fade(@color-button-text-light, 60%) !important; // for ovewritings on .disabled class
         text-shadow: none;
         .vertical-gradient(lighten(@object-color, 20), @button-gradient-level);
     }

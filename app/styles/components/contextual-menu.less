@@ -14,8 +14,9 @@
     z-index: @zindex-pnd-contextual-menu;
     background-image: none;
     background-color: rgb(255, 255, 255);
-    border: 1px solid  @color-border-normal;
-    border-radius: @dropdown-round-corners;
+    border: 1px solid  @color-border-normal !important; /* For css overwritings */
+    border-radius: @dropdown-round-corners !important; /* For css overwritings */
+    box-shadow: 0 2px 2px rgba(0, 0, 0, .1) !important; /* For css overwritings */
     font-size: 12px;
 
     .divider {
@@ -97,7 +98,10 @@
 
 .bottom-left,
 .bottom,
-.bottom-right {
+.bottom-right,
+.top,
+.top-left,
+.top-right {
     height: auto;
 }
 

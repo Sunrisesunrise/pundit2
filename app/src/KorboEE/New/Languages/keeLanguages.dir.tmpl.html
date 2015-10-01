@@ -1,6 +1,6 @@
 <div class="tabbable tabs-left"> <!-- tabs left -->
 
-    <ul class="nav nav-tabs pnd-vertical-tabs">
+    <ul class="pnd-vertical-tabs">
         <li ng-repeat="pane in panes" ng-class="{active: $index == active, 'kee-error' : panes[$index].hasError}" ng-show="pane.isVisible">
             <a ng-show="!panes[$index].hasError" data-toggle="tab" ng-click="setActive($index, $event)" data-index="{{$index}}" ng-bind-html="pane.title"></a>
             <a ng-show="panes[$index].hasError" data-toggle="tab" ng-click="setActive($index, $event)" data-index="{{$index}}" >
@@ -13,7 +13,7 @@
     </ul>
     <!-- tab content-->
     <div>
-        <div class="pnd-vertical-tab-content tab-content">
+        <div class="pnd-vertical-tab-content pnd-tab-content">
             <div ng-repeat="pane in tabs" class="tab-pane pnd-vertical-tab-list-content" ng-class="[$index == active ? 'active' : '']">
                 <!-- entity title -->
                 <div class="kee-title">

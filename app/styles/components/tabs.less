@@ -7,175 +7,111 @@
 // TODO and Important: the style for tabs is dispersed in the code, lets move it here!
 
 /* ------------------------------------ *\
-   #TABS
+   #TABS HEADER
 \* ------------------------------------ */
 
-.tabs {
-    margin: 0 !important; /* For css overwritings */
-    padding: 0;
-    position: static;
-    overflow: visible;
-    border: none;
-    font-family: inherit;
-    color: @color-text;
+ul.pnd-tab-header {
+    display: block;
+    //width: auto;
+    //height: auto;
+    margin: 0; // 0 0 10px 0;
+    background: @gray-light;
 
-    ul {
+    /* Temp fix for tabs list*/
+    height: 27px;
+    overflow-y: hidden;
+    overflow-x: visible;
+
+    //border-bottom: 1px solid #999;
+
+    &:extend(.clearfix all);
+
+    > li {
+        // Actual tabs (as links)
         display: block;
-        width: auto;
-        height: auto;
-        white-space: normal;
+        margin-top: 0;
+        float: left;
+        position: relative;
+
+        > a {
+            display: block;
+            height: auto;
+            min-height: auto;
+            margin: 0;
+            padding: 6px 8px;
+            position: relative;
+            background-color: @gray-light;
+            border-radius: @tab-border-radius @tab-border-radius 0 0;
+            color: @nav-tabs-active-link-hover-color; /* For css overwritings - !important */
+            line-height: @line-height-base;
+            overflow: visible;
+
+            &:hover,
+            &:focus,
+            &:active {
+                border-color: transparent;
+                background-color: @tab-bg-hover-color;
+                color: @nav-tabs-active-link-hover-color !important;
+                text-decoration: none !important; /* For css overwritings - !important */
+                cursor: pointer;
+            }
+        }
+
+        // Active state, and its :hover to override normal :hover
+        &.active > a {
+            &,
+            &:hover,
+            &:focus {
+                margin: 0;
+                background-color: @nav-tabs-active-link-hover-bg;
+                border-bottom-color: transparent;
+                color: @nav-tabs-active-link-hover-color !important;
+                text-decoration: none !important;
+                cursor: pointer;
+                // box-shadow: 0 -1px 2px rgba(0,0,0,.18);
+            }
+        }
     }
 
-    li {
-        display: inline-block;
-        height: auto;
-        margin-right: 0;
-        margin-left: 0;
-        border-radius: 0;
-        line-height: inherit;
+    // Show tabs button
+    .show-tabs {
 
         a { 
-            display: inline-block;
-            float: none;
-            position: static;
-            top: 0; /* In case of position overwriting */
-            background: none;
-            border: none;
-            border-radius: 0;
-            font-size: inherit;
-            text-align: left;
-            transition: initial;
-        }
+            padding: 7px 10px 5px;
 
-        strong {
-            display: inline;
-            padding: 0;
-            float: none;
-            background: none;
-            background-image: none;
-        }
-    }
-
-    .nav-tabs > li {
-        margin-bottom: -1px !important; /* For css overwritings */
-    }
-
-    &.pnd-dashboard-panel-content > .pnd-tab-header {
-        padding-top: 3px;
-    }
-
-    .pnd-panel-tab-content {
-
-        .nav-tabs li {
-            float: left;
-
-            a:hover {
-                text-decoration: none !important;
+            .pnd-icon {
+                display: inline-block;
+                padding: 0;
+                margin: 0;
+                font-size: 14px;
+                line-height: normal;
             }
         }
 
-        .pnd-tab-content ul {
-            overflow: visible;
-        }
-    }
-
-    .tab-content {
-        display: block;
-        clear: none; /* CSS conflicts fix */
-
-        .tab-pane {
-            display: none;
-            margin-bottom: 30px;
+        &.active a {
+            background-color: @nav-tabs-active-link-hover-bg;
         }
 
-        .active {
-            display: block;
-        }
-    }
-
-    .pnd-panel-tab-content-content {
-
-        ul.list-group {
-            overflow: visible;
-            -webkit-box-shadow: none; /* For css overwritings  - VENDOR PREFIX */
-            box-shadow: none;
-
-            &.pnd-hidden-tabs {
-
-                .show-tabs {
-                    a {
-                        padding-top: 5px;
-                        padding-bottom: 5px;
-
-                        .pnd-icon {
-                            margin: 0;
-                            padding-bottom: 3px;
-                        }
-                    }
-
-                    &.active a {
-                        padding-top: 3px;
-                        padding-bottom: 5px;
-
-                        .pnd-icon {
-                            margin-top: 2px;
-                        }
-                    }
-                }
-            }
-        }
-
-        li {
-            display: block;
-            float: none;
+        /* For css overwritings */
+        &.pull-right {
+            top: initial;
         }
     }
 
     .dropdown-menu {
-
-        li {
-            display: block;
-            width: 100%;
-
-            a {
-                display: block;
-                width: 100%;
-            }
-        }
+        margin: 0;
     }
-
-    .nav-tabs .dropdown-menu {
-
-        li {
-            float: none;
-        }
-    }
-
-    > div {
-        width: auto;
-        padding: 0;
-    }
-}
-
-.show-tabs.pull-right {
-    top: initial;
-}
-
-/* For overwritings on preview page links */
-
-.pnd-annotation-preview-item-container ul a:hover {
-    color: @color-text-link-hover !important; /* For css overwritings */
-    text-decoration: underline !important; /* For css overwritings */
 }
 
 /* ------------------------------------ *\
    #VERTICAL-TABS
 \* ------------------------------------ */
 
-.tabs-left .nav-tabs {
+.tabs-left .pnd-vertical-tabs { //nav-tabs
     float: left;
     border-bottom: 0;
     background-color: lighten(@gray-lighter, 2);
+    &:extend(.clearfix all);
 
     /* Single item */
     & > li {
@@ -194,17 +130,21 @@
         }
 
         & > a {
+            display: block;
             min-width: 150px;
             margin-right: 0;
             margin-bottom: 1px;
+            padding: 5px 8px;
+            position: relative;
             background-color: @gray-lighter;
             color: @gray;
             border-bottom: 1px solid #fff;
 
             &:hover, &:focus {
-                color: @gray-darker;
                 background-color: darken(@gray-lighter, 3%);
                 border-bottom: 1px solid #fff;
+                color: @gray-darker;
+                text-decoration: none;
 
                 .badge {
                     background-color: lighten(@gray, 20%);
@@ -238,12 +178,13 @@
     }
 }
 
-/* ------------------------------------ *\
-   #TEMP FIX FOR TABS LIST
-\* ------------------------------------ */
+.pnd-vertical-tab-content {
 
-.pnd-tab-header {
-    height: 27px;
-    overflow-y: hidden;
-    overflow-x: visible;
+    > .tab-pane {
+        display: none;
+    }
+
+    > .active {
+        display: block;
+    }
 }
