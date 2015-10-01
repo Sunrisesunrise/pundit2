@@ -12,9 +12,16 @@
     margin: 0;
     padding: 0;
 
+    /* For overwritings */
+    input[type=button], input[type=reset], input[type=submit], button {
+        min-width: auto;
+    }
+
     .pnd-btn, .btn {
+        width: auto;
         margin: 0 auto;
         padding: 5px !important; /* For css overwritings */
+        float: none;
         //border: 1px solid @gray-lighter;
         border: 0 !important;
         box-shadow: none;
