@@ -1,6 +1,6 @@
 angular.module('Pundit2.Annotators')
 
-.directive('textFragmentBit', function(TextFragmentAnnotator, $injector, Config) {
+.directive('textFragmentBit', function(TextFragmentAnnotator, $injector, Config, $document, $window) {
     return {
         restrict: 'A',
         scope: {
@@ -41,6 +41,7 @@ angular.module('Pundit2.Annotators')
                     FragmentPopover = $injector.get('FragmentPopover');
 
                 element.on('click', function(evt) {
+                    console.log(evt);
                     var fragments = element.attr('fragments'),
                         annotations = {};
                     if (typeof fragments !== 'undefined') {
@@ -65,7 +66,23 @@ angular.module('Pundit2.Annotators')
                         annotations: annotations,
                         link: link
                     };
-                    FragmentPopover.show(evt.pageX, evt.pageY + 7, data);
+
+                    var y = evt.pageY + 7;
+                    if (typeof $document[0].caretRangeFromPoint !== 'undefined') {
+                        var range = $document[0].caretRangeFromPoint(evt.clientX, evt.clientY);
+                        if (range !== null) {
+                            var t = angular.element('<div class="pnd-temp-click-fr" style="display: inline-flex;overflow-x: hidden;width: 0px;">&nbsp;</div>');
+                            range.insertNode(t[0]);
+                            y = $window.scrollY + t[0].getClientRects()[0].bottom;
+                            var tParent = t.parent();
+                            t.remove();
+                            if (tParent.length) {
+                                tParent[0].normalize();
+                            }
+                        }
+                    }
+
+                    FragmentPopover.show(evt.pageX, y, data);
 
                     evt.stopImmediatePropagation();
                     return false;
