@@ -293,6 +293,14 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
     }
 });
 
+chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
+    window.clearInterval(state.loading[tabId]);
+    delete state.loading[tabId];
+    delete state.injections[tabId];
+    delete state.stopLoading[tabId];
+    delete state.tabsOnOff[tabId];
+});
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     var tabId;
     switch (request.action) {
