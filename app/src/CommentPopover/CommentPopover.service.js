@@ -104,8 +104,12 @@ angular.module('Pundit2.CommentPopover')
             });
             resizeData.lastSelectionUsed = state.selectionStart;
             popoverRect = changePopoverPlacement(state, 'top');
+            var wrongArrowFix = false;
+            if (state.popover.$element.find('.arrow').css('left').indexOf('-') !== -1) {
+                wrongArrowFix = true;
+            }
             var pageVisibleTop = $window.scrollY;
-            if ($window.scrollY + popoverRect.top < pageVisibleTop) {
+            if (wrongArrowFix || $window.scrollY + popoverRect.top < pageVisibleTop) {
                 state.anchor.css({
                     top: (state.selectionStart.offset.top + state.selectionStart.height / 2)+'px',
                     left: state.selectionStart.offset.left+'px'
