@@ -60,7 +60,8 @@
     }
 
     .option-container{
-        display: none;
+        display: block;
+        visibility: hidden;
         height:auto;
         max-height: 170px;
         width: 100%;
@@ -75,7 +76,7 @@
         z-index: 400;
 
         &.expanded{
-            display: block;
+            visibility: visible;
         }
         .option{
             height:100%;

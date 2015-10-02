@@ -1,12 +1,13 @@
 angular.module('Pundit2.Core')
 
-.directive('pndSelect', function($timeout, $document) {
+.directive('pndSelect', function($timeout, $document, $window) {
     return {
         restrict: 'E',
         replace: true,
         scope: {
             optionList: '=options',
             optionSelectedValue: '=selectedValue',
+            optionsVisible: '=optionsVisible',
             expanded: '=expanded',
             deferredAction: '=deferredAction',
             labelAction: '=labelAction',
@@ -17,9 +18,16 @@ angular.module('Pundit2.Core')
         link: function(scope, element) {
             var inputElement = element.find('.creation-input').eq(0),
                 fncAction,
-                hasMouseDownHandler = false;
+                hasMouseDownHandler = false,
+                optionsContainer= element.find('.option-container');
 
             scope.optionAction = false;
+            scope.moveTop = false;
+
+            //if (typeof scope.optionsVisible === 'undefined') {
+            //    scope.optionsVisible = 4;
+            //}
+            //scope.optionsContainerHeight = element.height() * scope.optionsVisible;
 
             // Be sure that the optionList is an array and there is at least one element
             if (angular.isArray(scope.optionList) === false) {
@@ -97,6 +105,9 @@ angular.module('Pundit2.Core')
                     $document.on('mousedown', mouseHandler);
                     hasMouseDownHandler = true;
                 }
+                var h = optionsContainer.height(),
+                    pageVisibleTop = $window.scrollY;
+                scope.moveTop = ($window.scrollY + h) > pageVisibleTop;
             };
 
             scope.collapse = function() {
