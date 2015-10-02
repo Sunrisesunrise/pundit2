@@ -93,7 +93,9 @@ body.pnd-toolbar-active {
         letter-spacing: 0;
         text-transform: none;
 
-        &:hover {
+        &:hover,
+        &:focus,
+        &:active {
             background-color: @color-toolbar-button-hover;
             text-decoration: none !important; /* For css overwritings */
         }

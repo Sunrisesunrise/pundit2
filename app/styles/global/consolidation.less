@@ -92,7 +92,7 @@
 
 /* For css font overwritings on icons */
 .pnd-wrp [class*="icon-"] {
-    font-family: 'pundit-font';
+    font-family: 'pundit-font' !important;
 }
 
 /* The small icon next to each text fragment */
@@ -104,7 +104,7 @@ span.pnd-text-fragment-icon {
     margin-bottom: -0.18em;
     font-family: 'pundit-font' !important; /* For css font overwritings on icons */
     color: @text-fragment-icon-color; //  @brand-warning;
-    font-size: 1.18em;
+    font-size: 1.18em !important; /* For css overwritings */
     vertical-align: top;
     text-decoration: none;
     text-shadow: none;
@@ -118,11 +118,16 @@ span.pnd-text-fragment-icon {
 
     &.pnd-icon-bookmark {
         color: @text-fragment-icon-color;
+        font-size: 1.18em !important; /* For css overwritings */
 
         &:hover {
             color: @text-fragment-icon-color-hover; // darken(@brand-success, 12%);
             text-decoration: none;
         }
+    }
+
+    &.pnd-icon-tag {
+        font-size: 1.18em !important; /* For css overwritings */
     }
 }
 
