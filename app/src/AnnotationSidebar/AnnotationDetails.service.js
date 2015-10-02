@@ -62,7 +62,7 @@ angular.module('Pundit2.AnnotationSidebar')
     debug: false
 })
 
-.service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $modal, $injector, $q,
+.service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $window, $modal, $injector, $q,
     BaseComponent, Config, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, ModelHelper, TemplatesExchange,
     Consolidation, ContextualMenu, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
     ImageAnnotator, AnnotationsCommunication, NotebookExchange, TypesHelper, Analytics, NameSpace) {
@@ -630,8 +630,14 @@ angular.module('Pundit2.AnnotationSidebar')
             annotationDetails.addAnnotationReference(targetAnnotation, true);
 
             $timeout(function() {
-                var currentElement = angular.element('#' + annotationId);
-                var dashboardHeight = clientMode === 'pro' ? Dashboard.getContainerHeight() : 0;
+                var currentElement = angular.element('#' + annotationId),
+                    currentElementRect = currentElement[0].getClientRects()[0],
+                    dashboardHeight = clientMode === 'pro' ? Dashboard.getContainerHeight() : 0;
+
+                if (currentElementRect.top >= 0 &&
+                    currentElementRect.bottom <= $window.innerHeight) {
+                    return;
+                }
                 if (currentElement.length > 0) {
                     angular.element('body').animate({
                         scrollTop: currentElement.offset().top - dashboardHeight - 60
