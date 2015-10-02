@@ -229,8 +229,8 @@ angular.module('Pundit2.Core')
             if (data.loginStatus === 0) {
                 isUserLogged = false;
                 EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
-                $cookies.remove('pundit.User');
-                $cookies.remove('pundit.Info');
+                $cookies.remove('pundit.User', {path: '/'});
+                $cookies.remove('pundit.Info', {path: '/'});
                 promise.resolve(false);
             } else {
                 // user is logged in
@@ -683,6 +683,12 @@ angular.module('Pundit2.Core')
             return;
         }
         myPundit.popoverLogin('editProfile');
+    };
+
+    myPundit.checkUserCookie = function() {
+        // TODO: expand this check
+        $cookies.remove('pundit.User', {path: '/'});
+        $cookies.remove('pundit.Info', {path: '/'});
     };
 
     var clientHidden = false;
