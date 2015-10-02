@@ -62,8 +62,12 @@ angular.module('Pundit2.CommentPopover')
             popoverRect = state.popover.$element[0].getClientRects()[0];
 
         function checkFromBottom(topInfoWhen) {
-            var pageVisibleBottom = $window.innerHeight + $window.scrollY;
-            if ($window.scrollY + popoverRect.bottom > pageVisibleBottom) {
+            var pageVisibleBottom = $window.innerHeight + $window.scrollY,
+                wrongArrowFix = false;
+            if (state.popover.$element.find('.arrow').css('left').indexOf('-') !== -1) {
+                wrongArrowFix = true;
+            }
+            if (wrongArrowFix || $window.scrollY + popoverRect.bottom > pageVisibleBottom) {
                 if (typeof topInfoWhen !== 'undefined' && typeof topInfoWhen.right !== 'undefined') {
                     state.anchor.css('top', topInfoWhen.right+'px');
                 }
@@ -137,13 +141,15 @@ angular.module('Pundit2.CommentPopover')
             }
         };
         var promise = PndPopover.show(x, y, options, {item: item, fragmentId: fragmentId});
-        promise.then(function() {
-            changePopoverPosition(x, y);
-            PndPopover.getState().selection.removeAllRanges();
-            angular.element($window).on('resize', resizeCallback);
-        }, function() {
-            commentPopover.log(arguments);
-        });
+        if (promise !== false) {
+            promise.then(function() {
+                changePopoverPosition(x, y);
+                PndPopover.getState().selection.removeAllRanges();
+                angular.element($window).on('resize', resizeCallback);
+            }, function() {
+                commentPopover.log(arguments);
+            });
+        }
         return promise;
     };
 

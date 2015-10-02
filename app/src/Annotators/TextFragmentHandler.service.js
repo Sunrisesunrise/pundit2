@@ -680,7 +680,7 @@ angular.module('Pundit2.Annotators')
 
         // TODO: generalize item in {data}
         var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType, currentFr);
-        if (typeof promise !== 'undefined') {
+        if (typeof promise !== 'undefined' && promise !== false) {
             promise.then(function() {
                 textFragmentHandler.log('textFragmentHandler handlerMenu.show promise resolved');
             });
