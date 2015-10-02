@@ -711,6 +711,7 @@ angular.module('Pundit2.Annotators')
             return;
         }
 
+        $document.off('mouseup', mouseUpHandler);
         $document.on('mouseup', mouseUpHandler);
         textFragmentHandler.log('Selection started on document, waiting for mouse up.');
     } // mouseDownHandler()
