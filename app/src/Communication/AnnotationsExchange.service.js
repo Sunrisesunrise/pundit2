@@ -118,7 +118,9 @@ angular.module('Pundit2.Communication')
             var ann = annListById[id];
             for (var uri in ann.items) {
                 if (typeof annByItemUri[uri] !== 'undefined') {
-                    annByItemUri[uri] = annByItemUri[uri].filter(function(e) {return e.id !== id;});
+                    annByItemUri[uri] = annByItemUri[uri].filter(function(e) {
+                        return e.id !== id;
+                    });
                     if (annByItemUri[uri].length === 0) {
                         delete annByItemUri[uri];
                     }
@@ -132,11 +134,12 @@ angular.module('Pundit2.Communication')
         }
     };
 
-    annotationExchange.updateAnnotationStructureInfo = function(id) {
-        if (id in annListById) {
-            var ann = annListById[id];
-        }
-    };
+    // TODO: full structure update
+    // annotationExchange.updateAnnotationStructureInfo = function(id) {
+    //     if (id in annListById) {
+    //         var ann = annListById[id];
+    //     }
+    // };
 
     annotationExchange.getAnnotations = function() {
         return annList;

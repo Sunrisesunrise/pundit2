@@ -172,10 +172,10 @@ angular.module('Pundit2.Annotators')
             fragments,
             elemFragments = elem.attr('fragments'),
             cleanElemFragments = elemFragments.replace(fragmentId, '').split(',').filter(function(s) {
-                return s.length > 0
+                return s.length > 0;
             }).join(','),
             elemTempFragments = elem.attr('temp-fragments'),
-            cleanTempFragmentsA = [],
+            // cleanTempFragmentsA = [],
             cleanElemFragmentsA = cleanElemFragments.split(','),
             mergeWithPrev = false,
             frIntersectWithPrev = false,
@@ -186,9 +186,9 @@ angular.module('Pundit2.Annotators')
 
         if (typeof elemTempFragments !== 'undefined') {
             elemTempFragments = elemTempFragments.replace(fragmentId, '').split(',').filter(function(s) {
-                return s.length > 0
-            }).join(',')
-            elemTempFragments = elemTempFragments.length == 0 ? undefined : elemTempFragments;
+                return s.length > 0;
+            }).join(',');
+            elemTempFragments = elemTempFragments.length === 0 ? undefined : elemTempFragments;
         }
 
         // #1 TEXT<SPAN>TEXT
@@ -214,7 +214,7 @@ angular.module('Pundit2.Annotators')
                     } else {
                         // Check if prev fragments list intersects with current element fragments list purged by fragmentId
                         fragmentIntersection = fragments.split(',').filter(function(n) {
-                            return cleanElemFragmentsA.indexOf(n) !== -1
+                            return cleanElemFragmentsA.indexOf(n) !== -1;
                         });
                         frIntersectWithPrev = fragmentIntersection.length !== 0;
                     }
@@ -230,7 +230,7 @@ angular.module('Pundit2.Annotators')
                     } else {
                         // Check if next fragments list intersects with current element fragments list purged by fragmentId
                         fragmentIntersection = fragments.split(',').filter(function(n) {
-                            return cleanElemFragmentsA.indexOf(n) !== -1
+                            return cleanElemFragmentsA.indexOf(n) !== -1;
                         });
                         frIntersectWithNext = fragmentIntersection.length !== 0;
                     }
@@ -274,13 +274,13 @@ angular.module('Pundit2.Annotators')
                 if (tempFragments.length > 0) {
                     var tempObj = {};
                     tempFragments.forEach(function(e) {
-                        tempObj[e] = true
+                        tempObj[e] = true;
                     });
                     tempFragments = Object.keys(tempObj);
                     wrapNode.jElement.attr('temp-fragments', tempFragments.join(','));
                     wrapNode.jElement.addClass(XpointersHelper.options.tempWrapNodeClass);
                 }
-                elementsToRemove.forEach(function(e, i) {
+                elementsToRemove.forEach(function(e) {
                     e.remove();
                 });
                 angular.extend(mod, modObj);
@@ -367,8 +367,8 @@ angular.module('Pundit2.Annotators')
         // TODO: refactor!!
         angular.forEach(Object.keys(modifiedFragmentsId), function(fr) {
             var currentUri = fragmentById[fr].uri,
-            currentReferences = angular.element('.' + fr),
-            referencesList = [];
+                currentReferences = angular.element('.' + fr),
+                referencesList = [];
 
             currentReferences.each(function(i) {
                 referencesList.unshift(currentReferences.eq(i));

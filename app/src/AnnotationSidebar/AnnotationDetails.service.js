@@ -87,7 +87,7 @@ angular.module('Pundit2.AnnotationSidebar')
         overActiveId = '',
         highlightFragments = [];
 
-    var modalTimeoutPromise;
+    // var modalTimeoutPromise;
 
     ContextualMenu.addAction({
         type: [

@@ -659,7 +659,9 @@ module.exports = function(grunt) {
                 },
                 "predef": [
                     "waitsFor",
-                    "runs"
+                    "runs",
+                    "element",
+                    "by"
                 ]
             },
             tests: {

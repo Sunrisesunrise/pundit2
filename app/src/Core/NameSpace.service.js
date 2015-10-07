@@ -133,7 +133,7 @@ angular.module('Pundit2.Core')
         linking: _oa + 'linking',
         tagging: _oa + 'tagging',
         commenting: _oa + 'commenting'
-    }
+    };
 
     // TODO: move to Consolidation.options ??
     // Consolidation use this to know what items are consolidable

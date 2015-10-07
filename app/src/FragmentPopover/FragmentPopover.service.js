@@ -1,5 +1,6 @@
 angular.module('Pundit2.FragmentPopover')
-.service('FragmentPopover', function(BaseComponent, PndPopover, $window) {
+
+.service('FragmentPopover', function(BaseComponent, PndPopover) {
     var fragmentPopover = new BaseComponent('FragmentPopover');
 
     fragmentPopover.show = function(x, y, data) {

@@ -62,7 +62,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.fromMaxDate = new Date();
     $scope.fromToDate = new Date();
 
-    $scope.proMode = clientMode === 'pro'; 
+    $scope.proMode = clientMode === 'pro';
 
     body.css('position', 'static');
     container.css('height', body.innerHeight() + 'px');
@@ -536,7 +536,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 annotationId = e.args;
 
             annotationsQueques[eventType].push(annotationId);
-            EventDispatcher.sendEvent('AnnotationSidebar.forceUpdate');                
+            EventDispatcher.sendEvent('AnnotationSidebar.forceUpdate');
         }
     );
 
@@ -559,7 +559,7 @@ angular.module('Pundit2.AnnotationSidebar')
     EventDispatcher.addListener('TextFragmentAnnotator.updateItems', function(e) {
         var updatedItems = e.args,
             updatedAnnotations = {};
-        
+
         angular.forEach(updatedItems, function(itemUri) {
             var annList = AnnotationsExchange.getAnnotationsByItem(itemUri);
             for (var i in annList) {
@@ -571,7 +571,7 @@ angular.module('Pundit2.AnnotationSidebar')
             if (typeof $scope.annotations[annotation.id] !== 'undefined') {
                 activateFragments(annotation.items);
             }
-        })
+        });
     });
 
     angular.element($window).bind('resize', function() {
