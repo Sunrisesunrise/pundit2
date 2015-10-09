@@ -8,7 +8,7 @@ angular.module('Pundit2.Communication')
 
 .service('AnnotationsCommunication', function(BaseComponent, EventDispatcher, NameSpace, Consolidation, MyPundit, ModelHelper,
     AnnotationsExchange, Annotation, NotebookExchange, Notebook, ItemsExchange, Config, XpointersHelper, ModelHandler,
-    $http, $q, $rootScope, ANNOTATIONSCOMMUNICATIONDEFAULTS) {
+    $http, $q, $rootScope, $document, ANNOTATIONSCOMMUNICATIONDEFAULTS) {
 
     var annotationsCommunication = new BaseComponent("AnnotationsCommunication", ANNOTATIONSCOMMUNICATIONDEFAULTS);
 
@@ -40,7 +40,8 @@ angular.module('Pundit2.Communication')
             params: {
                 context: angular.toJson({
                     targets: targets,
-                    pageContext: XpointersHelper.getSafePageContext()
+                    pageContext: XpointersHelper.getSafePageContext(),
+                    pageTitle: $document[0].title || 'No title'
                 })
             },
             withCredentials: true,
@@ -126,7 +127,8 @@ angular.module('Pundit2.Communication')
         var params = {
             context: angular.toJson({
                 targets: flatTargets,
-                pageContext: XpointersHelper.getSafePageContext()
+                pageContext: XpointersHelper.getSafePageContext(),
+                pageTitle: $document[0].title || 'No title'
             })
         };
 
@@ -477,7 +479,8 @@ angular.module('Pundit2.Communication')
             var params = {
                 context: angular.toJson({
                     targets: flatTargets,
-                    pageContext: XpointersHelper.getSafePageContext()
+                    pageContext: XpointersHelper.getSafePageContext(),
+                    pageTitle: $document[0].title || 'No title'
                 })
             };
 
