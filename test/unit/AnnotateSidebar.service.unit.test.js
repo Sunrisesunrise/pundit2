@@ -140,7 +140,7 @@ describe('AnnotationSidebar service', function() {
     });
 
     it('should sidebar get annotation after consolidation-completed event', function(){
-        EventDispatcher.sendEvent('Consolidation.consolidateAll');
+        EventDispatcher.sendEvent('Pundit.forceUpdate');
         myAnnotation = AnnotationSidebar.getAllAnnotations();
         expect(Object.keys(myAnnotation).length).toEqual(1);
     });

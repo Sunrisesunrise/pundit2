@@ -1377,23 +1377,28 @@ angular.module('Pundit2.AnnotationSidebar')
         angular.element('annotation-details[id="' + annId + '"] .pnd-annotation-details-header').trigger('click');
     };
 
-    EventDispatcher.addListeners(['Consolidation.consolidateAll', 'AnnotationSidebar.forceUpdate'], function() {
-        if (Consolidation.getConsolidationRequestNumber() !== 0) {
-            annotationSidebar.log('Waiting for consolidation');
-            return;
-        }
+    EventDispatcher.addListeners(
+        [
+            'Consolidation.consolidateAll',
+            'AnnotationSidebar.forceUpdate',
+            'Pundit.forceUpdate'
+        ], function(e) {
+            if (Consolidation.getConsolidationRequestNumber() !== 0 &&
+                e.name !== 'Pundit.forceUpdate') {
+                annotationSidebar.log('Waiting for consolidation');
+                return;
+            }
+            annotationSidebar.log('Update annotations in sidebar');
 
-        annotationSidebar.log('Update annotations in sidebar');
+            var annotations = AnnotationsExchange.getAnnotations();
+            var annotationsList = AnnotationsExchange.getAnnotationsHash();
 
-        var annotations = AnnotationsExchange.getAnnotations();
-        var annotationsList = AnnotationsExchange.getAnnotationsHash();
-
-        annotationsByPosition = angular.extend([], annotations);
-        annotationsByDate = angular.extend([], annotations);
-        annotationsByDate = sortByKey(annotationsByDate, 'created');
-        state.allAnnotations = angular.extend({}, annotationsList);
-        // TODO: inizialize as first operation
-        initializeFiltersAndPositions();
+            annotationsByPosition = angular.extend([], annotations);
+            annotationsByDate = angular.extend([], annotations);
+            annotationsByDate = sortByKey(annotationsByDate, 'created');
+            state.allAnnotations = angular.extend({}, annotationsList);
+            // TODO: inizialize as first operation
+            initializeFiltersAndPositions();
     });
 
     EventDispatcher.addListener('ResizeManager.resize', function() {
