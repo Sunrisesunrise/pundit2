@@ -1,7 +1,7 @@
 angular.module('Pundit2.Client')
 
-.run(function($injector, MessageHandler) {
-    if (MessageHandler.options.active) {
+.run(function($injector, Config) {
+    if (Config.isModuleActive('Client')) {
         var messageHandler = $injector.get('MessageHandler');
         messageHandler.log('Client handler running');
     }
@@ -21,7 +21,7 @@ angular.module('Pundit2.Client')
      * Default value:
      * <pre> active: true </pre>
      */
-    active: true,
+    active: false,
     /**
      * @module punditConfig
      * @ngdoc property
