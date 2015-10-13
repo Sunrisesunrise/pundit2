@@ -44,32 +44,38 @@ describe('Dashboard service', function() {
     });
 
     it("should read default container height", function() {
+        Dashboard.toggle();
         expect(Dashboard.getContainerHeight()).toBe(DASHBOARDDEFAULTS.containerHeight);
     });
 
     it("should set container height", function() {
+        Dashboard.toggle();
         var before = Dashboard.getContainerHeight();
         expect(Dashboard.increaseContainerHeight(1)).toBe(true);
         expect(Dashboard.getContainerHeight()).toBe(before+1);
     });
 
     it("should not set container height over max", function() {
+        Dashboard.toggle();
         expect(Dashboard.increaseContainerHeight(999)).toBe(true);
         expect(Dashboard.getContainerHeight()).toBe(DASHBOARDDEFAULTS.containerMaxHeight);
     });
 
     it("should not set container height over max when is at maxHeight", function() {
+        Dashboard.toggle();
         expect(Dashboard.increaseContainerHeight(999)).toBe(true);
         expect(Dashboard.increaseContainerHeight(999)).toBe(false);
         expect(Dashboard.getContainerHeight()).toBe(DASHBOARDDEFAULTS.containerMaxHeight);
     });
 
     it("should not set container height under min", function() {
+        Dashboard.toggle();
         expect(Dashboard.increaseContainerHeight(-999)).toBe(true);
         expect(Dashboard.getContainerHeight()).toBe(DASHBOARDDEFAULTS.containerMinHeight);
     });
 
     it("should not set container height under min when is at minHeight", function() {
+        Dashboard.toggle();
         expect(Dashboard.increaseContainerHeight(-999)).toBe(true);
         expect(Dashboard.increaseContainerHeight(-999)).toBe(false);
         expect(Dashboard.getContainerHeight()).toBe(DASHBOARDDEFAULTS.containerMinHeight);
