@@ -77,7 +77,7 @@ angular.module('Pundit2.CommentPopover')
 
         httpPromise.then(function() {
             // OK.
-            CommentPopover.lastUsedNotebookID = $scope.selectedNotebookId;
+            CommentPopover.lastUsedNotebookID = lastSelectedNotebookId = $scope.selectedNotebookId;
             NotebookCommunication.setCurrent(lastSelectedNotebookId);
             PndPopover.hide();
         }, function() {

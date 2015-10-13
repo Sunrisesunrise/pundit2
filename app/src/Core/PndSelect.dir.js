@@ -139,6 +139,7 @@ angular.module('Pundit2.Core')
 
             scope.selectOption = function(option) {
                 scope.optionSelected = option;
+                scope.optionSelectedValue = option.value;
 
                 if (scope.expanded) {
                     scope.collapse();
