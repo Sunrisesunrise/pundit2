@@ -676,19 +676,19 @@ angular.module('Pundit2.Dashboard')
         dashboard.log("Added tab " + tabName + " to non-existing panel " + panelTitle + ": for later use.");
     };
 
-    EventDispatcher.addListener('Dashboard.close', function(/*e*/) {
+    EventDispatcher.addListener('Dashboard.close', function( /*e*/ ) {
         if (state.isDashboardVisible) {
             dashboard.toggle();
         }
     });
 
-    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
         if (state.isDashboardVisible) {
             dashboard.toggle();
         }
     });
 
-    EventDispatcher.addListener('Client.show', function(/*e*/) {
+    EventDispatcher.addListener('Client.show', function( /*e*/ ) {
         dashboard.toggle();
         $rootScope.$$phase || $rootScope.$digest();
         dashboard.toggle();
@@ -698,7 +698,7 @@ angular.module('Pundit2.Dashboard')
         keyCode: 27,
         ignoreOnInput: false,
         stopPropagation: true
-    }, function(/*event, eventKeyConfig*/){
+    }, function( /*event, eventKeyConfig*/ ) {
         if (state.isDashboardVisible) {
             dashboard.toggle();
             $rootScope.$$phase || $rootScope.$digest();

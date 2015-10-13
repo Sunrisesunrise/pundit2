@@ -1,4 +1,4 @@
-describe("AlertSystem", function(){
+describe("AlertSystem", function() {
 
     var AlertSystem,
         $rootScope,
@@ -7,28 +7,29 @@ describe("AlertSystem", function(){
 
     beforeEach(module('Pundit2'));
 
-    beforeEach(module(
-    ));
+    beforeEach(module());
 
-    beforeEach(inject(function(_$rootScope_, _$compile_, _$timeout_, _AlertSystem_){
+    beforeEach(inject(function(_$rootScope_, _$compile_, _$timeout_, _AlertSystem_) {
         $rootScope = _$rootScope_;
         $compile = _$compile_;
         $timeout = _$timeout_;
         AlertSystem = _AlertSystem_;
     }));
 
-    /*var compileDirective = function(){
+    /*
+    var compileDirective = function(){
         var elem = $compile('<page-item-container></page-item-container>')($rootScope);
         angular.element('body').append(elem);
         $rootScope.$digest();
         return elem;
-    };*/
+    };
+    */
 
     /*afterEach(function(){
         angular.element('page-item-container').remove();
     });*/
 
-    it('should correctly initialize', function(){
+    it('should correctly initialize', function() {
         expect(AlertSystem.AlertType).toBeDefined();
         expect(AlertSystem.addAlert).toBeDefined();
         expect(AlertSystem.clearAlert).toBeDefined();
@@ -39,7 +40,7 @@ describe("AlertSystem", function(){
         expect(AlertSystem.alerts.length).toBe(0);
     });
 
-    it('should correctly insert and delete alerts', function(){
+    it('should correctly insert and delete alerts', function() {
         expect(AlertSystem.alerts.length).toBe(0);
         AlertSystem.addAlert(AlertSystem.AlertType.SUCCESS, 'SUCCESS msg');
         expect(AlertSystem.alerts.length).toBe(1);
