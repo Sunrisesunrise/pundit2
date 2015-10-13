@@ -171,13 +171,13 @@ describe('Toolbar service', function() {
         Toolbar.setLoading(true);
         expect(Toolbar.isLoading()).toBe(true);
         $rootScope.$digest();
-        expect(angular.element(elem).find('.pnd-toolbar-loading-button').length).toBe(1);
-        expect(angular.element(elem).find('.pnd-toolbar-loading-button.ng-hide').length).toBe(0);
+        expect(angular.element(elem).find('.pnd-toolbar-first-button .pnd-pulse').length).toBe(1);
+        expect(angular.element(elem).find('.pnd-toolbar-first-button.ng-hide .pnd-pulse').length).toBe(0);
 
         Toolbar.setLoading(false);
         expect(Toolbar.isLoading()).toBe(false);
         $rootScope.$digest();
-        expect(angular.element(elem).find('.pnd-toolbar-loading-button.ng-hide').length).toBe(1);
+        expect(angular.element(elem).find('.pnd-toolbar-first-button.ng-hide .pnd-pulse').length).toBe(1);
     });
 
     it("should correctly toggle template mode", function(){

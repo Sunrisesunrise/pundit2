@@ -1,6 +1,7 @@
 var testConfig = {};
 
 testConfig.resourcePanel = {
+    limitToSuggestedTypes: true,
     modules: {
         "KorboBasketSelector": {
             active: false
