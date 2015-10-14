@@ -66,7 +66,8 @@ angular.module('Pundit2.ResourcePanel')
                 if (!isValidField(input)) {
                     return false;
                 }
-                if (input < 1 || input > 9999) {
+                // if (input < 1 || input > 9999) {
+                if (input > 9999) {
                     return false;
                 }
 
@@ -204,7 +205,7 @@ angular.module('Pundit2.ResourcePanel')
                 var currentYear = scope.inputDate.year;
                 if (isValidYear(currentYear)) {
                     var dateWithNewYear = moment(scope.currentDate).year(currentYear);
-                    scope.currentDate = new Date(dateWithNewYear.format());
+                    scope.currentDate = new Date(dateWithNewYear.format('YYYYYY-MM-DDTHH:mm'));
                 } else {
                     scope.inputDate.year = currentYear.substring(0, currentYear.length - 1);
                 }
@@ -214,7 +215,7 @@ angular.module('Pundit2.ResourcePanel')
                 var currentMonth = scope.inputDate.month;
                 if (isValidMonth(currentMonth)) {
                     var dateWithNewMonth = moment(scope.currentDate).month(currentMonth - 1);
-                    scope.currentDate = new Date(dateWithNewMonth.format());
+                    scope.currentDate = new Date(dateWithNewMonth.format('YYYYYY-MM-DDTHH:mm'));
                 } else {
                     scope.inputDate.month = currentMonth.substring(0, currentMonth.length - 1);
                 }
@@ -224,7 +225,7 @@ angular.module('Pundit2.ResourcePanel')
                 var currentDay = scope.inputDate.day;
                 if (isValidDay(currentDay)) {
                     var dateWithNewDay = moment(scope.currentDate).date(currentDay);
-                    scope.currentDate = new Date(dateWithNewDay.format());
+                    scope.currentDate = new Date(dateWithNewDay.format('YYYYYY-MM-DDTHH:mm'));
                 } else {
                     scope.inputDate.day = currentDay.substring(0, currentDay.length - 1);
                 }
@@ -244,7 +245,7 @@ angular.module('Pundit2.ResourcePanel')
                 if (isValidTime(currentTime)) {
                     var timeArray = scope.inputDate.time.split(':');
                     var dateWithNewTime = moment(scope.currentDate).hours(timeArray[0]).minutes(timeArray[1]);
-                    scope.currentDate = new Date(dateWithNewTime.format());
+                    scope.currentDate = new Date(dateWithNewTime.format('YYYYYY-MM-DDTHH:mm'));
                 }
             };
 
