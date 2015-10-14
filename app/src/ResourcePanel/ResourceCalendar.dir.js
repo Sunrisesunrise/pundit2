@@ -43,7 +43,9 @@ angular.module('Pundit2.ResourcePanel')
                             scope.focus = 'time';
                             break;
                     }
+
                    scope.currentDate = moment(scope.model.value).toDate();
+                    console.log('scope.currentDate',scope.currentDate);
                 }
             }
 
@@ -138,6 +140,10 @@ angular.module('Pundit2.ResourcePanel')
                     month = momentDate.format('MM'),
                     day = momentDate.format('DD'),
                     time = momentDate.format('HH:mm');
+                console.log('current date inside updatemodel',currentDate);
+                console.log('moment of current date inside updatemodel',momentDate);
+
+                console.log('inputDate date inside updatemodel',scope.inputDate);
 
                 if (currentDate instanceof Date) {
                     switch (scope.mode) {
@@ -212,48 +218,67 @@ angular.module('Pundit2.ResourcePanel')
                 };
             };
 
+            var setBcDate = function() {
+                var currentYear = scope.inputDate.year;
+                var dateWithNewField = moment(scope.currentDate);
+                var date = new Date();
+
+                date.setYear(normalizeYear(currentYear));
+                date.setMonth(dateWithNewField.format('MM'));
+                date.setDate(dateWithNewField.format('DD'));
+                date.setHours(dateWithNewField.format('HH'));
+                date.setMinutes(dateWithNewField.format('mm'));
+                scope.currentDate = date;
+
+
+            }
             scope.updateYear = function() {
                 var currentYear = scope.inputDate.year;
 
                 if (isValidYear(currentYear)) {
-                     if(currentYear>0){
+                    if(currentYear>0){
                         var dateWithNewYear = moment(scope.currentDate).year(currentYear);
                         scope.currentDate = new Date(dateWithNewYear.format());
                     }
-                    else{
-                        var dateWithNewYear = moment(scope.currentDate).year(normalizeYear(currentYear));
-                        var date = new Date();
-                        date.setYear(normalizeYear(currentYear));
-                        date.setMonth(dateWithNewYear.format('MM'));
-                        date.setDate(dateWithNewYear.format('DD'));
-                        scope.currentDate = new Date(date);
+                    else {
+                        setBcDate();
                     }
-                } else {
+                }else {
                     scope.inputDate.year = currentYear.substring(0, currentYear.length - 1);
                     if(!isValidYear(scope.inputDate.year)){
                         scope.inputDate.year ='';
                     }
-
                 }
-
             };
 
             scope.updateMonth = function() {
                 var currentMonth = scope.inputDate.month;
+                var currentYear = scope.inputDate.year;
+
                 if (isValidMonth(currentMonth)) {
-                    var dateWithNewMonth = moment(scope.currentDate).month(currentMonth - 1);
-                    scope.currentDate = new Date(dateWithNewMonth.format());
-                } else {
+                    if (currentYear > 0) {
+                        var dateWithNewYear = moment(scope.currentDate).year(currentYear);
+                        scope.currentDate = new Date(dateWithNewYear.format());
+                    }else {
+                        setBcDate();
+                    }
+                }else {
                     scope.inputDate.month = currentMonth.substring(0, currentMonth.length - 1);
                 }
             };
 
             scope.updateDay = function() {
                 var currentDay = scope.inputDate.day;
+                var currentYear = scope.inputDate.year;
+
                 if (isValidDay(currentDay)) {
-                    var dateWithNewDay = moment(scope.currentDate).date(currentDay);
-                    scope.currentDate = new Date(dateWithNewDay.format());
-                } else {
+                    if (currentYear > 0) {
+                        var dateWithNewDay = moment(scope.currentDate).date(currentDay);
+                        scope.currentDate = new Date(dateWithNewDay.format());
+                    }else {
+                        setBcDate();
+                    }
+                }else{
                     scope.inputDate.day = currentDay.substring(0, currentDay.length - 1);
                 }
             };
