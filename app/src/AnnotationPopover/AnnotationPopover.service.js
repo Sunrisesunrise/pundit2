@@ -1,6 +1,6 @@
-angular.module('Pundit2.CommentPopover')
-.service('CommentPopover', function(BaseComponent, PndPopover, $window, $timeout) {
-    var commentPopover = new BaseComponent('CommentPopover');
+angular.module('Pundit2.AnnotationPopover')
+.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout) {
+    var annotationPopover = new BaseComponent('AnnotationPopover');
 
     var changePopoverPlacement = function(state, placement) {
         state.popover.$options.placement = placement;
@@ -44,7 +44,7 @@ angular.module('Pundit2.CommentPopover')
         changePopoverPosition(resizeData.lastSelectionUsed.offset.left, resizeData.lastSelectionUsed.offset.top);
 
         resizeData.removeTimeout = $timeout(function() {
-            commentPopover.log('Remove temporary element');
+            annotationPopover.log('Remove temporary element');
             var parentTS = resizeData.temporaryElement.parent();
             resizeData.temporaryElement.remove();
             resizeData.temporaryElement = null;
@@ -130,17 +130,17 @@ angular.module('Pundit2.CommentPopover')
 
     };
 
-    commentPopover.lastUsedNotebookID = undefined;
+    annotationPopover.lastUsedNotebookID = undefined;
 
-    commentPopover.show = function(x, y, item, unUsed, fragmentId) {
+    annotationPopover.show = function(x, y, item, unUsed, fragmentId) {
         var options = {
-            templateUrl: 'src/CommentPopover/CommentPopover.tmpl.html',
-            controller: 'CommentPopoverCtrl',
+            templateUrl: 'src/AnnotationPopover/AnnotationPopover.tmpl.html',
+            controller: 'AnnotationPopoverCtrl',
             placement: 'bottom',
             alphaRollover: true,
             lockPageScroll: true,
             hideCallback: function() {
-                commentPopover.log('Comment popover hide');
+                annotationPopover.log('Comment popover hide');
                 angular.element($window).off('resize', resizeCallback);
             }
         };
@@ -151,11 +151,11 @@ angular.module('Pundit2.CommentPopover')
                 PndPopover.getState().selection.removeAllRanges();
                 angular.element($window).on('resize', resizeCallback);
             }, function() {
-                commentPopover.log(arguments);
+                annotationPopover.log(arguments);
             });
         }
         return promise;
     };
 
-    return commentPopover;
+    return annotationPopover;
 });

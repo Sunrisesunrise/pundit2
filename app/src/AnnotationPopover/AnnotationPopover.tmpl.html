@@ -1,8 +1,8 @@
-<div class="popover pnd-comment-popover pnd-popover-literal">
+<div class="popover pnd-annotation-popover pnd-popover-literal">
     <div class="arrow"></div>
 
     <div class="popover-content-wrapper"
-         ng-show="!savingComment && !errorSaving">
+         ng-show="!savingAnnotation && !errorSaving">
         <div class="popover-content"
              ng-show="!isUserLogged">
             Please <a href="javascript:void(0)" ng-click="login()">login</a>
@@ -44,7 +44,7 @@
     </div>
 
     <div class="popover-content-wrapper"
-         ng-show="!savingComment && errorSaving">
+         ng-show="!savingAnnotation && errorSaving">
         There was an error saving your comment, please try again later.
         </button><button
             class="pnd-btn"
@@ -54,7 +54,7 @@
     </div>
 
     <div class="popover-content-wrapper"
-         ng-show="savingComment">
+         ng-show="savingAnnotation">
             Saving ...
     </div>
 </div>

@@ -1,12 +1,12 @@
-angular.module('Pundit2.CommentPopover')
+angular.module('Pundit2.AnnotationPopover')
 
-.controller('CommentPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange,
-    NotebookCommunication, AnnotationsCommunication, CommentPopover, ModelHelper, $timeout, $q) {
+.controller('AnnotationPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange,
+    NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, $timeout, $q) {
 
     $scope.literalText = '';
 
     $scope.selectedNotebookId = undefined;
-    $scope.savingComment = false;
+    $scope.savingAnnotation = false;
     $scope.errorSaving = false;
     $scope.availableNotebooks = [];
     $scope.isUserLogged = MyPundit.isUserLogged();
@@ -30,10 +30,10 @@ angular.module('Pundit2.CommentPopover')
         if (!MyPundit.isUserLogged()) {
             return;
         }
-        if (typeof CommentPopover.lastUsedNotebookID === 'undefined') {
-            CommentPopover.lastUsedNotebookID = NotebookExchange.getCurrentNotebooks().id;
+        if (typeof AnnotationPopover.lastUsedNotebookID === 'undefined') {
+            AnnotationPopover.lastUsedNotebookID = NotebookExchange.getCurrentNotebooks().id;
         }
-        lastSelectedNotebookId = $scope.selectedNotebookId = CommentPopover.lastUsedNotebookID;
+        lastSelectedNotebookId = $scope.selectedNotebookId = AnnotationPopover.lastUsedNotebookID;
     };
 
     $scope.login = function() {
@@ -46,7 +46,7 @@ angular.module('Pundit2.CommentPopover')
     };
 
     $scope.save = function() {
-        $scope.savingComment = true;
+        $scope.savingAnnotation = true;
 
         var currentTarget = PndPopover.getData().item,
             currentStatement = {
@@ -77,7 +77,7 @@ angular.module('Pundit2.CommentPopover')
 
         httpPromise.then(function() {
             // OK.
-            CommentPopover.lastUsedNotebookID = lastSelectedNotebookId = $scope.selectedNotebookId;
+            AnnotationPopover.lastUsedNotebookID = lastSelectedNotebookId = $scope.selectedNotebookId;
             NotebookCommunication.setCurrent(lastSelectedNotebookId);
             PndPopover.hide();
         }, function() {

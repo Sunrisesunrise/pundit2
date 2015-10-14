@@ -119,9 +119,9 @@
     <script src="../src/ContextualMenu/ContextualMenu.js"></script>
     <script src="../src/ContextualMenu/ContextualMenu.service.js"></script>
 
-    <script src="../src/CommentPopover/CommentPopover.js"></script>
-    <script src="../src/CommentPopover/CommentPopover.ctrl.js"></script>
-    <script src="../src/CommentPopover/CommentPopover.service.js"></script>
+    <script src="../src/AnnotationPopover/AnnotationPopover.js"></script>
+    <script src="../src/AnnotationPopover/AnnotationPopover.ctrl.js"></script>
+    <script src="../src/AnnotationPopover/AnnotationPopover.service.js"></script>
 
     <script src="../src/FragmentPopover/FragmentPopover.js"></script>
     <script src="../src/FragmentPopover/FragmentPopover.ctrl.js"></script>

@@ -123,7 +123,7 @@ angular.module('Pundit2.Annotators')
     var lastTemporaryConsolidable,
     temporaryConsolidated = {};
 
-    var menuType = Config.clientMode === 'pro' ? 'ContextualMenu' : 'CommentPopover',
+    var menuType = Config.clientMode === 'pro' ? 'ContextualMenu' : 'AnnotationPopover',
     handlerMenu = $injector.get(menuType);
 
     // TODO: cambiare nome perche a raffaele da noia.
