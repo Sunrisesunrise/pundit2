@@ -422,6 +422,22 @@ angular.module('Pundit2.Model')
         return res;
     };
 
+    modelHelper.buildHigthLightData = function(statement) {
+        error = false;
+        errorMessage = '';
+        var res = {
+            'graph': {},
+            'items': {},
+            'target': {},
+            'flatTargets': [],
+            'type': {}
+        };
+
+        addTargetElem(statement, res.target, res.flatTargets, res.type);
+
+        return res;
+    };
+
     modelHelper.getLastError = function() {
         return {
             error: error,
