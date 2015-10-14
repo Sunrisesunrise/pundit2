@@ -935,7 +935,8 @@ angular.module('KorboEE')
             showNewButton: false,
             showUseFullPageButton: false
         };
-        ResourcePanel.showItemsForSubject(triple, $event.target, undefined, resourcePanelFooterButtonsOverride).then(function(item/*, fixed*/) {
+        // TODO: T_T
+        ResourcePanel.showItemsForObject(triple, $event.target, undefined, resourcePanelFooterButtonsOverride).then(function(item/*, fixed*/) {
             var innerCopyFromLOD = function() {
                 $scope.tabs = [];
                 $scope.disactiveLanguages = [];
