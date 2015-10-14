@@ -329,7 +329,7 @@ angular.module('Pundit2.Communication')
             annData = data.metadata[ann.uri],
             item;
 
-        var bodyUri = annData[NameSpace.annotation.hasBody][0].value;
+        var bodyUri = typeof annData[NameSpace.annotation.hasBody] !== 'undefined' ? annData[NameSpace.annotation.hasBody][0].value : undefined;
         if (typeof ann.graph[bodyUri] !== 'undefined') {
             ann.graph = ann.graph[bodyUri];
         }
@@ -346,7 +346,7 @@ angular.module('Pundit2.Communication')
                 ann[property] = '';
             }
 
-            if (property === 'hasBody') {
+            if (property === 'hasBody' && typeof annData[propertyURI] !== 'undefined') {
                 ann[property] = annData[propertyURI][0].type === 'uri' ? annData[propertyURI][0].value : annData[propertyURI][1].value;
             }
         }
