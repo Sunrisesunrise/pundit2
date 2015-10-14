@@ -1,20 +1,20 @@
 <div class="popover pnd-annotation-popover pnd-popover-literal">
     <div class="arrow"></div>
 
-    <div ng-if="currentMode === ''">
+    <div class="popover-content"
+         ng-if="!isUserLogged">
+        Please <a href="javascript:void(0)" ng-click="login()">login</a>
+    </div>
+    <div ng-if="currentMode === '' && isUserLogged">
         <button ng-click="setMode('comment')">Comment</button>
         <button ng-click="setMode('highlight')">Highlight</button>
     </div>
 
     <div class="popover-content-wrapper"
          ng-show="!savingAnnotation && !errorSaving"
-         ng-if="currentMode !== ''">
+         ng-if="currentMode !== '' && isUserLogged">
         <div class="popover-content"
-             ng-show="!isUserLogged">
-            Please <a href="javascript:void(0)" ng-click="login()">login</a>
-        </div>
-        <div class="popover-content"
-             ng-show="isUserLogged && currentMode === 'comment'">
+             ng-show="currentMode === 'comment'">
             <div class="form-group">
                 <textarea
                     class="form-control pnd-popover-literal-textarea"
@@ -25,8 +25,7 @@
         </div>
 
         <div 
-            class="popover-notebooks"
-            ng-show="isUserLogged">
+            class="popover-notebooks">
             Save {{currentMode}} in 
             <pnd-select
                     options="availableNotebooks"
@@ -36,8 +35,7 @@
                     placeholder-action="'Type new notebook name here'"></pnd-select>
         </div>
 
-        <div class="popover-footer"
-             ng-show="isUserLogged">
+        <div class="popover-footer">
             <button
                 class="pnd-btn pnd-btn-calltoaction"
                 ng-class="{disabled: $parent.literalText == '' && currentMode == 'comment'}"
