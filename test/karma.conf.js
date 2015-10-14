@@ -39,7 +39,7 @@ module.exports = function(config) {
             'app/src/Tools/TripleComposer/TripleComposer.js',
             'app/src/Tools/NotebookComposer/NotebookComposer.js',
             'app/src/LiteTool/LiteTool.js',
-            'app/src/CommentPopover/CommentPopover.js',
+            'app/src/AnnotationPopover/AnnotationPopover.js',
             'app/src/FragmentPopover/FragmentPopover.js',
             'app/src/Item/Item.js',
             'app/src/Toolbar/Toolbar.js',
