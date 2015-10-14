@@ -294,7 +294,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         var text = '';
         var action = '';
         var requireLoggedUser = true;
-        var btnClass = 'pnd-triplecomposer-cancel pnd-btn pnd-btn-xs pnd-btn-full';
+        var btnClass = 'pnd-triplecomposer-cancel pnd-btn pnd-btn-xsmall pnd-btn-full';
 
         if (generalItemsContainer.isMyItemsType(type)) {
             title = 'Remove from My Items';

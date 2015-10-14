@@ -28,14 +28,14 @@ body.pnd-toolbar-active {
     min-height: @toolbar-height;
     margin: 0;
     padding-top: 0;
+
     position: fixed;
     top: 0;
     right: 0;
     left: 0;
     z-index: @zindex-pnd-toolbar;
-    background-color: @color-toolbar-bg;
-    border-radius: 0; // Undo rounded corners in static and fixed navbars
-    box-shadow: 0 1px 1px rgba(0,0,0,.1);
+
+    background-color: @color-toolbar-background;
     border-bottom-width: @toolbar-border-bottom;
 
     .pnd-toolbar-navbar-container {
@@ -49,13 +49,13 @@ body.pnd-toolbar-active {
         position: absolute;
         top: 30px;
         left:  0px;
-        background-color: rgb(72, 187, 88);
-        -webkit-transition-property: width;
+        background-color: @color-brand;
         transition-property: width;
         transition-duration: 1s;
-        -webkit-transition-duration: 1s;
     }
     
+    /*
+    // TODO Maybe we don't need this anymore
     // FROM BOOTSTRAP ELEMENTS - consider how to manage this
     @media (min-width: @grid-float-breakpoint) { 
         border-radius: 0;
@@ -64,27 +64,27 @@ body.pnd-toolbar-active {
     @media (max-device-width: @screen-xs-min) and (orientation: landscape) {
       max-height: 200px;
     }
+    */
 }
 
 /* ------------------------------------ *\
    #BUTTONS
 \* ------------------------------------ */
 
-.pnd-toolbar-navbar .pnd-inner-nav { //.navbar-nav
+.pnd-toolbar-inner-nav {
     display: block;
     width: auto;
     height: auto;
     min-height: @toolbar-height;
     position: relative;
     background: transparent;
-    margin: 0px;
-    padding-left: 0px;
+    margin: 0;
+    padding-left: 0;
     list-style: none;
     &:extend(.clearfix all);
 
     > li {
         display: block;
-        //width: initial;
         height: auto;
         margin: 0;
         float: left;
@@ -96,44 +96,40 @@ body.pnd-toolbar-active {
         &:hover,
         &:focus,
         &:active {
-            background-color: @color-toolbar-button-hover;
+            // background-color: @color-toolbar-button-hover;
             text-decoration: none !important; /* For css overwritings */
         }
 
         /* Normal buttons */
         > a {
             display: block;
-            height: @toolbar-height - @toolbar-border-bottom !important; //!important for css overwritings
+            height: @toolbar-height - @toolbar-border-bottom !important; /* For css overwritings */
             margin: 0;
-            padding: 0 10px;
+            padding: 0 15px;
             float: none;
             position: relative;
 
-            background-color: @color-toolbar-button;
+            background-color: @color-toolbar-button-bg;
             border: 0;
             border-radius: 0;
 
-            font-size: 12px;
-            color: @color-toolbar-text !important; /* For css overwritings */
+            font-size: 13px;
+            color: @color-toolbar-button-text !important; /* For css overwritings */
             font-family: @font;
             line-height: 32px;
-            font-weight: normal;
+            font-weight: 500;
             text-transform: none;
-            text-shadow: 0 1px 0 rgba(255, 255, 255, .25);
-            // .text-dark-emboss();
+
             transition: none !important; /* Delete any transition */
 
             &:focus {
-                background-color: @color-toolbar-button;
-                //background-image: none;
+                background-color: @color-toolbar-button-bg;
                 text-decoration: none !important; /* For css overwritings */
             }
 
             &:hover {
-                background-color: @color-toolbar-button-hover;
-                //background-image: none;
+                background-color: @color-toolbar-button-bg-hover;
                 text-decoration: none !important; /* For css overwritings */
-
                 > span {
                     color: inherit;
                 }
@@ -143,7 +139,7 @@ body.pnd-toolbar-active {
                 background: transparent none;
                 float: initial;
                 font-size: inherit;
-                font-weight: normal;
+                // font-weight: 600;
 
                 &:after {
                     content: none;
@@ -153,26 +149,19 @@ body.pnd-toolbar-active {
 
         /* Icons inside buttons */
         .pnd-icon {
-            font-size: 14px;
+            font-size: 15px;
+            margin-top: 8px;
             display: inline-block;
-            vertical-align: text-bottom;
+            vertical-align: top;
         }
         
         /* Toggle buttons like Dashboard and Sidebar: active state */
         &.pnd-toolbar-toggle-button {
-
             &.pnd-toolbar-button-active {
-
                 a {
-                    background-color: @color-toolbar-button-open;
-                    .text-dark-emboss();
-
-                    &:focus {
-                        background-color: @color-toolbar-button-open;
-                    }
-
-                    &:hover {
-                        background-color: @color-toolbar-button-open;
+                    background-color: @dashboard-bg-color;
+                    &:focus, &:hover {
+                        background-color: @dashboard-bg-color;
                     }
                 }
             }
@@ -180,66 +169,24 @@ body.pnd-toolbar-active {
 
         /* Call to action buttons */
         &.pnd-calltoaction-btn {
-
             a {
-                background-color: @color-button-bg-cta;
-                border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 16);
-                .text-dark-emboss();
-
-                &:focus {
-                    background-color: @color-button-bg-cta;
-                }
-
-                &:hover {
-                    background-color: saturate(lighten(@color-button-bg-cta, 5), 10);
-                }
-            }
-        }
-
-        /* Triangular right border buttons... now ask the pundit */
-        /* Currently not used */
-        &.pnd-triangular-btn {
-
-            a {
-                position: relative;
-                padding-left: 10px;
+                background-color: @color-toolbar-button-cta-bg;
                 border-right: 0;
-
-                &:after {
-                    left: 100%;
-                    top: 50%;
-                    border: solid transparent;
-                    content: " ";
-                    height: 0;
-                    width: 0;
-                    position: absolute;
-                    pointer-events: none;
-                    border-color: rgba(0, 0, 0, 0);
-                    border-left-color: @brand-success;
-                    border-width: 15px;
-                    margin-top: -15px;
-                    z-index: 100;
+                &:focus {
+                    background-color: @color-toolbar-button-cta-bg;
                 }
-
-                &:hover:after {
-                    border-left-color: darken(@brand-success, 8) !important;
+                &:hover {
+                    background-color: @color-toolbar-button-cta-bg-hover;
                 }
-
-                &:focus:after {
-                    border-left-color: @brand-success;
-                }
-            }
-            /* Any button following a triangular button */
-            & + li a {
-                padding-left: 23px;
             }
         }
 
         /* Disabled buttons */
         &.disabled > a, .pnd-toolbar-not-active-element {
-            color: darken(@color-toolbar-text, 30) !important; // Specificity war against bootstrap
+            color: @color-toolbar-button-cta-text-disabled !important; /* For css overwritings */
         }
 
+        /* Contextual menu */
         .pnd-dropdown-contextual-menu.dropdown-menu {
             border-top-right-radius: 0;
             border-top-left-radius: 0;
@@ -249,6 +196,9 @@ body.pnd-toolbar-active {
     /* Left navigation*/
     &.pnd-toolbar-navbar-left {
         float: left;
+        a {
+            margin: 0 1px 0 0;
+        }
     }
 
     /* Right navigation */ 
@@ -257,6 +207,10 @@ body.pnd-toolbar-active {
 
         &:last-child {
             margin-right: -15px; /* Remove margin for right toolbar menu */
+        }
+
+        a {
+            margin: 0 0 0 1px;
         }
     }
 
@@ -271,49 +225,22 @@ body.pnd-toolbar-active {
    #SPECIAL-BUTTONS-STYLES
 \* ------------------------------------ */
 
-
 /* First button on the left (loading, pundit logo, error */
 .pnd-toolbar-navbar .pnd-toolbar-first-button {
-    width: 40px;
+    width: 30px; // TODO Define this
     text-align: center;
 
     a {
         padding-left: 0;
         padding-right: 0;
+        text-align: center;
     }
 
     /* First button with Pundit Logo and error icon when necessary */
     &.pnd-toolbar-status-button-ok {
-        a {
-            padding-top: 4px;
-        }
-
         .pnd-icon {
-            font-size: 24px;
-        }
-    }
-}
-
-/* Dashboard button */
-.pnd-toolbar-dashboard-toogle-button {
-    &.pnd-toolbar-button-active a {
-        box-shadow: 0 3px 0 @color-toolbar-button-open; /* Covers the toolbar shadow */
-    }
-}
-
-/* Buttons on the right */
-.pnd-toolbar-navbar .pnd-toolbar-navbar-right li {
-    a {
-        border-left: 0; // border-left: 1px solid lighten(@color-toolbar-button, 25);
-        border-right: 0;
-    }
-}
-
-/* Template selection button: special border color */
-.pnd-toolbar-navbar .pnd-toolbar-navbar-right li { //navbar-right
-    &.pnd-toolbar-template-menu-button {
-        a {
-            border-left: 0; // border-left: 1px solid lighten(@color-toolbar-button, 8);
+            margin-top: 7px;
+            font-size: 18px;
         }
     }
 }
@@ -374,9 +301,6 @@ body.pnd-toolbar-active {
     margin: 0 auto;
     color: @color-toolbar-text;
     text-align: center;
-    line-height: 30px;
-    opacity: .5;
+    line-height: @toolbar-height;
+    opacity: .6;
 }
-
-
-

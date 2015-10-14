@@ -12,17 +12,13 @@
 
 ul.pnd-tab-header {
     display: block;
-    //width: auto;
-    //height: auto;
-    margin: 0; // 0 0 10px 0;
-    background: @gray-light;
+    margin: 0;
+    background: @dashboard-bg-color;
 
-    /* Temp fix for tabs list*/
+    /* Temp fix for tabs list */
     height: 27px;
     overflow-y: hidden;
     overflow-x: visible;
-
-    //border-bottom: 1px solid #999;
 
     &:extend(.clearfix all);
 
@@ -35,13 +31,17 @@ ul.pnd-tab-header {
 
         > a {
             display: block;
+            position: relative;
             height: auto;
             min-height: auto;
             margin: 0;
             padding: 6px 8px;
-            position: relative;
-            background-color: @gray-light;
+
+            background-color: @dashboard-bg-color;
             border-radius: @tab-border-radius @tab-border-radius 0 0;
+
+            font-size: 12px;
+            font-weight: 200;
             color: @nav-tabs-active-link-hover-color; /* For css overwritings - !important */
             line-height: @line-height-base;
             overflow: visible;

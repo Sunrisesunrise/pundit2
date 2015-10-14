@@ -10,69 +10,70 @@
 // ------------------------------------ //
 // #FONT
 // ------------------------------------ //
-// @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
-// @import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic);
-@font: "Lucida Grande", Helvetica, Verdana, Arial, sans-serif; // "'Open Sans', sans-serif; // 'Lato', sans-serif;
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300italic,300,400italic,600,600italic,700,700italic);
+@font: 'Source Sans Pro', sans-serif;
+
 
 // ------------------------------------ //
-// #COLORS
+// #GENERAL-COLORS
 // ------------------------------------ //
+
+// Color scheme
+@color-ultra-light-background: #FAFBFC;
+@color-light-background: #F2F5F7;
+@color-light-gray-background: #DFE2E6;
+@color-dark-gray-background: #7E858C;
+@color-dark-background: #242D38;
+@color-brand: #146DEB;
+@color-error: #FF643F;
+@color-warning: #febe53;
+@subject-color: #54b4e6; // TODO Correct name
+@predicate-color: #febe53; // TODO Correct name
+@object-color: #0084c8; // TODO Correct name
+
 // Text colors
-@color-text: #555;
-@color-text-light: #808080;
-@color-text-error: #FF643F;
-@color-text-link: #48bb58; // #39b54a;
-@color-text-link-hover: darken(@color-text-link, 15%);
+@color-text: @color-dark-background;
+@color-text-light: red; // TODO To be defined
+@color-text-error: @color-error;
+@color-text-link: @color-brand;
+@color-text-link-hover: #224E8C;
 
 // Borders
-@color-border-normal: #cacaca;
-@color-border-light: #DDD;
-@color-border-ultralight: #F0F0F0;
+@color-border-light: @color-light-background;
+@color-border-normal: @color-light-gray-background;
+@color-border-ultralight: red; // TODO Not required
 
 // Backgrounds
 @color-background-base: #FFF;
-@color-background-light: lighten(#000, 96%);
-@color-background-medium: lighten(#000, 90%);
+@color-background-light: @color-ultra-light-background;
+@color-background-medium: @color-light-background;
 
-// Buttons
-@color-button-bg-cta: @color-text-link;
-@color-button-bg: @color-background-medium;
-@color-button-bg-dark: #3d4042;
-@color-button-text-light: #fff;
-@color-button-text-dark: @color-text;
-
-// Shades of gray
+// Shades of gray // TODO Must be removed
 @gray-soft-dark: lighten(#000, 26%);
 @gray-extra-light: lighten(#000, 80%);
 @gray-extra-lighter: lighten(#000, 90%);
 @gray-extra-lightest: lighten(#000, 98%); // It's obvious some crazy guys are working on this project
+
+// Semantic colors
+@subject-color-text: lighten(@subject-color, 27);
+@predicate-color-text: lighten(@predicate-color, 25);
+@object-color-text: desaturate(lighten(@object-color, 27), 30);
+
+
+
+
+
+
+
+
+
+
 
 // Annotations in the sidebar
 @color-annotation-header: #8F999E; // @subject-color; // #aaaaaa; // @subject-color;
 @color-annotation-broken-header: @color-text-error; // @predicate-color;
 @color-annotation-header-text: #FFF;
 @color-annotation-sidebar-bg: #464b4c;
-
-// Semantic colors
-@subject-color: #54b4e6;
-@subject-color-text: lighten(@subject-color, 27);
-@predicate-color: #febe53;
-@predicate-color-text: lighten(@predicate-color, 25);
-@object-color: #0084c8;
-@object-color-text: desaturate(lighten(@object-color, 27), 30);
-
-// Toolbar
-@color-toolbar-bg: #333333;
-@color-toolbar-text: #eee;
-@color-toolbar-button: lighten(@color-toolbar-bg, 3);
-@color-toolbar-button-hover: lighten(@color-toolbar-button, 8);
-@color-toolbar-button-open: #999999; // @color-toolbar-button-hover;
-
-// Dropdown
-@color-dropdown-bg: #ffffff;
-@color-dropdown-active: darken(@color-dropdown-bg, 10);
-@color-dropdown-bg-hover: darken(@color-dropdown-bg, 5);
-@color-dropdown-text: @color-text;
 
 // Login popover colors
 @color-login-popover-background: #FFF;
@@ -82,14 +83,6 @@
 @color-type-background: rgb(224, 227, 228);
 @color-type-text: #555;
 @type-border-radius: 3px;
-
-// Alert system
-@color-alert-success:  #48bb58;
-@color-alert-info:  @color-background-medium;
-@color-alert-warning:  #febe53;
-@color-alert-error:  @color-text-error;
-@color-alert-text-heading: #000000;
-@color-alert-text: @color-text;
 
 // Modal
 @color-modal-backdrop:  rgba(0,0,0,.5);
@@ -102,7 +95,99 @@
 // ------------------------------------ //
 // #BUTTONS
 // ------------------------------------ //
-@button-gradient-level: 0; // Represents the impact of gradient in the button bg
+
+@button-font-weight: 600;
+
+// Button call to action
+@color-button-cta-text: #FFF;
+@color-button-cta-text-disabled: #D7E5FA;
+
+@color-button-cta-bg: @color-brand;
+@color-button-cta-bg-hover: #2E6ABF;
+@color-button-cta-bg-active: #224E8C;
+@color-button-cta-bg-disabled: #9BBFF2;
+
+// Button normal
+@color-button-text: @color-brand;
+@color-button-text-hover: #2E6ABF;
+@color-button-text-active: #224E8C;
+@color-button-text-disabled: #CDDFF8;
+
+@color-button-bg: #FFF;
+@color-button-bg-hover: #FFF;
+@color-button-bg-active: #FFF;
+@color-button-bg-disabled: #FFF;
+
+@color-button-border: @color-brand;
+@color-button-border-hover: #3780E6;
+@color-button-border-active: #224E8C;
+@color-button-border-disabled: #9BBFF2;
+
+@button-border-width: 2px;
+
+// Button light bg
+@color-button-light-text: @color-brand;
+@color-button-light-text-hover: #2E6ABF;
+@color-button-light-text-active: #224E8C;
+@color-button-light-text-disabled: #CDDFF8;
+
+// Toolbar buttons
+@color-button-bg-dark: #3d4042; // TODO no good naming
+@color-button-text-light: #fff; // TODO no good naming
+@color-button-text-dark: @color-text; // TODO no good naming
+
+
+// ------------------------------------ //
+// #TOOLBAR
+// ------------------------------------ //
+
+// Toolbar colors
+@color-toolbar-background: @color-dark-background;
+@color-toolbar-text: #FFFFFF;
+
+// Toolbar button call to action
+@color-toolbar-button-cta-text: #FFF;
+@color-toolbar-button-cta-text-disabled: #717D8D;
+
+@color-toolbar-button-cta-bg: @color-brand;
+@color-toolbar-button-cta-bg-hover: #2E6ABF;
+@color-toolbar-button-cta-bg-active: #224E8C;
+@color-toolbar-button-cta-bg-disabled: #415166;
+
+// Toolbar button normal
+@color-toolbar-button-text: #FFF;
+@color-toolbar-button-text-disabled: #626971;
+
+@color-toolbar-button-bg: #404852;
+@color-toolbar-button-bg-hover: #5A626A;
+@color-toolbar-button-bg-active: #7E858C;
+@color-toolbar-button-bg-disabled: #313A44;
+
+// Toolbar button light
+@color-toolbar-button-light-text: #C8CACD;
+@color-toolbar-button-light-hover: #FFF;
+@color-toolbar-button-light-text-disabled: #626971;
+
+@color-toolbar-button-light-bg: transparent;
+
+// Geometry
+@toolbar-height: 30px;
+@toolbar-border-bottom: 0;
+
+
+
+
+
+@color-toolbar-button: red; // TODO Maybe delete?
+@color-toolbar-button-hover: lighten(@color-toolbar-button, 8); // TODO Maybe delete?
+@color-toolbar-button-open: #999999; // @color-toolbar-button-hover; // TODO Maybe delete?
+
+
+// ------------------------------------ //
+// #DASHBOARD
+// ------------------------------------ //
+@dashboard-bg-color: @color-dark-gray-background;
+
 
 // ------------------------------------ //
 // #INLINE-CONSOLIDATION
@@ -131,17 +216,24 @@
 
 
 // ------------------------------------ //
+// #ALERT-SYSTEM
+// ------------------------------------ //
+
+// Colors
+@color-alert-success:  @color-brand; // #48bb58; TODO Let's consider if we want to keep the green for success
+@color-alert-info:  @color-dark-gray-background;
+@color-alert-warning: @color-warning;
+@color-alert-error: @color-error;
+
+@color-alert-text-heading: #FFFFFF;
+@color-alert-text: #FFFFFF;
+
+
+// ------------------------------------ //
 // #LOGIN-POPOVER
 // ------------------------------------ //
 @login-popover-width: 430px;
 @login-popover-height: 560px;
-
-
-// ------------------------------------ //
-// #TOOLBAR
-// ------------------------------------ //
-@toolbar-height: 30px;
-@toolbar-border-bottom: 0; // 1px;
 
 
 // ------------------------------------ //
@@ -187,7 +279,14 @@
 // ------------------------------------ //
 // #DROPDOWN-CONTEXTUAL-MENU
 // ------------------------------------ //
-@dropdown-round-corners: 4px;
+@dropdown-round-corners: 3px;
+
+// Dropdown
+@color-dropdown-bg: #ffffff;
+@color-dropdown-active: @color-light-background;
+@color-dropdown-bg-hover: @color-light-background;
+@color-dropdown-text: @color-text;
+
 
 // ------------------------------------ //
 // #TABS
@@ -198,7 +297,7 @@
 @tab-text-hover-color: @color-text;
 @tab-bg-active-color: #FFFFFF;
 @tab-text-active-color: @color-text;
-@tab-border-radius: 1px;
+@tab-border-radius: 3px;
 
 
 // ------------------------------------ //

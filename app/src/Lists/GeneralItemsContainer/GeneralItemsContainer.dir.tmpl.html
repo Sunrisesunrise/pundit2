@@ -17,7 +17,7 @@
             </div>
             <button
                     type="button"
-                    class="pnd-btn pnd-btn-xs pnd-btn-link pnd-btn-full {{isPredicates?'predicates-items-btn-order':''}} pnd-btn-full pnd-panel-tab-icon {{search.additionalClass}}"
+                    class="pnd-btn pnd-btn-xsmall pnd-btn-link pnd-btn-full {{isPredicates?'predicates-items-btn-order':''}} pnd-btn-full pnd-panel-tab-icon {{search.additionalClass}}"
                     template-url="{{dropdownTemplate}}"
                     bs-dropdown="dropdownOrdering"
                     title="{{search.orderLabel}}">
@@ -61,20 +61,20 @@
     <div class="pnd-panel-tab-content-footer">
         <button
                 ng-if="!(isMyNotebooks || isPredicates)"
-                class="pnd-btn pnd-btn-subject"
+                class="pnd-btn pnd-btn-subject pnd-btn-small"
                 title="Use as subject"
                 ng-disabled="!isUseActive || !canAddItemAsSubject"
                 ng-click="onClickUseSubject()">
             Set subject
         </button><button
                 ng-if="!(isMyNotebooks || isPredicates)"
-                class="pnd-btn pnd-btn-object"
+                class="pnd-btn pnd-btn-object pnd-btn-small "
                 title="Use as object"
                 ng-disabled="!isUseActive || !canAddItemAsObject"
                 ng-click="onClickUseObject()">
             Set object
         </button><button
-                class="{{actionButton.btnClass}}"
+                class="{{actionButton.btnClass}} pnd-btn-small"
                 title="{{actionButton.title}}"
                 ng-disabled="isMyNotebooks? false :
                             isPredicates? (!isUseActive || !canBeUseAsPredicate) :

@@ -4,6 +4,12 @@
  * Common simple styles shared by different components and interface elements
  */
 
+/* ------------------------------------ *\
+   #GENERAL
+\* ------------------------------------ */
+&{
+    letter-spacing: .04rem !important;
+}
 
 /* ------------------------------------ *\
    #UI-MESSAGES
@@ -22,7 +28,7 @@
 \* ------------------------------------ */
 .pnd-pulse {
     animation: pulse 1s linear infinite;
-    -webkit-animation: pulse 1s linear infinite;
+    // -webkit-animation: pulse 1s linear infinite; // TODO Do we need this?
 }
 
 @keyframes "pulse" {
