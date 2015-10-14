@@ -41,7 +41,7 @@ angular.module('Pundit2.Annotators')
                     FragmentPopover = $injector.get('FragmentPopover');
 
                 element.on('click', function(evt) {
-                    console.log(evt);
+                    // console.log(evt);
                     var fragments = element.attr('fragments'),
                         annotations = {};
                     if (typeof fragments !== 'undefined') {

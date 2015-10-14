@@ -1,5 +1,6 @@
 angular.module('Pundit2.AnnotationPopover')
 
+// TODO: manage opening during loading
 .controller('AnnotationPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange,
     NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, $timeout, $q) {
 
@@ -30,7 +31,9 @@ angular.module('Pundit2.AnnotationPopover')
         if (!MyPundit.isUserLogged()) {
             return;
         }
+        
         if (typeof AnnotationPopover.lastUsedNotebookID === 'undefined') {
+            // TODO: manage loading statuts, so with currentNotebook undefined
             AnnotationPopover.lastUsedNotebookID = NotebookExchange.getCurrentNotebooks().id;
         }
         lastSelectedNotebookId = $scope.selectedNotebookId = AnnotationPopover.lastUsedNotebookID;

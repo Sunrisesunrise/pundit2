@@ -138,7 +138,7 @@ angular.module('Pundit2.AnnotationPopover')
             alphaRollover: true,
             lockPageScroll: true,
             hideCallback: function() {
-                annotationPopover.log('Comment popover hide');
+                annotationPopover.log('Annotation popover hide');
                 angular.element($window).off('resize', resizeCallback);
             }
         };
