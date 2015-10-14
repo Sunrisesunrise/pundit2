@@ -12,6 +12,8 @@ angular.module('Pundit2.AnnotationPopover')
     $scope.availableNotebooks = [];
     $scope.isUserLogged = MyPundit.isUserLogged();
 
+    $scope.currentMode = '';
+
     var lastSelectedNotebookId;
 
     var updateAvailableNotebooks = function() {
@@ -39,6 +41,10 @@ angular.module('Pundit2.AnnotationPopover')
         lastSelectedNotebookId = $scope.selectedNotebookId = AnnotationPopover.lastUsedNotebookID;
     };
 
+    $scope.setMode = function(mode) {
+        $scope.currentMode = mode;
+    };
+
     $scope.login = function() {
         MyPundit.login();
         PndPopover.hide();
@@ -51,6 +57,9 @@ angular.module('Pundit2.AnnotationPopover')
     $scope.save = function() {
         $scope.savingAnnotation = true;
 
+        var isComment = $scope.currentMode === 'comment',
+            objectContent = isComment ? $scope.literalText : '';
+
         var currentTarget = PndPopover.getData().item,
             currentStatement = {
                 scope: {
@@ -58,13 +67,14 @@ angular.module('Pundit2.AnnotationPopover')
                         return {
                             subject: currentTarget,
                             predicate: '',
-                            object: $scope.literalText
+                            object: objectContent
                         };
                     }
                 }
             };
 
-        var modelData = ModelHelper.buildCommentData(currentStatement);
+        var modelData = isComment ? ModelHelper.buildCommentData(currentStatement) : ModelHelper.buildHigthLightData(currentStatement),
+            motivation = isComment ? 'commenting' : 'highlighting';
 
         var httpPromise = AnnotationsCommunication.saveAnnotation(
             modelData.graph,
@@ -74,7 +84,7 @@ angular.module('Pundit2.AnnotationPopover')
             undefined, // skipConsolidation
             modelData.target,
             modelData.type,
-            'commenting',
+            motivation,
             $scope.selectedNotebookId
         );
 

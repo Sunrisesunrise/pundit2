@@ -39,10 +39,18 @@ angular.module('Pundit2.Model')
     modelHandler.makeGraph = function(data) {
         for (var metadataURI in data.metadata) {
             var metadata = data.metadata[metadataURI],
-                bodyReferences = metadata[NameSpace.annotation.hasBody],
-                graphURI = bodyReferences[0].type === 'uri' ? bodyReferences[0].value : bodyReferences[1].value;
+                bodyReferences = metadata[NameSpace.annotation.hasBody];
+            
+            var graphURI, currentGraph;
 
-            data.graph = data.graph[graphURI];
+            if (typeof bodyReferences !== 'undefined') {
+                graphURI = bodyReferences[0].type === 'uri' ? bodyReferences[0].value : bodyReferences[1].value;
+                currentGraph = data.graph[graphURI];
+            } else {
+                currentGraph = {};
+            } 
+
+            data.graph = currentGraph;
         }
     };
 

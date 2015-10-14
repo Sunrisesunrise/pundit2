@@ -4,7 +4,7 @@ angular.module('Pundit2.Communication')
     AnnotationsExchange, Consolidation, MyPundit, ItemsExchange, PageItemsContainer, ModelHandler,
     $http, $q) {
 
-    var annotationComponent = new BaseComponent("Annotation");
+    var annotationComponent = new BaseComponent('Annotation');
     var annotationServerVersion = Config.annotationServerVersion;
 
     // Creates a new Annotation instance. If an id is passed in
@@ -15,7 +15,7 @@ angular.module('Pundit2.Communication')
     function Annotation(id, useCache, loadedData) {
         this._q = $q.defer();
 
-        if (typeof(id) !== "undefined") {
+        if (typeof(id) !== 'undefined') {
             this.id = id;
             if (typeof loadedData !== 'undefined') {
                 if (annotationServerVersion === 'v1') {
@@ -71,10 +71,10 @@ angular.module('Pundit2.Communication')
             }
 
             promise.resolve();
-            annotationComponent.log("Retrieved annotation " + self.id + " metadata");
+            annotationComponent.log('Retrieved annotation ' + self.id + ' metadata');
         }).error(function(data, statusCode) {
             promise.reject();
-            annotationComponent.err("Error getting annotation " + self.id + ". Server answered with status code " + statusCode);
+            annotationComponent.err('Error getting annotation ' + self.id + '. Server answered with status code ' + statusCode);
         });
 
         return promise.promise;
@@ -84,11 +84,11 @@ angular.module('Pundit2.Communication')
         var self = this,
             nsKey = (MyPundit.isUserLogged()) ? 'asAnn' : 'asOpenAnn';
 
-        if (typeof(useCache) === "undefined") {
+        if (typeof(useCache) === 'undefined') {
             useCache = true;
         }
 
-        annotationComponent.log("Loading annotation " + self.id + " with cache " + useCache);
+        annotationComponent.log('Loading annotation ' + self.id + ' with cache ' + useCache);
 
         var httpPromise;
         httpPromise = $http({
@@ -117,7 +117,7 @@ angular.module('Pundit2.Communication')
             // TODO: set an error flag and let the user try load() again?
 
             self._q.resolve(self);
-            annotationComponent.log("Retrieved annotation " + self.id + " metadata");
+            annotationComponent.log('Retrieved annotation ' + self.id + ' metadata');
             // @TODO: decide what to do with tracking
             //Analytics.track('api', 'get', 'annotation');
 
@@ -125,8 +125,8 @@ angular.module('Pundit2.Communication')
 
             // TODO: 404 not found, nothing to do about it, but 403 forbidden might be
             // recoverable by loggin in??
-            self._q.reject("Error from server while retrieving annotation " + self.id + ": " + statusCode);
-            annotationComponent.err("Error getting annotation " + self.id + ". Server answered with status code " + statusCode);
+            self._q.reject('Error from server while retrieving annotation ' + self.id + ': ' + statusCode);
+            annotationComponent.err('Error getting annotation ' + self.id + '. Server answered with status code ' + statusCode);
             Analytics.track('api', 'error', 'get annotation', statusCode);
 
         });
@@ -165,10 +165,10 @@ angular.module('Pundit2.Communication')
     // Returns true if the annotation has been parsed correctly and entirely
     var readAnnotationData = function(ann, data) {
         // Data _must_ contain .graph, .metadata and .items .. and be defined.
-        if (typeof(data) === "undefined" ||
-            typeof(data.graph) === "undefined" ||
-            typeof(data.metadata) === "undefined" ||
-            typeof(data.items) === "undefined") {
+        if (typeof(data) === 'undefined' ||
+            typeof(data.graph) === 'undefined' ||
+            typeof(data.metadata) === 'undefined' ||
+            typeof(data.items) === 'undefined') {
             annotationComponent.err('Malformed annotation id=' + ann.id + ': ', data);
             return false;
         }
@@ -183,7 +183,7 @@ angular.module('Pundit2.Communication')
         }
 
         // if there wasnt that first level ... not good news.
-        if (typeof(ann.uri) === "undefined") {
+        if (typeof(ann.uri) === 'undefined') {
             annotationComponent.err('Malformed annotation id=' + ann.id + ', wrong metadata: ', data);
             return false;
         }
@@ -251,7 +251,7 @@ angular.module('Pundit2.Communication')
 
                 for (var o in data.graph[s][p]) {
                     var object = data.graph[s][p][o];
-                    if (object.type === "uri" && ann.entities.indexOf(object.value) === -1) {
+                    if (object.type === 'uri' && ann.entities.indexOf(object.value) === -1) {
                         ann.entities.push(object.value);
                         ann.items[object.value] = {};
                     }
@@ -265,7 +265,7 @@ angular.module('Pundit2.Communication')
             // This item might exist already (my item? another annotation?). If it does not
             // exist, create it from this annotation content
             var item = ItemsExchange.getItemByUri(uri);
-            if (typeof(item) === "undefined") {
+            if (typeof(item) === 'undefined') {
 
                 // If it's not empty, let ItemFactory extend it with the previously gathered
                 // values
@@ -303,9 +303,9 @@ angular.module('Pundit2.Communication')
 
     var readAnnotationMetadataAndGraph = function(ann, data) {
         // Data _must_ contain .graph, .metadata and .items .. and be defined.
-        if (typeof(data) === "undefined" ||
-            typeof(data.graph) === "undefined" ||
-            typeof(data.metadata) === "undefined") {
+        if (typeof(data) === 'undefined' ||
+            typeof(data.graph) === 'undefined' ||
+            typeof(data.metadata) === 'undefined') {
             annotationComponent.err('Malformed annotation id=' + ann.id + ': ', data);
             return false;
         }
@@ -320,7 +320,7 @@ angular.module('Pundit2.Communication')
         }
 
         // if there wasnt that first level ... not good news.
-        if (typeof(ann.uri) === "undefined") {
+        if (typeof(ann.uri) === 'undefined') {
             annotationComponent.err('Malformed annotation id=' + ann.id + ', wrong metadata: ', data);
             return false;
         }
@@ -329,7 +329,7 @@ angular.module('Pundit2.Communication')
             annData = data.metadata[ann.uri],
             item;
 
-        var bodyUri = annData[NameSpace.annotation.hasBody][0].value;
+        var bodyUri = typeof annData[NameSpace.annotation.hasBody] !== 'undefined' ? annData[NameSpace.annotation.hasBody][0].value : undefined;
         if (typeof ann.graph[bodyUri] !== 'undefined') {
             ann.graph = ann.graph[bodyUri];
         }
@@ -346,7 +346,7 @@ angular.module('Pundit2.Communication')
                 ann[property] = '';
             }
 
-            if (property === 'hasBody') {
+            if (property === 'hasBody' && typeof annData[propertyURI] !== 'undefined') {
                 ann[property] = annData[propertyURI][0].type === 'uri' ? annData[propertyURI][0].value : annData[propertyURI][1].value;
             }
         }
@@ -425,7 +425,7 @@ angular.module('Pundit2.Communication')
 
                 for (var o in ann.graph[s][p]) {
                     var object = ann.graph[s][p][o];
-                    if (object.type === "uri" && ann.entities.indexOf(object.value) === -1) {
+                    if (object.type === 'uri' && ann.entities.indexOf(object.value) === -1) {
                         ann.entities.push(object.value);
                         item = ItemsExchange.getItemByUri(object.value);
                         if (typeof(item) !== 'undefined') {
