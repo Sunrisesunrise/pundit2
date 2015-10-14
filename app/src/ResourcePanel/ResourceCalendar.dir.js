@@ -63,14 +63,19 @@ angular.module('Pundit2.ResourcePanel')
             };
 
             var isValidYear = function(input) {
-                if (!isValidField(input)) {
+                if(input[0]=='-'){
+                    if(input.length!=1){
+                        if(!isValidField(input.substring(1, input.length))) {
+                            return false
+                        }
+                    }
+                }
+                else if (!isValidField(input)) {
                     return false;
                 }
-                // if (input < 1 || input > 9999) {
-                if (input > 9999) {
+                if (-9999 > input || input > 9999) {
                     return false;
                 }
-
                 return true;
             };
 
@@ -111,11 +116,19 @@ angular.module('Pundit2.ResourcePanel')
             };
 
             var normalizeYear = function(year) {
-                // TODO: add support to BC date 
                 year = typeof year !== 'string' ? year.toString() : year;
-                year = year.indexOf('-') !== -1 ? '0000' : year;
-                while (year.length < 4) {
-                    year = '0' + year;
+
+                if(year[0]=='-'){
+                    var yearTemp=year.substring(1, year.length);
+                    while (yearTemp.length < 6) {
+                        yearTemp = '0' + yearTemp;
+                    }
+                    year='-'+yearTemp;
+
+                }else {
+                    while (year.length < 4) {
+                        year = '0' + year;
+                    }
                 }
                 return year;
             };
@@ -203,12 +216,16 @@ angular.module('Pundit2.ResourcePanel')
 
             scope.updateYear = function() {
                 var currentYear = scope.inputDate.year;
+
                 if (isValidYear(currentYear)) {
                     var dateWithNewYear = moment(scope.currentDate).year(currentYear);
                     scope.currentDate = new Date(dateWithNewYear.format('YYYYYY-MM-DDTHH:mm'));
                 } else {
                     scope.inputDate.year = currentYear.substring(0, currentYear.length - 1);
-                }
+                    if(!isValidYear(scope.inputDate.year)) {
+                        scope.inputDate.year = '';
+                    }
+                    }
             };
 
             scope.updateMonth = function() {
@@ -218,6 +235,10 @@ angular.module('Pundit2.ResourcePanel')
                     scope.currentDate = new Date(dateWithNewMonth.format('YYYYYY-MM-DDTHH:mm'));
                 } else {
                     scope.inputDate.month = currentMonth.substring(0, currentMonth.length - 1);
+                    if (!isValidMonth(scope.inputDate.month)) {
+                        scope.inputDate.month = '';
+
+                    }
                 }
             };
 
@@ -228,6 +249,9 @@ angular.module('Pundit2.ResourcePanel')
                     scope.currentDate = new Date(dateWithNewDay.format('YYYYYY-MM-DDTHH:mm'));
                 } else {
                     scope.inputDate.day = currentDay.substring(0, currentDay.length - 1);
+                    if (!isValidDay(scope.inputDate.day)) {
+                        scope.inputDate.day = '';
+                    }
                 }
             };
 
