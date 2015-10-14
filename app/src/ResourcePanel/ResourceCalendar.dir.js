@@ -43,7 +43,7 @@ angular.module('Pundit2.ResourcePanel')
                             scope.focus = 'time';
                             break;
                     }
-                    scope.currentDate = moment(scope.model.value).toDate();
+                   scope.currentDate = moment(scope.model.value).toDate();
                 }
             }
 
@@ -58,19 +58,24 @@ angular.module('Pundit2.ResourcePanel')
                 if (isNaN(input)) {
                     return false;
                 }
-
                 return true;
             };
 
             var isValidYear = function(input) {
-                if (!isValidField(input)) {
+                if(input[0]=='-'){
+                    if(input.length!=1){
+                        if(!isValidField(input.substring(1, input.length))) {
+                            return false
+                        }
+                    }
+                }
+                else if (!isValidField(input)) {
                     return false;
                 }
-                if (input < 1 || input > 9999) {
+                if (-9999 > input || input > 9999) {
                     return false;
                 }
-
-                return true;
+                    return true;
             };
 
             var isValidMonth = function(input) {
@@ -91,12 +96,12 @@ angular.module('Pundit2.ResourcePanel')
                 if (input < 1 || input > 31) {
                     return false;
                 }
-
                 return true;
             };
 
             var isValidTime = function(input) {
-                // TODO: add support to BC date 
+                // TODO: add support to BC date for time???????
+
                 var regExpTime = /^\d{1,2}:\d{2}([ap]m)?$/;
 
                 if (typeof(input) === 'undefined') {
@@ -110,15 +115,22 @@ angular.module('Pundit2.ResourcePanel')
             };
 
             var normalizeYear = function(year) {
-                // TODO: add support to BC date 
                 year = typeof year !== 'string' ? year.toString() : year;
-                year = year.indexOf('-') !== -1 ? '0000' : year;
-                while (year.length < 4) {
-                    year = '0' + year;
+
+                if(year[0]=='-'){
+                    var yearTemp=year.substring(1, year.length);
+                    while (yearTemp.length < 6) {
+                        yearTemp = '0' + yearTemp;
+                    }
+                    year='-'+yearTemp;
+
+                }else {
+                    while (year.length < 4) {
+                        year = '0' + year;
+                    }
                 }
                 return year;
             };
-
             var updateModel = function() {
                 var currentDate = scope.currentDate,
                     momentDate = moment(currentDate),
@@ -202,12 +214,28 @@ angular.module('Pundit2.ResourcePanel')
 
             scope.updateYear = function() {
                 var currentYear = scope.inputDate.year;
+
                 if (isValidYear(currentYear)) {
-                    var dateWithNewYear = moment(scope.currentDate).year(currentYear);
-                    scope.currentDate = new Date(dateWithNewYear.format());
+                     if(currentYear>0){
+                        var dateWithNewYear = moment(scope.currentDate).year(currentYear);
+                        scope.currentDate = new Date(dateWithNewYear.format());
+                    }
+                    else{
+                        var dateWithNewYear = moment(scope.currentDate).year(normalizeYear(currentYear));
+                        var date = new Date();
+                        date.setYear(normalizeYear(currentYear));
+                        date.setMonth(dateWithNewYear.format('MM'));
+                        date.setDate(dateWithNewYear.format('DD'));
+                        scope.currentDate = new Date(date);
+                    }
                 } else {
                     scope.inputDate.year = currentYear.substring(0, currentYear.length - 1);
+                    if(!isValidYear(scope.inputDate.year)){
+                        scope.inputDate.year ='';
+                    }
+
                 }
+
             };
 
             scope.updateMonth = function() {
@@ -293,7 +321,6 @@ angular.module('Pundit2.ResourcePanel')
                     default:
                         scope.focus = mode;
                 }
-
                 updateModel();
             };
 
@@ -308,7 +335,6 @@ angular.module('Pundit2.ResourcePanel')
                     }
                     updateInput(value);
                 }
-
                 updateModel();
             });
         }
