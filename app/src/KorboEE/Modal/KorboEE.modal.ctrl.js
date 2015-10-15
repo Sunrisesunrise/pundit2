@@ -1,5 +1,5 @@
 angular.module('KorboEE')
-.controller('KeeModalCtrl', function ($scope, $modal, KorboCommunicationService, APIService, korboConf, KorboCommunicationFactory, $window, ResourcePanel) {
+.controller('KeeModalCtrl', function ($scope, $rootScope, $modal, KorboCommunicationService, APIService, korboConf, KorboCommunicationFactory, $window, ResourcePanel) {
 
     var api = APIService.get($scope.conf.globalObjectName);
     var korboComm = new KorboCommunicationFactory();
@@ -371,4 +371,7 @@ angular.module('KorboEE')
         $scope.showSaveAndAdd.visibility = $scope.korboModalTabs.activeTab === 1;
     };
 
+    $rootScope.$on('modal.hide',function(){
+        korboConf.setIsOpenModal(false);
+    });
 });
