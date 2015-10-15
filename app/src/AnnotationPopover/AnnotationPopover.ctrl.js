@@ -121,6 +121,10 @@ angular.module('Pundit2.AnnotationPopover')
         return deferred.promise;
     };
 
+    $scope.focusOn = function(elementId) {
+        angular.element('.pnd-annotation-popover #' + elementId)[0].focus();
+    };
+
     updateCurrentNotebook();
     updateAvailableNotebooks();
 });

@@ -17,10 +17,11 @@
              ng-show="currentMode === 'comment'">
             <div class="form-group">
                 <textarea
+                    id="comment-area"
                     class="form-control pnd-popover-literal-textarea"
                     rows="6"
                     ng-model="$parent.literalText"
-                    ></textarea>
+                    ng-init="focusOn('comment-area')"></textarea>
             </div>
         </div>
 
