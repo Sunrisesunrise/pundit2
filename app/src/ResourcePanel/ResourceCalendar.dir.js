@@ -20,7 +20,9 @@ angular.module('Pundit2.ResourcePanel')
             };
             scope.mode = 'day';
             scope.focus = 'year';
-
+            var lastYear;
+            var lastMonth;
+            var lastDay;
             if (typeof(scope.model) === 'undefined') {
                 scope.model = {};
             } else {
@@ -220,10 +222,11 @@ angular.module('Pundit2.ResourcePanel')
                 if (isValidYear(currentYear)) {
                     var dateWithNewYear = moment(scope.currentDate).year(currentYear);
                     scope.currentDate = new Date(dateWithNewYear.format('YYYYYY-MM-DDTHH:mm'));
+                    lastYear = currentYear;
                 } else {
                     scope.inputDate.year = currentYear.substring(0, currentYear.length - 1);
                     if(!isValidYear(scope.inputDate.year)) {
-                        scope.inputDate.year = '';
+                        scope.inputDate.year = lastYear;
                     }
                     }
             };
@@ -231,12 +234,13 @@ angular.module('Pundit2.ResourcePanel')
             scope.updateMonth = function() {
                 var currentMonth = scope.inputDate.month;
                 if (isValidMonth(currentMonth)) {
+                    lastMonth =  currentMonth;
                     var dateWithNewMonth = moment(scope.currentDate).month(currentMonth - 1);
                     scope.currentDate = new Date(dateWithNewMonth.format('YYYYYY-MM-DDTHH:mm'));
                 } else {
                     scope.inputDate.month = currentMonth.substring(0, currentMonth.length - 1);
                     if (!isValidMonth(scope.inputDate.month)) {
-                        scope.inputDate.month = '';
+                        scope.inputDate.month = lastMonth;
 
                     }
                 }
@@ -244,13 +248,15 @@ angular.module('Pundit2.ResourcePanel')
 
             scope.updateDay = function() {
                 var currentDay = scope.inputDate.day;
+
                 if (isValidDay(currentDay)) {
+                    lastDay = currentDay;
                     var dateWithNewDay = moment(scope.currentDate).date(currentDay);
                     scope.currentDate = new Date(dateWithNewDay.format('YYYYYY-MM-DDTHH:mm'));
                 } else {
                     scope.inputDate.day = currentDay.substring(0, currentDay.length - 1);
                     if (!isValidDay(scope.inputDate.day)) {
-                        scope.inputDate.day = '';
+                        scope.inputDate.day = lastDay;
                     }
                 }
             };
