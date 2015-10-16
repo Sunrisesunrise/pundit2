@@ -81,14 +81,14 @@ angular.module('Pundit2.Core')
             notebookLabel: undefined
         };
 
-    var loginExecute = function(where, skipClose, popoverPlacement) {
+    var loginExecute = function(where, popoverPlacement, skipClose) {
         loginPromise = $q.defer();
 
         if (myPundit.isUserLogged()) {
             loginPromise.resolve(true);
         } else {
             loginStatus = 'loggedOff';
-            myPundit.popoverLogin(where, skipClose, popoverPlacement);
+            myPundit.popoverLogin(where, popoverPlacement, skipClose);
         }
 
         return loginPromise.promise;
@@ -302,11 +302,11 @@ angular.module('Pundit2.Core')
      *
      */
     myPundit.login = function(popoverPlacement) {
-        loginExecute('login', false, popoverPlacement)
+        loginExecute('login', popoverPlacement, false)
     };
 
     myPundit.loginWithoutSwitch = function(popoverPlacement) {
-        loginExecute('login', true, popoverPlacement);
+        loginExecute('login', popoverPlacement, true);
     };
 
     // TODO remove it, remove the old login popup and manage popover in unit test 
@@ -620,7 +620,7 @@ angular.module('Pundit2.Core')
     myPundit.addPostMessageListener();
 
     // TODO This is not really a popoverLogin but more a popover toggler
-    myPundit.popoverLogin = function(where, skipClose, popoverPlacement) {
+    myPundit.popoverLogin = function(where, popoverPlacement, skipClose) {
         if (typeof(loginPromise) === 'undefined' && where !== 'editProfile') {
             return;
             // loginPromise = $q.defer();
@@ -628,13 +628,14 @@ angular.module('Pundit2.Core')
 
         // If there's already a Login popover I close and destroy it
         if (popoverState.popover !== null) {
-            if (typeof skipClose !== 'undefined' && 
-                loginWithoutSwitch === false) {
-                popoverState.popover.hide();
-                popoverState.popover.destroy(); // TODO Doesn't remove the code?????
-                popoverState.popover = null;
-                EventDispatcher.sendEvent('MyPundit.popoverClose');
+            if (typeof skipClose !== 'undefined' && skipClose) {
+                return;
             }
+
+            popoverState.popover.hide();
+            popoverState.popover.destroy(); // TODO Doesn't remove the code?????
+            popoverState.popover = null;
+            EventDispatcher.sendEvent('MyPundit.popoverClose');
             return;
         }
 
