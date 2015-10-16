@@ -270,19 +270,25 @@ angular.module('Pundit2.Core')
      * @returns {Promise} the promise will be resolved as true when user has finished authentication and is logged in correctly, false otherwise
      *
      */
-    myPundit.login = function(popoverPlacement) {
+    var loginExecute = function( where, loginWithoutSwitch , popoverPlacement){
         loginPromise = $q.defer();
 
         if (myPundit.isUserLogged()) {
             loginPromise.resolve(true);
         } else {
             loginStatus = 'loggedOff';
-            myPundit.popoverLogin('login', popoverPlacement);
+            myPundit.popoverLogin(where , loginWithoutSwitch , popoverPlacement);
         }
 
         return loginPromise.promise;
-    };
 
+    }
+    myPundit.login = function(popoverPlacement) {
+        loginExecute('login', false , popoverPlacement)
+    };
+    myPundit.loginWithoutSwitch = function(popoverPlacement) {
+        loginExecute('login', true , popoverPlacement);
+    };
     // TODO remove it, remove the old login popup and manage popover in unit test 
     myPundit.oldLogin = function() {
 
@@ -586,12 +592,13 @@ angular.module('Pundit2.Core')
     myPundit.addPostMessageListener();
 
     // TODO This is not really a popoverLogin but more a popover toggler
-    myPundit.popoverLogin = function(where, popoverPlacement) {
-        if (typeof(loginPromise) === 'undefined' && where !== 'editProfile') {
+    myPundit.popoverLogin = function(where, loginWithoutSwitch , popoverPlacement) {
+        if (typeof(loginPromise) === 'undefined' && where !== 'editProfile' ) {
             return;
             // loginPromise = $q.defer();
         }
-
+        if(loginWithoutSwitch)return;
+        //if(loginWithoutSwitch === true) return;
         // If there's already a Login popover I close and destroy it
         if (popoverState.popover !== null) {
             popoverState.popover.hide();

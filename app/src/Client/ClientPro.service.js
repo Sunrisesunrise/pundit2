@@ -635,7 +635,7 @@ angular.module('Pundit2.Client')
                     message: "<a href=\"javascript:void(0)\" data-inner-callback=\"0\">Log in or register</a> to Pundit to save your annotations and see your private notebooks.",
                     callbacks: [
                         function( /*alert*/ ) {
-                            MyPundit.login();
+                            MyPundit.loginWithoutSwitch();
                             return true;
                         }
                     ]
