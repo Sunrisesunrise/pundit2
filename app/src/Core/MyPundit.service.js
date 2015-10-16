@@ -80,8 +80,21 @@ angular.module('Pundit2.Core')
             templateColor: undefined,
             notebookLabel: undefined
         };
+        var loginExecute = function( where, loginWithoutSwitch , popoverPlacement){
+            loginPromise = $q.defer();
 
-    myPundit.useCookies = true;
+            if (myPundit.isUserLogged()) {
+                loginPromise.resolve(true);
+            } else {
+                loginStatus = 'loggedOff';
+                myPundit.popoverLogin(where , loginWithoutSwitch , popoverPlacement);
+            }
+
+            return loginPromise.promise;
+
+        }
+
+        myPundit.useCookies = true;
 
     /**
      * @ngdoc method
@@ -270,19 +283,6 @@ angular.module('Pundit2.Core')
      * @returns {Promise} the promise will be resolved as true when user has finished authentication and is logged in correctly, false otherwise
      *
      */
-    var loginExecute = function( where, loginWithoutSwitch , popoverPlacement){
-        loginPromise = $q.defer();
-
-        if (myPundit.isUserLogged()) {
-            loginPromise.resolve(true);
-        } else {
-            loginStatus = 'loggedOff';
-            myPundit.popoverLogin(where , loginWithoutSwitch , popoverPlacement);
-        }
-
-        return loginPromise.promise;
-
-    }
     myPundit.login = function(popoverPlacement) {
         loginExecute('login', false , popoverPlacement)
     };
