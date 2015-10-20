@@ -31,24 +31,24 @@
 
     <div class="pnd-panel-tab-content-footer" ng-hide="useInKorbo">
         <button
-            class="pnd-btn pnd-btn-transparent pnd-dashboard-preview-clear-sticky-button"
+            class="pnd-btn pnd-btn-small pnd-dashboard-preview-clear-sticky-button"
             ng-click="clearSticky()" 
             ng-class="{disabled: !isStickyItem()}">
             Clear preview
         </button><button
-            class="pnd-btn pnd-dashboard-preview-more-info-button"
+            class="pnd-btn pnd-btn-small pnd-btn-calltoaction pnd-dashboard-preview-more-info-button"
             ng-if="itemDashboardPreview.isProperty() || itemDashboardPreview.isEntity()" 
             ng-click="openUrl(itemDashboardPreview.uri)" 
             ng-class="{disabled: !isStickyItem()}">
             More info
         </button><button
-            class="pnd-btn"
+            class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
             ng-if="itemDashboardPreview.isWebPage()"
             ng-click="openUrl(itemDashboardPreview.uri)"
             ng-class="{disabled: !isStickyItem()}">
             Go to page
         </button><button
-            class="pnd-btn pnd-dashboard-preview-more-info-button"
+            class="pnd-btn pnd-btn-small pnd-btn-calltoaction pnd-dashboard-preview-more-info-button"
             ng-if="isNotebook() && askThePundit" 
             ng-click="openNotebookUrl(itemDashboardPreview.id)" 
             ng-class="{disabled: !isStickyItem()}">

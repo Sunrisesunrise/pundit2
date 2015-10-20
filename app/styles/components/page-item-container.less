@@ -24,7 +24,7 @@
         padding: 0;
         clear: none;
         font-size: 18px;
-        font-weight: bold;
+        font-weight: 600;
         line-height: 1.8;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -56,7 +56,7 @@
 
         input {
             padding-right: 20px;
-            font-weight: normal;
+            // font-weight: normal;
         }
 
         .pnd-icon {
@@ -80,8 +80,6 @@
             }
         }
 
-        // .pnd-icon-times is configured in *ItemsContainer.service.js defaults with
-        // inputIconClear: 'pnd-icon-times'
         .pnd-icon.pnd-icon-times:hover {
             color: @brand-success;
             cursor: pointer;
@@ -98,65 +96,12 @@
         // Not very elegant solution. The top positioning
         // cannot be relative to .pnd-panel-tab-content-header since there are some overflow
         // problems if we assign position: relative to that element
-        top: 43px;
+        top: 46px;
         right: 13px;
+        color: @color-dark-gray-background;
 
-        &.pnd-btn:hover,
-        &.pnd-btn:focus {
-            background-image: none;
-        }
-    }
-}
-
-
-/* ------------------------------------ *\
-   #SECOND-LEVEL-TABS
-\* ------------------------------------ */
-/* Style for the second level tabs that are found under
- the search field.
- These tabs are usually used for filtering the items
- in the displayed list */
-.pnd-panel-tab-content {
-
-    /* These are the second level tabs, under the search field */
-    .pnd-tab-header { //.nav-tabs
-        margin-bottom: 0;
-        margin-right: 0;
-
-        background-color: #fff;
-        border-top: 1px solid @color-border-normal;
-        border-bottom: 1px solid @color-border-normal;
-
-        > li {
-            /* Actual tabs (as links) */
-            > a {
-                margin-right: 0;
-                background-color: #fff;
-                border: 0;
-                border-top: 2px solid transparent;
-                //border-bottom: 1px solid @color-border-normal;
-
-                color: @nav-tabs-active-link-hover-color;
-                line-height: @line-height-base;
-
-                &:hover {
-                    background-color: transparent;
-                    //border-bottom: 1px solid @color-border-normal;
-
-                    color: #000;
-                    cursor: pointer;
-                }
-            }
-
-            /* Active state, and its :hover to override normal :hover */
-            &.active > a {
-                &,
-                &:hover,
-                &:focus {
-                    border-top: 2px solid @gray;
-                    cursor: pointer;
-                }
-            }
+        &:hover, &:focus {
+            color: @color-brand;
         }
     }
 }
@@ -204,18 +149,21 @@
 
 .pnd-panel-tab-content-footer {
     display: block;
-    height: 32px;
+    height: 40px;
     position: absolute;
     bottom: 0;
     right: 7px;
     left: 0;
+    padding-top: 7px;
 
     background-color: #fff;
     border-top: 1px solid @color-border-normal;
+    text-align: right;
 
     .pnd-btn {
-        float: left;
+        // float: left;
         //border-right: 1px solid #fff;
+        margin-right: 7px;
     }
 
     .pnd-btn-lists.pnd-btn {

@@ -109,8 +109,12 @@
                 
                 <!-- Notebooks menu -->
                 <li class="pnd-toolbar-notebook-menu-button" ng-if="myNotebooks" ng-click="onClickNotebookDropdown()">
-                    <a ng-show="isUserLogged" href="javascript:void(0)" placement="bottom-right" template-url="{{dropdownTemplateMyNotebook}}" bs-dropdown="userNotebooksDropdown"><span class="pnd-icon pnd-icon-book"> </span> <span class="pnd-toolbar-active-element">{{currentNotebookLabel}}</span></a>
-                    <a ng-show="!isUserLogged" href="javascript:void(0)" placement="bottom-right" template-url="{{dropdownTemplate}}" bs-dropdown="userNotLoggedDropdown"><span class="pnd-toolbar-not-active-element">Log in to select a notebook</span></a>
+                    <a ng-show="isUserLogged" href="javascript:void(0)" placement="bottom-right" template-url="{{dropdownTemplateMyNotebook}}" bs-dropdown="userNotebooksDropdown">
+                        <span class="pnd-icon pnd-icon-book"> </span> <span class="pnd-toolbar-active-element">{{currentNotebookLabel}}</span>
+                    </a>
+                    <a ng-show="!isUserLogged" href="javascript:void(0)" placement="bottom-right" template-url="{{dropdownTemplate}}" bs-dropdown="userNotLoggedDropdown" class="disabled">
+                        <span class="pnd-toolbar-not-active-element">Log in to select a notebook</span>
+                    </a>
                 </li>
 
                 <!-- Custom menu -->

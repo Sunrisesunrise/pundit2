@@ -33,11 +33,11 @@
     overflow: hidden;
 
      input[type="text"].form-control, select.form-control, textarea.form-control {
-        color: @color-text-light;
+        // color: @color-text-light;
     }
 
     .pnd-btn-xsmall {
-        background: #fff;
+        // background: #fff;
     }
 }
 
@@ -72,65 +72,66 @@ vertical draggable bar */
     text-decoration: underline !important; /* For css overwritings */
 }
 
+
 /* ------------------------------------ *\
    #COLLAPSE-EXPAND-BUTTONS
 \* ------------------------------------ */
 
 .pnd-dashboard-panel {
 
-    button.pnd-btn-dashboard {
+    button.pnd-dashboard-panel-toggle {
+        position: absolute;
         width: 20px; /* This is modified below for not-last panels */
         padding-bottom: 0;
-        position: absolute;
-        z-index: 1;
         right: 0; /* This is modified below for not-last panels */
+        border: 0;
+        padding-top: 2px;
+        background-color: #fff;
+        color: @color-dark-gray-background;
+        z-index: 1;
 
+        &:hover {
+            color: @color-brand;
+        }
 
-        &.pnd-btn-xsmall {
-            border: 0;
-            padding-top: 2px;
-            //padding-bottom: 0;
+        &:focus,
+        &:active:focus,
+        &.active:focus {
+            box-shadow: none;
+        }
+
+        .pnd-icon {
+            font-size: 12px;
+            line-height: normal;
+            padding: 0;
+        }
+
+        &.disabled,
+        &[disabled] {
             background-color: #fff;
-            text-shadow: 0 1px 0 #fff;
-
-            &:hover {
-                color: @brand-success;
-            }
-
-            &:focus,
-            &:active:focus,
-            &.active:focus {
-                box-shadow: none;
-            }
+            text-shadow: 0;
+            opacity: 1;
+            filter: alpha(opacity=100);
 
             .pnd-icon {
-                font-size: 12px;
-                line-height: normal;
-                padding: 0;
-            }
-
-            &.disabled,
-            &[disabled] {
-                background-color: #fff;
-                text-shadow: 0;
-                opacity: 1;
-                filter: alpha(opacity=100);
-
-                .pnd-icon {
-                    color: @gray-extra-light;
-                }
+                color: @gray-extra-light;
             }
         }
     }
 
     /* First and second panel (not-last) */
     &.pnd-dashboard-panel-not-last {
-        button.pnd-btn-dashboard {
+        button.pnd-dashboard-panel-toggle {
             right: 7px;
             width: 21px;
         }
     }
 }
+
+
+/* ------------------------------------ *\
+   #OTHER-STUFF
+\* ------------------------------------ */
 
 .pnd-dashboard-panel-nav {
     width: 100%;

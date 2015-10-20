@@ -25,7 +25,7 @@ ul.pnd-tab-header {
     > li {
         // Actual tabs (as links)
         display: block;
-        margin-top: 0;
+        margin: 0 2px 0 0;
         float: left;
         position: relative;
 
@@ -37,13 +37,13 @@ ul.pnd-tab-header {
             margin: 0;
             padding: 6px 8px;
 
-            background-color: @dashboard-bg-color;
+            background-color: @tab-bg-color;
             border-radius: @tab-border-radius @tab-border-radius 0 0;
 
-            font-size: 12px;
-            font-weight: 200;
-            color: @nav-tabs-active-link-hover-color; /* For css overwritings - !important */
-            line-height: @line-height-base;
+            font-size: 13px;
+            // font-weight: 400;
+            color: @tab-text-color; /* For css overwritings - !important */
+            line-height: @line-height-base; // TODO
             overflow: visible;
 
             &:hover,
@@ -51,7 +51,7 @@ ul.pnd-tab-header {
             &:active {
                 border-color: transparent;
                 background-color: @tab-bg-hover-color;
-                color: @nav-tabs-active-link-hover-color !important;
+                color: @tab-text-hover-color !important;
                 text-decoration: none !important; /* For css overwritings - !important */
                 cursor: pointer;
             }
@@ -63,18 +63,18 @@ ul.pnd-tab-header {
             &:hover,
             &:focus {
                 margin: 0;
-                background-color: @nav-tabs-active-link-hover-bg;
+                background-color: @tab-bg-active-color;
                 border-bottom-color: transparent;
-                color: @nav-tabs-active-link-hover-color !important;
+                color: @tab-text-active-color !important;
                 text-decoration: none !important;
                 cursor: pointer;
-                // box-shadow: 0 -1px 2px rgba(0,0,0,.18);
             }
         }
     }
 
-    // Show tabs button
+    /* Show tabs button */
     .show-tabs {
+        margin-right: 0;
 
         a { 
             padding: 7px 10px 5px;
@@ -95,7 +95,7 @@ ul.pnd-tab-header {
         }
 
         &.active a {
-            background-color: @nav-tabs-active-link-hover-bg;
+            background-color: @tab-bg-active-color;
         }
 
         /* For css overwritings */
@@ -115,6 +115,59 @@ ul.pnd-tab-header {
         box-shadow: none;
     }
 }
+
+
+/* ------------------------------------ *\
+   #INNER-TABS
+\* ------------------------------------ */
+
+/* Style for the second level tabs that are found under
+ the search field in the items list panel.
+ These tabs are usually used for filtering the items
+ in the displayed list */
+
+.pnd-panel-tab-content {
+    .pnd-tab-header {
+        margin-bottom: 0;
+        margin-right: 0;
+
+        background-color: @tab-inner-bg-color;
+        border-top: 1px solid @color-border-normal;
+        border-bottom: 1px solid @color-border-normal;
+
+        > li {
+            /* Actual tabs (as links) */
+            margin: 0;
+
+            > a {
+                margin-right: 0;
+                border: 0;
+                border-top: 2px solid transparent;
+                border-radius: 0;
+                color: @tab-inner-text-color;
+                line-height: @line-height-base;  // TODO
+
+                &:hover {
+                    background-color: @tab-inner-hover-bg-color;
+                    color: @tab-inner-text-hover-color;
+                    cursor: pointer;
+                }
+            }
+
+            /* Active state, and its :hover to override normal :hover */
+            &.active > a {
+                &,
+                &:hover,
+                &:focus {
+                    border-top: 2px solid @tab-inner-border-top-color;
+                    color: @tab-inner-text-active-color;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
 
 /* ------------------------------------ *\
    #VERTICAL-TABS

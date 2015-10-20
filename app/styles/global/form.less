@@ -1,0 +1,29 @@
+/**
+ * FORM
+ *
+ * Styles for forms elements
+ */
+
+/* ------------------------------------ *\
+   #GENERAL
+\* ------------------------------------ */
+select, textarea, input[type="date"], input[type="datetime"],
+input[type="datetime-local"], input[type="email"], input[type="month"],
+input[type="number"], input[type="password"], input[type="search"], input[type="tel"],
+input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
+    padding: 4px 5px;
+    border-radius: @input-border-radius;
+    border-color: @input-border-color;
+    font-size: 13px;
+    color: @color-text;
+    box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.05);
+
+    &:hover {
+        border-color: @input-border-color;
+    }
+
+    &:focus,
+    &:active {
+        border-color: @color-brand;
+    }
+}

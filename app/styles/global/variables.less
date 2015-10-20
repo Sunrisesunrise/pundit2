@@ -33,7 +33,7 @@
 
 // Text colors
 @color-text: @color-dark-background;
-@color-text-light: red; // TODO To be defined
+@color-text-light: #AEB1B5; // TODO To be added to Sketch document
 @color-text-error: @color-error;
 @color-text-link: @color-brand;
 @color-text-link-hover: #224E8C;
@@ -79,11 +79,6 @@
 @color-login-popover-background: #FFF;
 @color-login-popover-border: #979797;
 
-// Types of entities (shown in previews)
-@color-type-background: rgb(224, 227, 228);
-@color-type-text: #555;
-@type-border-radius: 3px;
-
 // Modal
 @color-modal-backdrop:  rgba(0,0,0,.5);
 
@@ -96,7 +91,7 @@
 // #BUTTONS
 // ------------------------------------ //
 
-@button-font-weight: 600;
+@button-font-weight: 400;
 
 // Button call to action
 @color-button-cta-text: #FFF;
@@ -113,17 +108,17 @@
 @color-button-text-active: #224E8C;
 @color-button-text-disabled: #CDDFF8;
 
-@color-button-bg: #FFF;
+@color-button-bg: @color-light-background; // #FFF;
 @color-button-bg-hover: #FFF;
 @color-button-bg-active: #FFF;
 @color-button-bg-disabled: #FFF;
 
-@color-button-border: @color-brand;
-@color-button-border-hover: #3780E6;
-@color-button-border-active: #224E8C;
-@color-button-border-disabled: #9BBFF2;
+@color-button-border: @color-light-gray-background; // @color-brand;
+@color-button-border-hover: @color-light-gray-background;
+@color-button-border-active: @color-light-gray-background;
+@color-button-border-disabled: @color-light-gray-background;
 
-@button-border-width: 2px;
+@button-border-width: 1px;
 
 // Button light bg
 @color-button-light-text: @color-brand;
@@ -131,7 +126,7 @@
 @color-button-light-text-active: #224E8C;
 @color-button-light-text-disabled: #CDDFF8;
 
-// Toolbar buttons
+// Toolbar buttons // TODO
 @color-button-bg-dark: #3d4042; // TODO no good naming
 @color-button-text-light: #fff; // TODO no good naming
 @color-button-text-dark: @color-text; // TODO no good naming
@@ -174,10 +169,7 @@
 @toolbar-height: 30px;
 @toolbar-border-bottom: 0;
 
-
-
-
-
+// TODO
 @color-toolbar-button: red; // TODO Maybe delete?
 @color-toolbar-button-hover: lighten(@color-toolbar-button, 8); // TODO Maybe delete?
 @color-toolbar-button-open: #999999; // @color-toolbar-button-hover; // TODO Maybe delete?
@@ -187,6 +179,28 @@
 // #DASHBOARD
 // ------------------------------------ //
 @dashboard-bg-color: @color-dark-gray-background;
+
+
+// ------------------------------------ //
+// #TABS
+// ------------------------------------ //
+@tab-bg-color: transparent;
+@tab-bg-hover-color: @color-light-background;
+@tab-bg-active-color: #FFFFFF; // TODO Fix
+
+@tab-text-color: @color-text;
+@tab-text-hover-color: @color-text;
+@tab-text-active-color: @color-text;
+
+@tab-inner-bg-color: transparent;
+@tab-inner-hover-bg-color: @color-light-background;
+@tab-inner-border-top-color: @color-dark-background;
+
+@tab-inner-text-color: @color-dark-gray-background;
+@tab-inner-text-hover-color: @color-text;
+@tab-inner-text-active-color: @color-text;
+
+@tab-border-radius: 2px;
 
 
 // ------------------------------------ //
@@ -245,6 +259,11 @@
 // ------------------------------------ //
 // #TRIPLE-COMPOSER
 // ------------------------------------ //
+
+@triplecomposer-color-bg: @color-light-background;
+@triplecomposer-color-border: @color-light-gray-background;
+@triplecomposer-border-radius: 3px;
+@triplecomposer-inner-border-radius: 2px;
 @triplecomposer-height: 25px;
 @triplecomposer-padding-inner: 5px;
 @triplecomposer-spacing: 6px;
@@ -289,18 +308,6 @@
 
 
 // ------------------------------------ //
-// #TABS
-// ------------------------------------ //
-@tab-bg-color: transparent;
-@tab-text-color: @color-text;
-@tab-bg-hover-color: #dddddd;
-@tab-text-hover-color: @color-text;
-@tab-bg-active-color: #FFFFFF;
-@tab-text-active-color: @color-text;
-@tab-border-radius: 3px;
-
-
-// ------------------------------------ //
 // #Z-INDEX
 // ------------------------------------ //
 
@@ -328,6 +335,34 @@
 
 
 // ------------------------------------ //
+// #MOUSE-CURSOR
+// ------------------------------------ //
+
+// Disabled cursor for form controls and buttons
+@cursor-disabled: not-allowed;
+
+
+// ------------------------------------ //
 // #ANIMATIONS-VARIABLES
 // ------------------------------------ //
 @animation-fast-duration: .15s;
+
+
+// ------------------------------------ //
+// #FORMS
+// ------------------------------------ //
+@input-border-radius: 2px;
+@input-border-color: @color-light-gray-background;
+@input-border-color-focus: @color-brand;
+
+
+// ------------------------------------ //
+// #TYPES
+// ------------------------------------ //
+
+// Types of entities (shown in previews)
+@color-type-background: @color-dark-gray-background;
+@color-type-text: #FFF;
+@type-border-radius: 3px;
+
+

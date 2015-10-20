@@ -23,13 +23,11 @@
     cursor: pointer;
 
     &:hover {
-        background-color: @gray-extra-lightest;
+        background-color: @color-ultra-light-background;
     }
 
     .pnd-item-buttons {
-        // margin-right: 7px;
         display: inline;
-        // float: left;
     }
 
     /* Item's wrapper for title and type label */
@@ -41,10 +39,10 @@
     /* Item's title */
     .pnd-item-label {
         display: inline;
-        color: inherit; /* Fixes css conflicts */
+        color: @color-dark-gray-background; // @color-text; /* Fixes css conflicts */
         font-family: @font;
         font-size: 12px;
-        font-weight: bold;
+        // font-weight: 100;
         line-height: @item-height - 1px;
         margin-left: 3px;
     }
@@ -56,14 +54,14 @@
 
     /* Sticky/selected item */
     &.pnd-sticky-item, &.pnd-select-item {
-        background-color: @brand-success;
-        color: #fff;
+        background-color: @color-light-gray-background;
 
         .pnd-item-label {
-            font-weight: bold;
+            color: @color-text;
+            font-weight: inherit;
         }
         .pnd-icon {
-            color: #fff !important;
+            // color: #fff !important;
         }
     }
 }

@@ -19,7 +19,9 @@
 // we can add the declaration to reset it
 
 
-// Common tags reset
+// ------------------------------------ //
+// #COMMON-TAG-RESET
+// ------------------------------------ //
 *, *:before, *:after {
     background-image: none;
     background-color: none;
@@ -51,7 +53,14 @@ button span {
     overflow: visible;
 }
 
-// Display declaration
+*:focus {
+    outline: 0;
+}
+
+
+// ------------------------------------ //
+// #DISPLAY-DECLARATIONS
+// ------------------------------------ //
 div, h1, h2, h3, h4, h5, h6, p, ul, li, ul li, nav ul li {
     display: block;
 }
@@ -65,8 +74,10 @@ span, img, strong, b, i {
     padding-left: 0;
 }
 
-// Form elements
 
+// ------------------------------------ //
+// #FORMS
+// ------------------------------------ //
 input[type='radio'] {
     -webkit-appearance : radio; /* For css overwritings */
 }
@@ -87,26 +98,15 @@ button, input[type="button"], input[type="submit"] {
     background-position: initial;
 }
 
-select, textarea, input[type="date"], input[type="datetime"], 
-input[type="datetime-local"], input[type="email"], input[type="month"], 
-input[type="number"], input[type="password"], input[type="search"], input[type="tel"], 
+select, textarea, input[type="date"], input[type="datetime"],
+input[type="datetime-local"], input[type="email"], input[type="month"],
+input[type="number"], input[type="password"], input[type="search"], input[type="tel"],
 input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
     float: initial;
     margin: 0;
-    padding: 4px 5px;
-    border-radius: 0;
-
-    &:hover {
-        border-color: @color-border-normal;
-    }
-    
-    &:focus,
-    &:active {
-        border-color: @input-border-focus;
-    }
 }
 
-select, input[type="date"], input[type="datetime"], 
+select, input[type="date"], input[type="datetime"],
 input[type="datetime-local"], input[type="email"], input[type="month"], 
 input[type="number"], input[type="password"], input[type="search"], input[type="tel"], 
 input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
@@ -123,16 +123,15 @@ input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
     height: auto;
 }
 
-// Typography resets
 
-* {
-    letter-spacing: normal;
-}
+// ------------------------------------ //
+// #TYPOGRAPHY
+// ------------------------------------ //
 
 a {
     border-bottom: none;
     color: @color-text-link;
-    font-weight: normal;
+    font-weight: 100;
     font-family: @font !important; /* Consider if this is to declare elsewhere */
     &:hover {
     border-bottom: none;
@@ -202,7 +201,10 @@ nav, label {
     text-transform: initial;
 }
 
-// Lists
+
+// ------------------------------------ //
+// #LISTS
+// ------------------------------------ //
 ol, ul, li, ul li {
     list-style: none;
 }
@@ -216,7 +218,11 @@ nav ul {
     overflow: visible;
 }
 
-// Tables
+
+// ------------------------------------ //
+// #LISTS
+// ------------------------------------ //
+
 table {
     display: table;
 }

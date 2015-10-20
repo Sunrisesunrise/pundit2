@@ -218,7 +218,7 @@ angular.module('Pundit2.GeneralItemsContainer')
                 return 'You can add items here selecting parts of text or entities in the Linked Data panel and clicking "Add to My Items".';
             }
             if (str === '') {
-                return 'No item found.';
+                return 'No items found.';
             } else {
                 return noItemsFound;
             }

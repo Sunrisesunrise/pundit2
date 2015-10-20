@@ -8,7 +8,11 @@
    #CONTEXTUAL-MENU
 \* ------------------------------------ */
 
-.pnd-dropdown-contextual-menu.dropdown-menu {
+.pnd-dropdown-contextual-menu.dropdown-menu, .show-tabs + .dropdown-menu {
+    /*
+    The selector ".show-tabs + .dropdown-menu" is for the special case of the
+
+    */
     padding: 0;
     overflow: hidden;
     z-index: @zindex-pnd-contextual-menu;

@@ -11,12 +11,9 @@
 .pnd-type {
     overflow: hidden;
     margin: 0 3px 3px 0;
-    padding: 3px 6px;
+    padding: 3px 4px;
 
-    // background-color: @color-type-background;
-    /* Gradient bg with mixin */
-    #gradient > .vertical(lighten(@color-type-background, 1); darken(@color-type-background, 1));
-    
+    background-color: @color-type-background;
     /* border: 1px solid rgb(234, 234, 234); */
 
     color: @color-type-text;
@@ -26,5 +23,5 @@
     text-overflow: ellipsis;
     font-size: 10px;
     text-transform: uppercase;
-    .text-white-emboss(.4);
+    border-radius: 3px;
 }

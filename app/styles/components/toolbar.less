@@ -122,17 +122,26 @@ body.pnd-toolbar-active {
 
             transition: none !important; /* Delete any transition */
 
-            &:focus {
-                background-color: @color-toolbar-button-bg;
-                text-decoration: none !important; /* For css overwritings */
-            }
-
+            /* Hover state */
             &:hover {
                 background-color: @color-toolbar-button-bg-hover;
                 text-decoration: none !important; /* For css overwritings */
                 > span {
                     color: inherit;
                 }
+            }
+
+            /* Focus state */
+            &:focus {
+                background-color: @color-toolbar-button-bg;
+                text-decoration: none !important; /* For css overwritings */
+            }
+
+            /* Disabled state */
+            &.disabled {
+                background-color: @color-toolbar-button-bg-disabled;
+                color: @color-toolbar-button-cta-text-disabled !important; /* For css overwritings */
+                cursor: @cursor-disabled;
             }
 
             span {
@@ -182,6 +191,7 @@ body.pnd-toolbar-active {
         }
 
         /* Disabled buttons */
+        /* TODO This is used only by Template selector It needs some refactoring both for UI/UX and code */
         &.disabled > a, .pnd-toolbar-not-active-element {
             color: @color-toolbar-button-cta-text-disabled !important; /* For css overwritings */
         }
@@ -196,8 +206,8 @@ body.pnd-toolbar-active {
     /* Left navigation*/
     &.pnd-toolbar-navbar-left {
         float: left;
-        a {
-            margin: 0 1px 0 0;
+        > li > a {
+            margin: 0 2px 0 0;
         }
     }
 
@@ -209,8 +219,8 @@ body.pnd-toolbar-active {
             margin-right: -15px; /* Remove margin for right toolbar menu */
         }
 
-        a {
-            margin: 0 0 0 1px;
+        > li > a {
+            margin: 0 0 0 2px;
         }
     }
 
@@ -264,13 +274,13 @@ body.pnd-toolbar-active {
 }
 
 /* Sidebar button icon */
-.pnd-toolbar-navbar .pnd-inner-nav .pnd-toolbar-annotations-button { //.navbar-nav
+.pnd-toolbar-navbar .pnd-inner-nav .pnd-toolbar-annotations-button {
     .pnd-icon {
         margin-left: 3px;
-        color: @color-toolbar-disabled;
+        // color: @color-toolbar-disabled;
 
         &.pnd-filter-active {
-            color: @brand-primary;
+            color: @color-toolbar-button-cta-bg;
         }
     }
 }
@@ -288,6 +298,13 @@ body.pnd-toolbar-active {
         > li:hover {
             background-color: transparent;
         }
+    }
+}
+
+/* Template selection button */
+.pnd-toolbar-inner-nav.pnd-toolbar-navbar-right > li.pnd-toolbar-template-menu-button { /* Little specificity issue here */
+    > a {
+        margin-left: 0;
     }
 }
 
