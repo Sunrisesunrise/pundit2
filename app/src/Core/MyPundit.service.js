@@ -302,11 +302,11 @@ angular.module('Pundit2.Core')
      *
      */
     myPundit.login = function(popoverPlacement) {
-        loginExecute('login', popoverPlacement, false)
+        return loginExecute('login', popoverPlacement, false)
     };
 
     myPundit.loginWithoutSwitch = function(popoverPlacement) {
-        loginExecute('login', popoverPlacement, true);
+        return loginExecute('login', popoverPlacement, true);
     };
 
     // TODO remove it, remove the old login popup and manage popover in unit test 
