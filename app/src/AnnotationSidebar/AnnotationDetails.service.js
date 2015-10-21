@@ -334,12 +334,12 @@ angular.module('Pundit2.AnnotationSidebar')
     var convertTime = function(serverdate) {
         var annotationServerVersion = Config.annotationServerVersion;
 
-            if (annotationServerVersion === 'v2') {
-                   var momentDate = moment(serverdate).utc().format('YYYY-MM-DD HH:mm:ss');
-                   var localTime  = moment.utc(momentDate).toDate();
-                   localTime = moment(localTime).format('YYYY-MM-DD HH:mm:ss');
-                   return localTime.toString();
-            }
+        if (annotationServerVersion === 'v2') {
+            var momentDate = moment(serverdate).utc().format('YYYY-MM-DD HH:mm:ss');
+            var localTime  = moment.utc(momentDate).toDate();
+            localTime = moment(localTime).format('YYYY-MM-DD HH:mm:ss');
+            return localTime.toString();
+        }
         return serverdate;
     };
 
