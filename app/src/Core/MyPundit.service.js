@@ -302,7 +302,7 @@ angular.module('Pundit2.Core')
      *
      */
     myPundit.login = function(popoverPlacement) {
-        return loginExecute('login', popoverPlacement, false)
+        return loginExecute('login', popoverPlacement, false);
     };
 
     myPundit.loginWithoutSwitch = function(popoverPlacement) {

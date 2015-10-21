@@ -330,17 +330,20 @@ angular.module('Pundit2.AnnotationSidebar')
 
         return results;
     };
+
     var convertTime = function(serverdate) {
-            var annotationServerVersion = Config.annotationServerVersion;
+        var annotationServerVersion = Config.annotationServerVersion;
 
             if (annotationServerVersion === 'v2') {
-                var myDate = new Date(serverdate);
-                return myDate.toString();
+                   var momentDate = moment(serverdate).utc().format('YYYY-MM-DD HH:mm:ss');
+                   var localTime  = moment.utc(momentDate).toDate();
+                   localTime = moment(localTime).format('YYYY-MM-DD HH:mm:ss');
+                   return localTime.toString();
             }
         return serverdate;
     };
 
-        annotationDetails.openConfirmModal = function(currentElement, currentId)  {
+    annotationDetails.openConfirmModal = function(currentElement, currentId)  {
         // promise is needed to open modal when template is ready
         modalScope.notifyMessage = 'Are you sure you want to delete this annotation? Please be aware that deleted annotations cannot be recovered.';
         modalScope.elementReference = currentElement;
