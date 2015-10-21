@@ -40,7 +40,7 @@ describe("My Notebooks interaction", function() {
             });
     };
 
-    var p = protractor.getInstance();
+    var p = browser;
 
     beforeEach(function(){
         p.addMockModule('httpBackendMock', httpMock);
@@ -53,16 +53,16 @@ describe("My Notebooks interaction", function() {
 
     it('should correctly load default template', function() {
         // check tab content (welcome messagge)
-        p.findElements(protractor.By.css('.pnd-panel-tab-content-content .pnd-dashboard-welcome')).then(function(welcome){
+        element.all(By.css('.pnd-panel-tab-content-content .pnd-dashboard-welcome')).then(function(welcome){
             expect(welcome.length).toBe(1);
             expect(welcome[0].getText()).toEqual("No notebook found.");
         });
     });
 
     it('should correctly show my notebooks', function() {
-        p.findElement(protractor.By.css('.pnd-test-get-my-notebooks')).click();
+        element(By.css('.pnd-test-get-my-notebooks')).click();
         // check notebook
-        p.findElements(protractor.By.css('.pnd-panel-tab-content-content item')).then(function(notebooks) {
+        element.all(By.css('.pnd-panel-tab-content-content item')).then(function(notebooks) {
             expect(notebooks.length).toBe(1);
             expect(notebooks[0].getAttribute('nid')).toEqual('ntfkid123');
         });

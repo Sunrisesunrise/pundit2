@@ -1,22 +1,22 @@
 describe("The toolbar module", function() {
-    var p = protractor.getInstance();
+    var p = browser;
 
     // check buttons state where user is not logged in
     var checkNotLoggedUserButtons = function() {
 
         // user button should be hide
-        p.findElements(protractor.By.css('.pnd-toolbar-user-button.ng-hide')).then(function(userButton) {
+        element.all(By.css('.pnd-toolbar-user-button.ng-hide')).then(function(userButton) {
             expect(userButton.length).toBe(1);
         });
 
         // login button should be visible
-        p.findElements(protractor.By.css('.pnd-login-button')).then(function(loginButton) {
+        element.all(By.css('.pnd-login-button')).then(function(loginButton) {
             expect(loginButton.length).toBe(1);
 
             // click login button
             /*loginButton[0].click().then(function() {
                 // dropdown-menu should be visible
-                p.findElements(protractor.By.css('.pnd-toolbar-login-button .dropdown-menu li')).then(function(dropdownMenu) {
+                element.all(By.css('.pnd-toolbar-login-button .dropdown-menu li')).then(function(dropdownMenu) {
                     expect(dropdownMenu.length).toBe(2);
                     expect(dropdownMenu[0].getText()).toBe("Please sign in to use Pundit");
                     expect(dropdownMenu[1].getText()).toBe("Sign in");
@@ -25,28 +25,28 @@ describe("The toolbar module", function() {
         });
 
         // status button ok should be visible
-        p.findElements(protractor.By.css('.pnd-toolbar-status-button-ok')).then(function(statusOkButton) {
+        element.all(By.css('.pnd-toolbar-status-button-ok')).then(function(statusOkButton) {
             expect(statusOkButton.length).toBe(1);
         });
 
         // error button should be hide
-        p.findElements(protractor.By.css('.pnd-toolbar-error-button.ng-hide')).then(function(errorButton) {
+        element.all(By.css('.pnd-toolbar-error-button.ng-hide')).then(function(errorButton) {
             expect(errorButton.length).toBe(1);
         });
 
         // ask the pundit button should be not active
-        p.findElements(protractor.By.css('.pnd-toolbar-ask-button')).then(function(askButton) {
+        element.all(By.css('.pnd-toolbar-ask-button')).then(function(askButton) {
             expect(askButton.length).toBe(1);
         });
 
         // notebook button should be active
-        p.findElements(protractor.By.css('.pnd-toolbar-notebook-menu-button .pnd-toolbar-not-active-element')).then(function(notebookButton) {
+        element.all(By.css('.pnd-toolbar-notebook-menu-button .pnd-toolbar-not-active-element')).then(function(notebookButton) {
             expect(notebookButton.length).toBe(1);
 
             // click notebook button
             notebookButton[0].click().then(function() {
                 // dropdown-menu should be visible
-                p.findElements(protractor.By.css('.pnd-toolbar-notebook-menu-button .dropdown-menu li')).then(function(dropdownMenu) {
+                element.all(By.css('.pnd-toolbar-notebook-menu-button .dropdown-menu li')).then(function(dropdownMenu) {
                     expect(dropdownMenu.length).toBe(2);
                     expect(dropdownMenu[0].getText()).toBe("Please log in to select the notebook to store your annotations");
                     expect(dropdownMenu[1].getText()).toBe("Log in");
@@ -59,14 +59,14 @@ describe("The toolbar module", function() {
     var checkLoggedUserButtons = function() {
 
         // user button should be visible and should show user full name
-        p.findElements(protractor.By.css('.pnd-toolbar-user-button')).then(function(userButton) {
+        element.all(By.css('.pnd-toolbar-user-button')).then(function(userButton) {
             expect(userButton.length).toBe(1);
             expect(userButton[0].getText()).toBe("Mario Rossi");
 
             // click user button
             userButton[0].click().then(function() {
                 // dropdown-menu should be visible
-                p.findElements(protractor.By.css('.pnd-toolbar-user-button .dropdown-menu li')).then(function(dropdownMenu) {
+                element.all(By.css('.pnd-toolbar-user-button .dropdown-menu li')).then(function(dropdownMenu) {
                     expect(dropdownMenu.length).toBe(2);
                     expect(dropdownMenu[0].getText()).toBe("Edit your profile");
                     expect(dropdownMenu[1].getText()).toBe("Log out");
@@ -75,32 +75,32 @@ describe("The toolbar module", function() {
         });
 
         // login button should be hide
-        p.findElements(protractor.By.css('.pnd-login-button.ng-hide')).then(function(loginButton) {
+        element.all(By.css('.pnd-login-button.ng-hide')).then(function(loginButton) {
             expect(loginButton.length).toBe(1);
         });
 
         // status button ok should be visible
-        p.findElements(protractor.By.css('.pnd-toolbar-status-button-ok')).then(function(statusOkButton) {
+        element.all(By.css('.pnd-toolbar-status-button-ok')).then(function(statusOkButton) {
             expect(statusOkButton.length).toBe(1);
         });
 
         // error button should be hide
-        p.findElements(protractor.By.css('.pnd-toolbar-error-button.ng-hide')).then(function(errorButton) {
+        element.all(By.css('.pnd-toolbar-error-button.ng-hide')).then(function(errorButton) {
             expect(errorButton.length).toBe(1);
         });
 
         // ask the pundit button should be active
-        p.findElements(protractor.By.css('.pnd-toolbar-ask-button-active')).then(function(askButton) {
+        element.all(By.css('.pnd-toolbar-ask-button-active')).then(function(askButton) {
             expect(askButton.length).toBe(1);
         });
 
         // dashboard button should be active
-        p.findElements(protractor.By.css('.pnd-toolbar-dashboard-toogle-button .pnd-toolbar-active-element')).then(function(dashboardButton) {
+        element.all(By.css('.pnd-toolbar-dashboard-toogle-button .pnd-toolbar-active-element')).then(function(dashboardButton) {
             expect(dashboardButton.length).toBe(1);
         });
 
         // notebook button should be active
-        p.findElements(protractor.By.css('.pnd-toolbar-notebook-menu-button .pnd-toolbar-active-element')).then(function(notebookButton) {
+        element.all(By.css('.pnd-toolbar-notebook-menu-button .pnd-toolbar-active-element')).then(function(notebookButton) {
             expect(notebookButton.length).toBe(1);
         });
     };
@@ -110,19 +110,19 @@ describe("The toolbar module", function() {
         p.get('/app/examples/toolbar.html');
 
         // click set loading btn
-        p.findElement(protractor.By.css('.pnd-test-set-loading')).click();
+        element(By.css('.pnd-test-set-loading')).click();
 
-        p.findElements(protractor.By.css('.pnd-toolbar-loading-button')).then(function(buttons) {
+        element.all(By.css('.pnd-toolbar-loading-button')).then(function(buttons) {
             expect(buttons.length).toBe(1);
         });
-        p.findElements(protractor.By.css('.pnd-toolbar-loading-button.ng-hide')).then(function(buttons) {
+        element.all(By.css('.pnd-toolbar-loading-button.ng-hide')).then(function(buttons) {
             expect(buttons.length).toBe(0);
         });
 
         // click remove loading btn
-        p.findElement(protractor.By.css('.pnd-test-remove-loading')).click();
+        element(By.css('.pnd-test-remove-loading')).click();
 
-        p.findElements(protractor.By.css('.pnd-toolbar-loading-button.ng-hide')).then(function(buttons) {
+        element.all(By.css('.pnd-toolbar-loading-button.ng-hide')).then(function(buttons) {
             expect(buttons.length).toBe(1);
         });
 
@@ -133,19 +133,19 @@ describe("The toolbar module", function() {
         p.get('/app/examples/toolbar.html');
 
         // by default dashboard is close
-        p.findElements(protractor.By.css('.pnd-dashboard-container.ng-hide')).then(function(d){
+        element.all(By.css('.pnd-dashboard-container.ng-hide')).then(function(d){
             expect(d.length).toBe(1);
         });
 
         // open dashboard
-        p.findElement(protractor.By.css('.pnd-toolbar-dashboard-toogle-button')).click();
-        p.findElements(protractor.By.css('.pnd-dashboard-container.ng-hide')).then(function(d){
+        element(By.css('.pnd-toolbar-dashboard-toogle-button')).click();
+        element.all(By.css('.pnd-dashboard-container.ng-hide')).then(function(d){
             expect(d.length).toBe(0);
         });
 
         // close dashboard
-        p.findElement(protractor.By.css('.pnd-toolbar-dashboard-toogle-button')).click();
-        p.findElements(protractor.By.css('.pnd-dashboard-container.ng-hide')).then(function(d){
+        element(By.css('.pnd-toolbar-dashboard-toogle-button')).click();
+        element.all(By.css('.pnd-dashboard-container.ng-hide')).then(function(d){
             expect(d.length).toBe(1);
         });
 
@@ -156,19 +156,19 @@ describe("The toolbar module", function() {
         p.get('/app/examples/toolbar.html');
 
         // by default siderbar is collapsed
-        p.findElements(protractor.By.css('annotation-sidebar > .pnd-annotation-sidebar-collapsed')).then(function(d){
+        element.all(By.css('annotation-sidebar > .pnd-annotation-sidebar-collapsed')).then(function(d){
             expect(d.length).toBe(1);
         });
 
         // open sidebar
-        p.findElement(protractor.By.css('.pnd-toolbar-annotations-button')).click();
-        p.findElements(protractor.By.css('annotation-sidebar > .pnd-annotation-sidebar-expanded')).then(function(d){
+        element(By.css('.pnd-toolbar-annotations-button')).click();
+        element.all(By.css('annotation-sidebar > .pnd-annotation-sidebar-expanded')).then(function(d){
             expect(d.length).toBe(1);
         });
 
         // close sidebar
-        p.findElement(protractor.By.css('.pnd-toolbar-annotations-button')).click();
-        p.findElements(protractor.By.css('annotation-sidebar > .pnd-annotation-sidebar-collapsed')).then(function(d){
+        element(By.css('.pnd-toolbar-annotations-button')).click();
+        element.all(By.css('annotation-sidebar > .pnd-annotation-sidebar-collapsed')).then(function(d){
             expect(d.length).toBe(1);
         });
 
@@ -178,35 +178,35 @@ describe("The toolbar module", function() {
         p.get('/app/examples/toolbar.html');
 
         // click set loading btn
-        p.findElement(protractor.By.css('.pnd-test-set-loading')).click();
+        element(By.css('.pnd-test-set-loading')).click();
 
-        p.findElements(protractor.By.css('.pnd-toolbar-loading-button')).then(function(buttons) {
+        element.all(By.css('.pnd-toolbar-loading-button')).then(function(buttons) {
             expect(buttons.length).toBe(1);
         });
 
         // open info dropdown
-        p.findElement(protractor.By.css('.pnd-toolbar-loading-button')).click();
+        element(By.css('.pnd-toolbar-loading-button')).click();
         // check if dropdown exist
-        p.findElements(protractor.By.css('.pnd-toolbar-loading-button .dropdown-menu')).then(function(d){
+        element.all(By.css('.pnd-toolbar-loading-button .dropdown-menu')).then(function(d){
             expect(d.length).toBe(1);
         });
         // check if dropdown exist
-        p.findElements(protractor.By.css('.pnd-toolbar-loading-button .dropdown-menu a')).then(function(a){
+        element.all(By.css('.pnd-toolbar-loading-button .dropdown-menu a')).then(function(a){
             expect(a.length).toBe(2);
             expect(a[0].getText()).toEqual("About Pundit");
         });
 
         // click remove loading btn
-        p.findElement(protractor.By.css('.pnd-test-remove-loading')).click();
+        element(By.css('.pnd-test-remove-loading')).click();
 
         // open info dropdown
-        p.findElement(protractor.By.css('.pnd-toolbar-status-button-ok')).click();
+        element(By.css('.pnd-toolbar-status-button-ok')).click();
         // check if dropdown exist
-        p.findElements(protractor.By.css('.pnd-toolbar-status-button-ok .dropdown-menu')).then(function(d){
+        element.all(By.css('.pnd-toolbar-status-button-ok .dropdown-menu')).then(function(d){
             expect(d.length).toBe(1);
         });
         // check if dropdown exist
-        p.findElements(protractor.By.css('.pnd-toolbar-status-button-ok .dropdown-menu a')).then(function(a){
+        element.all(By.css('.pnd-toolbar-status-button-ok .dropdown-menu a')).then(function(a){
             expect(a.length).toBe(2);
             expect(a[0].getText()).toEqual("About Pundit");
         });
@@ -287,13 +287,13 @@ describe("The toolbar module", function() {
         checkNotLoggedUserButtons();
 
         // click login button and get login
-        p.findElement(protractor.By.css('.btn-example-login')).click().then(function() {
+        element(By.css('.btn-example-login')).click().then(function() {
             // at this time user should be logged in
             checkLoggedUserButtons();
         });
 
         // click logout button
-        p.findElement(protractor.By.css('.btn-example-logout')).click().then(function() {
+        element(By.css('.btn-example-logout')).click().then(function() {
             // at this time user should not be logged in anymore
             checkNotLoggedUserButtons();
         });
@@ -305,23 +305,23 @@ describe("The toolbar module", function() {
         p.get('/app/examples/toolbar.html');
 
         // click login button and get login
-        p.findElement(protractor.By.css('.btn-example-login')).click();
+        element(By.css('.btn-example-login')).click();
         // click get my notebooks button
-        p.findElement(protractor.By.css('.pnd-test-get-my-notebooks')).click();
+        element(By.css('.pnd-test-get-my-notebooks')).click();
         // click and open my notebooks dropdown
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-notebook-menu-button')).click();
+        element(By.css('toolbar .pnd-toolbar-notebook-menu-button')).click();
         // check dropdown voices number
-        p.findElements(protractor.By.css('toolbar .pnd-toolbar-notebook-menu-button .dropdown-menu li')).then(function(items) {
+        element.all(By.css('toolbar .pnd-toolbar-notebook-menu-button .dropdown-menu li')).then(function(items) {
             expect(items.length).toBe(3);
             expect(items[1].getText()).toBe("Second Notebook Name");
             expect(items[2].getText()).toBe("Notebook Name");
         });
         // check dropdown voices icon (public icon)
-        p.findElements(protractor.By.css('toolbar .pnd-toolbar-notebook-menu-button .dropdown-menu .pnd-icon-group')).then(function(icons) {
+        element.all(By.css('toolbar .pnd-toolbar-notebook-menu-button .dropdown-menu .pnd-icon-group')).then(function(icons) {
             expect(icons.length).toBe(1);
         });
         // check dropdown voices icon (private icon)
-        p.findElements(protractor.By.css('toolbar .pnd-toolbar-notebook-menu-button .dropdown-menu .pnd-icon-lock')).then(function(icons) {
+        element.all(By.css('toolbar .pnd-toolbar-notebook-menu-button .dropdown-menu .pnd-icon-lock')).then(function(icons) {
             expect(icons.length).toBe(1);
         });
 
@@ -332,13 +332,13 @@ describe("The toolbar module", function() {
         p.get('/app/examples/toolbar.html');
 
         // click login button and get login
-        p.findElement(protractor.By.css('.btn-example-login')).click();
+        element(By.css('.btn-example-login')).click();
 
         // get current info
-        p.findElement(protractor.By.css('.pnd-test-get-current-notebook')).click();
+        element(By.css('.pnd-test-get-current-notebook')).click();
 
         // check showed name
-        p.findElements(protractor.By.css('toolbar .pnd-toolbar-notebook-menu-button span')).then(function(spans) {
+        element.all(By.css('toolbar .pnd-toolbar-notebook-menu-button span')).then(function(spans) {
             expect(spans[1].getText()).toBe("Notebook Name");
         });
     });
@@ -348,15 +348,15 @@ describe("The toolbar module", function() {
         p.get('/app/examples/toolbar.html');
 
         // check showed name
-        p.findElements(protractor.By.css('toolbar .pnd-toolbar-template-menu-button span')).then(function(spans) {
+        element.all(By.css('toolbar .pnd-toolbar-template-menu-button span')).then(function(spans) {
             expect(spans[0].getText()).toBe("Loading...");
         });
 
         // get templates
-        p.findElement(protractor.By.css('.pnd-test-get-templates')).click();
+        element(By.css('.pnd-test-get-templates')).click();
 
         // check showed name
-        p.findElements(protractor.By.css('toolbar .pnd-toolbar-template-menu-button span')).then(function(spans) {
+        element.all(By.css('toolbar .pnd-toolbar-template-menu-button span')).then(function(spans) {
             expect(spans[0].getText()).toBe("Template Name");
         });
     });
@@ -366,21 +366,21 @@ describe("The toolbar module", function() {
         p.get('/app/examples/toolbar.html');
 
         // get templates
-        p.findElement(protractor.By.css('.pnd-test-get-templates')).click();
+        element(By.css('.pnd-test-get-templates')).click();
         // open templates dropdown
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-template-menu-button')).click();
+        element(By.css('toolbar .pnd-toolbar-template-menu-button')).click();
 
         // check dropdown voices number
-        p.findElements(protractor.By.css('toolbar .pnd-toolbar-template-menu-button .dropdown-menu li')).then(function(items) {
+        element.all(By.css('toolbar .pnd-toolbar-template-menu-button .dropdown-menu li')).then(function(items) {
             expect(items.length).toBe(2);
             expect(items[1].getText()).toBe("Template Name");
         });
         // check dropdown voices icon (color icon)
-        p.findElements(protractor.By.css('toolbar .pnd-toolbar-template-menu-button .dropdown-menu .pnd-icon-circle')).then(function(icons) {
+        element.all(By.css('toolbar .pnd-toolbar-template-menu-button .dropdown-menu .pnd-icon-circle')).then(function(icons) {
             expect(icons.length).toBe(1);
         });
         // check dropdown voices icon (current icon)
-        p.findElements(protractor.By.css('toolbar .pnd-toolbar-template-menu-button .dropdown-menu .pnd-icon-check')).then(function(icons) {
+        element.all(By.css('toolbar .pnd-toolbar-template-menu-button .dropdown-menu .pnd-icon-check')).then(function(icons) {
             expect(icons.length).toBe(1);
         });
     });
@@ -390,19 +390,19 @@ describe("The toolbar module", function() {
         p.get('/app/examples/toolbar.html');
 
         // template icon is disable
-        p.findElements(protractor.By.css('toolbar .pnd-toolbar-template-mode-button .pnd-toolbar-not-active-element')).then(function(s) {
+        element.all(By.css('toolbar .pnd-toolbar-template-mode-button .pnd-toolbar-not-active-element')).then(function(s) {
             expect(s.length).toBe(1);
         });
-        p.findElements(protractor.By.css('toolbar .pnd-toolbar-template-menu-button .pnd-toolbar-not-active-element')).then(function(s) {
+        element.all(By.css('toolbar .pnd-toolbar-template-menu-button .pnd-toolbar-not-active-element')).then(function(s) {
             expect(s.length).toBe(2);
         });
         //enable template mode
-        p.findElement(protractor.By.css('toolbar .pnd-toolbar-template-mode-button')).click();
+        element(By.css('toolbar .pnd-toolbar-template-mode-button')).click();
         // template icon is enabled
-        p.findElements(protractor.By.css('toolbar .pnd-toolbar-template-mode-button .pnd-toolbar-not-active-element')).then(function(s) {
+        element.all(By.css('toolbar .pnd-toolbar-template-mode-button .pnd-toolbar-not-active-element')).then(function(s) {
             expect(s.length).toBe(0);
         });
-        p.findElements(protractor.By.css('toolbar .pnd-toolbar-template-menu-button .pnd-toolbar-not-active-element')).then(function(s) {
+        element.all(By.css('toolbar .pnd-toolbar-template-menu-button .pnd-toolbar-not-active-element')).then(function(s) {
             expect(s.length).toBe(0);
         });
     });
@@ -412,26 +412,26 @@ describe("The toolbar module", function() {
         p.get('/app/examples/toolbar.html');
 
         // by default siderbar is collapsed
-        p.findElements(protractor.By.css('annotation-sidebar > .pnd-annotation-sidebar-collapsed')).then(function(d){
+        element.all(By.css('annotation-sidebar > .pnd-annotation-sidebar-collapsed')).then(function(d){
             expect(d.length).toBe(1);
         });
 
         // open sidebar
-        p.findElement(protractor.By.css('.pnd-toolbar-annotations-button')).click();
-        p.findElements(protractor.By.css('annotation-sidebar > .pnd-annotation-sidebar-expanded')).then(function(d){
+        element(By.css('.pnd-toolbar-annotations-button')).click();
+        element.all(By.css('annotation-sidebar > .pnd-annotation-sidebar-expanded')).then(function(d){
             expect(d.length).toBe(1);
         });
 
-        p.findElement(protractor.By.css('.pnd-annotation-sidebar-btn-show-filter')).click();
-        p.findElement(protractor.By.css('.pnd-annotation-sidebar-filter-broken')).click();
+        element(By.css('.pnd-annotation-sidebar-btn-show-filter')).click();
+        element(By.css('.pnd-annotation-sidebar-filter-broken')).click();
 
-        p.findElements(protractor.By.css('.pnd-toolbar-annotations-button .pnd-filter-active')).then(function(d){
+        element.all(By.css('.pnd-toolbar-annotations-button .pnd-filter-active')).then(function(d){
             expect(d.length).toBe(1);
         });
 
-        p.findElement(protractor.By.css('.pnd-annotation-sidebar-filter-broken')).click();
+        element(By.css('.pnd-annotation-sidebar-filter-broken')).click();
 
-        p.findElements(protractor.By.css('.pnd-toolbar-annotations-button .pnd-filter-active')).then(function(d){
+        element.all(By.css('.pnd-toolbar-annotations-button .pnd-filter-active')).then(function(d){
             expect(d.length).toBe(0);
         });
 

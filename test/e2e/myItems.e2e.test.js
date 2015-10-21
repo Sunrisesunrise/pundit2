@@ -41,16 +41,16 @@ describe("My Items interaction", function() {
 
     it('should correctly load default template', function() {
         // check tab content (welcome messagge)
-        p.findElements(protractor.By.css('.pnd-tab-content .active .pnd-dashboard-welcome')).then(function(items){
+        element.all(By.css('.pnd-tab-content .active .pnd-dashboard-welcome')).then(function(items){
             expect(items.length).toBe(1);
             expect(items[0].getText()).toEqual("No my items found.");
         });
     });
 
     it('should correctly show my items', function() {
-        p.findElement(protractor.By.css('.pnd-test-get-my-items')).click();
+        element(By.css('.pnd-test-get-my-items')).click();
         // check active tab content
-        p.findElements(protractor.By.css('.pnd-tab-content .active item')).then(function(items) {
+        element.all(By.css('.pnd-tab-content .active item')).then(function(items) {
             expect(items.length).toBe(1);
             expect(items[0].getAttribute('uri')).toEqual('http://fake-url.it/xpointerUriVeryLong');
         });
@@ -59,26 +59,26 @@ describe("My Items interaction", function() {
     // Feature currently removed
 
     // it('should correctly open confirm modal when try to delete all my items', function() {
-    //     p.findElement(protractor.By.css('.pnd-test-get-my-items')).click();
+    //     element(By.css('.pnd-test-get-my-items')).click();
     //     // check active tab content
-    //     p.findElements(protractor.By.css('.pnd-tab-content .active item')).then(function(items) {
+    //     element.all(By.css('.pnd-tab-content .active item')).then(function(items) {
     //         expect(items.length).toBe(1);
     //         expect(items[0].getAttribute('uri')).toEqual('http://fake-url.it/xpointerUriVeryLong');
     //     });
 
     //     // click delete btn (this open a confirm modal)
-    //     p.findElement(protractor.By.css('.pnd-panel-tab-content-footer .my-items-btn-delete')).click();
-    //     p.findElements(protractor.By.css('.pnd-confirm-modal-container')).then(function(m) {
+    //     element(By.css('.pnd-panel-tab-content-footer .my-items-btn-delete')).click();
+    //     element.all(By.css('.pnd-confirm-modal-container')).then(function(m) {
     //         expect(m.length).toBe(1);
     //     });
 
     //     // click cancel btn (this close the confirm modal)
-    //     p.findElement(protractor.By.css('.pnd-confirm-modal-cancel')).click();
-    //     p.findElements(protractor.By.css('.pnd-confirm-modal-container')).then(function(m) {
+    //     element(By.css('.pnd-confirm-modal-cancel')).click();
+    //     element.all(By.css('.pnd-confirm-modal-container')).then(function(m) {
     //         expect(m.length).toBe(0);
     //     });
     //     // the numbers of items not change
-    //     p.findElements(protractor.By.css('.pnd-tab-content .active item')).then(function(items) {
+    //     element.all(By.css('.pnd-tab-content .active item')).then(function(items) {
     //         expect(items.length).toBe(1);
     //         expect(items[0].getAttribute('uri')).toEqual('http://fake-url.it/xpointerUriVeryLong');
     //     });
@@ -86,24 +86,24 @@ describe("My Items interaction", function() {
     // });
 
     // it('should correctly open confirm modal and delete all my items', function() {
-    //     p.findElement(protractor.By.css('.pnd-test-login')).click();
-    //     p.findElement(protractor.By.css('.pnd-test-get-my-items')).click();
+    //     element(By.css('.pnd-test-login')).click();
+    //     element(By.css('.pnd-test-get-my-items')).click();
     //     // check active tab content
-    //     p.findElements(protractor.By.css('.pnd-tab-content .active item')).then(function(items) {
+    //     element.all(By.css('.pnd-tab-content .active item')).then(function(items) {
     //         expect(items.length).toBe(1);
     //         expect(items[0].getAttribute('uri')).toEqual('http://fake-url.it/xpointerUriVeryLong');
     //     });
 
     //     // click delete btn (this open a confirm modal)
-    //     p.findElement(protractor.By.css('.pnd-panel-tab-content-footer .my-items-btn-delete')).click();
-    //     p.findElements(protractor.By.css('.pnd-confirm-modal-container')).then(function(m) {
+    //     element(By.css('.pnd-panel-tab-content-footer .my-items-btn-delete')).click();
+    //     element.all(By.css('.pnd-confirm-modal-container')).then(function(m) {
     //         expect(m.length).toBe(1);
     //     });
 
     //     // click confirm btn (this close the confirm modal)
-    //     p.findElement(protractor.By.css('.pnd-confirm-modal-confirm')).click();
+    //     element(By.css('.pnd-confirm-modal-confirm')).click();
     //     // the number of items now is zero
-    //     p.findElements(protractor.By.css('.pnd-tab-content .active item')).then(function(items) {
+    //     element.all(By.css('.pnd-tab-content .active item')).then(function(items) {
     //         expect(items.length).toBe(0);
     //     });
 

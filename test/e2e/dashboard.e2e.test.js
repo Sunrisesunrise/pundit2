@@ -1,5 +1,5 @@
 describe("Dashboard interaction", function() {
-    var p = protractor.getInstance();
+    var p = browser;
 
     it('should load template and compile directive', function() {
         var panelNum = 3;

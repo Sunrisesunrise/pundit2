@@ -1,27 +1,27 @@
 describe("The contextualMenu module", function() {
-    var p = protractor.getInstance();
+    var p = browser;
 
     it('should correctly show and hide menu by click', function() {
 
         p.get('app/examples/contextualMenu.html');
 
-        p.findElement(protractor.By.css('.pnd-contexMenu-addAll-btn')).click();
+        element(By.css('.pnd-contexMenu-addAll-btn')).click();
 
-        p.findElement(protractor.By.css('.contexMenu-example-div')).then(function(element){
+        element(By.css('.contexMenu-example-div')).then(function(element){
             p.actions().mouseMove(element, {x:100, y:20}).click().perform();
         });
 
-        p.findElements(protractor.By.css('.dropdown-menu')).then(function(elements) {
+        element.all(By.css('.dropdown-menu')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
 
-        p.findElements(protractor.By.css('.dropdown-menu > li')).then(function(elements) {
+        element.all(By.css('.dropdown-menu > li')).then(function(elements) {
             expect(elements.length).toBe(5);
         });
 
         p.actions().mouseMove({x:-50, y:0}).click().perform();
 
-        p.findElements(protractor.By.css('.dropdown-menu')).then(function(elements) {
+        element.all(By.css('.dropdown-menu')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
 
@@ -31,11 +31,11 @@ describe("The contextualMenu module", function() {
 
         p.get('app/examples/contextualMenu.html');
 
-        p.findElement(protractor.By.css('.pnd-contexMenu-addAll-btn')).click();
+        element(By.css('.pnd-contexMenu-addAll-btn')).click();
 
-        p.findElement(protractor.By.css('.pnd-contexMenu-show2-btn')).click();
+        element(By.css('.pnd-contexMenu-show2-btn')).click();
 
-        p.findElement(protractor.By.css('.dropdown-menu')).then(function(element) {
+        element(By.css('.dropdown-menu')).then(function(element) {
             expect(element.getCssValue('left')).toBe('400px');
             expect(element.getCssValue('top')).toBe('200px');
         });
@@ -46,15 +46,15 @@ describe("The contextualMenu module", function() {
 
         p.get('app/examples/contextualMenu.html');
 
-        p.findElement(protractor.By.css('.pnd-contexMenu-addAll-btn')).click();
+        element(By.css('.pnd-contexMenu-addAll-btn')).click();
 
-        p.findElement(protractor.By.css('.pnd-contexMenu-show1-btn')).click();
+        element(By.css('.pnd-contexMenu-show1-btn')).click();
 
-        p.findElements(protractor.By.css('.dropdown-menu')).then(function(elements) {
+        element.all(By.css('.dropdown-menu')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
 
-        p.findElements(protractor.By.css('.dropdown-menu > li > a')).then(function(elements) {
+        element.all(By.css('.dropdown-menu > li > a')).then(function(elements) {
             expect(elements.length).toBe(5);
             elements[0].getInnerHtml().then(function(innerHtml){
                 expect(innerHtml.indexOf('type1')).toBeGreaterThan(-1);
@@ -70,21 +70,21 @@ describe("The contextualMenu module", function() {
 
         p.get('app/examples/contextualMenu.html');
 
-        p.findElement(protractor.By.css('.pnd-contexMenu-addAll-btn')).click();
+        element(By.css('.pnd-contexMenu-addAll-btn')).click();
 
-        p.findElement(protractor.By.css('.pnd-contexMenu-show2-btn')).click();
+        element(By.css('.pnd-contexMenu-show2-btn')).click();
 
-        var submenu = p.findElement(protractor.By.css('.dropdown-submenu'));
+        var submenu = element(By.css('.dropdown-submenu'));
 
         p.actions().mouseMove(submenu).perform();
 
-        p.findElements(protractor.By.css('.dropdown-menu')).then(function(elements) {
+        element.all(By.css('.dropdown-menu')).then(function(elements) {
             expect(elements.length).toBe(2);
         });
 
         p.actions().mouseMove({x:0, y:100}).perform();
 
-        p.findElements(protractor.By.css('.dropdown-menu')).then(function(elements) {
+        element.all(By.css('.dropdown-menu')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
 
@@ -94,21 +94,21 @@ describe("The contextualMenu module", function() {
 
         p.get('app/examples/contextualMenu.html');
 
-        p.findElement(protractor.By.css('.pnd-contexMenu-addAll-btn')).click();
+        element(By.css('.pnd-contexMenu-addAll-btn')).click();
 
-        p.findElement(protractor.By.css('.pnd-contexMenu-show2-btn')).click();
+        element(By.css('.pnd-contexMenu-show2-btn')).click();
 
-        var submenu = p.findElement(protractor.By.css('.dropdown-submenu'));
+        var submenu = element(By.css('.dropdown-submenu'));
 
         p.actions().mouseMove(submenu).perform();
 
-        p.findElements(protractor.By.css('.dropdown-menu')).then(function(elements) {
+        element.all(By.css('.dropdown-menu')).then(function(elements) {
             expect(elements.length).toBe(2);
         });
 
         p.actions().mouseMove({x:500, y:5}).perform();
 
-        p.findElements(protractor.By.css('.dropdown-menu')).then(function(elements) {
+        element.all(By.css('.dropdown-menu')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
 
@@ -118,14 +118,14 @@ describe("The contextualMenu module", function() {
 
         p.get('app/examples/contextualMenu.html');
 
-        p.findElement(protractor.By.css('.pnd-contexMenu-addAll-btn')).click();
+        element(By.css('.pnd-contexMenu-addAll-btn')).click();
 
-        p.findElement(protractor.By.css('.pnd-contexMenu-show1-btn')).click();
+        element(By.css('.pnd-contexMenu-show1-btn')).click();
 
-        p.findElement(protractor.By.css('.dropdown-menu > li')).click();
+        element(By.css('.dropdown-menu > li')).click();
 
         // action produce output inside a div element
-        p.findElement(protractor.By.css('.pnd-contexMenu-output')).then(function(element) {
+        element(By.css('.pnd-contexMenu-output')).then(function(element) {
             element.getInnerHtml().then(function(innerHtml){
                 expect(innerHtml.indexOf('exe action')).toBeGreaterThan(-1);
             });
@@ -137,15 +137,15 @@ describe("The contextualMenu module", function() {
 
         p.get('app/examples/contextualMenu.html');
 
-        p.findElement(protractor.By.css('.pnd-contexMenu-addAll-btn')).click();
+        element(By.css('.pnd-contexMenu-addAll-btn')).click();
 
-        p.findElement(protractor.By.css('.pnd-contexMenu-show1-btn')).click();
+        element(By.css('.pnd-contexMenu-show1-btn')).click();
 
         // Verify presence of disabled item and click on it.
-        p.findElement(protractor.By.css('.dropdown-menu > li.disabled')).click();
+        element(By.css('.dropdown-menu > li.disabled')).click();
 
         // Verify that no action has been executed.
-        p.findElement(protractor.By.css('.pnd-contexMenu-output')).then(function(element) {
+        element(By.css('.pnd-contexMenu-output')).then(function(element) {
             element.getInnerHtml().then(function(innerHtml){
                 expect(innerHtml.indexOf('exe action')).toBeLessThan(0);
             });
