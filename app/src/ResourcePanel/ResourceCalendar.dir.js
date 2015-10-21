@@ -65,10 +65,10 @@ angular.module('Pundit2.ResourcePanel')
             };
 
             var isValidYear = function(input) {
-                if(input[0]=='-'){
-                    if(input.length!=1){
+                if(input[0]==='-'){
+                    if(input.length!==1){
                         if(!isValidField(input.substring(1, input.length))) {
-                            return false
+                            return false;
                         }
                     }
                 }
@@ -120,7 +120,7 @@ angular.module('Pundit2.ResourcePanel')
             var normalizeYear = function(year) {
                 year = typeof year !== 'string' ? year.toString() : year;
 
-                if(year[0]=='-'){
+                if(year[0]==='-'){
                     var yearTemp=year.substring(1, year.length);
                     while (yearTemp.length < 6) {
                         yearTemp = '0' + yearTemp;
