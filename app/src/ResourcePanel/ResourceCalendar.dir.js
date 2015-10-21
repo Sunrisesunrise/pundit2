@@ -23,6 +23,7 @@ angular.module('Pundit2.ResourcePanel')
             var lastYear;
             var lastMonth;
             var lastDay;
+            
             if (typeof(scope.model) === 'undefined') {
                 scope.model = {};
             } else {
@@ -49,7 +50,6 @@ angular.module('Pundit2.ResourcePanel')
                 }
             }
 
-
             var isValidField = function(input) {
                 if (typeof(input) === 'undefined') {
                     return false;
@@ -65,13 +65,13 @@ angular.module('Pundit2.ResourcePanel')
             };
 
             var isValidYear = function(input) {
-                if(input[0]==='-'){
-                    if(input.length!==1){
-                        if(!isValidField(input.substring(1, input.length))) {
+                if (input[0] === '-') {
+                    if (input.length !== 1) {
+                        if (!isValidField(input.substring(1, input.length))) {
                             return false;
                         }
                     }
-                }
+                } 
                 else if (!isValidField(input)) {
                     return false;
                 }
@@ -120,14 +120,14 @@ angular.module('Pundit2.ResourcePanel')
             var normalizeYear = function(year) {
                 year = typeof year !== 'string' ? year.toString() : year;
 
-                if(year[0]==='-'){
-                    var yearTemp=year.substring(1, year.length);
+                if (year[0] === '-') {
+                    var yearTemp = year.substring(1, year.length);
                     while (yearTemp.length < 6) {
                         yearTemp = '0' + yearTemp;
                     }
-                    year='-'+yearTemp;
+                    year = '-' + yearTemp;
 
-                }else {
+                } else {
                     while (year.length < 4) {
                         year = '0' + year;
                     }
@@ -225,16 +225,16 @@ angular.module('Pundit2.ResourcePanel')
                     lastYear = currentYear;
                 } else {
                     scope.inputDate.year = currentYear.substring(0, currentYear.length - 1);
-                    if(!isValidYear(scope.inputDate.year)) {
+                    if (!isValidYear(scope.inputDate.year)) {
                         scope.inputDate.year = lastYear;
                     }
-                    }
+                }
             };
 
             scope.updateMonth = function() {
                 var currentMonth = scope.inputDate.month;
                 if (isValidMonth(currentMonth)) {
-                    lastMonth =  currentMonth;
+                    lastMonth = currentMonth;
                     var dateWithNewMonth = moment(scope.currentDate).month(currentMonth - 1);
                     scope.currentDate = new Date(dateWithNewMonth.format('YYYYYY-MM-DDTHH:mm'));
                 } else {
