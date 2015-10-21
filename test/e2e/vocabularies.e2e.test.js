@@ -34,12 +34,12 @@ describe('Vocabularies interaction', function() {
     it('should correctly load default template', function() {
 
         // check tabs number (vocab + hidden vocab)
-        element.all(By.css('.pnd-tab-header > li')).then(function(tabs) {
+        element.all(by.css('.pnd-tab-header > li')).then(function(tabs) {
             expect(tabs.length).toBe(4);
         });
 
         // check tab content (welcome messagge)
-        element.all(By.css('.pnd-tab-content .active .pnd-dashboard-welcome')).then(function(items){
+        element.all(by.css('.pnd-tab-content .active .pnd-dashboard-welcome')).then(function(items){
             expect(items.length).toBe(1);
             expect(items[0].getText()).toEqual('Enter text to search in the vocabularies.');
         });
@@ -48,9 +48,9 @@ describe('Vocabularies interaction', function() {
 
     it('should correctly show item', function() {
 
-        element(By.css('.pnd-panel-tab-content-header input')).sendKeys('pippo');
+        element(by.css('.pnd-panel-tab-content-header input')).sendKeys('pippo');
 
-        element.all(By.css('.pnd-tab-content .active item')).then(function(items){
+        element.all(by.css('.pnd-tab-content .active item')).then(function(items){
             expect(items.length).toBe(1);
             expect(items[0].getAttribute('uri')).toEqual(freebaseItemUri);
             expect(items[0].getAttribute('menu-type')).toEqual(menuType);
@@ -60,14 +60,14 @@ describe('Vocabularies interaction', function() {
 
     it('should correctly show items in different tabs', function() {
 
-        element(By.css('.pnd-panel-tab-content-header input')).sendKeys('pippo');
+        element(by.css('.pnd-panel-tab-content-header input')).sendKeys('pippo');
 
-        element.all(By.css('.pnd-tab-header li')).then(function(tabs){
+        element.all(by.css('.pnd-tab-header li')).then(function(tabs){
             // switch to muruca item list (click muruca tab header)
             tabs[1].click();
         });
 
-        element.all(By.css('.pnd-tab-content .active item')).then(function(items){
+        element.all(by.css('.pnd-tab-content .active item')).then(function(items){
             expect(items.length).toBe(2);
             expect(items[0].getAttribute('uri')).toEqual(murucaItemsUri[1]);
             expect(items[1].getAttribute('uri')).toEqual(murucaItemsUri[0]);
@@ -79,15 +79,15 @@ describe('Vocabularies interaction', function() {
 
     it('should correctly show no found messagge after a failed search', function() {
 
-        element(By.css('.pnd-panel-tab-content-header input')).sendKeys('anything');
+        element(by.css('.pnd-panel-tab-content-header input')).sendKeys('anything');
 
-        element.all(By.css('.pnd-tab-header li')).then(function(tabs){
+        element.all(by.css('.pnd-tab-header li')).then(function(tabs){
             // switch to korbo item list (click korbo tab header)
             tabs[2].click();
         });
 
         // check tab content (no found messagge)
-        element.all(By.css('.pnd-tab-content .active .pnd-dashboard-welcome')).then(function(items){
+        element.all(by.css('.pnd-tab-content .active .pnd-dashboard-welcome')).then(function(items){
             expect(items.length).toBe(1);
             expect(items[0].getText()).toEqual('No item found to: anything');
         });

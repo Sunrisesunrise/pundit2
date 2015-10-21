@@ -111,19 +111,19 @@ describe("Client interaction when user is not logged in", function() {
         p.driver.manage().window().setSize(1200, 960);
 
         // open dashboard
-        element(By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
+        element(by.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // open resource panel on subject
-        element(By.css(".pnd-statement-subject .pnd-statement-label")).click();
+        element(by.css(".pnd-statement-subject .pnd-statement-label")).click();
         // check if popover is showed
-        element.all(By.css(".pnd-resource-panel-popover")).then(function(popover) {
+        element.all(by.css(".pnd-resource-panel-popover")).then(function(popover) {
             expect(popover.length).toBe(1);
         });
         // check popover vertical tabs number and names
-        element.all(By.css(".pnd-resource-panel-popover .pnd-vertical-tabs li:not(.ng-hide)")).then(function(tabs) {
+        element.all(by.css(".pnd-resource-panel-popover .pnd-vertical-tabs li:not(.ng-hide)")).then(function(tabs) {
             expect(tabs.length).toBe(1);
         });
         // check popover vertical tabs showed items number
-        element.all(By.css(".pnd-resource-panel-popover .pnd-vertical-tabs li:not(.ng-hide) a span")).then(function(spans) {
+        element.all(by.css(".pnd-resource-panel-popover .pnd-vertical-tabs li:not(.ng-hide) a span")).then(function(spans) {
             expect(spans.length).toBe(3);
             expect(spans[0].getText()).toEqual("1");
         });

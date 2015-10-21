@@ -151,37 +151,37 @@ describe("Client interaction when user is logged in", function() {
 
     it("should correctly open triple composer from annotation sidebar when edit annotation", function(){
         // open sidebar by click on annotation icon
-        element(By.css('annotation-sidebar annotation-details[id=annid123]')).click();
+        element(by.css('annotation-sidebar annotation-details[id=annid123]')).click();
         // open triple composer by click on edit button
-        element(By.css('annotation-sidebar annotation-details[id=annid123] .pnd-annotation-details-footer button.pnd-edit')).click();
+        element(by.css('annotation-sidebar annotation-details[id=annid123] .pnd-annotation-details-footer button.pnd-edit')).click();
         
         // now triple composer show annotation and allow to modify it
 
         // dashboard should be visible
-        p.findElements(protractor.By.css('.pnd-dashboard-container.ng-hide')).then(function(elements) {
+        p.findElements(protractor.by.css('.pnd-dashboard-container.ng-hide')).then(function(elements) {
             expect(elements.length).toBe(0);
         });
         // dashboard (tools) panel should be visible
-        p.findElements(protractor.By.css('dashboard-panel[paneltitle=tools] .pnd-dashboard-panel-expanded.ng-hide')).then(function(elements) {
+        p.findElements(protractor.by.css('dashboard-panel[paneltitle=tools] .pnd-dashboard-panel-expanded.ng-hide')).then(function(elements) {
             expect(elements.length).toBe(0);
         });
         // triple composer should be have one triple
-        p.findElements(protractor.By.css(".pnd-triplecomposer-statements-container statement")).then(function(s) {
+        p.findElements(protractor.by.css(".pnd-triplecomposer-statements-container statement")).then(function(s) {
             expect(s.length).toBe(1);
         });
         // the triple should be have the expected subject
-        p.findElements(protractor.By.css("statement .pnd-statement-subject .pnd-statement-label")).then(function(sub) {
+        p.findElements(protractor.by.css("statement .pnd-statement-subject .pnd-statement-label")).then(function(sub) {
             expect(sub.length).toBe(1);
             expect(sub[0].getText()).toEqual("Dante");
         });
         // the triple should be have the expected predicate
-        p.findElements(protractor.By.css("statement .pnd-statement-predicate .pnd-statement-label")).then(function(pred) {
+        p.findElements(protractor.by.css("statement .pnd-statement-predicate .pnd-statement-label")).then(function(pred) {
             expect(pred.length).toBe(1);
             expect(pred[0].getText()).toEqual("has comment (free text)");
         });
 
         // the triple should be have the expected object
-        p.findElements(protractor.By.css("statement .pnd-statement-object .pnd-statement-label")).then(function(obj) {
+        p.findElements(protractor.by.css("statement .pnd-statement-object .pnd-statement-label")).then(function(obj) {
             expect(obj.length).toBe(1);
             expect(obj[0].getText()).toEqual("poeta italiano del 1300");
         });
@@ -189,27 +189,27 @@ describe("Client interaction when user is logged in", function() {
 
     it("should show confirm modal when try to delete annotation", function(){
         // open sidebar by click on annotation icon
-        element(By.css('annotation-sidebar annotation-details[id=annid123]')).click();
+        element(by.css('annotation-sidebar annotation-details[id=annid123]')).click();
         // should show confirm modal when click delete
-        element(By.css('annotation-sidebar annotation-details[id=annid123] .pnd-annotation-details-footer button.pnd-delete')).click();
+        element(by.css('annotation-sidebar annotation-details[id=annid123] .pnd-annotation-details-footer button.pnd-delete')).click();
         // check if info modal exist
-        p.findElements(protractor.By.css('.pnd-confirm-modal-container')).then(function(m){
+        p.findElements(protractor.by.css('.pnd-confirm-modal-container')).then(function(m){
             expect(m.length).toBe(1);
         });
     });
 
     it("should correctly show template inside triple composer", function(){
         //enable template mode
-        element(By.css('toolbar .pnd-toolbar-template-mode-button')).click();
+        element(by.css('toolbar .pnd-toolbar-template-mode-button')).click();
         // open dashboard (triple composer is showed by default)
-        element(By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
+        element(by.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
 
         // check triple composer header
-        element(By.css('triple-composer .pnd-panel-tab-content-header')).then(function(h){
+        element(by.css('triple-composer .pnd-panel-tab-content-header')).then(function(h){
             expect(h.getText()).toBe('Complete your annotation and save!');
         });
         // check triple composer statement subject text
-        element(By.css('triple-composer statement .pnd-statement-subject .pnd-statement-subject-text')).then(function(t){
+        element(by.css('triple-composer statement .pnd-statement-subject .pnd-statement-subject-text')).then(function(t){
             expect(t.getText()).toBe('Select some text on the page');
             // it must be visible
             t.getAttribute('class').then(function(classes){
@@ -217,7 +217,7 @@ describe("Client interaction when user is logged in", function() {
             });
         });
         // check triple composer object
-        element(By.css('triple-composer statement .pnd-statement-object .pnd-statement-label')).then(function(o){
+        element(by.css('triple-composer statement .pnd-statement-object .pnd-statement-label')).then(function(o){
             // it must have *
             expect(o.getText()).toBe('Add an object*');
 
@@ -231,16 +231,16 @@ describe("Client interaction when user is logged in", function() {
 
     it("should correctly show a text selection inside triple composer during template mode", function(){
         //enable template mode
-        element(By.css('toolbar .pnd-toolbar-template-mode-button')).click();
+        element(by.css('toolbar .pnd-toolbar-template-mode-button')).click();
         // open dashboard (triple composer is showed by default)
-        element(By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
+        element(by.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
 
-        var el = element(By.css('.pnd-test-init-selection'));
+        var el = element(by.css('.pnd-test-init-selection'));
         // dbclick (simulate a selection) on text populate the triple composer subject
         p.actions().doubleClick(el).perform();
 
         // check triple composer statement subject text
-        element(By.css('triple-composer statement .pnd-statement-subject .pnd-statement-label')).then(function(t){
+        element(by.css('triple-composer statement .pnd-statement-subject .pnd-statement-label')).then(function(t){
             expect(t.getText()).toBe('Boccaccio');
             // it must be visible
             t.getAttribute('class').then(function(classes){
@@ -251,10 +251,10 @@ describe("Client interaction when user is logged in", function() {
 
     it("should correctly show ctx menu voice when triple composer is empty", function(){
         // dbclick (simulate a selection) on text
-        var el = element(By.css('.pnd-test-init-selection'));
+        var el = element(by.css('.pnd-test-init-selection'));
         p.actions().doubleClick(el).perform();
         // check triple composer statement subject text
-        p.findElements(protractor.By.css('.dropdown-menu li a')).then(function(a){
+        p.findElements(protractor.by.css('.dropdown-menu li a')).then(function(a){
             expect(a.length).toBe(3);
             expect(a[0].getText()).toBe('Use as subject');
             expect(a[1].getText()).toBe('Use as object');
@@ -264,18 +264,18 @@ describe("Client interaction when user is logged in", function() {
 
     it("should correctly add as subject by ctx menu voice when triple composer is empty", function(){
         // dbclick (simulate a selection) on text
-        var el = element(By.css('.pnd-test-init-selection'));
+        var el = element(by.css('.pnd-test-init-selection'));
         p.actions().doubleClick(el).perform();
 
         // check triple composer statement subject text
-        p.findElements(protractor.By.css('.dropdown-menu li a')).then(function(a){
+        p.findElements(protractor.by.css('.dropdown-menu li a')).then(function(a){
             expect(a.length).toBe(3);
             expect(a[0].getText()).toBe('Use as subject');
             a[0].click();
         });
 
         // check triple composer statement subject text
-        element(By.css('triple-composer statement .pnd-statement-subject .pnd-statement-label')).then(function(t){
+        element(by.css('triple-composer statement .pnd-statement-subject .pnd-statement-label')).then(function(t){
             expect(t.getText()).toBe('Boccaccio');
             // it must be visible
             t.getAttribute('class').then(function(classes){
@@ -286,18 +286,18 @@ describe("Client interaction when user is logged in", function() {
 
     it("should correctly add as subject by ctx menu voice when triple composer is empty", function(){
         // dbclick (simulate a selection) on text
-        var el = element(By.css('.pnd-test-init-selection'));
+        var el = element(by.css('.pnd-test-init-selection'));
         p.actions().doubleClick(el).perform();
 
         // check triple composer statement subject text
-        p.findElements(protractor.By.css('.dropdown-menu li a')).then(function(a){
+        p.findElements(protractor.by.css('.dropdown-menu li a')).then(function(a){
             expect(a.length).toBe(3);
             expect(a[1].getText()).toBe('Use as object');
             a[1].click();
         });
 
         // check triple composer statement object text
-        element(By.css('triple-composer statement .pnd-statement-object .pnd-statement-label')).then(function(t){
+        element(by.css('triple-composer statement .pnd-statement-object .pnd-statement-label')).then(function(t){
             expect(t.getText()).toBe('Boccaccio');
             // it must be visible
             t.getAttribute('class').then(function(classes){
@@ -309,14 +309,14 @@ describe("Client interaction when user is logged in", function() {
     // it("should correctly show ctx menu voice when triple composer is empty", function(){
 
     //     // open dashboard
-    //     element(By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
+    //     element(by.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
     //     // collapse tools panel
-    //     element(By.css('dashboard-panel[paneltitle=tools] .btn.btn-default')).click();
+    //     element(by.css('dashboard-panel[paneltitle=tools] .btn.btn-default')).click();
     //     // open page items tab
-    //     element(By.css("dashboard dashboard-panel .pnd-tab-header li [data-index='1']")).click();
+    //     element(by.css("dashboard dashboard-panel .pnd-tab-header li [data-index='1']")).click();
     //     // mouseover on item
-    //     var item = element(By.css("dashboard dashboard-panel .pnd-tab-content item")),
-    //         menuBtn = element(By.css("dashboard dashboard-panel .pnd-tab-content item .pnd-icon-dots"));
+    //     var item = element(by.css("dashboard dashboard-panel .pnd-tab-content item")),
+    //         menuBtn = element(by.css("dashboard dashboard-panel .pnd-tab-content item .pnd-icon-dots"));
     //     p.actions().mouseMove(item).perform();
     //     // wait animation
     //     p.sleep(500);
@@ -324,7 +324,7 @@ describe("Client interaction when user is logged in", function() {
     //     menuBtn.click();
 
     //     // check triple composer statement subject text
-    //     p.findElements(protractor.By.css('.dropdown-menu li a')).then(function(a){
+    //     p.findElements(protractor.by.css('.dropdown-menu li a')).then(function(a){
     //         expect(a.length).toBe(3);
     //         expect(a[0].getText()).toBe('Use as subject');
     //         expect(a[1].getText()).toBe('Use as object');
@@ -335,22 +335,22 @@ describe("Client interaction when user is logged in", function() {
     it("should add my items by ctx menu showed on text selection", function(){
 
         // dbclick (simulate a selection) on text
-        var el = element(By.css('.pnd-test-init-selection'));
+        var el = element(by.css('.pnd-test-init-selection'));
         p.actions().doubleClick(el).perform();
         // click add my items
-        p.findElements(protractor.By.css('.dropdown-menu li')).then(function(voices){
+        p.findElements(protractor.by.css('.dropdown-menu li')).then(function(voices){
            voices[2].click();
         });
 
         // open dashboard
-        element(By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
+        element(by.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // collapse tools panel
-        element(By.css('dashboard-panel[paneltitle=tools] .btn.btn-default')).click();
+        element(by.css('dashboard-panel[paneltitle=tools] .btn.btn-default')).click();
         // open my items tab
-        element(By.css("dashboard dashboard-panel .pnd-tab-header li [data-index='0']")).click();
+        element(by.css("dashboard dashboard-panel .pnd-tab-header li [data-index='0']")).click();
         
         // chek item content
-        p.findElements(protractor.By.css("dashboard general-items-container[type=myItems] .pnd-panel-tab-content-content .pnd-tab-content > .active li .pnd-item-text")).then(function(items){
+        p.findElements(protractor.by.css("dashboard general-items-container[type=myItems] .pnd-panel-tab-content-content .pnd-tab-content > .active li .pnd-item-text")).then(function(items){
             expect(items.length).toBe(1);
             expect(items[0].getText()).toBe("TEXT FRAGMENT Boccaccio");
         });
@@ -361,19 +361,19 @@ describe("Client interaction when user is logged in", function() {
         p.driver.manage().window().setSize(1200, 960);
 
         // open dashboard
-        element(By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
+        element(by.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // open resource panel on subject
-        element(By.css(".pnd-statement-object .pnd-statement-label")).click();
+        element(by.css(".pnd-statement-object .pnd-statement-label")).click();
         // check if popover is showed
-        p.findElements(protractor.By.css(".pnd-resource-panel-popover")).then(function(popover) {
+        p.findElements(protractor.by.css(".pnd-resource-panel-popover")).then(function(popover) {
             expect(popover.length).toBe(1);
         });
         // check popover vertical tabs number and names
-        p.findElements(protractor.By.css(".pnd-resource-panel-popover .pnd-vertical-tabs li")).then(function(tabs) {
+        p.findElements(protractor.by.css(".pnd-resource-panel-popover .pnd-vertical-tabs li")).then(function(tabs) {
             expect(tabs.length).toBe(2);
         });
         // check popover vertical tabs showed items number
-        p.findElements(protractor.By.css(".pnd-resource-panel-popover .pnd-vertical-tabs li a span:not(.ng-hide)")).then(function(spans) {
+        p.findElements(protractor.by.css(".pnd-resource-panel-popover .pnd-vertical-tabs li a span:not(.ng-hide)")).then(function(spans) {
             expect(spans.length).toBe(2);
             expect(spans[0].getText()).toEqual(pageItemsNumber.toString());
             expect(spans[1].getText()).toEqual("0");
@@ -385,19 +385,19 @@ describe("Client interaction when user is logged in", function() {
         p.driver.manage().window().setSize(1200, 960);
 
         // open dashboard
-        element(By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
+        element(by.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // open resource panel on predicate
-        element(By.css(".pnd-statement-predicate .pnd-statement-label")).click();
+        element(by.css(".pnd-statement-predicate .pnd-statement-label")).click();
         // check if popover is showed
-        p.findElements(protractor.By.css(".pnd-resource-panel-popover")).then(function(popover) {
+        p.findElements(protractor.by.css(".pnd-resource-panel-popover")).then(function(popover) {
             expect(popover.length).toBe(1);
         });
         // check popover vertical tabs number and names
-        p.findElements(protractor.By.css(".pnd-resource-panel-popover .pnd-vertical-tabs li")).then(function(tabs) {
+        p.findElements(protractor.by.css(".pnd-resource-panel-popover .pnd-vertical-tabs li")).then(function(tabs) {
             expect(tabs.length).toBe(1);
         });
         // check popover vertical tabs showed items number
-        p.findElements(protractor.By.css(".pnd-resource-panel-popover .pnd-vertical-tabs li a span:not(.ng-hide)")).then(function(spans) {
+        p.findElements(protractor.by.css(".pnd-resource-panel-popover .pnd-vertical-tabs li a span:not(.ng-hide)")).then(function(spans) {
             expect(spans.length).toBeGreaterThan(0);
             expect(spans[0].getText()).toEqual("15");
         });
@@ -408,25 +408,25 @@ describe("Client interaction when user is logged in", function() {
         p.driver.manage().window().setSize(1200, 960);
 
         // open dashboard
-        element(By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
+        element(by.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
 
         // open resource panel on subject
-        element(By.css(".pnd-statement-subject .pnd-row-button-subject .pnd-statement-label")).click();
+        element(by.css(".pnd-statement-subject .pnd-row-button-subject .pnd-statement-label")).click();
         // check if popover is showed
-        p.findElements(protractor.By.css(".pnd-resource-panel-popover")).then(function(popover) {
+        p.findElements(protractor.by.css(".pnd-resource-panel-popover")).then(function(popover) {
             expect(popover.length).toBe(1);
         });
         // click item
-        element(By.css(".pnd-resource-panel-popover .pnd-vertical-tab-content > .active li .pnd-item")).click();
+        element(by.css(".pnd-resource-panel-popover .pnd-vertical-tab-content > .active li .pnd-item")).click();
         // check if use button is enabled
-        element(By.css(".pnd-resource-panel-popover .pnd-vertical-tab-footer-content .pnd-resource-panel-use-button")).then(function(useBtn) {
+        element(by.css(".pnd-resource-panel-popover .pnd-vertical-tab-footer-content .pnd-resource-panel-use-button")).then(function(useBtn) {
             useBtn.getAttribute('class').then(function(classes){
                 expect(classes.indexOf('disabled')).toBe(-1);
             });
             useBtn.click();
         });
         // check if popover is closed
-        p.findElements(protractor.By.css(".pnd-resource-panel-popover")).then(function(popover) {
+        p.findElements(protractor.by.css(".pnd-resource-panel-popover")).then(function(popover) {
             expect(popover.length).toBe(0);
         });
     });
@@ -436,19 +436,19 @@ describe("Client interaction when user is logged in", function() {
         p.driver.manage().window().setSize(1200, 960);
 
         // open dashboard
-        element(By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
+        element(by.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // open resource panel on predicate
-        element(By.css(".pnd-statement-predicate .pnd-statement-label")).click();
+        element(by.css(".pnd-statement-predicate .pnd-statement-label")).click();
         // add text inside input to filter predicates
         // add text to popover
-        element(By.css(".pnd-resource-panel-popover .pnd-rsp-input")).sendKeys('has');
+        element(by.css(".pnd-resource-panel-popover .pnd-rsp-input")).sendKeys('has');
         
         // check popover vertical tabs showed number
-        p.findElements(protractor.By.css(".pnd-resource-panel-popover .pnd-vertical-tabs li a span")).then(function(spans) {
+        p.findElements(protractor.by.css(".pnd-resource-panel-popover .pnd-vertical-tabs li a span")).then(function(spans) {
             expect(spans[0].getText()).toEqual("2");
         });
         // check popover vertical tabs showed items
-        p.findElements(protractor.By.css(".pnd-resource-panel-popover .pnd-vertical-tab-content > .active item")).then(function(items) {
+        p.findElements(protractor.by.css(".pnd-resource-panel-popover .pnd-vertical-tab-content > .active item")).then(function(items) {
             expect(items.length).toBe(2);
         });
     });
@@ -458,24 +458,24 @@ describe("Client interaction when user is logged in", function() {
         p.driver.manage().window().setSize(1200, 960);
 
         // open dashboard
-        element(By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
+        element(by.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // open resource panel
-        element(By.css(".pnd-statement-object .pnd-statement-label")).click();
+        element(by.css(".pnd-statement-object .pnd-statement-label")).click();
 
         // add item by click on resource panel item and use btn
-        element(By.css(".pnd-resource-panel-popover .pnd-item")).click();
-        element(By.css(".pnd-resource-panel-popover .pnd-vertical-tab-footer-content .pnd-resource-panel-use-button")).click();
+        element(by.css(".pnd-resource-panel-popover .pnd-item")).click();
+        element(by.css(".pnd-resource-panel-popover .pnd-vertical-tab-footer-content .pnd-resource-panel-use-button")).click();
 
         // mouseover on item
-        var item = element(By.css(".pnd-statement-object .pnd-statement-label"));
+        var item = element(by.css(".pnd-statement-object .pnd-statement-label"));
         p.actions().mouseMove(item).perform();
 
         // check title
-        element(By.css("preview .pnd-dashboard-preview-panel-label")).getText().then(function(text) {
+        element(by.css("preview .pnd-dashboard-preview-panel-label")).getText().then(function(text) {
             expect(text).toBe("Dante");
         });
         // check type
-        element(By.css("item-preview .pnd-type")).getText().then(function(text) {
+        element(by.css("item-preview .pnd-type")).getText().then(function(text) {
             expect(text).toBe("TEXT FRAGMENT");
         });
 
@@ -485,36 +485,36 @@ describe("Client interaction when user is logged in", function() {
 
         p.driver.manage().window().setSize(1700, 960);
         // open dashboard
-        element(By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
+        element(by.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // collapse right panel
-        element(By.css('dashboard-panel[paneltitle=details] .btn.btn-default')).click();
+        element(by.css('dashboard-panel[paneltitle=details] .btn.btn-default')).click();
         // collapse tools panel
-        element(By.css('dashboard-panel[paneltitle=tools] .btn.btn-default')).click();
+        element(by.css('dashboard-panel[paneltitle=tools] .btn.btn-default')).click();
 
         // open my notebooks tab
-        element.all(By.css("dashboard-panel[paneltitle=lists] .pnd-tab-header > li > a")).then(function(tabs) {
+        element.all(by.css("dashboard-panel[paneltitle=lists] .pnd-tab-header > li > a")).then(function(tabs) {
             expect(tabs.length).toBeGreaterThan(4);
             expect(tabs[4].getText()).toBe("Notebooks");
             tabs[4].click();
         });
         // move on notebook item
-        var item = element(By.css("dashboard-panel[paneltitle=lists] .pnd-tab-content > div.active general-items-container[type=myNotebooks] item .pnd-item"));
+        var item = element(by.css("dashboard-panel[paneltitle=lists] .pnd-tab-content > div.active general-items-container[type=myNotebooks] item .pnd-item"));
         p.actions().mouseMove(item).perform();
         // wait animation
         p.sleep(500);
         // open ctx menu
-        element.all(By.css("dashboard-panel[paneltitle=lists] .pnd-tab-content > div.active general-items-container[type=myNotebooks] item .pnd-item-buttons")).then(function(btns){
+        element.all(by.css("dashboard-panel[paneltitle=lists] .pnd-tab-content > div.active general-items-container[type=myNotebooks] item .pnd-item-buttons")).then(function(btns){
             btns[0].click();
         });
         // edit notebook
-        element.all(By.css(".pnd-dropdown-contextual-menu > li > a")).then(function(options){
+        element.all(by.css(".pnd-dropdown-contextual-menu > li > a")).then(function(options){
             expect(options[0].getText()).toBe("Edit notebook");
             options[0].click();
         });
 
         // check if tools panel show notebook composer interface
         // check active tab title
-        element.all(By.css("dashboard-panel[paneltitle=tools] .pnd-tab-header > li.active > a")).then(function(tabs) {
+        element.all(by.css("dashboard-panel[paneltitle=tools] .pnd-tab-header > li.active > a")).then(function(tabs) {
             expect(tabs.length).toBe(1);
             expect(tabs[0].getText()).toBe("Notebook composer");
         });
@@ -527,23 +527,23 @@ describe("Client interaction when user is logged in", function() {
         
         p.driver.manage().window().setSize(1700, 960);
         // open dashboard
-        element(By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
+        element(by.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
         // collapse right panel
-        element(By.css('dashboard-panel[paneltitle=details] .btn.btn-default')).click();
+        element(by.css('dashboard-panel[paneltitle=details] .btn.btn-default')).click();
         // collapse tools panel
-        element(By.css('dashboard-panel[paneltitle=tools] .btn.btn-default')).click();
+        element(by.css('dashboard-panel[paneltitle=tools] .btn.btn-default')).click();
         // open my notebooks tab
-        element.all(By.css("dashboard-panel[paneltitle=lists] .pnd-tab-header > li > a")).then(function(tabs) {
+        element.all(by.css("dashboard-panel[paneltitle=lists] .pnd-tab-header > li > a")).then(function(tabs) {
             tabs[4].click();
             expect(tabs[4].getText()).toBe("Notebooks");
         });
 
         // click on create new notebook
-        element(By.css('.my-notebooks-btn-new')).click();
+        element(by.css('.my-notebooks-btn-new')).click();
 
         // check if tools panel show notebook composer interface
         // check active tab title
-        element.all(By.css("dashboard-panel[paneltitle=tools] .pnd-tab-header > li.active > a")).then(function(tabs) {
+        element.all(by.css("dashboard-panel[paneltitle=tools] .pnd-tab-header > li.active > a")).then(function(tabs) {
             expect(tabs.length).toBe(1);
             expect(tabs[0].getText()).toBe("Notebook composer");
         });
@@ -554,21 +554,21 @@ describe("Client interaction when user is logged in", function() {
     //     p.driver.manage().window().setSize(1600, 960);
 
     //     // open dashboard
-    //     element(By.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
+    //     element(by.css('toolbar .pnd-toolbar-dashboard-toogle-button')).click();
     //     // collapse tools panel
-    //     element(By.css('dashboard-panel[paneltitle=details] .btn.btn-default')).click();
+    //     element(by.css('dashboard-panel[paneltitle=details] .btn.btn-default')).click();
     //     // open page items tab
-    //     element(By.css("dashboard dashboard-panel .pnd-tab-header li [data-index='2']")).click();
+    //     element(by.css("dashboard dashboard-panel .pnd-tab-header li [data-index='2']")).click();
     //     // mouseover on item
-    //     var item = element(By.css("dashboard dashboard-panel predicates-container item")),
-    //         menuBtn = element(By.css("dashboard dashboard-panel predicates-container item .pnd-btn-bar"));
+    //     var item = element(by.css("dashboard dashboard-panel predicates-container item")),
+    //         menuBtn = element(by.css("dashboard dashboard-panel predicates-container item .pnd-btn-bar"));
     //     p.actions().mouseMove(item).perform();
     //     // wait animation
     //     p.sleep(500);
     //     // open ctx menu
     //     menuBtn.click();
 
-    //     element.all(By.css('.dropdown-menu li a')).then(function(a){
+    //     element.all(by.css('.dropdown-menu li a')).then(function(a){
     //         expect(a.length).toBe(1);
     //         expect(a[0].getText()).toBe('Use as predicate');
     //         a[0].click();
@@ -577,10 +577,10 @@ describe("Client interaction when user is logged in", function() {
     //     p.actions().mouseMove(item).perform();
     //     menuBtn.click();
 
-    //     element.all(By.css('.dropdown-menu li a')).then(function(a){
+    //     element.all(by.css('.dropdown-menu li a')).then(function(a){
     //         expect(a.length).toBe(0);
     //     });
-    //     element.all(By.css('.dropdown-menu li span')).then(function(span){
+    //     element.all(by.css('.dropdown-menu li span')).then(function(span){
     //         expect(span.length).toBe(1);
     //     });
 

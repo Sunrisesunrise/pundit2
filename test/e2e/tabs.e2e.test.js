@@ -7,11 +7,11 @@ describe("Tabs interaction", function() {
         p.driver.manage().window().setSize(1200, 960);
         p.get('/app/examples/tabs.html');
 
-        element.all(By.css('.pnd-tab-header')).then(function(elements) {
+        element.all(by.css('.pnd-tab-header')).then(function(elements) {
             expect(elements.length).toBe(panelNum);
         });
 
-        element.all(By.css('.pnd-tab-content')).then(function(elements) {
+        element.all(by.css('.pnd-tab-content')).then(function(elements) {
             expect(elements.length).toBe(panelNum);
         });
 

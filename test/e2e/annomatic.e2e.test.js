@@ -6,9 +6,9 @@ describe("The annomatic module", function() {
     it('should load some annotations from datatxt', function() {
         p.get('/app/examples/annomatic.html');
 
-        element(By.css('.pnd-button-suggestion')).click().then(function(){
+        element(by.css('.pnd-button-suggestion')).click().then(function(){
             p.waitForAngular();
-            element.all(By.css('.ann-auto')).then(function(elements) {
+            element.all(by.css('.ann-auto')).then(function(elements) {
                 expect(elements.length).toBe(51);
             });
         });
@@ -19,23 +19,23 @@ describe("The annomatic module", function() {
         p.driver.manage().window().setSize(1200, 960);
 
         // Get annotations
-        element(By.css('.pnd-button-suggestion')).click();
+        element(by.css('.pnd-button-suggestion')).click();
         
         // At this time there are no accepted annotations
-        element.all(By.css('.ann-ok')).then(function(elements) {
+        element.all(by.css('.ann-ok')).then(function(elements) {
             expect(elements.length).toBe(0);
         });
 
         // find all suggested annotation, should be 38
-        element.all(By.css('.pnd-text-fragment-icon')).then(function(elements) {
+        element.all(by.css('.pnd-text-fragment-icon')).then(function(elements) {
             expect(elements.length).toBe(50);
 
             // click first icon to open preview and menu suggested annotation
             elements[0].click();
             // accept the suggested annotation
-            element(By.css('.popover-content .pnd-button-set-ok')).click();
+            element(by.css('.popover-content .pnd-button-set-ok')).click();
             // now there is 1 accepted annonation
-            // element.all(By.css('.ann-ok')).then(function(elements) {
+            // element.all(by.css('.ann-ok')).then(function(elements) {
                 // TODO adapt annomatic workflow
                 // expect(elements.length).toBe(1);
             // });
@@ -44,10 +44,10 @@ describe("The annomatic module", function() {
             // remove accepted annotation
 
             // TODO adapt annomatic workflow
-            // element(By.css('.popover-content .pnd-button-set-ko')).click();
+            // element(by.css('.popover-content .pnd-button-set-ko')).click();
             
             // now there are none accepted annotation
-            // element.all(By.css('.ann-ok')).then(function(elements) {
+            // element.all(by.css('.ann-ok')).then(function(elements) {
                 // TODO adapt annomatic workflow
                 // expect(elements.length).toBe(0);
             // });

@@ -12,10 +12,10 @@ describe("OpenID Login", function() {
     //     p.get('/app/examples/mypundit.testPage.html');
 
     //     // open login modal
-    //     element(By.css('.btn-example-login')).click();
+    //     element(by.css('.btn-example-login')).click();
 
     //     // open login popup
-    //     element(By.css('.pnd-login-modal-openPopUp')).click();
+    //     element(by.css('.pnd-login-modal-openPopUp')).click();
 
     //     // needed to prevent 'Error while waiting for Protractor to sync with the page: {}'
     //     p.ignoreSynchronization = true;
@@ -37,16 +37,16 @@ describe("OpenID Login", function() {
     //         browser.driver.executeScript('window.focus();');
 
     //         // get google button and click it
-    //         element(By.css('.google.openid_large_btn')).then(function(openIdButton) {
+    //         element(by.css('.google.openid_large_btn')).then(function(openIdButton) {
 
     //             openIdButton.click();
 
     //             // fill form with my google account credentials
-    //             element(By.id('Email')).sendKeys(myEmail);
-    //             element(By.id('Passwd')).sendKeys(myPassword);
+    //             element(by.id('Email')).sendKeys(myEmail);
+    //             element(by.id('Passwd')).sendKeys(myPassword);
 
     //             // submit form
-    //             element(By.id('signIn')).click().then(function() {
+    //             element(by.id('signIn')).click().then(function() {
 
     //                 // get handle to main window
     //                 handle = browser.switchTo().window(mainWindow);
@@ -56,7 +56,7 @@ describe("OpenID Login", function() {
 
     //                 // at this time user should be logged in
     //                 // user button should be visible and should show user full name
-    //                 element.all(By.css('.pnd-toolbar-user-button')).then(function(userButton) {
+    //                 element.all(by.css('.pnd-toolbar-user-button')).then(function(userButton) {
     //                     //TODO: TROVARE UNA SOLUZIONE PER QUESTO SLEEP. SENZA NON VIENE AGGIORNATA LA PAGINA
     //                     p.sleep(1000);
     //                     expect(userButton.length).toBe(1);
@@ -66,10 +66,10 @@ describe("OpenID Login", function() {
 
     //                 // get logout
     //                 p.sleep(1000);
-    //                 element(By.css('.btn-example-logout')).then(function(logoutButton) {
+    //                 element(by.css('.btn-example-logout')).then(function(logoutButton) {
     //                     logoutButton.click().then(function() {
     //                         p.sleep(1000);
-    //                         element.all(By.css('.pnd-toolbar-user-button.ng-hide')).then(function(userButton) {
+    //                         element.all(by.css('.pnd-toolbar-user-button.ng-hide')).then(function(userButton) {
     //                             expect(userButton.length).toBe(1);
     //                             p.waitForAngular();
     //                             p.sleep(1000);

@@ -33,7 +33,7 @@ describe("KorboEE autocomplete", function() {
         p.get('/app/examples/korboee-autocomplete-test.html');
 
         // should be visible 3 input fields
-        element.all(By.css('.kee-input-elem-to-search.kee-input-ok')).then(function(inputType) {
+        element.all(by.css('.kee-input-elem-to-search.kee-input-ok')).then(function(inputType) {
             expect(inputType.length).toBe(3);
         });
 

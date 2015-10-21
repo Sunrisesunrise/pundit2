@@ -762,122 +762,122 @@ describe("AnnotationSidebar interaction", function() {
     });
 
     it('should toggle the sidebar', function() {
-       element.all(By.css('.pnd-annotation-sidebar-container')).then(function(elements) {
+       element.all(by.css('.pnd-annotation-sidebar-container')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
-       element(By.css('.pnd-toolbar-annotations-button')).click();
+       element(by.css('.pnd-toolbar-annotations-button')).click();
 
-        var container = element(By.css('.pnd-annotation-sidebar-container'));
+        var container = element(by.css('.pnd-annotation-sidebar-container'));
         container.getSize().then(function(size){
             expect(size.width).toBe(sidebarExpandedWidth);
         });
     });
 
     it('should toggle the filers list', function() {
-        element(By.css('.pnd-toolbar-annotations-button')).click();
-        element.all(tBy.css('.pnd-annotation-sidebar-filters-list.ng-hide')).then(function(elements) {
+        element(by.css('.pnd-toolbar-annotations-button')).click();
+        element.all(by.css('.pnd-annotation-sidebar-filters-list.ng-hide')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
-        element(By.css('.pnd-annotation-sidebar-btn-show-filter')).click();
-        element.all(By.css('.pnd-annotation-sidebar-filters-list.ng-hide')).then(function(elements) {
+        element(by.css('.pnd-annotation-sidebar-btn-show-filter')).click();
+        element.all(by.css('.pnd-annotation-sidebar-filters-list.ng-hide')).then(function(elements) {
             expect(elements.length).toBe(0);
         });
     });
 
     it('should create annotation details', function() {
-        element.all(By.css('#'+firstAnnotation)).then(function(elements) {
+        element.all(by.css('#'+firstAnnotation)).then(function(elements) {
             expect(elements.length).toBe(1);
         });
     });
 
     it('should open the sidebar and details after click on annotation', function() {
-        element.all(By.css('#'+firstAnnotation)).then(function(elements) {
+        element.all(by.css('#'+firstAnnotation)).then(function(elements) {
             expect(elements.length).toBe(1);
         });
 
-        element(By.css('#'+firstAnnotation+' .pnd-annotation-details-header')).click();
+        element(by.css('#'+firstAnnotation+' .pnd-annotation-details-header')).click();
 
-        var container = element(By.css('.pnd-annotation-sidebar-container'));
+        var container = element(by.css('.pnd-annotation-sidebar-container'));
         container.getSize().then(function(size){
             expect(size.width).toBe(sidebarExpandedWidth);
         });
 
-        element.all(By.css('#'+firstAnnotation+' .pnd-annotation-details-container')).then(function(elements) {
+        element.all(by.css('#'+firstAnnotation+' .pnd-annotation-details-container')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
     });
 
     it('should expand and collapse one annotation at a time', function() {
-        element.all(By.css('#'+firstAnnotation)).then(function(elements) {
+        element.all(by.css('#'+firstAnnotation)).then(function(elements) {
             expect(elements.length).toBe(1);
         });
-        element.all(By.css('#'+secondAnnotation)).then(function(elements) {
+        element.all(by.css('#'+secondAnnotation)).then(function(elements) {
             expect(elements.length).toBe(1);
         });
 
-        element.all(By.css('.pnd-annotation-details-container')).then(function(elements) {
+        element.all(by.css('.pnd-annotation-details-container')).then(function(elements) {
             expect(elements.length).toBe(0);
         });
-        element(By.css('#'+firstAnnotation+' .pnd-annotation-details-header')).click();
-        element.all(By.css('.pnd-annotation-details-container')).then(function(elements) {
+        element(by.css('#'+firstAnnotation+' .pnd-annotation-details-header')).click();
+        element.all(by.css('.pnd-annotation-details-container')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
 
-        element(By.css('#'+secondAnnotation+' .pnd-annotation-details-header')).click();
-        element.all(By.css('.pnd-annotation-details-container')).then(function(elements) {
+        element(by.css('#'+secondAnnotation+' .pnd-annotation-details-header')).click();
+        element.all(by.css('.pnd-annotation-details-container')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
     });
 
     it('should close annotation details after the close of the sidebar', function() {
-        element(By.css('.pnd-toolbar-annotations-button')).click();
-        element(By.css('#'+firstAnnotation+' .pnd-annotation-details-header')).click();
+        element(by.css('.pnd-toolbar-annotations-button')).click();
+        element(by.css('#'+firstAnnotation+' .pnd-annotation-details-header')).click();
 
-        element.all(By.css('#'+firstAnnotation+' .pnd-annotation-details-container')).then(function(elements) {
+        element.all(by.css('#'+firstAnnotation+' .pnd-annotation-details-container')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
 
-        element(By.css('.pnd-toolbar-annotations-button')).click();
+        element(by.css('.pnd-toolbar-annotations-button')).click();
 
-        element.all(By.css('#'+firstAnnotation+' .pnd-annotation-details-container')).then(function(elements) {
+        element.all(by.css('#'+firstAnnotation+' .pnd-annotation-details-container')).then(function(elements) {
             expect(elements.length).toBe(0);
         });
     });
 
     it('should toggle annotation details', function() {
-        element(By.css('.pnd-toolbar-annotations-button')).click();
-        element(By.css('#'+firstAnnotation+' .pnd-annotation-details-header')).click();
+        element(by.css('.pnd-toolbar-annotations-button')).click();
+        element(by.css('#'+firstAnnotation+' .pnd-annotation-details-header')).click();
 
-        element.all(By.css('#'+firstAnnotation+' .pnd-annotation-details-container')).then(function(elements) {
+        element.all(by.css('#'+firstAnnotation+' .pnd-annotation-details-container')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
     });
 
     it('should hide broken annotations', function() {
-        element.all(By.css('#'+firstAnnotation)).then(function(elements) {
+        element.all(by.css('#'+firstAnnotation)).then(function(elements) {
             expect(elements.length).toBe(1);
         });
-        element(By.css('.pnd-toolbar-annotations-button')).click();
-        element(By.css('.pnd-annotation-sidebar-btn-show-filter')).click();
-        element(By.css('.pnd-annotation-sidebar-filter-broken')).click();
+        element(by.css('.pnd-toolbar-annotations-button')).click();
+        element(by.css('.pnd-annotation-sidebar-btn-show-filter')).click();
+        element(by.css('.pnd-annotation-sidebar-filter-broken')).click();
         
-        element.all(By.css('#'+firstAnnotation)).then(function(elements) {
+        element.all(by.css('#'+firstAnnotation)).then(function(elements) {
             expect(elements.length).toBe(0);
         });
     });
 
     it('should remove all filters', function() {
-        element(By.css('.pnd-toolbar-annotations-button')).click();
-        element(By.css('.pnd-annotation-sidebar-btn-show-filter')).click();
-        element(By.css('.pnd-annotation-sidebar-filter-broken')).click();
+        element(by.css('.pnd-toolbar-annotations-button')).click();
+        element(by.css('.pnd-annotation-sidebar-btn-show-filter')).click();
+        element(by.css('.pnd-annotation-sidebar-filter-broken')).click();
         
-        element.all(By.css('#'+firstAnnotation)).then(function(elements) {
+        element.all(by.css('#'+firstAnnotation)).then(function(elements) {
             expect(elements.length).toBe(0);
         });
 
-        element(By.css('.pnd-annotation-sidebar-btn-remove-filters')).click();
+        element(by.css('.pnd-annotation-sidebar-btn-remove-filters')).click();
 
-        element.all(By.css('#'+firstAnnotation)).then(function(elements) {
+        element.all(by.css('#'+firstAnnotation)).then(function(elements) {
             expect(elements.length).toBe(1);
         });
     });
@@ -887,13 +887,13 @@ describe("AnnotationSidebar interaction", function() {
         var dashboardHeight;
         var globalHeight;
 
-        var sidebarContainer = element(By.css('.pnd-annotation-sidebar-container'));
-        var dashboardContainer = element(By.css('.pnd-dashboard-container'));
-        var toolbarContainer = element(By.css('.pnd-toolbar-navbar-container'));
+        var sidebarContainer = element(by.css('.pnd-annotation-sidebar-container'));
+        var dashboardContainer = element(by.css('.pnd-dashboard-container'));
+        var toolbarContainer = element(by.css('.pnd-toolbar-navbar-container'));
 
-        var dashboardFooter = element(By.css('.pnd-dashboard-container .pnd-dashboard-footer'));
+        var dashboardFooter = element(by.css('.pnd-dashboard-container .pnd-dashboard-footer'));
 
-        // element(By.css('.pnd-toolbar-annotations-button')).click();
+        // element(by.css('.pnd-toolbar-annotations-button')).click();
 
         toolbarContainer.getSize().then(function(size){
             toolbarHeight = size.height;
@@ -901,7 +901,7 @@ describe("AnnotationSidebar interaction", function() {
                 expect(toolbarHeight + "px").toEqual(sidebarTop);
             });
 
-            element(By.css('.pnd-toolbar-dashboard-toogle-button')).click();
+            element(by.css('.pnd-toolbar-dashboard-toogle-button')).click();
 
             dashboardContainer.getSize().then(function(size){
                 dashboardHeight = size.height;
@@ -911,13 +911,13 @@ describe("AnnotationSidebar interaction", function() {
                 });
             });
 
-            element(By.css('.pnd-toolbar-dashboard-toogle-button')).click();
+            element(by.css('.pnd-toolbar-dashboard-toogle-button')).click();
 
             sidebarContainer.getCssValue('margin-top').then(function(sidebarTop){
                 expect(toolbarHeight + "px").toEqual(sidebarTop);
             });
 
-            element(By.css('.pnd-toolbar-dashboard-toogle-button')).click();
+            element(by.css('.pnd-toolbar-dashboard-toogle-button')).click();
             p.actions().dragAndDrop(dashboardFooter, {x:0, y:100}).perform();
 
             dashboardContainer.getSize().then(function(size){
@@ -931,19 +931,19 @@ describe("AnnotationSidebar interaction", function() {
     });
 
     it('should hide filter list after click on show all annotations', function() {
-        element(By.css('.pnd-toolbar-annotations-button')).click();
-        element(By.css('.pnd-annotation-sidebar-btn-show-filter')).click();
-        element.all(By.css('.pnd-annotation-sidebar-filters-list.ng-hide')).then(function(elements) {
+        element(by.css('.pnd-toolbar-annotations-button')).click();
+        element(by.css('.pnd-annotation-sidebar-btn-show-filter')).click();
+        element.all(by.css('.pnd-annotation-sidebar-filters-list.ng-hide')).then(function(elements) {
             expect(elements.length).toBe(0);
         });
 
-        element.all(By.css('.pnd-text-fragment-icon')).then(function(elements) {
+        element.all(by.css('.pnd-text-fragment-icon')).then(function(elements) {
             elements[0].click();
-            element.all(By.css('.dropdown-menu li a')).then(function(a){
+            element.all(by.css('.dropdown-menu li a')).then(function(a){
                 expect(a.length).toBe(4);
                 expect(a[3].getText()).toBe('Show all annotations of this item');
                 a[3].click();
-                element.all(By.css('.pnd-annotation-sidebar-filters-list.ng-hide')).then(function(elements) {
+                element.all(by.css('.pnd-annotation-sidebar-filters-list.ng-hide')).then(function(elements) {
                     expect(elements.length).toBe(1);
                 });
             });
@@ -951,19 +951,19 @@ describe("AnnotationSidebar interaction", function() {
     });
 
     it('should hide filter list after click on show all annotations', function() {
-        element(By.css('.pnd-toolbar-annotations-button')).click();
-        element(By.css('.pnd-annotation-sidebar-btn-show-filter')).click();
-        element.all(By.css('.pnd-annotation-sidebar-filters-list.ng-hide')).then(function(elements) {
+        element(by.css('.pnd-toolbar-annotations-button')).click();
+        element(by.css('.pnd-annotation-sidebar-btn-show-filter')).click();
+        element.all(by.css('.pnd-annotation-sidebar-filters-list.ng-hide')).then(function(elements) {
             expect(elements.length).toBe(0);
         });
 
-        element.all(By.css('.pnd-text-fragment-icon')).then(function(elements) {
+        element.all(by.css('.pnd-text-fragment-icon')).then(function(elements) {
             elements[0].click();
-            element.all(By.css('.dropdown-menu li a')).then(function(a){
+            element.all(by.css('.dropdown-menu li a')).then(function(a){
                 expect(a.length).toBe(4);
                 expect(a[3].getText()).toBe('Show all annotations of this item');
                 a[3].click();
-                element.all(By.css('.pnd-annotation-sidebar-filters-list.ng-hide')).then(function(elements) {
+                element.all(by.css('.pnd-annotation-sidebar-filters-list.ng-hide')).then(function(elements) {
                     expect(elements.length).toBe(1);
                 });
             });
@@ -971,41 +971,41 @@ describe("AnnotationSidebar interaction", function() {
     });
 
     it('should apply correctly the filters', function() {
-        element.all(By.css('.pnd-annotation-details-wrap')).then(function(elements) {
+        element.all(by.css('.pnd-annotation-details-wrap')).then(function(elements) {
             expect(elements.length).toBe(3);
         });
 
-        element(By.css('.pnd-toolbar-annotations-button')).click();
-        element(By.css('.pnd-annotation-sidebar-btn-show-filter')).click();
+        element(by.css('.pnd-toolbar-annotations-button')).click();
+        element(by.css('.pnd-annotation-sidebar-btn-show-filter')).click();
 
-        element(By.css('.pnd-annotation-sidebar-filter-input-contains input')).sendKeys('Dante');
+        element(by.css('.pnd-annotation-sidebar-filter-input-contains input')).sendKeys('Dante');
 
-        element.all(By.css('.pnd-annotation-details-wrap')).then(function(elements) {
+        element.all(by.css('.pnd-annotation-details-wrap')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
 
-        element(By.css('.pnd-annotation-sidebar-btn-remove-filters')).click();
+        element(by.css('.pnd-annotation-sidebar-btn-remove-filters')).click();
 
-        element.all(By.css('.pnd-annotation-details-wrap')).then(function(elements) {
+        element.all(by.css('.pnd-annotation-details-wrap')).then(function(elements) {
             expect(elements.length).toBe(3);
         });
     });
 
     it('should apply partial filters', function() {
-        element(By.css('.pnd-toolbar-annotations-button')).click();
-        element(By.css('.pnd-annotation-sidebar-btn-show-filter')).click();
-        element.all(By.css('.pnd-annotation-sidebar-filters-list .pnd-annotation-sidebar-filter')).then(function(elements) {
+        element(by.css('.pnd-toolbar-annotations-button')).click();
+        element(by.css('.pnd-annotation-sidebar-btn-show-filter')).click();
+        element.all(by.css('.pnd-annotation-sidebar-filters-list .pnd-annotation-sidebar-filter')).then(function(elements) {
             expect(elements.length).toBe(6);
             elements[4].click();
 
-            elements[4].findElements(protractor.By.css('.pnd-annotation-sidebar-filter-element-label')).then(function(ftr) {
+            elements[4].findElements(protractor.by.css('.pnd-annotation-sidebar-filter-element-label')).then(function(ftr) {
                 expect(ftr.length).toBe(5);
                 ftr[2].click();
             });
 
             elements[3].click();
 
-            elements[3].findElements(protractor.By.css('.pnd-annotation-sidebar-filter-element-label')).then(function(ftr) {
+            elements[3].findElements(protractor.by.css('.pnd-annotation-sidebar-filter-element-label')).then(function(ftr) {
                 expect(ftr.length).toBe(3);
                 expect(ftr[1].getText()).toBe('cites (0)');
             });
@@ -1016,14 +1016,14 @@ describe("AnnotationSidebar interaction", function() {
     });
 
     it('should be present More info in annotation object info', function() {
-        element.all(By.css('.pnd-annotation-sidebar-container')).then(function(elements) {
+        element.all(by.css('.pnd-annotation-sidebar-container')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
-        element(By.css('.pnd-toolbar-annotations-button')).click();
-        element(By.css('annotation-details[id="annid125"] .pnd-item-title')).click();
-        element(By.css('annotation-details[id="annid125"] .pnd-annotation-details-object .pnd-annotation-item-header-text')).click();
+        element(by.css('.pnd-toolbar-annotations-button')).click();
+        element(by.css('annotation-details[id="annid125"] .pnd-item-title')).click();
+        element(by.css('annotation-details[id="annid125"] .pnd-annotation-details-object .pnd-annotation-item-header-text')).click();
 
-        element.all(By.css('annotation-details[id="annid125"] .pnd-annotation-details-object .pnd-sub-info .pnd-preview-bottom-links a')).then(function(elements) {
+        element.all(by.css('annotation-details[id="annid125"] .pnd-annotation-details-object .pnd-sub-info .pnd-preview-bottom-links a')).then(function(elements) {
             expect(elements.length).toBe(1);
         });
     });
