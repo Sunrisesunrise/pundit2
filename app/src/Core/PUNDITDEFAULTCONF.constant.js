@@ -264,10 +264,7 @@ angular.module('Pundit2.Core')
      * Default:
      * <pre> templates: [
      *   "http://conf.thepund.it/V2/templates/tagFree",
-     *   "http://conf.thepund.it/V2/templates/comment",
-     *   "http://conf.thepund.it/V2/templates/tagFixedMarx",
-     *   "http://conf.thepund.it/V2/templates/timeline",
-     *   "http://conf.thepund.it/V2/templates/peopleGraph"
+     *   "http://conf.thepund.it/V2/templates/comment"
      * ] </pre>
      *
      * Where a template is defined by:
@@ -318,10 +315,9 @@ angular.module('Pundit2.Core')
      */
     templates: [
         "http://conf.thepund.it/V2/templates/tagFree",
-        "http://conf.thepund.it/V2/templates/comment",
-        "http://conf.thepund.it/V2/templates/tagFixedMarx",
-        "http://conf.thepund.it/V2/templates/timeline",
-        "http://conf.thepund.it/V2/templates/peopleGraph"
+        "http://conf.thepund.it/V2/templates/comment"
+        // "http://conf.thepund.it/V2/templates/timeline",
+        // "http://conf.thepund.it/V2/templates/peopleGraph"
     ],
 
     /**
