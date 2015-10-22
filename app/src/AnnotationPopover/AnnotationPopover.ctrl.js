@@ -1,15 +1,18 @@
-angular.module('Pundit2.CommentPopover')
+angular.module('Pundit2.AnnotationPopover')
 
-.controller('CommentPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange,
-    NotebookCommunication, AnnotationsCommunication, CommentPopover, ModelHelper, $timeout, $q) {
+// TODO: manage opening during loading
+.controller('AnnotationPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange,
+    NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, $timeout, $q) {
 
     $scope.literalText = '';
 
     $scope.selectedNotebookId = undefined;
-    $scope.savingComment = false;
+    $scope.savingAnnotation = false;
     $scope.errorSaving = false;
     $scope.availableNotebooks = [];
     $scope.isUserLogged = MyPundit.isUserLogged();
+
+    $scope.currentMode = '';
 
     var lastSelectedNotebookId;
 
@@ -30,10 +33,16 @@ angular.module('Pundit2.CommentPopover')
         if (!MyPundit.isUserLogged()) {
             return;
         }
-        if (typeof CommentPopover.lastUsedNotebookID === 'undefined') {
-            CommentPopover.lastUsedNotebookID = NotebookExchange.getCurrentNotebooks().id;
+        
+        if (typeof AnnotationPopover.lastUsedNotebookID === 'undefined') {
+            // TODO: manage loading statuts, so with currentNotebook undefined
+            AnnotationPopover.lastUsedNotebookID = NotebookExchange.getCurrentNotebooks().id;
         }
-        lastSelectedNotebookId = $scope.selectedNotebookId = CommentPopover.lastUsedNotebookID;
+        lastSelectedNotebookId = $scope.selectedNotebookId = AnnotationPopover.lastUsedNotebookID;
+    };
+
+    $scope.setMode = function(mode) {
+        $scope.currentMode = mode;
     };
 
     $scope.login = function() {
@@ -46,7 +55,10 @@ angular.module('Pundit2.CommentPopover')
     };
 
     $scope.save = function() {
-        $scope.savingComment = true;
+        $scope.savingAnnotation = true;
+
+        var isComment = $scope.currentMode === 'comment',
+            objectContent = isComment ? $scope.literalText : '';
 
         var currentTarget = PndPopover.getData().item,
             currentStatement = {
@@ -55,13 +67,14 @@ angular.module('Pundit2.CommentPopover')
                         return {
                             subject: currentTarget,
                             predicate: '',
-                            object: $scope.literalText
+                            object: objectContent
                         };
                     }
                 }
             };
 
-        var modelData = ModelHelper.buildCommentData(currentStatement);
+        var modelData = isComment ? ModelHelper.buildCommentData(currentStatement) : ModelHelper.buildHigthLightData(currentStatement),
+            motivation = isComment ? 'commenting' : 'highlighting';
 
         var httpPromise = AnnotationsCommunication.saveAnnotation(
             modelData.graph,
@@ -71,13 +84,13 @@ angular.module('Pundit2.CommentPopover')
             undefined, // skipConsolidation
             modelData.target,
             modelData.type,
-            'commenting',
+            motivation,
             $scope.selectedNotebookId
         );
 
         httpPromise.then(function() {
             // OK.
-            CommentPopover.lastUsedNotebookID = lastSelectedNotebookId = $scope.selectedNotebookId;
+            AnnotationPopover.lastUsedNotebookID = lastSelectedNotebookId = $scope.selectedNotebookId;
             NotebookCommunication.setCurrent(lastSelectedNotebookId);
             PndPopover.hide();
         }, function() {
@@ -106,6 +119,10 @@ angular.module('Pundit2.CommentPopover')
         });
 
         return deferred.promise;
+    };
+
+    $scope.focusOn = function(elementId) {
+        angular.element('.pnd-annotation-popover #' + elementId)[0].focus();
     };
 
     updateCurrentNotebook();

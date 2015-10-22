@@ -1,6 +1,7 @@
-angular.module('Pundit2.CommentPopover')
-.service('CommentPopover', function(BaseComponent, PndPopover, $window, $timeout) {
-    var commentPopover = new BaseComponent('CommentPopover');
+angular.module('Pundit2.AnnotationPopover')
+
+.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout) {
+    var annotationPopover = new BaseComponent('AnnotationPopover');
 
     var changePopoverPlacement = function(state, placement) {
         state.popover.$options.placement = placement;
@@ -15,7 +16,6 @@ angular.module('Pundit2.CommentPopover')
         temporaryElement: null,
         removeTimeout: null
     };
-
 
     var resizeCallback = function() {
         // No last used info.
@@ -34,8 +34,7 @@ angular.module('Pundit2.CommentPopover')
             // Add temporary element at the and or beginning of fragment ref depending on last used selection.
             if (resizeData.lastSelectionUsed.label === 'end') {
                 resizeData.lastSelectionUsed.fragmentRef.after(resizeData.temporaryElement);
-            }
-            else {
+            } else {
                 resizeData.lastSelectionUsed.fragmentRef.before(resizeData.temporaryElement);
             }
         }
@@ -44,7 +43,7 @@ angular.module('Pundit2.CommentPopover')
         changePopoverPosition(resizeData.lastSelectionUsed.offset.left, resizeData.lastSelectionUsed.offset.top);
 
         resizeData.removeTimeout = $timeout(function() {
-            commentPopover.log('Remove temporary element');
+            annotationPopover.log('Remove temporary element');
             var parentTS = resizeData.temporaryElement.parent();
             resizeData.temporaryElement.remove();
             resizeData.temporaryElement = null;
@@ -55,7 +54,7 @@ angular.module('Pundit2.CommentPopover')
         }, 300);
     };
 
-    var changePopoverPosition = function(mouseX, mouseY){
+    var changePopoverPosition = function(mouseX, mouseY) {
         var state = PndPopover.getState(),
             distanceFromSelectionStart = Math.pow(parseInt(mouseX - state.selectionStart.offset.left), 2) + Math.pow(parseInt(mouseY - state.selectionStart.offset.top), 2),
             distanceFromSelectionEnd = Math.pow(parseInt(mouseX - state.selectionEnd.offset.left), 2) + Math.pow(parseInt(mouseY - state.selectionEnd.offset.top), 2),
@@ -69,13 +68,13 @@ angular.module('Pundit2.CommentPopover')
             }
             if (wrongArrowFix || $window.scrollY + popoverRect.bottom > pageVisibleBottom) {
                 if (typeof topInfoWhen !== 'undefined' && typeof topInfoWhen.right !== 'undefined') {
-                    state.anchor.css('top', topInfoWhen.right+'px');
+                    state.anchor.css('top', topInfoWhen.right + 'px');
                 }
                 popoverRect = changePopoverPlacement(state, 'right');
                 var pageVisibleRight = $window.innerWidth + $window.scrollX;
                 if ($window.scrollX + popoverRect.right > pageVisibleRight) {
                     if (typeof topInfoWhen !== 'undefined' && typeof topInfoWhen.top !== 'undefined') {
-                        state.anchor.css('top', topInfoWhen.top+'px');
+                        state.anchor.css('top', topInfoWhen.top + 'px');
                     }
                     popoverRect = changePopoverPlacement(state, 'top');
                     return true;
@@ -87,8 +86,8 @@ angular.module('Pundit2.CommentPopover')
 
         if (distanceFromSelectionEnd <= distanceFromSelectionStart) {
             state.anchor.css({
-                top: (state.selectionEnd.offset.top + state.selectionEnd.height)+'px',
-                left: state.selectionEnd.offset.left+'px'
+                top: (state.selectionEnd.offset.top + state.selectionEnd.height) + 'px',
+                left: state.selectionEnd.offset.left + 'px'
             });
             resizeData.lastSelectionUsed = state.selectionEnd;
             popoverRect = changePopoverPlacement(state, 'bottom');
@@ -96,11 +95,10 @@ angular.module('Pundit2.CommentPopover')
                 right: (state.selectionEnd.offset.top + state.selectionEnd.height / 2),
                 top: state.selectionEnd.offset.top
             });
-        }
-        else {
+        } else {
             state.anchor.css({
-                top: (state.selectionStart.offset.top)+'px',
-                left: state.selectionStart.offset.left+'px'
+                top: (state.selectionStart.offset.top) + 'px',
+                left: state.selectionStart.offset.left + 'px'
             });
             resizeData.lastSelectionUsed = state.selectionStart;
             popoverRect = changePopoverPlacement(state, 'top');
@@ -111,16 +109,16 @@ angular.module('Pundit2.CommentPopover')
             var pageVisibleTop = $window.scrollY;
             if (wrongArrowFix || $window.scrollY + popoverRect.top < pageVisibleTop) {
                 state.anchor.css({
-                    top: (state.selectionStart.offset.top + state.selectionStart.height / 2)+'px',
-                    left: state.selectionStart.offset.left+'px'
+                    top: (state.selectionStart.offset.top + state.selectionStart.height / 2) + 'px',
+                    left: state.selectionStart.offset.left + 'px'
                 });
                 resizeData.lastSelectionUsed = state.selectionStart;
                 popoverRect = changePopoverPlacement(state, 'left');
                 var pageVisibleLeft = $window.scrollX;
                 if ($window.scrollX + popoverRect.left < pageVisibleLeft) {
                     state.anchor.css({
-                        top: (state.selectionStart.offset.top + state.selectionStart.height)+'px',
-                        left: state.selectionStart.offset.left+'px'
+                        top: (state.selectionStart.offset.top + state.selectionStart.height) + 'px',
+                        left: state.selectionStart.offset.left + 'px'
                     });
                     resizeData.lastSelectionUsed = state.selectionStart;
                     popoverRect = changePopoverPlacement(state, 'bottom');
@@ -130,32 +128,35 @@ angular.module('Pundit2.CommentPopover')
 
     };
 
-    commentPopover.lastUsedNotebookID = undefined;
+    annotationPopover.lastUsedNotebookID = undefined;
 
-    commentPopover.show = function(x, y, item, unUsed, fragmentId) {
+    annotationPopover.show = function(x, y, item, unUsed, fragmentId) {
         var options = {
-            templateUrl: 'src/CommentPopover/CommentPopover.tmpl.html',
-            controller: 'CommentPopoverCtrl',
+            templateUrl: 'src/AnnotationPopover/AnnotationPopover.tmpl.html',
+            controller: 'AnnotationPopoverCtrl',
             placement: 'bottom',
             alphaRollover: true,
             lockPageScroll: true,
             hideCallback: function() {
-                commentPopover.log('Comment popover hide');
+                annotationPopover.log('Annotation popover hide');
                 angular.element($window).off('resize', resizeCallback);
             }
         };
-        var promise = PndPopover.show(x, y, options, {item: item, fragmentId: fragmentId});
+        var promise = PndPopover.show(x, y, options, {
+            item: item,
+            fragmentId: fragmentId
+        });
         if (promise !== false) {
             promise.then(function() {
                 changePopoverPosition(x, y);
                 PndPopover.getState().selection.removeAllRanges();
                 angular.element($window).on('resize', resizeCallback);
             }, function() {
-                commentPopover.log(arguments);
+                annotationPopover.log(arguments);
             });
         }
         return promise;
     };
 
-    return commentPopover;
+    return annotationPopover;
 });

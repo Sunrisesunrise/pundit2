@@ -6,14 +6,14 @@
         clientMode: 'lite',
         annotationServerBaseURL: " https://staging.punditbrain.netseven.it:8443/annotationserver/",
         modules: {
-            'CommentPopover': {
+            'AnnotationPopover': {
                 debug: true,
                 active: true
             }
         }
     }
 
-    var commentPopoverDemoCtrl = function($scope, MyPundit, NotebookCommunication) {
+    var annotationPopoverDemoCtrl = function($scope, MyPundit, NotebookCommunication) {
         MyPundit.checkLoggedIn(true).then(function() {
             NotebookCommunication.getCurrent();
             NotebookCommunication.getMyNotebooks();
@@ -22,7 +22,7 @@
 </script>
 
 <div data-ng-app="Pundit2" class="pundit2 pnd-wrp">
-    <div ng-controller="commentPopoverDemoCtrl" ></div>
+    <div ng-controller="annotationPopoverDemoCtrl" ></div>
 </div>
 
 <link rel="stylesheet" href="//bits.wikimedia.org/it.wikipedia.org/load.php?debug=false&amp;lang=it&amp;modules=ext.rtlcite%2Cwikihiero%7Cext.uls.nojs%7Cext.visualEditor.viewPageTarget.noscript%7Cmediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.skinning.interface%7Cmediawiki.ui.button%7Cskins.vector.styles%7Cwikibase.client.init&amp;only=styles&amp;skin=vector&amp;*" />

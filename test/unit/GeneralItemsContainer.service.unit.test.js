@@ -96,7 +96,7 @@ describe("GeneralItemsContainer", function(){
     it('should return correct action button data', function(){
         expect(GeneralItemsContainer.getActionButton('myItems').requireLoggedUser).toBeTruthy();
         expect(GeneralItemsContainer.getActionButton('pageItems').requireLoggedUser).toBeTruthy();
-        expect(GeneralItemsContainer.getActionButton('vocabularies').requireLoggedUser).toBeFalsy();
+        expect(GeneralItemsContainer.getActionButton('vocabularies').requireLoggedUser).toBeTruthy();
         expect(GeneralItemsContainer.getActionButton('myNotebooks').requireLoggedUser).toBeFalsy();
         expect(GeneralItemsContainer.getActionButton('predicates').requireLoggedUser).toBeFalsy();
     });

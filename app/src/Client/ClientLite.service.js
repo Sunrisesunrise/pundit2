@@ -71,7 +71,7 @@ angular.module('Pundit2.Client')
 
 .service('ClientLite', function(CLIENTLITEDEFAULTS, BaseComponent, Config, EventDispatcher, Analytics, MyPundit, LiteTool,
     TextFragmentAnnotator, AnnotationsCommunication, AnnotationsExchange, Item, ItemsExchange, Status, TextFragmentHandler, 
-    AnnotationSidebar, AnnotationDetails, ResizeManager, NotebookCommunication, NotebookExchange, CommentPopover,
+    AnnotationSidebar, AnnotationDetails, ResizeManager, NotebookCommunication, NotebookExchange, AnnotationPopover,
     $injector, $templateCache, $rootScope) {
 
     var client = new BaseComponent('Client', CLIENTLITEDEFAULTS),

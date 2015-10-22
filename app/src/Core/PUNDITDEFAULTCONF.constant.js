@@ -466,6 +466,10 @@ angular.module('Pundit2.Core')
             active: false
         },
 
+        MessageHandler: {
+            active: true
+        },
+
         // Simplified version of pundit client, do only consolidation
         // and show the annotations on the page
         SimplifiedClient: {

@@ -1,0 +1,117 @@
+<div class="pnd-annotation-details-wrap pnd-ignore">
+    <div class="pnd-annotation-details-header pnd-annotation-details-top" 
+        ng-click="toggleAnnotation()"
+        ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
+        <div class="{{::annotation.mainItem.class}}">
+                <div class="pnd-annotation-item-header-text">
+                        <span ng-show="annotation.broken" class="pnd-annotation-icon-color">
+                            <span class="pnd-icon pnd-icon-exclamation"></span>
+                        </span>
+                        <span 
+                            ng-show="!annotation.broken" 
+                            class="pnd-annotation-icon-color"
+                            style="background-color: {{::annotation.color}};">
+                            <span 
+                                class="{{annotation.mainItem.icon}}"></span>
+                        </span>
+                        <span class="pnd-item-title">{{annotation.mainItem.label}}</span>
+                </div>    
+                <button type="button" class="pnd-btn pull-right">
+                    <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[annotation.expanded]"></span>
+                </button>
+        </div>
+    </div>
+    <div class="pnd-annotation-details-container" ng-if="annotation.expanded">
+        <div class="pnd-annotation-details-content">
+
+            <!-- Meta -->
+            <div 
+                class="pnd-annotation-details-meta" 
+                ng-init="meta = false">
+                <div class="pnd-annotation-details-item-header"
+                     ng-click="meta = !meta; trackAnalyticsToggleEvent('meta', meta)"
+                     ng-class="{'pnd-annotation-details-sub-open': meta}">
+                    <div class="pnd-annotation-item-header-text">
+                        <span class="pnd-icon pnd-icon-info-circle"></span>
+                        <span>Annotation's info</span>
+                    </div>
+                    <button type="button" class="pnd-btn pnd-btn-link pull-right">
+                        <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[meta]"></span>
+                    </button>
+                </div>
+
+                <div ng-show="meta" class="pnd-sub-info">
+                        <span ng-if="meta">
+                            <div class="pnd-annotation-details-info-author">
+                                <strong>Author:</strong> {{::annotation.creatorName}}
+                            </div>
+                            <div class="pnd-annotation-details-info-date">
+                                <strong>Date:</strong> {{::annotation.created | date : 'MMM d, y H:mm a'}}
+                            </div>
+                            <div class="pnd-annotation-details-info-notebook">
+                                <strong>Notebook:</strong>
+                                <a href="{{::askLink}}{{::annotation.notebookId}}"
+                                   target="_blank"
+                                   ng-click="trackAnalyticsEvent('meta--notebook')"
+                                   ng-show="notebookLink">
+                                    {{annotation.notebookName}}
+                                </a>
+                                <span ng-show="!notebookLink">
+                                    {{annotation.notebookName}}
+                                </span>
+                            </div>
+                            <div class="pnd-annotation-details-info-id">
+                                <strong>Annotation ID:</strong> {{::annotation.id}}
+                            </div>
+                            <div ng-show="lodLive">
+                                <strong>Graph:</strong>
+                                <a href="{{::openGraph}}"
+                                   target="_blank"
+                                   ng-click="trackAnalyticsEvent('meta--graph')">
+                                    open graph of the annotation
+                                </a>
+                            </div>
+                        </span>
+                </div>
+            </div>
+            <!-- // END Meta -->
+
+            <!-- <div 
+                class="pnd-comment"
+                ng-if="!editMode">{{annotation.comment}}</div>
+            <div
+                ng-if="editMode">
+                <textarea
+                    class="form-control pnd-popover-literal-textarea"
+                    rows="6"
+                    ng-model="annotation.comment"></textarea>
+            </div> -->
+
+        </div>
+
+        <!-- Footer -->
+        <div 
+            class="pnd-annotation-details-footer" 
+            ng-show="isUserToolShowed()"
+            ng-if="!editMode">
+            <button
+                type="button" 
+                class="pnd-btn pnd-btn-small pnd-btn-fill-width pnd-delete"
+                ng-click="deleteAnnotation()">Delete</button>
+        </div>
+        <div 
+            class="pnd-annotation-details-footer" 
+            ng-show="isUserToolShowed()"
+            ng-if="editMode">
+            <button 
+                type="button" 
+                class="pnd-btn pnd-btn-small pnd-btn-calltoaction pnd-btn-fill-width"
+                ng-click="saveEdit()">Save</button><button
+                type="button" 
+                class="pnd-btn pnd-btn-small pnd-btn-fill-width"
+                ng-click="cancelEdit()">Cancel</button>
+        </div>
+        <!-- // END Footer -->
+
+    </div>
+</div>

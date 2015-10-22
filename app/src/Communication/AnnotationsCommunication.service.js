@@ -524,6 +524,7 @@ angular.module('Pundit2.Communication')
                         NotebookExchange.getNotebookById(ann.isIncludedIn).addAnnotation(data.AnnotationID);
                     }
 
+                    // TODO: remove skipConsolidation
                     if (typeof(skipConsolidation) === 'undefined' || !skipConsolidation) {
                         EventDispatcher.sendEvent('AnnotationsCommunication.saveAnnotation', data.AnnotationID);
                         // Consolidation.consolidateAll();

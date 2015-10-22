@@ -514,7 +514,7 @@ angular.module('Pundit2.AnnotationSidebar')
             }
         };
 
-        var buildComment = function() {
+        var buildCommentOrHighlight = function(motivation) {
             var firstTargetUri = currentAnnotation.hasTarget[0],
                 firstItem = currentAnnotation.items[firstTargetUri];
 
@@ -530,11 +530,14 @@ angular.module('Pundit2.AnnotationSidebar')
                     mainItem: firstItem,
                     itemsArray: [firstItem],
                     itemsUriArray: [firstTargetUri],
-                    comment: currentAnnotation.graph[NameSpace.rdf.value][0].value,
                     broken: isBroken,
                     expanded: expandedState,
                     ghosted: false
                 };
+
+                if (motivation === 'commenting') {
+                    state.annotations[currentId].comment = currentAnnotation.graph[NameSpace.rdf.value][0].value;
+                }
 
                 var cancelWatchNotebookName = $rootScope.$watch(function() {
                     return NotebookExchange.getNotebookById(currentAnnotation.isIncludedIn);
@@ -571,13 +574,12 @@ angular.module('Pundit2.AnnotationSidebar')
 
         expandedState = (force ? true : state.defaultExpanded);
 
-        if (currentAnnotation.motivatedBy === 'commenting') {
-            buildComment();
+        if (currentAnnotation.motivatedBy === 'commenting' ||
+            currentAnnotation.motivatedBy === 'highlighting') {
+            buildCommentOrHighlight(currentAnnotation.motivatedBy);
         } else {
             buildSemantic();
         }
-
-
     };
 
     annotationDetails.activateTextFragmentHighlight = function(broken, annotationId, items) {

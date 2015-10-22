@@ -422,6 +422,22 @@ angular.module('Pundit2.Model')
         return res;
     };
 
+    modelHelper.buildHigthLightData = function(statement) {
+        error = false;
+        errorMessage = '';
+        var res = {
+            'graph': {},
+            'items': {},
+            'target': {},
+            'flatTargets': [],
+            'type': {}
+        };
+
+        addTargetElem(statement, res.target, res.flatTargets, res.type);
+
+        return res;
+    };
+
     modelHelper.getLastError = function() {
         return {
             error: error,
@@ -470,14 +486,22 @@ angular.module('Pundit2.Model')
             var annotationID = metadataURIParts[metadataURIParts.length - 1];
 
             // Get graph URI.
-            var bodyReferences = metadata[NameSpace.annotation.hasBody],
+            var bodyReferences = metadata[NameSpace.annotation.hasBody];
+
+            var currentGraph, graphURI;
+
+            if (typeof bodyReferences !== 'undefined') {
                 graphURI = bodyReferences[0].type === 'uri' ? bodyReferences[0].value : bodyReferences[1].value;
+                currentGraph = data.graph[graphURI];
+            } else {
+                currentGraph = {};
+            }
 
             var metadataContent = {};
             metadataContent[metadataURI] = metadata;
 
             res[annotationID] = {
-                'graph': data.graph[graphURI],
+                'graph': currentGraph,
                 'metadata': metadataContent
             };
 

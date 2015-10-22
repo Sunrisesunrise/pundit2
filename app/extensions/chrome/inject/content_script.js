@@ -34,25 +34,8 @@ var switchPundit = function(on) {
             div = document.createElement('div'),
             preloadDiv = document.createElement('div');
 
-        var toolbarHeight = 30;
-
-        if (punditConfig &&
-            punditConfig.modules &&
-            punditConfig.modules.Toolbar) {
-            toolbarHeight = punditConfig.modules.Toolbar.toolbarHeight || toolbarHeight;
-        }
-
-        bodyStyle[cssTransform] = 'translateY(' + toolbarHeight + ')';
-        bodyStyle.position = 'static';
-        bodyStyle.marginTop = toolbarHeight + 'px';
-
-        preloadDiv.setAttribute('id', 'pundit2_preload');
-
-        div.setAttribute('data-ng-app', 'Pundit2');
-        div.setAttribute('id', 'pundit2');
-        div.setAttribute('class', 'pnd-wrp');
-        b.appendChild(div);
-        div.appendChild(preloadDiv);
+        var toolbarHeight = 30,
+            isClientInLiteMode = false;
 
         var innerHtml = '';
         innerHtml += '<div class="navbar navbar-inverse navbar-fixed-top pnd-toolbar-navbar pnd-ignore">';
@@ -65,7 +48,30 @@ var switchPundit = function(on) {
         innerHtml += '  </div><!-- pnd-toolbar-navbar-container -->';
         innerHtml += '</div><!-- navbar-inverse navbar-fixed-top -->';
 
-        preloadDiv.innerHTML = innerHtml;
+        if (punditConfig) {
+            if (punditConfig.clientMode === 'lite') {
+                isClientInLiteMode = true;
+            } else if (punditConfig.modules &&
+                punditConfig.modules.Toolbar) {
+                toolbarHeight = punditConfig.modules.Toolbar.toolbarHeight || toolbarHeight;
+            }
+        }
+
+        bodyStyle.position = 'static';
+
+        div.setAttribute('data-ng-app', 'Pundit2');
+        div.setAttribute('id', 'pundit2');
+        div.setAttribute('class', 'pnd-wrp');
+        b.appendChild(div);
+        
+        if (isClientInLiteMode === false) {
+            bodyStyle[cssTransform] = 'translateY(' + toolbarHeight + ')';
+            bodyStyle.marginTop = toolbarHeight + 'px';
+
+            preloadDiv.setAttribute('id', 'pundit2_preload');
+            div.appendChild(preloadDiv);
+            preloadDiv.innerHTML = innerHtml;
+        } 
 
         // Boot angular app.
         setTimeout(function() {
