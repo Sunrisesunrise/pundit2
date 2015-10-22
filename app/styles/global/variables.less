@@ -22,7 +22,7 @@
 @color-ultra-light-background: #FAFBFC;
 @color-light-background: #F2F5F7;
 @color-light-gray-background: #DFE2E6;
-@color-dark-gray-background: #7E858C;
+@color-dark-gray-background: #9fa6ad; // #7E858C;
 @color-dark-background: #242D38;
 @color-brand: #146DEB;
 @color-error: #FF643F;
@@ -59,30 +59,7 @@
 @predicate-color-text: lighten(@predicate-color, 25);
 @object-color-text: desaturate(lighten(@object-color, 27), 30);
 
-
-
-
-
-
-
-
-
-
-
-// Annotations in the sidebar
-@color-annotation-header: #8F999E; // @subject-color; // #aaaaaa; // @subject-color;
-@color-annotation-broken-header: @color-text-error; // @predicate-color;
-@color-annotation-header-text: #FFF;
-@color-annotation-sidebar-bg: #464b4c;
-
-// Login popover colors
-@color-login-popover-background: #FFF;
-@color-login-popover-border: #979797;
-
-// Modal
-@color-modal-backdrop:  rgba(0,0,0,.5);
-
-// Various
+// Various // TODO Smistare!
 @color-toolbar-disabled: lighten(#000, 45%);
 @color-overlay: rgba(0,0,0,.6);
 
@@ -91,7 +68,7 @@
 // #BUTTONS
 // ------------------------------------ //
 
-@button-font-weight: 400;
+@button-font-weight: 200;
 
 // Button call to action
 @color-button-cta-text: #FFF;
@@ -246,6 +223,11 @@
 // ------------------------------------ //
 // #LOGIN-POPOVER
 // ------------------------------------ //
+
+// Login popover colors
+@color-login-popover-background: #FFF;
+@color-login-popover-border: #979797;
+
 @login-popover-width: 430px;
 @login-popover-height: 560px;
 
@@ -272,10 +254,23 @@
 // ------------------------------------ //
 // #ANNOTATIONS-SIDEBAR
 // ------------------------------------ //
+
+@sidebar-bg-color: @color-light-background;
+
+@annotation-bg-color: #FFF;
+@annotation-border-color: @color-light-gray-background;
+@annotation-border-size: 1px;
+@annotation-box-shadow: 0 3px 0 #E9ECF0;
+@annotation-border-radius: 3px;
+
+// Annotations in the sidebar
+@color-annotation-header: #8F999E; // @subject-color; // #aaaaaa; // @subject-color;
+@color-annotation-broken-header: @color-text-error; // @predicate-color;
+@color-annotation-header-text: #FFF;
+
 // General variables for the sidebar
 @annotation-sidebar-coll-width: 10px;
 @annotation-sidebar-exp-width: 300px;
-
 
 // Styles defining single annotations as shown in the sidebar
 @annotation-header-height: 24px;
@@ -361,8 +356,16 @@
 // ------------------------------------ //
 
 // Types of entities (shown in previews)
-@color-type-background: @color-dark-gray-background;
-@color-type-text: #FFF;
+@type-color-bg: @color-light-background;
+@type-color-border: @color-light-gray-background;
+@type-border-size: 1px;
+@type-color-text: @color-dark-gray-background;
+
 @type-border-radius: 3px;
 
 
+// ------------------------------------ //
+// #MODAL
+// ------------------------------------ //
+
+@color-modal-backdrop:  rgba(0,0,0,.5);
