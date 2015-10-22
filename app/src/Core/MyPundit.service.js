@@ -81,6 +81,19 @@ angular.module('Pundit2.Core')
             notebookLabel: undefined
         };
 
+    var loginExecute = function(where, popoverPlacement, skipClose) {
+        loginPromise = $q.defer();
+
+        if (myPundit.isUserLogged()) {
+            loginPromise.resolve(true);
+        } else {
+            loginStatus = 'loggedOff';
+            myPundit.popoverLogin(where, popoverPlacement, skipClose);
+        }
+
+        return loginPromise.promise;
+    };
+
     myPundit.useCookies = true;
 
     /**
@@ -158,7 +171,10 @@ angular.module('Pundit2.Core')
         angular.extend(infoCookie, data);
         var expirationDate = (new Date()).getTime() + myPundit.options.userCookieExpireTime;
         expirationDate = new Date(expirationDate);
-        $cookies.putObject('pundit.Info', infoCookie, {expires: expirationDate, path: '/'});
+        $cookies.putObject('pundit.Info', infoCookie, {
+            expires: expirationDate,
+            path: '/'
+        });
     };
 
     /**
@@ -201,11 +217,11 @@ angular.module('Pundit2.Core')
                     path: '/'
                 });
                 EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
-                $timeout(function () {
+                $timeout(function() {
                     promise.resolve(true);
                 }, 5);
 
-                $timeout(function(){
+                $timeout(function() {
                     myPundit.checkLoggedIn(true);
                 }, 500);
 
@@ -229,24 +245,39 @@ angular.module('Pundit2.Core')
             if (data.loginStatus === 0) {
                 isUserLogged = false;
                 EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
-                $cookies.remove('pundit.User', {path: '/'});
-                $cookies.remove('pundit.Info', {path: '/'});
+                $cookies.remove('pundit.User', {
+                    path: '/'
+                });
+                $cookies.remove('pundit.Info', {
+                    path: '/'
+                });
                 promise.resolve(false);
             } else {
                 // user is logged in
                 isUserLogged = true;
                 loginStatus = 'loggedIn';
                 userData = data;
-                $cookies.putObject('pundit.User', data, {expires: expirationDate, path: '/'});
+                $cookies.putObject('pundit.User', data, {
+                    expires: expirationDate,
+                    path: '/'
+                });
                 EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
                 promise.resolve(true);
             }
             if (dispatchDocumentEvent) {
-                EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {event: 'Pundit.userLoggedStatusChanged', data: null});
+                EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                    event: 'Pundit.userLoggedStatusChanged',
+                    data: null
+                });
             }
         }).error(function() {
             myPundit.err('Server error');
-            EventDispatcher.sendEvent('Pundit.alert', {title: 'Oops! Something went wrong.', id: 'ERROR', timeout: null, message: 'There was an error while trying to communicate with server. Please reaload the page in few minutes'});
+            EventDispatcher.sendEvent('Pundit.alert', {
+                title: 'Oops! Something went wrong.',
+                id: 'ERROR',
+                timeout: null,
+                message: 'There was an error while trying to communicate with server. Please reaload the page in few minutes'
+            });
             promise.reject('check logged in promise error');
         });
 
@@ -271,16 +302,11 @@ angular.module('Pundit2.Core')
      *
      */
     myPundit.login = function(popoverPlacement) {
-        loginPromise = $q.defer();
+        return loginExecute('login', popoverPlacement, false);
+    };
 
-        if (myPundit.isUserLogged()) {
-            loginPromise.resolve(true);
-        } else {
-            loginStatus = 'loggedOff';
-            myPundit.popoverLogin('login', popoverPlacement);
-        }
-
-        return loginPromise.promise;
+    myPundit.loginWithoutSwitch = function(popoverPlacement) {
+        return loginExecute('login', popoverPlacement, true);
     };
 
     // TODO remove it, remove the old login popup and manage popover in unit test 
@@ -412,13 +438,20 @@ angular.module('Pundit2.Core')
             userData = {};
             logoutPromise.resolve(true);
             Analytics.track('main-events', 'user--logout');
-            EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {event: 'Pundit.userProfileUpdated', data: null});
+            EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                event: 'Pundit.userProfileUpdated',
+                data: null
+            });
         }).error(function() {
             logoutPromise.reject('logout promise error');
         });
 
-        $cookies.remove('pundit.User', {path: '/'});
-        $cookies.remove('pundit.Info', {path: '/'});
+        $cookies.remove('pundit.User', {
+            path: '/'
+        });
+        $cookies.remove('pundit.Info', {
+            path: '/'
+        });
 
         return logoutPromise.promise;
     };
@@ -486,13 +519,11 @@ angular.module('Pundit2.Core')
             if (params.data === 'loginPageLoaded' || params.data === 'pageLoaded') {
                 popoverState.popover.$scope.isLoading = false;
                 popoverState.popover.$scope.$digest();
-            }
-            else if (params.data === 'loginCheck') {
+            } else if (params.data === 'loginCheck') {
                 popoverState.popover.$scope.isLoading = true;
                 popoverState.popover.$scope.postLoginPreCheck = true;
                 popoverState.popover.$scope.$digest();
-            }
-            else if (params.data === 'profileSuccessfullyUpdated') {
+            } else if (params.data === 'profileSuccessfullyUpdated') {
                 $timeout.cancel(popoverState.autoCloseTimeout);
                 popoverState.autoCloseTimeout = $timeout(function() {
                     myPundit.closeLoginPopover();
@@ -500,14 +531,16 @@ angular.module('Pundit2.Core')
                 if (!updateUser) {
                     console.log("updating user name by event");
                     updateUser = true;
-                    EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {event: 'Pundit.userProfileUpdated', data: null});
+                    EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                        event: 'Pundit.userProfileUpdated',
+                        data: null
+                    });
                     myPundit.checkLoggedIn(true).then(function() {
                         updateUser = false;
                         $rootScope.$$phase || $rootScope.$digest();
                     });
                 }
-            }
-            else if (params.data === 'forcePopoverClose') {
+            } else if (params.data === 'forcePopoverClose') {
                 if (typeof popoverState.autoCloseTimeout !== 'undefined' && popoverState.autoCloseTimeout !== null) {
                     $timeout.cancel(popoverState.autoCloseTimeout);
                 }
@@ -518,7 +551,10 @@ angular.module('Pundit2.Core')
                     console.log("updating user name by force close");
                     updateUser = true;
                     $timeout(function() {
-                        EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {event: 'Pundit.userProfileUpdated', data: null});
+                        EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                            event: 'Pundit.userProfileUpdated',
+                            data: null
+                        });
                         myPundit.checkLoggedIn(true).then(function() {
                             updateUser = false;
                             $rootScope.$$phase || $rootScope.$digest();
@@ -526,16 +562,14 @@ angular.module('Pundit2.Core')
                     }, 50);
                 }
                 myPundit.closeLoginPopover();
-            }
-            else if (params.data === 'userLoggedIn') {
+            } else if (params.data === 'userLoggedIn') {
                 popoverState.popover.$scope.postLoginPreCheck = true;
                 myPundit.checkLoggedIn().then(function(status) {
                     popoverState.popover.$scope.isLoading = false;
                     if (status) {
                         popoverState.loginSuccess();
                         loginPromise.resolve(true);
-                    }
-                    else {
+                    } else {
                         popoverState.popover.$scope.loginSomeError = true;
                         loginPromise.resolve(false);
                     }
@@ -586,7 +620,7 @@ angular.module('Pundit2.Core')
     myPundit.addPostMessageListener();
 
     // TODO This is not really a popoverLogin but more a popover toggler
-    myPundit.popoverLogin = function(where, popoverPlacement) {
+    myPundit.popoverLogin = function(where, popoverPlacement, skipClose) {
         if (typeof(loginPromise) === 'undefined' && where !== 'editProfile') {
             return;
             // loginPromise = $q.defer();
@@ -594,6 +628,10 @@ angular.module('Pundit2.Core')
 
         // If there's already a Login popover I close and destroy it
         if (popoverState.popover !== null) {
+            if (typeof skipClose !== 'undefined' && skipClose) {
+                return;
+            }
+
             popoverState.popover.hide();
             popoverState.popover.destroy(); // TODO Doesn't remove the code?????
             popoverState.popover = null;
@@ -603,7 +641,7 @@ angular.module('Pundit2.Core')
 
         // popoverState.anchor = angular.element('.pnd-toolbar-login-button');
         // popoverState.popover = $popover(angular.element(".pnd-toolbar-toggle-button"), popoverState.options);
-        
+
         var popoverOptions = popoverState.options;
         if (typeof popoverPlacement !== 'undefined') {
             popoverOptions = angular.copy(popoverState.options);
@@ -646,7 +684,7 @@ angular.module('Pundit2.Core')
             checkPopoverPosition();
         });
 
-        if (typeof loginPromise !== 'undefined'){
+        if (typeof loginPromise !== 'undefined') {
             return loginPromise.promise;
         }
     };
@@ -687,19 +725,23 @@ angular.module('Pundit2.Core')
 
     myPundit.checkUserCookie = function() {
         // TODO: expand this check
-        $cookies.remove('pundit.User', {path: '/'});
-        $cookies.remove('pundit.Info', {path: '/'});
+        $cookies.remove('pundit.User', {
+            path: '/'
+        });
+        $cookies.remove('pundit.Info', {
+            path: '/'
+        });
     };
 
     var clientHidden = false;
-    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
         if (!clientHidden) {
             myPundit.removePostMessageListener();
         }
         clientHidden = true;
     });
 
-    EventDispatcher.addListener('Client.show', function(/*e*/) {
+    EventDispatcher.addListener('Client.show', function( /*e*/ ) {
         if (clientHidden) {
             myPundit.addPostMessageListener();
         }
