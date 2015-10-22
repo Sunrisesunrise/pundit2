@@ -287,23 +287,23 @@ angular.module('Pundit2.Core')
         var i;
         // empty array coding a free objectTypes
         if (objectTypes.length === 0) {
-            p.objectTypes = [];
-        } else if (p.objectTypes.length > 0) {
+            p.suggestedObjectTypes = [];
+        } else if (p.suggestedObjectTypes.length > 0) {
             for (i in objectTypes) {
                 // if the objectTypes is not already present
-                if (p.objectTypes.indexOf(objectTypes[i]) === -1) {
-                    p.objectTypes.push(objectTypes[i]);
+                if (p.suggestedObjectTypes.indexOf(objectTypes[i]) === -1) {
+                    p.suggestedObjectTypes.push(objectTypes[i]);
                 }
             }
         }
         // empty array coding a free subjectTypes
         if (subjectTypes.length === 0) {
-            p.subjectTypes = [];
-        } else if (p.subjectTypes.length > 0) {
+            p.suggestedSubjectTypes = [];
+        } else if (p.suggestedSubjectTypes.length > 0) {
             for (i in subjectTypes) {
                 // if the subjectTypes is not already present
-                if (p.subjectTypes.indexOf(subjectTypes[i]) === -1) {
-                    p.subjectTypes.push(subjectTypes[i]);
+                if (p.suggestedSubjectTypes.indexOf(subjectTypes[i]) === -1) {
+                    p.suggestedSubjectTypes.push(subjectTypes[i]);
                 }
             }
         }
