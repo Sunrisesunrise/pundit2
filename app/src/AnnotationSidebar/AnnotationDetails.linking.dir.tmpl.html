@@ -3,6 +3,7 @@
     <!-- Collapsed view of the annotation -->
     <div class="pnd-annotation-collapsed pnd-annotation-details-header pnd-annotation-details-top"
         ng-click="toggleAnnotation()"
+        ng-if="!annotation.expanded"
         ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
 
         <div class="pnd-annotation-collapsed-subject"
@@ -18,6 +19,78 @@
     </div>
 
     <!-- Expanded view of the annotation -->
+    <div class="pnd-annotation-expanded pnd-annotation-details-container"
+         ng-if="annotation.expanded">
+
+        <!-- All'annotazione apert andrebbe aggiunto ng-click="toggleAnnotation()"
+            ma va fatto in modo che i pulsanti interni siamo cliccabili e non triggerino
+            il toggleAnnotation() -->
+
+        <!-- Metadata -->
+        <div class="pnd-annotation-details-meta"
+             ng-init="meta = false">
+
+            <img class="pnd-annotation-user-thumb" src="http://placehold.it/30x30" alt="{{::annotation.creatorName}}"/>
+            <span class="pnd-annotation-user-name">
+                {{::annotation.creatorName}}
+            </span>
+            <span class="pnd-annotation-metadata">
+                {{::annotation.created | date : 'd MMM y'}} · in <span class="pnd-annotation-notebook-name">{{annotation.notebookName}}</span>
+            </span>
+
+        </div>
+
+        <!-- Annotation data -->
+        <div class="pnd-annotation-details-data">
+
+            <!-- Repeat here content for each triple -->
+
+            <!-- Annotated text fragment or webpage -->
+            <div ng-class="{'pnd-annotation-page': annotation.mainItem.typeLabel == 'WebPage'}">
+                <span>{{annotation.mainItem.label}}</span>
+            </div>
+
+            <div
+                    class="pnd-comment"
+                    ng-if="!editMode">{{annotation.comment}}</div>
+            <div
+                    ng-if="editMode">
+                <textarea
+                        class="form-control pnd-popover-literal-textarea"
+                        rows="6"
+                        ng-model="annotation.comment"></textarea>
+            </div>
+        </div>
+
+        <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
+        <!-- Attenzione vanno rimessi tutto i vari ng-if e ng-show -->
+        <div class="pnd-annotation-details-buttons">
+            <div
+                    class="pnd-annotation-details-footer"
+                    >
+                <button
+                    type="button"
+                    class="pnd-edit"
+                    ng-click="editComment()">
+                    <span class="pnd-icon-pencil"></span>
+                    Edit
+                </button> · <button
+                    type="button"
+                    class="pnd-delete"
+                    ng-click="deleteAnnotation()">
+                    <span class="pnd-icon-trash"></span>
+                    Delete
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+        <!-- Expanded view of the annotation -->
     <div class="pnd-annotation-details-container" ng-if="annotation.expanded">
         <div class="pnd-annotation-details-content">
 

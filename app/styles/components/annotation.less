@@ -20,6 +20,7 @@
 .pnd-annotation-details-wrap {
 }
 
+
 /* ------------------------------------ *\
    #COLLAPSED-ANNOTATION
 \* ------------------------------------ */
@@ -84,7 +85,7 @@
         height: @annotation-collapsed-height;
         max-width: 52%;
         padding: 1px 4px 1px (@annotation-collapsed-height/2);
-        background-color: @color-light-background;
+        background-color: @color-ultra-light-background;
         overflow: hidden;
         white-space: nowrap;
         border-left: 1px solid @annotation-border-color;
@@ -93,7 +94,7 @@
 }
 
 /* Arrow triangle between subject and object, code inspired by Bootstrap css */
-.pnd-annotation-collapsed-arrow
+.pnd-annotation-collapsed-caret
 {
     position: absolute;
     display: block;
@@ -137,7 +138,7 @@
     overflow: hidden;
 
     background-color: @annotation-bg-color;
-    border: @annotation-border-size solid @annotation-border-color;
+    border: @annotation-border-size solid @annotation-expanded-border-color;
     box-shadow: @annotation-box-shadow;
     border-radius: @annotation-border-radius;
 
@@ -145,9 +146,10 @@
     cursor: pointer;
 }
 
+/* Metadata showed on top of the annotation */
 .pnd-annotation-details-meta {
-    margin: 10px;
-    padding-bottom: 10px;
+    margin: 10px 0 0 10px;
+    padding: 0 10px 10px 0;
     border-bottom: @annotation-border-size solid @annotation-border-color;
 
     .pnd-annotation-user-thumb {
@@ -176,6 +178,90 @@
     }
 }
 
+/* Annotation content */
+.pnd-annotation-details-data {
+    /* The annotated fragment shown in the annotation details */
+    .pnd-annotation-annotated-fragment {
+        padding: 10px;
+        max-height: @annotation-text-max-height;
+        overflow: auto;
+        display: block;
+
+        span {
+            background-color: @color-highlight;
+        }
+    }
+
+    /* The comment shown in the annotation details */
+    .pnd-annotation-comment-text {
+        padding: 10px;
+        max-height: @annotation-text-max-height;
+        overflow: auto;
+        display: block;
+        background-color: @color-ultra-light-background;
+        border-top: @annotation-border-size solid @annotation-border-color;
+    }
+
+    /* Editing of the comment */
+    .pnd-annotation-comment-text-edit {
+        padding: 10px;
+    }
+
+    /* The triangle caret between fragment and comment */
+    /* Arrow triangle between subject and object, code inspired by Bootstrap css */
+    .pnd-annotation-comment-caret
+    {
+        position: absolute;
+        display: block;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-bottom-color: @annotation-border-color;
+        border-top-width: 0;
+        border-width: 10px;
+        margin-top: -19px;
+        left: 15px;
+
+        &:after {
+            content: " ";
+            position: absolute;
+            display: block;
+            width: 0;
+            left: -9px;
+            top: 1px;
+            border-color: transparent;
+            border-style: solid;
+            border-width: 9px;
+            border-bottom-color:@color-ultra-light-background;
+            border-top-width: 0;
+        }
+    }
+}
+
+/* Buttons at the bottom of teh annotation */
+.pnd-annotation-details-buttons {
+    padding: 0 5px;
+    border-top: @annotation-border-size solid @annotation-border-color;
+    button {
+        padding: 4px 5px 3px 5px;
+        color: @color-dark-gray-background;
+        font-size: 12px;
+
+        &:hover {
+            color: @color-brand;
+        }
+    }
+}
 
 
-
+/* ------------------------------------ *\
+   #SPECIAL-COMMENT-ANNOTATION
+\* ------------------------------------ */
+.pnd-annotation-comment {
+    .pnd-annotation-expanded {
+        .pnd-annotation-annotated-fragment {
+            padding: 10px 10px 14px 10px;
+        }
+    }
+}

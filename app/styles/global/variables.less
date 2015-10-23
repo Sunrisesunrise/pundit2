@@ -257,14 +257,19 @@
 // #ANNOTATIONS-SIDEBAR
 // ------------------------------------ //
 
+// General variables for the sidebar
+@annotation-sidebar-coll-width: 10px;
+@annotation-sidebar-exp-width: 340px;
 @annotation-collapsed-height: 24px;
+@annotation-text-max-height: 100px;
 
-@sidebar-bg-color: #FFF; // @color-light-background;
+@sidebar-bg-color: @color-ultra-light-background; // #FFF;
 @sidebar-border-color: @color-light-background;
 @sidebar-border-size: 1px;
 
 @annotation-bg-color: #FFF;
 @annotation-border-color: @color-light-gray-background;
+@annotation-expanded-border-color: @color-brand;
 @annotation-border-size: 1px;
 @annotation-box-shadow: 0 2px 0 #E9ECF0;
 @annotation-border-radius: 3px;
@@ -273,10 +278,6 @@
 @color-annotation-header: #8F999E; // @subject-color; // #aaaaaa; // @subject-color;
 @color-annotation-broken-header: @color-text-error; // @predicate-color;
 @color-annotation-header-text: #FFF;
-
-// General variables for the sidebar
-@annotation-sidebar-coll-width: 10px;
-@annotation-sidebar-exp-width: 300px;
 
 // Styles defining single annotations as shown in the sidebar
 @annotation-header-height: 24px;
