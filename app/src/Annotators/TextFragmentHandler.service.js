@@ -674,6 +674,7 @@ angular.module('Pundit2.Annotators')
             textFragmentHandler.log('Item used as subject inside triple composer (template mode active).');
             TripleComposer.addToAllSubject(item);
             TripleComposer.closeAfterOp();
+            addTemporarySelection();
             EventDispatcher.sendEvent('Annotators.saveAnnotation');
             return;
         }
