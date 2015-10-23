@@ -27,6 +27,8 @@
 @color-brand: #146DEB;
 @color-error: #FF643F;
 @color-warning: #febe53;
+@color-highlight: #FFFFB8;
+@color-highlight-hover: fade(#2ee6e6, 40%);
 @subject-color: #54b4e6; // TODO Correct name
 @predicate-color: #febe53; // TODO Correct name
 @object-color: #0084c8; // TODO Correct name
@@ -192,10 +194,10 @@
 @text-fragment-color-6: fade(#ffff00, 65%);
 
 // Highlights the text fragment the user is annotating
-@text-fragment-color-highlight: fade(#2ee6e6, 40%);
+@text-fragment-color-highlight: @color-highlight-hover;
 
 // Hovering on a text fragment icon or an annotations in the sidebar
-@text-fragment-color-hover: @text-fragment-color-highlight; // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
+@text-fragment-color-hover: @color-highlight-hover; // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
 
 // When doing "Show all annotations on this item"... alle the others text fragment are ghosted
 @text-fragment-ghosted: fade(#ffff33, 15%);
@@ -255,12 +257,16 @@
 // #ANNOTATIONS-SIDEBAR
 // ------------------------------------ //
 
-@sidebar-bg-color: @color-light-background;
+@annotation-collapsed-height: 24px;
+
+@sidebar-bg-color: #FFF; // @color-light-background;
+@sidebar-border-color: @color-light-background;
+@sidebar-border-size: 1px;
 
 @annotation-bg-color: #FFF;
 @annotation-border-color: @color-light-gray-background;
 @annotation-border-size: 1px;
-@annotation-box-shadow: 0 3px 0 #E9ECF0;
+@annotation-box-shadow: 0 2px 0 #E9ECF0;
 @annotation-border-radius: 3px;
 
 // Annotations in the sidebar

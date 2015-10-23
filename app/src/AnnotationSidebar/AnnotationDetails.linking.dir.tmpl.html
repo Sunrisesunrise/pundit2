@@ -1,34 +1,23 @@
-<div class="pnd-annotation-details-wrap pnd-ignore">
+<div class="pnd-annotation-details-wrap pnd-annotation-semantic pnd-ignore">
 
-    <div class="pnd-annotation-details-header pnd-annotation-details-top"
+    <!-- Collapsed view of the annotation -->
+    <div class="pnd-annotation-collapsed pnd-annotation-details-header pnd-annotation-details-top"
         ng-click="toggleAnnotation()"
         ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
-        <div class="{{::annotation.mainItem.class}}">
-                <div class="pnd-annotation-item-header-text">
-                        <!--
-                        <span ng-show="annotation.broken" class="pnd-annotation-icon-color">
-                            <span class="pnd-icon pnd-icon-exclamation"></span>
-                        </span>
-                        -->
-                        <!--
-                        <span
-                            ng-show="!annotation.broken" 
-                            class="pnd-annotation-icon-color"
-                            style="background-color: {{::annotation.color}};">
-                            <span 
-                                class="{{annotation.mainItem.icon}}"></span>
-                        </span>
-                        -->
-                        <span class="pnd-item-title">{{annotation.mainItem.label}}</span>
-                </div>    
-                <!--
-                <button type="button" class="pnd-btn pull-right">
-                    <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[annotation.expanded]"></span>
-                </button>
-                -->
+
+        <div class="pnd-annotation-collapsed-subject"
+            ng-class="{'pnd-annotation-page': annotation.mainItem.typeLabel == 'WebPage'}">
+            <span>{{annotation.mainItem.label}}</span>
+        </div>
+
+        <div class="pnd-annotation-collapsed-arrow"></div>
+
+        <div class="pnd-annotation-collapsed-object">
+            <span>{{ annotation.itemsArray[0].objects[0].label }}</span>
         </div>
     </div>
 
+    <!-- Expanded view of the annotation -->
     <div class="pnd-annotation-details-container" ng-if="annotation.expanded">
         <div class="pnd-annotation-details-content">
 

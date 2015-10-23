@@ -10,7 +10,7 @@
    #SINGLE-ANNOTATIONS-DETAILS
 \* ------------------------------------ */
 
-/* annotations-details dom element */
+/* Annotations-details dom element */
 .pnd-annotation-details {
     position: absolute;
     width: 100%;
@@ -18,9 +18,164 @@
 }
 
 .pnd-annotation-details-wrap {
+}
+
+/* ------------------------------------ *\
+   #COLLAPSED-ANNOTATION
+\* ------------------------------------ */
+
+.pnd-annotation-collapsed {
+    height: @annotation-collapsed-height;
     margin: 5px;
+    overflow: hidden;
+
     background-color: @annotation-bg-color;
     border: @annotation-border-size solid @annotation-border-color;
     box-shadow: @annotation-box-shadow;
     border-radius: @annotation-border-radius;
+
+    font-size: 13px;
+    cursor: pointer;
 }
+
+/* Subject */
+.pnd-annotation-collapsed-subject {
+    float: left;
+    width: 100%;
+    height: @annotation-collapsed-height;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 2px 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    // TODO Fix line height
+
+    &:not(.pnd-annotation-page) span {
+        background-color: @color-highlight;
+        font-style: italic;
+    }
+
+    &.pnd-annotation-page {
+        span {
+            font-weight: 600;
+        }
+    }
+}
+
+/* Hover effect */
+.pnd-annotation-collapsed:hover {
+    .pnd-annotation-collapsed-subject:not(.pnd-annotation-page) span {
+        background-color: @color-highlight-hover;
+    }
+}
+
+/* Style for semantic and commenting annotations */
+.pnd-annotation-semantic, .pnd-annotation-comment {
+    /* Subject */
+    .pnd-annotation-collapsed-subject {
+        width: 48%;
+        max-width: 48%;
+    }
+
+    /* Object */
+    .pnd-annotation-collapsed-object {
+        float: left;
+        width: 52%;
+        height: @annotation-collapsed-height;
+        max-width: 52%;
+        padding: 1px 4px 1px (@annotation-collapsed-height/2);
+        background-color: @color-light-background;
+        overflow: hidden;
+        white-space: nowrap;
+        border-left: 1px solid @annotation-border-color;
+        text-overflow: ellipsis;
+    }
+}
+
+/* Arrow triangle between subject and object, code inspired by Bootstrap css */
+.pnd-annotation-collapsed-arrow
+{
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    top: 50%;
+    left: 48%;
+    margin-top: -(@annotation-collapsed-height/2);
+
+    border-color: transparent;
+    border-style: solid;
+    border-left-color: @color-light-gray-background;
+    border-right-width: 0;
+    border-width: (@annotation-collapsed-height/2);
+
+
+    &:after {
+        content: " ";
+
+        position: absolute;
+        display: block;
+        width: 0;
+        height: 0;
+        right: 1px;
+        bottom: -(@annotation-collapsed-height/2)+1;
+
+        border-color: transparent;
+        border-style: solid;
+        border-width: (@annotation-collapsed-height/2) - 1;
+        border-left-color: #FFF;
+        border-right-width: 0;
+    }
+}
+
+/* ------------------------------------ *\
+   #EXPANDED-ANNOTATION
+\* ------------------------------------ */
+
+.pnd-annotation-expanded {
+    margin: 5px;
+    overflow: hidden;
+
+    background-color: @annotation-bg-color;
+    border: @annotation-border-size solid @annotation-border-color;
+    box-shadow: @annotation-box-shadow;
+    border-radius: @annotation-border-radius;
+
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.pnd-annotation-details-meta {
+    margin: 10px;
+    padding-bottom: 10px;
+    border-bottom: @annotation-border-size solid @annotation-border-color;
+
+    .pnd-annotation-user-thumb {
+        float: left;
+        margin-right: 10px;
+        border-radius: 5px;
+    }
+
+    .pnd-annotation-user-name {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.3;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .pnd-annotation-metadata {
+        display: block;
+        font-size: 12px;
+        line-height: 1.3;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
+
+
+
