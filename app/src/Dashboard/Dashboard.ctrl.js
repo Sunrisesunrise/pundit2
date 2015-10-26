@@ -25,7 +25,7 @@ angular.module('Pundit2.Dashboard')
             width = innerWidth + marginRight + marginLeft;
 
         if (width !== Dashboard.getContainerWidth()) {
-            Dashboard.setContainerWidth(width);
+            Dashboard.setContainerWidth(window.innerWidth*0.9886);
             $rootScope.$$phase || $scope.$digest();
         }
     };
