@@ -24,8 +24,16 @@ angular.module('Pundit2.Dashboard')
             marginRight = parseInt(body.css('margin-right'), 10),
             width = innerWidth + marginRight + marginLeft;
 
+        //create an alement at bottom of dom
+        var scrollDiv = document.createElement("div");
+        document.body.appendChild(scrollDiv);
+
+        // Get the width
+        var scrollbarWidth = scrollDiv.clientWidth;
+        // Delete the DIV
+        document.body.removeChild(scrollDiv);
         if (width !== Dashboard.getContainerWidth()) {
-            Dashboard.setContainerWidth(window.innerWidth*0.9886);
+            Dashboard.setContainerWidth(scrollbarWidth);
             $rootScope.$$phase || $scope.$digest();
         }
     };
