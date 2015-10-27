@@ -940,27 +940,30 @@ angular.module('Pundit2.Annotators')
             uri = uri.substring(0, uri.indexOf('#'));
         }
 
+        // TODO: add pundit-show support in Pundit2 
         // If there's a query, decode it and remove it from the uri. Look for the
         // pundit-show parameter and strips it out
         // TODO: 'pundit-show' should be configurable ... ?
-        if (uri.indexOf('?') !== -1) {
-            query = uri.substring(uri.indexOf('?') + 1, uri.length);
-            uri = uri.substring(0, uri.indexOf('?'));
+        // if (uri.indexOf('?') !== -1) {
+        //     query = uri.substring(uri.indexOf('?') + 1, uri.length);
+        //     uri = uri.substring(0, uri.indexOf('?'));
 
-            queryObject = $location.search();
-            delete queryObject['pundit-show'];
+        //     // there is a related issue with html5 and $location.search(): https://github.com/angular/angular.js/issues/7239
+        //     queryObject = $location.search();
+        //     delete queryObject['pundit-show'];
 
-            var queryArray = [];
-            for (var p in queryObject) {
-                queryArray.push(p + '=' + queryObject[p]);
-            }
-            query = queryArray.join('&');
-        }
+        //     var queryArray = [];
+        //     for (var p in queryObject) {
+        //         queryArray.push(p + '=' + queryObject[p]);
+        //     }
+        //     query = queryArray.join('&');
+        // }
 
-        // Build back the URI
-        if (query) {
-            uri += '?' + query;
-        }
+        // // Build back the URI
+        // if (query) {
+        //     uri += '?' + query;
+        // }
+
         if (fragment) {
             uri += '#' + fragment;
         }
