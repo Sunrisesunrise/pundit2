@@ -18,14 +18,16 @@ angular.module('Pundit2.Dashboard')
     // Will check body innerWidth and its margins and set Dashboard width
     // if needed
     var resizeContainer = function() {
-        var body = angular.element('body'),
-            innerWidth = parseInt(body.innerWidth(), 10);
+        var bodyW = body.innerWidth(),
+            documentW = $document.innerWidth(),
+            newWidth = Math.max(bodyW, documentW);
 
-        if (innerWidth !== Dashboard.getContainerWidth()) {
-            Dashboard.setContainerWidth(innerWidth);
+        if (newWidth !== Dashboard.getContainerWidth()) {
+            Dashboard.setContainerWidth(newWidth);
             $rootScope.$$phase || $scope.$digest();
         }
     };
+
     // We want to watch body innerWidth and bind a listener to the resize
     // event on window, to be sure to intercept both window resize and scrollbars
     // show and hide events
