@@ -813,10 +813,14 @@ angular.module('Pundit2.AnnotationSidebar')
         startPosition = annotationSidebar.options.startTop;
 
         angular.forEach(state.allAnnotations, function(annotation) {
+            var isMotivationAccepted = annotation.motivatedBy in NameSpace.motivation;
             annotation.firstConsolidableItem = findFirstConsolidateItem(annotation);
             setBrokenInfo(annotation);
             inizializeAuthorAndNotebookFilter(annotation);
-            if (annotation.motivatedBy !== 'commenting') {
+            if (isMotivationAccepted === false) {
+                annotation.motivatedBy = 'linking';
+            }
+            if (annotation.motivatedBy === 'linking') {
                 inizializeSemanticAnnotationFilters(annotation);
             } else {
                 inizializeCommentFilter(annotation);
