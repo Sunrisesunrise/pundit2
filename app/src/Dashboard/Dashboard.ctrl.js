@@ -18,7 +18,8 @@ angular.module('Pundit2.Dashboard')
     // Will check body innerWidth and its margins and set Dashboard width
     // if needed
     var resizeContainer = function() {
-        var bodyW = body.innerWidth(),
+
+        var bodyW = angular.element('body').innerWidth(),
             documentW = $document.innerWidth(),
             newWidth = Math.max(bodyW, documentW);
 
