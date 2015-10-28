@@ -487,7 +487,7 @@ angular.module('Pundit2.GeneralItemsContainer')
                 return;
             }
 
-            if ($scope.displayedItems.length === 0) {
+            if ($scope.displayedItems.length === 0 && $scope.search.term !== '' && typeof($scope.search.term) !== 'undefined') {
                 $scope.message.text = "No item found to: " + $scope.search.term;
             }
         };

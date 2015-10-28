@@ -341,7 +341,11 @@ angular.module('Pundit2.ResourcePanel')
                 }, ResourcePanel.options.vocabSearchTimer);
             }
         } else {
-            $timeout.cancel(searchTimer);
+            if(typeof($scope.contentTabs) !== 'undefined' && term === ''){
+            $scope.contentTabs[$scope.contentTabs.activeTab].items = [] ;
+        }
+        $timeout.cancel(searchTimer);
+
             // TODO: add specific method in ResourcePanel to reset search
             if (Config.annotationServerCallsNeedLoggedUser) {
                 MyPundit.checkLoggedIn().then(function(isLoggedIn) {
