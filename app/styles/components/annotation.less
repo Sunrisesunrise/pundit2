@@ -192,6 +192,8 @@
         }
     }
 
+    /* Comment annotations */
+
     /* The comment shown in the annotation details */
     .pnd-annotation-comment-text, .pnd-annotation-comment-text-edit {
         padding: 10px;
@@ -245,6 +247,107 @@
             border-top-width: 0;
         }
     }
+
+    /* Semantic annotations */
+
+    /* Triple element in semantic annotations */
+    .pnd-annotation-details-triple {
+        border-bottom: 3px double @annotation-border-color;
+
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+
+    /* Predicate in semantic annotation */
+    .pnd-annotation-details-predicate {
+        display: inline-block;
+        position: relative;
+        height: 22px;
+        margin-left: 10px;
+        padding: 0 5px;
+        background: @predicate-color;
+
+        font-size: 13px;
+        line-height: 22px;
+        font-style: italic;
+        color: #fff;
+        text-align: center;
+        border-radius: 3px;
+
+        &:before, &:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 0;
+            height: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+        }
+
+        &:before {
+            top: -3px;
+            border-bottom: 3px solid @predicate-color;
+        }
+
+        &:after {
+            top: 22px;
+            border-top: 3px solid @predicate-color;
+        }
+    }
+
+    /* The Object in semantic annotations */
+    .pnd-annotation-details-object {
+        display: block;
+        padding: 18px 10px 10px;
+        margin-top: -11px;
+        max-height: @annotation-text-max-height;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        background-color: @color-ultra-light-background;
+        border-top: @annotation-border-size solid @annotation-border-color;
+
+        /* The thumb */
+        .pnd-annotation-details-object-image {
+            display: block;
+            float: left;
+            margin: 0 6px 6px 0;
+            width: 40px; // TODO Create variable
+            height: 40px; // TODO Create variable
+            overflow: hidden;
+
+            border-radius: 3px;
+            background-color: @color-light-gray-background;  // TODO Create variable
+            vertical-align: middle;
+            text-align: center;
+
+            img {
+                max-width:100%;
+                max-height:100%;
+            }
+        }
+
+        /* The label */
+        .pnd-annotation-details-object-label {
+            display: block;
+            font-weight: 600;
+        }
+
+        /* The type */
+        .pnd-annotation-details-object-type {
+        }
+
+
+        /* The description */
+        .pnd-annotation-details-object-description {
+            display: block;
+            float: none;
+            clear: both;
+        }
+    }
 }
 
 /* Buttons at the bottom of teh annotation */
@@ -277,6 +380,7 @@
 /* ------------------------------------ *\
    #SPECIAL-COMMENT-ANNOTATION
 \* ------------------------------------ */
+// TODO This must stay here???
 .pnd-annotation-comment {
     .pnd-annotation-expanded {
         .pnd-annotation-annotated-fragment {
