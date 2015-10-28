@@ -193,13 +193,21 @@
     }
 
     /* The comment shown in the annotation details */
-    .pnd-annotation-comment-text {
+    .pnd-annotation-comment-text, .pnd-annotation-comment-text-edit {
         padding: 10px;
         max-height: @annotation-text-max-height;
         overflow: auto;
         display: block;
         background-color: @color-ultra-light-background;
         border-top: @annotation-border-size solid @annotation-border-color;
+    }
+
+    .pnd-annotation-comment-text {
+        max-height: @annotation-text-max-height;
+    }
+
+    .pnd-annotation-comment-text-edit {
+        max-height: 200px;
     }
 
     /* Editing of the comment */
@@ -251,6 +259,17 @@
         &:hover {
             color: @color-brand;
         }
+    }
+}
+
+/* Buttons to save or cancel comment edit */
+.pnd-annotation-comment-text-edit-buttons {
+    text-align: right;
+    height: 40px; // TODO Create a variable!
+    padding-top: 7px;
+
+    .pnd-btn {
+        margin-right: 7px;
     }
 }
 

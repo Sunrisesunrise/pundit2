@@ -101,23 +101,22 @@
         </div>
 
 
-        <!-- Save or cancel of comment... after Edit -->
+        <!-- Save or cancel of comment in Edit mode -->
         <!-- Attenzione vanno rimessi tutto i vari ng-if e ng-show -->
-        <div class="pnd-annotation-comment-edit"
+        <div class="pnd-annotation-comment-text-edit-buttons"
              ng-if="editMode">
             <button
-                type="button"
-                class="pnd-btn pnd-btn-xsmall pnd-btn-calltoaction"
-                ng-click="saveEdit()">
-                Save
+                    type="button"
+                    class="pnd-btn pnd-btn-small"
+                    ng-click="cancelEdit()">
+                Cancel
             </button><button
                 type="button"
-                class="pnd-btn pnd-btn-xsmall"
-                ng-click="cancelEdit()">
-            Cancel
+                class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
+                ng-click="saveEdit()">
+                Save
             </button>
         </div>
-
 
     </div>
 </div>

@@ -7,10 +7,22 @@
 /* ------------------------------------ *\
    #GENERAL
 \* ------------------------------------ */
+
+/*
+ATTENTION!
+".form-control" is a class used by bootstrap for form element styling.
+We've decided non to change that in HTML since it is already used in many parts of code.
+*/
+
 select, textarea, input[type="date"], input[type="datetime"],
 input[type="datetime-local"], input[type="email"], input[type="month"],
 input[type="number"], input[type="password"], input[type="search"], input[type="tel"],
-input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
+input[type="text"], input[type="time"], input[type="url"], input[type="week"],
+select.form-control, textarea.form-control, input[type="date"].form-control, input[type="datetime"].form-control,
+input[type="datetime-local"].form-control, input[type="email"].form-control, input[type="month"].form-control,
+input[type="number"].form-control, input[type="password"].form-control, input[type="search"].form-control, input[type="tel"].form-control,
+input[type="text"].form-control, input[type="time"].form-control, input[type="url"].form-control, input[type="week"].form-control
+{
     padding: 4px 5px;
     border-radius: @input-border-radius;
     border-color: @input-border-color;
