@@ -516,7 +516,7 @@ angular.module('Pundit2.Client')
         ItemsExchange.wipe();
         AnnotationsExchange.wipe();
         TemplatesExchange.wipe();
-        TextFragmentHandler.wipeTemporarySelection();
+        // TextFragmentHandler.wipeTemporarySelection();
 
         // There could be private annotations we want to show, get them again
         AnnotationsCommunication.getAnnotations();
