@@ -27,8 +27,8 @@ angular.module('Pundit2.GeneralItemsContainer')
     $scope.canAddItemAsSubject = false;
     $scope.canAddItemAsObject = false;
     $scope.canBeUseAsPredicate = false;
+
     var eraseSearch = false;
-    var oldStr = "";
 
     var orderBtn = angular.element($element).find(GeneralItemsContainer.getOrderButtonClass($scope.type));
 
@@ -480,12 +480,13 @@ angular.module('Pundit2.GeneralItemsContainer')
 
         $scope.displayedItems = [];
         var updateMessage = function() {
-            if(eraseSearch === true){
+            if (eraseSearch === true) {
                 $scope.message.text = GeneralItemsContainer.getMessage($scope.type).text;
-                scope.search.term = '';
                 $scope.displayedItems = [];
                 eraseSearch = false;
+                return;
             }
+
             if ($scope.displayedItems.length === 0) {
                 $scope.message.text = "No item found to: " + $scope.search.term;
             }
