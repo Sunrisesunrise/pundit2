@@ -188,7 +188,8 @@
         display: block;
 
         span {
-            background-color: @color-highlight;
+            background-color: @color-highlight-hover;
+            // background-color: @color-highlight;
         }
     }
 
@@ -263,17 +264,18 @@
     .pnd-annotation-details-predicate {
         display: inline-block;
         position: relative;
-        height: 22px;
+        height: 20px;
         margin-left: 10px;
-        padding: 0 5px;
+        padding: 0 8px;
         background: @predicate-color;
 
         font-size: 13px;
-        line-height: 22px;
+        line-height: 20px;
         font-style: italic;
         color: #fff;
         text-align: center;
         border-radius: 3px;
+        text-shadow: 0px -1px 0px rgba(0,0,0,0.10);
 
         &:before, &:after {
             content: "";
@@ -293,7 +295,7 @@
         }
 
         &:after {
-            top: 22px;
+            top: 20px;
             border-top: 3px solid @predicate-color;
         }
     }
@@ -301,12 +303,11 @@
     /* The Object in semantic annotations */
     .pnd-annotation-details-object {
         display: block;
-        padding: 18px 10px 10px;
-        margin-top: -11px;
-        max-height: @annotation-text-max-height;
-        overflow-y: auto;
-        overflow-x: hidden;
-
+        padding: 25px 10px 10px;
+        margin-top: -10px;
+        // max-height: @annotation-text-max-height;
+        // overflow-y: auto;
+        // overflow-x: hidden;
         background-color: @color-ultra-light-background;
         border-top: @annotation-border-size solid @annotation-border-color;
 

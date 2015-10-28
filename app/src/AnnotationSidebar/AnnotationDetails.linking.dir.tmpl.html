@@ -48,17 +48,20 @@
             <!-- TODO Fare una modifica qui e togliere la logica di accorpamento degli object se viene utlizzato stesso subject-predicate -->
             <div class="pnd-annotation-details-triple" ng-repeat="item in annotation.itemsArray">
 
+                <!-- Subject -->
                 <div class="pnd-annotation-details-subject pnd-annotation-annotated-fragment">
                     <span>
                         {{item.subject.label}}
                     </span>
                 </div>
 
+                <!-- Predicate -->
                 <div class="pnd-annotation-details-predicate"
                      data-trigger="hover" data-type="success" data-title="{{item.predicate.description}}" bs-tooltip>
                     {{item.predicate.label}}
                 </div>
 
+                <!-- Object -->
                 <div class="pnd-annotation-details-object">
 
                     <!-- Thumb -->
@@ -84,12 +87,12 @@
                     <!-- Description  -->
                     <span ng-if="item.objects[0].typeLabel != 'Text fragment' && item.objects[0].typeClass != 'literal' && item.objects[0].typeClass != 'WebPage'"
                           class="pnd-annotation-details-object-description">
-                        {{item.objects[0].description | limitTo:50}}
+                        {{item.objects[0].description | limitTo:200}}
                     </span> <!-- TODO Esiste una versione tagliata dopo N caratteri della description? -->
 
                     <span ng-if="item.objects[0].typeLabel == 'Text fragment' || item.objects[0].typeClass == 'literal'"
                           class="pnd-annotation-details-object-description">
-                        {{item.objects[0].label | limitTo:50}}
+                        {{item.objects[0].label | limitTo:200}}
                     </span>
 
                 </div>
@@ -108,7 +111,7 @@
                 <button
                     type="button"
                     class="pnd-edit"
-                    ng-click="editComment()">
+                    ng-click="editAnnotation()">
                     <span class="pnd-icon-pencil"></span>
                     Edit
                 </button> · <button
