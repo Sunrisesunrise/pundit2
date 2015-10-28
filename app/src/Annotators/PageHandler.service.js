@@ -46,12 +46,10 @@ angular.module('Pundit2.Annotators')
 
 })
 
-.service('PageHandler', function($document, PAGEHANDLERDEFAULTS, NameSpace, BaseComponent, Item, ItemsExchange, XpointersHelper) {
-    // ContextualMenu, XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer,
-    // $document
+.service('PageHandler', function($document, PAGEHANDLERDEFAULTS, BaseComponent, 
+    NameSpace, Item, ItemsExchange, XpointersHelper, Consolidation) {
 
     var pageHandler = new BaseComponent('PageHandler', PAGEHANDLERDEFAULTS);
-
 
     var getPageMetadata = function() {
         var metadata = {};
@@ -74,18 +72,23 @@ angular.module('Pundit2.Annotators')
 
     // Creates a proper Item from page
     pageHandler.createItemFromPage = function() {
+        var values = {},
+            item;
 
-        var values = {};
         values = getPageMetadata();
         values.uri = XpointersHelper.getSafePageContext();
         values.label = $document[0].title || "No title";
+
         if (typeof(values.description) === 'undefined') {
             values.description = values.label;
         }
         values.type = [NameSpace.types.page];
         // item.rdfData = semlibItems.createBucketForPage(item).bucket;
 
-        return new Item(values.uri, values);
+        item = new Item(values.uri, values);
+        Consolidation.updateItemListAndMap(item, 'page');
+
+        return item;
     };
 
     pageHandler.getPageItem = function() {
