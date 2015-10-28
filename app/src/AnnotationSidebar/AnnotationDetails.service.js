@@ -529,7 +529,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var buildCommentOrHighlight = function(motivation) {
             var firstTargetUri = currentAnnotation.hasTarget[0],
-                firstItem = currentAnnotation.items[firstTargetUri];
+                firstItem = currentAnnotation.items[firstTargetUri],
+                currentGraph = '';
 
             if (typeof(state.annotations[currentId]) === 'undefined') {
                 state.annotations[currentId] = {
@@ -549,7 +550,16 @@ angular.module('Pundit2.AnnotationSidebar')
                 };
 
                 if (motivation === 'commenting') {
-                    state.annotations[currentId].comment = currentAnnotation.graph[NameSpace.rdf.value][0].value;
+                    if (typeof currentAnnotation.graph[NameSpace.rdf.value] === 'undefined') {
+                        for (var first in currentAnnotation.graph) {
+                            currentGraph = currentAnnotation.graph[first];
+                            break;
+                        }
+
+                    } else {
+                        currentGraph = currentAnnotation.graph;
+                    }
+                    state.annotations[currentId].comment = currentGraph[NameSpace.rdf.value][0].value;
                 }
 
                 var cancelWatchNotebookName = $rootScope.$watch(function() {
