@@ -15,7 +15,7 @@ the blog please visit the <a href="http://thepund.it/" target="_blank">Pundit we
 
 - - -
 
-#How to use Puntid
+#How to use Pundit
 
 There are **three main ways** you can use Pundit:
 
@@ -29,7 +29,7 @@ when the Extension will be released.
 
 ##2. Embed Pundit in your project
 
-In the case of custom archives or web sites where is possible to hardcode some HTML code inside the pages we can directly inject the Pundit code.
+In the case of custom archives or web sites where is possible to hard code some HTML code inside the pages we can directly inject the Pundit code.
 So Pundit will be launched as the page loads.
 In this case we can use a custom configuration there properties ontologies and entities can be used.
 This case is detailed at [this page](embed-pundit.html)
@@ -50,7 +50,7 @@ You can find more detailed info at these pages:
  - <a href="data-model.html">Pundit RDF annotation data model</a>
  - <a href="rest-api.html">Annotation Server REST API</a>
  - <a href="css-style-guide.html">CSS Style guide</a>
- - <a href="javascript.html">Javascript coding and naming policies</a>
+ - <a href="javascript.html">JavaScript coding and naming policies</a>
 
  - - -
 
