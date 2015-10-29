@@ -932,7 +932,8 @@ angular.module('Pundit2.Annotators')
     // Gets a safe page context, stripping out pundit-related query parameters
     xpointersHelper.getSafePageContext = function() {
         var uri = $window.location.href,
-            fragment, query, queryObject;
+            // , query, queryObject;
+            fragment;
 
         // If there's a fragment, save it and remove it from the uri
         if (uri.indexOf('#') !== -1) {

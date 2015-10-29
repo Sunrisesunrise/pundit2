@@ -142,7 +142,7 @@ angular.module('Pundit2.Core')
         if (state.popoverOptions.needsValidSelection) {
             var selection = $document[0].getSelection();
             if (selection.baseNode === null) {
-                console.log("skipping show .. no valid selection");
+                pndPopover.log("Skipping show .. no valid selection");
                 return false;
             }
             state.selection = selection;

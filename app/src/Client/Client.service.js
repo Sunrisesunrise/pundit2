@@ -5,7 +5,7 @@ angular.module('Pundit2.Client')
     $provide.decorator('$browser', function($delegate) {
         $delegate.onUrlChange = function() {};
         $delegate.url = function() {
-            return ''
+            return '';
         };
         return $delegate;
     });
