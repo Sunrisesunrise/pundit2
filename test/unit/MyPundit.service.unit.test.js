@@ -29,50 +29,50 @@ describe('MyPundit service', function() {
         loginServer: "http:\/\/demo-cloud.as.thepund.it:8080\/annotationserver\/login.jsp"
     };
 
-    var iFramePostMessageSimulation = function() {
-        // TODO find a better way to do it
-        var flag0 = false;
-        var flag1 = false;
-        var flag2 = false;
+    // var iFramePostMessageSimulation = function() {
+    //     // TODO find a better way to do it
+    //     var flag0 = false;
+    //     var flag1 = false;
+    //     var flag2 = false;
 
-        setTimeout(function() {
-            flag0 = true;
-        }, 1000);
-        setTimeout(function() {
-            flag1 = true;
-        }, 3000);
-        setTimeout(function() {
-            flag2 = true;
-        }, 4000);
+    //     setTimeout(function() {
+    //         flag0 = true;
+    //     }, 1000);
+    //     setTimeout(function() {
+    //         flag1 = true;
+    //     }, 3000);
+    //     setTimeout(function() {
+    //         flag2 = true;
+    //     }, 4000);
 
-        waitsFor(function() {
-            if (flag0) {
-                $rootScope.$digest();
-            }
-            return flag0;
-        });
+    //     waitsFor(function() {
+    //         if (flag0) {
+    //             $rootScope.$digest();
+    //         }
+    //         return flag0;
+    //     });
 
-        waitsFor(
-            function() {
-                if (flag1) {
-                    window.postMessage(
-                        'userLoggedIn',
-                        'http://localhost:9876'
-                    );
-                }
-                return flag1;
-            }
-        );
+    //     waitsFor(
+    //         function() {
+    //             if (flag1) {
+    //                 window.postMessage(
+    //                     'userLoggedIn',
+    //                     'http://localhost:9876'
+    //                 );
+    //             }
+    //             return flag1;
+    //         }
+    //     );
 
-        waitsFor(
-            function() {
-                if (flag2) {
-                    $httpBackend.flush();
-                }
-                return flag2;
-            }
-        );
-    };
+    //     waitsFor(
+    //         function() {
+    //             if (flag2) {
+    //                 $httpBackend.flush();
+    //             }
+    //             return flag2;
+    //         }
+    //     );
+    // };
 
     beforeEach(module('Pundit2'));
 

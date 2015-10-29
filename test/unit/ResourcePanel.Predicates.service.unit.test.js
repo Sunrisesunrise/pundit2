@@ -1,4 +1,4 @@
-/*global testPredicates*/
+/*global testPredicates, testConfig*/
 
 describe('Subject Popover Resource Panel service', function() {
 
