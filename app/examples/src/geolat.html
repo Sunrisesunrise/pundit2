@@ -1,0 +1,319 @@
+<!-- buildexamples:section header --><!-- /buildexamples -->
+
+
+<script>
+    var korboEEConfig = {
+        //endpoint: "http://korbo2.local:80/v1",
+        // endpoint: "http://korbo2.local/app_dev.php/v1",
+
+        endpoint: "http://geolat.netseven.it:8282/annotationserver/api/korbo",
+        resourceProxy: "http://geolat.netseven.it:8282/annotationserver/api/services/proxy",
+        //endpoint: "http://172.20.0.79:8081/annotationserver/api/korbo",
+        //annotationServerBaseURL: 'http://geolat.netseven.it:8282/annotationserver/api/korbo',
+        //annotationServerBaseURL: 'http://172.20.0.79:8081/annotationserver/api/korbo',
+
+        basketID: 'f304cffe',
+        //basketID: 948781 , //Susanna.
+        globalObjectName : 'KK',
+        limitSearchResult: 11,
+        useOnlyCallback: false,
+        useTafonyCompatibility: true,
+        labelMinLength: 4,
+        onLoad: function(){
+            console.log("onLoad calling");
+        },
+        providers: {
+            freebase: true,
+            dandeliondbpedia: true
+        },
+        type: [
+            {  label: 'Place', state: false, URI:'http://place.uri'},
+            { label: 'Scientist', state: false, URI:'http://scientist.uri'},
+            { label: 'Writer', state: false, URI:'http://writer.uri'},
+            { label: 'Type1', state: false, URI:'http://type1.uri'},
+            { label: 'Type2', state: false, URI:'http://type2.uri'},
+            { label: 'Type3', state: false, URI:'http://type3.uri'},
+            { label: 'Type4', state: false, URI:'http://type4.uri'},
+            { label: 'Type5', state: false, URI:'http://type5.uri'},
+            { label: 'Type6', state: false, URI:'http://type6.uri'},
+            { label: 'Type7', state: false, URI:'http://type7.uri'},
+            { label: 'Type8', state: false, URI:'http://type8.uri'},
+            { label: 'Type9', state: false, URI:'http://type9.uri'},
+            { label: 'Type10', state: false, URI:'http://type10.uri'},
+            { label: 'Type11', state: false, URI:'http://type11.uri'},
+            { label: 'Type12', state: false, URI:'http://type12.uri'},
+            { label: 'Type13', state: false, URI:'http://type13.uri'},
+            { label: 'Type14', state: false, URI:'http://type14.uri'}
+        ],
+        buttonLabel: "Search",
+        visualizeUseButton: ['dandeliondbpedia','freebase', 'korbo'],
+        visualizeCopyButton: ['dandeliondbpedia','freebase'],
+        copyToKorboBeforeUse: true,
+        visualizeEditButton: false,
+        showHeaderTabs: false,
+
+        languages: [
+            {
+                name:'Italian',
+                value:'it',
+                state: true
+            },
+            {
+                name:'English',
+                value:'en',
+                state: true
+            },
+            {
+                name:'German',
+                value:'de',
+                state: false
+            },
+            {
+                name:'Spanish',
+                value:'es',
+                state: true
+            },
+            {
+                name:'French',
+                value:'fr',
+                state: false
+            }
+
+        ],
+        defaultLanguage: 'en',
+        autoCompleteOptions: 'none',
+        contextMenuActiveItems: {
+            'advancedOptions': true,
+            'editOriginalUrl': false,
+            'searchOriginalUrl': false,
+            'removeLanguages': false,
+            'tripleComposer': true,
+            'updateAllData': true,
+            'searchAndCopyFromLOD': true,
+            'korboHelp': true
+        },
+        tripleComposerEnabled: true,
+        useCredentialInHttpCalls: true,
+        languagesSaveMethod: 'singleCall',
+        tripleComposerForCustomFields: true,
+        fromLODTools:true
+    };
+
+    // INIT TRIPLECOMPOSER
+    var predicates = [
+        {
+            "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            "label": "is translation of",
+            "description": "The selected text fragment is the translation of another text fragment",
+            "domain": ["http://purl.org/pundit/ont/ao#fragment-text", "http://place.uri", "http://scientist.uri"],
+            "range": [],
+            "vocabulary": "Basic Relation",
+            "uri": "http://purl.org/pundit/ont/oa#isTranslationOf"
+        },
+        {
+            type:["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            label:"period of dates starts at",
+            description:"The selected text fragment corresponds to the specified date period which starts at the specified Date",
+            domain:["http://purl.org/pundit/ont/ao#fragment-text", "http://place.uri", "http://scientist.uri"],
+            range:[],
+            vocabulary:"Basic Relation",
+            uri:"http://purl.org/pundit/ont/oa#periodStartDate"
+        },
+        {
+            type: ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            label: "talks about",
+            description: "The selected text fragment talks about some other text, Entity, Person or any other kind of concept",
+            domain: ["http://purl.org/pundit/ont/ao#fragment-text", "http://place.uri", "http://scientist.uri"],
+            range: ["http://purl.org/pundit/ont/ao#fragment-text"],
+            vocabulary: "Basic Relation",
+            uri: "http://purl.org/pundit/ont/oa#talksAbout"
+        },
+        {
+            type: ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+            label: "generic predicate",
+            description: "The selected text fragment is some how related to",
+            domain: [],
+            range: [],
+            vocabulary: "Basic Relation",
+            uri: "http://purl.org/pundit/ont/oa#genericProperty"
+        }
+    ];
+
+
+    var pageItems = [
+        {
+            uri: "http://item.com/item1",
+            label: "item1Label",
+            type: ["http://purl.org/pundit/ont/ao#fragment-text"]
+        },
+        {
+            uri: "http://item.com/item3",
+            label: "label of page item 3",
+            type: ["http://purl.org/pundit/ont/ao#fragment-text"]
+        },
+        {
+            uri: "http://item.com/item4",
+            label: "label of page item 4(image)",
+            type: ["http://xmlns.com/foaf/0.1/Image"]
+        }
+    ];
+    var myItems = [
+        {
+            uri: "http://item.com/item2",
+            label: "label of my item 2",
+            type: ["http://purl.org/pundit/ont/ao#fragment-text"]
+        }
+    ];
+
+    var KeeDemoCtrl = function($scope, KorboCommunicationService, $window, ItemsExchange,
+                               Item, $timeout, EventDispatcher, CLIENTPRODEFAULTS, PAGEITEMSCONTAINERDEFAULTS,
+                               MYITEMSDEFAULTS, MyPundit,ResourcePanel,  SelectorsManager, Korbo2Selector, FreebaseSelector, DbpediaSelector) {
+
+
+        $scope.itemID = 665330;
+        var name = $window['korboEEConfig'].globalObjectName;
+        $scope.openSearch = function(){
+            //$window.KK.callOpenSearch();
+            $window[name].callOpenSearch();
+        };
+
+        $scope.edit = function(){
+            //2606; 2607
+            $window[name].callEdit($scope.itemID);
+            // $window[name].callEdit(3176);
+        };
+
+        $scope.new = function() {
+            $window[name].callOpenNew();
+        }
+
+        for (var i in predicates) {
+            var item = new Item(predicates[i].uri, predicates[i]);
+            ItemsExchange.addItemToContainer(item, CLIENTPRODEFAULTS.relationsContainer);
+        }
+
+        var loadMockedItems = function(){
+            var j, item;
+            for (j in pageItems) {
+                item = new Item(pageItems[j].uri, pageItems[j]);
+                ItemsExchange.addItemToContainer(item, PAGEITEMSCONTAINERDEFAULTS.container);
+            }
+            for (j in myItems) {
+                item = new Item(myItems[j].uri, myItems[j]);
+                ItemsExchange.addItemToContainer(item, MYITEMSDEFAULTS.container);
+            }
+        }();
+
+        $timeout(function() {
+            EventDispatcher.sendEvent('Client.boot');
+        }, 1000);
+
+        MyPundit.checkLoggedIn();
+
+        var addKorboEESelector = function() {
+            var instances = [
+                {
+                    container: 'korbo',
+                    // instance label tab title and search provider
+                    label: 'Korbo',
+                    // enable or disable the instance
+                    active: true,
+                    basketID: korboEEConfig.basketID,
+                    url: korboEEConfig.endpoint,
+                    language: korboEEConfig.defaultLanguage
+                },
+                {
+                    container: 'freebase',
+                    // instance label tab title and search provider
+                    label: 'Freebase',
+                    // enable or disable the instance
+                    active: true,
+                    basketID: korboEEConfig.basketID,
+                    url: korboEEConfig.endpoint,
+                    language: korboEEConfig.defaultLanguage,
+                    rebuildURI: {
+                        baseURI: 'http://www.freebase.com',
+                        replaceIDParts: ['__', '/']
+                    }
+                },
+                {
+                    container: 'dandeliondbpedia',
+                    // instance label tab title and search provider
+                    label: 'DBPedia(K)',
+                    // enable or disable the instance
+                    active: true,
+                    basketID: korboEEConfig.basketID,
+                    url: korboEEConfig.endpoint,
+                    language: korboEEConfig.defaultLanguage
+                },
+                {
+                    container: 'pelagios',
+                    // instance label tab title and search provider
+                    label: 'Pelagios',
+                    // enable or disable the instance
+                    active: true,
+                    basketID: korboEEConfig.basketID,
+                    url: korboEEConfig.endpoint,
+                    language: korboEEConfig.defaultLanguage,
+                    resultsLimit: 50
+                }
+            ];
+
+            for (var i in instances) {
+                var config = instances[i];
+                var keeSelector = new Korbo2Selector(config);
+                keeSelector.push(config);
+                delete keeSelector;
+            }
+        };
+
+        EventDispatcher.addListener('MyPundit.userNeedToLogin', function() {
+            ResourcePanel.hide();
+            MyPundit.login();
+        });
+
+
+        addKorboEESelector();
+        SelectorsManager.init();
+
+
+    };
+
+    var punditConfig = {
+        annotationServerBaseURL: 'http://geolat.netseven.it:8282/annotationserver/',
+        annotationServerCallsNeedLoggedUser: true,
+        lodLive: {
+            active: true
+        },
+        modules: {
+            SelectorsManager: {
+                active: true
+            },
+            "Korbo2Selector": {
+                active: true,
+                searchWithCredentials: true,
+                instances: []
+            }/*,
+            "DbpediaSelector": {
+                active: true
+            }*/
+        }
+    };
+
+
+</script>
+<div data-ng-app="Pundit2" class="pundit2 kee-wrp pnd-wrp">
+    <div ng-controller="KeeDemoCtrl">
+        <br>
+        <korbo-entity-editor conf-name="korboEEConfig"></korbo-entity-editor>
+        <br>
+        <!--<button class="btn btn-xs btn-success" style="margin-left: 50px; margin-bottom: 30px;" ng-click="openSearch()">Search</button>-->
+        <!--<button class="btn btn-xs btn-success" style="margin-left: 50px; margin-bottom: 30px;" ng-click="edit()">Edit</button>-->
+        <button class="btn btn-xs btn-success" style="margin-left: 50px; margin-bottom: 30px;" ng-click="new()">New</button>
+        <br />
+        type item id to edit: <input type="text" ng-model="itemID"/>
+        <br />
+        <button class="btn btn-xs btn-success" style="margin-left: 50px; margin-bottom: 30px;" ng-click="edit()">Edit</button>
+    </div>
+</div>
+<!-- buildexamples:section footer --><!-- /buildexamples -->

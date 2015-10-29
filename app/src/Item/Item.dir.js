@@ -5,7 +5,9 @@ angular.module('Pundit2.Item')
         restrict: 'E',
         scope: {
             uri: '@',
+            nid: '@',
             menuType: '@',
+            itemType: "@",
             isSelected: '=isSelected',
             forceSticky: '=forceSticky',
             hideOptions: '@',

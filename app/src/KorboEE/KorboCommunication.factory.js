@@ -19,13 +19,17 @@ angular.module('KorboEE')
     //
     // container: where add items
     //
-    KorboCommFactory.prototype.search = function(param, container){
+    KorboCommFactory.prototype.search = function(param, container, useCredentialInHttpCalls){
         var promise = $q.defer();
+        if (typeof useCredentialInHttpCalls !== 'boolean') {
+            useCredentialInHttpCalls = false;
+        }
         $http({
             //headers: { 'Content-Type': 'application/json' },
             method: 'GET',
             url: param.endpoint + "/search/items",
             cache: false,
+            withCredentials: useCredentialInHttpCalls,
             params: {
                 q: param.label,
                 p: param.provider,
@@ -71,14 +75,18 @@ angular.module('KorboEE')
     // }
     //
 
-    KorboCommFactory.prototype.getItem = function(param, useCache){
+    KorboCommFactory.prototype.getItem = function(param, useCache, useCredentialInHttpCalls){
         var promise = $q.defer();
         var currentLanguage = angular.copy(param.language);
+        if (typeof useCredentialInHttpCalls !== 'boolean') {
+            useCredentialInHttpCalls = false;
+        }
         $http({
-            headers: { 'Accept-Language': param.language },
+            headers: { 'Accept-Language': param.language, 'Accept': 'application/json' },
             method: 'GET',
             url: param.endpoint + "/baskets/"+param.basketID+"/items/"+param.item.uri+"",
             cache: useCache,
+            withCredentials: useCredentialInHttpCalls,
             params: {
                 p: param.provider
             }
@@ -93,17 +101,66 @@ angular.module('KorboEE')
     };
 
     // save an entity
-    KorboCommFactory.prototype.save = function(entity, lan, baseURL, basketID){
+    KorboCommFactory.prototype.save = function(entity, lan, baseURL, basketID, useCredentialInHttpCalls){
         var promise = $q.defer();
-
+        if (typeof useCredentialInHttpCalls !== 'boolean') {
+            useCredentialInHttpCalls = false;
+        }
         $http({
             headers: {'Access-Control-Expose-Headers': "Location", 'Content-Language': lan},
             method: 'POST',
+            async: false,
             url: baseURL + "/baskets/" + basketID + "/items",
+            withCredentials: useCredentialInHttpCalls,
             data: entity
         }).success(function(data, status, headers){
             var location = headers('Location');
+            promise.resolve(location);
+        }).error(function(){
+            promise.reject();
+        });
 
+        return promise.promise;
+    };
+
+    // save an entity
+    KorboCommFactory.prototype.saveAllLanguages = function(entityID, languagesData, baseURL, basketID, useCredentialInHttpCalls){
+        var promise = $q.defer();
+        if (typeof useCredentialInHttpCalls !== 'boolean') {
+            useCredentialInHttpCalls = false;
+        }
+        $http({
+            headers: {'Access-Control-Expose-Headers': "Location"},
+            method: 'POST',
+            async: false,
+            url: baseURL + "/baskets/" + basketID + "/languages/" + entityID,
+            withCredentials: useCredentialInHttpCalls,
+            data: languagesData
+        }).success(function(data, status, headers){
+            var location = headers('Location');
+            promise.resolve(location);
+        }).error(function(){
+            promise.reject();
+        });
+
+        return promise.promise;
+    };
+
+    // save an entity
+    KorboCommFactory.prototype.addItemCustomFields = function(baseURL, language, basketID, triplesData, useCredentialInHttpCalls) {
+        var promise = $q.defer();
+        if (typeof useCredentialInHttpCalls !== 'boolean') {
+            useCredentialInHttpCalls = false;
+        }
+        $http({
+            headers: {'Access-Control-Expose-Headers': "Location", 'Content-Language': language},
+            method: 'POST',
+            async: false,
+            url: baseURL + "/baskets/" + basketID + "/items/add",
+            withCredentials: useCredentialInHttpCalls,
+            data: triplesData
+        }).success(function(data, status, headers){
+            var location = headers('Location');
             promise.resolve(location);
         }).error(function(){
             promise.reject();

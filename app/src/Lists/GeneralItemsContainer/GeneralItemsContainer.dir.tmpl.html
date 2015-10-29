@@ -1,0 +1,88 @@
+<div class="pnd-panel-tab-content">
+    <div ng-if="!(isMyNotebooks || isPredicates)">
+        <ng-include src="'src/Lists/itemsContainer.tmpl.html'"></ng-include>
+    </div>
+    <div ng-if="(isMyNotebooks || isPredicates)">
+    <!-- HEADER for myNotebooks and Predicates-->
+        <div class="pnd-panel-tab-content-header pnd-panel-tab-content-header-border">
+            <div class="left-inner-icon pnd-panel-tab-search pnd-has-options">
+                <span
+                        class="pnd-icon {{search.icon}}"
+                        ng-click="search.term = ''"></span>
+                <input
+                        type="text"
+                        ng-model="search.term"
+                        placeholder="{{search.placeholder}}"
+                        class="form-control">
+            </div>
+            <button
+                    type="button"
+                    class="pnd-btn pnd-btn-xs pnd-btn-link pnd-btn-full {{isPredicates?'predicates-items-btn-order':''}} pnd-btn-full pnd-panel-tab-icon {{search.additionalClass}}"
+                    template-url="{{dropdownTemplate}}"
+                    bs-dropdown="dropdownOrdering"
+                    title="{{search.orderLabel}}">
+                <span
+                        class="pnd-icon pnd-icon-caret-down"></span>
+            </button>
+        </div>
+        <!-- end pnd-panel-tab-content-header -->
+
+        <!-- CONTENT for myNotebooks and Predicates-->
+        <div class="pnd-panel-tab-content-content pnd-inner-scrollable pnd-inner-no-tabs">
+            <ul
+                    class="list-group"
+                    ng-if="!message.flag">
+                <li
+                        class="list-group-item"
+                        ng-repeat="item in displayedItems | orderBy:getOrderProperty:reverse">
+                    <item ng-if="isMyNotebooks"
+                          nid="{{item.id}}"
+                          menu-type="{{itemMenuType}}"
+                          item-type="notebook"
+                          hide-sticky-button="true"
+                          is-selected="isSelected(item)"
+                          ng-click="select(item, $event)"></item>
+                    <item ng-if="isPredicates"
+                          uri="{{item.uri}}"
+                          menu-type="{{itemMenuType}}"
+                          hide-sticky-button="true"
+                          hide-options="true"
+                          is-selected="isSelected(item)"
+                          ng-click="select(item, $event)"></item>
+                </li>
+            </ul>
+            <div
+                    class="pnd-dashboard-welcome pnd-ui-message"
+                    ng-if="message.flag">{{message.text}}</div>
+        </div>
+        <!-- end pnd-panel-tab-content-content -->
+    </div>
+    <!-- FOOTER -->
+    <div class="pnd-panel-tab-content-footer">
+        <button
+                ng-if="!(isMyNotebooks || isPredicates)"
+                class="pnd-btn pnd-btn-subject"
+                title="Use as subject"
+                ng-disabled="!isUseActive || !canAddItemAsSubject"
+                ng-click="onClickUseSubject()">
+            Set subject
+        </button><button
+                ng-if="!(isMyNotebooks || isPredicates)"
+                class="pnd-btn pnd-btn-object"
+                title="Use as object"
+                ng-disabled="!isUseActive || !canAddItemAsObject"
+                ng-click="onClickUseObject()">
+            Set object
+        </button><button
+                class="{{actionButton.btnClass}}"
+                title="{{actionButton.title}}"
+                ng-disabled="isMyNotebooks? false :
+                            isPredicates? (!isUseActive || !canBeUseAsPredicate) :
+                            actionButton.requireLoggedUser? (!isUseActive || !isUserLogged) : !isUseActive"
+                ng-click="onClickAction()">
+            {{actionButton.text}}
+        </button>
+
+    </div> <!-- end pnd-panel-tab-content-footer -->
+
+</div>

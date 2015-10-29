@@ -2,9 +2,18 @@ var testNotebooks = {};
 
 testNotebooks.simple1 = {
     "http://purl.org/pundit/demo-cloud-server/notebook/simple1ID": {
-        "http://open.vocab.org/terms/visibility": [{value: "private", type: "literal"}],
-        "http://purl.org/dc/elements/1.1/creator": [{value: "Giacomo", type: "literal"}],
-        "http://purl.org/pundit/ont/ao#id": [{value: "simple1ID", type: "literal"}],
+        "http://open.vocab.org/terms/visibility": [{
+            value: "private",
+            type: "literal"
+        }],
+        "http://purl.org/dc/elements/1.1/creator": [{
+            value: "Giacomo",
+            type: "literal"
+        }],
+        "http://purl.org/pundit/ont/ao#id": [{
+            value: "simple1ID",
+            type: "literal"
+        }],
         "http://purl.org/pundit/ont/ao#includes": [{
             value: "http://purl.org/pundit/demo-cloud-server/annotation/testannid99",
             type: "uri"
@@ -13,15 +22,66 @@ testNotebooks.simple1 = {
             value: "http://purl.org/pundit/ont/ao#Notebook",
             type: "uri"
         }],
-        "http://www.w3.org/2000/01/rdf-schema#label": [{value: "Notebook Label", type: "literal"}]
+        "http://www.w3.org/2000/01/rdf-schema#label": [{
+            value: "Notebook Label",
+            type: "literal"
+        }]
+    }
+};
+
+testNotebooks.firstLogin = {
+    "http://purl.org/pundit/demo-cloud-server/notebook/doe1ID": {
+        "http://purl.org/pundit/ont/ao#public": [{
+            "value": "true",
+            "type": "literal",
+            "datatype": "http://www.w3.org/2001/XMLSchema#boolean"
+        }],
+        "http://open.vocab.org/terms/visibility": [{
+            "value": "public",
+            "type": "literal"
+        }],
+        "http://purl.org/dc/terms/creator": [{
+            "value": "http://purl.org/pundit/demo-cloud-server/user/55a8e6a21fedc",
+            "type": "uri"
+        }],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [{
+            "value": "http://purl.org/pundit/ont/ao#Notebook",
+            "type": "uri"
+        }],
+        "http://purl.org/dc/terms/created": [{
+            "value": "2015-07-17T07:27:32",
+            "type": "literal",
+            "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        }],
+        "http://purl.org/pundit/ont/ao#id": [{
+            "value": "doe1ID",
+            "type": "literal"
+        }],
+        "http://www.w3.org/2000/01/rdf-schema#label": [{
+            "value": "Notebook 2015-07-17 07:27:32",
+            "type": "literal"
+        }],
+        "http://purl.org/dc/elements/1.1/creator": [{
+            "value": "pippo luigi",
+            "type": "literal"
+        }]
     }
 };
 
 testNotebooks.myNotebook = {
     "http://purl.org/pundit/demo-cloud-server/notebook/myNbID": {
-        "http://open.vocab.org/terms/visibility": [{value: "public", type: "literal"}],
-        "http://purl.org/dc/elements/1.1/creator": [{value: "Simone", type: "literal"}],
-        "http://purl.org/pundit/ont/ao#id": [{value: "myNbID", type: "literal"}],
+        "http://open.vocab.org/terms/visibility": [{
+            value: "public",
+            type: "literal"
+        }],
+        "http://purl.org/dc/elements/1.1/creator": [{
+            value: "Simone",
+            type: "literal"
+        }],
+        "http://purl.org/pundit/ont/ao#id": [{
+            value: "myNbID",
+            type: "literal"
+        }],
         "http://purl.org/pundit/ont/ao#includes": [{
             value: "http://purl.org/pundit/demo-cloud-server/annotation/testannid99",
             type: "uri"
@@ -30,15 +90,27 @@ testNotebooks.myNotebook = {
             value: "http://purl.org/pundit/ont/ao#Notebook",
             type: "uri"
         }],
-        "http://www.w3.org/2000/01/rdf-schema#label": [{value: "myNotebook", type: "literal"}]
+        "http://www.w3.org/2000/01/rdf-schema#label": [{
+            value: "myNotebook",
+            type: "literal"
+        }]
     }
 };
 
 testNotebooks.notebookPrivate = {
     "http://purl.org/pundit/demo-cloud-server/notebook/88e4c1e8": {
-        "http://open.vocab.org/terms/visibility": [{value: "private", type: "literal"}],
-        "http://purl.org/dc/elements/1.1/creator": [{value: "Mario Bros", type: "literal"}],
-        "http://purl.org/pundit/ont/ao#id": [{value: "88e4c1e8", type: "literal"}],
+        "http://open.vocab.org/terms/visibility": [{
+            value: "private",
+            type: "literal"
+        }],
+        "http://purl.org/dc/elements/1.1/creator": [{
+            value: "Mario Bros",
+            type: "literal"
+        }],
+        "http://purl.org/pundit/ont/ao#id": [{
+            value: "88e4c1e8",
+            type: "literal"
+        }],
         "http://purl.org/pundit/ont/ao#includes": [{
             value: "http://purl.org/pundit/demo-cloud-server/annotation/testannid99",
             type: "uri"
@@ -47,7 +119,10 @@ testNotebooks.notebookPrivate = {
             value: "http://purl.org/pundit/ont/ao#Notebook",
             type: "uri"
         }],
-        "http://www.w3.org/2000/01/rdf-schema#label": [{value: "notebook1", type: "literal"}]
+        "http://www.w3.org/2000/01/rdf-schema#label": [{
+            value: "notebook1",
+            type: "literal"
+        }]
     }
 };
 
@@ -65,9 +140,18 @@ testNotebooks.notebookPrivate = {
 
 testNotebooks.notebookPublic = {
     "http://purl.org/pundit/demo-cloud-server/notebook/123456789": {
-        "http://open.vocab.org/terms/visibility": [{value: "public", type: "literal"}],
-        "http://purl.org/dc/elements/1.1/creator": [{value: "Godzilla", type: "literal"}],
-        "http://purl.org/pundit/ont/ao#id": [{value: "123456789", type: "literal"}],
+        "http://open.vocab.org/terms/visibility": [{
+            value: "public",
+            type: "literal"
+        }],
+        "http://purl.org/dc/elements/1.1/creator": [{
+            value: "Godzilla",
+            type: "literal"
+        }],
+        "http://purl.org/pundit/ont/ao#id": [{
+            value: "123456789",
+            type: "literal"
+        }],
         "http://purl.org/pundit/ont/ao#includes": [{
             value: "http://purl.org/pundit/demo-cloud-server/annotation/testannid98",
             type: "uri"
@@ -76,7 +160,10 @@ testNotebooks.notebookPublic = {
             value: "http://purl.org/pundit/ont/ao#Notebook",
             type: "uri"
         }],
-        "http://www.w3.org/2000/01/rdf-schema#label": [{value: "notebook2", type: "literal"}]
+        "http://www.w3.org/2000/01/rdf-schema#label": [{
+            value: "notebook2",
+            type: "literal"
+        }]
     }
 };
 

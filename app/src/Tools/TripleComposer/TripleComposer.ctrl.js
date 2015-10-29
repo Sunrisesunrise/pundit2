@@ -1,20 +1,36 @@
 angular.module('Pundit2.TripleComposer')
 
 .controller('TripleComposerCtrl', function($rootScope, $scope, $http, $q, $timeout, NameSpace, EventDispatcher,
-    MyPundit, Toolbar, TripleComposer, AnnotationsCommunication, AnnotationsExchange, TemplatesExchange) {
+    MyPundit, Toolbar, TripleComposer, AnnotationsCommunication, AnnotationsExchange, TemplatesExchange, Analytics, ModelHelper) {
+
+    if (typeof $scope.name === 'undefined') {
+        $scope.name = "triplecomposer-" + Math.floor((new Date()).getTime() / 100 * (Math.random() * 100) + 1);
+    }
+
+    TripleComposer.initInstance($scope.name);
 
     // statements objects are extend by this.addStatementScope()
     // the function is called in the statement directive link function
-    $scope.statements = TripleComposer.getStatements();
+    $scope.statements = TripleComposer.getStatements($scope.name);
+
+    $scope.showHeader = function() {
+        return TripleComposer.showHeader(undefined, $scope.name);
+    };
+
+    $scope.showFooter = function() {
+        return TripleComposer.showFooter(undefined, $scope.name);
+    };
 
     $scope.saving = false;
+    TripleComposer.setSaving(false, $scope.name);
     $scope.textMessage = TripleComposer.options.savingMsg;
 
     $scope.headerMessage = "Create new annotation";
 
+    // TODO find a better way to change this state
     $scope.editMode = false;
     $scope.$watch(function() {
-        return TripleComposer.isEditMode();
+        return TripleComposer.isEditMode($scope.name);
     }, function(editMode) {
         if (editMode) {
             $scope.headerMessage = "Edit and update your annotation";
@@ -43,8 +59,8 @@ angular.module('Pundit2.TripleComposer')
         warnShortMsg = "Warning!";
 
     var loadIcon = "pnd-icon-refresh pnd-icon-spin",
-        successIcon = "pnd-icon-check-circle",
-        warnIcon = "pnd-icon-exclamation-circle";
+        successIcon = "pnd-icon-check",
+        warnIcon = "pnd-icon-exclamation";
 
     var loadMessageClass = "pnd-message",
         successMessageClass = "pnd-message-success",
@@ -56,47 +72,51 @@ angular.module('Pundit2.TripleComposer')
 
     this.removeStatement = function(id) {
         id = parseInt(id, 10);
-        TripleComposer.removeStatement(id);
-        if (TripleComposer.isAnnotationComplete()) {
+        TripleComposer.removeStatement(id, $scope.name);
+        if (TripleComposer.isAnnotationComplete($scope.name)) {
             angular.element('.pnd-triplecomposer-save').removeClass('disabled');
         }
     };
 
     this.addStatementScope = function(id, scope) {
         id = parseInt(id, 10);
-        TripleComposer.addStatementScope(id, scope);
+        TripleComposer.addStatementScope(id, scope, $scope.name);
     };
 
     this.duplicateStatement = function(id) {
         id = parseInt(id, 10);
-        TripleComposer.duplicateStatement(id);
+        TripleComposer.duplicateStatement(id, $scope.name);
     };
 
     this.isAnnotationComplete = function() {
-        if (TripleComposer.isAnnotationComplete()) {
+        if (TripleComposer.isAnnotationComplete($scope.name)) {
             angular.element('.pnd-triplecomposer-save').removeClass('disabled');
         }
     };
 
     this.isTripleErasable = function() {
-        TripleComposer.isTripleErasable();
+        TripleComposer.isTripleErasable($scope.name);
+    };
+
+    this.getName = function() {
+        return $scope.name;
     };
 
     $scope.isAnnotationErasable = function() {
-        return !TripleComposer.isTripleEmpty();
+        return !TripleComposer.isTripleEmpty($scope.name);
     };
 
     $scope.onClickAddStatement = function() {
         angular.element('.pnd-triplecomposer-save').addClass('disabled');
-        TripleComposer.addStatement();
+        TripleComposer.addStatement($scope.name);
     };
 
     $scope.cancel = function() {
         if ($scope.editMode) {
             angular.element('.pnd-triplecomposer-save').addClass('disabled');
-            TripleComposer.reset();
-            TripleComposer.setEditMode(false);
-            TripleComposer.updateVisibility();
+            TripleComposer.reset($scope.name);
+            TripleComposer.setEditMode(false, $scope.name);
+            TripleComposer.updateVisibility($scope.name);
         }
 
         EventDispatcher.sendEvent('Pundit.changeSelection');
@@ -105,26 +125,35 @@ angular.module('Pundit2.TripleComposer')
     $scope.resetComposer = function() {
         angular.element('.pnd-triplecomposer-save').addClass('disabled');
         if ($scope.templateMode) {
-            TripleComposer.wipeNotFixedItems();
+            TripleComposer.wipeNotFixedItems($scope.name);
             return;
         }
-        TripleComposer.reset();
+        TripleComposer.reset($scope.name);
         EventDispatcher.sendEvent('Pundit.changeSelection');
+
+        var eventLabel = getHierarchyString();
+        eventLabel += "--resetComposer";
+        Analytics.track('buttons', 'click', eventLabel);
     };
 
     $scope.editAnnotation = function() {
-        var annID = TripleComposer.getEditAnnID();
+        var annID = TripleComposer.getEditAnnID($scope.name);
 
         if (typeof(annID) !== 'undefined') {
 
             var savePromise = initSavingProcess();
             angular.element('.pnd-triplecomposer-cancel').addClass('disabled');
 
+            var statements = TripleComposer.getStatements($scope.name);
+            var modelData = ModelHelper.buildAllData(statements);
+
             AnnotationsCommunication.editAnnotation(
                 annID,
-                TripleComposer.buildGraph(),
-                TripleComposer.buildItems(),
-                TripleComposer.buildTargets()
+                modelData.graph,
+                modelData.items,
+                modelData.flatTargets,
+                modelData.target,
+                modelData.type
             ).then(function() {
                 stopSavingProcess(
                     savePromise,
@@ -143,6 +172,29 @@ angular.module('Pundit2.TripleComposer')
         }
     };
 
+    // getter function used to build hierarchystring.
+    // hierarchystring is used for tracking events with analytics.
+    var getHierarchyString = function() {
+        // Temporary solution to find hierarchystring.
+        var eventLabel = "";
+        var myScope = $scope;
+        do {
+            if (typeof(myScope) === 'undefined' || myScope === null) {
+                break;
+            }
+            if (myScope.hasOwnProperty('pane')) {
+                if (myScope.pane.hasOwnProperty('hierarchystring')) {
+                    eventLabel = myScope.pane.hierarchystring;
+                }
+                break;
+            }
+            myScope = myScope.$parent;
+        }
+        while (typeof(myScope) !== 'undefined' && myScope !== null);
+
+        return eventLabel;
+    };
+
     // update triple composer messagge then after "time" (ms)
     // restore default template content
     var updateMessagge = function(msg, time, err) {
@@ -159,10 +211,11 @@ angular.module('Pundit2.TripleComposer')
         }
 
         $timeout(function() {
-            TripleComposer.setEditMode(false);
+            TripleComposer.setEditMode(false, $scope.name);
             angular.element('.pnd-triplecomposer-cancel').removeClass('disabled');
             $scope.saving = false;
-            TripleComposer.updateVisibility();
+            TripleComposer.setSaving(false, $scope.name);
+            TripleComposer.updateVisibility($scope.name);
         }, time);
     };
 
@@ -180,6 +233,7 @@ angular.module('Pundit2.TripleComposer')
         promiseResolved = false;
         //savePromise = $timeout(function(){ promiseResolved = true; }, TripleComposer.options.savingMsgTime);
         $scope.saving = true;
+        TripleComposer.setSaving(true, $scope.name);
         return $timeout(function() {
             promiseResolved = true;
         }, TripleComposer.options.savingMsgTime);
@@ -197,11 +251,11 @@ angular.module('Pundit2.TripleComposer')
         }
 
         if ($scope.templateMode) {
-            TripleComposer.wipeNotFixedItems();
+            TripleComposer.wipeNotFixedItems($scope.name);
             return;
         }
 
-        TripleComposer.reset();
+        TripleComposer.reset($scope.name);
     };
 
     $scope.saveAnnotation = function() {
@@ -228,18 +282,30 @@ angular.module('Pundit2.TripleComposer')
 
                 var savePromise = initSavingProcess();
 
+                var statements = TripleComposer.getStatements($scope.name);
+                var modelData = ModelHelper.buildAllData(statements);
+
                 var httpPromise;
                 if ($scope.templateMode) {
                     httpPromise = AnnotationsCommunication.saveAnnotation(
-                        TripleComposer.buildGraph(),
-                        TripleComposer.buildItems(),
-                        TripleComposer.buildTargets(),
-                        TemplatesExchange.getCurrent().id);
+                        modelData.graph,
+                        modelData.items,
+                        modelData.flatTargets,
+                        TemplatesExchange.getCurrent().id,
+                        undefined, // skipConsolidation
+                        modelData.target, // Can be undefined if ModelHelper is acting in mode1
+                        modelData.type
+                    );
                 } else {
                     httpPromise = AnnotationsCommunication.saveAnnotation(
-                        TripleComposer.buildGraph(),
-                        TripleComposer.buildItems(),
-                        TripleComposer.buildTargets());
+                        modelData.graph,
+                        modelData.items,
+                        modelData.flatTargets,
+                        undefined, // templateID
+                        undefined, // skipConsolidation
+                        modelData.target, // Can be undefined if ModelHelper is acting in mode1
+                        modelData.type
+                    );
                 }
 
                 httpPromise.then(function() {
@@ -253,7 +319,7 @@ angular.module('Pundit2.TripleComposer')
                     promise.resolve();
                 }, function() {
                     // rejected
-                    TripleComposer.closeAfterOpOff();
+                    TripleComposer.closeAfterOpOff($scope.name);
                     stopSavingProcess(
                         savePromise,
                         TripleComposer.options.notificationErrorMsg,
@@ -268,20 +334,26 @@ angular.module('Pundit2.TripleComposer')
 
         EventDispatcher.sendEvent('Pundit.changeSelection');
 
+        var eventLabel = getHierarchyString();
+        eventLabel += "--saveAnnotation";
+        Analytics.track('buttons', 'click', eventLabel);
+
         return promise.promise;
 
     }; // end save function
 
-    EventDispatcher.addListener('ResourcePanel.toggle', function(e) {
+    var evtHandlers = [];
+
+    evtHandlers.push(EventDispatcher.addListener('ResourcePanel.toggle', function(e) {
         var isResourcePanelOpend = e.args;
         if (isResourcePanelOpend) {
             angular.element('.pnd-triplecomposer-statements-container').addClass('pnd-triplecomposer-statement-not-scroll');
         } else {
             angular.element('.pnd-triplecomposer-statements-container').removeClass('pnd-triplecomposer-statement-not-scroll');
         }
-    });
+    }));
 
-    EventDispatcher.addListener('Annotators.saveAnnotation', function() {
+    evtHandlers.push(EventDispatcher.addListener('Annotators.saveAnnotation', function() {
         var uncomplete = $scope.statements.some(function(el) {
             var t = el.scope.get();
             if (t.subject === null || t.predicate === null || t.object === null) {
@@ -297,7 +369,27 @@ angular.module('Pundit2.TripleComposer')
                 TripleComposer.openTripleComposer();
             });
         }
+    }));
 
-    });
+    evtHandlers.push(EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
+        if (!e.args) {
+            TripleComposer.reset($scope.name);
+        }
+    }));
+
+    evtHandlers.push(EventDispatcher.addListener('AnnotationsCommunication.deleteAnnotation', function(e) {
+        var currentAnnId = TripleComposer.getEditAnnID($scope.name);
+        if (e.args === currentAnnId) {
+            TripleComposer.reset($scope.name);
+            angular.element('.pnd-triplecomposer-save').addClass('disabled');
+            EventDispatcher.sendEvent('Dashboard.close');
+        }
+    }));
+
+    $scope.removeEventListeners = function() {
+        for (var i in evtHandlers) {
+            EventDispatcher.removeListener(evtHandlers[i]);
+        }
+    };
 
 });

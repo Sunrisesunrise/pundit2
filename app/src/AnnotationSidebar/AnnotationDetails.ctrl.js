@@ -1,22 +1,32 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.controller('AnnotationDetailsCtrl', function($scope, $rootScope, $element, $modal, $timeout, $window,
-    AnnotationSidebar, AnnotationDetails, AnnotationsExchange, AnnotationsCommunication, Config,
-    EventDispatcher, NotebookExchange, ItemsExchange, TripleComposer, Dashboard, ImageAnnotator,
-    TextFragmentAnnotator, TypesHelper, MyPundit, Consolidation) {
+.controller('AnnotationDetailsCtrl', function($scope, $rootScope, $element, $timeout, $window,
+    AnnotationSidebar, AnnotationDetails, TripleComposer, Dashboard, EventDispatcher,
+    Config, MyPundit, Analytics) {
 
-    AnnotationDetails.addAnnotationReference($scope);
+    // TODO: temporary fix waiting for server consistency
+    if ($scope.motivation !== 'linking' &&
+        $scope.motivation !== 'commenting') {
+        $scope.motivation = 'linking';
+    }
+
+    if (AnnotationDetails.getAnnotationDetails($scope.id) === undefined) {
+        AnnotationDetails.addAnnotationReference($scope);
+    }
 
     var notebookId,
         currentId = $scope.id,
-        currentElement = angular.element($element).find('.pnd-annotation-details-wrap'),
-        initialHeight = AnnotationSidebar.options.annotationHeigth;
+        currentElement = $element,
+        initialHeight = AnnotationSidebar.options.annotationHeight,
+        currentHeight = initialHeight - 1;
 
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
     $scope.moreInfo = AnnotationDetails.options.moreInfo;
-    $scope.notebookName = 'Downloading notebook in progress';
-    $scope.isLoading = false;
+    $scope.notebookLink = Config.askThePundit;
+
+    $scope.editMode = false;
+    $scope.editCommentValue = '';
 
     if (typeof($scope.annotation) !== 'undefined') {
         if (AnnotationDetails.isUserToolShowed($scope.annotation.creator)) {
@@ -47,62 +57,44 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.forceEdit = false;
     }
 
-    // confirm modal
-    var modalScope = $rootScope.$new();
-    modalScope.titleMessage = 'Delete Annotation';
-
-    var confirmModal = $modal({
-        container: '[data-ng-app="Pundit2"]',
-        template: 'src/Core/Templates/confirm.modal.tmpl.html',
-        show: false,
-        backdrop: 'static',
-        scope: modalScope
-    });
-
-    // open modal
-    var openConfirmModal = function() {
-        // promise is needed to open modal when template is ready
-        modalScope.notifyMessage = 'Are you sure you want to delete this annotation? After you can no longer recover.';
-        confirmModal.$promise.then(confirmModal.show);
-    };
-
-    // confirm btn click
-    modalScope.confirm = function() {
-        if (MyPundit.isUserLogged()) {
-            currentElement.addClass('pnd-annotation-details-delete-in-progress');
-            AnnotationsCommunication.deleteAnnotation($scope.annotation.id).then(function() {
-                modalScope.notifyMessage = "Your annotation has been deleted successfully";
-            }, function() {
-                currentElement.removeClass('pnd-annotation-details-delete-in-progress');
-                modalScope.notifyMessage = 'Impossible to delete the annotation. Please reatry later.';
-            });
-        }
-        $timeout(function() {
-            confirmModal.hide();
-        }, 1000);
-    };
-
-    // cancel btn click
-    modalScope.cancel = function() {
-        confirmModal.hide();
-    };
-
     $scope.toggleAnnotation = function() {
+        $scope.editMode = false;
+
         if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
+            if (AnnotationSidebar.isFiltersExpanded()) {
+                AnnotationSidebar.toggleFiltersContent();
+            }
             AnnotationSidebar.toggle();
+            $timeout(function() {
+                var dashboardHeight = Dashboard.isDashboardVisible() ? Dashboard.getContainerHeight() : 0;
+                angular.element('body').animate({
+                    scrollTop: currentElement.offset().top - dashboardHeight - 60
+                }, 'slow');
+            }, 100);
         }
         // if(AnnotationDetails.isAnnotationGhosted(currentId)){
         //     AnnotationDetails.closeViewAndReset();
         // }
-        $scope.metaInfo = false;
+        // $scope.metaInfo = false;
         AnnotationDetails.toggleAnnotationView(currentId);
         if (!$scope.annotation.expanded) {
             AnnotationSidebar.setAllPosition(currentId, initialHeight);
         }
+
+        Analytics.track('buttons', 'click', 'annotation--details--' + ($scope.annotation.expanded ? 'expand' : 'collapse'));
+    };
+
+    $scope.trackAnalyticsToggleEvent = function(label, expanded) {
+        Analytics.track('buttons', 'click', 'annotation--details--' + label + '--' + (expanded ? 'expand' : 'collapse'));
+    };
+
+    $scope.trackAnalyticsEvent = function(label) {
+        Analytics.track('buttons', 'click', 'annotation--details--' + label);
     };
 
     $scope.deleteAnnotation = function() {
-        openConfirmModal();
+        AnnotationDetails.openConfirmModal(currentElement, currentId);
+        Analytics.track('buttons', 'click', 'annotation--details--delete');
     };
 
     $scope.showEdit = function() {
@@ -110,149 +102,58 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.editAnnotation = function() {
-        TripleComposer.editAnnotation($scope.annotation.id);
-        if (!Dashboard.isDashboardVisible()) {
-            TripleComposer.closeAfterOp();
-            Dashboard.toggle();
+
+        var doEditAnnotation = function() {
+            if (TripleComposer.isEditMode()) {
+                TripleComposer.reset();
+            }
+
+            // TODO fix tripleComposer.editAnnotation removing watch to add statement and remove this timeout
+            $timeout(function() {
+                TripleComposer.editAnnotation($scope.annotation.id);
+                if (!Dashboard.isDashboardVisible()) {
+                    TripleComposer.closeAfterOp();
+                    Dashboard.toggle();
+                } else {
+                    TripleComposer.closeAfterOpOff();
+                }
+                EventDispatcher.sendEvent('AnnotationDetails.editAnnotation', TripleComposer.options.clientDashboardTabTitle);
+
+                Analytics.track('buttons', 'click', 'annotation--details--edit');
+            }, 1);
+        };
+
+        if (TripleComposer.isSaving()) {
+            console.log("Still saving .. wait !!");
+            TripleComposer.setAfterSave(doEditAnnotation);
+        } else {
+            doEditAnnotation();
         }
-        EventDispatcher.sendEvent('AnnotationDetails.editAnnotation', TripleComposer.options.clientDashboardTabTitle);
+    };
+
+    $scope.editComment = function() {
+        $scope.editMode = true;
+        $scope.editCommentValue = $scope.annotation.comment;
+    };
+
+    $scope.saveEdit = function() {
+        var promise = AnnotationDetails.saveEditedComment(currentId, $scope.annotation.mainItem, $scope.annotation.comment);
+
+        promise.then(function() {
+            $scope.editMode = false;
+        }, function() {
+            $scope.editCommentValue = '';
+            $scope.editMode = false;
+        });
+    };
+
+    $scope.cancelEdit = function() {
+        $scope.editMode = false;
     };
 
     $scope.isUserToolShowed = function() {
         return (AnnotationDetails.isUserToolShowed($scope.annotation.creator) || ($scope.forceEdit && MyPundit.isUserLogged())) && AnnotationSidebar.isAnnotationsPanelActive();
     };
-
-    $scope.mouseoverAllHandler = function() {
-        if ($scope.annotation.broken) {
-            return;
-        }
-
-        var currentItem;
-        var items = $scope.annotation.itemsUriArray;
-        for (var index in items) {
-            currentItem = ItemsExchange.getItemByUri(items[index]);
-            if (typeof(currentItem) !== 'undefined') {
-                if (currentItem.isImageFragment() && Consolidation.isConsolidated(currentItem)) {
-                    ImageAnnotator.svgHighlightByItem(currentItem);
-                }
-            }
-        }
-    };
-
-    $scope.mouseoutAllHandler = function() {
-        if ($scope.annotation.broken) {
-            return;
-        }
-
-        var currentItem;
-        var items = $scope.annotation.itemsUriArray;
-        for (var index in items) {
-            currentItem = ItemsExchange.getItemByUri(items[index]);
-            if (typeof(currentItem) !== 'undefined') {
-                if (currentItem.isImageFragment() && Consolidation.isConsolidated(currentItem)) {
-                    ImageAnnotator.svgClearHighlightByItem(currentItem);
-                }
-            }
-        }
-    };
-
-    $scope.mouseoverHandler = function() {
-        if ($scope.annotation.broken) {
-            return;
-        }
-
-        var currentItem;
-        var items = $scope.annotation.itemsUriArray;
-        for (var index in items) {
-            currentItem = ItemsExchange.getItemByUri(items[index]);
-            if (typeof(currentItem) !== 'undefined') {
-                if (currentItem.isTextFragment()) {
-                    TextFragmentAnnotator.highlightByUri(items[index]);
-                } else if (currentItem.isImageFragment()) {
-                    // ImageAnnotator.svgHighlightByItem(currentItem);
-                } else if (currentItem.isImage()) {
-                    ImageAnnotator.highlightByUri(items[index]);
-                }
-            }
-        }
-    };
-
-    $scope.mouseoutHandler = function() {
-        if ($scope.annotation.broken) {
-            return;
-        }
-
-        var currentItem;
-        var items = $scope.annotation.itemsUriArray;
-        for (var index in items) {
-            currentItem = ItemsExchange.getItemByUri(items[index]);
-            if (typeof(currentItem) !== 'undefined') {
-                if (currentItem.isTextFragment()) {
-                    TextFragmentAnnotator.clearHighlightByUri(items[index]);
-                } else if (currentItem.isImageFragment()) {
-                    // ImageAnnotator.svgClearHighlightByItem(currentItem);
-                } else if (currentItem.isImage()) {
-                    ImageAnnotator.clearHighlightByUri(items[index]);
-                }
-            }
-        }
-    };
-
-    $scope.mouseoverItemHandler = function(itemUri) {
-        if ($scope.annotation.broken) {
-            return;
-        }
-
-        var currentItem = ItemsExchange.getItemByUri(itemUri);
-        if (typeof(currentItem) !== 'undefined') {
-            if (currentItem.isTextFragment()) {
-                TextFragmentAnnotator.highlightByUri(itemUri);
-            } else if (currentItem.isImageFragment() && Consolidation.isConsolidated(currentItem)) {
-                // TODO really temp trick!!
-                ImageAnnotator.svgClearHighlightByItem(currentItem);
-                ImageAnnotator.svgHighlightByItem(currentItem);
-            } else if (currentItem.isImage()) {
-                ImageAnnotator.highlightByUri(itemUri);
-            }
-        }
-    };
-
-    $scope.mouseoutItemHandler = function(itemUri) {
-        if ($scope.annotation.broken) {
-            return;
-        }
-
-        var currentItem = ItemsExchange.getItemByUri(itemUri);
-        if (typeof(currentItem) !== 'undefined') {
-            if (currentItem.isTextFragment()) {
-                TextFragmentAnnotator.clearHighlightByUri(itemUri);
-            } else if (currentItem.isImageFragment()) {
-                // ImageAnnotator.svgClearHighlightByItem(currentItem);
-            } else if (currentItem.isImage()) {
-                ImageAnnotator.clearHighlightByUri(itemUri);
-            }
-        }
-    };
-
-    EventDispatcher.addListener('Pundit.loading', function(e) {
-        $scope.isLoading = e.args;
-    });
-
-    EventDispatcher.addListener('AnnotationSidebar.toggle', function(e) {
-        var isExpanded = e.args;
-        if (!isExpanded) {
-            AnnotationDetails.closeViewAndReset();
-        }
-    });
-
-    var cancelWatchNotebookName = $scope.$watch(function() {
-        return NotebookExchange.getNotebookById(notebookId);
-    }, function(nb) {
-        if (typeof(nb) !== 'undefined') {
-            $scope.notebookName = nb.label;
-            cancelWatchNotebookName();
-        }
-    });
 
     $scope.$watch(function() {
         return currentElement.height();
@@ -260,6 +161,18 @@ angular.module('Pundit2.AnnotationSidebar')
         if (typeof($scope.annotation) !== 'undefined') {
             if (newHeight !== oldHeight && $scope.annotation.expanded) {
                 AnnotationSidebar.setAllPosition(currentId, newHeight);
+            }
+        }
+    });
+
+    // TODO find alternative to force digest and avoid watch delay on the height change (?)
+    currentElement.bind('DOMSubtreeModified', function() {
+        if (typeof($scope.annotation) !== 'undefined') {
+            if (currentElement.height() !== currentHeight) {
+                currentHeight = currentElement.height();
+                if (currentHeight < 30 || currentHeight > 140) {
+                    $rootScope.$$phase || $rootScope.$digest();
+                }
             }
         }
     });

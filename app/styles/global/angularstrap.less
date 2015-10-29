@@ -1,0 +1,49 @@
+/**
+ * ANGULAR STRAP
+ *
+ * Styles depending on angular strap
+ *
+ * TODO: Actually all declaration should be move in other files and this on deleted
+ *
+ */
+
+.modal-backdrop.am-fade {
+    opacity: .5;
+
+    &.ng-enter {
+        opacity: 0;
+        &.ng-enter-active {
+            opacity: .5;
+        }
+    }
+    &.ng-leave {
+        opacity: .5;
+        &.ng-leave-active {
+            opacity: 0;
+        }
+    }
+}
+
+// TODO: We must find a way to add the wrapper around the modal backdrop or this style could affect modals outside Pundit
+// Modal backdrop cant be injected into a .pnd-wrp :(
+body .modal-backdrop {
+    // TODO Display:none is a momentary fix. We will disable this backdrop from angularstrap settings
+    display: none;
+    /*
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: @zindex-pnd-modal-background !important; // This is a bad patch
+    background-color: @modal-backdrop-bg;
+    opacity: .5 !important; // This is a bad patch
+    // Fade for backdrop
+    &.fade {
+        .opacity(0);
+    }
+    &.in {
+        .opacity(@modal-backdrop-opacity);
+    }
+    */
+}

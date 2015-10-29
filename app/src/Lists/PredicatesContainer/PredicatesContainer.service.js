@@ -87,7 +87,68 @@ angular.module('Pundit2.PredicatesContainer')
      * Default value:
      * <pre> cMenuType: 'predicates' </pre>
      */
-    cMenuType: 'predicates'
+    cMenuType: 'predicates',
+
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#PredicatesContainer.inputIconSearch
+     *
+     * @description
+     * `string`
+     *
+     * Icon shown in the search input when it's empty
+     *
+     * Default value:
+     * <pre> inputIconSearch: 'pnd-icon-search' </pre>
+     */
+    inputIconSearch: 'pnd-icon-search',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#PredicatesContainer.inputIconClear
+     *
+     * @description
+     * `string`
+     *
+     * Icon shown in the search input when it has some content
+     *
+     * Default value:
+     * <pre> inputIconClear: 'pnd-icon-close' </pre>
+     */
+    inputIconClear: 'pnd-icon-close',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#PredicatesContainer.order
+     *
+     * @description
+     * `string`
+     *
+     * Default items property used to sort items list inside directive (legal value are: 'label' and 'type')
+     *
+     * Default value:
+     * <pre> order: 'label' </pre>
+     */
+    order: 'label',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#PredicatesContainer.reverse
+     *
+     * @description
+     * `boolean`
+     *
+     * Default items ordering inside directive (true: ascending, false: descending)
+     *
+     * Default value:
+     * <pre> reverse: false </pre>
+     */
+    reverse: false
 
 })
 

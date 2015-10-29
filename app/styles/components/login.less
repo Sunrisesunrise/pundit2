@@ -1,0 +1,147 @@
+/**
+ * LOGIN
+ *
+ * Style for login popover
+ * The popover includes an iframe
+ * Style here doesn't affect contents of the iframe
+ */
+
+
+/* ------------------------------------ *\
+   #LOGIN-ARROW
+\* ------------------------------------ */
+
+.pnd-login-popover-container {
+    z-index: @zindex-pnd-login;
+
+    &>.arrow-top {
+        position: absolute;
+        display: block;
+        width: 0;
+        height: 0;
+
+        top: -11px;
+        left: 24px;
+        margin-left: -11px;
+
+        border-color: transparent;
+        border-bottom-color: @color-login-popover-border;
+        border-style: solid;
+        border-width: 11px;
+        border-top-width: 0;
+
+        &:after {
+            top: 1px;
+            margin-left: -10px;
+            content: " ";
+            border-top-width: 0;
+            border-bottom-color: #FFFFFF;
+        }
+    }
+
+    &>.arrow-right {
+        top: -10px;
+    }
+}
+
+
+/* ------------------------------------ *\
+   #POPOVER
+\* ------------------------------------ */
+
+.pnd-login-popover-container {
+    position: fixed;
+    border: 1px solid @color-login-popover-border;
+    background: @color-login-popover-background;
+    width: @login-popover-width;
+    min-width: @login-popover-width;
+    height: @login-popover-height;
+    margin-top: 11px;
+
+    .popover-login-pane {
+        position: absolute;
+        box-sizing: border-box;
+        display: table;
+        top: 0;
+        padding: 20px;
+        background-color: white;
+        width: 100%;
+        min-width: 100%;
+        height: @login-popover-height - 2px;
+
+        .popover-login-pane-content {
+            bottom: 1px solid red;
+            display: table-cell;
+            text-align: center;
+            vertical-align: middle;
+
+            h1 {
+                margin-bottom: 10px;
+                display: block;
+                color: #333333;
+                text-align: center;
+                font-weight: bold;
+                font-size: 20px;
+                line-height: 25px;
+            }
+
+            p {
+                display: block;
+                margin-bottom: 10px;
+                font-size: 14px;
+                text-align: center;
+                line-height: 18px;
+            }
+
+            small {
+                display: block;
+                margin-bottom: 10px;
+                font-size: 14px;
+                color: @gray-light;
+                text-align: center;
+                line-height: 18px;
+            }
+
+            .pnd-icon {
+                display: block;
+                position: relative;
+                margin: 0 0 8px 0;
+                color: @gray-light;
+                text-align: center;
+                font-size: 30px;
+                top: 0;
+                left: 0;
+            }
+        }
+
+        &.popover-login-error {
+            h1 {
+                color: @brand-danger;
+            }
+
+            .pnd-icon {
+                color: @brand-danger;
+            }
+        }
+
+        &.popover-login-success {
+        }
+    }
+
+    .popover-login-pane  span.pnd-icon-refresh {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -16px;
+        margin-top: -16px;
+        font-size: 32px;
+        color: green;
+    }
+
+    .iframe-container {
+        iframe {
+            width: 100%;
+            height: @login-popover-height - 2px;
+        }
+    }
+}

@@ -16,16 +16,18 @@ angular.module('Pundit2.Core')
                 eventArgs = {
                     name: name,
                     args: args,
-                    resolve: function(a) {
-                        if (defIndex < deferred.length) {
-                            deferred[defIndex].resolve(a);
-                            defIndex++;
-                        }
-                    },
-                    reject: function(a) {
-                        if (defIndex < deferred.length) {
-                            deferred[defIndex].reject(a);
-                            defIndex++;
+                    promise: {
+                        resolve: function(a) {
+                            if (defIndex < deferred.length) {
+                                deferred[defIndex].resolve(a);
+                                defIndex++;
+                            }
+                        },
+                        reject: function(a) {
+                            if (defIndex < deferred.length) {
+                                deferred[defIndex].reject(a);
+                                defIndex++;
+                            }
                         }
                     }
                 };
@@ -70,7 +72,7 @@ angular.module('Pundit2.Core')
                     events[name].splice(index, 1);
                     if (events[name].length === 0) {
                         delete events[name];
-                        return;
+                        return; // TODO: why?!
                     }
                 }
             }

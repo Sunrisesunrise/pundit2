@@ -1,0 +1,234 @@
+//
+// COMMON VARIABLES
+//
+// Variables for all applications.
+// These are **NOT** the variables of Bootstrap (that are defined in other LESS files)
+// but the custom variables for the applications.
+//
+
+
+// ------------------------------------ //
+// #FONT
+// ------------------------------------ //
+// @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+// @import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic);
+@font: "Lucida Grande", Helvetica, Verdana, Arial, sans-serif; // "'Open Sans', sans-serif; // 'Lato', sans-serif;
+
+// ------------------------------------ //
+// #COLORS
+// ------------------------------------ //
+// Text colors
+@color-text: #555;
+@color-text-light: #808080;
+@color-text-error: #FF643F;
+@color-text-link: #48bb58; // #39b54a;
+@color-text-link-hover: darken(@color-text-link, 15%);
+
+// Borders
+@color-border-normal: #cacaca;
+@color-border-light: #DDD;
+@color-border-ultralight: #F0F0F0;
+
+// Backgrounds
+@color-background-base: #FFF;
+@color-background-light: lighten(#000, 96%);
+@color-background-medium: lighten(#000, 90%);
+
+// Buttons
+@color-button-bg-cta: @color-text-link;
+@color-button-bg: @color-background-medium;
+@color-button-bg-dark: #3d4042;
+@color-button-text-light: #fff;
+@color-button-text-dark: @color-text;
+
+// Shades of gray
+@gray-soft-dark: lighten(#000, 26%);
+@gray-extra-light: lighten(#000, 80%);
+@gray-extra-lighter: lighten(#000, 90%);
+@gray-extra-lightest: lighten(#000, 98%); // It's obvious some crazy guys are working on this project
+
+// Annotations in the sidebar
+@color-annotation-header: #8F999E; // @subject-color; // #aaaaaa; // @subject-color;
+@color-annotation-broken-header: @color-text-error; // @predicate-color;
+@color-annotation-header-text: #FFF;
+@color-annotation-sidebar-bg: #464b4c;
+
+// Semantic colors
+@subject-color: #54b4e6;
+@subject-color-text: lighten(@subject-color, 27);
+@predicate-color: #febe53;
+@predicate-color-text: lighten(@predicate-color, 25);
+@object-color: #0084c8;
+@object-color-text: desaturate(lighten(@object-color, 27), 30);
+
+// Toolbar
+@color-toolbar-bg: #333333;
+@color-toolbar-text: #eee;
+@color-toolbar-button: lighten(@color-toolbar-bg, 3);
+@color-toolbar-button-hover: lighten(@color-toolbar-button, 8);
+@color-toolbar-button-open: #999999; // @color-toolbar-button-hover;
+
+// Dropdown
+@color-dropdown-bg: #ffffff;
+@color-dropdown-active: darken(@color-dropdown-bg, 10);
+@color-dropdown-bg-hover: darken(@color-dropdown-bg, 5);
+@color-dropdown-text: @color-text;
+
+// Login popover colors
+@color-login-popover-background: #FFF;
+@color-login-popover-border: #979797;
+
+// Types of entities (shown in previews)
+@color-type-background: rgb(224, 227, 228);
+@color-type-text: #555;
+@type-border-radius: 3px;
+
+// Alert system
+@color-alert-success:  #48bb58;
+@color-alert-info:  @color-background-medium;
+@color-alert-warning:  #febe53;
+@color-alert-error:  @color-text-error;
+@color-alert-text-heading: #000000;
+@color-alert-text: @color-text;
+
+// Modal
+@color-modal-backdrop:  rgba(0,0,0,.5);
+
+// Various
+@color-toolbar-disabled: lighten(#000, 45%);
+@color-overlay: rgba(0,0,0,.6);
+
+
+// ------------------------------------ //
+// #BUTTONS
+// ------------------------------------ //
+@button-gradient-level: 0; // Represents the impact of gradient in the button bg
+
+// ------------------------------------ //
+// #INLINE-CONSOLIDATION
+// ------------------------------------ //
+@text-fragment-color: fade(#ffff00, 65%); // fade(#f8d420, 45%); // Original from Simone Fonda #f8cd48; // rgba(255,255,0,.32); // #f8cd48;
+@text-fragment-color-1: fade(#ffff33, 35%);
+@text-fragment-color-2: fade(#ffff00, 45%);
+@text-fragment-color-3: fade(#ffff00, 50%);
+@text-fragment-color-4: fade(#ffff00, 55%);
+@text-fragment-color-5: fade(#ffff00, 60%);
+@text-fragment-color-6: fade(#ffff00, 65%);
+
+// Highlights the text fragment the user is annotating
+@text-fragment-color-highlight: fade(#2ee6e6, 40%);
+
+// Hovering on a text fragment icon or an annotations in the sidebar
+@text-fragment-color-hover: @text-fragment-color-highlight; // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
+
+// When doing "Show all annotations on this item"... alle the others text fragment are ghosted
+@text-fragment-ghosted: fade(#ffff33, 15%);
+
+// Icons
+@text-fragment-icon-color: fade(#bfbf00, 65%);
+@text-fragment-icon-color-hover: fade(#47b3b3, 65%);
+@text-fragment-icon-color-ghosted: fade(#bfbf00, 30%);
+
+
+// ------------------------------------ //
+// #LOGIN-POPOVER
+// ------------------------------------ //
+@login-popover-width: 430px;
+@login-popover-height: 560px;
+
+
+// ------------------------------------ //
+// #TOOLBAR
+// ------------------------------------ //
+@toolbar-height: 30px;
+@toolbar-border-bottom: 0; // 1px;
+
+
+// ------------------------------------ //
+// #ITEM
+// ------------------------------------ //
+@item-height: 28px;
+
+
+// ------------------------------------ //
+// #TRIPLE-COMPOSER
+// ------------------------------------ //
+@triplecomposer-height: 25px;
+@triplecomposer-padding-inner: 5px;
+@triplecomposer-spacing: 6px;
+
+
+// ------------------------------------ //
+// #ANNOTATIONS-SIDEBAR
+// ------------------------------------ //
+// General variables for the sidebar
+@annotation-sidebar-coll-width: 10px;
+@annotation-sidebar-exp-width: 300px;
+
+
+// Styles defining single annotations as shown in the sidebar
+@annotation-header-height: 24px;
+@annotation-header-text-shadow: 0 1px 0 rgba(0, 0, 0, .15);
+
+
+// ------------------------------------ //
+// #RESOURCE-PANEL
+// ------------------------------------ //
+@resource-panel-width: 400px;
+@resource-panel-height: 250px;
+
+
+// ------------------------------------ //
+// #CALEDAR-WIDGET
+// ------------------------------------ //
+@calendar-popover-width: 280px;
+
+
+// ------------------------------------ //
+// #DROPDOWN-CONTEXTUAL-MENU
+// ------------------------------------ //
+@dropdown-round-corners: 4px;
+
+// ------------------------------------ //
+// #TABS
+// ------------------------------------ //
+@tab-bg-color: transparent;
+@tab-text-color: @color-text;
+@tab-bg-hover-color: #dddddd;
+@tab-text-hover-color: @color-text;
+@tab-bg-active-color: #FFFFFF;
+@tab-text-active-color: @color-text;
+@tab-border-radius: 1px;
+
+
+// ------------------------------------ //
+// #Z-INDEX
+// ------------------------------------ //
+
+// Attention: here we define only z-index for highlevel components
+// Z-indexes for nested elements (inside components) are defined inside each file and have
+// lower values as they should be relative
+
+@zindex-pnd-base: 2147483627; // Increment for z-index values. The sum of this value and the highest element must not be > 2147483647
+
+//initial z-index 1000000000 changed for css overwritings
+
+@zindex-pnd:                        2147483647; // Used only once by .pnd-wrp but ignored since the element has position: static that doesn't support z-index
+
+@zindex-pnd-annotation-sidebar:     10 + @zindex-pnd-base;
+@zindex-pnd-dashboard:              11 + @zindex-pnd-base;
+@zindex-pnd-toolbar:                12 + @zindex-pnd-base;
+@zindex-pnd-login:                  13 + @zindex-pnd-base;
+@zindex-pnd-image-fragment-tool:    14 + @zindex-pnd-base;
+@zindex-pnd-kee-modal:              15 + @zindex-pnd-base;
+@zindex-pnd-resource-panel:         16 + @zindex-pnd-base;
+@zindex-pnd-contextual-menu:        17 + @zindex-pnd-base;
+@zindex-pnd-popver:                 18 + @zindex-pnd-base;
+@zindex-pnd-modal:                  19 + @zindex-pnd-base;
+@zindex-pnd-alert-system:           20 + @zindex-pnd-base;
+
+
+// ------------------------------------ //
+// #ANIMATIONS-VARIABLES
+// ------------------------------------ //
+@animation-fast-duration: .15s;

@@ -10,23 +10,59 @@ angular.module('Pundit2.Core')
 
         // container: [ array of ItemFactory objects belonging to that container ]
         itemListByContainer = {},
+        // container: total number of remote ItemFactory objects belonging to that container
+        remoteItemCountByContainer = {},
         // item uri : [ array of containers which contains the ItemFactory with that uri ]
         itemContainers = {},
         // [ array of ItemFactory objects ]
         itemList = [],
         // item uri : { ItemFactory object }
-        itemListByURI = {};
+        itemListByURI = {},
+
+        temporaryItems = {};
 
     itemsExchange.wipe = function() {
         itemListByContainer = {};
+        remoteItemCountByContainer = {};
         itemContainers = {};
         itemList = [];
         itemListByURI = {};
+        temporaryItems = {};
         itemsExchange.log('Wiped every loaded item and every container.');
+    };
+
+    itemsExchange.isTemporary = function(uri) {
+        return typeof temporaryItems[uri] !== 'undefined';
+    };
+
+    itemsExchange.setItemAsTemporary = function(mixed, isTemporary) {
+        var item = mixed;
+        if (typeof item === 'string') {
+            item = itemsExchange.getItemByUri(mixed);
+        }
+        if (isTemporary) {
+            temporaryItems[item.uri] = item;
+        }
+        else {
+            delete temporaryItems[item.uri];
+        }
+    };
+
+    itemsExchange.wipeTemporaryItems = function() {
+        temporaryItems = {};
+    };
+
+    itemsExchange.getTemporaryItems = function() {
+        return temporaryItems;
     };
 
     itemsExchange.isItemInContainer = function(item, container) {
         if (typeof(container) === "undefined") {
+            return false;
+        }
+
+        if (typeof(item) === "undefined") {
+            itemsExchange.log('itemsExchange.isItemInContainer has been called with undefined item, that shouldn\'t happen');
             return false;
         }
 
@@ -67,6 +103,11 @@ angular.module('Pundit2.Core')
         });
         // empty container list
         delete itemListByContainer[container];
+        //empty total remote count
+        if (typeof(remoteItemCountByContainer[container]) !== 'undefined') {
+            delete remoteItemCountByContainer[container];
+        }
+
 
         itemsExchange.log('Wiped ' + container + ' container.');
     };
@@ -90,7 +131,8 @@ angular.module('Pundit2.Core')
         return {
             itemListByURI: itemListByURI,
             itemListByContainer: itemListByContainer,
-            itemContainers: itemContainers
+            itemContainers: itemContainers,
+            remoteItemTotalCountByContainer: remoteItemCountByContainer
         };
     };
 
@@ -141,6 +183,8 @@ angular.module('Pundit2.Core')
     // TODO must be refactor, pass uri instead of new item reference
     itemsExchange.addItemToContainer = function(item, containers) {
 
+        // console.log(containers);
+
         if (!angular.isArray(containers)) {
             containers = [containers];
         }
@@ -166,6 +210,30 @@ angular.module('Pundit2.Core')
             }
         }
 
+    };
+
+    itemsExchange.setRemoteItemCount = function(counts, containers) {
+
+        if (!angular.isArray(counts)) {
+            counts = [counts];
+        }
+        if (!angular.isArray(containers)) {
+            containers = [containers];
+        }
+
+        for (var i = containers.length; i--;) {
+            var container = containers[i];
+            remoteItemCountByContainer[container] = counts[i];
+        }
+
+    };
+
+    itemsExchange.getRemoteItemCount = function(container) {
+
+        if (typeof(remoteItemCountByContainer) === 'undefined') {
+            return null;
+        }
+        return remoteItemCountByContainer[container];
     };
 
     // TODO must be refactor, pass uri instead of new item reference
@@ -210,29 +278,32 @@ angular.module('Pundit2.Core')
         }
     };
 
-    var extendRangeAndDomain = function(uri, range, domain) {
+    var extendSuggestions = function(uri, subjectTypes, objectTypes) {
         var p = itemListByURI[uri];
 
+        subjectTypes = typeof subjectTypes !== 'undefined' ? subjectTypes : [];
+        objectTypes = typeof objectTypes !== 'undefined' ? objectTypes : [];
+
         var i;
-        // empty array coding a free range
-        if (range.length === 0) {
-            p.range = [];
-        } else if (p.range.length > 0) {
-            for (i in range) {
-                // if the range is not already present
-                if (p.range.indexOf(range[i]) === -1) {
-                    p.range.push(range[i]);
+        // empty array coding a free objectTypes
+        if (objectTypes.length === 0) {
+            p.suggestedObjectTypes = [];
+        } else if (p.suggestedObjectTypes.length > 0) {
+            for (i in objectTypes) {
+                // if the objectTypes is not already present
+                if (p.suggestedObjectTypes.indexOf(objectTypes[i]) === -1) {
+                    p.suggestedObjectTypes.push(objectTypes[i]);
                 }
             }
         }
-        // empty array coding a free domain
-        if (domain.length === 0) {
-            p.domain = [];
-        } else if (p.domain.length > 0) {
-            for (i in domain) {
-                // if the domain is not already present
-                if (p.domain.indexOf(domain[i]) === -1) {
-                    p.domain.push(domain[i]);
+        // empty array coding a free subjectTypes
+        if (subjectTypes.length === 0) {
+            p.suggestedSubjectTypes = [];
+        } else if (p.suggestedSubjectTypes.length > 0) {
+            for (i in subjectTypes) {
+                // if the subjectTypes is not already present
+                if (p.suggestedSubjectTypes.indexOf(subjectTypes[i]) === -1) {
+                    p.suggestedSubjectTypes.push(subjectTypes[i]);
                 }
             }
         }
@@ -267,6 +338,13 @@ angular.module('Pundit2.Core')
             itemListByURI[item.uri] = item;
             itemList.push(item);
             itemsExchange.addItemToContainer(item, container);
+
+            if (typeof itemListByURI[item.uri].suggestedSubjectTypes === 'undefined') {
+                itemListByURI[item.uri].suggestedSubjectTypes = [];
+            }
+            if (typeof itemListByURI[item.uri].suggestedObjectTypes === 'undefined') {
+                itemListByURI[item.uri].suggestedObjectTypes = [];
+            }
         };
 
         if (typeof(container) === "undefined") {
@@ -305,12 +383,11 @@ angular.module('Pundit2.Core')
 
                     insertItem();
                 } else {
-                    // update the old item (merge of range, domain and vocabs)
-                    extendRangeAndDomain(item.uri, item.range, item.domain);
+                    // update the old item (merge of suggestedObjectTypes, suggestedSubjectTypes and vocabs)
+                    extendSuggestions(item.uri, item.suggestedSubjectTypes, item.suggestedObjectTypes);
                     addLabel(item.uri, item.label);
                     addVocab(item.uri, item.vocabulary);
                 }
-
             }
 
             return;

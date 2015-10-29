@@ -10,6 +10,15 @@ angular.module('KorboEE')
         // preview loading status
         $scope.previewIsLoading = false;
 
+        $scope.showFilteredResults = false;
+        $scope.showHeader = false;
+        $scope.showVerticalTabFooterContent = false;
+        $scope.showContentMessage1 = true;
+        $scope.showContentMessage4 = true;
+        $scope.showContentMessage5 = false;
+        
+        $scope.useCustomTemplate = 'src/Item/KorboItem.dir.tmpl.html';
+
         // set label to search
         if(typeof($scope.pane.labelToSearch) !== 'undefined'&& $scope.pane.labelToSearch !== ''){
             $scope.elemToSearch = $scope.pane.labelToSearch;
@@ -20,7 +29,7 @@ angular.module('KorboEE')
         // set default language
         $scope.defaultLan = $scope.conf.languages[0];
         for (var j in $scope.conf.languages){
-            if($scope.conf.languages[j].state === true) {
+            if($scope.conf.languages[j].value === $scope.conf.defaultLanguage) {
                 $scope.defaultLan = $scope.conf.languages[j];
                 break;
             } // end if
@@ -87,6 +96,9 @@ angular.module('KorboEE')
 
         // when select a provider tab, update buttons visibility
         $scope.$watch('contentTabs.activeTab', function(tab){
+            if (typeof $scope.contentTabs[tab] === 'undefined') {
+                return;
+            }
             $scope.currentProv.p = $scope.contentTabs[tab].provider;
             if($scope.itemSelected === null){
                 if($scope.contentTabs[tab].provider !== 'korbo' && typeof($scope.conf.copyToKorboBeforeUse) !== 'undefined' && $scope.conf.copyToKorboBeforeUse){
@@ -130,7 +142,7 @@ angular.module('KorboEE')
                     $scope.contentTabs[index].isLoading = true;
                     $scope.contentTabs[index].isStarted = true;
                     // let start searching
-                    korboComm.search(param, $scope.contentTabs[index].itemsContainer).then(
+                    korboComm.search(param, $scope.contentTabs[index].itemsContainer, $scope.conf.useCredentialInHttpCalls).then(
                         // when search is finished without errors
                         function(){
                             // set loading status to false
@@ -180,18 +192,22 @@ angular.module('KorboEE')
             $scope.previewError = false;
             var param = {};
             param.endpoint = $scope.conf.endpoint;
+            // New AnnotationServer APIs require basketID.
+            /*
             if($scope.contentTabs[$scope.contentTabs.activeTab].provider === 'korbo'){
                 param.basketID = 'null';
             } else {
                 param.basketID = $scope.conf.basketID;
             }
+            */
+            param.basketID = $scope.conf.basketID;
 
             param.language = $scope.defaultLan.value;
             param.provider = $scope.contentTabs[$scope.contentTabs.activeTab].provider;
             param.item = item;
 
             // call get HTTP
-            var promise = korboComm.getItem(param, true);
+            var promise = korboComm.getItem(param, true, $scope.conf.useCredentialInHttpCalls);
 
             // when promise is resolved
             promise.then(function(res){

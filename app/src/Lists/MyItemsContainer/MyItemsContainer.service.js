@@ -73,7 +73,7 @@ angular.module('Pundit2.MyItemsContainer')
      * Default value:
      * <pre> clientDashboardTabTitle: "My Items" </pre>
      */
-    clientDashboardTabTitle: "My items",
+    clientDashboardTabTitle: "My Items",
 
     /**
      * @module punditConfig
@@ -138,6 +138,21 @@ angular.module('Pundit2.MyItemsContainer')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#MyItems.container
+     *
+     * @description
+     * `string`
+     *
+     * Name of the container used to store the my items in the itemsExchange.
+     *
+     * Default value:
+     * <pre> container: 'myItems' </pre>
+     */
+    container: 'myItems',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#MyIyemsContainer.inputIconSearch
      *
      * @description
@@ -161,9 +176,9 @@ angular.module('Pundit2.MyItemsContainer')
      * Icon shown in the search input when it has some content
      *
      * Default value:
-     * <pre> inputIconClear: 'pnd-icon-times' </pre>
+     * <pre> inputIconClear: 'pnd-icon-close' </pre>
      */
-    inputIconClear: 'pnd-icon-times',
+    inputIconClear: 'pnd-icon-close',
 
     /**
      * @module punditConfig

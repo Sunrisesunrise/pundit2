@@ -77,6 +77,8 @@ angular.module('Pundit2.Vocabularies')
     instances: [{
         // where items is stored inside itemsExchange service
         container: 'korbo2',
+        //infinite scrolling
+        infiniteScrolling: false,
         // instance label tab title
         label: 'Korbo2',
         // enable or disable the instance
@@ -100,12 +102,27 @@ angular.module('Pundit2.Vocabularies')
      * Default value:
      * <pre> debug: false </pre>
      */
-    debug: false
+    debug: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Korbo2Selector.searchWithCredentials
+     *
+     * @description
+     * `boolean`
+     *
+     * Search with credentials
+     *
+     * Default value:
+     * <pre> searchWithCredentials: false </pre>
+     */
+    searchWithCredentials: false
 
 })
 
 .factory('Korbo2Selector', function(BaseComponent, KORBO2DEFAULTS, Item, ItemsExchange, SelectorsManager,
-    $http, $q) {
+    $http, $q, Config) {
 
     var korbo2Selector = new BaseComponent('Korbo2Selector', KORBO2DEFAULTS);
     korbo2Selector.name = 'Korbo2Selector';
@@ -129,10 +146,15 @@ angular.module('Pundit2.Vocabularies')
             promise = $q.defer(),
             container = self.config.container + term.split(' ').join('$');
         // TODO se basketID è null non aggiungerlo tra i parametri, altrimenti passarlo nell'oggetto params
+        var provider = self.config.container;
+        var resultsLimit = korbo2Selector.options.limit;
+        if (typeof self.config.resultsLimit === 'number' && self.config.resultsLimit > 0) {
+            resultsLimit = self.config.resultsLimit;
+        }
         var params = {
             q: term,
-            p: 'korbo',
-            limit: korbo2Selector.options.limit,
+            p: provider,
+            limit: resultsLimit,
             offset: 0,
             lang: self.config.language
         };
@@ -141,10 +163,12 @@ angular.module('Pundit2.Vocabularies')
             params.basketId = self.config.basketID;
         }
 
+        var requestUrl = (typeof self.config.url === 'undefined' ? Config.annotationServerBaseURL + 'api/open/korbo' : self.config.url) + "/search/items";
         $http({
             //headers: { 'Content-Type': 'application/json' },
             method: 'GET',
-            url: self.config.url + "/search/items",
+            url: requestUrl,
+            withCredentials: korbo2Selector.options.searchWithCredentials,
             cache: false,
             params: params
 
@@ -152,6 +176,10 @@ angular.module('Pundit2.Vocabularies')
             // TODO check selector loading (console log duplicate)
 
             korbo2Selector.log('Http success, get items ' + self.config.label, res.data);
+            var baseURI = '';
+            if (typeof self.config.rebuildURI !== 'undefined') {
+                baseURI = self.config.rebuildURI.baseURI;
+            }
 
             if (res.data.length === 0) {
                 korbo2Selector.log('Empty response');
@@ -166,11 +194,26 @@ angular.module('Pundit2.Vocabularies')
             for (var i = 0; i < res.data.length; i++) {
                 var current = res.data[i];
 
+                if (typeof current.uri === 'undefined' &&
+                    typeof self.config.rebuildURI !== 'undefined' &&
+                    typeof self.config.rebuildURI.replaceIDParts !== 'undefined') {
+                    var find = self.config.rebuildURI.replaceIDParts[0];
+                    var re = new RegExp(find, 'g');
+                    current.uri = baseURI + current.id.replace(re, self.config.rebuildURI.replaceIDParts[1]);
+                }
+
+                if (typeof current.type === 'undefined') {
+                    current.type = [];
+                }
+
                 var item = {
                     label: current.label,
                     uri: current.uri,
                     type: current.type
                 };
+                if (typeof current.id !== "undefined") {
+                    item.id = current.id;
+                }
                 // optional propeties
                 if (current.depiction !== "") {
                     item.image = current.depiction;
@@ -178,6 +221,7 @@ angular.module('Pundit2.Vocabularies')
                 if (current.abstract !== "") {
                     item.description = current.abstract;
                 }
+                item.providerFrom = provider;
 
                 // add to itemsExchange
                 ItemsExchange.addItemToContainer(new Item(item.uri, item), container);

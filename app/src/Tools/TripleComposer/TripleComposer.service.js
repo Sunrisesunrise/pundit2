@@ -175,9 +175,9 @@ angular.module('Pundit2.TripleComposer')
      * Icon shown in the search input when it has some content
      *
      * Default value:
-     * <pre> inputIconClear: 'pnd-icon-times' </pre>
+     * <pre> inputIconClear: 'pnd-icon-close' </pre>
      */
-    inputIconClear: 'pnd-icon-times',
+    inputIconClear: 'pnd-icon-close',
 
     /**
      * @module punditConfig
@@ -212,26 +212,48 @@ angular.module('Pundit2.TripleComposer')
 })
 
 .service('TripleComposer', function($rootScope, BaseComponent, EventDispatcher, TRIPLECOMPOSERDEFAULTS, TypesHelper, NameSpace, Config,
-    AnnotationsExchange, ItemsExchange, Dashboard, ContextualMenu, TemplatesExchange, Status, Utils) {
+    AnnotationsExchange, ItemsExchange, Dashboard, ContextualMenu, TemplatesExchange, Status, Utils, Analytics) {
 
     var tripleComposer = new BaseComponent('TripleComposer', TRIPLECOMPOSERDEFAULTS);
 
-    var nextId = 1;
-    var statements = [{
-        id: nextId
-    }];
+    var state = {};
+    var firstInstanceName; // it will be default triple composer.
 
-    var editMode = false,
-        editAnnID;
+    var limitToSuggestedTypes = tripleComposer.limitToSuggestedTypes = Config.limitToSuggestedTypes;
 
-    var closeAfterOp = false;
+    //var statements = [{
+    //    id: 1
+    //}];
 
     var statementChangeStatus = function() {
         EventDispatcher.sendEvent('TripleComposer.statementChange');
     };
 
+    var trackContextualEvent = function(eventString) {
+        var eventLabel = "contextualMenu--" + eventString;
+        Analytics.track('buttons', 'click', eventLabel);
+    };
+
+    var contextualMenuInitialized = false;
+    var fixName = function(name) {
+        if (typeof name === 'undefined') {
+            return firstInstanceName;
+        }
+        return name;
+    };
+
+    var dateSpace = [
+        NameSpace.gYear,
+        NameSpace.gYearMonth,
+        NameSpace.date,
+        NameSpace.dateTime
+    ];
+
     // Contextual Menu actions for my items and page items
     var initContextualMenu = function() {
+        if (contextualMenuInitialized) {
+            return;
+        }
         ContextualMenu.addAction({
             type: [
                 Config.modules.PageItemsContainer.cMenuType,
@@ -253,6 +275,8 @@ angular.module('Pundit2.TripleComposer')
                 } else {
                     tripleComposer.addToSubject(item);
                 }
+                EventDispatcher.sendEvent('TripleComposer.useAsSubject', item);
+                trackContextualEvent('useAsSubject');
             }
         });
 
@@ -273,6 +297,8 @@ angular.module('Pundit2.TripleComposer')
             priority: 100,
             action: function(item) {
                 tripleComposer.addToObject(item);
+                EventDispatcher.sendEvent('TripleComposer.useAsObject', item);
+                trackContextualEvent('useAsObject');
             }
         });
 
@@ -293,6 +319,8 @@ angular.module('Pundit2.TripleComposer')
             priority: 100,
             action: function(item) {
                 tripleComposer.addToPredicate(item);
+                EventDispatcher.sendEvent('TripleComposer.useAsPredicate', item);
+                trackContextualEvent('useAsPredicate');
             }
         });
 
@@ -304,10 +332,11 @@ angular.module('Pundit2.TripleComposer')
             showIf: function() {
                 return true;
             },
-            action: function() {
+            action: function(statement) {
                 angular.element('.pnd-triplecomposer-save').addClass('disabled');
-                tripleComposer.addStatement();
+                tripleComposer.addStatement(statement.tripleComposerName);
                 statementChangeStatus();
+                trackContextualEvent('newTriple');
             }
         });
 
@@ -321,8 +350,9 @@ angular.module('Pundit2.TripleComposer')
             },
             action: function(statement) {
                 var id = parseInt(statement.id, 10);
-                tripleComposer.duplicateStatement(id);
+                tripleComposer.duplicateStatement(id, statement.tripleComposerName);
                 statementChangeStatus();
+                trackContextualEvent('duplicateTriple');
             }
         });
 
@@ -336,120 +366,216 @@ angular.module('Pundit2.TripleComposer')
             },
             action: function(statement) {
                 var id = parseInt(statement.id, 10);
-                tripleComposer.removeStatement(id);
+                tripleComposer.removeStatement(id, statement.tripleComposerName);
                 if (tripleComposer.isAnnotationComplete()) {
                     angular.element('.pnd-triplecomposer-save').removeClass('disabled');
                 }
                 statementChangeStatus();
+                trackContextualEvent('removeTriple');
             }
         });
 
+        contextualMenuInitialized = true;
     }; // initContextualMenu()
 
-    // When all modules have been initialized, services are up, Config are setup etc..
-    EventDispatcher.addListener('Client.boot', function() {
+
+    tripleComposer.initInstance = function(name) {
+        if (typeof firstInstanceName === 'undefined') {
+            firstInstanceName = name;
+        }
+        state[name] = {
+            nextId: 1,
+            statements: [{
+                id: 1
+            }],
+            editMode: false,
+            editAnnID: undefined,
+            closeAfterOp: false,
+            showHeader: true,
+            showFooter: true,
+            saving: false,
+            afterSave: undefined
+        };
+    };
+
+    tripleComposer.remove = function(name) {
+        delete state[name];
+    };
+
+    tripleComposer.showHeader = function(newVal, name) {
+        name = fixName(name);
+        if (typeof newVal === 'boolean') {
+            state[name].showHeader = newVal;
+        }
+        return state[name].showHeader;
+    };
+
+    tripleComposer.showFooter = function(newVal, name) {
+        name = fixName(name);
+        if (typeof newVal === 'boolean') {
+            state[name].showFooter = newVal;
+        }
+        return state[name].showFooter;
+    };
+
+    tripleComposer.initContextualMenu = function() {
         initContextualMenu();
-    });
-
-    tripleComposer.getStatements = function() {
-        return statements;
     };
 
-    tripleComposer.isEditMode = function() {
-        return editMode;
+    tripleComposer.getStatements = function(name) {
+        name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return [];
+        }
+        return state[name].statements;
+        //return statements;
     };
 
-    tripleComposer.closeAfterOp = function() {
-        closeAfterOp = true;
+    tripleComposer.isEditMode = function(name) {
+        name = fixName(name);
+        return typeof state[name] !== 'undefined' ? state[name].editMode : false;
+        //return editMode;
     };
 
-    tripleComposer.closeAfterOpOff = function() {
-        closeAfterOp = false;
+    tripleComposer.closeAfterOp = function(name) {
+        name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
+        state[name].closeAfterOp = true;
     };
 
-    tripleComposer.updateVisibility = function() {
-        if (closeAfterOp && Dashboard.isDashboardVisible()) {
+    tripleComposer.setSaving = function(saving, name) {
+        name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
+        state[name].saving = saving;
+    };
+
+    tripleComposer.isSaving = function(name) {
+        name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
+        return state[name].saving;
+    };
+
+    tripleComposer.setAfterSave = function(callback, name) {
+        name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
+        state[name].afterSave = callback;
+    };
+
+    tripleComposer.closeAfterOpOff = function(name) {
+        name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
+        state[name].closeAfterOp = false;
+    };
+
+    tripleComposer.updateVisibility = function(name) {
+        name = fixName(name);
+        if (typeof state[name].afterSave !== 'undefined') {
+            state[name].afterSave();
+            state[name].afterSave = undefined;
+        }
+        else if (state[name].closeAfterOp && Dashboard.isDashboardVisible()) {
             Dashboard.toggle();
         }
-        closeAfterOp = false;
+        state[name].closeAfterOp = false;
     };
 
-    tripleComposer.getEditAnnID = function() {
-        return editAnnID;
+    tripleComposer.getEditAnnID = function(name) {
+        name = fixName(name);
+        return state[name].editAnnID;
     };
 
-    tripleComposer.setEditMode = function(bool) {
-        editMode = bool;
-        for (var i in statements) {
-            if (typeof(statements[i].scope) !== 'undefined') {
-                statements[i].scope.editMode = bool;
+    tripleComposer.setEditMode = function(bool, name) {
+        name = fixName(name);
+        state[name].editMode = bool;
+        for (var i in state[name].statements) {
+            if (typeof(state[name].statements[i].scope) !== 'undefined') {
+                state[name].statements[i].scope.editMode = bool;
             }
         }
     };
 
-    tripleComposer.addStatement = function() {
-        nextId = nextId + 1;
-        var l = statements.push({
-            id: nextId
+    tripleComposer.addStatement = function(name) {
+        name = fixName(name);
+        state[name].nextId = state[name].nextId + 1;
+        var l = state[name].statements.push({
+            id: state[name].nextId
         });
-        return statements[l - 1];
+        return state[name].statements[l - 1];
     };
 
-    tripleComposer.removeStatement = function(id) {
+    tripleComposer.removeStatement = function(id, name) {
+        name = fixName(name);
         // at least one statetement must be present
-        if (statements.length === 1) {
-            statements[0].scope.wipe();
+        if (state[name].statements.length === 1) {
+            state[name].statements[0].scope.wipe();
             return;
         }
 
         var index = -1;
-        statements.some(function(s, i) {
+        state[name].statements.some(function(s, i) {
             if (s.id === id) {
                 index = i;
                 return true;
             }
         });
         if (index > -1) {
-            statements.splice(index, 1);
+            state[name].statements.splice(index, 1);
         }
 
-        if (statements.length === 1) {
-            if (statements[0].scope.isStatementEmpty()) {
+        if (state[name].statements.length === 1) {
+            if (state[name].statements[0].scope.isStatementEmpty()) {
                 ContextualMenu.modifyDisabled('removeTriple', true);
             }
         }
         tripleComposer.log('Try to remove statement at index', index);
     };
 
-    tripleComposer.reset = function() {
-        nextId = 1;
-        statements.splice(0, statements.length);
-        statements.push({
-            id: nextId
+    tripleComposer.reset = function(name) {
+        name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
+        state[name].nextId = 1;
+        state[name].statements.splice(0, state[name].statements.length);
+        state[name].statements.push({
+            id: state[name].nextId
         });
+        state[name].editMode = false;
         EventDispatcher.sendEvent('TripleComposer.reset');
-        tripleComposer.log('statements reset', statements);
+        tripleComposer.log('statements reset', state[name].statements);
     };
 
-    tripleComposer.wipeNotFixedItems = function() {
-        for (var i in statements) {
-            if (!statements[i].scope.subjectFixed) {
-                statements[i].scope.wipeSubject();
+    tripleComposer.wipeNotFixedItems = function(name) {
+        name = fixName(name);
+        for (var i in state[name].statements) {
+            if (!state[name].statements[i].scope.subjectFixed) {
+                state[name].statements[i].scope.wipeSubject();
             }
-            if (!statements[i].scope.predicateFixed) {
-                statements[i].scope.wipePredicate();
+            if (!state[name].statements[i].scope.predicateFixed) {
+                state[name].statements[i].scope.wipePredicate();
             }
-            if (!statements[i].scope.objectFixed) {
-                statements[i].scope.wipeObject();
+            if (!state[name].statements[i].scope.objectFixed) {
+                state[name].statements[i].scope.wipeObject();
             }
         }
         tripleComposer.log('Wiped not fixed items.');
     };
 
     // extend arr object with scope property
-    tripleComposer.addStatementScope = function(id, scope) {
+    tripleComposer.addStatementScope = function(id, scope, name) {
+        name = fixName(name);
         var index = -1;
-        statements.some(function(s, i) {
+        state[name].statements.some(function(s, i) {
             if (s.id === id) {
                 index = i;
                 return true;
@@ -458,23 +584,26 @@ angular.module('Pundit2.TripleComposer')
 
         if (index > -1) {
             // extend scope with actual mode
-            scope.editMode = editMode;
-            statements[index].scope = scope;
+            scope.editMode = state[name].editMode;
+            state[name].statements[index].scope = scope;
         }
 
+        /*
         if (statements.length > 1) {
             ContextualMenu.modifyDisabled('removeTriple', false);
         }
+        */
 
-        tripleComposer.log('statement extended with scope', statements[index]);
+        tripleComposer.log('statement extended with scope', state[name].statements[index]);
     };
 
     // duplicate a statement and add it to the statements array
     // this produce the view update and a new <statement> directive
     // is added to the triple composer directive
-    tripleComposer.duplicateStatement = function(id) {
+    tripleComposer.duplicateStatement = function(id, name) {
+        name = fixName(name);
         var index = -1;
-        statements.some(function(s, i) {
+        state[name].statements.some(function(s, i) {
             if (s.id === id) {
                 index = i;
                 return true;
@@ -482,26 +611,32 @@ angular.module('Pundit2.TripleComposer')
         });
 
         if (index > -1) {
-            nextId = nextId + 1;
-            statements.push({
-                id: nextId,
+            state[name].nextId = state[name].nextId + 1;
+            state[name].statements.push({
+                id: state[name].nextId,
                 scope: {
-                    duplicated: statements[index].scope.copy()
+                    duplicated: state[name].statements[index].scope.copy()
                 }
             });
         }
 
-        if (statements.length > 1) {
+        if (state[name].statements.length > 1) {
             ContextualMenu.modifyDisabled('removeTriple', false);
         }
 
     };
 
-    tripleComposer.canAddItemAsSubject = function(item) {
-
+    tripleComposer.canAddItemAsSubject = function(item, name) {
+        name = fixName(name);
         // search first empty subject
         var index = -1;
-        statements.some(function(s, i) {
+        if (typeof state === 'undefined' || typeof state[name] === 'undefined') {
+            return false;
+        }
+        state[name].statements.some(function(s, i) {
+            if (typeof s.scope === 'undefined') {
+                return false;
+            }
             if (!s.scope.subjectFound) {
                 index = i;
                 return true;
@@ -512,36 +647,41 @@ angular.module('Pundit2.TripleComposer')
             return false;
         }
 
-        var domainFound = false,
-            predicate = statements[index].scope.get().predicate;
-
-        if (predicate === null || predicate.domain.length === 0) {
+        if (limitToSuggestedTypes === false) {
             return true;
         }
-        // check if subject type match predicate domain
+
+        var suggestFound = false,
+            predicate = state[name].statements[index].scope.get().predicate;
+
+        if (predicate === null || predicate.suggestedSubjectTypes.length === 0) {
+            return true;
+        }
+        // check if subject type match predicate suggestedSubjectTypes
         item.type.some(function(type) {
-            if (predicate.domain.indexOf(type) > -1) {
-                domainFound = true;
-                return domainFound;
+            if (predicate.suggestedSubjectTypes.indexOf(type) > -1) {
+                suggestFound = true;
+                return suggestFound;
             }
         });
 
-        if (!domainFound) {
-            tripleComposer.log('Impossible to add item as Subject: predicate domain not match');
+        if (!suggestFound) {
+            tripleComposer.log('Impossible to add item as Subject: predicate suggestedSubjectTypes not match');
         } else {
-            tripleComposer.log('Predicate domain match.');
+            tripleComposer.log('Predicate suggestedSubjectTypes match.');
         }
 
-        return domainFound;
+        return suggestFound;
     };
 
-    tripleComposer.canBeUseAsPredicate = function(item) {
-        var domainCheck = false;
-        var rangeCheck = false;
+    tripleComposer.canBeUseAsPredicate = function(item, name) {
+        name = fixName(name);
+        var subjectCheck = false;
+        var objectCheck = false;
 
         // search first empty prendicate
         var index = -1;
-        statements.some(function(s, i) {
+        state[name].statements.some(function(s, i) {
             if (!s.scope.predicateFound) {
                 index = i;
                 return true;
@@ -552,44 +692,51 @@ angular.module('Pundit2.TripleComposer')
             return false;
         }
 
-        var subject = statements[index].scope.get().subject;
-        var object = statements[index].scope.get().object;
+        var subject = state[name].statements[index].scope.get().subject;
+        var object = state[name].statements[index].scope.get().object;
         if (subject === null && object === null) {
             return true;
         }
 
-        if (subject !== null && item.domain.length !== 0) {
-            // check if subject type match predicate domain
-            item.domain.some(function(type) {
+        if (limitToSuggestedTypes === false) {
+            return true;
+        }
+
+        if (subject !== null && item.suggestedSubjectTypes.length !== 0) {
+            // check if subject type match predicate suggestedSubjectTypes
+            item.suggestedSubjectTypes.some(function(type) {
                 if (subject.type.indexOf(type) > -1) {
-                    domainCheck = true;
-                    return domainCheck;
+                    subjectCheck = true;
+                    return subjectCheck;
                 }
             });
         } else {
-            domainCheck = true;
+            subjectCheck = true;
         }
 
-        if (object !== null && item.range.length !== 0) {
-            // check if object type match predicate range
-            item.range.some(function(type) {
+        if (object !== null && item.suggestedObjectTypes.length !== 0) {
+            // check if object type match predicate suggestedObjectTypes
+            item.suggestedObjectTypes.some(function(type) {
                 if (object.type.indexOf(type) > -1) {
-                    rangeCheck = true;
-                    return rangeCheck;
+                    objectCheck = true;
+                    return objectCheck;
                 }
             });
         } else {
-            rangeCheck = true;
+            objectCheck = true;
         }
 
-        return domainCheck && rangeCheck;
+        return subjectCheck && objectCheck;
     };
 
-    tripleComposer.canAddItemAsObject = function(item) {
-
+    tripleComposer.canAddItemAsObject = function(item, name) {
+        name = fixName(name);
         // search first empty subject
         var index = -1;
-        statements.some(function(s, i) {
+        if (typeof state[name] === 'undefined') {
+            return false;
+        }
+        state[name].statements.some(function(s, i) {
             if (!s.scope.objectFound) {
                 index = i;
                 return true;
@@ -600,27 +747,74 @@ angular.module('Pundit2.TripleComposer')
             return false;
         }
 
-        var rangeFound = false,
-            predicate = statements[index].scope.get().predicate;
-
-        if (predicate === null || predicate.range.length === 0) {
+        if (limitToSuggestedTypes === false) {
             return true;
         }
-        // check if object type match predicate range
+
+        var suggestFound = false,
+            predicate = state[name].statements[index].scope.get().predicate;
+
+        if (predicate === null || predicate.suggestedObjectTypes.length === 0) {
+            return true;
+        }
+        // check if object type match predicate suggestedObjectTypes
         item.type.some(function(type) {
-            if (predicate.range.indexOf(type) > -1) {
-                rangeFound = true;
-                return rangeFound;
+            if (predicate.suggestedObjectTypes.indexOf(type) > -1) {
+                suggestFound = true;
+                return suggestFound;
             }
         });
 
-        if (!rangeFound) {
-            tripleComposer.log('Impossible to add item as Object: predicate range not match');
+        if (!suggestFound) {
+            tripleComposer.log('Impossible to add item as Object: predicate suggestedObjectTypes not match');
         } else {
-            tripleComposer.log('Predicate range match.');
+            tripleComposer.log('Predicate suggestedObjectTypes match.');
         }
 
-        return rangeFound;
+        return suggestFound;
+    };
+
+    tripleComposer.canUseItemInTripleAs = function(item, triple, useAs) {
+        if (typeof item === 'undefined' || typeof item.type === 'undefined') {
+            return false;
+        }
+        if (typeof triple === 'undefined') {
+            return false;
+        }
+        if (typeof triple.predicate === 'undefined' || triple.predicate === null || limitToSuggestedTypes === false) {
+            return true;
+        }
+
+        var res = false;
+
+        switch (useAs) {
+            case 'sub':
+                if (triple.predicate.suggestedSubjectTypes.length === 0) {
+                    res = true;
+                    break;
+                }
+                item.type.some(function(type) {
+                    if (triple.predicate.suggestedSubjectTypes.indexOf(type) > -1) {
+                        res = true;
+                        return res;
+                    }
+                });
+                break;
+            case 'obj':
+                if (triple.predicate.suggestedObjectTypes.length === 0) {
+                    res = true;
+                    break;
+                }
+                item.type.some(function(type) {
+                    if (triple.predicate.suggestedObjectTypes.indexOf(type) > -1) {
+                        res = true;
+                        return res;
+                    }
+                });
+                break;
+        }
+
+        return res;
     };
 
     tripleComposer.openTripleComposer = function() {
@@ -633,15 +827,18 @@ angular.module('Pundit2.TripleComposer')
     };
 
     // Used to add a object from outside of triple composer
-    tripleComposer.addToObject = function(item) {
-        tripleComposer.closeAfterOp();
+    tripleComposer.addToObject = function(item, name) {
+        name = fixName(name);
+        if (Dashboard.isDashboardVisible() === false) {
+            tripleComposer.closeAfterOp(name);
+        }
         tripleComposer.openTripleComposer();
 
-        for (var i in statements) {
+        for (var i in state[name].statements) {
             // find the first empty subject
-            if (!statements[i].scope.objectFound) {
+            if (!state[name].statements[i].scope.objectFound) {
                 // set it
-                statements[i].scope.setObject(item);
+                state[name].statements[i].scope.setObject(item);
                 $rootScope.$$phase || $rootScope.$digest();
                 tripleComposer.log('Add item as object: ' + item.label);
                 return;
@@ -651,15 +848,18 @@ angular.module('Pundit2.TripleComposer')
     };
 
     // Used to add a predicate from outside of triple composer
-    tripleComposer.addToPredicate = function(item) {
-        tripleComposer.closeAfterOp();
+    tripleComposer.addToPredicate = function(item, name) {
+        name = fixName(name);
+        if (Dashboard.isDashboardVisible() === false) {
+            tripleComposer.closeAfterOp(name);
+        }
         tripleComposer.openTripleComposer();
 
-        for (var i in statements) {
+        for (var i in state[name].statements) {
             // find the first empty subject
-            if (!statements[i].scope.predicateFound) {
+            if (!state[name].statements[i].scope.predicateFound) {
                 // set it
-                statements[i].scope.setPredicate(item);
+                state[name].statements[i].scope.setPredicate(item);
                 $rootScope.$$phase || $rootScope.$digest();
                 tripleComposer.log('Add item as predicate: ' + item.label);
                 return;
@@ -669,15 +869,18 @@ angular.module('Pundit2.TripleComposer')
     };
 
     // Used to add a subject from outside of triple composer
-    tripleComposer.addToSubject = function(item) {
-        tripleComposer.closeAfterOp();
+    tripleComposer.addToSubject = function(item, name) {
+        name = fixName(name);
+        if (Dashboard.isDashboardVisible() === false) {
+            tripleComposer.closeAfterOp(name);
+        }
         tripleComposer.openTripleComposer();
 
-        for (var i in statements) {
+        for (var i in state[name].statements) {
             // find the first empty subject
-            if (!statements[i].scope.subjectFound) {
+            if (!state[name].statements[i].scope.subjectFound) {
                 // set it
-                statements[i].scope.setSubject(item);
+                state[name].statements[i].scope.setSubject(item);
                 $rootScope.$$phase || $rootScope.$digest();
                 tripleComposer.log('Add item as subject: ' + item.label);
                 return;
@@ -686,18 +889,20 @@ angular.module('Pundit2.TripleComposer')
         tripleComposer.log('Error: impossible to add subject (all full)');
     };
 
-    tripleComposer.addToAllSubject = function(item) {
+    tripleComposer.addToAllSubject = function(item, fixed, name) {
+        name = fixName(name);
         // template have always a free subject ?
-        for (var i in statements) {
-            statements[i].scope.setSubject(item);
+        for (var i in state[name].statements) {
+            state[name].statements[i].scope.setSubject(item, fixed);
         }
         $rootScope.$$phase || $rootScope.$digest();
         tripleComposer.log('Add item: ' + item.uri + 'as subject of all triples');
     };
 
-    tripleComposer.isAnnotationComplete = function() {
+    tripleComposer.isAnnotationComplete = function(name) {
+        name = fixName(name);
         var complete = true;
-        statements.some(function(s) {
+        state[name].statements.some(function(s) {
             if (s.scope.isMandatory && !s.scope.isStatementComplete()) {
                 complete = false;
                 return true;
@@ -706,14 +911,15 @@ angular.module('Pundit2.TripleComposer')
         return complete;
     };
 
-    tripleComposer.isTripleEmpty = function() {
-        if (statements.length > 1 && !statements[0].scope.templateMode) {
+    tripleComposer.isTripleEmpty = function(name) {
+        name = fixName(name);
+        if (state[name].statements.length > 1 && !state[name].statements[0].scope.templateMode) {
             return false;
         }
 
         var empty = true;
 
-        statements.some(function(s) {
+        state[name].statements.some(function(s) {
             if (!s.scope.isStatementEmpty()) {
                 empty = false;
                 return;
@@ -722,18 +928,25 @@ angular.module('Pundit2.TripleComposer')
         return empty;
     };
 
-    tripleComposer.isTripleErasable = function() {
-        if (statements.length === 1) {
-            if (!statements[0].scope.isStatementEmpty()) {
+    tripleComposer.isTripleErasable = function(name) {
+        name = fixName(name);
+        if (state[name].statements.length === 1) {
+            if (!state[name].statements[0].scope.isStatementEmpty()) {
                 ContextualMenu.modifyDisabled('removeTriple', false);
             } else {
                 ContextualMenu.modifyDisabled('removeTriple', true);
             }
+        } else {
+            ContextualMenu.modifyDisabled('removeTriple', false);
         }
     };
 
-    tripleComposer.showCurrentTemplate = function() {
-        tripleComposer.reset();
+    tripleComposer.showCurrentTemplate = function(name) {
+        name = fixName(name);
+        if (typeof state[name] === 'undefined') {
+            return;
+        }
+        tripleComposer.reset(name);
         var i, tmpl = TemplatesExchange.getCurrent();
 
         if (typeof(tmpl) === 'undefined') {
@@ -742,31 +955,36 @@ angular.module('Pundit2.TripleComposer')
 
         // at least one statement is present
         for (i = 1; i < tmpl.triples.length; i++) {
-            tripleComposer.addStatement();
+            tripleComposer.addStatement(name);
         }
 
         var removeWatcher = $rootScope.$watch(function() {
-            return statements[tmpl.triples.length - 1].scope;
+            return state[name].statements[tmpl.triples.length - 1].scope;
         }, function(newScope) {
             if (typeof(newScope) !== 'undefined') {
                 tripleComposer.log('Now the last statement is populated with relative scope');
 
                 // read triples from template and fix items
-                for (i = 0; i < statements.length; i++) {
+                for (i = 0; i < state[name].statements.length; i++) {
                     var triple = tmpl.triples[i];
 
                     if (typeof(triple.predicate) !== 'undefined') {
-                        statements[i].scope.setPredicate(ItemsExchange.getItemByUri(triple.predicate.uri), true);
+                        state[name].statements[i].scope.setPredicate(ItemsExchange.getItemByUri(triple.predicate.uri), true);
                     }
                     if (typeof(triple.subject) !== 'undefined') {
-                        statements[i].scope.setSubject(triple.subject.value, true);
+                        state[name].statements[i].scope.setSubject(triple.subject.value, true);
                     }
                     if (typeof(triple.object) !== 'undefined') {
-                        statements[i].scope.setObject(triple.object.value, true);
+                        // TODO check the datatype and use "literal" in the object definiton
+                        if (triple.object.type === 'date') {
+                            state[name].statements[i].scope.setObject(triple.object, true);
+                        } else {
+                            state[name].statements[i].scope.setObject(triple.object.value, true);
+                        }
                     }
                     // check if the triple is mandatory (if must be completed or if can be skipped when save annotation)
                     if (typeof(triple.mandatory) !== 'undefined') {
-                        statements[i].scope.isMandatory = triple.mandatory;
+                        state[name].statements[i].scope.isMandatory = triple.mandatory;
                     }
                     tripleComposer.log('New statement populated with', triple);
                 }
@@ -778,10 +996,11 @@ angular.module('Pundit2.TripleComposer')
     };
 
     // build all statement relative to the passed annotation
-    tripleComposer.editAnnotation = function(annID) {
+    tripleComposer.editAnnotation = function(annID, name) {
+        name = fixName(name);
         // wipe all statements
-        tripleComposer.reset();
-        editAnnID = annID;
+        tripleComposer.reset(name);
+        state[name].editAnnID = annID;
 
         var ann = AnnotationsExchange.getAnnotationById(annID),
             i;
@@ -802,30 +1021,34 @@ angular.module('Pundit2.TripleComposer')
         var l = triples.length;
         // one triple is added by the reset function (defulat is one empty triple)
         for (i = 0; i < l - 1; i++) {
-            tripleComposer.addStatement();
+            tripleComposer.addStatement(name);
         }
 
         var removeWatcher = $rootScope.$watch(function() {
-            return statements[l - 1].scope;
+            return state[name].statements[l - 1].scope;
         }, function(newScope) {
             if (typeof(newScope) !== 'undefined') {
                 tripleComposer.log('Now the last statement is populated with relative scope');
-                for (i = 0; i < statements.length; i++) {
-                    statements[i].scope.setSubject(ItemsExchange.getItemByUri(triples[i].subject));
-                    statements[i].scope.setPredicate(ItemsExchange.getItemByUri(triples[i].predicate));
+                for (i = 0; i < state[name].statements.length; i++) {
+                    state[name].statements[i].scope.setSubject(ItemsExchange.getItemByUri(triples[i].subject));
+                    state[name].statements[i].scope.setPredicate(ItemsExchange.getItemByUri(triples[i].predicate));
                     if (triples[i].object.type === 'uri') {
-                        statements[i].scope.setObject(ItemsExchange.getItemByUri(triples[i].object.value));
+                        state[name].statements[i].scope.setObject(ItemsExchange.getItemByUri(triples[i].object.value));
                     } else if (triples[i].object.type === 'literal') {
-                        // TODO: add full support to date
-                        if (Utils.isValidDate(triples[i].object.value)) {
-                            statements[i].scope.setObject(new Date(triples[i].object.value));
+                        if (dateSpace.indexOf(triples[i].object.datatype) !== -1) {
+                            var newItem = {
+                                type: 'date',
+                                datatype: triples[i].object.datatype,
+                                value: triples[i].object.value
+                            };
+                            state[name].statements[i].scope.setObject(newItem);
                         } else {
-                            statements[i].scope.setObject(triples[i].object.value);
+                            state[name].statements[i].scope.setObject(triples[i].object.value);
                         }
                     } else {
                         tripleComposer.log('Try to add incompatible type of object', triples[i].object);
                     }
-                    tripleComposer.setEditMode(true);
+                    tripleComposer.setEditMode(true, name);
                     tripleComposer.log('New statement populated with', triples[i]);
                 }
                 removeWatcher();
@@ -834,11 +1057,12 @@ angular.module('Pundit2.TripleComposer')
     };
 
     // build the items object used inside http call
-    tripleComposer.buildItems = function() {
+    tripleComposer.buildItems = function(name) {
+        name = fixName(name);
         var res = {};
         var val;
 
-        statements.forEach(function(el) {
+        state[name].statements.forEach(function(el) {
             var triple = el.scope.get();
 
             // skip incomplete triple
@@ -925,14 +1149,23 @@ angular.module('Pundit2.TripleComposer')
         return res;
     };
 
-    tripleComposer.buildObject = function(item) {
-        if (typeof(item) === 'string') {
-            // date or literal
+    tripleComposer.buildObject = function(item, objType) {
+        if (typeof(item) === 'string' && typeof(objType) === 'undefined') {
+            // literal
             return {
                 type: 'literal',
+                datatype: NameSpace.string,
+                value: item
+            };
+        } else if (typeof(objType) !== 'undefined') {
+            // date
+            return {
+                type: 'literal',
+                datatype: objType,
                 value: item
             };
         } else {
+            // standard item
             return {
                 type: 'uri',
                 value: item.uri
@@ -940,10 +1173,11 @@ angular.module('Pundit2.TripleComposer')
         }
     };
 
-    tripleComposer.buildTargets = function() {
+    tripleComposer.buildTargets = function(name) {
+        name = fixName(name);
         var res = [];
 
-        statements.forEach(function(el) {
+        state[name].statements.forEach(function(el) {
             var triple = el.scope.get();
 
             // skip incomplete triple
@@ -974,10 +1208,11 @@ angular.module('Pundit2.TripleComposer')
         return res;
     };
 
-    tripleComposer.buildGraph = function() {
+    tripleComposer.buildGraph = function(name) {
+        name = fixName(name);
         var res = {};
 
-        statements.forEach(function(el) {
+        state[name].statements.forEach(function(el) {
             var triple = el.scope.get();
 
             // skip incomplete triple
@@ -989,13 +1224,13 @@ angular.module('Pundit2.TripleComposer')
                 // subject uri not exist (happy it's easy)
                 res[triple.subject.uri] = {};
                 // predicate uri not exist
-                res[triple.subject.uri][triple.predicate.uri] = [tripleComposer.buildObject(triple.object)];
+                res[triple.subject.uri][triple.predicate.uri] = [tripleComposer.buildObject(triple.object, triple.objType)];
             } else {
                 // subject uri already exists
 
                 if (typeof(res[triple.subject.uri][triple.predicate.uri]) === 'undefined') {
                     // predicate uri not exist (happy it's easy)
-                    res[triple.subject.uri][triple.predicate.uri] = [tripleComposer.buildObject(triple.object)];
+                    res[triple.subject.uri][triple.predicate.uri] = [tripleComposer.buildObject(triple.object, triple.objType)];
                 } else {
 
                     // predicate uri already exists
@@ -1007,7 +1242,7 @@ angular.module('Pundit2.TripleComposer')
                     });
                     // object not eqaul (happy it's easy)
                     if (!found) {
-                        arr.push(tripleComposer.buildObject(triple.object));
+                        arr.push(tripleComposer.buildObject(triple.object, triple.objType));
                     }
 
                 }
@@ -1018,6 +1253,15 @@ angular.module('Pundit2.TripleComposer')
 
         return res;
     };
+
+    // When all modules have been initialized, services are up, Config are setup etc..
+    EventDispatcher.addListener('Client.boot', function() {
+        initContextualMenu();
+    });
+
+    EventDispatcher.addListeners(['Client.hide', 'AnnotationsCommunication.deleteAnnotation'], function() {
+        tripleComposer.reset();
+    });
 
     return tripleComposer;
 });

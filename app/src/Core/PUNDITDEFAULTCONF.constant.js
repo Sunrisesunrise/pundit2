@@ -5,6 +5,22 @@ angular.module('Pundit2.Core')
     /**
      * @module punditConfig
      * @ngdoc object
+     * @name clientMode
+     * @description
+     * `string`
+     *
+     * Determines the client mode: pro|lite
+     *
+     * Default:
+     * <pre>
+     * clientMode: 'pro'
+     * </pre>
+     */
+    clientMode: 'pro',
+
+    /**
+     * @module punditConfig
+     * @ngdoc object
      * @name korbo
      * @description
      * `object`
@@ -87,6 +103,38 @@ angular.module('Pundit2.Core')
      * </pre>
      */
     annotationServerBaseURL: 'http://demo-cloud.as.thepund.it:8080/annotationserver/',
+    //annotationServerBaseURL: 'http://geolat.netseven.it:8282/annotationserver/',
+
+    /**
+     * @module punditConfig
+     * @ngdoc object
+     * @name annotationServerVersion
+     * @description
+     * `string`
+     * Pundit server version
+     *
+     * Default:
+     * <pre>
+     * annotationServerVersion: 'v1'
+     * </pre>
+     */
+    annotationServerVersion: 'v1',
+
+    /**
+     * @module punditConfig
+     * @ngdoc object
+     * @name annotationServerCallsNeedLoggedUser
+     * @description
+     * `boolean`
+     *
+     * Determines whether all calls to annotation server need logged user.
+     *
+     * Default:
+     * <pre>
+     * annotationServerCallsNeedLoggedUser: false
+     * </pre>
+     */
+    annotationServerCallsNeedLoggedUser: false,
 
     /**
      * @module punditConfig
@@ -102,6 +150,21 @@ angular.module('Pundit2.Core')
      * <pre> askBaseURL: "http://demo-cloud.ask.thepund.it/" </pre>
      */
     askBaseURL: "http://demo-cloud.ask.thepund.it/",
+
+    /**
+     * @module punditConfig
+     * @ngdoc object
+     * @name askThePundit
+     *
+     * @description
+     * `boolean`
+     *
+     * Enable/Disable ask the Pundit feature
+     *
+     * Default value:
+     * <pre> askThePundit: false </pre>
+     */
+    askThePundit: false,
 
     /**
      * @module punditConfig
@@ -154,7 +217,7 @@ angular.module('Pundit2.Core')
      * @description
      * `Array of url`
      * Specifies relations vocaularies that will be available to Pundit users
-     * (defines a list of relations with domain and ranges).
+     * (defines a list of relations).
      * Each vocabulary definition is a JSONP file available on the Web and is loaded by resolving an absolute URL.
      *
      * Default:
@@ -163,23 +226,26 @@ angular.module('Pundit2.Core')
      * URL Response Example:
      * <pre> {
      *      result: {
-     *          items: [
+     *          vocab_label: "Relations-X",
+     *          vocab_id: "91",
+     *          vocab_type: "predicates",
+     *          items: [{
      *              "value": "http://purl.org/dc/terms/creator",
      *              "rdftype":["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
      *              "label":"has creator",
      *              "description":"The selected text fragment has been created by a specific Person",
-     *              "domain":[
+     *              "suggestedSubjectTypes":[
      *                  "http://xmlns.com/foaf/0.1/Image",
      *                  "http://purl.org/pundit/ont/ao#fragment-image",
      *                  "http://purl.org/pundit/ont/ao#fragment-text"
      *               ],
-     *               "range":[
+     *               "suggestedObjectTypes":[
      *                  "http://dbpedia.org/ontology/Person",
      *                  "http://xmlns.com/foaf/0.1/Person",
      *                  "http://www.freebase.com/schema/people/person"
      *               ],
      *          ...other items...
-     *          ]
+     *          }]
      *      }
      * }</pre>
      */
@@ -198,10 +264,7 @@ angular.module('Pundit2.Core')
      * Default:
      * <pre> templates: [
      *   "http://conf.thepund.it/V2/templates/tagFree",
-     *   "http://conf.thepund.it/V2/templates/comment",
-     *   "http://conf.thepund.it/V2/templates/tagFixedMarx",
-     *   "http://conf.thepund.it/V2/templates/timeline",
-     *   "http://conf.thepund.it/V2/templates/peopleGraph"
+     *   "http://conf.thepund.it/V2/templates/comment"
      * ] </pre>
      *
      * Where a template is defined by:
@@ -230,23 +293,31 @@ angular.module('Pundit2.Core')
      *      "predicate" : {
      *              "uri": ...,
      *              "label": ...,
-     *              "domain": [...],
-     *              "range": [...],
+     *              "suggestedSubjectTypes": [...],
+     *              "suggestedObjectTypes": [...],
      *       },
      *       "object" : {
      *         "value" : ....,
-     *         "type": "uri|literal"
+     *         "type": "uri|literal|date"
      *       }
      * }
      * </pre>
+     * 
+     * Where a date object is defined by
+     * "object" : {
+     *   "value" : "2010-01-05",
+     *   "type" : "date",
+     *   "datatype" : "http://www.w3.org/2001/XMLSchema#date"
+     * }
+     * 
+     *  
      * All propeties are optional. By default a triple is mandatory.
      */
     templates: [
         "http://conf.thepund.it/V2/templates/tagFree",
-        "http://conf.thepund.it/V2/templates/comment",
-        "http://conf.thepund.it/V2/templates/tagFixedMarx",
-        "http://conf.thepund.it/V2/templates/timeline",
-        "http://conf.thepund.it/V2/templates/peopleGraph"
+        "http://conf.thepund.it/V2/templates/comment"
+        // "http://conf.thepund.it/V2/templates/timeline",
+        // "http://conf.thepund.it/V2/templates/peopleGraph"
     ],
 
     /**
@@ -327,6 +398,21 @@ angular.module('Pundit2.Core')
      */
     useBasicRelations: true,
 
+    /**
+     * @module punditConfig
+     * @ngdoc object
+     * @name limitToSuggestedTypes
+     *
+     * @description
+     * `boolean`
+     *
+     * Limit the use of subject and object to suggestedSubjectTypes and suggestedObjectTypes
+     *
+     * Default value:
+     * <pre> limitToSuggestedTypes: false </pre>
+     */
+    limitToSuggestedTypes: false,
+
     // Modules active by default are activated here with active=true
     /**
      *
@@ -376,6 +462,10 @@ angular.module('Pundit2.Core')
             active: false
         },
 
+        MessageHandler: {
+            active: true
+        },
+
         // Simplified version of pundit client, do only consolidation
         // and show the annotations on the page
         SimplifiedClient: {
@@ -385,7 +475,9 @@ angular.module('Pundit2.Core')
         },
 
         Annomatic: {
-            active: false
+            active: false,
+            // TODO: update this value in exsterlan gramsci configurations and remove it from here
+            sourceURL: 'http://metasound.dibet.univpm.it:8080/DOMAnnotationService/api/annotator/v1/gramsci-dictionary'
         },
 
         Dashboard: {
@@ -393,6 +485,9 @@ angular.module('Pundit2.Core')
             active: true
         },
         Toolbar: {
+            active: true
+        },
+        LiteTool: {
             active: true
         },
         AnnotationSidebar: {
@@ -403,7 +498,7 @@ angular.module('Pundit2.Core')
         },
         PageItemsContainer: {
             // ngdoc in PageItemsContainer.service.js
-            active: true
+            active: false
         },
         PredicatesContainer: {
             // ngdoc in PredicatesContainer.service.js
@@ -415,6 +510,10 @@ angular.module('Pundit2.Core')
         MyItemsContainer: {
             // ngdoc in MyItemsContainer.service.js
             active: true
+        },
+        VocabulariesContainer: {
+            // ngdoc in VocabulariesContainer.service.js
+            active: false
         },
         SelectorsManager: {
             // ngdoc in SelectorsManager.service.js
@@ -480,5 +579,4 @@ angular.module('Pundit2.Core')
         active: false,
         baseUrl: 'http://metasound.dibet.univpm.it/timelinejs/examples/pundit.html?'
     }
-
 });

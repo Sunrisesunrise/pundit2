@@ -10,12 +10,12 @@
             hide-sticky-button="true"
             hide-options="true"
             is-selected="isSelected(pndItem)" 
-            ng-click="select(pndItem)"></item> 
+            ng-click="select(pndItem, $event)"></item>
     </li>
 </ul>
 
 <div 
-    class="pnd-dashboard-welcome" 
+    class="pnd-dashboard-welcome pnd-ui-message"
     ng-if="message.flag">
     {{message.text}}
 </div>

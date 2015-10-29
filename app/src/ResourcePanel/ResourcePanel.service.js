@@ -32,18 +32,6 @@ angular.module('Pundit2.ResourcePanel')
     /**
      * @module punditConfig
      * @ngdoc property
-     * @name modules#ResourcePanel.initialCalendarDate
-     *
-     * @description
-     * `number`
-     *
-     * Initial date showing in calendar popover.
-     */
-    initialCalendarDate: '',
-
-    /**
-     * @module punditConfig
-     * @ngdoc property
      * @name modules#ResourcePanel.inputIconSearch
      *
      * @description
@@ -67,10 +55,39 @@ angular.module('Pundit2.ResourcePanel')
      * Icon shown in the search input when it has some content
      *
      * Default value:
-     * <pre> inputIconClear: 'pnd-icon-times' </pre>
+     * <pre> inputIconClear: 'pnd-icon-close' </pre>
      */
-    inputIconClear: 'pnd-icon-times'
+    inputIconClear: 'pnd-icon-close',
 
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ResourcePanel.pageItemsEnabled
+     *
+     * @description
+     * `boolean`
+     *
+     * Shows "Page items" selector
+     *
+     * Default value:
+     * <pre> pageItemsEnabled: true </pre>
+     */
+    pageItemsEnabled: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ResourcePanel.myItemsEnabled
+     *
+     * @description
+     * `boolean`
+     *
+     * Shows "My items" selector
+     *
+     * Default value:
+     * <pre> myItemsEnabled: true </pre>
+     */
+    myItemsEnabled: true
 })
 
 /**
@@ -94,7 +111,8 @@ angular.module('Pundit2.ResourcePanel')
  */
 .service('ResourcePanel', function(BaseComponent, EventDispatcher, RESOURCEPANELDEFAULTS,
     ItemsExchange, MyItems, PageItemsContainer, Client, NameSpace, SelectorsManager,
-    $filter, $rootScope, $popover, $q, $timeout, Preview, $window, Config, Item, Utils) {
+    $filter, $rootScope, $popover, $q, $timeout, Preview, $window, Config, Item,
+    Utils, Analytics, Keyboard) {
 
     var resourcePanel = new BaseComponent('ResourcePanel', RESOURCEPANELDEFAULTS);
 
@@ -114,9 +132,12 @@ angular.module('Pundit2.ResourcePanel')
         }
     };
 
+    var limitToSuggestedTypes = Config.limitToSuggestedTypes;
+
     var show = function() {
         state.popover.show();
         EventDispatcher.sendEvent('ResourcePanel.toggle', true);
+        resourcePanel.updatePosition();
     };
 
     var hide = function() {
@@ -124,19 +145,31 @@ angular.module('Pundit2.ResourcePanel')
             return;
         }
 
+        for (var key in state.popoverOptions.eventKeyHandlers) {
+            Keyboard.unregisterHandler(state.popoverOptions.eventKeyHandlers[key]);
+        }
+
+        state.popoverOptions.eventKeyHandlers = {};
         state.popoverOptions.scope.vocabObjRes = [];
         state.popoverOptions.scope.vocabSubRes = [];
         state.popoverOptions.scope.label = "";
         state.popover.hide();
-        state.popover.destroy();
+        if (state.popover) {
+            state.popover.destroy();
+        }
         state.popover = null;
+
+        resourcePanel.openBy = undefined;
 
         EventDispatcher.sendEvent('ResourcePanel.toggle', false);
     };
 
     var setFocus = function(selector) {
         $timeout(function() {
-            angular.element(selector)[0].focus();
+            var elem = angular.element(selector);
+            if (elem.length > 0) {
+                elem[0].focus();
+            }
         });
     };
 
@@ -145,6 +178,13 @@ angular.module('Pundit2.ResourcePanel')
         var posPopMod = 0,
             valMod = 100;
         state.popoverOptions.scope.arrowLeft = '-11px';
+        state.popoverOptions.eventKeyHandlers = {};
+
+        var childScope;
+        state.popoverOptions.scope.showSaveButton = function(cs) {
+            childScope = cs;
+            return true;
+        };
 
         if (typeof(tripleElemType) !== 'undefined') {
             if (tripleElemType === 'sub') {
@@ -159,43 +199,65 @@ angular.module('Pundit2.ResourcePanel')
         // initialize a calendar popover
         if (type === 'calendar') {
 
-            state.popoverOptions.template = 'src/ResourcePanel/popoverCalendar.tmpl.html';
+            state.popoverOptions.templateUrl = 'src/ResourcePanel/popoverCalendar.tmpl.html';
+            state.popoverOptions.scope.arrowLeft = '34px';
 
-            if (typeof(content.date) === 'undefined' || content.date === '') {
-
-                if (typeof(resourcePanel.options.initialCalendarDate) === 'undefined' || resourcePanel.options.initialCalendarDate === '') {
-                    state.popoverOptions.scope.selectedDate = new Date().toString();
-                } else {
-                    state.popoverOptions.scope.selectedDate = resourcePanel.options.initialCalendarDate;
-                }
-
+            if (content !== '' && typeof(content.value) !== 'undefined' && content.value !== '') {
+                state.popoverOptions.scope.modelDate = {};
+                state.popoverOptions.scope.modelDate.valid = true;
+                state.popoverOptions.scope.modelDate.value = content.value;
+                state.popoverOptions.scope.modelDate.datatype = content.datatype;
             } else {
-                state.popoverOptions.scope.selectedDate = content.date;
+                state.popoverOptions.scope.modelDate = {};
             }
 
-            state.popoverOptions.scope.escapeEvent = function(e) {
-                if (e.which === 27) {
-                    e.stopPropagation();
+            state.popoverOptions.scope.container = "[data-ng-app='Pundit2'] .popover-datepicker .popover-content .form-group";
+
+            state.popoverOptions.scope.save = function(byKey) {
+                if (byKey) {
+                    this.modelDate = childScope.modelDate;
                 }
-            };
 
-            state.popoverOptions.scope.save = function() {
+                if (typeof(this.modelDate) !== 'undefined' && this.modelDate.valid) {
+                    this.modelDate.type = 'date';
+                    state.resourcePromise.resolve(this.modelDate);
+                    Preview.hideDashboardPreview();
+                    hide();
+                }
 
-                state.resourcePromise.resolve(new Date(this.selectedDate));
-                Preview.hideDashboardPreview();
-                hide();
+                // state.resourcePromise.resolve(new Date(this.selectedDate));
+                // Preview.hideDashboardPreview();
+                // hide();
+
+                var eventLabel = 'resourcePanel--' + type;
+                eventLabel += '--save';
+                Analytics.track('buttons', 'click', eventLabel);
+
             };
 
             // close popoverCalendar popover without saving
             state.popoverOptions.scope.cancel = function() {
                 Preview.hideDashboardPreview();
                 hide();
+                var eventLabel = 'resourcePanel--' + type;
+                eventLabel += '--cancel';
+                Analytics.track('buttons', 'click', eventLabel);
             };
 
-            // initialize a literal popover
-        } else if (type === 'literal') {
+            state.popoverOptions.eventKeyHandlers.enter = Keyboard.registerHandler('ResourcePanelService', {
+                scope: state.popoverOptions.scope,
+                keyCode: 13,
+                ignoreOnInput: false,
+                stopPropagation: true,
+                priority: 10
+            }, function( /*event, eventKeyConfig*/ ) {
+                state.popoverOptions.scope.save(true);
+                $rootScope.$$phase || $rootScope.$digest();
+            });
+        } else if (type === 'literal') { // initialize a literal popover
 
-            state.popoverOptions.template = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
+            state.popoverOptions.templateUrl = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
+            state.popoverOptions.scope.arrowLeft = '24px';
 
             if (typeof(content.literalText) === 'undefined') {
                 state.popoverOptions.scope.literalText = '';
@@ -203,24 +265,43 @@ angular.module('Pundit2.ResourcePanel')
                 state.popoverOptions.scope.literalText = content.literalText;
             }
 
-            state.popoverOptions.scope.escapeEvent = function(e) {
-                if (e.which === 27) {
-                    e.stopPropagation();
-                }
-            };
-
             // handle save a new popoverLiteral
-            state.popoverOptions.scope.save = function() {
+            state.popoverOptions.scope.save = function(byKey) {
+                if (typeof byKey !== 'undefined' && byKey) {
+                    if (childScope.literalText.length === 0) {
+                        return;
+                    }
+                    this.literalText = childScope.literalText;
+                }
                 state.resourcePromise.resolve(this.literalText);
                 Preview.hideDashboardPreview();
                 hide();
+
+                var eventLabel = 'resourcePanel--' + type;
+                eventLabel += '--save';
+                Analytics.track('buttons', 'click', eventLabel);
             };
 
             // close popoverLiteral popover without saving
             state.popoverOptions.scope.cancel = function() {
                 Preview.hideDashboardPreview();
                 hide();
+
+                var eventLabel = 'resourcePanel--' + type;
+                eventLabel += '--cancel';
+                Analytics.track('buttons', 'click', eventLabel);
             };
+
+            state.popoverOptions.eventKeyHandlers['meta+enter'] = Keyboard.registerHandler('ResourcePanelService', {
+                scope: state.popoverOptions.scope,
+                keyCode: 13,
+                ignoreOnInput: false,
+                stopPropagation: true,
+                priority: 10
+            }, function( /*event, eventKeyConfig*/ ) {
+                state.popoverOptions.scope.save(true);
+                $rootScope.$$phase || $rootScope.$digest();
+            });
 
             // initialize a resource panel popover
         } else if (type === 'resourcePanel') {
@@ -250,15 +331,19 @@ angular.module('Pundit2.ResourcePanel')
                 );
             }
 
-            state.popoverOptions.template = 'src/ResourcePanel/popoverResourcePanel.tmpl.html';
+            state.popoverOptions.templateUrl = 'src/ResourcePanel/popoverResourcePanel.tmpl.html';
 
-            state.popoverOptions.scope.originalContent = angular.copy(content);
+            state.popoverOptions.scope.originalContent = angular.extend({}, content);
             state.popoverOptions.scope.type = content.type;
             state.popoverOptions.scope.triple = content.triple;
             state.popoverOptions.scope.pageItems = content.pageItems;
             state.popoverOptions.scope.myItems = content.myItems;
             state.popoverOptions.scope.properties = content.properties;
             state.popoverOptions.scope.contentTabs = contentTabs;
+            state.popoverOptions.scope.active = 0;
+            // if (content.type !== 'pr') {
+            //     state.popoverOptions.scope.active = MyPundit.isUserLogged() ? 0 : (resourcePanel.options.pageItemsEnabled + resourcePanel.options.myItemsEnabled);
+            // }
             if (content.label !== '' && typeof(content.label) !== 'undefined') {
                 setLabelToSearch(content.label);
             } else {
@@ -269,14 +354,36 @@ angular.module('Pundit2.ResourcePanel')
             state.popoverOptions.scope.save = function(elem) {
                 hide();
                 Preview.hideDashboardPreview();
+                var activeTab = state.popoverOptions.scope.contentTabs.activeTab;
+                if (typeof elem.providerFrom === 'undefined' && typeof state.popoverOptions.scope.contentTabs[activeTab].itemsContainer !== 'undefined') {
+                    elem.providerFrom = state.popoverOptions.scope.contentTabs[activeTab].itemsContainer;
+                }
                 state.resourcePromise.resolve(elem);
+
+                var eventLabel = 'resourcePanel--';
+                eventLabel += state.popoverOptions.scope.contentTabs[state.popoverOptions.scope.contentTabs.activeTab].title;
+                eventLabel += '--' + state.popoverOptions.scope.type;
+                eventLabel += '--use';
+                Analytics.track('buttons', 'click', eventLabel);
             };
             state.popoverOptions.scope.cancel = function() {
                 Preview.clearItemDashboardSticky();
                 Preview.hideDashboardPreview();
                 hide();
+
+                var eventLabel = 'resourcePanel--';
+                eventLabel += state.popoverOptions.scope.contentTabs[state.popoverOptions.scope.contentTabs.activeTab].title;
+                eventLabel += '--' + state.popoverOptions.scope.type;
+                eventLabel += '--cancel';
+                Analytics.track('buttons', 'click', eventLabel);
             };
         }
+
+        state.popoverOptions.scope.setActive = function(index) {
+            // index = index >= state.popoverOptions.scope.contentTabs.length ? state.popoverOptions.scope.contentTabs.length - 1 : index;
+            // index = index < 0 ? 0 : index;
+            state.popoverOptions.scope.active = index;
+        };
 
         // common for all type of popover
         if (typeof(placement) === 'undefined' || placement === '') {
@@ -310,7 +417,8 @@ angular.module('Pundit2.ResourcePanel')
         });
 
         //state.popover = $popover(angular.element(target), state.popoverOptions);
-        state.popover = $popover(state.anchor, state.popoverOptions);
+        //state.popover = $popover(state.anchor, state.popoverOptions);
+        state.popover = $popover(angular.element(target), state.popoverOptions);
         state.popover.posPopMod = posPopMod;
 
         // Open the calendar automatically
@@ -326,10 +434,74 @@ angular.module('Pundit2.ResourcePanel')
 
         }
 
+        state.popoverOptions.eventKeyHandlers.ESC = Keyboard.registerHandler('ResourcePanelService', {
+            scope: state.popoverOptions.scope,
+            keyCode: 27,
+            ignoreOnInput: false,
+            stopPropagation: true
+        }, function( /*event, eventKeyConfig*/ ) {
+            state.popoverOptions.scope.cancel();
+        });
 
         state.popover.clickTarget = target;
         return state.popover;
     };
+
+    // TODO keep or delete? 
+    // var initPopover_new = function(content, target, placement, type, contentTabs, tripleElemType) {
+    //     var posPopMod = 0,
+    //     valMod = 100;
+    //     state.popoverOptions.scope.arrowLeft = '-11px';
+
+    //     if (typeof(tripleElemType) !== 'undefined') {
+    //         if (tripleElemType === 'sub') {
+    //             posPopMod = valMod + 27;
+    //             state.popoverOptions.scope.arrowLeft = '-' + valMod - 27 + 'px';
+    //         } else if (tripleElemType === 'obj') {
+    //             state.popoverOptions.scope.arrowLeft = valMod + 'px';
+    //             posPopMod = -valMod;
+    //         }
+    //     }
+
+    //     switch (type) {
+    //         case 'literal':
+    //             state.popoverOptions.template = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
+
+    //             if (typeof(content.literalText) === 'undefined') {
+    //                 state.popoverOptions.scope.literalText = '';
+    //             } else {
+    //                 state.popoverOptions.scope.literalText = content.literalText;
+    //             }
+
+    //             state.popoverOptions.scope.escapeEvent = function(e) {
+    //                 if (e.which === 27) {
+    //                     e.stopPropagation();
+    //                 }
+    //             };
+
+    //             // handle save a new popoverLiteral
+    //             state.popoverOptions.scope.save = function() {
+    //                 state.resourcePromise.resolve(this.literalText);
+    //                 Preview.hideDashboardPreview();
+    //                 hide();
+
+    //                 var eventLabel = 'resourcePanel--' + type;
+    //                 eventLabel += '--save';
+    //                 Analytics.track('buttons', 'click', eventLabel);
+    //             };
+
+    //             // close popoverLiteral popover without saving
+    //             state.popoverOptions.scope.cancel = function() {
+    //                 Preview.hideDashboardPreview();
+    //                 hide();
+
+    //                 var eventLabel = 'resourcePanel--' + type;
+    //                 eventLabel += '--cancel';
+    //                 Analytics.track('buttons', 'click', eventLabel);
+    //             };
+    //             break;
+    //     }
+    // };
 
     var setLabelToSearch = function(val) {
         state.popoverOptions.scope.label = val;
@@ -370,12 +542,12 @@ angular.module('Pundit2.ResourcePanel')
 
     var filterSubjectItems = function(items, predicate) {
         var ret = [];
-        if (!isItemValid(predicate, 'domain')) {
+        if (!isItemValid(predicate, 'suggestedSubjectTypes')) {
             return items;
         }
 
         for (var i in items) {
-            if (isTypeIncluded(items[i], predicate.domain)) {
+            if (isTypeIncluded(items[i], predicate.suggestedSubjectTypes)) {
                 ret.push(items[i]);
             }
         }
@@ -385,12 +557,12 @@ angular.module('Pundit2.ResourcePanel')
 
     var filterObjectItems = function(items, predicate) {
         var ret = [];
-        if (!isItemValid(predicate, 'range')) {
+        if (!isItemValid(predicate, 'suggestedObjectTypes')) {
             return items;
         }
 
         for (var i in items) {
-            if (isTypeIncluded(items[i], predicate.range)) {
+            if (isTypeIncluded(items[i], predicate.suggestedObjectTypes)) {
                 ret.push(items[i]);
             }
         }
@@ -410,23 +582,29 @@ angular.module('Pundit2.ResourcePanel')
         content.triple = triple;
 
         if (type === 'sub' || type === 'obj') {
-            var pageItemsForTabs = {
-                title: 'Page items',
-                items: pageItems,
-                module: 'Pundit2',
-                isStarted: true
-            };
-            contentTabs.push(pageItemsForTabs);
-            content.pageItems = pageItems;
+            if (resourcePanel.options.pageItemsEnabled) {
+                var pageItemsForTabs = {
+                    title: 'Page items',
+                    items: pageItems,
+                    module: 'Pundit2',
+                    isStarted: true,
+                    isLocal: true
+                };
+                contentTabs.push(pageItemsForTabs);
+                content.pageItems = pageItems;
+            }
 
-            var myItemsForTabs = {
-                title: 'My items',
-                items: myItems,
-                module: 'Pundit2',
-                isStarted: true
-            };
-            contentTabs.push(myItemsForTabs);
-            content.myItems = myItems;
+            if (resourcePanel.options.myItemsEnabled) {
+                var myItemsForTabs = {
+                    title: 'My Items',
+                    items: myItems,
+                    module: 'Pundit2',
+                    isStarted: true,
+                    isLocal: true
+                };
+                contentTabs.push(myItemsForTabs);
+                content.myItems = myItems;
+            }
 
             content.properties = null;
         }
@@ -434,7 +612,8 @@ angular.module('Pundit2.ResourcePanel')
             var prop = {
                 title: 'Properties',
                 items: properties,
-                isStarted: true
+                isStarted: true,
+                isLocal: true
             };
             contentTabs.push(prop);
 
@@ -465,7 +644,7 @@ angular.module('Pundit2.ResourcePanel')
 
     };
 
-    var searchOnVocab = function(label, selectors, triple, caller) {
+    var searchOnVocab = function(label, selectors, triple, caller, offset, limit) {
 
         var predicate = triple.predicate;
 
@@ -499,23 +678,24 @@ angular.module('Pundit2.ResourcePanel')
                         }
                     }
                     // ... and search label for each selector
-                    selectors[index].getItems(label).then(function() {
+                    selectors[index].getItems(label, offset, limit).then(function() {
 
                         // where results is done, update content for each selector
                         for (var t = 0; t < state.popoverOptions.scope.contentTabs.length; t++) {
                             if (state.popoverOptions.scope.contentTabs[t].title === selectors[index].config.label) {
                                 var container = state.popoverOptions.scope.contentTabs[t].itemsContainer + label.split(' ').join('$');
                                 var itemsList = ItemsExchange.getItemsByContainer(container);
-
+                                var remoteItemCount = ItemsExchange.getRemoteItemCount(container);
                                 if (predicate !== null) {
                                     if (caller === 'subject') {
-                                        itemsList = filterSubjectItems(itemsList, predicate);
+                                        itemsList = limitToSuggestedTypes ? filterSubjectItems(itemsList, predicate) : itemsList;
                                     } else if (caller === 'object') {
-                                        itemsList = filterObjectItems(itemsList, predicate);
+                                        itemsList = limitToSuggestedTypes ? filterObjectItems(itemsList, predicate) : itemsList;
                                     }
                                 }
 
                                 state.popoverOptions.scope.contentTabs[t].items = itemsList;
+                                state.popoverOptions.scope.contentTabs[t].remoteItemCount = remoteItemCount;
                                 // and set loading to false
                                 state.popoverOptions.scope.contentTabs[t].isLoading = false;
                             }
@@ -527,10 +707,29 @@ angular.module('Pundit2.ResourcePanel')
         }
     };
 
+    resourcePanel.lastPromiseThen = undefined;
+    /**
+     * Last promise info object.
+     * It should contain following properties:
+     *   method: mandatory function to call
+     *   checkFunction: mandatory function called to know if method can be called
+     *   data: optional data object for evaluation purpose.
+     * @type {object}
+     */
+    resourcePanel.lastPromiseData = undefined;
+
+    resourcePanel.overrideFooterExtraButtons = undefined;
+
+    resourcePanel.openBy;
+
     resourcePanel.updateVocabSearch = function(label, triple, caller) {
         var selectors = SelectorsManager.getActiveSelectors();
         searchOnVocab(label, selectors, triple, caller);
         setLabelToSearch(label);
+    };
+
+    resourcePanel.addItems = function(label, selectors, triple, caller, offset, limit) {
+        searchOnVocab(label, selectors, triple, caller, offset, limit);
     };
 
     resourcePanel.updatePosition = function() {
@@ -551,6 +750,12 @@ angular.module('Pundit2.ResourcePanel')
             'left': newLeft,
             'top': newTop
         });
+
+        // TODO: update angular strap and check the #871 issues on codebase 
+        // Temporary angularstrap fix 
+        angular.element('.popover .arrow').css({
+            'left': '50%'
+        });
     };
 
     /**
@@ -565,6 +770,7 @@ angular.module('Pundit2.ResourcePanel')
      */
     resourcePanel.hide = function() {
         hide();
+        resourcePanel.lastPromise = undefined;
     };
 
     /**
@@ -583,8 +789,7 @@ angular.module('Pundit2.ResourcePanel')
      * @return {Promise} when Save button is clicked, promise will be resolved with value entered in textarea
      *
      */
-    resourcePanel.showPopoverLiteral = function(text, target) {
-
+    resourcePanel.showPopoverLiteral = function(text, target, openBy) {
         var content = {};
         content.literalText = text;
 
@@ -606,6 +811,7 @@ angular.module('Pundit2.ResourcePanel')
             });
         }
 
+        resourcePanel.openBy = typeof openBy === 'undefined' ? target : openBy;
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;
     };
@@ -621,34 +827,51 @@ angular.module('Pundit2.ResourcePanel')
      *
      * Popover has two buttons: `Save` that resolve a promise and `Cancel` that close the popover.
      *
-     * @param {date} date Date selected when calendar is shown. If no date is specified, will be show the date set as default in configuration (See {@link #!/api/punditConfig/object/modules#ResourcePanel.initialCalendarDate here} for details).
+     * @param {date} date Date selected when calendar is shown. 
      * @param {DOMElement} target DOM Element where to append the popover
      * @return {Promise} when Save button is clicked, promise will be resolved with the selected date
      *
      */
-    resourcePanel.showPopoverCalendar = function(date, target) {
+    resourcePanel.showPopoverCalendar = function(date, target, openBy) {
         var content = {};
-        content.date = date;
+
+        if (angular.isObject(date) === false) {
+            content.value = '';
+            content.datatype = NameSpace.dateTime;
+        } else {
+            content.value = date.value;
+            content.datatype = date.datatype;
+        }
+
         // if no popover is shown, just show it
         if (state.popover === null) {
-            state.popover = initPopover(content, target, "", 'calendar');
+            state.popover = initPopover(content, target, '', 'calendar');
             state.popover.$promise.then(function() {
                 show();
+                if (content.value === '') {
+                    setFocus('input.pnd-resource-calendar-input-year');
+                }
+
+                //$datepicker.show;
+                // angular.element('input.pnd-input-calendar')[0].focus();
+            });
+        }
+        // if click a different popover, hide the shown popover and show the clicked one
+        else if (state.popover !== null && state.popover.clickTarget !== target) {
+            hide();
+            state.popover = initPopover('', target, '', 'calendar');
+            state.popover.$promise.then(function() {
+                show();
+                if (content.value === '') {
+                    setFocus('input.pnd-resource-calendar-input-year');
+                }
+
                 //$datepicker.show;
                 // angular.element('input.pnd-input-calendar')[0].focus();
             });
         }
 
-        // if click a different popover, hide the shown popover and show the clicked one
-        else if (state.popover !== null && state.popover.clickTarget !== target) {
-            hide();
-            state.popover = initPopover("", target, "", 'calendar');
-            state.popover.$promise.then(function() {
-                show();
-                //$datepicker.show;
-                // angular.element('input.pnd-input-calendar')[0].focus();
-            });
-        }
+        resourcePanel.openBy = typeof openBy === 'undefined' ? target : openBy;
 
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;
@@ -663,7 +886,7 @@ angular.module('Pundit2.ResourcePanel')
      * @description
      * Open a popover where subject items are shown grouped according from their provenance ('Page items', 'My items', 'Vocabularies').
      * If predicate is not defined in the triple, all items will be shown.
-     * If predicate is defined in the triple, will be shown only items whose types are compatible with predicate domain
+     * If predicate is defined in the triple, will be shown only items whose types are compatible with predicate suggestedSubjectTypes
      *
      * My items are visible only if user is logged in.
      *
@@ -672,10 +895,12 @@ angular.module('Pundit2.ResourcePanel')
      * @param {Object} triple object (for details content of this object, see {@link #!/api/Pundit2.ResourcePanel/service/ResourcePanel here})
      * @param {DOMElement} target DOM Element where to append the popover
      * @param {string} label label used to search subject in the vocabularies and filter shown Page Items and My Items
+     * @param {overrideFooterExtraButtons} override footer extra buttons config (default: undefined)
      * @return {Promise} return a promise that will be resolved when a subject is selected
      *
      */
-    resourcePanel.showItemsForSubject = function(triple, target, label) {
+    resourcePanel.showItemsForSubject = function(triple, target, label, overrideFooterExtraButtons) {
+        resourcePanel.overrideFooterExtraButtons = overrideFooterExtraButtons;
 
         if (typeof(target) === 'undefined') {
             target = state.popover.clickTarget;
@@ -724,23 +949,27 @@ angular.module('Pundit2.ResourcePanel')
                     pageItems = ItemsExchange.getItemsByContainer(pageItemsContainer);
                     // if predicate is a valid uri
                 } else {
-                    // get item predicate and check his domain
+                    // get item predicate and check his suggestedSubjectTypes
                     var itemPredicate = ItemsExchange.getItemByUri(predicate.uri);
-                    // predicate with empty domain
-                    if (typeof(itemPredicate) === 'undefined' || typeof(itemPredicate.domain) === 'undefined' || itemPredicate.domain.length === 0 || itemPredicate.domain[0] === "") {
+                    // predicate with empty suggestedSubjectTypes
+                    if (typeof(itemPredicate) === 'undefined' ||
+                        typeof(itemPredicate.suggestedSubjectTypes) === 'undefined' ||
+                        itemPredicate.suggestedSubjectTypes.length === 0 ||
+                        itemPredicate.suggestedSubjectTypes[0] === "" ||
+                        limitToSuggestedTypes === false) {
                         // all items are good
                         myItems = ItemsExchange.getItemsByContainer(myItemsContainer);
                         pageItems = ItemsExchange.getItemsByContainer(pageItemsContainer);
                     } else {
-                        // predicate with a valid domain
-                        var domain = itemPredicate.domain;
+                        // predicate with a valid suggestedSubjectTypes
+                        var suggestedSubjectTypes = itemPredicate.suggestedSubjectTypes;
 
-                        // get only items matching with predicate domain
+                        // get only items matching with predicate suggestedSubjectTypes
                         var filter = function(item) {
 
-                            for (var i = 0; i < domain.length; i++) {
+                            for (var i = 0; i < suggestedSubjectTypes.length; i++) {
                                 for (var j = 0; j < item.type.length; j++) {
-                                    if (domain[i] === item.type[j]) {
+                                    if (suggestedSubjectTypes[i] === item.type[j]) {
                                         return true;
                                     }
                                 }
@@ -750,7 +979,7 @@ angular.module('Pundit2.ResourcePanel')
 
                         myItems = ItemsExchange.getItemsFromContainerByFilter(myItemsContainer, filter);
                         pageItems = ItemsExchange.getItemsFromContainerByFilter(pageItemsContainer, filter);
-                    } // end else domain defined
+                    } // end else suggestedSubjectTypes defined
 
                 } // end else predicate valid uri
 
@@ -758,9 +987,9 @@ angular.module('Pundit2.ResourcePanel')
 
             showPopoverResourcePanel(target, pageItems, myItems, "", label, 'sub', triple);
         }
+        resourcePanel.openBy = target;
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;
-
     };
 
     /**
@@ -772,7 +1001,7 @@ angular.module('Pundit2.ResourcePanel')
      * @description
      * Open a popover where object items are shown grouped according from their provenance ('Page items', 'My items', 'Vocabularies').
      * If predicate is not defined in the triple, all items will be shown.
-     * If predicate is defined in the triple, will be shown only items whose types are compatible with predicate range
+     * If predicate is defined in the triple, will be shown only items whose types are compatible with predicate suggestedObjectTypes
      *
      * My items are visible only if user is logged in.
      *
@@ -781,10 +1010,12 @@ angular.module('Pundit2.ResourcePanel')
      * @param {Object} triple object (for details content of this object, see {@link #!/api/Pundit2.ResourcePanel/service/ResourcePanel here})
      * @param {DOMElement} target DOM Element where to append the popover
      * @param {string} label label used to search subject in the vocabularies and filter shown Page Items and My Items
+     * @param {overrideFooterExtraButtons} override footer extra buttons config (default: undefined)
      * @return {Promise} return a promise that will be resolved when a subject is selected
      *
      */
-    resourcePanel.showItemsForObject = function(triple, target, label) {
+    resourcePanel.showItemsForObject = function(triple, target, label, overrideFooterExtraButtons) {
+        resourcePanel.overrideFooterExtraButtons = overrideFooterExtraButtons;
 
         if (typeof(target) === 'undefined') {
             target = state.popover.clickTarget;
@@ -833,33 +1064,37 @@ angular.module('Pundit2.ResourcePanel')
                     showPopoverResourcePanel(target, pageItems, myItems, "", label, 'obj', triple);
 
                 } else {
-                    // get item predicate and check his domain
+                    // get item predicate and check his suggestedObjectTypes
                     var itemPredicate = ItemsExchange.getItemByUri(predicate.uri);
-                    // predicate with empty domain
-                    if (typeof(itemPredicate) === 'undefined' || typeof(itemPredicate.range) === 'undefined' || itemPredicate.range.length === 0 || itemPredicate.range[0] === "") {
+                    // predicate with empty suggestedObjectTypes
+                    if (typeof(itemPredicate) === 'undefined' ||
+                        typeof(itemPredicate.suggestedObjectTypes) === 'undefined' ||
+                        itemPredicate.suggestedObjectTypes.length === 0 ||
+                        itemPredicate.suggestedObjectTypes[0] === "" ||
+                        limitToSuggestedTypes === false) {
                         // all items are good
                         myItems = ItemsExchange.getItemsByContainer(myItemsContainer);
                         pageItems = ItemsExchange.getItemsByContainer(pageItemsContainer);
                         showPopoverResourcePanel(target, pageItems, myItems, "", label, 'obj', triple);
 
                         // if predicate is literal, show popover literal
-                    } else if (itemPredicate.range.length === 1 && itemPredicate.range[0] === NameSpace.rdfs.literal) {
+                    } else if (itemPredicate.suggestedObjectTypes.length === 1 && itemPredicate.suggestedObjectTypes[0] === NameSpace.rdfs.literal) {
                         resourcePanel.showPopoverLiteral("", target);
 
                         // if predicate is dateTime, show popover calendar
-                    } else if (itemPredicate.range.length === 1 && itemPredicate.range[0] === NameSpace.dateTime) {
+                    } else if (itemPredicate.suggestedObjectTypes.length === 1 && itemPredicate.suggestedObjectTypes[0] === NameSpace.dateTime) {
                         resourcePanel.showPopoverCalendar("", target);
 
                     } else {
-                        // predicate with a valid domain
-                        var range = itemPredicate.range;
+                        // predicate with a valid suggestedObjectTypes
+                        var suggestedObjectTypes = itemPredicate.suggestedObjectTypes;
 
-                        // get only items matching with predicate domain
+                        // get only items matching with predicate suggestedObjectTypes
                         var filter = function(item) {
 
-                            for (var i = 0; i < range.length; i++) {
+                            for (var i = 0; i < suggestedObjectTypes.length; i++) {
                                 for (var j = 0; j < item.type.length; j++) {
-                                    if (range[i] === item.type[j]) {
+                                    if (suggestedObjectTypes[i] === item.type[j]) {
                                         return true;
                                     }
                                 }
@@ -873,6 +1108,8 @@ angular.module('Pundit2.ResourcePanel')
                     }
 
                 } // end else predicate !== undefined
+
+                resourcePanel.openBy = target;
 
             } // end if triple !== undefined
 
@@ -890,8 +1127,8 @@ angular.module('Pundit2.ResourcePanel')
      * @description
      * Open a popover where predicate items are shown.
      * If subject and object are both not defined in the triple, all predicates will be shown.
-     * If only subject is defined in the triple, will be shown only predicates whose domain is compatible with subject types
-     * If only object is defined in the triple, will be shown only predicates whose range is compatible with subject types
+     * If only subject is defined in the triple, will be shown only predicates whose suggestedSubjectTypes is compatible with subject types
+     * If only object is defined in the triple, will be shown only predicates whose suggestedObjectTypes is compatible with subject types
      *
      * My items are visible only if user is logged in.
      *
@@ -904,7 +1141,6 @@ angular.module('Pundit2.ResourcePanel')
      *
      */
     resourcePanel.showProperties = function(triple, target, label) {
-
         if (typeof(target) === 'undefined') {
             target = state.popover.clickTarget;
         }
@@ -929,24 +1165,26 @@ angular.module('Pundit2.ResourcePanel')
 
                 properties = ItemsExchange.getItemsByContainer(propertiesContainer);
 
-                if (isItemValid(subject, 'type')) {
-                    subTypes = subject.type;
-                    properties = $filter('filterByTypes')(properties, 'domain', subTypes);
-                }
-
-                if (isItemValid(object)) {
-                    objTypes = [];
-
-                    // TODO: add full date support
-                    if (isItemValid(object, 'type')) {
-                        objTypes = object.type;
-                    } else if (Utils.isValidDate(object)) {
-                        objTypes = [NameSpace.dateTime];
-                    } else if (typeof(object) === 'string') {
-                        objTypes = [NameSpace.rdfs.literal];
+                if (limitToSuggestedTypes === true) {
+                    if (isItemValid(subject, 'type')) {
+                        subTypes = subject.type;
+                        properties = $filter('filterByTypes')(properties, 'suggestedSubjectTypes', subTypes);
                     }
 
-                    properties = $filter('filterByTypes')(properties, 'range', objTypes);
+                    if (isItemValid(object)) {
+                        objTypes = [];
+
+                        // TODO: add full date support
+                        if (isItemValid(object, 'type')) {
+                            objTypes = object.type;
+                        } else if (Utils.isValidDate(object)) {
+                            objTypes = [NameSpace.dateTime];
+                        } else if (typeof(object) === 'string') {
+                            objTypes = [NameSpace.rdfs.literal];
+                        }
+
+                        properties = $filter('filterByTypes')(properties, 'suggestedObjectTypes', objTypes);
+                    }
                 }
 
                 if (typeof(properties) !== 'undefined' && properties.length > 0) {
@@ -958,6 +1196,7 @@ angular.module('Pundit2.ResourcePanel')
 
             } // end triple !== undefined
         }
+        resourcePanel.openBy = target;
         state.resourcePromise = $q.defer();
         return state.resourcePromise.promise;
     };
@@ -967,6 +1206,10 @@ angular.module('Pundit2.ResourcePanel')
     });
 
     EventDispatcher.addListener('TripleComposer.reset', function() {
+        hide();
+    });
+
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
         hide();
     });
 

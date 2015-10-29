@@ -16,21 +16,18 @@
 // outside of the .kee-wrp import
 @import "@{bspath}variables.less";
 @import "@{bspath}mixins.less";
-@import "../assets/bootstrap-variables";
+@import "../bootstrap/bootstrap-variables";
 
 // Wrap every bs rule under one of our nodes
-.kee-wrp {
+body .kee-wrp {
     @import "@{bspath}normalize.less";
     @import "@{bspath}scaffolding.less";
     @import "@{bspath}type.less";
     @import "@{bspath}grid.less";
     @import "@{bspath}forms.less";
-    @import "@{bspath}buttons.less";
     @import "@{bspath}dropdowns.less";
     @import "@{bspath}button-groups.less";
     @import "@{bspath}input-groups.less";
-    @import "@{bspath}navs.less";
-    @import "@{bspath}navbar.less";
     @import "@{bspath}badges.less";
     @import "@{bspath}list-group.less";
     @import "@{bspath}panels.less";
@@ -45,9 +42,8 @@
 // ------------------------------------
 
 // Customizing the default Bootstrap theme
-.kee-wrp {
-    @import "../assets/bootstrap-theme";
-    @import "korboee-bootstrap-theme";
+body .kee-wrp {
+    @import "../bootstrap/bootstrap-theme";
 }
 
 
@@ -66,13 +62,13 @@
 // scaffolding.less, line 27.
 
 // Was html
-.kee-wrp {
+body .kee-wrp {
     font-size: 62.5%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 // Was body
-.kee-wrp {
+body .kee-wrp {
     font-family: @font-family-base;
     font-size: @font-size-base;
     line-height: @line-height-base;
@@ -85,9 +81,17 @@
 // ------------------------------------
 
 // Common variables
-@import "../assets/variables.less";
+@import "../global/variables.less";
 // Korbo variables
 @import "korboee-variables.less";
+
+
+// ------------------------------------
+//   #MIXINS
+// ------------------------------------
+
+// Common variables
+@import "../global/mixins.less";
 
 
 // ------------------------------------
@@ -114,10 +118,13 @@
 //   #COMPONENTS
 // ------------------------------------
 
-.kee-wrp {
-    @import "../assets/page-item-container.less";
-    @import "../assets/item.less";
-    @import "../assets/preview.less";
-    @import "../assets/vertical-tabs.less";
+body .kee-wrp {
+    @import "../components/page-item-container";
+    @import "../components/item";
+    @import "../components/preview";
+    @import "../components/tabs";
+    @import "../components/modal";
+    @import "../components/resource-panel";
+    @import "../components/buttons";
     @import "korboee-styles.less";
 }

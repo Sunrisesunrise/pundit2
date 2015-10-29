@@ -9,19 +9,45 @@
 <script>
 
     var punditConfig = {
+        annotationServerBaseURL: " https://staging.punditbrain.netseven.it:8443/annotationserver/",
+        annotationServerVersion: 'v2',
         modules: {
             'Client': {
-                active: true
+                active: true,
+                basicRelations: [{
+        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+        "label": "cites",
+        "description": "The selected text fragment or web page cites another text fragment, work or person.",
+        "suggestedSubjectTypes": [
+            "http://purl.org/pundit/ont/ao#fragment-text",
+            "http://schema.org/WebPage"
+        ],
+        "suggestedObjectTypes": [],
+        "vocabulary": "Basic Relation",
+        "uri": "http://purl.org/spar/cito/cites"
+    }]
+            },
+            'Analytics': {
+                doTracking: true,
+                doMixpanel: true
+            },
+            'AlertSystem': {
+                active: false
             },
             'Annomatic': {
                 debug: true,
                 active: true,
-                partialSelection: true
+                partialSelection: true,
+                source: 'DataTXT'
+                // sourceURL: 'http://metasound.dibet.univpm.it:8080/DOMAnnotationService/api/annotator/v1/gramsci-dictionary'
             },
             'FreebaseSelector': {
                 active: true
             },
             'DbpediaSelector': {
+                active: true
+            },
+            'VocabulariesContainer': {
                 active: true
             }
         }
@@ -29,7 +55,7 @@
 
 </script>
 
-<div data-ng-app="Pundit2"></div>
+<div data-ng-app="Pundit2" class="pundit2"></div>
 
 <div class="box transcription">
     <div class="boxContent">

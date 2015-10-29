@@ -1,34 +1,33 @@
 angular.module('Pundit2.Preview')
 
-.controller('PreviewCtrl', function($scope, Preview, TypesHelper, $window, Config) {
+.controller('PreviewCtrl', function($scope, Preview, TypesHelper, $window, Config, Analytics) {
 
     $scope.itemDashboardPreview = null;
 
+    $scope.askThePundit = Config.askThePundit;
 
-    // check where a new item is selected to get a preview
-    $scope.$watch(function() {
-        return Preview.getItemDashboardPreview();
-    }, function(newItem) {
-
-        $scope.itemDashboardPreview = newItem;
-        // check if item has an image to show
-        if (newItem === null) {
-
-            $scope.hasImage = false;
-            $scope.itemIsAnImage = false;
-
-        } else {
-            if (TypesHelper.getLabel(newItem.type[0]) === 'Notebook') {
-                $scope.hasImage = false;
-                $scope.itemIsAnImage = false;
-            } else {
-                $scope.hasImage = (typeof(newItem.image) !== 'undefined');
-                $scope.itemIsAnImage = $scope.itemDashboardPreview.isImage() || $scope.itemDashboardPreview.isImageFragment();
+    // getter function used to build hierarchystring.
+    // hierarchystring is used for tracking events with analytics.
+    var getHierarchyString = function() {
+        // Temporary solution to find hierarchystring.
+        var eventLabel = "";
+        var myScope = $scope;
+        do {
+            if (typeof(myScope) === 'undefined' || myScope === null) {
+                break;
             }
-
-
+            if (myScope.hasOwnProperty('pane')) {
+                if (myScope.pane.hasOwnProperty('hierarchystring')) {
+                    eventLabel = myScope.pane.hierarchystring;
+                }
+                break;
+            }
+            myScope = myScope.$parent;
         }
-    });
+        while (typeof(myScope) !== 'undefined' && myScope !== null);
+
+        return eventLabel;
+    };
 
     $scope.getWelcomeHeaderMessage = function() {
         return Preview.getWelcomeHeaderMessage();
@@ -66,6 +65,10 @@ angular.module('Pundit2.Preview')
 
     $scope.clearSticky = function() {
         Preview.clearItemDashboardSticky();
+
+        var eventLabel = getHierarchyString();
+        eventLabel += "--clear";
+        Analytics.track('buttons', 'click', eventLabel);
     };
 
     // get label of a type from his uri
@@ -77,11 +80,19 @@ angular.module('Pundit2.Preview')
     // open item url in a new window when click on More Info button in a preview
     $scope.openUrl = function(url) {
         $window.open(url);
+
+        var eventLabel = getHierarchyString();
+        eventLabel += "--moreInfo";
+        Analytics.track('buttons', 'click', eventLabel);
     };
 
     $scope.openNotebookUrl = function(id) {
         var url = Config.askBaseURL + '#/myNotebooks/' + id;
         $window.open(url);
+
+        var eventLabel = getHierarchyString();
+        eventLabel += "--moreInfo";
+        Analytics.track('buttons', 'click', eventLabel);
     };
 
     $scope.getItemIcon = function() {
@@ -96,4 +107,28 @@ angular.module('Pundit2.Preview')
         }
     };
 
+    // check where a new item is selected to get a preview
+    $scope.$watch(function() {
+        return Preview.getItemDashboardPreview();
+    }, function(newItem) {
+
+        $scope.itemDashboardPreview = newItem;
+        // check if item has an image to show
+        if (newItem === null) {
+
+            $scope.hasImage = false;
+            $scope.itemIsAnImage = false;
+
+        } else {
+            if (TypesHelper.getLabel(newItem.type[0]) === 'Notebook') {
+                $scope.hasImage = false;
+                $scope.itemIsAnImage = false;
+            } else {
+                $scope.hasImage = (typeof(newItem.image) !== 'undefined');
+                $scope.itemIsAnImage = $scope.itemDashboardPreview.isImage() || $scope.itemDashboardPreview.isImageFragment();
+            }
+
+
+        }
+    });
 });

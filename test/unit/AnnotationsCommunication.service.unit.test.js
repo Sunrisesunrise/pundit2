@@ -12,6 +12,18 @@ describe('AnnotationsCommunication service', function() {
     var userLoggedIn = {
         loginStatus: 1
     };
+
+    var addLoginButton = function() {
+        var loginButton = angular.element('<div/>').addClass('pnd-toolbar-login-button');
+        angular.element('body').append(loginButton);
+        $rootScope.$digest();
+        return loginButton;
+    };
+
+    var removeLoginButton = function() {
+        angular.element('.pnd-toolbar-login-button').remove();
+    };
+
     // var userNotLoggedIn = {
     //     loginStatus: 0
     // };
@@ -29,7 +41,15 @@ describe('AnnotationsCommunication service', function() {
         $httpBackend = _$httpBackend_;
         $q = _$q_;
         $rootScope = _$rootScope_;
+
+        MyPundit.useCookies = false;
+
+        addLoginButton();
     }));
+
+    afterEach(function(){
+        removeLoginButton();
+    });
 
     it("should correctly delete an annotation", function(){
         var ann = {
@@ -63,8 +83,8 @@ describe('AnnotationsCommunication service', function() {
 
         // get login
         var resolved;
-        MyPundit.login().then(function(){
-            $httpBackend.expectGET(new RegExp(NameSpace.get('asAnnMetaSearch'))).respond();
+        MyPundit.oldLogin().then(function(){
+            // $httpBackend.expectGET(new RegExp(NameSpace.get('asAnnMetaSearch'))).respond();
             AnnotationsCommunication.deleteAnnotation(ann.id).then(function(){
                 resolved = true;
             }, function(){
@@ -100,7 +120,7 @@ describe('AnnotationsCommunication service', function() {
         var rejected;
         // http mock for login
         $httpBackend.expectGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             $httpBackend.expectDELETE(NameSpace.get('asAnn', {id: "ID"})).respond(500, "Error msg");
             AnnotationsCommunication.deleteAnnotation("ID").then(function(){ }, function(){
                 rejected = true;
@@ -117,7 +137,7 @@ describe('AnnotationsCommunication service', function() {
         var rejected;
         // http mock for login
         $httpBackend.expectGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             $httpBackend.expectPUT(new RegExp(NameSpace.get('asAnnContent', {id: "ID"}))).respond(500, "Error msg");
             $httpBackend.expectPUT(new RegExp(NameSpace.get('asAnnItems', {id: "ID"}))).respond({});
             AnnotationsCommunication.editAnnotation("ID").then(function(){ }, function(){
@@ -135,7 +155,7 @@ describe('AnnotationsCommunication service', function() {
         var rejected;
         // http mock for login
         $httpBackend.expectGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
-        MyPundit.login().then(function(){
+        MyPundit.oldLogin().then(function(){
             $httpBackend.expectPUT(new RegExp(NameSpace.get('asAnnContent', {id: "ID"}))).respond({});
             $httpBackend.expectPUT(new RegExp(NameSpace.get('asAnnItems', {id: "ID"}))).respond(500, "Error msg");
             AnnotationsCommunication.editAnnotation("ID").then(function(){ }, function(){

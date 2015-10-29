@@ -1,3 +1,5 @@
+/*global moment*/
+
 angular.module('Pundit2.AnnotationSidebar')
 
 .constant('ANNOTATIONDETAILSDEFAULTS', {
@@ -60,20 +62,32 @@ angular.module('Pundit2.AnnotationSidebar')
     debug: false
 })
 
-.service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document,
-    BaseComponent, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, TemplatesExchange,
-    Consolidation, ContextualMenu, Dashboard, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
-    TypesHelper) {
+.service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $window, $modal, $injector, $q,
+    BaseComponent, Config, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, ModelHelper, TemplatesExchange,
+    Consolidation, ContextualMenu, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
+    ImageAnnotator, AnnotationsCommunication, NotebookExchange, TypesHelper, Analytics, NameSpace) {
 
     var annotationDetails = new BaseComponent('AnnotationDetails', ANNOTATIONDETAILSDEFAULTS);
+
+    var clientMode = Config.clientMode,
+        Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined;
 
     var state = {
         annotations: [],
         defaultExpanded: annotationDetails.options.defaultExpanded,
         isUserLogged: false,
+        isSidebarExpanded: false,
         isGhostedActive: false,
         userData: {}
     };
+
+    var forceSkip = '';
+
+    var mouseoutHandlerPromise,
+        overActiveId = '',
+        highlightFragments = [];
+
+    // var modalTimeoutPromise;
 
     ContextualMenu.addAction({
         type: [
@@ -98,6 +112,8 @@ angular.module('Pundit2.AnnotationSidebar')
                 AnnotationSidebar.toggleFiltersContent();
             }
 
+            AnnotationSidebar.resetFilters();
+
             var fragmentsListUri;
             var fragmentParentList = Consolidation.getFragmentParentList();
             if (item.uri in fragmentParentList) {
@@ -119,8 +135,80 @@ angular.module('Pundit2.AnnotationSidebar')
             state.isGhostedActive = true;
             TextFragmentAnnotator.ghostAll();
             TextFragmentAnnotator.ghostRemoveByUri(item.uri);
+
+            Analytics.track('buttons', 'click', 'contextualMenu--showAllAnnotationForItem');
         }
     });
+
+    // confirm modal
+    var modalScope = $rootScope.$new();
+    modalScope.titleMessage = 'Delete Annotation';
+
+    var confirmModal = $modal({
+        container: '[data-ng-app="Pundit2"]',
+        templateUrl: 'src/Core/Templates/confirm.modal.tmpl.html',
+        show: false,
+        backdrop: 'static',
+        scope: modalScope
+    });
+
+    // confirm btn click
+    modalScope.confirm = function() {
+        var currentElement = modalScope.elementReference,
+            currentId = modalScope.annotationId;
+
+        if (MyPundit.isUserLogged()) {
+            currentElement.addClass('pnd-annotation-details-delete-in-progress');
+            AnnotationsCommunication.deleteAnnotation(currentId).finally(function() {
+                confirmModal.hide();
+                currentElement.removeClass('pnd-annotation-details-delete-in-progress');
+            });
+        }
+
+        Analytics.track('buttons', 'click', 'annotation--details--delete--confirm');
+    };
+
+    // cancel btn click
+    modalScope.cancel = function() {
+        confirmModal.hide();
+        Analytics.track('buttons', 'click', 'annotation--details--delete--cancel');
+    };
+
+    var activateTextFragmentHighlight = function(items) {
+        var currentItem;
+        for (var index in items) {
+            currentItem = ItemsExchange.getItemByUri(items[index]);
+            if (typeof(currentItem) !== 'undefined') {
+                if (currentItem.isTextFragment()) {
+                    TextFragmentAnnotator.highlightByUri(items[index]);
+                } else if (currentItem.isImageFragment()) {
+                    // TODO really temp trick!!
+                    ImageAnnotator.svgClearHighlightByItem(currentItem);
+                    ImageAnnotator.svgHighlightByItem(currentItem);
+                } else if (currentItem.isImage()) {
+                    ImageAnnotator.highlightByUri(items[index]);
+                }
+                highlightFragments.push(items[index]);
+            }
+        }
+    };
+
+    var resetTextFragmentHighlight = function() {
+        var currentItem;
+        for (var index in highlightFragments) {
+            currentItem = ItemsExchange.getItemByUri(highlightFragments[index]);
+            if (typeof(currentItem) !== 'undefined') {
+                if (currentItem.isTextFragment()) {
+                    TextFragmentAnnotator.clearHighlightByUri(highlightFragments[index]);
+                } else if (currentItem.isImageFragment()) {
+                    ImageAnnotator.svgClearHighlightByItem(currentItem);
+                } else if (currentItem.isImage()) {
+                    ImageAnnotator.clearHighlightByUri(highlightFragments[index]);
+                }
+            }
+        }
+        highlightFragments = [];
+    };
 
     var isToBeIgnored = function(node) {
         var annClass = 'pnd-annotation-details-wrap';
@@ -191,6 +279,11 @@ angular.module('Pundit2.AnnotationSidebar')
             if (objectType === 'uri') {
                 results.push(buildItemDetails(objectValue));
             } else {
+                if (typeof list[object].datatype !== 'undefined' &&
+                    list[object].datatype === NameSpace.dateTime) {
+                    objectValue = moment(objectValue).format('YYYY-MM-DD  HH:mm');
+                }
+
                 results.push({
                     uri: null,
                     label: objectValue,
@@ -238,8 +331,57 @@ angular.module('Pundit2.AnnotationSidebar')
         return results;
     };
 
+    var convertTime = function(serverdate) {
+        var annotationServerVersion = Config.annotationServerVersion;
+
+        if (annotationServerVersion === 'v2') {
+            var momentDate = moment(serverdate).utc().format('YYYY-MM-DD HH:mm:ss');
+            var localTime = moment.utc(momentDate).toDate();
+            localTime = moment(localTime).format('YYYY-MM-DD HH:mm:ss');
+            return localTime.toString();
+        }
+        return serverdate;
+    };
+
+    annotationDetails.openConfirmModal = function(currentElement, currentId)  {
+        // promise is needed to open modal when template is ready
+        modalScope.notifyMessage = 'Are you sure you want to delete this annotation? Please be aware that deleted annotations cannot be recovered.';
+        modalScope.elementReference = currentElement;
+        modalScope.annotationId = currentId;
+        confirmModal.$promise.then(confirmModal.show);
+    };
+
+    annotationDetails.saveEditedComment = function(annID, item, comment) {
+        var currentTarget = item,
+            currentStatement = {
+                scope: {
+                    get: function() {
+                        return {
+                            subject: currentTarget,
+                            predicate: '',
+                            object: comment
+                        };
+                    }
+                }
+            };
+
+        var modelData = ModelHelper.buildCommentData(currentStatement);
+
+        var editPromise = AnnotationsCommunication.editAnnotation(
+            annID,
+            modelData.graph,
+            modelData.items,
+            modelData.flatTargets,
+            modelData.target,
+            modelData.type,
+            'commenting'
+        );
+
+        return editPromise;
+    };
+
     annotationDetails.getAnnotationDetails = function(currentId) {
-        if (currentId in state.annotations) {
+        if (typeof state.annotations[currentId] !== 'undefined') {
             return state.annotations[currentId];
         }
     };
@@ -267,17 +409,20 @@ angular.module('Pundit2.AnnotationSidebar')
         for (var id in state.annotations) {
             state.annotations[id].ghosted = false;
             state.annotations[id].expanded = false;
-            AnnotationSidebar.setAllPosition(id, AnnotationSidebar.options.annotationHeigth);
+            AnnotationSidebar.setAllPosition(id, AnnotationSidebar.options.annotationHeight);
         }
         state.isGhostedActive = false;
         TextFragmentAnnotator.ghostRemoveAll();
     };
 
-    annotationDetails.closeAllAnnotationView = function(skipId) {
+    annotationDetails.closeAllAnnotationView = function(skipId, skipPositioning) {
+        skipPositioning = typeof skipPositioning !== 'undefined' ? skipPositioning : false;
         for (var id in state.annotations) {
             if (id !== skipId) {
                 state.annotations[id].expanded = false;
-                AnnotationSidebar.setAnnotationPosition(id, AnnotationSidebar.options.annotationHeigth);
+                if (skipPositioning === false) {
+                    AnnotationSidebar.setAnnotationHeight(id, AnnotationSidebar.options.annotationHeight);
+                }
             }
         }
     };
@@ -294,9 +439,17 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
-    annotationDetails.toggleAnnotationView = function(currentId) {
+    annotationDetails.closeAnnotationView = function(currentId) {
+        if (typeof(state.annotations[currentId]) !== 'undefined') {
+            state.annotations[currentId].expanded = false;
+        } else {
+            annotationDetails.log("Cannot find this annotation: id -> " + currentId);
+        }
+    };
+
+    annotationDetails.toggleAnnotationView = function(currentId, forceTo) {
         annotationDetails.closeAllAnnotationView(currentId);
-        state.annotations[currentId].expanded = !state.annotations[currentId].expanded;
+        state.annotations[currentId].expanded = typeof forceTo !== 'undefined' ? forceTo : !state.annotations[currentId].expanded;
     };
 
     annotationDetails.isAnnotationGhosted = function(currentId) {
@@ -314,27 +467,28 @@ angular.module('Pundit2.AnnotationSidebar')
     annotationDetails.addAnnotationReference = function(scope, force) {
         var currentId = scope.id;
         var isBroken = scope.broken;
-        var currentAnnotation;
+        var notebookName = "Downloading in progress";
+        var currentAnnotation = AnnotationsExchange.getAnnotationById(currentId);
         var expandedState;
         var template;
         var currentColor;
 
-        if (typeof(currentId) !== 'undefined') {
-            currentAnnotation = AnnotationsExchange.getAnnotationById(currentId);
-            expandedState = (force ? true : state.defaultExpanded);
+        var buildSemantic = function() {
             template = TemplatesExchange.getTemplateById(currentAnnotation.hasTemplate);
 
             if (typeof(template) !== 'undefined') {
                 currentColor = template.hasColor;
             }
 
-            if (typeof(state.annotations[currentId]) === 'undefined' || typeof(force) !== 'undefined') {
+
+            if (typeof(state.annotations[currentId]) === 'undefined') {
                 state.annotations[currentId] = {
                     id: currentId,
                     creator: currentAnnotation.creator,
                     creatorName: currentAnnotation.creatorName,
-                    created: currentAnnotation.created,
+                    created: convertTime(currentAnnotation.created),
                     notebookId: currentAnnotation.isIncludedIn,
+                    notebookName: notebookName,
                     scopeReference: scope,
                     mainItem: buildMainItem(currentAnnotation),
                     itemsArray: buildItemsArray(currentAnnotation),
@@ -345,12 +499,140 @@ angular.module('Pundit2.AnnotationSidebar')
                     color: currentColor,
                     hasTemplate: template
                 };
+
+                var cancelWatchNotebookName = $rootScope.$watch(function() {
+                    return NotebookExchange.getNotebookById(currentAnnotation.isIncludedIn);
+                }, function(nb) {
+                    if (typeof(nb) !== 'undefined') {
+                        notebookName = nb.label;
+                        state.annotations[currentId].notebookName = notebookName;
+                        cancelWatchNotebookName();
+                    }
+                });
+            } else {
+                state.annotations[currentId].expanded = expandedState;
+
+                if (typeof(force) !== 'undefined' && force) {
+                    state.annotations[currentId].created = currentAnnotation.created;
+                    state.annotations[currentId].created = currentAnnotation.created;
+                    state.annotations[currentId].notebookId = currentAnnotation.isIncludedIn;
+                    state.annotations[currentId].scopeReference = scope;
+                    state.annotations[currentId].mainItem = buildMainItem(currentAnnotation);
+                    state.annotations[currentId].itemsArray = buildItemsArray(currentAnnotation);
+                    state.annotations[currentId].itemsUriArray = buildItemsUriArray(currentAnnotation);
+                    state.annotations[currentId].broken = isBroken;
+                    state.annotations[currentId].ghosted = false;
+                    state.annotations[currentId].expanded = true;
+                }
             }
+        };
+
+        var buildCommentOrHighlight = function(motivation) {
+            var firstTargetUri = currentAnnotation.hasTarget[0],
+                firstItem = currentAnnotation.items[firstTargetUri],
+                currentGraph = '';
+
+            if (typeof(state.annotations[currentId]) === 'undefined') {
+                state.annotations[currentId] = {
+                    id: currentId,
+                    creator: currentAnnotation.creator,
+                    creatorName: currentAnnotation.creatorName,
+                    created: currentAnnotation.created,
+                    notebookId: currentAnnotation.isIncludedIn,
+                    notebookName: notebookName,
+                    scopeReference: scope,
+                    mainItem: firstItem,
+                    itemsArray: [firstItem],
+                    itemsUriArray: [firstTargetUri],
+                    broken: isBroken,
+                    expanded: expandedState,
+                    ghosted: false
+                };
+
+                if (motivation === 'commenting') {
+                    if (typeof currentAnnotation.graph[NameSpace.rdf.value] === 'undefined') {
+                        for (var first in currentAnnotation.graph) {
+                            currentGraph = currentAnnotation.graph[first];
+                            break;
+                        }
+
+                    } else {
+                        currentGraph = currentAnnotation.graph;
+                    }
+                    state.annotations[currentId].comment = currentGraph[NameSpace.rdf.value][0].value;
+                }
+
+                var cancelWatchNotebookName = $rootScope.$watch(function() {
+                    return NotebookExchange.getNotebookById(currentAnnotation.isIncludedIn);
+                }, function(nb) {
+                    if (typeof(nb) !== 'undefined') {
+                        notebookName = nb.label;
+                        state.annotations[currentId].notebookName = notebookName;
+                        cancelWatchNotebookName();
+                    }
+                });
+            } else {
+                state.annotations[currentId].expanded = expandedState;
+
+                if (typeof(force) !== 'undefined' && force) {
+                    state.annotations[currentId].created = currentAnnotation.created;
+                    state.annotations[currentId].created = currentAnnotation.created;
+                    state.annotations[currentId].notebookId = currentAnnotation.isIncludedIn;
+                    state.annotations[currentId].scopeReference = scope;
+                    state.annotations[currentId].mainItem = firstItem;
+                    state.annotations[currentId].itemsArray = [firstItem];
+                    state.annotations[currentId].itemsUriArray = [firstTargetUri];
+                    state.annotations[currentId].broken = isBroken;
+                    state.annotations[currentId].ghosted = false;
+                    state.annotations[currentId].expanded = true;
+                }
+            }
+        };
+
+        if (typeof(currentId) === 'undefined' ||
+            typeof(currentAnnotation) === 'undefined') {
+            EventDispatcher.sendEvent('AnnotationDetails.wrongAnnotation', currentId);
+            return;
+        }
+
+        expandedState = (force ? true : state.defaultExpanded);
+
+        if (currentAnnotation.motivatedBy === 'commenting' ||
+            currentAnnotation.motivatedBy === 'highlighting') {
+            buildCommentOrHighlight(currentAnnotation.motivatedBy);
+        } else {
+            buildSemantic();
         }
     };
 
-    EventDispatcher.addListeners(['AnnotationsCommunication.saveAnnotation', 'AnnotationsCommunication.editAnnotation'], function(e) {
-        annotationDetails.log('Update annotation');
+    annotationDetails.activateTextFragmentHighlight = function(broken, annotationId, items) {
+        $timeout.cancel(mouseoutHandlerPromise);
+
+        if (broken || overActiveId === annotationId) {
+            return;
+        }
+
+        resetTextFragmentHighlight();
+        activateTextFragmentHighlight(items);
+        overActiveId = annotationId;
+    };
+
+    annotationDetails.resetTextFragmentHighlight = function(broken) {
+        $timeout.cancel(mouseoutHandlerPromise);
+
+        if (broken || overActiveId === '') {
+            return;
+        }
+
+        mouseoutHandlerPromise = $timeout(function() {
+            resetTextFragmentHighlight();
+            overActiveId = '';
+            $timeout.cancel(mouseoutHandlerPromise);
+        }, 100);
+    };
+
+    EventDispatcher.addListeners(['AnnotationSidebar.updateAnnotation'], function(e) {
+        annotationDetails.log('Update annotation ' + e.args);
 
         var annotationId = e.args,
             targetAnnotation,
@@ -366,28 +648,71 @@ angular.module('Pundit2.AnnotationSidebar')
             if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
                 AnnotationSidebar.toggle();
             }
+            if (AnnotationSidebar.needToFilter()) {
+                forceSkip = annotationId;
+            }
             annotationDetails.closeAllAnnotationView(annotationId);
             annotationDetails.addAnnotationReference(targetAnnotation, true);
 
-            // TODO: improve the update of the annotations in the sidebar
             $timeout(function() {
-                var currentElement = angular.element('#' + annotationId);
+                var currentElement = angular.element('#' + annotationId),
+                    currentElementRect = currentElement[0].getClientRects()[0],
+                    dashboardHeight = clientMode === 'pro' ? Dashboard.getContainerHeight() : 0;
+
+                if (currentElementRect.top >= 0 &&
+                    currentElementRect.bottom <= $window.innerHeight) {
+                    return;
+                }
                 if (currentElement.length > 0) {
                     angular.element('body').animate({
-                        scrollTop: currentElement.offset().top - Dashboard.getContainerHeight() - 30
+                        scrollTop: currentElement.offset().top - dashboardHeight - 60
                     }, 'slow');
                 }
             }, 100);
-
         }
+    });
+
+    // Watch annotation sidebar expanded or collapsed
+    EventDispatcher.addListener('AnnotationSidebar.toggle', function(e) {
+        state.isSidebarExpanded = e.args;
+        if (state.isSidebarExpanded === false) {
+            annotationDetails.closeAllAnnotationView();
+        }
+    });
+
+    EventDispatcher.addListener('MyItems.action', function() {
+        if (state.isSidebarExpanded) {
+            annotationDetails.closeAllAnnotationView();
+        }
+    });
+
+    // Watch annotation sidebar expanded or collapsed
+    EventDispatcher.addListener('AnnotationSidebar.toggleAnnotation', function(e) {
+        var annId = e.args;
+        annotationDetails.toggleAnnotationView(annId, true);
+    });
+
+    EventDispatcher.addListener('ResizeManager.resize', function() {
+        annotationDetails.closeAllAnnotationView();
     });
 
     EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
         state.isUserLogged = e.args;
         state.userData = MyPundit.getUserData();
+        annotationDetails.closeAllAnnotationView(undefined, true);
     });
 
-    $document.on('mousedown', function(downEvt) {
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
+        $document.off('mousedown', mouseDownHandler);
+    });
+
+    EventDispatcher.addListener('Client.show', function( /*e*/ ) {
+        $document.on('mousedown', mouseDownHandler);
+    });
+
+    $document.on('mousedown', mouseDownHandler);
+
+    function mouseDownHandler(downEvt) {
         var target = downEvt.target;
 
         if (state.isGhostedActive) {
@@ -397,7 +722,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         $rootScope.$$phase || $rootScope.$digest();
-    });
+    }
 
     annotationDetails.log('Component running');
     return annotationDetails;

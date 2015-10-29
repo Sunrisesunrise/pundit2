@@ -64,6 +64,12 @@ angular.module('Pundit2.Communication')
                 setLoading(false);
                 promise.reject("Error from server while retrieving list of my notebooks: " + statusCode);
                 notebookCommunication.err("Error from server while retrieving list of my notebooks: " + statusCode);
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'Error loading notebooks',
+                    id: "ERROR",
+                    timeout: null,
+                    message: "There was an error loading your notebooks, please try again in 5 minutes reloading the page."
+                });
                 Analytics.track('api', 'error', 'get notebook owned', statusCode);
             });
         } else {
@@ -133,6 +139,12 @@ angular.module('Pundit2.Communication')
             }).error(function(msg) {
                 setLoading(false);
                 notebookCommunication.log('Impossible to set as current: ' + id);
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'Current notebook not set',
+                    id: "WARNING",
+                    timeout: 3000,
+                    message: "The current notebook wasn't correctly set, please try again in 5 minutes."
+                });
                 promise.reject(msg);
             });
 
@@ -171,6 +183,12 @@ angular.module('Pundit2.Communication')
             }).error(function(msg) {
                 setLoading(false);
                 notebookCommunication.log('Impossible to set as public: ' + id);
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'Public notebook not set',
+                    id: "WARNING",
+                    timeout: 3000,
+                    message: "The notebook wasn't correctly set as public, please try again in 5 minutes."
+                });
                 promise.reject(msg);
             });
         } else {
@@ -205,6 +223,12 @@ angular.module('Pundit2.Communication')
             }).error(function(msg) {
                 setLoading(false);
                 notebookCommunication.log('Impossible to set as private: ' + id);
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'Private notebook not set',
+                    id: "WARNING",
+                    timeout: 3000,
+                    message: "The notebook wasn't correctly set as private, please try again in 5 minutes."
+                });
                 promise.reject(msg);
             });
 
@@ -264,6 +288,8 @@ angular.module('Pundit2.Communication')
                 notebookCommunication.err("Error from server while retrieving list of my notebooks: " + statusCode);
                 Analytics.track('api', 'error', 'get notebook owned', statusCode);
             });
+        }, function() {
+            promise.reject('Popover creation error, possible anchor missing');
         });
 
         return promise.promise;
@@ -291,6 +317,12 @@ angular.module('Pundit2.Communication')
             }).error(function(msg) {
                 setLoading(false);
                 notebookCommunication.log('Impossible to remove ' + id);
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'Error deleting notebook',
+                    id: "WARNING",
+                    timeout: 3000,
+                    message: "There was an error trying to delete the notebook, please try again in 5 minutes."
+                });
                 promise.reject(msg);
             });
 

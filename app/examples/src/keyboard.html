@@ -1,0 +1,351 @@
+<!-- buildexamples:section header --><!-- /buildexamples -->
+<script>
+    var punditConfig = {
+        modules: {
+            "Keyboard": {
+                debug: true
+            }
+        }
+    };
+
+    var keyboardDemoCtrl = function($scope, Keyboard) {
+        var defaultState = {
+            stInputVisible: false,
+            handlersRegistered: false,
+            hpHandlersRegistered: false,
+            hpNumericHandlersRegistered: false,
+            button1Enabled: false,
+            button2Enabled: false,
+            button3Enabled: false,
+            button4Enabled: false,
+            button5Enabled: false,
+            button6Enabled: false,
+            button7Enabled: false,
+            algGEnabled: true,
+            handlers: {}
+        };
+
+        $scope.state = {
+            stInputVisible: false,
+            handlersRegistered: false,
+            hpHandlersRegistered: false,
+            hpNumericHandlersRegistered: false,
+            button1Enabled: false,
+            button2Enabled: false,
+            button3Enabled: false,
+            button4Enabled: false,
+            button5Enabled: false,
+            button6Enabled: false,
+            button7Enabled: false,
+            algGEnabled: true,
+            handlers: {}
+        };
+
+        $scope.registerHandlers = function() {
+            Keyboard.unregisterAllHandlers();
+            $scope.state = angular.copy(defaultState);
+
+            $scope.state.handlers['Shift+T'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                shiftKey: true,
+                keyCode: 84
+            }, function(event, eventKeyConfig){
+                eventKeyConfig.scope.state.stInputVisible = !eventKeyConfig.scope.state.stInputVisible;
+                eventKeyConfig.scope.$apply();
+            });
+
+            $scope.state.handlers['ESC'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                keyCode: 27,
+                ignoreOnInput: false
+            }, function(event, eventKeyConfig){
+                Keyboard.unregisterAllHandlers();
+                $scope.state = angular.copy(defaultState);
+                eventKeyConfig.scope.$apply();
+            });
+
+            $scope.state.handlers['Ctrl+B'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                ctrlKey: true,
+                keyCode: 66
+            }, function(event, eventKeyConfig){
+                eventKeyConfig.scope.state.button1Enabled = !eventKeyConfig.scope.state.button1Enabled;
+                eventKeyConfig.scope.$apply();
+            });
+
+            $scope.state.handlers['Alt+G'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                altKey: true,
+                keyCode: 71,
+                ignoreOnInput: false,
+                once: true
+            }, function(event, eventKeyConfig){
+                eventKeyConfig.scope.state.button3Enabled = !eventKeyConfig.scope.state.button3Enabled;
+                eventKeyConfig.scope.state.algGEnabled = false;
+                eventKeyConfig.scope.$apply();
+            });
+
+            $scope.state.handlers['Ctrl+F'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                ctrlKey: true,
+                keyCode: 70
+            }, function(event, eventKeyConfig){
+                eventKeyConfig.scope.state.button2Enabled = !eventKeyConfig.scope.state.button2Enabled;
+                eventKeyConfig.scope.$apply();
+            });
+
+            $scope.state.handlers['Meta+F'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                metaKey: true,
+                keyCode: 70,
+                ignoreOnInput: false
+            }, function(event, eventKeyConfig){
+                eventKeyConfig.scope.state.button2Enabled = !eventKeyConfig.scope.state.button2Enabled;
+                eventKeyConfig.scope.$apply();
+            });
+
+            $scope.state.handlersRegistered = true;
+        }
+
+        $scope.registerHPHandlers = function() {
+            $scope.state.handlers['Ctrl+B 1'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                ctrlKey: true,
+                keyCode: 66,
+            }, function(event, eventKeyConfig){
+                eventKeyConfig.scope.state.button4Enabled = !eventKeyConfig.scope.state.button4Enabled;
+                eventKeyConfig.scope.$apply();
+            });
+
+            $scope.state.handlers['Ctrl+F 1'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                ctrlKey: true,
+                keyCode: 70,
+                stopPropagation: true
+            }, function(event, eventKeyConfig){
+                eventKeyConfig.scope.state.button5Enabled = !eventKeyConfig.scope.state.button5Enabled;
+                eventKeyConfig.scope.$apply();
+            });
+
+            $scope.state.hpHandlersRegistered = true;
+        }
+
+        $scope.registerHPNumericHandlers = function() {
+            var css = ['exec-first', 'exec-second'];
+            $scope.state.handlers['Ctrl+e 1'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                ctrlKey: true,
+                priority: 1,
+                keyCode: 69
+            }, function(event, eventKeyConfig){
+                eventKeyConfig.scope.state.button6Enabled = !eventKeyConfig.scope.state.button6Enabled;
+                $('#button6').addClass(css.shift());
+                eventKeyConfig.scope.$apply();
+            });
+
+            $scope.state.handlers['Ctrl+e 2'] = Keyboard.registerHandler('keyboardDemo', {
+                scope: $scope,
+                ctrlKey: true,
+                keyCode: 69,
+                stopPropagation: true
+            }, function(event, eventKeyConfig){
+                eventKeyConfig.scope.state.button7Enabled = !eventKeyConfig.scope.state.button7Enabled;
+                $('#button7').addClass(css.shift());
+                eventKeyConfig.scope.$apply();
+            });
+
+            $scope.state.hpNumericHandlersRegistered = true;
+        }
+
+        $scope.unregisterHandlers = function() {
+            for (var key in $scope.state.handlers) {
+                Keyboard.unregisterHandler($scope.state.handlers[key]);
+            }
+            $scope.state.handlersRegistered = false;
+        }
+
+        $scope.isSTInputVisible = function() {
+            return $scope.state.stInputVisible;
+        }
+    }
+
+</script>
+<style>
+div.pnd-wrp ul.shortcuts-list {
+    list-style: inherit;
+}
+div.pnd-wrp span.desc{
+    font-style: italic;
+    font-size: 11px;
+    color: cadetblue;
+    display: block;
+}
+div.pnd-wrp li.hpkey{
+    color: chocolate;
+}
+div.pnd-wrp li.hpnkey{
+    color: crimson;
+}
+div.pnd-wrp div.test-board button.btn {
+    position: relative;
+    padding-right: 20px;
+}
+.exec-first::after {
+    content: '1';
+    color: white;
+    font-weight: bolder;
+    font-size: 9px;
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    background: black;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-bottom-left-radius: 3px;
+}
+.exec-second::after {
+    content: '2';
+    color: white;
+    font-weight: bolder;
+    font-size: 9px;
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    background: black;
+    padding-left: 3px;
+    padding-bottom: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-bottom-left-radius: 3px;
+}
+</style>
+<div data-ng-app="Pundit2" class="pundit2" 
+     class="pnd-wrp">
+    <div 
+        ng-controller="keyboardDemoCtrl" 
+        class="container clearfix">
+        <div ng-show="state.handlersRegistered" class="event-list" style="float:left; width: 240px">
+            <ul class="shortcuts-list">
+                <li>Press ESC to reset status<span class="desc">NOT Ignored in input filed</span></li>
+                <li>Press Shift+T to toggle input field<span class="desc">Ignored in input filed</span></li>
+                <li id="hpkey0" class="hpkey" ng-show="state.hpHandlersRegistered">Press Ctrl+B to toggle button <span class="desc">Ignored in input filed<br />does not stop propagation</span></li>
+                <li>Press Ctrl+B to toggle button 1 <span class="desc">Ignored in input filed</span></li>
+                <li  id="hpkey1" class="hpkey" ng-show="state.hpHandlersRegistered">Press Ctrl+F to toggle button 5 <span class="desc">Ignored in input filed<br />stops propagation, other handlers for this shortcut wont be consumed</span></li>
+                <li>Press Ctrl+F to toggle button 2 <span class="desc">Ignored in input filed</span></li>
+                <li>Press Meta+F to toggle button 2 <span class="desc">NOT Ignored in input filed</span></li>
+                <li ng-show="state.algGEnabled" class="dkey">Press Alt+G to toggle button 3 <span class="desc">NOT Ignored in input filed and consumed only once</span></li>
+                <li ng-show="state.hpNumericHandlersRegistered" class="hpnkey">Press Ctrl+E to test numeric priority <span class="desc">Handler for button6 is added first but with higher priority than handler for button7</span></li>
+            </ul>
+        </div>
+        <div class="test-board" style="float: left; margin-left: 50px; border: 1px solid green; padding: 10px;">
+            <span>Test board</span>
+            <ul>
+                <li>
+                    <input 
+                          class=""
+                          id="st-inputfield"
+                          type="text"
+                          ng-show="isSTInputVisible()"
+                            />
+                </li>
+                <li>
+                    <button 
+                        id="button1"
+                        class="btn btn-success" 
+                        ng-disabled="!state.button1Enabled">
+                        Button 1
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        id="button2"
+                        class="btn btn-success" 
+                        ng-disabled="!state.button2Enabled">
+                        Button 2
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        id="button3"
+                        class="btn btn-success" 
+                        ng-disabled="!state.button3Enabled">
+                        Button 3
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        id="button4"
+                        class="btn btn-warning" 
+                        ng-disabled="!state.button4Enabled">
+                        Button 4
+                    </button>
+                </li>
+                <li>
+                    <button
+                            id="button5"
+                            class="btn btn-warning"
+                            ng-disabled="!state.button5Enabled">
+                        Button 5
+                    </button>
+                </li>
+                <li>
+                    <button
+                            id="button6"
+                            class="btn btn-danger"
+                            ng-disabled="!state.button6Enabled">
+                        Button 6
+                    </button>
+                </li>
+                <li>
+                    <button
+                            id="button7"
+                            class="btn btn-danger"
+                            ng-disabled="!state.button7Enabled">
+                        Button 7
+                    </button>
+                </li>
+        </div>
+        <div style="margin-top: 380px; margin-bottom: 30px;">
+            <p>
+                <h3>How to test:</h3>
+                First of all click on "Register default handlers" to add listeners of keyboard short cuts. It will appear a list of enabled shortcuts with a small description.
+                <br />
+                Some shortcuts will work also on text fields, most them wont.
+                <br />
+                High priority handlers represents circustances when the same short cut is needed within a user interface section such as a popup or a confirm window; event configuration can decide whether execute only its handler or all other registered handlers for that short cut.
+            </p>
+            <br />
+            <button
+                id = "btn-register-default"
+                class="btn btn-xs btn-success" 
+                ng-disabled="state.handlersRegistered"
+                ng-click="registerHandlers()">
+                Register default handlers
+            </button>
+            <button 
+                id = "btn-unregister-default"
+                class="btn btn-xs btn-success" 
+                ng-disabled="!state.handlersRegistered"
+                ng-click="unregisterHandlers()">
+                Unregister default handlers
+            </button>
+            <button
+                    id = "btn-register-hp"
+                    class="btn btn-xs btn-warning"
+                    ng-click="registerHPHandlers()"
+                    ng-disabled="!state.handlersRegistered || state.hpHandlersRegistered">
+                Register hight priority handlers
+            </button>
+            <button
+                    id = "btn-register-hpn"
+                    class="btn btn-xs btn-danger"
+                    ng-click="registerHPNumericHandlers()"
+                    ng-disabled="!state.handlersRegistered || !state.hpHandlersRegistered || state.hpNumericHandlersRegistered">
+                Register handlers with numeric priority
+            </button>
+        </div>
+    </div>
+</div>
+<!-- buildexamples:section footer --><!-- /buildexamples -->

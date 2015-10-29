@@ -2,15 +2,18 @@
 
 describe('NotebooksExchange factory', function() {
     
-    var NotebookExchange, Notebook, NameSpace, $httpBackend;
+    var NotebookExchange, Notebook, NameSpace, $httpBackend, MyPundit, NotebookCommunication, $timeout;
     
     beforeEach(module('Pundit2'));
 
-    beforeEach(inject(function(_NotebookExchange_, _Notebook_, _NameSpace_, _$httpBackend_){
+    beforeEach(inject(function(_NotebookExchange_, _NotebookCommunication_, _Notebook_, _NameSpace_, _$httpBackend_, _MyPundit_, _$timeout_){
+        MyPundit = _MyPundit_;
+        NotebookCommunication = _NotebookCommunication_;
         NotebookExchange = _NotebookExchange_;
         Notebook = _Notebook_;
         $httpBackend = _$httpBackend_;
         NameSpace = _NameSpace_;
+        $timeout = _$timeout_;
     }));
 
     it("should correctly add notebook by (new Notebook(id))", function(){
@@ -147,6 +150,36 @@ describe('NotebooksExchange factory', function() {
         expect(NotebookExchange.getNotebookById(nt.id)).toBeUndefined();
         expect(NotebookExchange.getMyNotebooks().length).toBe(0);
         expect(NotebookExchange.getCurrentNotebooks()).toBeUndefined();
+    });
+
+    it("should correctly add notebook to NotebooksExchange even in user first login", function() {
+        var testId = 'doe1ID';
+
+        $httpBackend
+            .when('GET', NameSpace.get('asNBOwned'))
+            .respond('');
+
+        $httpBackend
+            .when('GET', NameSpace.get('asNBCurrent'))
+            .respond('{"NotebookID":"'+testId+'"}');
+
+
+        $httpBackend
+            .when('GET', NameSpace.get('asNBMeta', {
+                id: testId
+            }))
+            .respond(JSON.stringify(testNotebooks.firstLogin));
+
+        MyPundit.setIsUserLogged(true);
+
+        NotebookCommunication.getMyNotebooks();
+        $httpBackend.flush();
+
+        NotebookCommunication.getCurrent();
+        $httpBackend.flush();
+
+        var currentNotebook = NotebookExchange.getCurrentNotebooks();
+        expect(currentNotebook).toBeDefined();
     });
 
 });

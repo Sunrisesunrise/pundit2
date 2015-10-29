@@ -1,7 +1,7 @@
 /*global testAnnotations*/
 
 describe('AnnotationSidebar service', function() {
-    
+
     var AnnotationSidebar,
         $window,
         $timeout,
@@ -22,7 +22,7 @@ describe('AnnotationSidebar service', function() {
     };
 
     beforeEach(module('Pundit2'));
-    
+
     beforeEach(function() {
         inject(function($injector, _$window_, _$log_, _$timeout_, _$compile_, _$httpBackend_, _$rootScope_, _ANNOTATIONSIDEBARDEFAULTS_) {
             AnnotationSidebar = $injector.get('AnnotationSidebar');
@@ -41,11 +41,15 @@ describe('AnnotationSidebar service', function() {
 
         var testId = fakeScope.id;
         $httpBackend
-            .when('GET', NameSpace.get('asOpenAnn', {id: testId}))
+            .when('GET', NameSpace.get('asOpenAnn', {
+                id: testId
+            }))
             .respond(testAnnotations.simple2);
         var ann,
             promise = new Annotation(testId);
-        waitsFor(function() { return ann; }, 2000);
+        waitsFor(function() {
+            return ann;
+        }, 2000);
         // runs(function() {
         //     expect(ann.id).toEqual(testId);
         // });
@@ -61,13 +65,13 @@ describe('AnnotationSidebar service', function() {
         delete $window.PUNDIT;
     });
 
-    var compileAnnotationSidebarDirective = function(){
+    var compileAnnotationSidebarDirective = function() {
         var elem = $compile('<annotation-sidebar></annotation-sidebar>')($rootScope);
         $rootScope.$digest();
         return elem;
     };
 
-    it('should be initialized the variables of detas', function(){
+    it('should be initialized the variables of detas', function() {
         var sidebarScope = compileAnnotationSidebarDirective().isolateScope();
         expect(sidebarScope.fromMinDate).not.toEqual('undefined');
         expect(sidebarScope.toMinDate).not.toEqual('undefined');
@@ -75,29 +79,29 @@ describe('AnnotationSidebar service', function() {
         expect(sidebarScope.fromToDate).not.toEqual('undefined');
     });
 
-    it('should change the expanded state', function(){
+    it('should change the expanded state', function() {
         var beforeToggleState = AnnotationSidebar.isAnnotationSidebarExpanded();
         expect(AnnotationSidebar.isAnnotationSidebarExpanded()).toEqual(beforeToggleState);
         AnnotationSidebar.toggle();
         expect(AnnotationSidebar.isAnnotationSidebarExpanded()).toEqual(!beforeToggleState);
     });
 
-    it('should change the filter view state', function(){
+    it('should change the filter view state', function() {
         var beforeFilterToggleState = AnnotationSidebar.isFiltersExpanded();
         expect(AnnotationSidebar.isFiltersExpanded()).toEqual(beforeFilterToggleState);
         AnnotationSidebar.toggleFiltersContent();
         expect(AnnotationSidebar.isFiltersExpanded()).toEqual(!beforeFilterToggleState);
     });
 
-    it('should read default annotations panel', function(){
+    it('should read default annotations panel', function() {
         expect(AnnotationSidebar.isAnnotationsPanelActive()).toEqual(ANNOTATIONSIDEBARDEFAULTS.annotationsPanelActive);
     });
 
-    it('should read default suggestions panel', function(){
+    it('should read default suggestions panel', function() {
         expect(AnnotationSidebar.isSuggestionsPanelActive()).toEqual(ANNOTATIONSIDEBARDEFAULTS.suggestionsPanelActive);
     });
 
-    it('should change the annotations panel view', function(){
+    it('should change the annotations panel view', function() {
         expect(AnnotationSidebar.isAnnotationsPanelActive()).toEqual(ANNOTATIONSIDEBARDEFAULTS.annotationsPanelActive);
         expect(AnnotationSidebar.isSuggestionsPanelActive()).toEqual(ANNOTATIONSIDEBARDEFAULTS.suggestionsPanelActive);
 
@@ -108,7 +112,7 @@ describe('AnnotationSidebar service', function() {
         expect(AnnotationSidebar.isSuggestionsPanelActive()).toEqual(false);
     });
 
-    it('should change the suggestions panel view', function(){
+    it('should change the suggestions panel view', function() {
         expect(AnnotationSidebar.isAnnotationsPanelActive()).toEqual(ANNOTATIONSIDEBARDEFAULTS.annotationsPanelActive);
         expect(AnnotationSidebar.isSuggestionsPanelActive()).toEqual(ANNOTATIONSIDEBARDEFAULTS.suggestionsPanelActive);
 
@@ -119,43 +123,41 @@ describe('AnnotationSidebar service', function() {
         expect(AnnotationSidebar.isSuggestionsPanelActive()).toEqual(true);
     });
 
-    it('should reset the filters', function(){
+    it('should reset the filters', function() {
         AnnotationSidebar.filters['authors'].expression.push('http://fakeuri.it/test');
         // var elementsList = AnnotationSidebar.getFilters();
         AnnotationSidebar.resetFilters();
         angular.forEach(AnnotationSidebar.filters, function(filter) {
-            if (typeof(filter.expression) === 'string'){
+            if (typeof(filter.expression) === 'string') {
                 expect(filter.expression).toEqual('');
-            } else if (typeof(filter.expression) === 'object'){
+            } else if (typeof(filter.expression) === 'object') {
                 expect(filter.expression.length).toEqual(0);
             }
         });
     });
 
     // TODO: mockkare più di un'annotazione con i valori delle date e completare il test
-    it('should return the correct range of minimum and maximum dates', function(){
+    it('should return the correct range of minimum and maximum dates', function() {
         $timeout.flush(AnnotationSidebar.options.annotationsRefresh);
         AnnotationSidebar.getMinDate();
         AnnotationSidebar.getMaxDate();
     });
 
-    it('should sidebar get annotation after consolidation-completed event', function(){
-        EventDispatcher.sendEvent('Consolidation.consolidateAll');
+    it('should sidebar get annotation after consolidation-completed event', function() {
+        EventDispatcher.sendEvent('Pundit.forceUpdate');
         myAnnotation = AnnotationSidebar.getAllAnnotations();
-        expect(myAnnotation.length).toEqual(1);
+        expect(Object.keys(myAnnotation).length).toEqual(1);
     });
 
-    // TODO: testare singolarmente le funzioni per la creazione e il conteggio dei filtri
-
-    it('should filter be applied to the list of filtered annotations', function(){
+    it('should filter be applied to the list of filtered annotations', function() {
         AnnotationSidebar.filters['authors'].expression.push('http://fakeuri.it/test');
         var currentFilters = AnnotationSidebar.filters;
         var myAnnotationFiltered = AnnotationSidebar.getAllAnnotationsFiltered(currentFilters);
 
-        expect(myAnnotationFiltered.length).toEqual(0);
+        expect(Object.keys(myAnnotationFiltered).length).toEqual(0);
     });
 
-    it('should service know if some filters are active', function(){
+    it('should service know if some filters are active', function() {
         AnnotationSidebar.resetFilters();
         expect(AnnotationSidebar.needToFilter()).toEqual(false);
 
@@ -163,7 +165,7 @@ describe('AnnotationSidebar service', function() {
         expect(AnnotationSidebar.needToFilter()).toEqual(true);
     });
 
-    it('should setFilters works only if element exists in the current annotations', function(){
+    it('should setFilters works only if element exists in the current annotations', function() {
         AnnotationSidebar.resetFilters();
         expect(AnnotationSidebar.needToFilter()).toEqual(false);
 

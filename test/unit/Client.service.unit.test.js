@@ -1,7 +1,7 @@
 describe('Client service', function() {
     
     var Client, NameSpace, SelectorsManager, ItemsExchange, EventDispatcher,
-        $rootScope, $httpBackend, $templateCache, $compile;
+        $rootScope, $httpBackend, $templateCache, $compile, MyPundit;
 
     var testPunditConfig = {
         korbo : {
@@ -16,12 +16,12 @@ describe('Client service', function() {
                         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
                         "label": "has comment (free text)",
                         "description": "Any comment related to the selected fragment of text or image",
-                        "domain": [
+                        "suggestedSubjectTypes": [
                             "http://purl.org/pundit/ont/ao#fragment-image",
                             "http://purl.org/pundit/ont/ao#fragment-text",
                             "http://xmlns.com/foaf/0.1/Image"
                         ],
-                        "range": ["http://www.w3.org/2000/01/rdf-schema#Literal"],
+                        "suggestedObjectTypes": ["http://www.w3.org/2000/01/rdf-schema#Literal"],
                         "uri": "http://schema.org/comment"
                     }
                 ]
@@ -68,7 +68,7 @@ describe('Client service', function() {
 
     var ImageHandler;
     beforeEach(inject(function( _$rootScope_, _$httpBackend_, _$templateCache_, _$compile_,
-        _Client_, _NameSpace_, _SelectorsManager_, _ItemsExchange_, _ImageHandler_, _EventDispatcher_){
+        _Client_, _NameSpace_, _SelectorsManager_, _ItemsExchange_, _ImageHandler_, _EventDispatcher_, _MyPundit_){
 
         $rootScope = _$rootScope_;
         $httpBackend = _$httpBackend_;
@@ -80,6 +80,9 @@ describe('Client service', function() {
         SelectorsManager = _SelectorsManager_;
         ItemsExchange = _ItemsExchange_;
         ImageHandler = _ImageHandler_;
+        MyPundit = _MyPundit_;
+
+        MyPundit.useCookies = false;
 
     }));
 
@@ -115,9 +118,10 @@ describe('Client service', function() {
             bootModules = rootNode.children();
 
         // add only configured modules
-        expect(bootModules.length).toBe(2);
+        expect(bootModules.length).toBe(3);
         expect(rootNode.find('dashboard').length).toBe(1);
         expect(rootNode.find('toolbar').length).toBe(1);
+        expect(rootNode.find('alert-system').length).toBe(1);
     });
 
     it('should add to the dom active modules inside dashboard panel', function(){
@@ -131,9 +135,10 @@ describe('Client service', function() {
             bootModules = rootNode.children();
 
         // add only configured modules
-        expect(bootModules.length).toBe(2);
+        expect(bootModules.length).toBe(3);
         expect(rootNode.find('dashboard').length).toBe(1);
         expect(rootNode.find('toolbar').length).toBe(1);
+        expect(rootNode.find('alert-system').length).toBe(1);
 
         compileDirective('dashboard');
         var el = angular.element.find("[paneltitle='tools'] .testClassToFindTmpl");

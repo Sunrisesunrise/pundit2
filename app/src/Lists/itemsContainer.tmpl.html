@@ -3,8 +3,8 @@
 <!-- HEADER -->
 <div 
     class="pnd-panel-tab-content-header pnd-panel-tab-content-header-no-border">
-    
-    <div class="left-inner-icon">
+
+    <div class="left-inner-icon pnd-panel-tab-search pnd-has-options">
         <span 
             class="pnd-icon {{search.icon}}" 
             ng-click="search.term = ''"></span>
@@ -14,6 +14,16 @@
             placeholder="search items" 
             class="form-control">
     </div>
+
+    <button
+            type="button"
+            class="pnd-btn pnd-btn-xs pnd-btn-link pnd-btn-full pnd-btn-full pnd-panel-tab-icon {{search.additionalClass}}"
+            template-url="{{dropdownTemplate}}"
+            bs-dropdown="dropdownOrdering"
+            title="{{search.orderLabel}}">
+            <span
+                    class="pnd-icon pnd-icon-caret-down"></span>
+    </button>
 
 </div> <!-- end pnd-panel-tab-content-header -->
 

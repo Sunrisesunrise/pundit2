@@ -51,6 +51,8 @@ describe('AnnotationDetails service', function() {
             ANNOTATIONDETAILSDEFAULTS = _ANNOTATIONDETAILSDEFAULTS_;
         });
 
+        MyPundit.useCookies = false;
+
         var promiseValue;
 
         var testId = fakeScope.id;
@@ -136,8 +138,7 @@ describe('AnnotationDetails service', function() {
     });
 
     it('should update annotation details and open it', function(){
-        // $rootScope.$emit('update-annotation-completed', fakeScope.id);
-        EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', fakeScope.id);
+        EventDispatcher.sendEvent('AnnotationSidebar.updateAnnotation', fakeScope.id);
         var currentAnnotationDetails = AnnotationDetails.getAnnotationDetails(fakeScope.id);
         expect(typeof(currentAnnotationDetails)).toBe('object');
         expect(currentAnnotationDetails.expanded).toEqual(true);

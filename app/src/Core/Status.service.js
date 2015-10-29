@@ -16,7 +16,9 @@ angular.module('Pundit2.Core')
             clientBoot: false,
             userLogged: false,
             loading: false,
-            templateMode: false
+            templateMode: false,
+            needsProgressBar: false,
+            progress: 0
         }
     };
 
@@ -35,9 +37,10 @@ angular.module('Pundit2.Core')
         }
 
         if (currentState) {
-            state.Pundit.loading = true;
-            updateLoading(true);
-
+            if (state.Pundit.loading === false) {
+                state.Pundit.loading = true;
+                updateLoading(true);
+            }
             loadingCount[eventName] ++;
         } else {
             loadingCount[eventName] --;
@@ -88,13 +91,18 @@ angular.module('Pundit2.Core')
         state.AnnotationSidebar.isFiltersContentExpanded = e.args;
     });
 
+    // Dashboard
+    EventDispatcher.addListener('Dashboard.toggle', function(e) {
+        state.Dashboard.isVisible = e.args;
+    });
+
     // Template mode
     EventDispatcher.addListener('Pundit.templateMode', function(e) {
         state.Pundit.templateMode = e.args;
 
         // Reset selection when template state change
         EventDispatcher.sendEvent('Pundit.changeSelection');
-    })
+    });
 
     // Error
     EventDispatcher.addListener('Pundit.error', function(e) {
@@ -123,6 +131,33 @@ angular.module('Pundit2.Core')
 
     status.getLog = function() {
         return errorLog;
+    };
+
+    status.resetProgress = function() {
+        state.Pundit.progress = 0;
+        state.Pundit.needsProgressBar = false;
+        EventDispatcher.sendEvent('Status.progressReset');
+    };
+
+    status.hitProgress = function(phase, relativePerc) {
+        var phases = {
+            'phase0': 0,
+            'phase1': 10,
+            'phase2': 40,
+            'phase3': 50,
+        };
+
+        var init = 0;
+        for (var i = 0; i < phase; i++) {
+            init += phases['phase'+i];
+        }
+        var p = phases['phase'+phase] / 100 * relativePerc;
+        state.Pundit.progress = init + p;
+
+        EventDispatcher.sendEvent('Status.progress', {
+            needsProgressBar: (state.Pundit.needsProgressBar = true),
+            progress: state.Pundit.progress
+        });
     };
 
     return status;

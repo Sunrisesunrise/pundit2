@@ -62,7 +62,7 @@ angular.module("Pundit2.MyItemsContainer")
 })
 
 .service("MyItems", function(MYITEMSDEFAULTS, BaseComponent, EventDispatcher, NameSpace, Item, ItemsExchange,
-    ContextualMenu, MyPundit, Config, Consolidation,
+    ContextualMenu, MyPundit, Config, Consolidation, TextFragmentAnnotator,
     $http, $rootScope, $q) {
 
     var myItems = new BaseComponent("MyItems", MYITEMSDEFAULTS);
@@ -71,6 +71,10 @@ angular.module("Pundit2.MyItemsContainer")
 
     var setLoading = function(state) {
         EventDispatcher.sendEvent('MyItems.loading', state);
+    };
+
+    var preventDelay = function() {
+        EventDispatcher.sendEvent('Pundit.preventDelay', true);
     };
 
     var initContextualMenu = function() {
@@ -93,14 +97,17 @@ angular.module("Pundit2.MyItemsContainer")
         ContextualMenu.addAction({
             name: 'addToMyItems',
             type: cMenuTypes,
-            label: "Add to my items",
+            label: "Add to My Items",
             priority: 99,
             showIf: function(item) {
                 return MyPundit.isUserLogged() &&
                     !ItemsExchange.isItemInContainer(item, myItems.options.container);
             },
             action: function(item) {
+                EventDispatcher.sendEvent('MyItems.action');
+                Consolidation.requestConsolidateAll();
                 myItems.addItem(item).then(function() {
+                    EventDispatcher.sendEvent('MyItems.itemAdded', item);
                     Consolidation.consolidateAll();
                 });
                 return true;
@@ -110,14 +117,17 @@ angular.module("Pundit2.MyItemsContainer")
         ContextualMenu.addAction({
             name: 'removeFromMyItems',
             type: cMenuTypes,
-            label: "Remove from my items",
+            label: "Remove from My Items",
             priority: 99,
             showIf: function(item) {
                 return MyPundit.isUserLogged() &&
                     ItemsExchange.isItemInContainer(item, myItems.options.container);
             },
             action: function(item) {
+                EventDispatcher.sendEvent('MyItems.action');
+                Consolidation.requestConsolidateAll();
                 myItems.deleteItem(item).then(function() {
+                    EventDispatcher.sendEvent('MyItems.itemRemoved', item);
                     Consolidation.consolidateAll();
                 });
                 return true;
@@ -233,6 +243,7 @@ angular.module("Pundit2.MyItemsContainer")
         opInProgress = true;
 
         setLoading(true);
+        Consolidation.requestConsolidateAll();
 
         // remove all my item on pundit server
         // setting it to []
@@ -269,10 +280,13 @@ angular.module("Pundit2.MyItemsContainer")
             myItems.log('Deleted all my items on server', data);
         }).error(function(msg) {
             setLoading(false);
+            Consolidation.rejectConsolidateAll();
             opInProgress = false;
             promise.reject();
             myItems.err('Cant delete my items on server: ', msg);
         });
+
+        preventDelay();
 
         return promise.promise;
     };
@@ -336,18 +350,29 @@ angular.module("Pundit2.MyItemsContainer")
 
         }).error(function(msg) {
             opInProgress = false;
+            Consolidation.rejectConsolidateAll();
             setLoading(false);
             promise.reject();
             myItems.err('Cant delete a my item on the server: ', msg);
         });
 
+        preventDelay();
+
         return promise.promise;
     };
 
     myItems.deleteItemAndConsolidate = function(item) {
+        Consolidation.requestConsolidateAll();
         myItems.deleteItem(item).then(function() {
+            preventDelay();
             Consolidation.consolidateAll();
         });
+    };
+
+    myItems.isItemPresent = function(item) {
+        var items = ItemsExchange.getItemsByContainer(myItems.options.container),
+            index = items.indexOf(item);
+        return index !== -1;
     };
 
     // add one item to my items on pundit server
@@ -362,7 +387,7 @@ angular.module("Pundit2.MyItemsContainer")
 
         var currentTime = new Date(),
             // get all my items and make a copy
-            items = angular.copy(ItemsExchange.getItemsByContainer(myItems.options.container)),
+            items = angular.extend([], ItemsExchange.getItemsByContainer(myItems.options.container)),
             promise = $q.defer();
 
         // add new item to the copied array
@@ -409,15 +434,19 @@ angular.module("Pundit2.MyItemsContainer")
             opInProgress = false;
             setLoading(false);
             promise.reject();
-
+            Consolidation.rejectConsolidateAll();
             myItems.err('Cant add item to my items on the server: ', msg);
         });
+
+        preventDelay();
 
         return promise.promise;
     };
 
     myItems.addItemAndConsolidate = function(item) {
+        Consolidation.requestConsolidateAll();
         myItems.addItem(item).then(function() {
+            preventDelay();
             Consolidation.consolidateAll();
         });
     };

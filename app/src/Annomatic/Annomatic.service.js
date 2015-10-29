@@ -50,12 +50,27 @@ angular.module('Pundit2.Annomatic')
      * @description
      * `string`
      *
-     * Set the service called by Annomatic to get annotation suggested: 'DataTXT' or 'gramsci'
+     * Set the service called by Annomatic to get annotation suggested: 'DataTXT' or 'gramsci' or 'NER'
      *
      * Default value:
      * <pre> source: 'gramsci' </pre>
      */
     source: 'DataTXT',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Annomatic.sourceURL
+     *
+     * @description
+     * `string`
+     *
+     * Propety used to set the NER resource URL. At the moment you can't set DataTXT. NB: you must set this value in the conf if you use NER
+     *
+     * Default value:
+     * <pre> sourceURL: 'http://localhost/ner' </pre>
+     */
+    sourceURL: 'http://localhost/ner',
 
     /**
      * @module punditConfig
@@ -112,10 +127,10 @@ angular.module('Pundit2.Annomatic')
  *
  * For the configuration of this module, see {@link #!/api/punditConfig/object/modules#Annomatic here}
  */
-.service('Annomatic', function(ANNOMATICDEFAULTS, BaseComponent, EventDispatcher, NameSpace, DataTXTResource, XpointersHelper,
-    ItemsExchange, TextFragmentHandler, ImageHandler, TypesHelper, Toolbar,
-    DBPediaSpotlightResource, Item, GramsciResource, AnnotationsCommunication,
-    $rootScope, $timeout, $document, $window, $q, Consolidation, ContextualMenu) {
+.service('Annomatic', function(ANNOMATICDEFAULTS, BaseComponent, EventDispatcher, NameSpace,
+    DataTXTResource, XpointersHelper, ItemsExchange, TextFragmentHandler, ImageHandler, TypesHelper,
+    Toolbar, DBPediaSpotlightResource, Item, AnnotationsCommunication, NameEntityRecognitionResource,
+    $rootScope, $timeout, $document, $window, $q, Consolidation, ContextualMenu, TextFragmentAnnotator) {
 
     var annomatic = new BaseComponent('Annomatic', ANNOMATICDEFAULTS);
 
@@ -837,8 +852,9 @@ angular.module('Pundit2.Annomatic')
 
     annomatic.log('Component up and running');
 
-    // NEW ANNOMATIC SERVICE BASED ON GRAMSCI
 
+
+    // TODO: new code to be integrated
 
     /**
      * @ngdoc method
@@ -907,6 +923,7 @@ angular.module('Pundit2.Annomatic')
      *
      */
     annomatic.stop = function() {
+        annomatic.closeAll();
         annomatic.hardReset();
         // ItemsExchange.wipeContainer(annomatic.options.container);
         state.isRunning = false;
@@ -1031,14 +1048,20 @@ angular.module('Pundit2.Annomatic')
      * @param {number} number of the annotation to be saved
      *
      */
-    annomatic.save = function(num) {
+    annomatic.save = function(num, entNum) {
         var uri = annomatic.ann.numToUriMap[num];
         var ann = annomatic.ann.byUri[uri];
+        var objUri = ann.uri;
 
-        var items = buildRDFItems(uri, annomatic.options.property, ann.uri);
-        var graph = buildGraph(uri, annomatic.options.property, ann.uri);
-        var targets = buildTargets(uri, annomatic.options.property, ann.uri);
+        if (typeof(entNum) !== 'undefined')  {
+            objUri = ann.entities[entNum].uri;
+        }
 
+        var items = buildRDFItems(uri, annomatic.options.property, objUri);
+        var graph = buildGraph(uri, annomatic.options.property, objUri);
+        var targets = buildTargets(uri, annomatic.options.property, objUri);
+
+        // TODO add support v2
         AnnotationsCommunication.saveAnnotation(graph, items, targets, undefined, true).then(function(annId) {
             annomatic.ann.savedById.push(annId);
             annomatic.ann.savedByNum.push(num);
@@ -1072,21 +1095,49 @@ angular.module('Pundit2.Annomatic')
     };
 
 
+    // TODO: remove it
+    var NERMock = {
+        "timestamp": "1234455",
+        "time": "234",
+        "annotations": [{
+            "uri": "http://purl.org/gramscisource/dictionary/entry/Risorgimento",
+            "endOffset": "38",
+            "endXpath": "/html[1]/body[1]/div[@about='http://89.31.77.216/quaderno/2/nota/2']/div[1]/text[1]/p[1]/emph[1]/text()[1]",
+            "label": "Risorgimento",
+            "spot": "Risorgimento",
+            "startOffset": "26",
+            "startXpath": "/html[1]/body[1]/div[@about='http://89.31.77.216/quaderno/2/nota/2']/div[1]/text[1]/p[1]/emph[1]/text()[1]",
+            "entities": [{
+                "label": "Risorgimento mento",
+                "uri": "http://purl.org/my_sample_uri",
+                "types": ["type city", "type capital "],
+                "abstract": "Risorgimento is the blabla...",
+                "depiction": "Thumbnail URL"
+            }, {
+                "label": "Risorgimento non mento",
+                "uri": "http://purl.org/my_sample_uri_2",
+                "types": ["type city", "type region "],
+                "abstract": "Risorgimento is a bloblo",
+                "depiction": "Thumbnail URL"
+            }]
+        }]
+    };
+
     /**
      * @ngdoc method
-     * @name Annomatic#getGramsciAnnotations
+     * @name Annomatic#getNERAnnotations
      * @module Pundit2.Annomatic
      * @function
      *
      * @description
-     * Given an HTML node, will query gramsci service for annotations on the contents of that node
+     * Given an HTML node, will query NER service for annotations on the contents of that node
      * solving the promise when done.
      *
      * @param {DOMElement} current node to be processed
-     * @return {Promise} promise will be resolved when the data is returned from gramsci service
+     * @return {Promise} promise will be resolved when the data is returned from NER service
      *
      */
-    annomatic.getGrasciAnnotations = function(node) {
+    annomatic.getNERAnnotations = function(node) {
         var promise = $q.defer();
 
         if (typeof(node) === 'undefined') {
@@ -1098,12 +1149,18 @@ angular.module('Pundit2.Annomatic')
         var about = element.attr('about');
         var content = element.parent().html();
 
-        GramsciResource.getAnnotations({
-                doc_id: about,
-                html_fragment: content
+        NameEntityRecognitionResource.getAnnotations({
+                doc_id: about, // jshint ignore:line
+                html_fragment: content // jshint ignore:line
             },
             function(data) {
-                consolidateGramsciSpots(data);
+
+                // TODO: temp if
+                if (annomatic.options.source === 'gramsci') {
+                    consolidateNERSpots(data);
+                } else {
+                    consolidateNERSpots(NERMock);
+                }
                 promise.resolve();
             },
             function(msg) {
@@ -1131,8 +1188,8 @@ angular.module('Pundit2.Annomatic')
     annomatic.getAnnotations = function(node) {
         if (annomatic.options.source === 'DataTXT') {
             return annomatic.getDataTXTAnnotations(node);
-        } else if (annomatic.options.source === 'gramsci') {
-            return annomatic.getGrasciAnnotations(node);
+        } else if (annomatic.options.source === 'gramsci' || annomatic.options.source === 'NER') {
+            return annomatic.getNERAnnotations(node);
         }
     };
 
@@ -1140,12 +1197,7 @@ angular.module('Pundit2.Annomatic')
         isRunning: false
     };
 
-    // get the html content to be sent to gramsci
-    var getGramsciHtml = function() {
-        return angular.element('.pundit-content').html();
-    };
-
-    var createItemFromGramsciAnnotation = function(ann) {
+    var createItemFromNERAnnotation = function(ann) {
         var values = {};
 
         values.uri = ann.uri;
@@ -1162,7 +1214,7 @@ angular.module('Pundit2.Annomatic')
             values.type = angular.copy(ann.types);
         }
         if (typeof(ann.abstract) === "undefined") {
-            values.description = ann.label + " imported from Gramsci Dictionary";
+            values.description = ann.label + " imported from NER Dictionary";
         } else {
             values.description = ann.abstract;
         }
@@ -1171,18 +1223,17 @@ angular.module('Pundit2.Annomatic')
     };
 
 
-    // consolidate all gramsci spots (wrap text inside span and add popover toggle icon)
-    var consolidateGramsciSpots = function(data) {
+    // consolidate all spots (wrap text inside span and add popover toggle icon)
+    var consolidateNERSpots = function(data) {
 
-        // var annotations = getGramsciAnnotations();
         var annotations = data.annotations;
         var validAnnotations = [];
-        var i;
+        var i,ann;
 
-        // cycle on all annotations received from gramsci
+        // cycle on all annotations received from NER service
         for (i = 0; i < annotations.length; i++) {
 
-            var ann = annotations[i];
+            ann = annotations[i];
             // get the current node from xpath
             var startCurrentNode = XpointersHelper.getNodeFromXpath(ann.startXpath.replace('/html[1]/body[1]', '/'));
             var endCurrentNode = XpointersHelper.getNodeFromXpath(ann.endXpath.replace('/html[1]/body[1]', '/'));
@@ -1215,8 +1266,15 @@ angular.module('Pundit2.Annomatic')
                         frUri: item.uri
                     });
 
-                    // create item from resource 
-                    ItemsExchange.addItemToContainer(createItemFromGramsciAnnotation(ann), annomatic.options.container);
+                    if (typeof(ann.entities) === 'undefined') {
+                        // create item from resource 
+                        ItemsExchange.addItemToContainer(createItemFromNERAnnotation(ann), annomatic.options.container);
+                    } else {
+                        for (var ent in ann.entities) {
+                            ItemsExchange.addItemToContainer(createItemFromNERAnnotation(ann.entities[ent]), annomatic.options.container);
+                        }
+                    }
+
                 }
 
             }
@@ -1232,7 +1290,7 @@ angular.module('Pundit2.Annomatic')
         for (i = 0; i < validAnnotations.length; i++) {
 
             var currentIndex = i + oldAnnotationNumber;
-            var ann = validAnnotations[i].ann;
+            ann = validAnnotations[i].ann;
 
             annomatic.ann.byNum[currentIndex] = ann;
             annomatic.ann.numToUriMap[currentIndex] = validAnnotations[i].frUri;
@@ -1297,7 +1355,7 @@ angular.module('Pundit2.Annomatic')
         }
 
         // AnnotationSidebar.toggleLoading();
-
+        var annotationsRootNode;
         if (ancestor) {
             angular.element(ancestor).removeClass('selecting-ancestor');
             annotationsRootNode = angular.element(ancestor);
@@ -1320,8 +1378,8 @@ angular.module('Pundit2.Annomatic')
      *
      */
     annomatic.getAnnotationByArea = function() {
-        annotationsRootNode = annomatic.area;
-        if (annotationsRootNode == null) {
+        var annotationsRootNode = annomatic.area;
+        if (annotationsRootNode === null) {
             return;
         }
 
@@ -1331,7 +1389,10 @@ angular.module('Pundit2.Annomatic')
             // AnnotationSidebar.toggleLoading();
             EventDispatcher.sendEvent('Annomatic.loading', false);
             Consolidation.consolidate(ItemsExchange.getItemsByContainer(annomatic.options.container));
-        })
+            setTimeout(function() {
+                TextFragmentAnnotator.showAll();
+            }, 10);
+        });
     };
 
     return annomatic;

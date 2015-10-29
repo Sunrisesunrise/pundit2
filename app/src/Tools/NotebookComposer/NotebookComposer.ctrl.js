@@ -1,9 +1,32 @@
 angular.module('Pundit2.NotebookComposer')
 
-.controller('NotebookComposerCtrl', function($scope, EventDispatcher, NotebookComposer, $timeout, NotebookExchange, NotebookCommunication, $q) {
+.controller('NotebookComposerCtrl', function($scope, EventDispatcher, NotebookComposer, $timeout, NotebookExchange, NotebookCommunication, Analytics, $q) {
 
     var setLoading = function(state) {
         EventDispatcher.sendEvent('NotebookComposerCtrl.loading', state);
+    };
+
+    // getter function used to build hierarchystring.
+    // hierarchystring is used for tracking events with analytics.
+    var getHierarchyString = function() {
+        // Temporary solution to find hierarchystring.
+        var eventLabel = "";
+        var myScope = $scope;
+        do {
+            if (typeof(myScope) === 'undefined' || myScope === null) {
+                break;
+            }
+            if (myScope.hasOwnProperty('pane')) {
+                if (myScope.pane.hasOwnProperty('hierarchystring')) {
+                    eventLabel = myScope.pane.hierarchystring;
+                }
+                break;
+            }
+            myScope = myScope.$parent;
+        }
+        while (typeof(myScope) !== 'undefined' && myScope !== null);
+
+        return eventLabel;
     };
 
     $scope.notebook = {};
@@ -48,8 +71,8 @@ angular.module('Pundit2.NotebookComposer')
         warnShortMsg = "Warning!";
 
     var loadIcon = "pnd-icon-refresh pnd-icon-spin",
-        successIcon = "pnd-icon-check-circle",
-        warnIcon = "pnd-icon-exclamation-circle";
+        successIcon = "pnd-icon-check",
+        warnIcon = "pnd-icon-exclamation";
 
     var loadMessageClass = "pnd-message",
         successMessageClass = "pnd-message-success",
@@ -127,6 +150,10 @@ angular.module('Pundit2.NotebookComposer')
                 }
 
             });
+
+        var eventLabel = getHierarchyString();
+        eventLabel += "--saveNewNotebook";
+        Analytics.track('buttons', 'click', eventLabel);
     };
 
     // edit a notebook
@@ -204,16 +231,33 @@ angular.module('Pundit2.NotebookComposer')
             });
 
 
+        var eventLabel = getHierarchyString();
+        eventLabel += "--saveExistingNotebook";
+        Analytics.track('buttons', 'click', eventLabel);
+
     };
 
     // reset form
-    $scope.clear = function() {
+    $scope.clear = function(trackEvent) {
         $scope.notebook.name = "";
         $scope.notebook.visibility = "public";
         $scope.notebook.current = "";
         $scope.editMode = false;
         $scope.notebookComposerHeader = "Create your notebook";
         NotebookComposer.setNotebookToEdit(null);
+
+        if (trackEvent) {
+            var eventLabel = getHierarchyString();
+            eventLabel += "--reset";
+            Analytics.track('buttons', 'click', eventLabel);
+        }
     };
+
+    EventDispatcher.addListener('MyPundit.popoverClose', function() {
+        if ($scope.saving) {
+            updateMessagge(NotebookComposer.options.notificationErrorMsg, NotebookComposer.options.notificationMsgTime, true);
+            $scope.clear();
+        }
+    });    
 
 });

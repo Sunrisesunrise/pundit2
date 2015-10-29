@@ -178,6 +178,8 @@ angular.module('Pundit2.Vocabularies')
     instances: [{
         // where items is stored inside itemsExchange service
         container: 'freebase',
+        //infinite scrolling
+        infiniteScrolling: true,
         // instance tab title
         label: 'Freebase',
         // enable or disable the instance
@@ -222,9 +224,25 @@ angular.module('Pundit2.Vocabularies')
      * Default value:
      * <pre> debug: false </pre>
      */
-    debug: false
+    debug: false,
 
-})
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#FreebaseSelector.searchWithCredentials
+     *
+     * @description
+     * `boolean`
+     *
+     * Search with credentials
+     *
+     * Default value:
+     * <pre> searchWithCredentials: false </pre>
+     */
+    searchWithCredentials: false
+
+
+    })
 
 .factory('FreebaseSelector', function(BaseComponent, FREEBASESELECTORDEFAULTS, TypesHelper, SelectorsManager, Item, ItemsExchange,
     $http, $q) {
@@ -246,7 +264,8 @@ angular.module('Pundit2.Vocabularies')
     // if two search are launched in parallel on the same term then won the last one is completed
     // you can change this behavior
     // eg. removing the wipeContainer() to produce a union of two research results
-    FreebaseFactory.prototype.getItems = function(term) {
+    FreebaseFactory.prototype.getItems = function(term, offset, limit) {
+
 
         if (typeof(term) === 'undefined') {
             return;
@@ -260,18 +279,21 @@ angular.module('Pundit2.Vocabularies')
         $http({
             method: 'GET',
             url: freebaseSelector.options.freebaseSearchURL,
+            withCredentials: freebaseSelector.options.searchWithCredentials,
             params: {
                 key: freebaseSelector.options.freebaseAPIKey,
                 query: term,
-                limit: freebaseSelector.options.limit
+                cursor: offset || 0,
+                limit: limit || freebaseSelector.options.limit
             }
         }).success(function(data) {
 
             freebaseSelector.log('Http success, get items from freebase', data);
-
             if (data.result.length === 0) {
                 freebaseSelector.log('Http success, but get empty result');
-                ItemsExchange.wipeContainer(container);
+                if(offset === null || (typeof offset === 'undefined')) {
+                    ItemsExchange.wipeContainer(container);
+                }
                 promise.resolve();
                 return;
             }
@@ -279,6 +301,7 @@ angular.module('Pundit2.Vocabularies')
             var promiseArr = [],
                 deferArr = [],
                 itemsArr = [];
+            var totalCount = data.hits;
             for (var i in data.result) {
 
                 // The item borns as half empty, will get filled up
@@ -302,10 +325,14 @@ angular.module('Pundit2.Vocabularies')
                 freebaseSelector.log('Completed all items http request (topic and mql)');
                 // when all http request are completed we can wipe itemsExchange
                 // and put new items inside relative container
-                ItemsExchange.wipeContainer(container);
+                if(offset === null || (typeof offset === 'undefined')) {
+                    ItemsExchange.wipeContainer(container);
+                }
+
                 for (i = 0; i < itemsArr.length; i++) {
                     ItemsExchange.addItemToContainer(new Item(itemsArr[i].uri, itemsArr[i]), container);
                 }
+                ItemsExchange.setRemoteItemCount(totalCount, container);
                 promise.resolve();
             });
 
@@ -338,7 +365,7 @@ angular.module('Pundit2.Vocabularies')
                 query: {
                     "id": null,
                     "mid": item.mid,
-                    "type": [{}],
+                    "type": [{}]
                 }
             }
         }).success(function(data) {

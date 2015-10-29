@@ -77,6 +77,8 @@ angular.module('Pundit2.Vocabularies')
     instances: [{
         // where items is stored inside itemsExchange service
         container: 'geonames',
+        //infinite scrolling
+        infiniteScrolling: false,
         // instance label tab title
         label: 'Geonames',
         // enable or disable the instance
@@ -100,7 +102,22 @@ angular.module('Pundit2.Vocabularies')
      * Default value:
      * <pre> debug: false </pre>
      */
-    debug: false
+    debug: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#GeonamesSelector.searchWithCredentials
+     *
+     * @description
+     * `boolean`
+     *
+     * Search with credentials
+     *
+     * Default value:
+     * <pre> searchWithCredentials: false </pre>
+     */
+    searchWithCredentials: false
 
 })
 
@@ -147,6 +164,7 @@ angular.module('Pundit2.Vocabularies')
             //headers: { 'Content-Type': 'application/json' },
             method: 'GET',
             url: self.config.url + "/search/items",
+            withCredentials: self.config.searchWithCredentials,
             cache: false,
             params: params
 

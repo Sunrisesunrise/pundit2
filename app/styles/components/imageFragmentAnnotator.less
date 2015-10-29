@@ -1,0 +1,30 @@
+/**
+ * IMAGE FRAGMENT ANNOTATOR
+ *
+ * The image fragment annotator is the tool that allows the user to create
+ * polygons on an image and use them for creating notes
+ *
+ */
+
+ /* ------------------------------------ *\
+   #IMAGE-FRAGMENT-ANNOTATOR
+\* ------------------------------------ */
+.pnd-image-fragment-frame {
+    position: fixed;
+    z-index: @zindex-pnd-image-fragment-tool;
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    overflow: auto;
+    overflow-y: scroll;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin-top: 0;
+
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}

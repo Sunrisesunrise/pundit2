@@ -1,0 +1,113 @@
+/**
+ * MODAL
+ *
+ * Style for modal windows used in Pundit and KorboEE
+ */
+
+/* ------------------------------------ *\
+   #MODAL
+\* ------------------------------------ */
+.modal {
+    width: auto; /* For css overwritings */
+    min-height: 210px;
+    margin-right: auto;
+    margin-left: auto; /* For css overwritings */
+    z-index: @zindex-pnd-modal; /* For css overwritings !important*/
+    background-color: @color-modal-backdrop;
+
+    .modal-dialog {
+        right: 0;
+        left: 0;
+        -webkit-transform: none;
+        transform: none;
+    }
+
+    &.top {
+        height: auto;
+    }
+
+    a,
+    a:visited {
+        color: @color-text-link;
+    }
+}
+
+.modal-header {
+    height: auto; /* For css overwritings */
+    color: inherit;
+}
+
+.modal-content {
+    height: auto; /* For css overwritings */
+
+    table, .table {
+        margin: 0;
+    }
+}
+
+.modal-title {
+    margin: 0 !important; /* For css overwritings */
+    font-weight: 700;
+    font-size: initial !important; /* For css overwritings */
+    color: inherit;
+    text-align: left;
+}
+
+.modal-footer {
+    padding: 0;
+    border-top: 1px solid @color-border-normal;
+    text-align: left;
+}
+
+
+/* ------------------------------------ *\
+   #SMALL-MODAL
+\* ------------------------------------ */
+/* This is a smaller modal that is currently displayed inside Korbo EE but
+that might be used also in other contexts */
+.small-modal-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+
+    .small-modal {
+        position: relative;
+        background-color: #fff;
+        margin: 20%;
+        -webkit-box-shadow: 0 0 7px rgba(0, 0, 0, .3);
+        -moz-box-shadow: 0 0 7px rgba(0, 0, 0, .3);
+        box-shadow: 0 0 7px rgba(0, 0, 0, .3);
+
+        /* Contents */
+        .small-modal-content {
+            padding: 30px 30px 60px 30px;
+
+            p {
+                font-size: 14px;
+            }
+
+            ul {
+                list-style: inside;
+
+                li {
+                    font-size: 14px;
+                }
+            }
+        }
+
+        /* Footer */
+        .small-modal-footer {
+            display: block;
+            position: absolute;
+            height: 30px;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            border-top: 1px solid #999999;
+            background-color: #fff;
+        }
+    }
+}

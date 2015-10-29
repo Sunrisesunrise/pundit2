@@ -61,9 +61,8 @@ angular.module('Pundit2.Annotators')
         return true;
     };
 
-    pageAnnotator.consolidate = function( /*items*/ ) {
-        pageAnnotator.log('Consolidating!');
-
+    pageAnnotator.consolidate = function(items) {
+        pageAnnotator.log('Consolidating!', items);
         // TODO Add something to the page?
     };
 
@@ -71,6 +70,9 @@ angular.module('Pundit2.Annotators')
         // TODO
     };
 
+    pageAnnotator.wipeItem = function( /*item*/ ) {
+        //TODO: ...
+    };
 
     pageAnnotator.log('Component up and running');
     return pageAnnotator;

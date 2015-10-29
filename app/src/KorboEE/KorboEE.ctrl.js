@@ -16,6 +16,9 @@ angular.module('KorboEE')
 
     // when configuration is set, initialize API callbacks
     $scope.$watch('conf', function(){
+        if (typeof $scope.conf === 'undefined') {
+            return;
+        }
 
         if (!$scope.errorGlobalObjName){
             $scope.init = function(){
@@ -194,22 +197,34 @@ angular.module('KorboEE')
 
 
     $scope.autoCompleteSearch = function(viewValue) {
-        // var container = "kee-korbo";
-        if(viewValue.length >= $scope.conf.labelMinLength){
-            $scope.isSearching = true;
+        //if (typeof $scope.conf === 'undefined') {
+        //    return;
+        //}
+//
+        //// var container = "kee-korbo";
+        //if(viewValue.length >= $scope.conf.labelMinLength){
+        //    $scope.isSearching = true;
+//
+        //    $scope.results = KorboCommunicationService.autocompleteSearch(viewValue, $scope.conf.endpoint, 'korbo', $scope.conf.limitSearchResult, 0, $scope.conf.defaultLanguage, $scope.conf.basketID, $scope.conf.useCredentialInHttpCalls);
+        //    $scope.results.then(function(res){
+        //        if(typeof(res[0]) !== 'undefined' && res[0].errorServer){
+        //            $scope.serverNotRunning = true;
+        //            $scope.isSearching = false;
+        //        } else {
+        //            $scope.isSearching = false;
+        // //           $scope.serverNotRunning = false;
+        //            return $scope.results;
+        //        }
+        //    });
+        //}
 
-            $scope.results = KorboCommunicationService.autocompleteSearch(viewValue, $scope.conf.endpoint, 'korbo', $scope.conf.limitSearchResult, 0, $scope.defaultLan.value, $scope.conf.basketID);
-            $scope.results.then(function(res){
-                if(typeof(res[0]) !== 'undefined' && res[0].errorServer){
-                    $scope.serverNotRunning = true;
-                    $scope.isSearching = false;
-                } else {
-                    $scope.isSearching = false;
-                    $scope.serverNotRunning = false;
-                    return $scope.results;
-                }
-            });
-        }
+        var promise = KorboCommunicationService.autocompleteSearch(viewValue, $scope.conf.endpoint, 'korbo', $scope.conf.limitSearchResult, 0, $scope.conf.defaultLanguage, $scope.conf.basketID, $scope.conf.useCredentialInHttpCalls);
+        promise.then(function(res) {
+            return res;
+        }, function() {
+            return [];
+        });
+        return promise;
     };
 
     $scope.selectEntity = function(entity){
@@ -229,11 +244,11 @@ angular.module('KorboEE')
 
     // var updateTimer;
     // timer when input change
-    $scope.$watch('elemToSearch', function() {
-        //$timeout.cancel(updateTimer);
-        //httpHandler();
-        $scope.autoCompleteSearch($scope.elemToSearch);
-    });
+    //$scope.$watch('elemToSearch', function() {
+    //    //$timeout.cancel(updateTimer);
+    //    //httpHandler();
+    //    $scope.autoCompleteSearch($scope.elemToSearch);
+    //});
 
     // var httpHandler = function() {
     //     updateTimer = $timeout(function(){
@@ -250,7 +265,7 @@ angular.module('KorboEE')
     };
 
     $scope.showNewButton = function(){
-        if($scope.conf.autoCompleteOptions === 'new' || $scope.conf.autoCompleteOptions === 'all' ){
+        if($scope.conf.autoCompleteOptions === 'new' || $scope.conf.autoCompleteOptions === 'all' ){//
             return true;
         } else {
             return false;
@@ -270,4 +285,5 @@ angular.module('KorboEE')
     $scope.searchOnLOD = function() {
         KorboCommunicationService.openModalOnSearch($scope.conf, $scope.elemToSearch, $scope);
     };
+
 });

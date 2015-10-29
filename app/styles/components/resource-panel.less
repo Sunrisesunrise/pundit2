@@ -1,0 +1,100 @@
+/**
+ * RESOURCE PANEL
+ *
+ * Includes styles for the resource panel but also
+ * literal and calendar popovers
+ */
+
+
+/* ------------------------------------ *\
+   #RESOURCE-PANEL
+\* ------------------------------------ */
+.pnd-resource-panel-popover {
+    position: fixed !important;
+    max-width: @resource-panel-width !important;
+    width: @resource-panel-width;
+    z-index: @zindex-pnd-resource-panel;
+
+    .pnd-vertical-tabs {
+        height: @resource-panel-height;
+    }
+    
+    .pnd-vertical-tab-content {
+        display: block; /* For css overwritings */
+        margin: 0;
+        padding: 0;
+
+        // Container for list of results
+        .pnd-vertical-tab-list-content {
+            height: @resource-panel-height;
+            margin-bottom: 30px;
+            padding: 0;
+            overflow-y: auto;
+        }
+
+        // Scrolling list of items
+        .list-group-item {
+            overflow: hidden;
+        }
+    }
+}
+
+
+/* ------------------------------------ *\
+   #RESOURCE-PANEL-FOOTER
+\* ------------------------------------ */
+
+.pnd-vertical-tab-footer-content {
+    display: block;
+    border-top: 1px solid @color-border-normal;
+    background-color: #fff;
+    height: 30px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    .pnd-btn {
+        float: left;
+        //border-right: 1px solid #fff;
+    }
+}
+
+
+/* ------------------------------------ *\
+   #LITERAL-POPOVER
+\* ------------------------------------ */
+
+.pnd-popover-literal {
+    position: fixed !important;
+    z-index: @zindex-pnd-popver;
+}
+
+
+/* ------------------------------------ *\
+   #CALENDAR-POPOVER
+\* ------------------------------------ */
+
+.pnd-popover-calendar {
+    position: fixed !important;
+    z-index: @zindex-pnd-popver;
+}
+
+.pnd-date-picker {
+    max-width: 320px;
+    position: static;
+
+    .pnd-date-picker-table {
+        table-layout: fixed;
+        height: 100%;
+        width: 100%;
+    }
+
+    .pnd-date-picker-str-btn {
+        text-transform: capitalize;
+    }
+
+    .pnd-date-picker-cntr-btn {
+        width: 100%;
+    }
+}

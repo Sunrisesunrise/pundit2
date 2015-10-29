@@ -1,0 +1,297 @@
+/**
+ * BUTTONS
+ *
+ * Style for custom buttons
+ */
+
+/* ------------------------------------ *\
+   #PUNDIT-BUTTON
+\* ------------------------------------ */
+
+/* Default button */
+.pnd-btn {
+    display: inline-block;
+
+    width: auto; /* for css conflicts */
+    min-width: auto;
+    height: 29px;
+
+    margin: 0;
+    padding: 0 10px;
+
+    background: @color-button-bg;
+    background-image: none;
+    border: 0;
+    border-radius: 0;
+    outline: 0;
+
+    color: @color-button-text-dark;
+    .text-white-emboss();
+    font-size: 12px;
+    font-weight: @btn-font-weight;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    box-shadow: none;
+    cursor: pointer;
+
+    &:hover,
+    &:focus,
+    &.focus {
+        background: darken(@color-button-bg, 5);
+        outline: 0;
+        box-shadow: none;
+    }
+
+    // Remove the gradient for the pressed/active state
+    /*
+    TODO To be removed
+    This shouldn't be necessary since it's not depending on bootstrap anymore
+    Commented on 24 sep 2015
+    &:active,
+    &.active {
+        background-image: none;
+        box-shadow: none;
+        outline: 0;
+    }
+    */
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        background: lighten(@color-button-bg, 20);
+        cursor: @cursor-disabled;
+        color: fade(@color-button-text-dark, 50%) !important; // for ovewritings on .disabled class
+        pointer-events: none; // Future-proof disabling of clicks
+    }
+
+    i {
+        color: inherit;
+    }
+}
+
+/* Smaller buttons */
+.pnd-btn-small {
+    height: 22px;
+    font-size: 11px;
+    padding-bottom: 2px;
+}
+
+/* X-small buttons */
+.pnd-btn-xs {
+    height: auto;
+    padding: 3px 5px; //!important
+    background-image: none;
+    text-shadow: none;
+    line-height: normal;
+
+    .pnd-icon {
+        font-size: 14px;
+    }
+}
+
+/* ------------------------------------ *\
+   #CALL-TO-ACTION-BUTTON
+\* ------------------------------------ */
+
+/* Usually green button */
+.pnd-btn-calltoaction {
+    .vertical-gradient(@color-button-bg-cta, @button-gradient-level);
+    color: @color-button-text-light;
+    .text-dark-emboss();
+
+    &:hover,
+    &:focus,
+    &.focus {
+        .vertical-gradient(darken(@color-button-bg-cta, 5), @button-gradient-level);
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 60%) !important; // for ovewritings on .disabled class
+        text-shadow: none;
+        .vertical-gradient(lighten(@color-button-bg-cta, 20), @button-gradient-level);
+    }
+}
+
+
+/* ------------------------------------ *\
+   #DARK
+\* ------------------------------------ */
+
+.pnd-btn-dark {
+    .vertical-gradient(@color-button-bg-dark, @button-gradient-level);
+    color: @color-button-text-light;
+    .text-dark-emboss();
+
+    &:hover,
+    &:focus,
+    &.focus {
+        .vertical-gradient(darken(@color-button-bg-dark, 5), @button-gradient-level);
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 20%) !important; // for ovewritings on .disabled class
+        text-shadow: none;
+        .vertical-gradient(darken(@color-button-bg-dark, 7), @button-gradient-level);
+    }
+}
+
+/* ------------------------------------ *\
+   #TRANSPARENT-BG-BUTTON
+\* ------------------------------------ */
+
+.pnd-btn-transparent {
+    background-color: transparent;
+    background-image: none;
+    color: @color-text;
+    text-shadow: none;
+
+    &:hover,
+    &:focus,
+    &.focus {
+        background-color: transparent;
+        background-image: none;
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        background-color: transparent;
+        background-image: none;
+        color: fade(@color-text, 60%) !important; // for ovewritings on .disabled class
+        text-shadow: none;
+    }
+}
+
+/* ------------------------------------ *\
+   #SEMANTIC-BUTTONS
+\* ------------------------------------ */
+/* Buttons with custom colors for Subject, Object, Predicate */
+
+/* Subject button */
+.pnd-btn-subject {
+    .vertical-gradient(@subject-color, @button-gradient-level);
+    color: @color-button-text-light;
+    .text-dark-emboss();
+
+    &:hover,
+    &:focus,
+    &.focus {
+        .vertical-gradient(darken(@subject-color, 5), @button-gradient-level);
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 60%) !important; // for ovewritings on .disabled class
+        text-shadow: none;
+        .vertical-gradient(lighten(@subject-color, 20), @button-gradient-level);
+    }
+
+}
+
+/* Predicate button */
+.pnd-btn-predicate {
+    .vertical-gradient(@predicate-color, @button-gradient-level);
+    color: @color-button-text-light;
+    .text-dark-emboss();
+
+    &:hover,
+    &:focus,
+    &.focus {
+        .vertical-gradient(darken(@predicate-color, 5), @button-gradient-level);
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 60%) !important; // for ovewritings on .disabled class
+        text-shadow: none;
+        .vertical-gradient(lighten(@predicate-color, 20), @button-gradient-level);
+    }
+
+}
+
+/* Object button */
+.pnd-btn-object {
+    .vertical-gradient(@object-color, @button-gradient-level);
+    color: @color-button-text-light;
+    .text-dark-emboss();
+
+    &:hover,
+    &:focus,
+    &.focus {
+        .vertical-gradient(darken(@object-color, 5), @button-gradient-level);
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: fade(@color-button-text-light, 60%) !important; // for ovewritings on .disabled class
+        text-shadow: none;
+        .vertical-gradient(lighten(@object-color, 20), @button-gradient-level);
+    }
+}
+
+/* ------------------------------------ *\
+   #LINK-BUTTONS
+\* ------------------------------------ */
+
+// Make a button look and behave like a link
+.pnd-btn-link {
+    color: @gray;
+    font-weight: normal;
+    cursor: pointer;
+    border-radius: 0;
+    line-height: 0; // PND ADD
+    background-color: transparent;
+
+    &:hover {
+        color: @color-text;
+        text-decoration: none;
+        background-color: transparent;
+    }
+
+    &:focus {
+        text-decoration: none;
+        background-color: transparent;
+    }
+}
+
+/* ------------------------------------ *\
+   #AVAILABLE-WIDTH-FILL-BUTTONS
+\* ------------------------------------ */
+
+/*
+The buttons with the class "pnd-btn-fill-width" always
+try to fill the available with.
+This class works for one, two or three buttons but
+can be extended to support more buttons
+*/
+
+/* One button */
+.pnd-btn-fill-width:first-child:nth-last-child(1) {
+    width: 100%;
+}
+
+/* Two buttons */
+.pnd-btn-fill-width:first-child:nth-last-child(2),
+.pnd-btn-fill-width:first-child:nth-last-child(2) ~ .pnd-btn-fill-width {
+    width: 50%;
+}
+
+/* Three buttons  */
+.pnd-btn-fill-width:first-child:nth-last-child(3),
+.pnd-btn-fill-width:first-child:nth-last-child(3) ~ .pnd-btn-fill-width {
+    width: 33.3333%;
+}
+
+/* For disabled buttons */
+button.disabled,
+button[disabled] {
+    opacity: 1;
+}

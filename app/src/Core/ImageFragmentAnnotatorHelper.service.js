@@ -1,8 +1,9 @@
 /*jshint unused: false*/
 
 angular.module('Pundit2.Core')
+// TODO move this service in a better place
 .service('ImageFragmentAnnotatorHelper', function($rootScope, $modal, $window, BaseComponent, EventDispatcher, Config, NameSpace,
-    ContextualMenu, XpointersHelper, Item, MyItems, MyPundit) {
+    ContextualMenu, XpointersHelper, Item, MyItems, MyPundit, Analytics) {
     
     var imageFragmentHelper = new BaseComponent("ImageFragmentAnnotatorHelper");
 
@@ -28,6 +29,7 @@ angular.module('Pundit2.Core')
             priority: 99,
             action: function(item) {
                 open(item);
+                Analytics.track('buttons', 'click', 'contextualMenu--annotatePartOfImage');
             }
         });
     };
@@ -49,7 +51,6 @@ angular.module('Pundit2.Core')
             var lastData = e.data;
             if(!MyPundit.isUserLogged()) {
                 var der = EventDispatcher.addListener('Consolidation.consolidateAll', function() {
-                    console.log('POLIGOOOO');
                     var item = imageFragmentHelper.createItemFromPolygon(lastData.poly);
                     MyItems.addItem(item).then(function(){
                         childWindow.postMessage({type:'pundit-add-to-my-items-success'},'*');

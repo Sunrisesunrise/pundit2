@@ -55,7 +55,11 @@ angular.module('Pundit2.Dashboard')
             $scope.isCollapsed = !$scope.isCollapsed;
             Dashboard.resizeAll();
         }
-        Analytics.track('buttons', 'dashboard--panel' + ($scope.isCollapsed ? 'Collapse' : 'Expand'), $scope.paneltitle);
+
+        $timeout(function() {
+            $rootScope.$$phase || $scope.$digest();
+        }, 10);
+        Analytics.track('buttons', 'click', 'dashboard--panel--' + $scope.paneltitle + '--' + ($scope.isCollapsed ? 'collapse' : 'expand'));
     };
 
     $scope.addContent = function(tabName, tabContent) {

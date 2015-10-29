@@ -2,8 +2,12 @@
 
 angular.module('Pundit2.Toolbar')
 
-.controller('ToolbarCtrl', function($scope, $rootScope, $modal, $http, $window, NameSpace, Config, Toolbar, SelectorsManager, Fp3,
-    MyPundit, Dashboard, TripleComposer, AnnotationSidebar, Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange, Analytics) {
+.controller('ToolbarCtrl', function($scope, $rootScope, $modal, $http, $window, NameSpace, Config,
+    Toolbar, SelectorsManager, Fp3, MyPundit, Dashboard, TripleComposer, AnnotationSidebar,
+    Annomatic, ResourcePanel, NotebookExchange, NotebookCommunication, TemplatesExchange,
+    Analytics, PageHandler, EventDispatcher, $timeout, $interval, Keyboard, Status) {
+
+    var progressBar = angular.element('.pnd-progress-bar');
 
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
     $scope.dropdownTemplateMyNotebook = "src/Toolbar/myNotebooksDropdown.tmpl.html";
@@ -15,7 +19,7 @@ angular.module('Pundit2.Toolbar')
 
     $scope.isUserLogged = false;
 
-    $scope.askThePundit = Toolbar.options.askThePundit;
+    $scope.askThePundit = Config.askThePundit;
     $scope.myNotebooks = Toolbar.options.myNotebooks;
     $scope.dashboard = false;
     $scope.sidebar = false;
@@ -23,6 +27,14 @@ angular.module('Pundit2.Toolbar')
     $scope.menuCustomBtn = false;
     $scope.menuCustomDropdown = [];
     $scope.menuCustomBtn = [];
+    $scope.needsProgressBar = false;
+    $scope.progress = '0%';
+
+    var progressState = {
+        'interval': undefined,
+        'current': 0,
+        'dest': 0
+    };
 
     var menuCustom = Toolbar.options.menuCustom;
 
@@ -61,35 +73,51 @@ angular.module('Pundit2.Toolbar')
         $scope.login('toolbar--myNotebooks--login');
     };
 
-    $scope.loginButtonClick = function() {
-        $scope.login('toolbar--login');
+    $scope.loginButtonClick = function($event) {
+        $scope.login('toolbar--login', $event);
+    };
+
+    $scope.closePopover = function() {
+        MyPundit.closeLoginPopover();
     };
 
     $scope.login = function(trackingLoginName) {
         ResourcePanel.hide();
         MyPundit.login();
-        if (trackingLoginName === undefined) {
-            trackingLoginName = 'toolbar--otherLogin'
-        }
         Analytics.track('buttons', 'click', trackingLoginName);
+        return;
+
+
+        //ResourcePanel.hide();
+        //MyPundit.login();
+        //if (trackingLoginName === undefined) {
+        //    trackingLoginName = 'toolbar--otherLogin';
+        //}
+
     };
 
     var logout = function() {
         ResourcePanel.hide();
         MyPundit.logout();
-        Analytics.track('buttons', 'toolbar--logout');
+        Analytics.track('buttons', 'click', 'toolbar--logout');
+    };
+
+    var editYourProfile = function() {
+        ResourcePanel.hide();
+        MyPundit.editProfile();
+        Analytics.track('buttons', 'click', 'toolbar--editProfile');
     };
 
     var lodliveOpen = function() {
         if (MyPundit.isUserLogged()) {
             var userData = MyPundit.getUserData();
             $window.open(Config.lodLive.baseUrl + Config.pndPurl + 'user/' + userData.id, '_blank');
-            Analytics.track('buttons', 'toolbar--openYourGraph');
+            Analytics.track('buttons', 'click', 'toolbar--openYourGraph');
         }
     };
 
     $scope.askThePunditClick = function() {
-        Analytics.track('buttons', 'toolbar--askThePundit', $scope.isUserLogged ? 'logged' : 'anonymous');
+        Analytics.track('buttons', 'click', 'toolbar--askThePundit--' + ($scope.isUserLogged ? 'logged' : 'anonymous'));
     };
 
     // modal
@@ -98,18 +126,20 @@ angular.module('Pundit2.Toolbar')
 
     var infoModal = $modal({
         container: "[data-ng-app='Pundit2']",
-        template: 'src/Core/Templates/info.modal.tmpl.html',
+        templateUrl: 'src/Core/Templates/info.modal.tmpl.html',
         show: false,
         backdrop: 'static',
-        scope: infoModalScope
+        scope: infoModalScope,
+        keyboard: false
     });
 
     var sendModal = $modal({
         container: "[data-ng-app='Pundit2']",
-        template: 'src/Core/Templates/send.modal.tmpl.html',
+        templateUrl: 'src/Core/Templates/send.modal.tmpl.html',
         show: false,
         backdrop: 'static',
-        scope: sendModalScope
+        scope: sendModalScope,
+        keyboard: false
     });
 
     infoModalScope.titleMessage = "About Pundit";
@@ -170,7 +200,7 @@ angular.module('Pundit2.Toolbar')
         value: str
     });
 
-    sendModalScope.titleMessage = "Found a bug? tell us!";
+    sendModalScope.titleMessage = "Need help? Contact us!";
     sendModalScope.text = {
         msg: "",
         subject: ""
@@ -191,17 +221,24 @@ angular.module('Pundit2.Toolbar')
             "%0A" + "User name: " + user.fullName +
             "%0A" + "User mail: " + user.email;
 
-        window.location.href = link;
+        //window.location.href = link;
+        window.open(link);
     };
 
     sendModalScope.send = function() {
         // send a mail
         sendMail(sendModalScope.text.subject, sendModalScope.text.msg);
         sendModal.hide();
+        Analytics.track('buttons', 'click', 'toolbar--reportBug--send');
     };
 
     sendModalScope.cancel = function() {
         sendModal.hide();
+        if (typeof modalEscapeHandler !== 'undefined') {
+            Keyboard.unregisterHandler(modalEscapeHandler);
+            modalEscapeHandler = undefined;
+        }
+        Analytics.track('buttons', 'click', 'toolbar--reportBug--cancel');
     };
 
     // found bug btn
@@ -231,20 +268,44 @@ angular.module('Pundit2.Toolbar')
     // close btn
     infoModalScope.close = function() {
         infoModal.hide();
+        if (typeof modalEscapeHandler !== 'undefined') {
+            Keyboard.unregisterHandler(modalEscapeHandler);
+            modalEscapeHandler = undefined;
+        }
+    };
+
+    var modalEscapeHandler;
+    var addModalEscapeHandler = function(callback) {
+        modalEscapeHandler = Keyboard.registerHandler('ToolbarController', {
+            keyCode: 27,
+            ignoreOnInput: false,
+            stopPropagation: true
+        }, callback);
     };
 
     // open info modal
     var showInfo = function() {
+        ResourcePanel.hide();
+        addModalEscapeHandler(function() {
+            infoModalScope.close();
+        });
         infoModal.$promise.then(infoModal.show);
-        Analytics.track('buttons', 'toolbar--aboutPundit');
+        Analytics.track('buttons', 'click', 'toolbar--aboutPundit');
     };
 
     // open bug modal
     var showBug = function() {
+        ResourcePanel.hide();
+        addModalEscapeHandler(function() {
+            sendModalScope.cancel();
+        });
         infoModalScope.send();
+        Analytics.track('buttons', 'click', 'toolbar--reportBug');
     };
 
     $scope.isAnnomaticRunning = false;
+
+    $scope.canUsePageAsSubject = true;
 
     // Watch Annomatic status
     $scope.$watch(function() {
@@ -276,10 +337,10 @@ angular.module('Pundit2.Toolbar')
     $scope.errorMessageDropdown = Toolbar.getErrorMessageDropdown();
 
     $scope.userNotLoggedDropdown = [{
-        text: 'Please sign in to use Pundit',
+        text: 'Please log in to select the notebook to store your annotations',
         header: true
     }, {
-        text: 'Sign in',
+        text: 'Log in',
         click: $scope.myNoteboockSigninClick
     }];
 
@@ -287,7 +348,7 @@ angular.module('Pundit2.Toolbar')
         text: 'About Pundit',
         click: showInfo
     }, {
-        text: 'Report a bug',
+        text: 'Help',
         click: showBug
     }, ];
     if (Fp3.options.active) {
@@ -302,11 +363,17 @@ angular.module('Pundit2.Toolbar')
             text: 'Open your graph',
             click: lodliveOpen
         }, {
+            text: 'Edit your profile',
+            click: editYourProfile
+        }, {
             text: 'Log out',
             click: logout
         }];
     } else {
         $scope.userLoggedInDropdown = [{
+            text: 'Edit your profile',
+            click: editYourProfile
+        }, {
             text: 'Log out',
             click: logout
         }];
@@ -324,18 +391,21 @@ angular.module('Pundit2.Toolbar')
         updateMyNotebooks();
     }, true);
 
-    $scope.currentNotebookLabel = "Loading...";
+    $scope.currentNotebookLabel = typeof MyPundit.getInfoCookie().notebookLabel === 'undefined' ? "Loading..." : MyPundit.getInfoCookie().notebookLabel;
     $scope.$watch(function() {
         return NotebookExchange.getCurrentNotebooks();
     }, function(newCurr) {
         if (typeof(newCurr) !== "undefined") {
             updateMyNotebooks();
             $scope.currentNotebookLabel = newCurr.label;
+            MyPundit.setInfoCookie({
+                notebookLabel: newCurr.label
+            });
         }
     });
 
     $scope.userNotebooksDropdown = [{
-        text: 'Please select notebook you want to use',
+        text: 'Please select the notebook you want to use',
         header: true
     }];
 
@@ -379,7 +449,14 @@ angular.module('Pundit2.Toolbar')
             text: 'Select the template you wish to use',
             header: true
         }];
-        $scope.currentTemplateLabel = "Loading...";
+
+        if (typeof MyPundit.getInfoCookie().templateId !== 'undefined') {
+            TemplatesExchange.setCurrent(MyPundit.getInfoCookie().templateId);
+        }
+        if (typeof MyPundit.getInfoCookie().templateColor !== 'undefined') {
+            $scope.currentTemplateColor = MyPundit.getInfoCookie().templateColor;
+        }
+        $scope.currentTemplateLabel = typeof MyPundit.getInfoCookie().templateLabel === 'undefined' ? "Loading..." : MyPundit.getInfoCookie().templateLabel;
 
         $scope.$watch(function() {
             return TemplatesExchange.getTemplates().length;
@@ -394,6 +471,11 @@ angular.module('Pundit2.Toolbar')
                 updateTemplates();
                 $scope.currentTemplateLabel = newCurr.label;
                 $scope.currentTemplateColor = newCurr.hasColor;
+                MyPundit.setInfoCookie({
+                    templateLabel: newCurr.label,
+                    templateId: newCurr.id,
+                    templateColor: newCurr.hasColor
+                });
             }
         });
 
@@ -456,6 +538,23 @@ angular.module('Pundit2.Toolbar')
         $scope.userData = MyPundit.getUserData();
     });
 
+    // Handles userdata changes after edit profile, maybe we can remove the above
+    // $watch.
+    EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
+        $scope.isUserLogged = e.args;
+        $scope.userData = MyPundit.getUserData();
+    });
+
+    // Handle changes in triple composer.
+    EventDispatcher.addListeners(['TripleComposer.statementChanged', 'TripleComposer.reset'], function(e) {
+        if (e.name === 'TripleComposer.reset') {
+            $scope.canUsePageAsSubject = true;
+            return;
+        }
+        var item = PageHandler.getPageItem();
+        $scope.canUsePageAsSubject = TripleComposer.canAddItemAsSubject(item);
+    });
+
     // return true if no errors are occured --> status button ok must be visible
     $scope.showStatusButtonOk = function() {
         return !Toolbar.getErrorShown() && !Toolbar.isLoading();
@@ -485,6 +584,14 @@ angular.module('Pundit2.Toolbar')
         return $scope.isUserLogged === true;
     };
 
+    $scope.annotateWebPage = function() {
+        if (!$scope.canUsePageAsSubject) {
+            return;
+        }
+        var item = PageHandler.getPageItem();
+        TripleComposer.addToSubject(item);
+    };
+
     $scope.toggleTemplateMode = function() {
         if (TripleComposer.isEditMode() || $scope.isAnnomaticRunning) {
             return;
@@ -495,11 +602,17 @@ angular.module('Pundit2.Toolbar')
     };
 
     $scope.onClickTemplateDropdown = function() {
+        MyPundit.closeLoginPopover();
         Analytics.track('buttons', 'click', 'toolbar--templateList');
         ResourcePanel.hide();
+    };    
+
+    $scope.infoClickHandler = function() {
+        MyPundit.closeLoginPopover();
     };
 
     $scope.onClickNotebookDropdown = function() {
+        MyPundit.closeLoginPopover();
         Analytics.track('buttons', 'click', 'toolbar--notebooks--' + ($scope.isUserLogged ? 'logged' : 'anonymous'));
     };
 
@@ -522,17 +635,63 @@ angular.module('Pundit2.Toolbar')
         if (!$scope.isAnnomaticRunning) {
             ResourcePanel.hide();
             Analytics.track('buttons', 'click', 'toolbar--dashboard--' + (Dashboard.isDashboardVisible() ? 'closed' : 'open'));
+            TripleComposer.closeAfterOpOff();
             Dashboard.toggle();
         }
     };
 
     $scope.annotationsClickHandler = function() {
         ResourcePanel.hide();
-        Analytics.track('buttons', 'click', 'toolbar--annotationsSidebar' + (AnnotationSidebar.isAnnotationSidebarExpanded() ? 'closed' : 'open'));
+        Analytics.track('buttons', 'click', 'toolbar--annotationsSidebar--' + (AnnotationSidebar.isAnnotationSidebarExpanded() ? 'closed' : 'open'));
         AnnotationSidebar.toggle();
     };
 
     $scope.openUrl = function(url) {
         $window.open(url, '_self');
     };
+
+    EventDispatcher.addListener('Status.progress', function(evt) {
+        progressBar.css('opacity', 1);
+        $scope.needsProgressBar = evt.args.needsProgressBar;
+        progressState.dest = evt.args.progress;
+        $scope.progress = evt.args.progress + '%';
+        if (evt.args.progress >= 100) {
+            $timeout(function() {
+                progressBar.animate({
+                    'opacity': 0
+                }, 500, function() {
+                    $scope.needsProgressBar = false;
+                    Status.resetProgress();
+                });
+            }, 1000);
+        }
+        /*
+        if (typeof progressState.interval === 'undefined') {
+            progressState.interval = $interval(function(){
+                $scope.progress = progressState.current + '%';
+                progressState.current ++;
+                if (progressState.current >= progressState.dest) {
+                    progressState.current = progressState.dest
+                    $interval.cancel(progressState.interval);
+                    progressState.interval = undefined;
+                    $scope.progress = progressState.current + '%';
+                }
+            }, 10);
+        }
+        */
+    });
+
+    EventDispatcher.addListener('Status.progressReset', function() {
+        $scope.progress = 0 + '%';
+        progressBar.css('opacity', 0);
+    });
+
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
+        MyPundit.closeLoginPopover();
+        angular.element('.dropdown-menu').dropdown("toggle");
+    });
+
+    $timeout(function() {
+        angular.element('#pundit2_preload').remove();
+    }, 1000);
 });

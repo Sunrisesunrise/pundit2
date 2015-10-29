@@ -21,9 +21,10 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/pundit2.css">
     <link rel="stylesheet" href="../css/korboee.css">
+    <!-- <link rel="stylesheet" href="../css/temporary.css"> -->
     <!-- endbuild -->
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
     
 </head>
 <body>

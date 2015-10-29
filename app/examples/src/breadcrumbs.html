@@ -1,0 +1,138 @@
+<!-- buildexamples:section header --><!-- /buildexamples -->
+<script>
+
+    var punditConfig = {
+        modules: {
+            "Breadcrumbs": {
+                active: true,
+                debug: true
+            }
+        }
+    };
+
+    var BreadcrumbsDemoCtrl = function($scope, Breadcrumbs) {
+        var bcIDs = ['first-breadcrumb', 'second-breadcrumb'];
+
+        $scope.appendItem = function(bcIndex) {
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.appendItem(name, {
+                label: Breadcrumbs.getItems(name).length == 1 ? "" : 'text item ' + Breadcrumbs.getItems(name).length,
+                callback: function(index, item) {
+                    console.log("item seleted " + index);
+                    console.log(item);
+                },
+                charLimit: Breadcrumbs.getItems(name).length == 0 ? 10 : undefined,
+                charLimitAsLast: Breadcrumbs.getItems(name).length == 0 ? 20 : undefined,
+                placeholder: Breadcrumbs.getItems(name).length == 1 ? "Item placeholder text" : undefined
+            });
+        };
+
+        $scope.popItem = function(bcIndex) {
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.popItem(name, bcIDs[bcIndex]);
+        };
+
+        $scope.empty = function(bcIndex) {
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.dropItemsFromIndex(name, 0);
+        };
+
+        $scope.remove = function(bcIndex) {
+            var name = bcIDs[bcIndex];
+            var elem = $($('breadcrumbs')[bcIndex]);
+            angular.element(elem).remove();
+        };
+
+        $scope.label = function(bcIndex, itemIndex) {
+            var name = bcIDs[bcIndex];
+            var currentLabel = Breadcrumbs.getItem(name, itemIndex).originalLabel;
+            Breadcrumbs.setItemLabel(name, itemIndex, currentLabel + "" + Math.floor(Math.random()*10));
+        }
+
+        $scope.clearLabel = function(bcIndex, itemIndex) {
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.setItemLabel(name, itemIndex, "");
+        }
+
+        $scope.toggleVisibility = function(bcIndex) {
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.visible(name, !Breadcrumbs.visible(name));
+        }
+
+        $scope.prefixLabel = function(bcIndex) {
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.setFirstItemPrefix(name, 'prefix changed');
+        }
+
+        $scope.charLimit = function(bcIndex, charLimit) {
+            var name = bcIDs[bcIndex];
+            Breadcrumbs.setItemCharLimit(name, 0, charLimit);
+        }
+
+    }
+
+</script>
+<style>
+body .pnd-wrp div.pnd-breadcrumbs-container {
+    margin: 0px 30px 30px 30px;
+}
+
+body .pnd-wrp div.action-panel {
+    padding: 30px;
+}
+
+.pnd-breadcrumbs-container .placeholder {
+    background-color: burlywood;
+    padding: 15px 4px 15px 15px;
+    color: white;
+    font-size: 16px;
+}
+.pnd-breadcrumbs-container li{
+    padding: 15px 5px 15px 15px;
+    background-color: lightyellow;
+    color: darksalmon;
+    font-size: 12px;
+    display: inline-block;
+}
+
+</style>
+
+<div data-ng-app="Pundit2" class="pundit2 pnd-wrp">
+    <br><br><br>
+
+    <breadcrumbs bc-name="'first-breadcrumb'" empty-placeholder="'Empty placeholder text 0'" first-item-prefix="'Create:'"></breadcrumbs>
+    <breadcrumbs bc-name="'second-breadcrumb'" empty-placeholder="'Empty placeholder text 1'" first-item-prefix=""></breadcrumbs>
+
+    <br><br><br>
+
+    <div ng-controller="BreadcrumbsDemoCtrl" >
+        <div class="action-panel">
+            Actions on first breadcrumb <br />
+            <button id="action-button-bc0-append" type="button" class="btn btn-success" ng-click="appendItem(0)">Append element</button>
+            <button id="action-button-bc0-pop" type="button" class="btn btn-success" ng-click="popItem(0)">Pop</button>
+            <button id="action-button-bc0-empty" type="button" class="btn btn-success" ng-click="empty(0)">Empty</button>
+            <button id="action-button-bc0-visibility" type="button" class="btn btn-success" ng-click="toggleVisibility(0)">Toggle visibility</button>
+            <br />
+            <button id="action-button-bc0-label0" type="button" class="btn btn-warning" ng-click="label(0, 0)">Change label for item 0</button>
+            <button id="action-button-bc0-label1" type="button" class="btn btn-warning" ng-click="label(0, 1)">Change label for item 1</button>
+            <button id="action-button-bc0-clearlabel1" type="button" class="btn btn-warning" ng-click="clearLabel(0, 1)">Clear label for item 1</button>
+            <button id="action-button-bc0-prefixlabel1" type="button" class="btn btn-warning" ng-click="prefixLabel(0)">Change prefix label for item 1</button>
+            <button id="action-button-bc0-remove" type="button" class="btn btn-danger" ng-click="remove(0)">Remove</button>
+            <br />
+            <button id="action-button-bc0-label0-cl0" type="button" class="btn btn-warning" ng-click="charLimit(0, 20)">Set charlimit 20 for label item 0</button>
+            <button id="action-button-bc0-label0-cl1" type="button" class="btn btn-warning" ng-click="charLimit(0, 5)">Set charlimit 5 for label item 0</button>
+        </div>
+        <div class="action-panel">
+            Actions on second breadcrumb  <br />
+            <button id="action-button-bc1-append" type="button" class="btn btn-success" ng-click="appendItem(1)">Append element</button>
+            <button id="action-button-bc1-pop" type="button" class="btn btn-success" ng-click="popItem(1)">Pop</button>
+            <button id="action-button-bc1-empty" type="button" class="btn btn-success" ng-click="empty(1)">Empty</button>
+            <button id="action-button-bc1-visibility" type="button" class="btn btn-success" ng-click="toggleVisibility(1)">Toggle visibility</button>
+            <button id="action-button-bc1-label0" type="button" class="btn btn-warning" ng-click="label(1, 0)">Change label for item 0</button>
+            <button id="action-button-bc1-label1" type="button" class="btn btn-warning" ng-click="label(1, 1)">Change label for item 1</button>
+            <button id="action-button-bc1-prefixlabel1" type="button" class="btn btn-warning" ng-click="prefixLabel(1)">Change prefix label for item 1</button>
+            <button id="action-button-bc1-remove" type="button" class="btn btn-danger" ng-click="remove(1)">Remove</button>
+        </div>
+    </div>
+</div>
+<!-- buildexamples:section footer --><!-- /buildexamples -->

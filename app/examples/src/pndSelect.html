@@ -1,0 +1,80 @@
+<!-- buildexamples:section header --><!-- /buildexamples -->
+
+<style>
+    .pnd-cons {
+        background: #fc0;
+    }
+    pre {
+        float: left;
+    }
+</style>
+
+<script type="text/javascript">
+
+    var punditConfig = {
+            annotationServerBaseURL: " https://staging.punditbrain.netseven.it:8443/annotationserver/"
+        };
+
+    var SelectDemoCtrl = function($rootScope, $scope, $q, NotebookCommunication, NotebookExchange, MyPundit) {
+        MyPundit.checkLoggedIn(true).then(function() {
+            NotebookCommunication.getCurrent();
+            NotebookCommunication.getMyNotebooks();
+        });
+
+        $scope.options = [{
+            label: 'gatto',
+            title: 'matto',
+            value: '9452934'
+        }, {
+            label: 'capra',
+            title: 'canta',
+            value: '9452933'
+        }];
+
+        $scope.options2 = [{
+            label: 'gatto',
+            title: 'matto',
+            value: '9452934'
+        }, {
+            label: 'capra',
+            title: 'canta',
+            value: '9452933'
+        }];
+
+        $scope.boom = function(name) {
+            var deferred = $q.defer();
+
+            NotebookCommunication.createNotebook(name).then(function(notebookId) {
+                var currentNotebook = NotebookExchange.getNotebookById(notebookId);
+                deferred.resolve({
+                    label: currentNotebook.label, 
+                    title: currentNotebook.label,
+                    value: currentNotebook.id
+                });
+            }, function() {
+                deferred.reject();
+            });
+
+            return deferred.promise;
+        };
+    }
+</script>
+
+<div data-ng-app="Pundit2" class="pundit2 pnd-wrp" ng-controller="SelectDemoCtrl">
+    <pnd-select options="options"></pnd-select>
+    <br/>
+    <br/>
+    <br/>
+    <pnd-select 
+        options="options2"
+        deferred-action="boom"
+        label-action="'Create new notebook'"
+        placeholder-action="'Type new notebook name here'"></pnd-select>
+
+    <br/>
+    <br/>
+    <br/>
+    <span class="pnd-toolbar-login-button"></span>
+</div>
+
+<!-- buildexamples:section footer --><!-- /buildexamples -->

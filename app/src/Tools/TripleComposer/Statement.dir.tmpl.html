@@ -21,7 +21,7 @@
 
                 <div 
                     class="pnd-row-button-subject pnd-statement-found"
-                    ng-class="{'pnd-statement-icon-one': !templateMode}"
+                    ng-class="{'pnd-statement-icon-one': !templateMode && !subjectFixed}"
                     ng-if="subjectFound">
                     <span 
                         class="pnd-statement-label" 
@@ -34,11 +34,11 @@
                     <div class="pnd-row-button-rightbuttons">
                         <button
                                 type="button"
-                                class="btn btn-xs btn-link"
-                                ng-if="!templateMode"
+                                class="pnd-btn pnd-btn-xs pnd-btn-link"
+                                ng-if="!templateMode && !subjectFixed"
                                 title="delete"
                                 ng-click="wipeSubject()">
-                            <span class="pnd-icon pnd-icon-trash-o"></span>
+                            <span class="pnd-icon pnd-icon-trash"></span>
                         </button>
                     </div>
                     <!-- <span>
@@ -76,11 +76,11 @@
                     <div class="pnd-row-button-rightbuttons">
                         <button
                                 type="button"
-                                class="btn btn-xs btn-link"
+                                class="pnd-btn pnd-btn-xs pnd-btn-link"
                                 ng-if="!predicateFixed"
                                 title="delete"
                                 ng-click="wipePredicate()">
-                            <span class="pnd-icon pnd-icon-trash-o"></span>
+                            <span class="pnd-icon pnd-icon-trash"></span>
                         </button>
                     </div>
                 </div>
@@ -111,16 +111,16 @@
                         <!--Calendar Icon-->
                         <button
                                 type="button"
-                                class="btn btn-xs btn-link"
+                                class="pnd-btn pnd-btn-xs pnd-btn-link"
                                 ng-if="canBeObjectDate"
                                 ng-click="onClickObjectCalendar($event)"
                                 title="calendar">
-                            <span class="pnd-icon pnd-icon-table"></span>
+                            <span class="pnd-icon pnd-icon-calendar"></span>
                         </button>
                         <!--Pen Icon-->
                         <button
                                 type="button"
-                                class="btn btn-xs btn-link"
+                                class="pnd-btn pnd-btn-xs pnd-btn-link"
                                 ng-if="canBeObjectLiteral"
                                 ng-click="onClickObjectLiteral($event)"
                                 title="text">
@@ -138,19 +138,28 @@
                         class="pnd-statement-label"
                         ng-mouseover="onObjectMouseOver()" 
                         ng-mouseleave="onItemMouseOut()"
-                        ng-click="onClickObject($event)">
+                        ng-click="onClickObject($event)"
+                        ng-if="!dateWithTime">
                         {{objectLabel}}
+                    </span>
+                    <span 
+                        class="pnd-statement-label"
+                        ng-mouseover="onObjectMouseOver()" 
+                        ng-mouseleave="onItemMouseOut()"
+                        ng-click="onClickObject($event)"
+                        ng-if="dateWithTime">
+                        {{objectLabel | amDateFormat:'YYYY-MM-DD  HH:mm'}}
                     </span>
 
                     <div 
                         class="pnd-row-button-rightbuttons">
                         <button
                                 type="button"
-                                class="btn btn-xs btn-link"
+                                class="pnd-btn pnd-btn-xs pnd-btn-link"
                                 ng-if="!objectFixed"
                                 title="delete"
                                 ng-click="wipeObject()">
-                            <span class="pnd-icon pnd-icon-trash-o"></span>
+                            <span class="pnd-icon pnd-icon-trash"></span>
                         </button>
                     </div>
                 </div>
@@ -164,11 +173,11 @@
     <div class="pnd-statement-buttons">
         <button 
             type="button" 
-            class="btn btn-xs" 
+            class="pnd-btn pnd-btn-xs" 
             ng-click="showDropdown($event)" 
             title="Triple menu"
             ng-disabled="templateMode">
-                <span class="pnd-icon pnd-icon-bars"></span>
+                <span class="pnd-icon pnd-icon-dots"></span>
         </button>
     </div>
 </div>
