@@ -80,17 +80,17 @@ angular.module('Pundit2.ResourcePanel')
             userNotLoggedMessage = 'My Items are only available to logged users. Please log in to use this section or select a fragment of text in the page.';
 
         searchLabel = typeof(searchLabel) !== 'undefined' ? searchLabel : '';
-        if (searchLabel.length > 2 && 
-            isLoading || 
+        if (searchLabel.length > 2 &&
+            isLoading ||
             isTimerRunning) {
             if (myItemsNotLogged) {
                 return userNotLoggedMessage;
             }
             return filteredItems.length > 0 ? '' : 'Loading ...';
         }
-        if (selectorsLabels.indexOf(tabTitle) !== -1 && 
+        if (selectorsLabels.indexOf(tabTitle) !== -1 &&
             searchLabel.length <= 2) {
-            return 'Search entities in ' + tabTitle +' using the input filed above. You can use the selected entity by clicking the "Use" button below.';
+            return 'Search entities in ' + tabTitle + ' using the input filed above. You can use the selected entity by clicking the "Use" button below.';
         }
 
         if (myItemsNotLogged) {
@@ -98,12 +98,12 @@ angular.module('Pundit2.ResourcePanel')
         }
 
         tabItems = typeof(tabItems) !== 'undefined' ? tabItems : [];
-        if (tabTitle === 'My Items' && 
+        if (tabTitle === 'My Items' &&
             tabItems.length === 0) {
             return 'It seems you haven\'t any item stored here yet! Please add some items to My Items to use this section.';
         }
-        if (filteredItems.length === 0 && 
-            searchLabel.length > 2 && 
+        if (filteredItems.length === 0 &&
+            searchLabel.length > 2 &&
             !isLoading) {
             return 'Oops, try again. It looks like your search didn\'t return anything.';
         }
@@ -131,7 +131,7 @@ angular.module('Pundit2.ResourcePanel')
         ignoreOnInput: false,
         stopPropagation: true,
         priority: 10,
-    }, function(/*event, eventKeyConfig*/){
+    }, function( /*event, eventKeyConfig*/ ) {
         if (typeof lastSelected !== 'undefined') {
             $scope.save(lastSelected.item);
         }
@@ -143,7 +143,7 @@ angular.module('Pundit2.ResourcePanel')
         ignoreOnInput: true,
         stopPropagation: true,
         priority: 10,
-    }, function(/*event, eventKeyConfig*/){
+    }, function( /*event, eventKeyConfig*/ ) {
         arrowKeyPressed(38);
     });
 
@@ -153,7 +153,7 @@ angular.module('Pundit2.ResourcePanel')
         ignoreOnInput: true,
         stopPropagation: true,
         priority: 10,
-    }, function(/*event, eventKeyConfig*/){
+    }, function( /*event, eventKeyConfig*/ ) {
         arrowKeyPressed(40);
     });
 
@@ -341,10 +341,10 @@ angular.module('Pundit2.ResourcePanel')
                 }, ResourcePanel.options.vocabSearchTimer);
             }
         } else {
-            if(typeof($scope.contentTabs) !== 'undefined' && term === ''){
-            $scope.contentTabs[$scope.contentTabs.activeTab].items = [] ;
-        }
-        $timeout.cancel(searchTimer);
+            if (typeof($scope.contentTabs) !== 'undefined' && term === '') {
+                $scope.contentTabs[$scope.contentTabs.activeTab].items = [];
+            }
+            $timeout.cancel(searchTimer);
 
             // TODO: add specific method in ResourcePanel to reset search
             if (Config.annotationServerCallsNeedLoggedUser) {

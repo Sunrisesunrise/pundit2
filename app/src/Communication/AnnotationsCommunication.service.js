@@ -488,7 +488,7 @@ angular.module('Pundit2.Communication')
                 params.motivatedBy = motivation;
             }
 
-            if ((typeof currentNotebook !== 'undefined' && typeof currentNotebook.id !== 'undefined') || typeof forceNotebookId !== 'undefined' ) {
+            if ((typeof currentNotebook !== 'undefined' && typeof currentNotebook.id !== 'undefined') || typeof forceNotebookId !== 'undefined') {
                 var nbId = forceNotebookId || NotebookExchange.getCurrentNotebooks().id;
                 url = NameSpace.get('asNBForcedCurrent', {
                     current: nbId

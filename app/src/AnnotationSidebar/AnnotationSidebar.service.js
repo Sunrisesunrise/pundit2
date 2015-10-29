@@ -1386,7 +1386,8 @@ angular.module('Pundit2.AnnotationSidebar')
             'Consolidation.consolidateAll',
             'AnnotationSidebar.forceUpdate',
             'Pundit.forceUpdate'
-        ], function(e) {
+        ],
+        function(e) {
             if (Consolidation.getConsolidationRequestNumber() !== 0 &&
                 e.name !== 'Pundit.forceUpdate') {
                 annotationSidebar.log('Waiting for consolidation');
@@ -1403,7 +1404,7 @@ angular.module('Pundit2.AnnotationSidebar')
             state.allAnnotations = angular.extend({}, annotationsList);
             // TODO: inizialize as first operation
             initializeFiltersAndPositions();
-    });
+        });
 
     EventDispatcher.addListener('ResizeManager.resize', function() {
         if (state.isLoading === false) {

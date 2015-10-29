@@ -46,7 +46,7 @@ angular.module('Pundit2.Annotators')
 
 })
 
-.service('PageHandler', function($document, PAGEHANDLERDEFAULTS, BaseComponent, 
+.service('PageHandler', function($document, PAGEHANDLERDEFAULTS, BaseComponent,
     NameSpace, Item, ItemsExchange, XpointersHelper, Consolidation) {
 
     var pageHandler = new BaseComponent('PageHandler', PAGEHANDLERDEFAULTS);

@@ -111,7 +111,7 @@ angular.module('Pundit2.ResourcePanel')
  */
 .service('ResourcePanel', function(BaseComponent, EventDispatcher, RESOURCEPANELDEFAULTS,
     ItemsExchange, MyItems, PageItemsContainer, Client, NameSpace, SelectorsManager,
-    $filter, $rootScope, $popover, $q, $timeout, Preview, $window, Config, Item, 
+    $filter, $rootScope, $popover, $q, $timeout, Preview, $window, Config, Item,
     Utils, Analytics, Keyboard) {
 
     var resourcePanel = new BaseComponent('ResourcePanel', RESOURCEPANELDEFAULTS);
@@ -254,8 +254,7 @@ angular.module('Pundit2.ResourcePanel')
                 state.popoverOptions.scope.save(true);
                 $rootScope.$$phase || $rootScope.$digest();
             });
-        }
-        else if (type === 'literal') { // initialize a literal popover
+        } else if (type === 'literal') { // initialize a literal popover
 
             state.popoverOptions.templateUrl = 'src/ResourcePanel/popoverLiteralText.tmpl.html';
             state.popoverOptions.scope.arrowLeft = '24px';
@@ -305,8 +304,7 @@ angular.module('Pundit2.ResourcePanel')
             });
 
             // initialize a resource panel popover
-        }
-        else if (type === 'resourcePanel') {
+        } else if (type === 'resourcePanel') {
 
             if (typeof(Config.korbo) !== 'undefined' && Config.korbo.active) {
                 var name = $window[Config.korbo.confName].globalObjectName;
@@ -755,7 +753,9 @@ angular.module('Pundit2.ResourcePanel')
 
         // TODO: update angular strap and check the #871 issues on codebase 
         // Temporary angularstrap fix 
-        angular.element('.popover .arrow').css({'left': '50%'});
+        angular.element('.popover .arrow').css({
+            'left': '50%'
+        });
     };
 
     /**
@@ -1067,9 +1067,9 @@ angular.module('Pundit2.ResourcePanel')
                     // get item predicate and check his suggestedObjectTypes
                     var itemPredicate = ItemsExchange.getItemByUri(predicate.uri);
                     // predicate with empty suggestedObjectTypes
-                    if (typeof(itemPredicate) === 'undefined' || 
-                        typeof(itemPredicate.suggestedObjectTypes) === 'undefined' || 
-                        itemPredicate.suggestedObjectTypes.length === 0 || 
+                    if (typeof(itemPredicate) === 'undefined' ||
+                        typeof(itemPredicate.suggestedObjectTypes) === 'undefined' ||
+                        itemPredicate.suggestedObjectTypes.length === 0 ||
                         itemPredicate.suggestedObjectTypes[0] === "" ||
                         limitToSuggestedTypes === false) {
                         // all items are good

@@ -725,8 +725,7 @@ angular.module('Pundit2.Annotators')
             jParentElement.addClass(htmlClass);
             jParentElement.attr('temp-fragments', tempFragmentIds.join(','));
             jParentElement.trigger('Pundit.updateFragmentBits', modParents.join(','));
-        }
-        else {
+        } else {
             wrapNode = xpointersHelper.createWrapNode(htmlTag, htmlClass, modParents);
             // Finally surround the range contents with an ad-hoc crafted html element
             r2.surroundContents(wrapNode.element);
@@ -735,7 +734,6 @@ angular.module('Pundit2.Annotators')
                 wrapNode.jElement.attr('temp-fragments', tempFragmentIds.join(','));
             }
         }
-
 
 
 

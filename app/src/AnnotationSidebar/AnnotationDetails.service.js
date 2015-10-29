@@ -336,7 +336,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if (annotationServerVersion === 'v2') {
             var momentDate = moment(serverdate).utc().format('YYYY-MM-DD HH:mm:ss');
-            var localTime  = moment.utc(momentDate).toDate();
+            var localTime = moment.utc(momentDate).toDate();
             localTime = moment(localTime).format('YYYY-MM-DD HH:mm:ss');
             return localTime.toString();
         }

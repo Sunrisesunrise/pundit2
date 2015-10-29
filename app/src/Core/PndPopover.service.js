@@ -1,6 +1,6 @@
 angular.module('Pundit2.Core')
 
-.service('PndPopover', function (BaseComponent, EventDispatcher, $rootScope, $popover, $document, $q, $window, $timeout) {
+.service('PndPopover', function(BaseComponent, EventDispatcher, $rootScope, $popover, $document, $q, $window, $timeout) {
     var pndPopover = new BaseComponent('PndPopover');
 
     var initPopoverOptions = {
@@ -31,10 +31,10 @@ angular.module('Pundit2.Core')
 
     var eventHandler = null;
 
-    var calculateSelectionCoordinates = function () {
+    var calculateSelectionCoordinates = function() {
         // var range = state.selection.getRangeAt(0)
         var ts = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>'),
-        te = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>');
+            te = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>');
 
         var fragmentElements = angular.element('span.' + state.data.fragmentId);
         var i = 0;
@@ -46,14 +46,14 @@ angular.module('Pundit2.Core')
             if (fragmentElements.eq(i).text().trim().length === 0 || !fragmentElements.eq(i).is(':visible')) {
                 continue;
             }
-            pos.beforeElem = fragmentElements.eq(i);//.before(ts);
+            pos.beforeElem = fragmentElements.eq(i); //.before(ts);
             break;
         }
         for (i = fragmentElements.length - 1; i >= 0; i--) {
             if (fragmentElements.eq(i).text().trim().length === 0 || !fragmentElements.eq(i).is(':visible')) {
                 continue;
             }
-            pos.afterElem = fragmentElements.eq(i);//.after(te);
+            pos.afterElem = fragmentElements.eq(i); //.after(te);
             break;
         }
 
@@ -95,7 +95,7 @@ angular.module('Pundit2.Core')
         }
     };
 
-    var initPopover = function (x, y, options, data) {
+    var initPopover = function(x, y, options, data) {
         state.data = data;
 
         var container = angular.element('div[data-ng-app="Pundit2"]');
@@ -118,23 +118,22 @@ angular.module('Pundit2.Core')
         return state.popover;
     };
 
-    var mouseUpHandler = function (evt) {
+    var mouseUpHandler = function(evt) {
         var tagName = angular.element(evt.target).prop('tagName').toLowerCase();
         if (angular.element(evt.target).closest('.popover').length === 0 && tagName !== 'select') {
             hide();
-        }
-        else {
+        } else {
             evt.stopImmediatePropagation();
             //evt.stopPropagation();
             return false;
         }
     };
 
-    var scrollHandler = function () {
+    var scrollHandler = function() {
         angular.element(this).scrollTop(state.scroll.top).scrollLeft(state.scroll.left);
     };
 
-    var show = function () {
+    var show = function() {
         if (eventHandler !== null) {
             EventDispatcher.removeListener(eventHandler);
         }
@@ -165,14 +164,14 @@ angular.module('Pundit2.Core')
 
     var startLockShowRemoveTimeout = function() {
         if (state.lockShowRemoveTimeout === null) {
-            state.lockShowRemoveTimeout = $timeout(function(){
+            state.lockShowRemoveTimeout = $timeout(function() {
                 state.lockShow = false;
                 state.lockShowRemoveTimeout = null;
             }, 200);
         }
     };
 
-    var hide = function () {
+    var hide = function() {
         // TODO: REMOVE THIS LINE !!!
         angular.element('.pnd-range-boundary').remove();
 
@@ -200,7 +199,7 @@ angular.module('Pundit2.Core')
         EventDispatcher.sendEvent('PndPopover.removeTemporarySelection');
     };
 
-    pndPopover.show = function (x, y, options, data) {
+    pndPopover.show = function(x, y, options, data) {
         if (state.lockShow) {
             startLockShowRemoveTimeout();
             return false;
@@ -215,28 +214,27 @@ angular.module('Pundit2.Core')
         state.popover = initPopover(x, y, options, data);
         var innerPromise = $q.defer();
         var promise = state.popover.$promise;
-        promise.then(function () {
+        promise.then(function() {
             if (show()) {
                 if (state.popoverOptions.needsValidSelection) {
                     calculateSelectionCoordinates();
                 }
                 innerPromise.resolve();
-            }
-            else {
+            } else {
                 innerPromise.reject();
             }
-        }, function () {
+        }, function() {
             // reject popover creation.
             console.log(arguments);
         });
         return innerPromise.promise;
     };
 
-    pndPopover.hide = function () {
+    pndPopover.hide = function() {
         hide();
     };
 
-    pndPopover.setAnchorPosition = function (x, y) {
+    pndPopover.setAnchorPosition = function(x, y) {
         state.x = x;
         state.y = y;
         if (state.anchor !== null) {
@@ -247,18 +245,18 @@ angular.module('Pundit2.Core')
         }
     };
 
-    pndPopover.getAnchorPosition = function () {
+    pndPopover.getAnchorPosition = function() {
         return {
             x: state.x,
             y: state.y
         };
     };
 
-    pndPopover.getData = function () {
+    pndPopover.getData = function() {
         return state.data;
     };
 
-    pndPopover.getState = function () {
+    pndPopover.getState = function() {
         return state;
     };
 
