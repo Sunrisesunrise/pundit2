@@ -8,7 +8,89 @@
    #ANNOTATION-POPOVER
 \* ------------------------------------ */
 
-.pnd-annotation-popover {
-    height: 200px;
-    min-height: 200px;
+.popover.pnd-popover-literal.pnd-annotation-popover { /* Here we fight for specificity */
+    height: 50px;
+    min-height: 50px;
 }
+
+
+/* ------------------------------------ *\
+   #LOGIN-POPOVER
+\* ------------------------------------ */
+
+/* Suggests the user to login */
+.popover.pnd-popover-literal.pnd-annotation-popover {
+    &.pnd-annotation-popover-login {
+        height: 45px;
+        min-height: 45px;
+
+        .popover-content {
+            height: 45px;
+            padding: 0;
+            font-size: 13px;
+            line-height: 45px;
+            text-align: center;
+        }
+    }
+}
+
+
+/* ------------------------------------ *\
+   #ANNOTATE-POPOVER
+\* ------------------------------------ */
+
+/* User choose if he want to highlight or comment */
+.popover.pnd-popover-literal.pnd-annotation-popover {
+    &.pnd-annotation-popover-annotate {
+        height: 30px;
+        width: 199px;
+        min-height: 30px;
+        min-width: 199px;
+
+        .popover-content {
+            padding: 0;
+
+            a {
+                display: block;
+                float: left;
+                width: 98px;
+                height: 30px;
+                padding: 0;
+                font-size: 13px;
+                font-weight: 600;
+                line-height: 30px;
+                text-align: center;
+                cursor: pointer;
+                
+                &:hover {
+                    color: @color-text-link-hover;
+                    text-decoration: none;
+                }
+            }
+            
+            .pnd-annotation-popover-separator {
+                display: block;
+                position: relative;
+                float: left;
+                width: 1px;
+                height: 30px;
+                background-color: @color-light-gray-background;
+            }
+        }
+    }
+
+    &.top .popover-content {
+        .pnd-annotation-popover-separator {
+            height: 38px;
+        }
+    }
+
+    &.bottom  .popover-content {
+        .pnd-annotation-popover-separator {
+            height: 38px;
+            top: -8px;
+        }
+    }
+}
+
+
