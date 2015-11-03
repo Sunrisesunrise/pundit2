@@ -8,7 +8,7 @@
 
         <div class="pnd-annotation-collapsed-subject"
             ng-class="{'pnd-annotation-page': annotation.mainItem.typeLabel == 'WebPage'}">
-            <span>{{annotation.mainItem.label}}</span>
+            <span>{{ annotation.mainItem.label }}</span> <!-- TODO For images instead of "label" we shoudl use the ALT attribute if present -->
         </div>
 
         <div class="pnd-annotation-collapsed-caret"></div>
@@ -31,12 +31,12 @@
         <div class="pnd-annotation-details-meta"
              ng-init="meta = false">
 
-            <img class="pnd-annotation-user-thumb" src="http://placehold.it/30x30" alt="{{::annotation.creatorName}}"/>
+            <img class="pnd-annotation-user-thumb" src="http://placehold.it/30x30" alt="{{ ::annotation.creatorName }}"/>
             <span class="pnd-annotation-user-name">
-                {{::annotation.creatorName}}
+                {{ ::annotation.creatorName }}
             </span>
             <span class="pnd-annotation-metadata">
-                {{::annotation.created | date : 'd MMM y'}} · in <span class="pnd-annotation-notebook-name">{{annotation.notebookName}}</span>
+                {{ ::annotation.created | date : 'd MMM y' }} · in <span class="pnd-annotation-notebook-name">{{ annotation.notebookName }}</span>
             </span>
 
         </div>
@@ -49,52 +49,160 @@
             <div class="pnd-annotation-details-triple" ng-repeat="item in annotation.itemsArray">
 
                 <!-- Subject -->
-                <div class="pnd-annotation-details-subject pnd-annotation-annotated-fragment">
+                <!-- Text fragment -->
+                <div class="pnd-annotation-details-subject pnd-annotation-annotated-fragment"
+                     ng-if="annotation.mainItem.typeLabel != 'WebPage' &&
+                            annotation.mainItem.typeLabel != 'Image' &&
+                            annotation.mainItem.typeLabel != 'Image fragment'">
                     <span>
-                        {{item.subject.label}}
+                        {{ item.subject.label }}
+                    </span>
+                </div>
+
+                <!-- Web page -->
+                <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
+                     ng-if="annotation.mainItem.typeLabel == 'WebPage'">
+                    <!-- Label -->
+                    <span class="pnd-annotation-entity-label">
+                        {{ item.subject.label }}
+                    </span>
+                    <!-- Type -->
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.subject.typeLabel }}
+                    </span>
+                </div>
+
+                <!-- Image -->
+                <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
+                     ng-if="annotation.mainItem.typeLabel == 'Image'">
+                    <!-- Thumb -->
+                    <span class="pnd-annotation-entity-image"
+                          ng-if="item.objects[0].image!='null'">
+                        <img src="{{ item.subject.image }}" alt="{{ item.subject.label }}"/> <!-- TODO Instead of "label" we shoudl use the ALT attribute if present -->
+                    </span>
+                    <!-- Label -->
+                    <span class="pnd-annotation-entity-label">
+                        <a href="{{ item.subject.description }}" target="_blank">{{ item.subject.label }} </a><!-- TODO Instead of "label" we shoudl use the ALT attribute if present -->
+                        <a href="{{ item.subject.description }}" target="_blank"><span class="pnd-icon-arrow-right"></span></a>
+                    </span>
+                    <!-- Type -->
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.subject.typeLabel }}
+                    </span>
+                </div>
+
+                <!-- Image fragment -->
+                <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
+                     ng-if="annotation.mainItem.typeLabel == 'Image fragment'">
+                    <!-- Thumb -->
+                    <span class="pnd-annotation-entity-image"
+                          ng-if="item.objects[0].image!='null'">
+                        <img src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
+                    </span>
+                    <!-- Label -->
+                    <span class="pnd-annotation-entity-label">
+                        <a href="{{ item.objects[0].uri }}" target="_blank">{{ item.objects[0].label }}</a>
+                        <a href="{{ item.objects[0].uri }}" target="_blank"><span class="pnd-icon-arrow-right"></span></a>
+                    </span>
+                    <!-- Type -->
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.objects[0].typeLabel }}
                     </span>
                 </div>
 
                 <!-- Predicate -->
+                <!-- TODO There's a problem with the positioning of the tooltip on "top" -->
                 <div class="pnd-annotation-details-predicate"
-                     data-trigger="hover" data-type="success" data-title="{{item.predicate.description}}" bs-tooltip>
-                    {{item.predicate.label}}
+                     data-trigger="hover"
+                     data-type="success"
+                     data-placement="left"
+                     data-title="{{ item.predicate.description }}"
+                     bs-tooltip>
+                    {{ item.predicate.label }}
                 </div>
 
                 <!-- Object -->
-                <div class="pnd-annotation-details-object">
-
-                    <!-- Thumb -->
-                    <span ng-if="item.objects[0].typeLabel != 'Text fragment' && item.objects[0].typeClass != 'literal' && item.objects[0].typeClass != 'WebPage' && item.objects[0].image!='null'"
-                          class="pnd-annotation-details-object-image">
-                        <img src="{{item.objects[0].image}}" alt="{{item.objects[0].label}}"/>
+                <!-- Text fragment -->
+                <div class="pnd-annotation-details-object pnd-annotation-entity-details"
+                     ng-if="item.objects[0].typeLabel == 'Text fragment'">
+                    <span class="pnd-annotation-entity-description">
+                        {{ item.objects[0].label | limitTo:200 }}
                     </span>
+                </div>
 
-                    <!-- Label -->
-                    <span ng-if="item.objects[0].typeLabel != 'Text fragment' && item.objects[0].typeClass != 'literal'"
-                          class="pnd-annotation-details-object-label">
-                        {{item.objects[0].label}}
-                        <a ng-if="item.objects[0].typeLabel != 'Text fragment' && item.objects[0].typeClass != 'literal'"
-                           href="{{item.objects[0].uri}}" target="_blank"><span class="pnd-icon-arrow-right"></span></a>
+                <!-- Literal -->
+                <div class="pnd-annotation-details-object pnd-annotation-entity-details"
+                     ng-if="item.objects[0].typeLabel == 'literal'">
+                    <span class="pnd-annotation-entity-description">
+                        {{ item.objects[0].label | limitTo:200 }}
                     </span>
+                </div>
 
-                    <!-- Type -->
-                    <span ng-if="item.objects[0].typeLabel != 'Text fragment' && item.objects[0].typeClass != 'literal'"
-                          class="pnd-annotation-details-object-type pnd-type">
-                        {{item.objects[0].typeLabel}}
+                <!-- WebPage -->
+                <div class="pnd-annotation-details-object pnd-annotation-entity-details"
+                     ng-if="item.objects[0].typeLabel == 'WebPage'">
+                    <span class="pnd-annotation-entity-label">
+                        <a href="{{ item.objects[0].uri }}" target="_blank">{{ item.objects[0].label }}</a>
+                        <a href="{{ item.objects[0].uri }}" target="_blank"><span class="pnd-icon-arrow-right"></span></a>
                     </span>
-
-                    <!-- Description  -->
-                    <span ng-if="item.objects[0].typeLabel != 'Text fragment' && item.objects[0].typeClass != 'literal' && item.objects[0].typeClass != 'WebPage'"
-                          class="pnd-annotation-details-object-description">
-                        {{item.objects[0].description | limitTo:200}}
-                    </span> <!-- TODO Esiste una versione tagliata dopo N caratteri della description? -->
-
-                    <span ng-if="item.objects[0].typeLabel == 'Text fragment' || item.objects[0].typeClass == 'literal'"
-                          class="pnd-annotation-details-object-description">
-                        {{item.objects[0].label | limitTo:200}}
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.objects[0].typeLabel }}
                     </span>
+                </div>
 
+                <!-- Image -->
+                <div class="pnd-annotation-details-object pnd-annotation-entity-details"
+                     ng-if="item.objects[0].typeLabel == 'Image'">
+                    <span class="pnd-annotation-entity-image"
+                          ng-if="item.objects[0].image!='null'">
+                        <img src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
+                    </span>
+                    <span class="pnd-annotation-entity-label">
+                        <a href="{{ item.objects[0].description }}" target="_blank">{{ item.objects[0].label }}</a>
+                        <a href="{{ item.objects[0].description }}" target="_blank"><span class="pnd-icon-arrow-right"></span></a>
+                    </span>
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.objects[0].typeLabel }}
+                    </span>
+                </div>
+
+                <!-- Image fragment -->
+                <div class="pnd-annotation-details-object pnd-annotation-entity-details"
+                     ng-if="item.objects[0].typeLabel == 'Image fragment'">
+                    <span class="pnd-annotation-entity-image"
+                          ng-if="item.objects[0].image!='null'">
+                        <img src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
+                    </span>
+                    <span class="pnd-annotation-entity-label">
+                        <a href="{{ item.objects[0].description }}" target="_blank">{{ item.objects[0].label }}</a>
+                        <a href="{{ item.objects[0].description }}" target="_blank"><span class="pnd-icon-arrow-right"></span></a>
+                    </span>
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.objects[0].typeLabel }}
+                    </span>
+                </div>
+
+                <!-- Anything else -->
+                <div class="pnd-annotation-details-object pnd-annotation-entity-details"
+                     ng-if="item.objects[0].typeLabel != 'Text fragment' &&
+                             item.objects[0].typeLabel != 'literal' &&
+                             item.objects[0].typeLabel != 'WebPage' &&
+                             item.objects[0].typeLabel != 'Image' &&
+                             item.objects[0].typeLabel != 'Image fragment'">
+                    <span class="pnd-annotation-entity-image"
+                          ng-if="item.objects[0].image!='null'">
+                        <img src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
+                    </span>
+                    <span class="pnd-annotation-entity-label">
+                        <a href="{{ item.objects[0].uri }}" target="_blank">{{ item.objects[0].label }}</a>
+                        <a href="{{ item.objects[0].uri }}" target="_blank"><span class="pnd-icon-arrow-right"></span></a>
+                    </span>
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.objects[0].typeLabel }}
+                    </span>
+                    <span class="pnd-annotation-entity-description">
+                        {{ item.objects[0].description | limitTo:200 }}
+                    </span>
                 </div>
 
             </div>

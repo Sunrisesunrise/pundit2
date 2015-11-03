@@ -17,9 +17,6 @@
     box-sizing: border-box;
 }
 
-.pnd-annotation-details-wrap {
-}
-
 
 /* ------------------------------------ *\
    #COLLAPSED-ANNOTATION
@@ -260,6 +257,11 @@
         }
     }
 
+    /* Subject entity (like web page) in */
+    .pnd-annotation-details-subject.pnd-annotation-entity-details {
+        padding: 10px 10px 20px;
+    }
+
     /* Predicate in semantic annotation */
     .pnd-annotation-details-predicate {
         display: inline-block;
@@ -277,6 +279,7 @@
         border-radius: 3px;
         text-shadow: 0px -1px 0px rgba(0,0,0,0.10);
 
+        /* Orange carets above and below */
         &:before, &:after {
             content: "";
             display: block;
@@ -302,17 +305,19 @@
 
     /* The Object in semantic annotations */
     .pnd-annotation-details-object {
-        display: block;
-        padding: 25px 10px 10px;
+        padding: 20px 10px 10px;
         margin-top: -10px;
-        // max-height: @annotation-text-max-height;
-        // overflow-y: auto;
-        // overflow-x: hidden;
         background-color: @color-ultra-light-background;
         border-top: @annotation-border-size solid @annotation-border-color;
+    }
+
+    /* Entity style */
+    /* Style for rendering entities like LOD or web pages, can be used both in subject and object */
+    .pnd-annotation-entity-details {
+        display: block;
 
         /* The thumb */
-        .pnd-annotation-details-object-image {
+        .pnd-annotation-entity-image {
             display: block;
             float: left;
             margin: 0 6px 6px 0;
@@ -332,18 +337,31 @@
         }
 
         /* The label */
-        .pnd-annotation-details-object-label {
+        .pnd-annotation-entity-label {
             display: block;
             font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 5px;
+            color: @annotation-text-color;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            a {
+                font-weight: inherit;
+                color: @annotation-text-color;
+                text-decoration: none;
+
+                &:hover {
+                    color: @color-text-link;
+                }
+            }
         }
 
         /* The type */
-        .pnd-annotation-details-object-type {
-        }
-
 
         /* The description */
-        .pnd-annotation-details-object-description {
+        .pnd-annotation-entity-description {
             display: block;
             float: none;
             clear: both;
@@ -351,7 +369,7 @@
     }
 }
 
-/* Buttons at the bottom of teh annotation */
+/* Buttons at the bottom of the annotation */
 .pnd-annotation-details-buttons {
     padding: 0 5px;
     border-top: @annotation-border-size solid @annotation-border-color;
