@@ -1,5 +1,8 @@
 <div class="popover pnd-annotation-popover pnd-popover-literal"
-     ng-class="{'pnd-annotation-popover-login': !isUserLogged, 'pnd-annotation-popover-annotate':currentMode === '' && isUserLogged}">
+     ng-class="{'pnd-annotation-popover-login': !isUserLogged,
+     'pnd-annotation-popover-annotate':currentMode === '' && isUserLogged,
+     'pnd-annotation-popover-comment':currentMode === 'comment' && isUserLogged,
+     'pnd-annotation-popover-highlight':currentMode !== '' && currentMode !== 'comment' && isUserLogged}">
 
     <div class="arrow"></div>
 
@@ -15,9 +18,11 @@
         </span><a ng-click="setMode('highlight')">Highlight</a>
     </div>
 
+    <!-- Comment Highlight creation  -->
     <div class="popover-content-wrapper"
          ng-show="!savingAnnotation && !errorSaving"
          ng-if="currentMode !== '' && isUserLogged">
+
         <div class="popover-content"
              ng-show="currentMode === 'comment'">
             <div class="form-group">
@@ -30,9 +35,10 @@
             </div>
         </div>
 
+        <!-- Notebook selector -->
         <div 
             class="popover-notebooks">
-            Save {{currentMode}} in 
+            <span class="popover-notebooks-copy">Save {{currentMode}} in</span>
             <pnd-select
                     options="availableNotebooks"
                     selected-value="$parent.selectedNotebookId"
@@ -41,16 +47,17 @@
                     placeholder-action="'Type new notebook name here'"></pnd-select>
         </div>
 
+        <!-- Footer with buttons -->
         <div class="popover-footer">
             <button
-                class="pnd-btn pnd-btn-calltoaction"
+                    class="pnd-btn pnd-btn-small"
+                    ng-click="cancel()">
+                Cancel
+            </button><button
+                class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
                 ng-class="{disabled: $parent.literalText == '' && currentMode == 'comment'}"
                 ng-click="save()">
                 Save
-            </button><button
-                class="pnd-btn"
-                ng-click="cancel()">
-                Cancel
             </button>
         </div>
     </div>

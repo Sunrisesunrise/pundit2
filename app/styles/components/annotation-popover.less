@@ -94,3 +94,89 @@
 }
 
 
+/* ------------------------------------ *\
+   #COMMENT-HIGHLIGHT-POPOVER-COMMONS
+\* ------------------------------------ */
+
+.popover.pnd-popover-literal.pnd-annotation-popover {
+    &.pnd-annotation-popover-comment, &.pnd-annotation-popover-highlight {
+        width: @annotation-popover-comment-width;
+        min-width: @annotation-popover-comment-width;
+
+        /* Footer with buttons */
+        .popover-footer {
+            /* Bottom positioning is inherited */
+            height: 40px;
+            padding-top: 7px;
+            padding-right: 7px;
+            text-align: right;
+            border-top: 1px solid @color-border-normal;
+
+            .pnd-btn {
+                margin-right: 7px;
+            }
+        }
+
+        /* Notebook selector */
+        .popover-notebooks {
+            position: absolute;
+            bottom: 39px;
+            height: 39px;
+            width: @annotation-popover-comment-width - 2;
+            background-color: #FFF;
+
+            .popover-notebooks-copy {
+                display: block;
+                float: left;
+                width: 100px;
+                margin-left: 10px;
+                font-size: 13px;
+                line-height: 40px;
+            }
+
+            .pnd-select {
+                max-width: @annotation-popover-comment-width - 125px;
+            }
+        }
+    }
+}
+
+
+/* ------------------------------------ *\
+   #COMMENT-POPOVER
+\* ------------------------------------ */
+
+.popover.pnd-popover-literal.pnd-annotation-popover {
+    &.pnd-annotation-popover-comment {
+        height: 250px;
+        min-height: 250px;
+
+        /* Notebook selector */
+        .popover-notebooks {
+            border-top: 1px solid @color-border-normal;
+        }
+
+        .pnd-popover-literal-textarea {
+            height: 148px;
+            resize: none;
+        }
+    }
+}
+
+
+/* ------------------------------------ *\
+   #HIGHLIGHT-POPOVER
+\* ------------------------------------ */
+
+.popover.pnd-popover-literal.pnd-annotation-popover {
+    &.pnd-annotation-popover-highlight {
+        height: 80px;
+        min-height: 80px;
+
+        /* Notebook selector */
+        .popover-notebooks {
+            border-radius: 3px 3px 0 0;
+            border: 0;
+        }
+    }
+}

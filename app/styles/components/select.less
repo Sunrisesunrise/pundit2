@@ -15,40 +15,40 @@
     margin: 0 4px;
     position: relative;
     left: 0;
-
     display: inline-block;
-    
-    background: yellow;
-    color: blue;
-    font-size: 1em;
     text-align: left;
-    
     overflow: visible;
 
     .label-selected{
-        position: relative; 
-        top: 3.5px;
-        margin: 0 4px;
+        display: block;
+        position: relative;
+        height: 28px;
+        margin: 0 20px 0 4px;
+        background-color: @color-background-light;
+        border: 1px solid @color-border-light;
+
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        cursor: pointer;
     }
 
     .open-options{
-        height: 28px;
-        width: 24px;
-        
         position: absolute;
         right: 0;
         top: 0;
-        
-        opacity: 0.5;
 
+        height: 28px;
+        width: 24px;
+        
+        background-color: @color-background-light;
         border-left: 1px solid black;
         border-radius: 0 2px 2px 0;
 
-        background: red;
         text-align: center;
-
         cursor: pointer;
-        
 
         &:hover{
             opacity: 1;
