@@ -9,10 +9,6 @@
 \* ------------------------------------ */
 
 .pnd-dropdown-contextual-menu.dropdown-menu, .show-tabs + .dropdown-menu {
-    /*
-    The selector ".show-tabs + .dropdown-menu" is for the special case of the
-
-    */
     padding: 0;
     overflow: hidden;
     z-index: @zindex-pnd-contextual-menu;
@@ -76,6 +72,7 @@
 
     /* Selected or active element */
     li.active a {
+        font-weight: 600;
         background-color: @color-dropdown-active;
 
         &:hover,

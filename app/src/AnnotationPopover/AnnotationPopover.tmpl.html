@@ -2,7 +2,9 @@
      ng-class="{'pnd-annotation-popover-login': !isUserLogged,
      'pnd-annotation-popover-annotate':currentMode === '' && isUserLogged,
      'pnd-annotation-popover-comment':currentMode === 'comment' && isUserLogged,
-     'pnd-annotation-popover-highlight':currentMode !== '' && currentMode !== 'comment' && isUserLogged}">
+     'pnd-annotation-popover-highlight':currentMode !== '' && currentMode !== 'comment' && isUserLogged,
+     'pnd-annotation-popover-saving':savingAnnotation,
+     'pnd-annotation-popover-error':!savingAnnotation && errorSaving}">
 
     <div class="arrow"></div>
 
@@ -64,9 +66,12 @@
 
     <div class="popover-content-wrapper"
          ng-show="!savingAnnotation && errorSaving">
-        There was an error saving your comment, please try again later.
-        </button><button
-            class="pnd-btn"
+        <span class="pnd-icon-exclamation"></span>
+        <br />
+        There was an error saving your annotation, please try again later
+        <br />
+        <button
+            class="pnd-btn pnd-btn-small"
             ng-click="cancel()">
             Cancel
         </button>
@@ -74,6 +79,8 @@
 
     <div class="popover-content-wrapper"
          ng-show="savingAnnotation">
-            Saving ...
+        <span class="pnd-icon-refresh pnd-icon-spin"></span>
+        <br />
+        Saving your annotation
     </div>
 </div>

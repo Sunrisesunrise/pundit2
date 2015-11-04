@@ -33,23 +33,41 @@
     /* Item's wrapper for title and type label */
     .pnd-item-text {
         display: inline;
-        line-height: @item-height;
+        vertical-align: top;
     }
 
     /* Item's title */
     .pnd-item-label {
         display: inline;
+        margin: 7px 0 0 3px;
+
         color: @color-text;
         font-family: @font;
         font-size: 12px;
+        line-height: @item-height;
         // font-weight: 100;
-        line-height: @item-height - 1px;
-        margin-left: 3px;
+    }
+
+    /* Type */
+    .pnd-type {
+        margin-top: (@item-height - 20)/2;
+        float: left;
     }
 
     /* Icons */
     .pnd-icon {
         line-height: @item-height - 1px;
+    }
+
+    /* Active icons inside buttons */
+    .pnd-btn {
+        .pnd-icon {
+            color: @color-dark-gray-background;
+
+            &:hover {
+                color: @color-text-link;
+            }
+        }
     }
 
     /* Sticky/selected item */
@@ -59,9 +77,6 @@
         .pnd-item-label {
             color: @color-text;
             font-weight: inherit;
-        }
-        .pnd-icon {
-            // color: #fff !important;
         }
     }
 }

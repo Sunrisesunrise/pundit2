@@ -135,10 +135,16 @@
             margin-right: 7px;
         }
     }
+}
 
-    .list-group {
-        -webkit-box-shadow: none;
-        box-shadow: none;
+.list-group {
+    box-shadow: none;
+
+    /* Single li containing .pnd-item element */
+    .list-group-item {
+        margin: 0;
+        padding: 0;
+        border: 0;
     }
 }
 
@@ -149,10 +155,10 @@
 
 .pnd-panel-tab-content-footer {
     display: block;
+    width: 100%;
     height: 40px;
     position: absolute;
     bottom: 0;
-    // right: 7px
     padding-right: 7px;
     left: 0;
     padding-top: 7px;
