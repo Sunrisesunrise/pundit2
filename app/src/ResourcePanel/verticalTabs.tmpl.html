@@ -72,7 +72,7 @@
                 <li 
                     class="list-group-item" 
                     ng-repeat="mi in $parent.tabItemsFiltered[$index] = contentTabs[$index].isLocal ? (contentTabs[$index].items | filter:{label: label}) : contentTabs[$index].items"
-                    ng-if="showFilteredResults">
+                    ng-if="showFilteredResults && !resetSearch">
                     <item 
                         uri="{{mi.uri}}" 
                         is-selected="isSelected(mi)" 

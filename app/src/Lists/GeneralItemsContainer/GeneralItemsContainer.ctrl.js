@@ -471,7 +471,6 @@ angular.module('Pundit2.GeneralItemsContainer')
             }
 
             // need to query vocab then update showed items
-            $timeout.cancel(promise);
             promise = $timeout(function() {
                 querySelectors();
             }, 500);
@@ -480,14 +479,14 @@ angular.module('Pundit2.GeneralItemsContainer')
 
         $scope.displayedItems = [];
         var updateMessage = function() {
-            if (eraseSearch === true) {
+            if (eraseSearch === true || search.term === '') {
                 $scope.message.text = GeneralItemsContainer.getMessage($scope.type).text;
                 $scope.displayedItems = [];
                 eraseSearch = false;
                 return;
             }
 
-            if ($scope.displayedItems.length === 0 && $scope.search.term !== '' && typeof($scope.search.term) !== 'undefined') {
+            if ($scope.displayedItems.length === 0) {
                 $scope.message.text = "No item found to: " + $scope.search.term;
             }
         };

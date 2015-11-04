@@ -11,6 +11,7 @@ angular.module('Pundit2.ResourcePanel')
     var resetHandler;
 
     var isTimerRunning = false;
+    $scope.resetSearch = false;
 
     $scope.label = '';
 
@@ -19,7 +20,7 @@ angular.module('Pundit2.ResourcePanel')
     $scope.itemSelected = null;
     $scope.isUseActive = false;
     $scope.contentTabs.activeTab = 0;
-
+    $scope.eraseSearch = false;
     // Properties and method to customize template (Pundit/KorboEE)
     $scope.showFilteredResults = true;
     $scope.showHeader = true;
@@ -80,13 +81,20 @@ angular.module('Pundit2.ResourcePanel')
             userNotLoggedMessage = 'My Items are only available to logged users. Please log in to use this section or select a fragment of text in the page.';
 
         searchLabel = typeof(searchLabel) !== 'undefined' ? searchLabel : '';
+
+        if (searchLabel === '') {
+            $scope.resetSearch = true;
+
+            return 'Search entities in ' + tabTitle +' using the input filed above. You can use the selected entity by clicking the "Use" button below.';
+
+        }
         if (searchLabel.length > 2 &&
-            isLoading ||
+            isLoading || 
             isTimerRunning) {
             if (myItemsNotLogged) {
                 return userNotLoggedMessage;
             }
-            return filteredItems.length > 0 ? '' : 'Loading ...';
+            return (filteredItems.length > 0 && searchLabel !== '')? '' : 'Loading ...';
         }
         if (selectorsLabels.indexOf(tabTitle) !== -1 &&
             searchLabel.length <= 2) {
@@ -195,7 +203,20 @@ angular.module('Pundit2.ResourcePanel')
             }
         }
     };
+    var ifLogged = function(term, caller){
+        if (Config.annotationServerCallsNeedLoggedUser) {
+            MyPundit.checkLoggedIn().then(function(isLoggedIn) {
+                if (isLoggedIn) {
+                    ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
+                } else {
+                    EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
+                }
+            });
+        } else {
+            ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
+        }
 
+    }
     $scope.select = function(item, $event) {
         // after triggering click, lastSelect object will be updated with new selected item.
         Preview.setLock(false);
@@ -307,10 +328,10 @@ angular.module('Pundit2.ResourcePanel')
         var name = $window[Config.korbo.confName].globalObjectName;
         $window[name].callOpenNew();
     };
-
     $scope.updateSearch = function(term) {
         var caller = '';
         if (typeof(term) !== 'undefined' && term.length > 2) {
+            $scope.resetSearch = false;
             switch ($scope.type) {
                 case 'sub':
                     caller = 'subject';
@@ -322,42 +343,21 @@ angular.module('Pundit2.ResourcePanel')
                     caller = 'object';
                     break;
             }
-            if (caller !== 'pr' && caller !== '') {
+            if (caller !== 'predicate' && caller !== '') {
                 $timeout.cancel(searchTimer);
                 isTimerRunning = true;
                 searchTimer = $timeout(function() {
-                    if (Config.annotationServerCallsNeedLoggedUser) {
-                        MyPundit.checkLoggedIn().then(function(isLoggedIn) {
-                            if (isLoggedIn) {
-                                ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
-                            } else {
-                                EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
-                            }
-                        });
-                    } else {
-                        ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
-                    }
+                    ifLogged(term, caller);
                     isTimerRunning = false;
                 }, ResourcePanel.options.vocabSearchTimer);
             }
         } else {
-            if (typeof($scope.contentTabs) !== 'undefined' && term === '') {
-                $scope.contentTabs[$scope.contentTabs.activeTab].items = [];
+            if(typeof($scope.contentTabs) !== 'undefined' && term === ''){
+                $scope.resetSearch = true;
             }
             $timeout.cancel(searchTimer);
-
             // TODO: add specific method in ResourcePanel to reset search
-            if (Config.annotationServerCallsNeedLoggedUser) {
-                MyPundit.checkLoggedIn().then(function(isLoggedIn) {
-                    if (isLoggedIn) {
-                        ResourcePanel.updateVocabSearch('', $scope.triple, caller);
-                    } else {
-                        EventDispatcher.sendEvent('MyPundit.userNeedToLogin');
-                    }
-                });
-            } else {
-                ResourcePanel.updateVocabSearch('', $scope.triple, caller);
-            }
+            ifLogged('', caller);
         }
     };
 
@@ -402,7 +402,7 @@ angular.module('Pundit2.ResourcePanel')
                 caller = 'object';
                 break;
         }
-        if (caller !== 'pr' && caller !== '') {
+        if (caller !== 'predicate' && caller !== '') {
             $timeout.cancel(searchTimer);
             searchTimer = $timeout(function() {
                 if (Config.annotationServerCallsNeedLoggedUser) {
