@@ -70,9 +70,10 @@
             <!-- TODO: find a better way to show partial counting -->
             <ul class="list-group" ng-init="$parent.tabItemsFiltered = $parent.tabItemsFiltered || []; initTabItemsFiltered()">
                 <li 
-                    class="list-group-item" 
+                    class="list-group-item"
                     ng-repeat="mi in $parent.tabItemsFiltered[$index] = contentTabs[$index].isLocal ? (contentTabs[$index].items | filter:{label: label}) : contentTabs[$index].items"
-                    ng-if="showFilteredResults && !resetSearch">
+                    ng-init="ok = false"
+                    ng-if="showFilteredResults && !resetSearch || !ok">
                     <item 
                         uri="{{mi.uri}}" 
                         is-selected="isSelected(mi)" 

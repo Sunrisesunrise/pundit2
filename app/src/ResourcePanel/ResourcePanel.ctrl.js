@@ -11,7 +11,7 @@ angular.module('Pundit2.ResourcePanel')
     var resetHandler;
 
     var isTimerRunning = false;
-    $scope.resetSearch = false;
+
 
     $scope.label = '';
 
@@ -23,6 +23,7 @@ angular.module('Pundit2.ResourcePanel')
     $scope.eraseSearch = false;
     // Properties and method to customize template (Pundit/KorboEE)
     $scope.showFilteredResults = true;
+    $scope.resetSearch = false;
     $scope.showHeader = true;
     $scope.showVerticalTabFooterContent = true;
     $scope.showContentMessage1 = false;
@@ -82,7 +83,8 @@ angular.module('Pundit2.ResourcePanel')
 
         searchLabel = typeof(searchLabel) !== 'undefined' ? searchLabel : '';
 
-        if (searchLabel === '') {
+
+        if (searchLabel === '' && tabTitle !== 'My Items' && tabTitle !== 'Page items') {
             $scope.resetSearch = true;
 
             return 'Search entities in ' + tabTitle +' using the input filed above. You can use the selected entity by clicking the "Use" button below.';
@@ -330,7 +332,7 @@ angular.module('Pundit2.ResourcePanel')
     };
     $scope.updateSearch = function(term) {
         var caller = '';
-        if (typeof(term) !== 'undefined' && term.length > 2) {
+        if (typeof(term) !== 'undefined' && term.length > 2 ) {
             $scope.resetSearch = false;
             switch ($scope.type) {
                 case 'sub':
@@ -355,6 +357,8 @@ angular.module('Pundit2.ResourcePanel')
             if(typeof($scope.contentTabs) !== 'undefined' && term === ''){
                 $scope.resetSearch = true;
             }
+
+
             $timeout.cancel(searchTimer);
             // TODO: add specific method in ResourcePanel to reset search
             ifLogged('', caller);

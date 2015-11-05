@@ -464,13 +464,13 @@ angular.module('Pundit2.GeneralItemsContainer')
             if (typeof(str) === 'undefined' || str === '') {
                 $scope.search.icon = ContainerManager.options.inputIconSearch;
                 eraseSearch = true;
-                $timeout.cancel(promise);
             } else {
                 $scope.search.icon = ContainerManager.options.inputIconClear;
                 eraseSearch = false;
             }
 
             // need to query vocab then update showed items
+            $timeout.cancel(promise);
             promise = $timeout(function() {
                 querySelectors();
             }, 500);
