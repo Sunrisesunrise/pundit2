@@ -1,8 +1,9 @@
-<div class="modal pnd-send-modal-container pnd-ignore" tabindex="-1" role="dialog">
+<div class="pnd-modal modal pnd-send-modal-container pnd-ignore" tabindex="-1" role="dialog">
 
-    <div class="modal-dialog">
+    <div class="pnd-modal-dialog modal-dialog">
 
-        <div class="modal-content">
+        <!-- Modal content-->
+        <div class="pnd-modal-content modal-content">
 
             <div class="modal-header">
                 <h4 class="modal-title"> {{titleMessage}} </h4>
@@ -15,22 +16,24 @@
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Description</label>
-                    <textarea ng-model="text.msg" class="form-control" rows="5" id="exampleInputPassword1" placeholder="Tell us how we can help, describe the bug or problem you encountered"></textarea>
+                    <textarea ng-model="text.msg" class="form-control" rows="5" id="exampleInputPassword1" placeholder="Tell us how we can help, describe the bug or problem you encountered">
+                    </textarea>
                 </div>
             </div>
 
-            <div class="modal-footer pnd-send-modal-footer">
-                <button type="button" class="pnd-btn pnd-btn-calltoaction disabled pnd-send-modal-send"
+            <!-- Modal-footer -->
+            <div class="pnd-modal-footer pnd-send-modal-footer">
+                <button type="button" class="pnd-btn pnd-btn-small pnd-send-modal-close" ng-click="cancel()">
+                    Cancel
+                </button><button type="button" class="pnd-btn pnd-btn-small pnd-btn-calltoaction disabled pnd-send-modal-send"
                         ng-click="send()">
                     Send
-                </button><button type="button" class="pnd-btn pnd-send-modal-close" ng-click="cancel()">
-                    Cancel
                 </button>
             </div>
-            <!-- end modal-footer -->
+            <!-- END // modal-footer -->
 
         </div>
-        <!-- end modal content-->
+        <!-- END // Modal content-->
 
     </div>
     <!-- end modal dialog-->

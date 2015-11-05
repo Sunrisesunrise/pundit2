@@ -9,7 +9,23 @@
 <script>
     angular.element('body').css('height', '4200px');
 
+    var keeConf = {
+        //endpoint: "http://korbo2.local:80/v1",
+        endpoint: "http://dev.korbo2.org/v1",
+        basketID: 1,
+        labelMinLength: 5,
+        limitSearchResult: 3,
+        globalObjectName : 'FF',
+        languages: [{ name:'English', value:'en', state: true }]
+    }
+
     var punditConfig = {
+        korbo: {
+            active: true,
+            //confName: 'KORBODEFAULTCONF'
+            confName: 'keeConf'
+        },
+
         //annotationServerBaseURL: "http://as.thepund.it:8080/annotationserver/",
         
         // vocabularies: ['http://manager.korbo.org/91'],
