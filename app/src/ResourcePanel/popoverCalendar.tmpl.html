@@ -1,4 +1,4 @@
-<div class="popover popover-datepicker pnd-popover-calendar">
+<div class="popover pnd-popover popover-datepicker pnd-popover-calendar">
     <div class="arrow" ng-style="{'margin-left': arrowLeft}"></div>
     <!--
     <h3 class="popover-title">
@@ -28,16 +28,17 @@
     </div>
 
     <div class="popover-footer">
-        <button 
-            class="pnd-btn pnd-btn-calltoaction"
-            ng-click="save()"
-            ng-show="showSaveButton(this)"
-            ng-disabled="!modelDate.valid">
-            Save date
-        </button><button
-            class="pnd-btn"
+        <button
+            class="pnd-btn pnd-btn-small"
             ng-click="cancel()">
             Cancel
+        </button>
+        <button
+                class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
+                ng-click="save()"
+                ng-show="showSaveButton(this)"
+                ng-disabled="!modelDate.valid">
+            Save date
         </button>
     </div>
 </div>

@@ -55,9 +55,7 @@
     fieldset[disabled] & {
         color: @color-button-text-disabled;
         border-color: @color-button-border-disabled;
-        // background: lighten(@color-button-bg, 20); // TODO remove if not necessary
         cursor: @cursor-disabled;
-        // color: fade(@color-button-text-dark, 50%) !important; // For ovewritings on .disabled class // TODO remove if not necessary
         pointer-events: none; // Future-proof disabling of clicks
     }
 
@@ -200,14 +198,14 @@ button[disabled] {
 /* Subject button */
 .pnd-btn-subject {
     color: @color-button-cta-text;
-    background-color: @subject-color;
+    background-color: @color-subject;
     border: 0;
 
     /* Hover state */
     &:hover,
     &:focus,
     &.focus {
-        background-color: darken(@subject-color, 5); // TODO To be introduced as variable?
+        background-color: darken(@color-subject, 5); // TODO To be introduced as variable?
     }
 
     /* Active state */
@@ -218,7 +216,7 @@ button[disabled] {
     &[disabled],
     fieldset[disabled] & {
         color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO To be introduced as variable?
-        background-color: lighten(@subject-color, 20);
+        background-color: lighten(@color-subject, 20);
         text-shadow: none;
     }
 }
@@ -226,14 +224,14 @@ button[disabled] {
 /* Predicate button */
 .pnd-btn-predicate {
     color: @color-button-cta-text;
-    background-color: @predicate-color;
+    background-color: @color-predicate;
     border: 0;
 
     /* Hover state */
     &:hover,
     &:focus,
     &.focus {
-        background-color: darken(@predicate-color, 5); // TODO To be introduced as variable?
+        background-color: darken(@color-predicate, 5); // TODO To be introduced as variable?
     }
 
     /* Active state */
@@ -244,7 +242,7 @@ button[disabled] {
     &[disabled],
     fieldset[disabled] & {
         color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO To be introduced as variable?
-        background-color: lighten(@predicate-color, 20);
+        background-color: lighten(@color-predicate, 20);
         text-shadow: none;
     }
 }
@@ -252,14 +250,14 @@ button[disabled] {
 /* Object button */
 .pnd-btn-object {
     color: @color-button-cta-text;
-    background-color: @object-color;
+    background-color: @color-object;
     border: 0;
 
     /* Hover state */
     &:hover,
     &:focus,
     &.focus {
-        background-color: darken(@object-color, 5); // TODO To be introduced as variable?
+        background-color: darken(@color-object, 5); // TODO To be introduced as variable?
     }
 
     /* Active state */
@@ -270,7 +268,7 @@ button[disabled] {
     &[disabled],
     fieldset[disabled] & {
         color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO To be introduced as variable?
-        background-color: lighten(@object-color, 20);
+        background-color: lighten(@color-object, 20);
         text-shadow: none;
     }
 }

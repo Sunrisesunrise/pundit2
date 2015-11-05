@@ -1,4 +1,4 @@
-<div class="popover pnd-fragment-popover">
+<div class="popover pnd-popover pnd-fragment-popover">
     <div class="arrow"></div>
 
     <div class="popover-content-wrapper">
@@ -7,7 +7,7 @@
                 ng-click="showAnnotation(annotation)"
                 ng-mouseover="mouseenter(annotation)" 
                 ng-mouseleave="mouseleave()">
-                {{annotation.id}}
+                {{annotation}}
             </li>
         </ul>
         <div ng-if="hasLink"

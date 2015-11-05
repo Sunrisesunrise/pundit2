@@ -176,7 +176,8 @@ ul.pnd-tab-header {
 .tabs-left .pnd-vertical-tabs { //nav-tabs
     float: left;
     border-bottom: 0;
-    background-color: lighten(@gray-lighter, 2);
+    background-color: @vertical-tabs-bg-color;
+    border-right: 1px solid @vertical-tabs-tab-border-color;
     &:extend(.clearfix all);
 
     /* Single item */
@@ -189,31 +190,35 @@ ul.pnd-tab-header {
 
         .badge {
             padding: 3px 7px;
+            margin-top: 2px;
+            color: @badge-text-color;
             font-size: 10px;
-            font-weight: normal;
-            background-color: lighten(@gray-light, 10%);
-            border-radius: 8px;
+            font-weight: @font-weight-normal;
+            background-color: @badge-bg-color;
+            border-radius: 7px;
         }
 
         & > a {
             display: block;
             min-width: 150px;
-            margin-right: 0;
-            margin-bottom: 1px;
-            padding: 5px 8px;
+            margin-right: -1px;
+            padding: 5px 6px 5px 8px;
             position: relative;
-            background-color: @gray-lighter;
-            color: @gray !important; /* For css overwritings */
-            border-bottom: 1px solid #fff;
+            background-color: @vertical-tabs-tab-bg-color;
+            font-size: 13px;
+            color: @color-text !important; /* For css overwritings */
+            border-bottom: 1px solid @vertical-tabs-tab-border-color;
+            border-right: 1px solid @vertical-tabs-tab-border-color;
+            cursor: pointer;
 
             &:hover, &:focus {
-                background-color: darken(@gray-lighter, 3%);
-                border-bottom: 1px solid #fff;
-                color: @gray-darker;
+                background-color: @vertical-tabs-tab-hover-bg-color;
+                // border-bottom: 1px solid #fff;
+                color: @color-text !important; /* For css overwritings */
                 text-decoration: none !important; /* For css overwritings */
 
                 .badge {
-                    background-color: lighten(@gray, 20%);
+                    // background-color: lighten(@gray, 20%);
                 }
             }
         }
@@ -223,22 +228,23 @@ ul.pnd-tab-header {
             & > a {
                 background-color: #fff;
                 cursor: default;
-                border-bottom: 1px solid #fff;
+                border-right: 1px solid #fff;
+                // border-bottom: 1px solid #fff;
                 box-shadow: none;
 
                 &:hover, &:focus {
                     color: @gray;
                     background-color: #fff;
-                    border-bottom: 1px solid #fff;
+                    // border-bottom: 1px solid #fff;
 
                     .badge {
-                        background-color: lighten(@gray, 20%);
+                        // background-color: lighten(@gray, 20%);
                     }
                 }
             }
 
             .badge {
-                background-color: lighten(@gray, 20%);
+                // background-color: lighten(@gray, 20%);
             }
         }
     }

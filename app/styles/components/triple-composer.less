@@ -17,7 +17,6 @@
     /* Single Triple */
     .pnd-statement-row {
         position: relative;
-        // height: @triplecomposer-height + 2 * @triplecomposer-padding-inner;
         margin-left: @triplecomposer-spacing;
         margin-bottom: @triplecomposer-spacing;
         margin-right: @triplecomposer-spacing;
@@ -75,7 +74,8 @@
                 display: block;
                 overflow: hidden;
                 height: @triplecomposer-height;
-                padding-left: @triplecomposer-padding-inner;
+                padding-left: 8px;;
+                font-size: 12px;
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 line-height: @triplecomposer-height;
@@ -129,9 +129,10 @@
                     }
                 }
 
-                /* Centers the icon, considering the left border */
+                /* Centers the icon */
                 .pnd-icon {
-                    margin-left: 1px;
+                    display: block;
+                    margin-left: -1px;
                 }
             }
 
@@ -145,55 +146,55 @@
         /* Subject */
         .pnd-row-button-subject {
             .pnd-statement-label, button {
-                background-color: @subject-color;
+                background-color: @color-subject;
                 &:hover {
-                    background-color: darken(@subject-color, 5);
+                    background-color: darken(@color-subject, 5);
                 }
             }
 
             .pnd-statement-label {
-                color: @subject-color-text;
+                color: @color-subject-text;
             }
 
             button {
-                border-left-color: darken(@subject-color, 10);
+                border-left-color: darken(@color-subject, 10);
             }
         }
 
         /* Predicate */
         .pnd-row-button-predicate {
             .pnd-statement-label, button {
-                background-color: @predicate-color;
+                background-color: @color-predicate;
                 &:hover {
-                    background-color: darken(@predicate-color, 5);
+                    background-color: darken(@color-predicate, 5);
                 }
             }
 
             .pnd-statement-label {
-                color: @predicate-color-text
+                color: @color-predicate-text;
             }
 
             button {
-                border-left-color: darken(@predicate-color, 10);
+                border-left-color: darken(@color-predicate, 10);
             }
         }
 
         /* Object */
         .pnd-row-button-object {
             .pnd-statement-label, button {
-                background-color: @object-color;
+                background-color: @color-object;
                 &:hover {
-                    background-color: darken(@object-color, 5);
+                    background-color: darken(@color-object, 5);
                     background-image: none;
                 }
             }
 
             .pnd-statement-label {
-                color: @object-color-text;
+                color: @color-object-text;
             }
 
             button {
-                border-left-color: darken(@object-color, 10);
+                border-left-color: darken(@color-object, 10);
             }
         }
 
@@ -205,6 +206,12 @@
 
             button {
                 height: @triplecomposer-height + 2 * @triplecomposer-padding-inner;
+                color: @color-dark-gray;
+                padding-left: 4px;
+                
+                &:hover {
+                    color: @color-brand;
+                }
             }
         }
 

@@ -612,7 +612,7 @@ angular.module('Pundit2.ResourcePanel')
         }
         if (type === 'pr') {
             var prop = {
-                title: 'Properties',
+                title: 'Predicates',
                 items: properties,
                 isStarted: true,
                 isLocal: true

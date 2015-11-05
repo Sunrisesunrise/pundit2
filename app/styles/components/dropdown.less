@@ -9,6 +9,7 @@
 \* ------------------------------------ */
 
 .pnd-dropdown-contextual-menu.dropdown-menu, .show-tabs + .dropdown-menu {
+    position: absolute;
     padding: 0;
     overflow: hidden;
     z-index: @zindex-pnd-contextual-menu;
@@ -44,7 +45,7 @@
             background-color: @color-dropdown-bg;
 
             font-size: 13px;
-            font-weight: 200;
+            font-weight: @font-weight-normal;
             color: @color-dropdown-text !important; /* For css overwritings */
             white-space: nowrap;
             line-height: 1.5;
@@ -72,7 +73,6 @@
 
     /* Selected or active element */
     li.active a {
-        font-weight: 600;
         background-color: @color-dropdown-active;
 
         &:hover,

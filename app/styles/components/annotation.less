@@ -55,7 +55,7 @@
 
     &.pnd-annotation-page {
         span {
-            font-weight: 600;
+            font-weight: @font-weight-bold;
         }
     }
 }
@@ -82,7 +82,7 @@
         height: @annotation-collapsed-height;
         max-width: 52%;
         padding: 1px 4px 1px (@annotation-collapsed-height/2);
-        background-color: @color-ultra-light-background;
+        background-color: @color-ultra-light;
         overflow: hidden;
         white-space: nowrap;
         border-left: 1px solid @annotation-border-color;
@@ -103,7 +103,7 @@
 
     border-color: transparent;
     border-style: solid;
-    border-left-color: @color-light-gray-background;
+    border-left-color: @color-light-gray;
     border-right-width: 0;
     border-width: (@annotation-collapsed-height/2);
 
@@ -160,7 +160,7 @@
     .pnd-annotation-user-name {
         display: block;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: @font-weight-bold;
         line-height: 1.3;
         overflow: hidden;
         white-space: nowrap;
@@ -200,7 +200,7 @@
         max-height: @annotation-text-max-height;
         overflow: auto;
         display: block;
-        background-color: @color-ultra-light-background;
+        background-color: @color-ultra-light;
         border-top: @annotation-border-size solid @annotation-border-color;
     }
 
@@ -243,7 +243,7 @@
             border-color: transparent;
             border-style: solid;
             border-width: 9px;
-            border-bottom-color:@color-ultra-light-background;
+            border-bottom-color:@color-ultra-light;
             border-top-width: 0;
         }
     }
@@ -271,7 +271,7 @@
         height: 20px;
         margin-left: 10px;
         padding: 0 8px;
-        background: @predicate-color;
+        background: @color-predicate;
 
         font-size: 13px;
         line-height: 20px;
@@ -296,12 +296,12 @@
 
         &:before {
             top: -3px;
-            border-bottom: 3px solid @predicate-color;
+            border-bottom: 3px solid @color-predicate;
         }
 
         &:after {
             top: 20px;
-            border-top: 3px solid @predicate-color;
+            border-top: 3px solid @color-predicate;
         }
     }
 
@@ -309,7 +309,7 @@
     .pnd-annotation-details-object {
         padding: 20px 10px 10px;
         margin-top: -10px;
-        background-color: @color-ultra-light-background;
+        background-color: @color-ultra-light;
         border-top: @annotation-border-size solid @annotation-border-color;
     }
 
@@ -328,7 +328,7 @@
             overflow: hidden;
 
             border-radius: 3px;
-            background-color: @color-light-gray-background;  // TODO Create variable
+            background-color: @color-light-gray;  // TODO Create variable
             vertical-align: middle;
             text-align: center;
 
@@ -341,7 +341,7 @@
         /* The label */
         .pnd-annotation-entity-label {
             display: block;
-            font-weight: 600;
+            font-weight: @font-weight-bold;
             line-height: 1.3;
             margin-bottom: 5px;
             color: @annotation-text-color;
@@ -377,7 +377,7 @@
     border-top: @annotation-border-size solid @annotation-border-color;
     button {
         padding: 4px 5px 3px 5px;
-        color: @color-dark-gray-background;
+        color: @color-dark-gray;
         font-size: 12px;
 
         &:hover {

@@ -12,6 +12,8 @@
 // ------------------------------------ //
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300italic,300,400italic,600,600italic,700,700italic);
 @font: 'Source Sans Pro', sans-serif;
+@font-weight-normal: 100;
+@font-weight-bold: 600;
 
 
 // ------------------------------------ //
@@ -19,51 +21,41 @@
 // ------------------------------------ //
 
 // Color scheme
-@color-ultra-light-background: #FAFBFC;
-@color-light-background: #F2F5F7;
-@color-light-gray-background: #DFE2E6;
-@color-dark-gray-background: #9fa6ad; // #7E858C;
-@color-dark-background: #242D38;
+@color-ultra-light: #FAFBFC;
+@color-light: #F2F5F7;
+@color-light-gray: #DFE2E6;
+@color-dark-gray: #9fa6ad; // #7E858C;
+@color-dark: #242D38;
+
 @color-brand: #146DEB;
 @color-error: #FF643F;
 @color-warning: #febe53;
 @color-highlight: #FFFFB8;
 @color-highlight-hover: fade(#2ee6e6, 40%);
-@subject-color: #54b4e6; // TODO Correct name
-@predicate-color: #febe53; // TODO Correct name
-@object-color: #0084c8; // TODO Correct name
+
+// Semantic colors
+@color-subject: #54b4e6;
+@color-predicate: #febe53;
+@color-object: #0084c8;
+@color-subject-text: lighten(@color-subject, 27);
+@color-predicate-text: lighten(@color-predicate, 25);
+@color-object-text: desaturate(lighten(@color-object, 27), 30);
 
 // Text colors
-@color-text: @color-dark-background;
+@color-text: @color-dark;
 @color-text-light: #AEB1B5; // TODO To be added to Sketch document
 @color-text-error: @color-error;
 @color-text-link: @color-brand;
 @color-text-link-hover: #224E8C;
 
 // Borders
-@color-border-light: @color-light-background;
-@color-border-normal: @color-light-gray-background;
-@color-border-ultralight: red; // TODO Not required
+@color-border-light: @color-light;
+@color-border-normal: @color-light-gray;
 
 // Backgrounds
 @color-background-base: #FFF;
-@color-background-light: @color-ultra-light-background;
-@color-background-medium: @color-light-background;
-
-// Shades of gray // TODO Must be removed
-@gray-soft-dark: lighten(#000, 26%);
-@gray-extra-light: lighten(#000, 80%);
-@gray-extra-lighter: lighten(#000, 90%);
-@gray-extra-lightest: lighten(#000, 98%); // It's obvious some crazy guys are working on this project
-
-// Semantic colors
-@subject-color-text: lighten(@subject-color, 27);
-@predicate-color-text: lighten(@predicate-color, 25);
-@object-color-text: desaturate(lighten(@object-color, 27), 30);
-
-// Various // TODO Smistare!
-@color-toolbar-disabled: lighten(#000, 45%);
-@color-overlay: rgba(0,0,0,.6);
+@color-background-light: @color-ultra-light;
+@color-background-medium: @color-light;
 
 
 // ------------------------------------ //
@@ -87,15 +79,15 @@
 @color-button-text-active: #224E8C;
 @color-button-text-disabled: #CDDFF8;
 
-@color-button-bg: @color-light-background; // #FFF;
+@color-button-bg: @color-light; // #FFF;
 @color-button-bg-hover: #FFF;
 @color-button-bg-active: #FFF;
 @color-button-bg-disabled: #FFF;
 
-@color-button-border: @color-light-gray-background; // @color-brand;
-@color-button-border-hover: @color-light-gray-background;
-@color-button-border-active: @color-light-gray-background;
-@color-button-border-disabled: @color-light-gray-background;
+@color-button-border: @color-light-gray; // @color-brand;
+@color-button-border-hover: @color-light-gray;
+@color-button-border-active: @color-light-gray;
+@color-button-border-disabled: @color-light-gray;
 
 @button-border-width: 1px;
 
@@ -105,18 +97,13 @@
 @color-button-light-text-active: #224E8C;
 @color-button-light-text-disabled: #CDDFF8;
 
-// Toolbar buttons // TODO
-@color-button-bg-dark: #3d4042; // TODO no good naming
-@color-button-text-light: #fff; // TODO no good naming
-@color-button-text-dark: @color-text; // TODO no good naming
-
 
 // ------------------------------------ //
 // #TOOLBAR
 // ------------------------------------ //
 
 // Toolbar colors
-@color-toolbar-background: @color-dark-background;
+@color-toolbar-background: @color-dark;
 @color-toolbar-text: #FFFFFF;
 
 // Toolbar button call to action
@@ -148,38 +135,49 @@
 @toolbar-height: 30px;
 @toolbar-border-bottom: 0;
 
-// TODO
-@color-toolbar-button: red; // TODO Maybe delete?
-@color-toolbar-button-hover: lighten(@color-toolbar-button, 8); // TODO Maybe delete?
-@color-toolbar-button-open: #999999; // @color-toolbar-button-hover; // TODO Maybe delete?
-
 
 // ------------------------------------ //
 // #DASHBOARD
 // ------------------------------------ //
-@dashboard-bg-color: @color-dark-gray-background;
+@dashboard-bg-color: @color-dark-gray;
 
 
 // ------------------------------------ //
 // #TABS
 // ------------------------------------ //
 @tab-bg-color: transparent;
-@tab-bg-hover-color: @color-light-background;
-@tab-bg-active-color: #FFFFFF; // TODO Fix
+@tab-bg-hover-color: @color-light;
+@tab-bg-active-color: #FFFFFF;
 
 @tab-text-color: @color-text;
 @tab-text-hover-color: @color-text;
 @tab-text-active-color: @color-text;
 
 @tab-inner-bg-color: transparent;
-@tab-inner-hover-bg-color: @color-light-background;
-@tab-inner-border-top-color: @color-dark-background;
+@tab-inner-hover-bg-color: @color-light;
+@tab-inner-border-top-color: @color-dark;
 
-@tab-inner-text-color: @color-dark-gray-background;
+@tab-inner-text-color: @color-dark-gray;
 @tab-inner-text-hover-color: @color-text;
 @tab-inner-text-active-color: @color-text;
 
 @tab-border-radius: 2px;
+
+
+// ------------------------------------ //
+// #VERTICAL-TABS
+// ------------------------------------ //
+@vertical-tabs-bg-color: @color-light;
+@vertical-tabs-tab-bg-color: @color-light;
+@vertical-tabs-tab-hover-bg-color: @color-ultra-light;
+@vertical-tabs-tab-border-color: @color-border-normal;
+
+
+// ------------------------------------ //
+// #BADGE
+// ------------------------------------ //
+@badge-bg-color: @color-dark-gray;
+@badge-text-color: #FFF;
 
 
 // ------------------------------------ //
@@ -213,8 +211,8 @@
 // ------------------------------------ //
 
 // Colors
-@color-alert-success:  @color-brand; // #48bb58; TODO Let's consider if we want to keep the green for success
-@color-alert-info:  @color-dark-gray-background;
+@color-alert-success:  #48bb58; // @color-brand;
+@color-alert-info:  @color-dark-gray;
 @color-alert-warning: @color-warning;
 @color-alert-error: @color-error;
 
@@ -244,8 +242,8 @@
 // #TRIPLE-COMPOSER
 // ------------------------------------ //
 
-@triplecomposer-color-bg: @color-light-background;
-@triplecomposer-color-border: @color-light-gray-background;
+@triplecomposer-color-bg: @color-light;
+@triplecomposer-color-border: @color-light-gray;
 @triplecomposer-border-radius: 3px;
 @triplecomposer-inner-border-radius: 2px;
 @triplecomposer-height: 25px;
@@ -263,13 +261,14 @@
 @annotation-collapsed-height: 24px;
 @annotation-text-max-height: 100px;
 
-@sidebar-bg-color: @color-ultra-light-background; // #FFF;
-@sidebar-border-color: @color-light-background;
+@sidebar-bg-color: @color-ultra-light; // #FFF;
+@sidebar-border-color: @color-light;
 @sidebar-border-size: 1px;
+@sidebar-overlay-color: rgba(0,0,0,.6);
 
 @annotation-bg-color: #FFF;
-@annotation-border-color: @color-light-gray-background;
-@annotation-expanded-border-color: @color-light-gray-background; // @color-dark-gray-background; // @color-brand;
+@annotation-border-color: @color-light-gray;
+@annotation-expanded-border-color: @color-light-gray; // @color-dark-gray; // @color-brand;
 @annotation-border-size: 1px;
 @annotation-box-shadow: 0 2px 0 #E9ECF0;
 @annotation-border-radius: 3px;
@@ -288,7 +287,9 @@
 // ------------------------------------ //
 
 /* Popover is styled in bootstrap */
+@popover-border-color: @color-border-normal;
 @popover-bg-color: #FFF;
+@popover-footer-height: 40px;
 
 
 // ------------------------------------ //
@@ -312,8 +313,8 @@
 
 // Dropdown
 @color-dropdown-bg: #ffffff;
-@color-dropdown-active: @color-light-background;
-@color-dropdown-bg-hover: @color-light-background;
+@color-dropdown-active: @color-light;
+@color-dropdown-bg-hover: @color-light;
 @color-dropdown-text: @color-text;
 
 
@@ -353,16 +354,10 @@
 
 
 // ------------------------------------ //
-// #ANIMATIONS-VARIABLES
-// ------------------------------------ //
-@animation-fast-duration: .15s;
-
-
-// ------------------------------------ //
 // #FORMS
 // ------------------------------------ //
 @input-border-radius: 2px;
-@input-border-color: @color-light-gray-background;
+@input-border-color: @color-light-gray;
 @input-border-color-focus: @color-brand;
 
 
@@ -371,10 +366,10 @@
 // ------------------------------------ //
 
 // Types of entities (shown in previews)
-@type-color-bg: @color-light-background;
-@type-color-border: @color-light-gray-background;
-@type-border-size: 1px;
-@type-color-text: @color-dark-gray-background;
+@type-color-bg: @color-dark-gray; // @color-light;
+@type-color-border: @color-light-gray;
+@type-color-text: #FFF; // @color-dark-gray;
+@type-border-size: 0; // 1px;
 
 @type-border-radius: 3px;
 
@@ -384,4 +379,6 @@
 // ------------------------------------ //
 
 @modal-width: 600px;
+@modal-padding: 20px;
+@modal-bg-color: #FFF;
 @modal-backdrop-color: rgba(0,0,0,.5);

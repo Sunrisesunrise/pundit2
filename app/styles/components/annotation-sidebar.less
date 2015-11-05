@@ -123,7 +123,7 @@
 
         /* Displays the name of the parameter and caret icon */
         .pnd-panel {
-            font-weight: bold;
+            font-weight: @font-weight-bold;
             cursor: pointer;
 
             .pnd-annotation-sidebar-filter-label {
@@ -145,7 +145,7 @@
         padding: 8px 6px 8px 10px;
         border-top: 1px solid @color-border-normal;
         width: @annotation-sidebar-exp-width;
-        font-weight: bold;
+        font-weight: @font-weight-bold;
         cursor: pointer;
     }
 
@@ -260,7 +260,7 @@
     text-align: center;
     position: fixed;
     z-index: 99; // TODO Fix this with a variable for Z-index
-    background-color: @color-overlay;
+    background-color: @sidebar-overlay-color;
     right: 0;
     width: @annotation-sidebar-exp-width;
     top: @toolbar-height;

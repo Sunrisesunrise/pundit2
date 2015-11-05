@@ -10,8 +10,9 @@
    #DIALOG-STRUCTURE
 \* ------------------------------------ */
 
-.modal-dialog {
-    width: @kee-dialog-width;
+.pnd-modal-content {
+    width: @kee-dialog-width !important;
+    min-width: @kee-dialog-width !important;
     height: @kee-dialog-height;
 }
 
@@ -21,7 +22,7 @@
 
 .kee-modal-body {
     padding: 0;
-    border-top: 4px solid @gray-light;
+    border-top: 4px solid @dashboard-bg-color;;
 }
 
 /* ------------------------------------ *\
@@ -91,7 +92,7 @@
 \* ------------------------------------ */
 
 .kee-top-area {
-    border-bottom: 1px solid @gray-light;
+    border-bottom: 1px solid @color-border-normal;
     padding: 0;
     margin-bottom: 0;
     height: 70px;
@@ -134,7 +135,7 @@
 
         input {
             padding-right: 20px;
-            font-weight: normal;
+            font-weight: @font-weight-normal;
         }
 
         .pnd-icon {
@@ -153,7 +154,7 @@
     .kee-inner-sub-pane-left {
         width: 50%;
         padding:  15px;
-        border-right: 1px solid @gray-extra-lighter;
+        border-right: 1px solid @color-border-normal;
         height: @kee-dialog-height - 70px - 30px - 4px;
     }
 
@@ -181,7 +182,7 @@
 .kee-list-types {
     overflow-y: auto;
     height: @kee-dialog-height - 210px;;
-    border: 1px solid @gray-extra-light;
+    border: 1px solid @color-border-normal;
     margin-bottom: 15px;
 }
 
@@ -202,15 +203,15 @@
 \* ------------------------------------ */
 
 .kee-footer {
-    // background-color: #fff;
-    border-top: 1px solid @gray-light;
-    height: 30px;
-    padding: 0;
+    border-top: 1px solid @color-border-normal;
+    height: 40px;
+    padding: 4px 0 0 0;
     margin: 0;
     clear: both;
+    text-align: right;
 
     .pnd-btn {
-        float: left;
+        margin-right: 7px;
     }
 }
 
@@ -276,11 +277,11 @@
         font-size: 12px;
 
         & ~ .kee-popover-item {
-            border-top: 1px solid @gray-lighter;
+            border-top: 1px solid @color-border-normal;
         }
 
         &[disabled="disabled"] {
-            color: @gray-extra-light;
+            color: @color-text-light;
             cursor: default;
 
             &:hover {
@@ -306,7 +307,7 @@
 \* ------------------------------------ */
 
 .kee-new-image-url {
-    border-bottom: 1px solid @gray-extra-lighter;
+    border-bottom: 1px solid @color-border-normal;
     margin-bottom: 15px;
 
     .kee-preview-image {
@@ -352,7 +353,7 @@
 \* ------------------------------------ */
 
 .kee-new-original-url {
-    border-bottom: 1px solid @gray-extra-lighter;
+    border-bottom: 1px solid @color-border-normal;
     margin-bottom: 15px;
     padding-bottom: 15px;
 
@@ -386,7 +387,7 @@
     input {
         width: 100% !important;
         padding-right: 20px;
-        font-weight: normal;
+        font-weight: @font-weight-normal;
     }
 
     .pnd-icon {
@@ -451,7 +452,7 @@
             }
 
             .kee-elem-to-search {
-                font-weight: bold;
+                font-weight: @font-weight-bold;
                 margin: 0 0 5px 0;
                 display: block;
                 white-space: nowrap;

@@ -9,10 +9,22 @@
 \* ------------------------------------ */
 .pnd-modal {
     display: table !important;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    -webkit-overflow-scrolling: touch;
     z-index: @zindex-pnd-modal; /* For css overwritings !important*/
     background-color: @modal-backdrop-color;
+
+    /* Bootstrap original stuff */
+    // Prevent Chrome on Windows from adding a focus outline. For details, see
+    // https://github.com/twbs/bootstrap/pull/10951.
+    outline: 0;
 
     .pnd-modal-dialog {
         display: table-cell;
@@ -23,6 +35,7 @@
             max-width: @modal-width;
             margin-left: auto;
             margin-right: auto;
+            background-color: @modal-bg-color;
             border: 1px solid @color-border-normal;
             border-radius: 3px;
             box-shadow: 0 2px 2px rgba(0, 0, 0, .1);
@@ -40,12 +53,6 @@
     }
 }
 
-.modal-header {
-    height: auto; /* For css overwritings */
-    background-color: @color-background-light;
-    color: inherit;
-}
-
 .modal-content {
     height: auto; /* For css overwritings */
 
@@ -54,12 +61,24 @@
     }
 }
 
+.modal-header {
+    height: auto; /* For css overwritings */
+    padding: @modal-padding;
+    background-color: @color-background-light;
+    border-bottom: 1px solid @color-border-normal;
+    color: inherit;
+}
+
 .modal-title {
     margin: 0 !important; /* For css overwritings */
-    font-weight: 600;
+    font-weight: @font-weight-bold;
     font-size: 28px !important; /* For css overwritings */
     color: inherit;
     text-align: left;
+}
+
+.modal-body {
+    padding: @modal-padding;
 }
 
 .pnd-modal-footer {

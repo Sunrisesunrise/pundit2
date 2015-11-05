@@ -23,7 +23,7 @@
     cursor: pointer;
 
     &:hover {
-        background-color: @color-ultra-light-background;
+        background-color: @color-ultra-light;
     }
 
     .pnd-item-buttons {
@@ -45,7 +45,6 @@
         font-family: @font;
         font-size: 12px;
         line-height: @item-height;
-        // font-weight: 100;
     }
 
     /* Type */
@@ -62,7 +61,7 @@
     /* Active icons inside buttons */
     .pnd-btn {
         .pnd-icon {
-            color: @color-dark-gray-background;
+            color: @color-dark-gray;
 
             &:hover {
                 color: @color-text-link;
@@ -72,11 +71,11 @@
 
     /* Sticky/selected item */
     &.pnd-sticky-item, &.pnd-select-item {
-        background-color: @color-light-gray-background;
+        background-color: @color-ultra-light; // @color-light-gray;
 
         .pnd-item-label {
             color: @color-text;
-            font-weight: inherit;
+            font-weight: @font-weight-bold;
         }
     }
 }
