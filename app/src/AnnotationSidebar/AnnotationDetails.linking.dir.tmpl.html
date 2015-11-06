@@ -82,8 +82,10 @@
                     </span>
                     <!-- Label -->
                     <span class="pnd-annotation-entity-label">
-                        <a href="{{ item.subject.description }}" target="_blank">{{ item.subject.label }} </a><!-- TODO Instead of "label" we shoudl use the ALT attribute if present -->
-                        <a href="{{ item.subject.description }}" target="_blank"><span class="pnd-icon-arrow-right"></span></a>
+                        <a href="{{ item.subject.description }}" target="_blank">
+                            {{ item.subject.label }} <!-- TODO Instead of "label" we shoudl use the ALT attribute if present -->
+                            <span class="pnd-icon-arrow-right"></span>
+                        </a>
                     </span>
                     <!-- Type -->
                     <span class="pnd-annotation-entity-type pnd-type">
@@ -101,8 +103,9 @@
                     </span>
                     <!-- Label -->
                     <span class="pnd-annotation-entity-label">
-                        <a href="{{ item.objects[0].uri }}" target="_blank">{{ item.objects[0].label }}</a>
-                        <a href="{{ item.objects[0].uri }}" target="_blank"><span class="pnd-icon-arrow-right"></span></a>
+                        <a href="{{ item.objects[0].uri }}" target="_blank">
+                            {{ item.objects[0].label }} <span class="pnd-icon-arrow-right"></span>
+                        </a>
                     </span>
                     <!-- Type -->
                     <span class="pnd-annotation-entity-type pnd-type">
@@ -142,8 +145,9 @@
                 <div class="pnd-annotation-details-object pnd-annotation-entity-details"
                      ng-if="item.objects[0].typeLabel == 'WebPage'">
                     <span class="pnd-annotation-entity-label">
-                        <a href="{{ item.objects[0].uri }}" target="_blank">{{ item.objects[0].label }}</a>
-                        <a href="{{ item.objects[0].uri }}" target="_blank"><span class="pnd-icon-arrow-right"></span></a>
+                        <a href="{{ item.objects[0].uri }}" target="_blank">
+                            {{ item.objects[0].label }} <span class="pnd-icon-arrow-right"></span>
+                        </a>
                     </span>
                     <span class="pnd-annotation-entity-type pnd-type">
                         {{ item.objects[0].typeLabel }}
@@ -158,8 +162,9 @@
                         <img src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
                     </span>
                     <span class="pnd-annotation-entity-label">
-                        <a href="{{ item.objects[0].description }}" target="_blank">{{ item.objects[0].label }}</a>
-                        <a href="{{ item.objects[0].description }}" target="_blank"><span class="pnd-icon-arrow-right"></span></a>
+                        <a href="{{ item.objects[0].description }}" target="_blank">
+                            {{ item.objects[0].label }} <span class="pnd-icon-arrow-right"></span>
+                        </a>
                     </span>
                     <span class="pnd-annotation-entity-type pnd-type">
                         {{ item.objects[0].typeLabel }}
@@ -174,8 +179,9 @@
                         <img src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
                     </span>
                     <span class="pnd-annotation-entity-label">
-                        <a href="{{ item.objects[0].description }}" target="_blank">{{ item.objects[0].label }}</a>
-                        <a href="{{ item.objects[0].description }}" target="_blank"><span class="pnd-icon-arrow-right"></span></a>
+                        <a href="{{ item.objects[0].description }}" target="_blank">
+                            {{ item.objects[0].label }} <span class="pnd-icon-arrow-right"></span>
+                        </a>
                     </span>
                     <span class="pnd-annotation-entity-type pnd-type">
                         {{ item.objects[0].typeLabel }}
@@ -194,8 +200,9 @@
                         <img src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
                     </span>
                     <span class="pnd-annotation-entity-label">
-                        <a href="{{ item.objects[0].uri }}" target="_blank">{{ item.objects[0].label }}</a>
-                        <a href="{{ item.objects[0].uri }}" target="_blank"><span class="pnd-icon-arrow-right"></span></a>
+                        <a href="{{ item.objects[0].uri }}" target="_blank">
+                            {{ item.objects[0].label }} <span class="pnd-icon-arrow-right"></span>
+                        </a>
                     </span>
                     <span class="pnd-annotation-entity-type pnd-type">
                         {{ item.objects[0].typeLabel }}

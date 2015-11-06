@@ -8,7 +8,7 @@ angular.module('Pundit2.Dashboard')
     $scope.collapsedWidth = Dashboard.options.panelCollapseWidth;
     $scope.bottom = Dashboard.options.footerHeight;
 
-    // overrided in Dashbpoard.addPanel()
+    // overrided in Dashboard.addPanel()
     $scope.minWidth = 100;
     $scope.ratio = 1;
 

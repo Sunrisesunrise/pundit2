@@ -255,7 +255,7 @@ angular.module('Pundit2.Dashboard')
      * Default value:
      * <pre> panelFooterHeight: 40 </pre>
      */
-    panelFooterHeight: 40
+    panelFooterHeight: 54
 
 })
 

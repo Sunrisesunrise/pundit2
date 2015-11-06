@@ -20,7 +20,6 @@
     display: block;
     background-color: @sidebar-bg-color;
     border-left: @sidebar-border-size solid @sidebar-border-color;
-    // #gradient > .horizontal-three-colors(darken(@sidebar-bg-color, 5); @sidebar-bg-color; 1%; @sidebar-bg-color);
 }
 
 .pnd-annotation-sidebar-content {
@@ -53,7 +52,6 @@
     top: @toolbar-height;
     width: @annotation-sidebar-exp-width;
     z-index: 3;
-    box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.20);
 }
 
 
@@ -61,11 +59,18 @@
    #FILTERS
 \* ------------------------------------ */
 
+/* Top button to show/hide filters */
+.pnd-annotation-sidebar-btn-show-filter, .pnd-annotation-sidebar-btn-hide-filters {
+    width: 100%;
+    background-color: #FFF;
+    border-bottom: 1px solid @color-border-normal;
+}
+
+
 /* Filter elements */
 .pnd-annotation-sidebar-filter-content {
     text-align: center;
     position: relative;
-    display: none;
 
     & ~ button {
         margin-top: 10px !important;
@@ -112,7 +117,6 @@
 }
 
 .pnd-annotation-sidebar-filters-list {
-    // background-color: rgba(255,255,255,.95);
     #gradient > .horizontal-three-colors(darken(rgba(255,255,255,.95), 4); rgba(255,255,255,.95); 1%; rgba(255,255,255,.95));
     text-align: left;
 
@@ -310,45 +314,52 @@
         display: none;
     }
 
-    .pnd-annotation-details-header {
-        width: @annotation-sidebar-coll-width;
-        background-color: @annotation-bg-color;
+    .pnd-annotation-details-wrap {
+    }
 
-        &:hover {
-            background-color: darken(@annotation-bg-color, 5%);
+    .pnd-annotation-details-header {
+        width: 10px;
+        height: 22px;
+        margin-left: 2px;
+        background-color: #FFF; // @annotation-bg-color;
+        border: 1px solid @annotation-border-color;
+        border-radius: @annotation-border-radius;
+        box-shadow: 0 0 0;
+
+        &:after {
+            content: '';
+            width: 6px;
+            height: 18px;
+            background: @color-highlight;
+            display: block;
+            margin: 1px;
         }
 
-        &.pnd-annotation-details-broken {
+        &:hover {
+            // background-color: @color-highlight-hover;
+
+            &:after {
+                background: @color-highlight-hover;
+            }
+        }
+
+        /* Child elements are not displayed in collapsed annotations */
+        & > div {
+            display: none;
+        }
+
+        /* Unanchored annotation */
+        /*&.pnd-annotation-details-broken {
             background-color: @annotation-bg-color;
 
             &:hover {
                 background-color: darken(@annotation-bg-color, 5%);
             }
-        }
-
-        .pnd-annotation-item-header-text {
-            width: @annotation-sidebar-coll-width;
-            white-space: normal;
-            overflow: hidden;
-            text-overflow: inherit;
-            display: inline;
-
-            .pnd-item-title {
-                display: none;
-            }
-
-            .pnd-icon-caret-up,
-            .pnd-icon-sort-down {
-                display: none;
-            }
-        }
-
-        .pnd-btn {
-            display: none;
-        }
+        }*/
     }
 
-    .pnd-annotation-icon-color {
+    /* Color BG used for Templates */
+    /*.pnd-annotation-icon-color {
         width: 10px;
         padding: 0;
         margin: 0;
@@ -356,9 +367,9 @@
         .pnd-icon {
             display: none;
         }
-    }
+    }*/
 
-    .pnd-annotation-details-broken {
+    /*.pnd-annotation-details-broken {
         width: 10px;
         padding: 0;
         margin: 0;
@@ -366,13 +377,16 @@
         .pnd-icon {
             display: none;
         }
-    }
+    }*/
 }
 
+/* Color BG used for Templates */
+/*
 .pnd-annotation-icon-color {
     height: 24px;
     width: 26px;
     display: inline-block;
     text-align: center;
 }
+*/
 
