@@ -84,7 +84,7 @@ angular.module('Pundit2.ResourcePanel')
         searchLabel = typeof(searchLabel) !== 'undefined' ? searchLabel : '';
 
 
-        if (searchLabel === '' && tabTitle !== 'My Items' && tabTitle !== 'Page items') {
+        if (searchLabel === '' && tabTitle !== 'My Items' && tabTitle !== 'Page items' && tabTitle !== 'Properties') {
             $scope.resetSearch = true;
 
             return 'Search entities in ' + tabTitle +' using the input filed above. You can use the selected entity by clicking the "Use" button below.';
