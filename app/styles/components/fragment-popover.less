@@ -1,45 +1,56 @@
 /**
- * COMMENT POPOVER
+ * FRAGMENT POPOVER
  *
- * Style of comment popover
+ * Popover showed when user clicks on a text fragment with some annotations on it.
+ * The popover will show a list of annotations to choose from.
  */
 
 /* ------------------------------------ *\
-   #COMMENT-POPOVER
+   #FRAGMENT-POPOVER
 \* ------------------------------------ */
 
 .pnd-fragment-popover {
-    // height: 100px;
-    min-height: 100px;
-    min-width: 250px;
+    width: 300px;
+    font-size: 13px;
+}
 
-    .popover-content-wrapper {
-        ul.annotations-list {
-            margin: 5px;
+.pnd-fragment-popover-label {
+    display: inline-block;
+    padding: 6px 6px 2px 6px;
+}
 
-            li {
-                cursor: pointer;
+.pnd-fragment-popover-list {
+    max-height: 60px;
+    padding: 6px 6px 0 6px;
+    margin-bottom: 6px;
+    overflow-x: hidden;
+    overflow-y: auto;
 
-                &:hover {
-                    background-color: @color-dropdown-bg-hover;
-                }
-            }
+    li {
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        background-color: @color-highlight;
+        font-style: italic;
+
+        &:hover {
+            background-color: @color-highlight-hover;
         }
+    }
+}
 
-        .link-section {
-            border-top-width: 1px;
-            border-top-style: solid;
-            border-top-color: @color-border-normal;
-            padding: 5px;
+.pnd-fragment-popover-link {
+    border-top: 1px solid @color-border-normal;
+    padding: 6px;
 
-            .normal-link {
-                color: red;
-            }
+    a {
+        color: @color-text-link;
+        text-decoration: underline;
 
-            .external-link {
-              color: blue;
-            }
-
+        &:hover {
+            color: @color-text-link-hover;
         }
     }
 }

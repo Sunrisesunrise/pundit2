@@ -2,7 +2,10 @@
     <div class="arrow"></div>
 
     <div class="popover-content-wrapper">
-        <ul class="annotations-list">
+        <span class="pnd-fragment-popover-label">
+            Choose an annotation to open
+        </span>
+        <ul class="pnd-fragment-popover-list">
             <li ng-repeat="annotation in annotations"
                 ng-click="showAnnotation(annotation)"
                 ng-mouseover="mouseenter(annotation)" 
@@ -10,15 +13,17 @@
                 {{annotation}}
             </li>
         </ul>
+
         <div ng-if="hasLink"
-             class="link-section">
-            <i ng-class="{'external-link': link.target=='_blank', 'normal-link': link.target!='_blank'}">
-                Go to:
-            </i>
+             class="pnd-fragment-popover-link">
+            <span ng-class="{'external-link': link.target=='_blank', 'normal-link': link.target!='_blank'}">
+                Open link
+            </span>
             <a href="{{link.url}}"
                target="{{link.target}}">
                 {{link.title}}
             </a>
         </div>
+
     </div>
 </div>

@@ -181,14 +181,14 @@
 .pnd-annotation-details-data {
     /* The annotated fragment shown in the annotation details */
     .pnd-annotation-annotated-fragment {
+        display: block;
         padding: 10px;
         max-height: @annotation-text-max-height;
         overflow: auto;
-        display: block;
+        font-style: italic;
 
         span {
-            background-color: @color-highlight-hover;
-            // background-color: @color-highlight;
+            background-color: @color-highlight-hover; // @color-highlight;
         }
     }
 
@@ -261,7 +261,7 @@
 
     /* Subject entity (like web page) in */
     .pnd-annotation-details-subject.pnd-annotation-entity-details {
-        padding: 10px 10px 20px;
+        padding: 10px; // 10px 10px 20px;
     }
 
     /* Predicate in semantic annotation */
@@ -322,7 +322,7 @@
         .pnd-annotation-entity-image {
             display: block;
             float: left;
-            margin: 0 6px 6px 0;
+            margin: 0 6px 0 0;
             width: 40px; // TODO Create variable
             height: 40px; // TODO Create variable
             overflow: hidden;
@@ -375,6 +375,11 @@
 .pnd-annotation-details-buttons {
     padding: 0 5px;
     border-top: @annotation-border-size solid @annotation-border-color;
+
+    .pnd-annotation-details-footer {
+        text-align: right;
+    }
+
     button {
         padding: 4px 5px 3px 5px;
         color: @color-dark-gray;
