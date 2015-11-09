@@ -20,7 +20,7 @@ angular.module('Pundit2.FragmentPopover')
             options.scopeData.annotations.push({
                 id: annId,
                 entities: ann.entities,
-                label: ann.firstConsolidableItem.label
+                description: ann.firstConsolidableItem.description
             });
         }
         if (typeof data.link !== 'undefined') {
