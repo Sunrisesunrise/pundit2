@@ -19,7 +19,8 @@ angular.module('Pundit2.FragmentPopover')
             var ann = data.annotations[annId];
             options.scopeData.annotations.push({
                 id: annId,
-                entities: ann.entities
+                entities: ann.entities,
+                label: ann.firstConsolidableItem.label
             });
         }
         if (typeof data.link !== 'undefined') {
