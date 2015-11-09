@@ -55,7 +55,7 @@
                             annotation.mainItem.typeLabel != 'Image' &&
                             annotation.mainItem.typeLabel != 'Image fragment'">
                     <span>
-                        {{ item.subject.label }}
+                        {{ item.subject.description }}
                     </span>
                 </div>
 
@@ -129,7 +129,8 @@
                 <div class="pnd-annotation-details-object pnd-annotation-annotated-fragment pnd-annotation-entity-details"
                      ng-if="item.objects[0].typeLabel == 'Text fragment'">
                     <span>
-                        {{ item.objects[0].label | limitTo:200 }}
+                        <!-- {{ item.objects[0].description | limitTo:200 }} -->
+                        {{ item.objects[0].description }}
                     </span>
                 </div>
 
@@ -137,7 +138,8 @@
                 <div class="pnd-annotation-details-object pnd-annotation-annotated-fragment pnd-annotation-entity-details"
                      ng-if="item.objects[0].typeLabel == 'literal'">
                     <span>
-                        {{ item.objects[0].label | limitTo:200 }}
+                        <!-- {{ item.objects[0].description | limitTo:200 }} -->
+                        {{ item.objects[0].description }}
                     </span>
                 </div>
 

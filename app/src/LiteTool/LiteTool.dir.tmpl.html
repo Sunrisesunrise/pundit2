@@ -8,7 +8,8 @@
         <!-- Pundit icon or user thumb -->
         <span class="pnd-icon pnd-icon-pundit-logo"
               ng-class="{'pnd-lite-tool-user-not-logged': !userIsLogged,
-                         'pnd-lite-tool-user-logged': userIsLogged}">
+                         'pnd-lite-tool-user-logged': userIsLogged}"
+              ng-click="annotationsClickHandler()">
         </span>
 
         <div class="pnd-lite-tool-content">
@@ -17,7 +18,8 @@
 
                 <div class="pnd-lite-tool-user-logged"
                      ng-show="userIsLogged"
-                     bs-dropdown="userLoggedInDropdown" 
+                     bs-dropdown="userLoggedInDropdown"
+                     data-container=".pnd-lite-tool"
                      template-url="{{dropdownTemplate}}">
                     {{userData.fullName}}
                     <!-- TODO If user is logged open dropdpwn like Annotator Pro -->

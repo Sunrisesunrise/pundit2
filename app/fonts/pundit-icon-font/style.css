@@ -1,16 +1,16 @@
 @font-face {
-	font-family: 'pundit-font';
-	src:url('fonts/pundit-font.eot?9aabh7');
-	src:url('fonts/pundit-font.eot?9aabh7#iefix') format('embedded-opentype'),
-		url('fonts/pundit-font.ttf?9aabh7') format('truetype'),
-		url('fonts/pundit-font.woff?9aabh7') format('woff'),
-		url('fonts/pundit-font.svg?9aabh7#pundit-font') format('svg');
+	font-family: 'pundit-icon-font';
+	src:url('fonts/pundit-icon-font.eot?503044');
+	src:url('fonts/pundit-icon-font.eot?503044#iefix') format('embedded-opentype'),
+		url('fonts/pundit-icon-font.ttf?503044') format('truetype'),
+		url('fonts/pundit-icon-font.woff?503044') format('woff'),
+		url('fonts/pundit-icon-font.svg?503044#pundit-icon-font') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
 
 [class^="pnd-icon-"], [class*=" pnd-icon-"] {
-	font-family: 'pundit-font';
+	font-family: 'pundit-icon-font';
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
