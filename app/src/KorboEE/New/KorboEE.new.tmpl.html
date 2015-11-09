@@ -322,13 +322,7 @@
 
     <!-- Footer -->
     <div class="kee-footer">
-        <button 
-            type="button" 
-            class="pnd-btn pnd-btn-smallpnd-btn-calltoaction"
-            ng-click="save()">
-                <span ng-if="!editMode">Save and add</span>
-                <span ng-if="editMode">Save</span>
-        </button><button
+        <button
             type="button" 
             class="pnd-btn pnd-btn-small"
             ng-click="closeKeeModal()">
@@ -339,6 +333,12 @@
             class="pnd-btn pnd-btn-small"
             ng-click="clearForm()">
                 Clear
+        </button><button
+                type="button"
+                class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
+                ng-click="save()">
+            <span ng-if="!editMode">Save and add</span>
+            <span ng-if="editMode">Save</span>
         </button>
     </div> 
     <!-- End Footer -->

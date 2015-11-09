@@ -111,7 +111,7 @@
             class="pnd-vertical-tab-footer-content pnd-panel-tab-content-footer"
             ng-if="showVerticalTabFooterContent">
             <button
-                class="pnd-resource-panel-use-button pnd-btn pnd-btn-small"
+                class="pnd-resource-panel-use-button pnd-btn pnd-btn-small pnd-btn-transparent"
                 ng-click="cancel()">
                 Cancel
             </button><button
@@ -127,14 +127,14 @@
                 ng-click="copyInEditor()">
                 Copy in editor
             </button><button
+                class="pnd-resource-panel-new-button pnd-btn pnd-btn-small" ng-show="showNewButton()"
+                ng-click="createNew()">
+                Create new
+            </button><button
                 class="pnd-resource-panel-use-button pnd-btn pnd-btn-small"
                 ng-show="showUseFullPageButton"
                 ng-click="useFullPage()">
                 Use web page
-            </button><button
-                class="pnd-resource-panel-new-button pnd-btn pnd-btn-small pnd-btn-calltoaction" ng-show="showNewButton()"
-                ng-click="createNew()">
-                Create new
             </button><button
                 class="pnd-resource-panel-use-button pnd-btn pnd-btn-small pnd-btn-calltoaction pnd-use"
                 ng-show="showSaveButton(this)"

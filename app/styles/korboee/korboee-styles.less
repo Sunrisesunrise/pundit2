@@ -14,6 +14,7 @@
     width: @kee-dialog-width !important;
     min-width: @kee-dialog-width !important;
     height: @kee-dialog-height;
+    font-family: @font;
 }
 
 &.kee-modal-container.modal {
@@ -22,16 +23,46 @@
 
 .kee-modal-body {
     padding: 0;
-    border-top: 4px solid @dashboard-bg-color;;
 }
 
+
 /* ------------------------------------ *\
-   #TABS-HEADERS
+   #HEADER
 \* ------------------------------------ */
 
-.pnd-tab-header {
+.kee-top-area {
+    border-bottom: 1px solid @color-border-normal;
+    padding: 0;
+    margin-bottom: 0;
+    height: 74px;
 
-   > li > a {
+    .kee-top-area-message {
+        height: 30px;
+        padding: 13px 9px;
+        font-size: 14px;
+        line-height: 1;
+        overflow: hidden;
+    }
+
+    .kee-top-area-menu {
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+
+        .pnd-btn-link {
+            padding: 5px 8px 8px;
+            background-color: #999999;
+        }
+    }
+}
+
+/* Tabs in header */
+ul.pnd-tab-header {
+    height: 34px;
+    padding-top: 4px;
+    border-radius: @modal-border-radius @modal-border-radius 0 0;
+
+    > li > a {
         text-decoration: none;
 
         &:hover,
@@ -41,7 +72,29 @@
         }
     }
 }
- 
+
+
+/* ------------------------------------ *\
+   #LANGUAGES-VERTICAL-TABS
+\* ------------------------------------ */
+
+.kee-new-languages {
+
+    // Button for adding or removing languages
+    // TODO This should go in the vertical tabs al the last item
+    .pnd-btn {
+        padding: 1px 5px;
+        position: absolute;
+        left: 9px;
+        bottom: 40px;
+        background: transparent;
+    }
+    .tabs-left > .pnd-vertical-tabs > li > a {
+        min-width: 40px;
+        text-align: center;
+    }
+}
+
 
 /* ------------------------------------ *\
    #VERTICAL-TABS-ELEMENTS
@@ -67,54 +120,6 @@
 
 
 /* ------------------------------------ *\
-   #LANGUAGES-VERTICAL-TABS
-\* ------------------------------------ */
-
-.kee-new-languages {
-
-    // Button for adding or removing languages
-    // TODO This should go in the vertical tabs al the last item
-    .pnd-btn {
-        padding: 1px 5px;
-        position: absolute;
-        left: 9px;
-        bottom: 40px;
-        background: transparent;
-    }
-    .tabs-left > .pnd-vertical-tabs > li > a {
-        min-width: 40px;
-    }
-}
-
-
-/* ------------------------------------ *\
-   #HEADER
-\* ------------------------------------ */
-
-.kee-top-area {
-    border-bottom: 1px solid @color-border-normal;
-    padding: 0;
-    margin-bottom: 0;
-    height: 70px;
-
-    .kee-top-area-message {
-        font-size: 16px;
-        padding: 10px;
-    }
-
-    .kee-top-area-menu {
-        font-size: 14px;
-        margin: 0;
-        padding: 0;
-
-        .pnd-btn-link {
-            padding: 5px 8px 8px;
-            background-color: #999999;
-        }
-    }
-}
-
-/* ------------------------------------ *\
    #CONTENT
 \* ------------------------------------ */
 
@@ -122,7 +127,7 @@
     overflow: auto;
     overflow-x: hidden;
     overflow-y: auto;
-    height: @kee-dialog-height - 70px - 30px - 4px;
+    height: @kee-dialog-height - 70px - @kee-footer-height - 4px;
 
     textarea {
         resize: none;
@@ -204,8 +209,8 @@
 
 .kee-footer {
     border-top: 1px solid @color-border-normal;
-    height: 40px;
-    padding: 4px 0 0 0;
+    height: @kee-footer-height;
+    padding: 7px 0 0 0;
     margin: 0;
     clear: both;
     text-align: right;
