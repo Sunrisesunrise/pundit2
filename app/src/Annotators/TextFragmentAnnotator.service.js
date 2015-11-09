@@ -86,7 +86,22 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> addIcon: 'true' </pre>
      */
-    addIcon: true
+    addIcon: true,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#TextFragmentAnnotator.addOnlyMyItemsIcon
+     *
+     * @description
+     * `boolean`
+     *
+     * Forced add of my item icons. addIcon should be false to use this option
+     *
+     * Default value:
+     * <pre> addOnlyMyItemsIcon: 'true' </pre>
+     */
+    addOnlyMyItemsIcon: true
 })
 
 .service('TextFragmentAnnotator', function(TEXTFRAGMENTANNOTATORDEFAULTS, NameSpace, BaseComponent, Consolidation,
@@ -162,6 +177,19 @@ angular.module('Pundit2.Annotators')
         // return deferred.promise;
     };
 
+    var placeMyItemsIconByUri = function(fragmentUri) {
+        if (textFragmentAnnotator.options.addOnlyMyItemsIcon === false) {
+            return;
+        }
+
+        var fragmentId = fragmentIds[fragmentUri],
+            currentIcon;
+
+        if (typeof fragmentById[fragmentId].icon === 'undefined') {
+            currentIcon = placeIcon(fragmentId, fragmentsRefsById[fragmentId][0]);
+            $compile(currentIcon)($rootScope);
+        }
+    };
 
     var wipeReference = function(elem, fragmentId, mod) {
         var node = elem[0],
@@ -775,6 +803,16 @@ angular.module('Pundit2.Annotators')
         }
 
         $compile(elementReferce)($rootScope);
+    });
+
+    EventDispatcher.addListener('Consolidation.consolidateAll', function(e) {
+        var myItemsList = ItemsExchange.getItemsByContainer(Config.modules.MyItemsContainer.container);
+        if (textFragmentAnnotator.options.addIcon === false &&
+            textFragmentAnnotator.options.addOnlyMyItemsIcon) {
+            angular.forEach(myItemsList, function(item) {
+                placeMyItemsIconByUri(item.uri);
+            });
+        }
     });
 
     EventDispatcher.addListener('XpointersHelper.temporaryWrap', function(e) {
