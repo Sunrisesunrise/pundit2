@@ -1,6 +1,6 @@
 <div class="pnd-lite-tool pnd-ignore">
 
-    <div class="pnd-lite-tool-wrap">
+    <div class="pnd-lite-tool-wrap" ng-class="{'pnd-lite-tool-wrap-open': isAnnotationSidebarExpanded}">
         <!-- TODO Handle the open status of the tool
         Add the class 'pnd-lite-tool-wrap-open'
         when the tool must stay open: when the sidebar is opened or when the login popover is open -->
@@ -8,7 +8,7 @@
         <!-- Pundit icon or user thumb -->
         <span class="pnd-icon pnd-icon-pundit-logo"
               ng-class="{'pnd-lite-tool-user-not-logged': !userIsLogged,
-                         'pnd-lite-tool-user-logged': userIsLogged   }">
+                         'pnd-lite-tool-user-logged': userIsLogged}">
         </span>
 
         <div class="pnd-lite-tool-content">
@@ -16,8 +16,10 @@
             <div class="pnd-lite-tool-user">
 
                 <div class="pnd-lite-tool-user-logged"
-                     ng-if="userIsLogged">
-                    Giulio Andreini <!-- TODO Get real user name -->
+                     ng-show="userIsLogged"
+                     bs-dropdown="userLoggedInDropdown" 
+                     template-url="{{dropdownTemplate}}">
+                    {{userData.fullName}}
                     <!-- TODO If user is logged open dropdpwn like Annotator Pro -->
                 </div>
 
@@ -32,15 +34,17 @@
             <div class="pnd-lite-tool-sidebar-toggle"
                   ng-click="annotationsClickHandler()">
 
-                <!-- TODO Get sidebar status (open or closed) and switch between the two divs
-                among these two divs with a ng-if -->
-                <div class="pnd-lite-tool-sidebar-toggle-open">
+                <div 
+                    class="pnd-lite-tool-sidebar-toggle-open" 
+                    ng-if="!isAnnotationSidebarExpanded">
                     <span class="pnd-icon pnd-icon-glyphicon-chevron-left-2"></span> Open sidebar
                 </div>
-
-                <div class="pnd-lite-tool-sidebar-toggle-close" style="display: none;">
+                <div 
+                    class="pnd-lite-tool-sidebar-toggle-close" 
+                    ng-if="isAnnotationSidebarExpanded">
                     Close sidebar <span class="pnd-icon pnd-icon-glyphicon-chevron-right-2"></span>
                 </div>
+
             </div>
         </div>
     </div>
