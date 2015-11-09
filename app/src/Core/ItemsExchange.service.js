@@ -40,6 +40,10 @@ angular.module('Pundit2.Core')
         if (typeof item === 'string') {
             item = itemsExchange.getItemByUri(mixed);
         }
+        if (typeof item === 'undefined') {
+            return;
+        }
+
         if (isTemporary) {
             temporaryItems[item.uri] = item;
         }

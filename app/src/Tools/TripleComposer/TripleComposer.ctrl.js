@@ -260,7 +260,8 @@ angular.module('Pundit2.TripleComposer')
 
     $scope.saveAnnotation = function() {
 
-        var promise = $q.defer();
+        var promise = $q.defer(),
+            forceConsolidation = MyPundit.isUserLogged() === false;
 
         MyPundit.login().then(function(logged) {
 
@@ -292,7 +293,7 @@ angular.module('Pundit2.TripleComposer')
                         modelData.items,
                         modelData.flatTargets,
                         TemplatesExchange.getCurrent().id,
-                        undefined, // skipConsolidation
+                        forceConsolidation, // forceConsolidation
                         modelData.target, // Can be undefined if ModelHelper is acting in mode1
                         modelData.type
                     );
@@ -302,7 +303,7 @@ angular.module('Pundit2.TripleComposer')
                         modelData.items,
                         modelData.flatTargets,
                         undefined, // templateID
-                        undefined, // skipConsolidation
+                        forceConsolidation, // forceConsolidation
                         modelData.target, // Can be undefined if ModelHelper is acting in mode1
                         modelData.type
                     );

@@ -428,7 +428,7 @@ angular.module('Pundit2.Communication')
         return promise.promise;
     };
 
-    annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, skipConsolidation, postDataTargets, types, motivation, forceNotebookId) {
+    annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, forceConsolidation, postDataTargets, types, motivation, forceNotebookId) {
         // var completed = 0;
         var promise = $q.defer();
 
@@ -455,7 +455,9 @@ angular.module('Pundit2.Communication')
         if (MyPundit.isUserLogged()) {
 
             setLoading(true);
-            // Consolidation.requestConsolidateAll();
+            if (forceConsolidation) {
+                Consolidation.requestConsolidateAll();
+            }
 
             var postData = {
                 graph: graph,
@@ -524,12 +526,9 @@ angular.module('Pundit2.Communication')
                         NotebookExchange.getNotebookById(ann.isIncludedIn).addAnnotation(data.AnnotationID);
                     }
 
-                    // TODO: remove skipConsolidation
-                    if (typeof(skipConsolidation) === 'undefined' || !skipConsolidation) {
-                        EventDispatcher.sendEvent('AnnotationsCommunication.saveAnnotation', data.AnnotationID);
-                        // Consolidation.consolidateAll();
-                    } else {
-                        // Consolidation.rejectConsolidateAll();
+                    EventDispatcher.sendEvent('AnnotationsCommunication.saveAnnotation', data.AnnotationID);
+                    if (forceConsolidation) {
+                        Consolidation.consolidateAll();
                     }
 
                     EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
@@ -551,7 +550,9 @@ angular.module('Pundit2.Communication')
                     // rejected, impossible to download annotation from server
                     annotationsCommunication.log("Error: impossible to get annotation from server after save");
                     setLoading(false);
-                    // Consolidation.rejectConsolidateAll();
+                    if (forceConsolidation) {
+                        Consolidation.rejectConsolidateAll();
+                    }
                     promise.reject();
                 });
 
