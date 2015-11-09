@@ -119,7 +119,7 @@
 @color-toolbar-button-text: #FFF;
 @color-toolbar-button-text-disabled: #626971;
 
-@color-toolbar-button-bg: #404852;
+@color-toolbar-button-bg: transparent; // #404852;
 @color-toolbar-button-bg-hover: #5A626A;
 @color-toolbar-button-bg-active: #7E858C;
 @color-toolbar-button-bg-disabled: #313A44;
@@ -332,8 +332,9 @@
 
 @zindex-pnd:                        2147483647; // Used only once by .pnd-wrp but ignored since the element has position: static that doesn't support z-index
 
-@zindex-pnd-annotation-sidebar:     10 + @zindex-pnd-base;
-@zindex-pnd-dashboard:              11 + @zindex-pnd-base;
+@zindex-pnd-annotation-sidebar:     9 + @zindex-pnd-base;
+@zindex-pnd-dashboard:              10 + @zindex-pnd-base;
+@zindex-pnd-litetool:               11 + @zindex-pnd-base;
 @zindex-pnd-toolbar:                12 + @zindex-pnd-base;
 @zindex-pnd-login:                  13 + @zindex-pnd-base;
 @zindex-pnd-image-fragment-tool:    14 + @zindex-pnd-base;

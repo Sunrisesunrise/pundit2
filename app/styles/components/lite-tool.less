@@ -1,26 +1,113 @@
 /**
  * LITE TOOL
  *
- * Style for Pundit toolbar
+ * Style for the tool that appears top right in the Pundit Annotator Light
+ * This tool allows to open/close the sidebar and to login
  */
 
-// ....
+@lite-tool-height: 38px;
+
 
 /* ------------------------------------ *\
-   #LITETOOL-STYLE
+   #LITETOOL
 \* ------------------------------------ */
 
 .pnd-lite-tool {
-    width: 10%;
-    height: 20px;
-    margin: 0;
-    padding-top: 0;
-    background-color: blue;
-    color: white;
-    z-index: 9999999999;
-    box-shadow: 0 1px 1px rgba(0,0,0,.1);
-    position: fixed;
-    top: 10px;
-    right: 5px;
+    position: relative;
+    z-index: @zindex-pnd-litetool;
+
+    .pnd-lite-tool-wrap {
+        position: fixed;
+        height: @lite-tool-height;
+        width: @lite-tool-height;
+        top: 10px;
+        right: 10px + @annotation-sidebar-coll-width;
+        overflow: hidden;
+        border-radius: @lite-tool-height/2;
+        box-shadow: 0 1px 2px rgba(0,0,0,.06);
+        transition-duration: .5s;
+        transition-property: width; // , right;
+
+        /* Class to add when the tool must be open */
+        &.pnd-lite-tool-wrap-open {
+            width: @annotation-sidebar-exp-width - 5px;
+        }
+
+        &:hover {
+            width: @annotation-sidebar-exp-width - 5px;
+        }
+
+        /* Circle with Pundit Logo or user thumb */
+        .pnd-icon-pundit-logo {
+            display: block;
+            position: absolute;
+            width: @lite-tool-height;
+            height: @lite-tool-height;
+
+            background-color: @color-brand;
+            border: 1px solid darken(@color-brand, 10%);
+            border-radius: @lite-tool-height/2;
+
+            font-size: 21px;
+            color: #FFFFFF;
+            text-shadow: 0px -1px 0px 0px rgba(0,0,0,0.20);
+            text-align: center;
+            line-height: @lite-tool-height;
+            z-index: 2;
+            cursor: pointer;
+
+            &.pnd-lite-tool-user-logged {
+                background-color: @color-dark-gray;
+                border: 1px solid darken(@color-dark-gray, 10%);
+            }
+        }
+
+        .pnd-lite-tool-content {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: @lite-tool-height;
+            width: @annotation-sidebar-exp-width;
+            background: #FFFFFF;
+            border: 1px solid @color-border-normal;
+            border-radius: @lite-tool-height/2;
+        }
+
+        /* User
+        Displays the name of teh user or the 'login' button */
+        .pnd-lite-tool-user {
+            position: absolute;
+            left: @lite-tool-height + 10px;
+            top: 0;
+            height: @lite-tool-height - 2px;
+
+            div {
+                line-height: @lite-tool-height - 2px;
+                font-size: 13px;
+                color: @color-text-link;
+                cursor: pointer;
+            }
+        }
+
+        /* Sidebar toggle
+        Allows users to open/close sidebar */
+        .pnd-lite-tool-sidebar-toggle {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: @lite-tool-height - 2px;
+            background: @color-background-light;
+            padding: 0 10px;
+            border-left: 1px solid @color-border-normal;
+            border-radius: 0 @lite-tool-height/2 - 2px @lite-tool-height/2 - 2px 0;
+            cursor: pointer;
+
+            div {
+                line-height: @lite-tool-height - 2px;
+                font-size: 13px;
+                color: @color-text-link;
+            }
+        }
+    }
 }
 

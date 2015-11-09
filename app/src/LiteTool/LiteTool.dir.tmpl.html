@@ -1,11 +1,47 @@
 <div class="pnd-lite-tool pnd-ignore">
-    <button class="pnd-login-button"
-            ng-if="!userIsLogged"
-            ng-click="login()">
-        Login
-    </button>
-    <button class=""
-            ng-click="annotationsClickHandler()">
-        Toggle Sidebar
-    </button>
+
+    <div class="pnd-lite-tool-wrap">
+        <!-- TODO Handle the open status of the tool
+        Add the class 'pnd-lite-tool-wrap-open'
+        when the tool must stay open: when the sidebar is opened or when the login popover is open -->
+
+        <!-- Pundit icon or user thumb -->
+        <span class="pnd-icon pnd-icon-pundit-logo"
+              ng-class="{'pnd-lite-tool-user-not-logged': !userIsLogged,
+                         'pnd-lite-tool-user-logged': userIsLogged   }">
+        </span>
+
+        <div class="pnd-lite-tool-content">
+            <!-- User name or 'login' button -->
+            <div class="pnd-lite-tool-user">
+
+                <div class="pnd-lite-tool-user-logged"
+                     ng-if="userIsLogged">
+                    Giulio Andreini <!-- TODO Get real user name -->
+                    <!-- TODO If user is logged open dropdpwn like Annotator Pro -->
+                </div>
+
+                <div class="pnd-lite-tool-user-not-logged"
+                     ng-if="!userIsLogged"
+                     ng-click="login()">
+                    Login
+                </div>
+            </div>
+
+            <!-- Sidebar toggle -->
+            <div class="pnd-lite-tool-sidebar-toggle"
+                  ng-click="annotationsClickHandler()">
+
+                <!-- TODO Get sidebar status (open or closed) and switch between the two divs
+                among these two divs with a ng-if -->
+                <div class="pnd-lite-tool-sidebar-toggle-open">
+                    <span class="pnd-icon pnd-icon-glyphicon-chevron-left-2"></span> Open sidebar
+                </div>
+
+                <div class="pnd-lite-tool-sidebar-toggle-close" style="display: none;">
+                    Close sidebar <span class="pnd-icon pnd-icon-glyphicon-chevron-right-2"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
