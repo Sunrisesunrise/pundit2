@@ -33,10 +33,13 @@
         overflow: hidden;
         text-overflow: ellipsis;
         cursor: pointer;
-        background-color: @color-highlight;
         font-style: italic;
 
-        &:hover {
+        span {
+            background-color: @color-highlight;
+        }
+
+        &:hover span{
             background-color: @color-highlight-hover;
         }
     }

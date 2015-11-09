@@ -133,7 +133,7 @@
 .pnd-annotation-expanded {
     margin: 5px;
     // TODO Just a try
-    // margin-left: -3px;
+    // margin-left: -4px;
     overflow: hidden;
 
     background-color: @annotation-bg-color;
@@ -180,7 +180,7 @@
 /* Annotation content */
 .pnd-annotation-details-data {
     /* The annotated fragment shown in the annotation details */
-    .pnd-annotation-annotated-fragment {
+    .pnd-annotation-annotated-fragment, .pnd-annotation-annotated-literal {
         display: block;
         padding: 10px;
         max-height: @annotation-text-max-height;
@@ -188,7 +188,7 @@
         font-style: italic;
 
         span {
-            background-color: @color-highlight-hover; // @color-highlight;
+            background-color: @color-highlight; // @color-highlight-hover; // @color-highlight;
         }
     }
 
@@ -408,7 +408,19 @@
 .pnd-annotation-comment {
     .pnd-annotation-expanded {
         .pnd-annotation-annotated-fragment {
-            padding: 10px 10px 14px 10px;
+            // padding: 10px 10px 14px 10px;
+        }
+    }
+}
+
+/* Highlights with a different color the text fragment
+in the expanded annotation */
+.pnd-annotation-expanded {
+    &:hover {
+        .pnd-annotation-annotated-fragment {
+            span {
+                background-color: @color-highlight-hover;
+            }
         }
     }
 }

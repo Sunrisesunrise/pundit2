@@ -47,6 +47,10 @@ vertical draggable bar */
     .pnd-dashboard-panel-expanded {
         padding-right: 7px;
     }
+
+    .pnd-panel-tab-content-footer {
+        padding-right: 7px;
+    }
 }
 
 .pnd-dashboard-panel-collapsed {
@@ -74,12 +78,14 @@ vertical draggable bar */
     button.pnd-dashboard-panel-toggle {
         position: absolute;
         width: 20px; /* This is modified below for not-last panels */
-        padding-bottom: 0;
+        height: 16px;
         right: 0; /* This is modified below for not-last panels */
+        padding-bottom: 0;
         border: 0;
-        padding-top: 2px;
+        border-radius: 0 0 3px 3px;
         background-color: #fff;
         color: @color-dark-gray;
+        line-height: 0.4;
         z-index: 1;
 
         &:hover {
@@ -118,6 +124,31 @@ vertical draggable bar */
             width: 21px;
         }
     }
+}
+
+
+/* ------------------------------------ *\
+   #FOOTER
+\* ------------------------------------ */
+.pnd-dashboard-footer-handler {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    right: 20px;
+    height: 18px;
+    background-image: url(img/bg-dashboard-footer.png);
+    background-repeat: no-repeat;
+    background-position: 50% 64%;
+    cursor: row-resize;
+}
+
+.pnd-dashboard-footer {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    background-color: @dashboard-bg-color;
+    border-bottom: 1px solid darken(@dashboard-bg-color, 10%);
 }
 
 
@@ -165,25 +196,4 @@ vertical draggable bar */
     background-repeat: no-repeat;
     background-position: 50% 50%;
     cursor: col-resize;
-}
-
-.pnd-dashboard-footer-handler {
-    position: absolute;
-    z-index: 2;
-    left: 0;
-    right: 20px;
-    height: 18px;
-    background-image: url(img/bg-dashboard-footer.png);
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    cursor: row-resize;
-}
-
-.pnd-dashboard-footer {
-    width: 100%;
-    position: absolute;
-    z-index: 1;
-    bottom: 0;
-    // #gradient > .vertical-three-colors(@gray-light; @gray-light; 80%; darken(@gray-light, 10));
-    background-color: @dashboard-bg-color;
 }
