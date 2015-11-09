@@ -24,7 +24,7 @@
     <!-- <link rel="stylesheet" href="../css/temporary.css"> -->
     <!-- endbuild -->
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/--bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css"> -->
     
 </head>
 <body>
