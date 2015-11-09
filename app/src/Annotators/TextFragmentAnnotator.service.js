@@ -56,7 +56,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> myItemsIconClass: 'pnd-icon-bookmark' </pre>
      */
-    myItemsIconClass: 'pnd-icon-bookmark',
+    myItemsIconClass: 'pnd-icon-star',
 
     /**
      * @module punditConfig
