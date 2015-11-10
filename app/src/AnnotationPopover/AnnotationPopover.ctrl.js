@@ -14,6 +14,10 @@ angular.module('Pundit2.AnnotationPopover')
 
     $scope.currentMode = '';
 
+    $scope.isSwitchMode = $scope.isUserLogged;
+    $scope.isCommentMode = false;
+    $scope.isHighlightMode = false;
+
     var lastSelectedNotebookId;
 
     var updateAvailableNotebooks = function() {
@@ -33,7 +37,7 @@ angular.module('Pundit2.AnnotationPopover')
         if (!MyPundit.isUserLogged()) {
             return;
         }
-        
+
         if (typeof AnnotationPopover.lastUsedNotebookID === 'undefined') {
             // TODO: manage loading statuts, so with currentNotebook undefined
             AnnotationPopover.lastUsedNotebookID = NotebookExchange.getCurrentNotebooks().id;
@@ -43,6 +47,16 @@ angular.module('Pundit2.AnnotationPopover')
 
     $scope.setMode = function(mode) {
         $scope.currentMode = mode;
+
+        $scope.isSwitchMode = false;
+        switch (mode) {
+            case 'comment':
+                $scope.isCommentMode = $scope.isUserLogged;
+                break;
+            case 'highlight':
+                $scope.isHighlightMode = $scope.isUserLogged;
+                break;
+        }
     };
 
     $scope.login = function() {

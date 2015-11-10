@@ -1,8 +1,9 @@
 <div class="popover pnd-popover pnd-annotation-popover pnd-popover-literal"
-     ng-class="{'pnd-annotation-popover-login': !isUserLogged,
-     'pnd-annotation-popover-annotate':currentMode === '' && isUserLogged,
-     'pnd-annotation-popover-comment':currentMode === 'comment' && isUserLogged,
-     'pnd-annotation-popover-highlight':currentMode !== '' && currentMode !== 'comment' && isUserLogged,
+     ng-class="{
+     'pnd-annotation-popover-login': !isUserLogged,
+     'pnd-annotation-popover-annotate': isSwitchMode,
+     'pnd-annotation-popover-comment': isCommentMode,
+     'pnd-annotation-popover-highlight': isHighlightMode,
      'pnd-annotation-popover-saving':savingAnnotation,
      'pnd-annotation-popover-error':!savingAnnotation && errorSaving}">
 
