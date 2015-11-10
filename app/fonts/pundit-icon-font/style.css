@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'pundit-icon-font';
-	src:url('fonts/pundit-icon-font.eot?503044');
-	src:url('fonts/pundit-icon-font.eot?503044#iefix') format('embedded-opentype'),
-		url('fonts/pundit-icon-font.ttf?503044') format('truetype'),
-		url('fonts/pundit-icon-font.woff?503044') format('woff'),
-		url('fonts/pundit-icon-font.svg?503044#pundit-icon-font') format('svg');
+	src:url('fonts/pundit-icon-font.eot?krd73g');
+	src:url('fonts/pundit-icon-font.eot?krd73g#iefix') format('embedded-opentype'),
+		url('fonts/pundit-icon-font.ttf?krd73g') format('truetype'),
+		url('fonts/pundit-icon-font.woff?krd73g') format('woff'),
+		url('fonts/pundit-icon-font.svg?krd73g#pundit-icon-font') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -23,6 +23,90 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.pnd-icon-check-2:before {
+	content: "\e116";
+}
+.pnd-icon-close:before {
+	content: "\e117";
+}
+.pnd-icon-angle-left:before {
+	content: "\f106";
+}
+.pnd-icon-angle-right:before {
+	content: "\f107";
+}
+.pnd-icon-angle-up:before {
+	content: "\f108";
+}
+.pnd-icon-angle-down:before {
+	content: "\f109";
+}
+.pnd-icon-pencil:before {
+	content: "\e900";
+}
+.pnd-icon-pin:before {
+	content: "\e901";
+}
+.pnd-icon-group:before {
+	content: "\e902";
+}
+.pnd-icon-spinner-12:before {
+	content: "\e903";
+}
+.pnd-icon-spinner-2:before {
+	content: "\e904";
+}
+.pnd-icon-spinner-3:before {
+	content: "\e905";
+}
+.pnd-icon-spinner-4:before {
+	content: "\e906";
+}
+.pnd-icon-spinner-5:before {
+	content: "\e907";
+}
+.pnd-icon-spinner-6:before {
+	content: "\e908";
+}
+.pnd-icon-spinner-7:before {
+	content: "\e909";
+}
+.pnd-icon-spinner-8:before {
+	content: "\e90a";
+}
+.pnd-icon-spinner-9:before {
+	content: "\e90b";
+}
+.pnd-icon-spinner-10:before {
+	content: "\e90c";
+}
+.pnd-icon-spinner-11:before {
+	content: "\e90d";
+}
+.pnd-icon-search:before {
+	content: "\e90e";
+}
+.pnd-icon-expand:before {
+	content: "\e90f";
+}
+.pnd-icon-shrink:before {
+	content: "\e910";
+}
+.pnd-icon-gear:before {
+	content: "\e911";
+}
+.pnd-icon-link:before {
+	content: "\e912";
+}
+.pnd-icon-star-empty:before {
+	content: "\e914";
+}
+.pnd-icon-star:before {
+	content: "\e915";
+}
+.pnd-icon-check:before {
+	content: "\e913";
+}
 .pnd-icon-sidebar-toggle:before {
 	content: "\e800";
 }
@@ -38,56 +122,14 @@
 .pnd-icon-thumb-o-down:before {
 	content: "\f088";
 }
-.pnd-icon-smile:before {
-	content: "\f118";
-}
-.pnd-icon-thumb-up:before {
-	content: "\f164";
-}
-.pnd-icon-thumb-down:before {
-	content: "\f165";
-}
 .pnd-icon-hand-peace-o:before {
 	content: "\f25b";
-}
-.pnd-icon-bookmark-new:before {
-	content: "\e610";
-}
-.pnd-icon-glyphicon-chevron-left:before {
-	content: "\f053";
-}
-.pnd-icon-glyphicon-chevron-right:before {
-	content: "\f054";
-}
-.pnd-icon-glyphicon-chevron-left-2:before {
-	content: "\f104";
-}
-.pnd-icon-glyphicon-chevron-right-2:before {
-	content: "\f105";
-}
-.pnd-icon-arrow-right:before {
-	content: "\e60e";
 }
 .pnd-icon-lock:before {
 	content: "\f023";
 }
-.pnd-icon-expand:before {
-	content: "\f065";
-}
 .pnd-icon-unlock:before {
 	content: "\f09c";
-}
-.pnd-icon-group:before {
-	content: "\f0c0";
-}
-.pnd-icon-logo-1:before {
-	content: "\e60b";
-}
-.pnd-icon-logo-2:before {
-	content: "\e60c";
-}
-.pnd-icon-logo-3:before {
-	content: "\e60d";
 }
 .pnd-icon-calendar:before {
 	content: "\e608";
@@ -98,44 +140,17 @@
 .pnd-icon-fragment-icon:before {
 	content: "\e60a";
 }
-.pnd-icon-bookmark-alt:before {
-	content: "\e602";
-}
 .pnd-icon-dots:before {
 	content: "\e603";
 }
 .pnd-icon-comment:before {
 	content: "\e604";
 }
-.pnd-icon-star:before {
-	content: "\e605";
-}
-.pnd-icon-tag-alt:before {
-	content: "\e606";
-}
 .pnd-icon-typing:before {
 	content: "\e607";
 }
-.pnd-icon-search:before {
-	content: "\f002";
-}
 .pnd-icon-user:before {
 	content: "\f007";
-}
-.pnd-icon-check:before {
-	content: "\f00c";
-}
-.pnd-icon-close:before {
-	content: "\f00d";
-}
-.pnd-icon-search-plus:before {
-	content: "\f00e";
-}
-.pnd-icon-search-minus:before {
-	content: "\f010";
-}
-.pnd-icon-gear:before {
-	content: "\f013";
 }
 .pnd-icon-trash:before {
 	content: "\f014";
@@ -160,9 +175,6 @@
 }
 .pnd-icon-picture:before {
 	content: "\f03e";
-}
-.pnd-icon-pencil:before {
-	content: "\f040";
 }
 .pnd-icon-plus:before {
 	content: "\f067";

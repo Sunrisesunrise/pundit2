@@ -7,7 +7,7 @@
             <ul class="pnd-inner-nav pnd-toolbar-inner-nav pnd-toolbar-navbar-left">
                 
                 <!-- Error button -->
-                <!-- <li ng-show="showStatusButtonError()" class="pnd-toolbar-error-button pnd-toolbar-first-button">
+                <li ng-show="showStatusButtonError()" class="pnd-toolbar-error-button pnd-toolbar-first-button">
                     <a 
                         href="javascript:void(0)" 
                         template-url="{{dropdownTemplate}}" 
@@ -15,7 +15,7 @@
                         ng-click="infoClickHandler()">
                         <span class="pnd-icon pnd-icon-exclamation"></span>
                     </a>
-                </li> -->
+                </li>
                 
                 <!-- OK button -->
                 <li ng-show="showStatusButtonOk()" class="pnd-toolbar-status-button-ok pnd-toolbar-first-button">
@@ -40,17 +40,6 @@
                     </a>
                 </li>
 
-                <!-- Login button -->
-                <li ng-show="showLogin()" class="pnd-toolbar-login-button pnd-login-button pnd-toolbar-button-active pnd-calltoaction-btn">
-                    <!-- <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="userNotLoggedDropdown"><span>Login</span></a> -->
-                    <a href="javascript:void(0)" ng-click="loginButtonClick($event)"><span>Log in</span></a>
-                </li>
-
-                <!-- User button -->
-                <li ng-show="showUserButton()" class="pnd-user-button  pnd-toolbar-button-active">
-                    <a href="javascript:void(0)" bs-dropdown="userLoggedInDropdown" template-url="{{dropdownTemplate}}" ng-click="closePopover($event)"><span>{{userData.fullName}}</span></a>
-                </li>
-
                 <!-- Dashboard button -->
                 <li class="pnd-toolbar-dashboard-toogle-button pnd-toolbar-toggle-button"
                     ng-if="dashboard"
@@ -60,20 +49,6 @@
                             Dashboard
                             <span class="pnd-icon pnd-icon-dashboard-toggle"></span>
                         </span>
-                    </a>
-                </li>
-
-                <!-- Ask the Pundit button-->
-                <li class="pnd-toolbar-ask-button pnd-toolbar-ask-button-active pnd-calltoaction-btn pnd-triangular-btn" ng-if="askThePundit">
-                    <a href="{{getAskLink()}}" target="_blank" ng-click="askThePunditClick()">
-                        <span ng-if="!isUserLogged">Ask the Pundit</span>
-                        <span ng-if="isUserLogged">My Ask the Pundit</span>
-                    </a>
-                </li>
-
-                <li class="pnd-toolbar-custom-button" ng-if="menuCustom && menuCustomBtn" ng-repeat="(key, value) in menuCustomBtn">
-                    <a href="javascript:void(0)" ng-click="openUrl(value)">
-                        <span class="pnd-toolbar-active-element">{{key}}</span>
                     </a>
                 </li>
 
@@ -124,17 +99,41 @@
                     </a>
                 </li>
 
-                <!-- Annotations menu -->
+                <!-- Sidebar -->
                 <li class="pnd-toolbar-annotations-button pnd-toolbar-toggle-button" ng-if="sidebar" ng-class="{'pnd-toolbar-button-active': isAnnotationSidebarExpanded}">
                     <a href="javascript:void(0)" ng-click="annotationsClickHandler()">
                         <span class="pnd-toolbar-active-element">
                             Sidebar 
-                            <span 
+                            <!--
+                            <span
                                 class="pnd-icon pnd-icon-filter"
                                 ng-class="{'pnd-filter-active': isAnnotationFiltersActive}">
                             </span>
+                            -->
                             <span class="pnd-icon pnd-icon-sidebar-toggle"></span>
                         </span>
+                    </a>
+                </li>
+
+                <!-- Active filters -->
+                <li class="" ng-if="isAnnotationFiltersActive">
+                    <span class="pnd-icon pnd-icon-filter pnd-filter-active">
+                    </span>
+                </li>
+
+                <!-- Login button -->
+                <li ng-show="showLogin()" class="pnd-toolbar-login-button pnd-login-button pnd-toolbar-button-active pnd-calltoaction-btn">
+                    <!-- <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="userNotLoggedDropdown"><span>Login</span></a> -->
+                    <a href="javascript:void(0)" ng-click="loginButtonClick($event)">
+                        <span>Log in</span>
+                    </a>
+                </li>
+
+                <!-- User button -->
+                <li ng-show="showUserButton()" class="pnd-toolbar-user-button  pnd-toolbar-button-active">
+                    <a href="javascript:void(0)" bs-dropdown="userLoggedInDropdown" placement="bottom-right" template-url="{{dropdownTemplate}}" ng-click="closePopover($event)">
+                        <span>{{userData.fullName}}</span>
+                        <span class="pnd-icon pnd-icon-angle-down"></span>
                     </a>
                 </li>
 
