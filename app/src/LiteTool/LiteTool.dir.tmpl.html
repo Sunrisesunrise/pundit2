@@ -16,8 +16,9 @@
             <!-- User name or 'login' button -->
             <div class="pnd-lite-tool-user">
 
-                <div class="pnd-lite-tool-user-logged"
+                <div class="pnd-lite-tool-user-logged pnd-user-button"
                      ng-show="userIsLogged"
+                     ng-click="closePopover($event)"
                      bs-dropdown="userLoggedInDropdown"
                      data-container=".pnd-lite-tool"
                      template-url="{{dropdownTemplate}}">

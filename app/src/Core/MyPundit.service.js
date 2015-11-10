@@ -618,7 +618,7 @@ angular.module('Pundit2.Core')
             }
             popoverState.popover = $popover(anchor, popoverOptions);
         } else if (where === 'editProfile') {
-            anchor = angular.element(".pnd-toolbar-user-button");
+            anchor = angular.element(".pnd-user-button");
             popoverState.popover = $popover(anchor, popoverOptions);
             if (anchor.length === 0) {
                 return;

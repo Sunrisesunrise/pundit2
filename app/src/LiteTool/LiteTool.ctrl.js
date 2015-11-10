@@ -34,6 +34,10 @@ angular.module('Pundit2.LiteTool')
         Analytics.track('buttons', 'click', 'litetool--login');
     };
 
+    $scope.closePopover = function() {
+        MyPundit.closeLoginPopover();
+    };
+
     EventDispatcher.addListener('AnnotationSidebar.toggle', function(e) {
         $scope.isAnnotationSidebarExpanded = e.args;
     });
