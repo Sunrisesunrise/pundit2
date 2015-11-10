@@ -79,8 +79,9 @@
         </div>
 
         <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
-        <!-- Attenzione vanno rimessi tutto i vari ng-if e ng-show -->
-        <div class="pnd-annotation-details-buttons">
+        <div 
+            class="pnd-annotation-details-buttons"
+            ng-show="isUserToolShowed()">
             <div ng-if="!editMode"
                  class="pnd-annotation-details-footer"
                     >
@@ -100,11 +101,11 @@
             </div>
         </div>
 
-
         <!-- Save or cancel of comment in Edit mode -->
-        <!-- Attenzione vanno rimessi tutto i vari ng-if e ng-show -->
-        <div class="pnd-annotation-comment-text-edit-buttons"
-             ng-if="editMode">
+        <div 
+            class="pnd-annotation-comment-text-edit-buttons"
+            ng-show="isUserToolShowed()"
+            ng-if="editMode">
             <button
                     type="button"
                     class="pnd-btn pnd-btn-small"

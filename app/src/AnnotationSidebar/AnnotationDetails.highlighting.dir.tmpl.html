@@ -44,11 +44,10 @@
         </div>
 
         <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
-        <!-- Attenzione vanno rimessi tutto i vari ng-if e ng-show -->
-        <div class="pnd-annotation-details-buttons">
-            <div
-                    class="pnd-annotation-details-footer"
-                    >
+        <div 
+            class="pnd-annotation-details-buttons"
+            ng-show="isUserToolShowed()">
+            <div class="pnd-annotation-details-footer">
                 <button
                         type="button"
                         class="pnd-delete"
