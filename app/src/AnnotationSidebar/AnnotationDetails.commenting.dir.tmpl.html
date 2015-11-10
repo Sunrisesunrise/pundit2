@@ -21,6 +21,7 @@
 
     <!-- Expanded view of the annotation -->
     <div class="pnd-annotation-expanded pnd-annotation-details-container"
+         ng-click="toggleAnnotation()"
          ng-if="annotation.expanded">
 
         <!-- All'annotazione apert andrebbe aggiunto ng-click="toggleAnnotation()"
@@ -73,6 +74,7 @@
                 <textarea
                     class="form-control pnd-popover-literal-textarea"
                     rows="6"
+                    ng-click="areaClick($event)"
                     ng-model="annotation.comment">
                 </textarea>
             </div>
@@ -88,13 +90,13 @@
                 <button
                     type="button"
                     class="pnd-edit"
-                    ng-click="editComment()">
+                    ng-click="editComment($event)">
                     <span class="pnd-icon-pencil"></span>
                     Edit
                     </button> · <button
                     type="button"
                     class="pnd-delete"
-                    ng-click="deleteAnnotation()">
+                    ng-click="deleteAnnotation($event)">
                     <span class="pnd-icon-trash"></span>
                     Delete
                 </button>
@@ -109,12 +111,12 @@
             <button
                     type="button"
                     class="pnd-btn pnd-btn-small"
-                    ng-click="cancelEdit()">
+                    ng-click="cancelEdit($event)">
                 Cancel
             </button><button
                 type="button"
                 class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
-                ng-click="saveEdit()">
+                ng-click="saveEdit($event)">
                 Save
             </button>
         </div>

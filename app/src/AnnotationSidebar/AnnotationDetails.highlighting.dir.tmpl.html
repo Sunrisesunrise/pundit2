@@ -13,6 +13,7 @@
 
     <!-- Expanded view of the annotation -->
     <div class="pnd-annotation-expanded pnd-annotation-details-container"
+         ng-click="toggleAnnotation()"
          ng-if="annotation.expanded">
 
         <!-- All'annotazione apert andrebbe aggiunto ng-click="toggleAnnotation()"
@@ -51,7 +52,7 @@
                 <button
                         type="button"
                         class="pnd-delete"
-                        ng-click="deleteAnnotation()">
+                        ng-click="deleteAnnotation($event)">
                     <span class="pnd-icon-trash"></span>
                     Delete
                 </button>

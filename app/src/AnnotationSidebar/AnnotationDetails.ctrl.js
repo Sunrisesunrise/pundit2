@@ -57,6 +57,11 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.forceEdit = false;
     }
 
+    var stopEvent = function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+    };
+
     $scope.toggleAnnotation = function() {
         $scope.editMode = false;
 
@@ -92,16 +97,18 @@ angular.module('Pundit2.AnnotationSidebar')
         Analytics.track('buttons', 'click', 'annotation--details--' + label);
     };
 
-    $scope.deleteAnnotation = function() {
+    $scope.deleteAnnotation = function(event) {
         AnnotationDetails.openConfirmModal(currentElement, currentId);
         Analytics.track('buttons', 'click', 'annotation--details--delete');
+
+        stopEvent(event);
     };
 
     $scope.showEdit = function() {
         return typeof($scope.annotation.hasTemplate) === 'undefined' || $scope.forceTemplateEdit;
     };
 
-    $scope.editAnnotation = function() {
+    $scope.editAnnotation = function(event) {
 
         var doEditAnnotation = function() {
             if (TripleComposer.isEditMode()) {
@@ -129,14 +136,18 @@ angular.module('Pundit2.AnnotationSidebar')
         } else {
             doEditAnnotation();
         }
+
+        stopEvent(event);
     };
 
-    $scope.editComment = function() {
+    $scope.editComment = function(event) {
         $scope.editMode = true;
         $scope.editCommentValue = $scope.annotation.comment;
+
+        stopEvent(event);
     };
 
-    $scope.saveEdit = function() {
+    $scope.saveEdit = function(event) {
         var promise = AnnotationDetails.saveEditedComment(currentId, $scope.annotation.mainItem, $scope.annotation.comment);
 
         promise.then(function() {
@@ -145,10 +156,17 @@ angular.module('Pundit2.AnnotationSidebar')
             $scope.editCommentValue = '';
             $scope.editMode = false;
         });
+
+        stopEvent(event);
     };
 
-    $scope.cancelEdit = function() {
+    $scope.areaClick = function(event) {
+        stopEvent(event);
+    };
+
+    $scope.cancelEdit = function(event) {
         $scope.editMode = false;
+        stopEvent(event);
     };
 
     $scope.isUserToolShowed = function() {
