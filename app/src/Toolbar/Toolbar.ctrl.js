@@ -550,16 +550,16 @@ angular.module('Pundit2.Toolbar')
 
     // return true if no errors are occured --> status button ok must be visible
     $scope.showStatusButtonOk = function() {
-        return !Toolbar.getErrorShown() && !Toolbar.isLoading();
+        return !Toolbar.isLoading();
     };
 
     // return true if an error is occured --> status button error must be visible
-    $scope.showStatusButtonError = function() {
-        return Toolbar.getErrorShown();
-    };
+    // $scope.showStatusButtonError = function() {
+    //     return Toolbar.getErrorShown();
+    // };
 
     $scope.showStatusButtonLoading = function() {
-        return Toolbar.isLoading() && !Toolbar.getErrorShown();
+        return Toolbar.isLoading();
     };
 
     // return true if user is not logged in --> login button must be visible

@@ -22,7 +22,7 @@ angular.module('Pundit2.Core')
         }
     };
 
-    var errorLog = [],
+    var alertLog = [],
         loadingCount = {};
 
     var updateLoading = function(currentState) {
@@ -104,9 +104,9 @@ angular.module('Pundit2.Core')
         EventDispatcher.sendEvent('Pundit.changeSelection');
     });
 
-    // Error
-    EventDispatcher.addListener('Pundit.error', function(e) {
-        errorLog.push(e.args);
+    // Alert
+    EventDispatcher.addListener('Pundit.alert', function(e) {
+        alertLog.push(e.args);
     });
 
     status.getState = function(component) {
@@ -130,7 +130,7 @@ angular.module('Pundit2.Core')
     };
 
     status.getLog = function() {
-        return errorLog;
+        return alertLog;
     };
 
     status.resetProgress = function() {

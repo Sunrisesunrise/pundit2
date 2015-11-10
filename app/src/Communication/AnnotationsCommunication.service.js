@@ -318,7 +318,6 @@ angular.module('Pundit2.Communication')
             annotationsCommunication.err("Could not search for annotations, error from the server: " + msg);
             Consolidation.rejectConsolidateAll();
             setLoading(false);
-            EventDispatcher.sendEvent('Pundit.error', 'Could not search for annotations, error from the server!');
             EventDispatcher.sendEvent('Pundit.alert', {
                 title: 'Sorry there was a problem',
                 id: "ERROR",
