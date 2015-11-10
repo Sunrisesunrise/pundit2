@@ -538,13 +538,6 @@ angular.module('Pundit2.Toolbar')
         $scope.userData = MyPundit.getUserData();
     });
 
-    // Handles userdata changes after edit profile, maybe we can remove the above
-    // $watch.
-    EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
-        $scope.isUserLogged = e.args;
-        $scope.userData = MyPundit.getUserData();
-    });
-
     // Handle changes in triple composer.
     EventDispatcher.addListeners(['TripleComposer.statementChanged', 'TripleComposer.reset'], function(e) {
         if (e.name === 'TripleComposer.reset') {

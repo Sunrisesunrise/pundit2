@@ -10,8 +10,8 @@
         <span 
             class="pnd-icon pnd-icon-pundit-logo" 
             ng-class="{
-                'pnd-lite-tool-user-not-logged': !userIsLogged,
-                'pnd-lite-tool-user-logged': userIsLogged}" 
+                'pnd-lite-tool-user-not-logged': !isUserLogged,
+                'pnd-lite-tool-user-logged': isUserLogged}" 
             ng-click="annotationsClickHandler()">
         </span>
         <div class="pnd-lite-tool-content">
@@ -19,13 +19,13 @@
             <div class="pnd-lite-tool-user">
                 <div 
                     class="pnd-lite-tool-user-logged pnd-user-button" 
-                    ng-show="userIsLogged" 
+                    ng-show="isUserLogged" 
                     ng-click="closePopover($event)" bs-dropdown="userLoggedInDropdown" data-container=".pnd-lite-tool" template-url="{{dropdownTemplate}}">
                     {{userData.fullName}}
                 </div>
                 <div 
                     class="pnd-lite-tool-user-not-logged pnd-login-button" 
-                    ng-if="!userIsLogged" 
+                    ng-if="!isUserLogged" 
                     ng-click="login()">
                     Login
                 </div>

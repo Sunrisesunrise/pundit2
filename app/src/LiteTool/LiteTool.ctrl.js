@@ -2,7 +2,7 @@ angular.module('Pundit2.LiteTool')
 
 .controller('LiteToolCtrl', function($scope, $rootScope, Status, AnnotationSidebar, EventDispatcher, MyPundit, Analytics) {
 
-    $scope.userIsLogged = false;
+    $scope.isUserLogged = false;
     $scope.isAnnotationSidebarExpandedv = false;
     $scope.userData = {};
 
@@ -42,8 +42,10 @@ angular.module('Pundit2.LiteTool')
         $scope.isAnnotationSidebarExpanded = e.args;
     });
 
-    EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
-        $scope.userIsLogged = e.args;
+    $scope.$watch(function() {
+        return MyPundit.isUserLogged();
+    }, function(newStatus) {
+        $scope.isUserLogged = newStatus;
         $scope.userData = MyPundit.getUserData();
     });
 });
