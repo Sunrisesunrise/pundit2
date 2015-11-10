@@ -49,9 +49,14 @@
         margin: 0;
         padding: 0;
 
-        .pnd-btn-link {
-            padding: 5px 8px 8px;
-            background-color: #999999;
+        .pnd-icon {
+            display: inline-block;
+            padding-top: 9px;
+            color: @color-dark-gray;
+
+            &:hover {
+                color: @color-text-link;
+            }
         }
     }
 }
@@ -273,13 +278,13 @@ ul.pnd-tab-header {
 /* ------------------------------------ *\
    #LANGUAGES-POPOVER
 \* ------------------------------------ */
-// TODO Verify why we're not using the Dropodown component
+// TODO This should become a dropdown element and inherit standard style
 
 .pnd-korbo-languages-popover {
 
     .kee-popover-item {
-        padding: 4px 8px;
-        font-size: 12px;
+        padding: 5px 8px;
+        font-size: 13px;
 
         & ~ .kee-popover-item {
             border-top: 1px solid @color-border-normal;
@@ -293,18 +298,17 @@ ul.pnd-tab-header {
                 background-color: #FFFFFF;
             }
         }
-
         &:hover {
             background-color: @gray-lighter;
             cursor: pointer;
         }
-
         .pnd-icon {
             margin-right: 5px;
             color: @gray;
         }
     }
 }
+
 
 
 /* ------------------------------------ *\
@@ -371,8 +375,15 @@ ul.pnd-tab-header {
         width: 26px;
         height: 26px;
         font-size: 13px;
-        background-color: darkgrey;
-        color: #FFFFFF !important; // TODO No important please
+        background-color: @color-light;
+        color: @color-dark-gray !important;
+        border-radius: 3px 0 0 3px;
+        border: 1px solid @color-border-normal;
+        cursor: pointer;
+
+        &:hover {
+            color: @color-text-link !important;;
+        }
     }
 }
 
