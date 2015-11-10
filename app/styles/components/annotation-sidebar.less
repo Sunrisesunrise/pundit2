@@ -60,14 +60,16 @@
 \* ------------------------------------ */
 
 /* Top button to show/hide filters */
-.pnd-annotation-sidebar-btn-show-filter, .pnd-annotation-sidebar-btn-hide-filters {
+.pnd-annotation-sidebar-btn-show-filter, .pnd-annotation-sidebar-btn-close-filters {
     width: 100%;
+    height: 30px;
     background-color: #FFF;
     border-bottom: 1px solid @color-border-normal;
+    line-height: 26px;
 }
 
 
-/* Filter elements */
+/* ----- */
 .pnd-annotation-sidebar-filter-content {
     text-align: center;
     position: relative;
@@ -85,7 +87,10 @@
             position: absolute;
             right: 10px;
             top: 9px;
-            opacity: 0.4;
+            color: @color-dark-gray;
+            &:hover {
+                color: @color-brand;
+            }
         }
     }
 }
@@ -98,9 +103,10 @@
     .pnd-icon {
         box-sizing: border-box;
         position: absolute;
-        right: 11px;
-        top: 10px;
+        right: 9px;
+        top: 9px;
         padding: 7px;
+        color: @color-text-form-placeholder;
         cursor: pointer;
     }
 }
@@ -117,7 +123,7 @@
 }
 
 .pnd-annotation-sidebar-filters-list {
-    #gradient > .horizontal-three-colors(darken(rgba(255,255,255,.95), 4); rgba(255,255,255,.95); 1%; rgba(255,255,255,.95));
+    background-color: @color-background-light;
     text-align: left;
 
     /* Each filter parameter */
@@ -130,26 +136,31 @@
             font-weight: @font-weight-bold;
             cursor: pointer;
 
+            /* Filter's text label */
             .pnd-annotation-sidebar-filter-label {
                 width: @annotation-sidebar-exp-width - 24;
                 display: inline-block;
-                padding: 8px 0 8px 10px;
+                padding: 6px 0 6px 10px;
+                font-size: 13px;
             }
 
+            /* Filter's toggle icon */
             .pnd-annotation-sidebar-filter-label + .pnd-icon {
-                width: 24px;
-                opacity: .3;
-                padding: 9px 13px 9px 0;
+                color: @color-dark-gray;
+                &:hover {
+                    color: @color-brand;
+                }
             }
         }
     }
 
     /* Filter for broken annotations */
     .pnd-annotation-sidebar-filter-broken {
-        padding: 8px 6px 8px 10px;
+        padding: 6px 6px 6px 10px;
         border-top: 1px solid @color-border-normal;
         width: @annotation-sidebar-exp-width;
         font-weight: @font-weight-bold;
+        font-size: 13px;
         cursor: pointer;
     }
 
@@ -182,11 +193,12 @@
     .pnd-annotation-sidebar-filter-element {
         margin: 0px 10px 4px 15px;
         padding-bottom: 4px;
-        font-size: 11px;
+        font-size: 12px;
         cursor: pointer;
 
         &.pnd-annotation-sidebar-current-filter-active {
             display: block;
+            font-weight: @font-weight-bold;
         }
 
         &.pnd-annotation-sidebar-current-filter-empt-red {
@@ -205,6 +217,8 @@
         overflow-y: auto;
         overflow-x: hidden;
     }
+
+    /* Visibility toggle */
 
     /* Hidden elements when the filter is closed */
     .pnd-annotation-sidebar-filter-label {
@@ -246,7 +260,13 @@
 
 /* Footer of filters section */
 .pnd-annotation-footer-sidebar-filter {
+    height: 33px;
+    text-align: right;
+    padding-top: 4px;
+    padding-right: 4px;
+    background-color: @color-background-base;
     border-top: 1px solid @color-border-normal;
+    border-bottom: 1px solid @color-border-normal;
 }
 
 

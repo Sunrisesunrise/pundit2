@@ -64,7 +64,7 @@
                                 class="pnd-icon"
                                 ng-class="setSearchIcon(annotationSidebar.filters.freeText.expression)"
                                 ng-click="freeText = ''; updateSearch(freeText)"></span>
-                            <input class="form-control" ng-model="freeText" ng-change="updateSearch(freeText)" ng-model-options="{debounce: 1000}" placeholder="Contains">
+                            <input class="form-control" type="text" ng-model="freeText" ng-change="updateSearch(freeText)" ng-model-options="{debounce: 1000}" placeholder="Contains">
                         </div>
 
                         <!-- Authors -->
@@ -78,7 +78,7 @@
                                     class="pnd-icon"
                                     ng-class="setFilterIcon(searchAuthors.label)"
                                     ng-click="searchAuthors.label = ''"></span>
-                                <input class="form-control" ng-model="searchAuthors.label" placeholder="Filter">
+                                <input class="form-control" type="text" ng-model="searchAuthors.label" placeholder="Filter">
                             </div>
                             <div class="pnd-sidebar-filter-scroll">
                                 <div
@@ -107,7 +107,7 @@
                                     class="pnd-icon"
                                     ng-class="setFilterIcon(searchNotebooks.label)"
                                     ng-click="searchNotebooks.label = ''"></span>
-                                <input class="form-control" ng-model="searchNotebooks.label" placeholder="Filter">
+                                <input class="form-control" type="text" ng-model="searchNotebooks.label" placeholder="Filter">
                             </div>
                             <div class="pnd-sidebar-filter-scroll">
                                 <div
@@ -136,7 +136,7 @@
                                     class="pnd-icon"
                                     ng-class="setFilterIcon(searchTypes.label)"
                                     ng-click="searchTypes.label = ''"></span>
-                                <input class="form-control" ng-model="searchTypes.label" placeholder="Filter">
+                                <input class="form-control" type="text" ng-model="searchTypes.label" placeholder="Filter">
                             </div>
                             <div class="pnd-sidebar-filter-scroll">
                                 <div ng-repeat="elem in filters.types | orderObjectBy:'partial':'dsc' | filter:searchTypes"
@@ -165,7 +165,7 @@
                                     class="pnd-icon"
                                     ng-class="setFilterIcon(searchPredicates.label)"
                                     ng-click="searchPredicates.label = ''"></span>
-                                <input class="form-control" ng-model="searchPredicates.label" placeholder="Filter">
+                                <input class="form-control" type="text" ng-model="searchPredicates.label" placeholder="Filter">
                             </div>
                             <div
                                 ng-repeat="elem in filters.predicates | orderObjectBy:'partial':'dsc' | filter:searchPredicates"
@@ -192,7 +192,7 @@
                                     class="pnd-icon"
                                     ng-class="setFilterIcon(searchEntities.label)"
                                     ng-click="searchEntities.label = ''"></span>
-                                <input class="form-control" ng-model="searchEntities.label" placeholder="Filter">
+                                <input class="form-control" type="text" ng-model="searchEntities.label" placeholder="Filter">
                             </div>
                             <div class="pnd-sidebar-filter-scroll">
                                 <div
@@ -286,7 +286,7 @@
                             <button
                                     ng-click="annotationSidebar.resetFilters()"
                                     type="button"
-                                    class="pnd-btn pnd-btn-small pnd-btn-fill-width pnd-annotation-sidebar-btn-remove-filters"
+                                    class="pnd-btn pnd-btn-xsmall pnd-annotation-sidebar-btn-remove-filters"
                                     ng-disabled="!annotationSidebar.needToFilter()">
                                 Reset filters
                             </button>

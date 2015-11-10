@@ -33,10 +33,6 @@
             width: @annotation-sidebar-exp-width - 5px;
         }
 
-        &:hover {
-            width: @annotation-sidebar-exp-width - 5px;
-        }
-
         /* Circle with Pundit Logo or user thumb */
         .pnd-icon-pundit-logo {
             display: block;
@@ -112,6 +108,13 @@
                 font-size: 13px;
                 color: @color-text-link;
             }
+        }
+    }
+
+    /* Hover state */
+    &:hover {
+        .pnd-lite-tool-wrap {
+            width: @annotation-sidebar-exp-width - 5px;
         }
     }
 }
