@@ -7,6 +7,7 @@
             <ul class="pnd-inner-nav pnd-toolbar-inner-nav pnd-toolbar-navbar-left">
                 
                 <!-- Error button -->
+                <!--
                 <li ng-show="showStatusButtonError()" class="pnd-toolbar-error-button pnd-toolbar-first-button">
                     <a 
                         href="javascript:void(0)" 
@@ -16,6 +17,7 @@
                         <span class="pnd-icon pnd-icon-exclamation"></span>
                     </a>
                 </li>
+                -->
                 
                 <!-- OK button -->
                 <li ng-show="showStatusButtonOk()" class="pnd-toolbar-status-button-ok pnd-toolbar-first-button">
@@ -39,6 +41,20 @@
                         <span class="pnd-icon pnd-icon-pundit-logo pnd-pulse"></span>
                     </a>
                 </li>
+
+                <!-- Login button -->
+                <!--
+                <li ng-show="showLogin()" class="pnd-toolbar-login-button pnd-login-button pnd-toolbar-button-active pnd-calltoaction-btn">
+                    <a href="javascript:void(0)" ng-click="loginButtonClick($event)"><span>Log in</span></a>
+                </li>
+                -->
+
+                <!-- User button -->
+                <!--
+                <li ng-show="showUserButton()" class="pnd-user-button  pnd-toolbar-button-active">
+                    <a href="javascript:void(0)" bs-dropdown="userLoggedInDropdown" template-url="{{dropdownTemplate}}" ng-click="closePopover($event)"><span>{{userData.fullName}}</span></a>
+                </li>
+                -->
 
                 <!-- Dashboard button -->
                 <li class="pnd-toolbar-dashboard-toogle-button pnd-toolbar-toggle-button"
