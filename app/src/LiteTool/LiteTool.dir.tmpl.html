@@ -1,7 +1,7 @@
 <div class="pnd-lite-tool pnd-ignore">
     <div 
         class="pnd-lite-tool-wrap" 
-        ng-class="{'pnd-lite-tool-wrap-open': isAnnotationSidebarExpanded}">
+        ng-class="{'pnd-lite-tool-wrap-open': (isAnnotationSidebarExpanded || isContextualMenuOpen || isUserPopoupOpen)}">
         <!-- TODO Handle the open status of the tool
                 Add the class 'pnd-lite-tool-wrap-open'
                 when the tool must stay open: when the login popover is open -->

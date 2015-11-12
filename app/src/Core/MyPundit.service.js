@@ -64,7 +64,7 @@ angular.module('Pundit2.Core')
  *
  *
  */
-.service('MyPundit', function(MYPUNDITDEFAULTS, $http, $q, $timeout, $modal, $window, $interval,
+.service('MyPundit', function(MYPUNDITDEFAULTS, Config, $http, $q, $timeout, $modal, $window, $document, $interval,
     BaseComponent, EventDispatcher, NameSpace, Analytics, $popover, $rootScope, $cookies) {
 
     var myPundit = new BaseComponent('MyPundit', MYPUNDITDEFAULTS);
@@ -74,6 +74,7 @@ angular.module('Pundit2.Core')
         editProfile,
         loginStatus,
         userData = {},
+        hasDocumentClickHandler = false,
         infoCookie = {
             templateLabel: undefined,
             templateId: undefined,
@@ -601,6 +602,10 @@ angular.module('Pundit2.Core')
             return;
         }
 
+        if (!hasDocumentClickHandler) {
+            $document.on('mouseup', documentClickHandler);
+            hasDocumentClickHandler = true;
+        }
         // popoverState.anchor = angular.element('.pnd-toolbar-login-button');
         // popoverState.popover = $popover(angular.element(".pnd-toolbar-toggle-button"), popoverState.options);
         
@@ -642,6 +647,7 @@ angular.module('Pundit2.Core')
 
         popoverState.popover.$promise.then(function() {
             popoverState.popover.show();
+            EventDispatcher.sendEvent('MyPundit.popoverOpen');
             popoverState.renderIFrame(where);
             checkPopoverPosition();
         });
@@ -674,8 +680,13 @@ angular.module('Pundit2.Core')
         popoverState.popover.hide();
         popoverState.popover.destroy();
         popoverState.popover = null;
+        EventDispatcher.sendEvent('MyPundit.popoverClose');
 
     };
+
+    var documentClickHandler = function(evt) {
+        myPundit.closeLoginPopover();
+    }
 
     myPundit.editProfile = function() {
         if (!isUserLogged) {
@@ -704,6 +715,11 @@ angular.module('Pundit2.Core')
             myPundit.addPostMessageListener();
         }
         clientHidden = false;
+    });
+
+    EventDispatcher.addListener('MyPundit.popoverClose', function(/*e*/) {
+        hasDocumentClickHandler = false;
+        $document.off('mouseup', documentClickHandler);
     });
 
     return myPundit;

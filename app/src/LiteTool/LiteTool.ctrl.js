@@ -4,6 +4,8 @@ angular.module('Pundit2.LiteTool')
 
     $scope.isUserLogged = false;
     $scope.isAnnotationSidebarExpandedv = false;
+    $scope.isContextualMenuOpen = false;
+    $scope.isUserPopoupOpen = false;
     $scope.userData = {};
 
     var logout = function() {
@@ -40,6 +42,22 @@ angular.module('Pundit2.LiteTool')
 
     EventDispatcher.addListener('AnnotationSidebar.toggle', function(e) {
         $scope.isAnnotationSidebarExpanded = e.args;
+    });
+
+    $scope.$on('dropdown.hide.before', function() {
+        $scope.isContextualMenuOpen = false;
+    });
+
+    $scope.$on('dropdown.show.before', function() {
+        $scope.isContextualMenuOpen = true;
+    });
+
+    EventDispatcher.addListener('MyPundit.popoverClose', function(/*e*/) {
+        $scope.isUserPopoupOpen = false;
+    });
+
+    EventDispatcher.addListener('MyPundit.popoverOpen', function(/*e*/) {
+        $scope.isUserPopoupOpen = true;
     });
 
     $scope.$watch(function() {
