@@ -255,9 +255,9 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var buildMainItem = function(currentAnnotation) {
-        var annotation = currentAnnotation;
-        var firstUri;
-        var mainItem = {};
+        var annotation = currentAnnotation,
+            mainItem = {},
+            firstUri;
 
         for (firstUri in annotation.graph) {
             break;
@@ -269,9 +269,10 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var buildObjectsArray = function(list) {
+        var objectValue,
+            objectType;
         var results = [];
-        var objectValue;
-        var objectType;
+
         for (var object in list) {
             objectValue = list[object].value;
             objectType = list[object].type;
@@ -300,17 +301,22 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var buildItemsArray = function(currentAnnotation) {
-        var annotation = currentAnnotation;
-        var graph = annotation.graph;
+        var annotation = currentAnnotation,
+            graph = annotation.graph,
+            object;
+
         var results = [];
 
         for (var subject in graph) {
             for (var predicate in graph[subject]) {
-                results.push({
-                    subject: buildItemDetails(subject),
-                    predicate: buildItemDetails(predicate),
-                    objects: buildObjectsArray(graph[subject][predicate], annotation)
-                });
+                for (var objectIndex in graph[subject][predicate]) {
+                    object = graph[subject][predicate][objectIndex];
+                    results.push({
+                        subject: buildItemDetails(subject),
+                        predicate: buildItemDetails(predicate),
+                        objects: buildObjectsArray([object])
+                    });
+                }
             }
         }
 
