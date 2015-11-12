@@ -5,6 +5,7 @@ angular.module('Pundit2.AnnotationPopover')
     NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, $timeout, $q) {
 
     $scope.literalText = '';
+    $scope.opacity = 1;
 
     $scope.selectedNotebookId = undefined;
     $scope.savingAnnotation = false;
@@ -48,6 +49,7 @@ angular.module('Pundit2.AnnotationPopover')
     $scope.setMode = function(mode) {
         $scope.currentMode = mode;
 
+        $scope.opacity = 0;
         $scope.isSwitchMode = false;
         switch (mode) {
             case 'comment':
@@ -57,6 +59,13 @@ angular.module('Pundit2.AnnotationPopover')
                 $scope.isHighlightMode = $scope.isUserLogged;
                 break;
         }
+
+        $timeout(function() {
+            var state = PndPopover.getState();
+            //state.popover.$applyPlacement();
+            AnnotationPopover.doResize();
+            $scope.opacity = 1;
+        }, 15);
     };
 
     $scope.login = function() {
