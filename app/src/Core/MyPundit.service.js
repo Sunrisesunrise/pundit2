@@ -661,9 +661,12 @@ angular.module('Pundit2.Core')
         var popoverRect = popoverState.popover.$element[0].getClientRects()[0];
         var pageVisibleRight = $window.innerWidth + $window.scrollX;
         if ($window.scrollX + popoverRect.right > pageVisibleRight) {
-            popoverState.popover.$options.placement = 'left';
+            popoverState.popover.$options.placement = 'bottom-right';
             popoverState.popover.$element.removeClass('left').removeClass('top').removeClass('right').removeClass('bottom');
-            popoverState.popover.$element.find('.arrow-top').removeClass('arrow-top').addClass('arrow-right');
+            popoverState.popover.$element.find('.arrow').removeClass('arrow-top').removeClass('arrow-right').addClass('arrow-top');
+            var popoverRect = popoverState.popover.$element[0].getClientRects()[0];
+            var marginLeft = Math.round(popoverRect.width * 0.8);
+            popoverState.popover.$element.find('.arrow').css('marginLeft', marginLeft);
             popoverState.popover.$applyPlacement();
         }
     };
