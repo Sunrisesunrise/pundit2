@@ -79,6 +79,7 @@
 
             div {
                 line-height: @lite-tool-height - 2px;
+                max-width: @annotation-sidebar-exp-width - 160px;
                 font-size: 13px;
                 color: @color-text-link;
                 cursor: pointer;
@@ -86,7 +87,10 @@
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
-                max-width: @annotation-sidebar-exp-width - 160px;
+            }
+
+            .pnd-lite-tool-user-not-logged {
+                width: 65px;
             }
         }
 
