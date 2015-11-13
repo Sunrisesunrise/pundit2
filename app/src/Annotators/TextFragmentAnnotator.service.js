@@ -86,7 +86,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> addIcon: 'true' </pre>
      */
-    addIcon: true,
+    addIcon: false,
 
     /**
      * @module punditConfig

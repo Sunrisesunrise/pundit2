@@ -13,7 +13,7 @@ angular.module('Pundit2.AnnotationPopover')
     $scope.availableNotebooks = [];
     $scope.isUserLogged = MyPundit.isUserLogged();
 
-    $scope.currentMode = '';
+    $scope.currentMode = AnnotationPopover.mode;
 
     $scope.isSwitchMode = $scope.isUserLogged;
     $scope.isCommentMode = false;
@@ -145,8 +145,14 @@ angular.module('Pundit2.AnnotationPopover')
     };
 
     $scope.focusOn = function(elementId) {
-        angular.element('.pnd-annotation-popover #' + elementId)[0].focus();
+        setTimeout(function() {
+            angular.element('.pnd-annotation-popover #' + elementId)[0].focus();
+        }, 10);
     };
+
+    if ($scope.currentMode !== '') {
+        $scope.setMode($scope.currentMode);
+    }
 
     updateCurrentNotebook();
     updateAvailableNotebooks();

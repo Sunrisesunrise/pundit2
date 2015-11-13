@@ -17,6 +17,8 @@ angular.module('Pundit2.AnnotationPopover')
         removeTimeout: null
     };
 
+    annotationPopover.mode = '';
+
     annotationPopover.doResize = function() {
         resizeCallback();
     };
@@ -133,7 +135,7 @@ angular.module('Pundit2.AnnotationPopover')
 
     annotationPopover.lastUsedNotebookID = undefined;
 
-    annotationPopover.show = function(x, y, item, unUsed, fragmentId) {
+    annotationPopover.show = function(x, y, item, unUsed, fragmentId, mode) {
         var options = {
             templateUrl: 'src/AnnotationPopover/AnnotationPopover.tmpl.html',
             controller: 'AnnotationPopoverCtrl',
@@ -150,6 +152,8 @@ angular.module('Pundit2.AnnotationPopover')
             fragmentId: fragmentId
         });
         var state = PndPopover.getState();
+
+        annotationPopover.mode = typeof mode === 'undefined' ? '' : mode;
 
         if (promise !== false) {
             promise.then(function() {
