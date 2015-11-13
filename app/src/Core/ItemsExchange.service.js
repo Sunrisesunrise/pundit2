@@ -284,6 +284,11 @@ angular.module('Pundit2.Core')
         subjectTypes = typeof subjectTypes !== 'undefined' ? subjectTypes : [];
         objectTypes = typeof objectTypes !== 'undefined' ? objectTypes : [];
 
+        if (typeof p.objectTypes === 'undefined' ||
+            typeof p.subjectTypes === 'undefined') {
+            return;
+        }
+
         var i;
         // empty array coding a free objectTypes
         if (objectTypes.length === 0) {
