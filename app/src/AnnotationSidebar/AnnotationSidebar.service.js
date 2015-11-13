@@ -795,6 +795,13 @@ angular.module('Pundit2.AnnotationSidebar')
         annotation.allLabels = annotation.graph[NameSpace.rdf.value][0].value;
     };
 
+    var inizializeHighlightFilter = function(annotation) {
+        if (clientMode !== 'pro') {
+            return;
+        }
+        annotation.allLabels = annotation.firstConsolidableItem.description;
+    };
+
     // Updates the list of filters and annotation positions when the consolidation is completed
     var initializeFiltersAndPositions = function() {
         if (Object.keys(state.allAnnotations).length === 0) {
@@ -822,8 +829,10 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             if (annotation.motivatedBy === 'linking') {
                 inizializeSemanticAnnotationFilters(annotation);
-            } else {
+            } else if (annotation.motivatedBy === 'commenting') {
                 inizializeCommentFilter(annotation);
+            } else if (annotation.motivatedBy === 'highlighting') {
+                inizializeHighlightFilter(annotation);
             }
             setAnnotationPosition(annotation, dashboardHeight);
         });
