@@ -43,18 +43,20 @@
                 </li>
 
                 <!-- Login button -->
-                <!--
                 <li ng-show="showLogin()" class="pnd-toolbar-login-button pnd-login-button pnd-toolbar-button-active pnd-calltoaction-btn">
-                    <a href="javascript:void(0)" ng-click="loginButtonClick($event)"><span>Log in</span></a>
+                    <!-- <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="userNotLoggedDropdown"><span>Login</span></a> -->
+                    <a href="javascript:void(0)" ng-click="loginButtonClick($event)">
+                        <span>Log in</span>
+                    </a>
                 </li>
-                -->
 
                 <!-- User button -->
-                <!--
-                <li ng-show="showUserButton()" class="pnd-user-button  pnd-toolbar-button-active">
-                    <a href="javascript:void(0)" bs-dropdown="userLoggedInDropdown" template-url="{{dropdownTemplate}}" ng-click="closePopover($event)"><span>{{userData.fullName}}</span></a>
+                <li ng-show="showUserButton()" class="pnd-toolbar-user-button pnd-user-button pnd-toolbar-button-active">
+                    <a href="javascript:void(0)" bs-dropdown="userLoggedInDropdown" placement="bottom-right" template-url="{{dropdownTemplate}}" ng-click="closePopover($event)">
+                        <span>{{userData.fullName}}</span>
+                        <span class="pnd-icon pnd-icon-angle-down"></span>
+                    </a>
                 </li>
-                -->
 
                 <!-- Dashboard button -->
                 <li class="pnd-toolbar-dashboard-toogle-button pnd-toolbar-toggle-button"
@@ -135,22 +137,6 @@
                 <li class="" ng-if="isAnnotationFiltersActive">
                     <span class="pnd-icon pnd-icon-filter pnd-filter-active">
                     </span>
-                </li>
-
-                <!-- Login button -->
-                <li ng-show="showLogin()" class="pnd-toolbar-login-button pnd-login-button pnd-toolbar-button-active pnd-calltoaction-btn">
-                    <!-- <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="userNotLoggedDropdown"><span>Login</span></a> -->
-                    <a href="javascript:void(0)" ng-click="loginButtonClick($event)">
-                        <span>Log in</span>
-                    </a>
-                </li>
-
-                <!-- User button -->
-                <li ng-show="showUserButton()" class="pnd-toolbar-user-button pnd-user-button pnd-toolbar-button-active">
-                    <a href="javascript:void(0)" bs-dropdown="userLoggedInDropdown" placement="bottom-right" template-url="{{dropdownTemplate}}" ng-click="closePopover($event)">
-                        <span>{{userData.fullName}}</span>
-                        <span class="pnd-icon pnd-icon-angle-down"></span>
-                    </a>
                 </li>
 
             </ul> <!-- pnd-toolbar-navbar-right -->
