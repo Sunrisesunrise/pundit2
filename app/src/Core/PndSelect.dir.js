@@ -19,7 +19,7 @@ angular.module('Pundit2.Core')
             var inputElement = element.find('.creation-input').eq(0),
                 fncAction,
                 hasMouseDownHandler = false,
-                optionsContainer= element.find('.option-container');
+                optionsContainer = element.find('.pnd-select-option-container');
 
             scope.optionAction = false;
             scope.moveTop = false;
