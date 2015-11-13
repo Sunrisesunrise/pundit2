@@ -64,7 +64,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
 .service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $window, $modal, $injector, $q,
     BaseComponent, Config, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, ModelHelper, TemplatesExchange,
-    Consolidation, ContextualMenu, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
+    Consolidation, ContextualMenu, ItemsExchange, MyPundit, TextFragmentAnnotator,
     ImageAnnotator, AnnotationsCommunication, NotebookExchange, TypesHelper, Analytics, NameSpace) {
 
     var annotationDetails = new BaseComponent('AnnotationDetails', ANNOTATIONDETAILSDEFAULTS);
@@ -87,58 +87,56 @@ angular.module('Pundit2.AnnotationSidebar')
         overActiveId = '',
         highlightFragments = [];
 
-    // var modalTimeoutPromise;
+    // ContextualMenu.addAction({
+    //     type: [
+    //         TextFragmentAnnotator.options.cMenuType,
+    //         ImageHandler.options.cMenuType
+    //     ],
+    //     name: 'showAllAnnotations',
+    //     label: 'Show all annotations of this item',
+    //     showIf: function(item) {
+    //         if (typeof(item) !== 'undefined') {
+    //             return Consolidation.isConsolidated(item) || (item.uri in Consolidation.getFragmentParentList());
+    //         }
+    //     },
+    //     priority: 10,
+    //     action: function(item) {
+    //         if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
+    //             AnnotationSidebar.toggle();
+    //         }
+    //         annotationDetails.closeViewAndReset();
 
-    ContextualMenu.addAction({
-        type: [
-            TextFragmentAnnotator.options.cMenuType,
-            ImageHandler.options.cMenuType
-        ],
-        name: 'showAllAnnotations',
-        label: 'Show all annotations of this item',
-        showIf: function(item) {
-            if (typeof(item) !== 'undefined') {
-                return Consolidation.isConsolidated(item) || (item.uri in Consolidation.getFragmentParentList());
-            }
-        },
-        priority: 10,
-        action: function(item) {
-            if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
-                AnnotationSidebar.toggle();
-            }
-            annotationDetails.closeViewAndReset();
+    //         if (AnnotationSidebar.isFiltersExpanded()) {
+    //             AnnotationSidebar.toggleFiltersContent();
+    //         }
 
-            if (AnnotationSidebar.isFiltersExpanded()) {
-                AnnotationSidebar.toggleFiltersContent();
-            }
+    //         AnnotationSidebar.resetFilters();
 
-            AnnotationSidebar.resetFilters();
+    //         var fragmentsListUri;
+    //         var fragmentParentList = Consolidation.getFragmentParentList();
+    //         if (item.uri in fragmentParentList) {
+    //             fragmentsListUri = fragmentParentList[item.uri];
+    //         }
 
-            var fragmentsListUri;
-            var fragmentParentList = Consolidation.getFragmentParentList();
-            if (item.uri in fragmentParentList) {
-                fragmentsListUri = fragmentParentList[item.uri];
-            }
+    //         for (var annotation in state.annotations) {
+    //             if (state.annotations[annotation].itemsUriArray.indexOf(item.uri) === -1) {
+    //                 state.annotations[annotation].ghosted = true;
+    //             }
+    //             for (var f in fragmentsListUri) {
+    //                 if (state.annotations[annotation].itemsUriArray.indexOf(fragmentsListUri[f].uri) !== -1) {
+    //                     state.annotations[annotation].ghosted = false;
+    //                     continue;
+    //                 }
+    //             }
+    //         }
 
-            for (var annotation in state.annotations) {
-                if (state.annotations[annotation].itemsUriArray.indexOf(item.uri) === -1) {
-                    state.annotations[annotation].ghosted = true;
-                }
-                for (var f in fragmentsListUri) {
-                    if (state.annotations[annotation].itemsUriArray.indexOf(fragmentsListUri[f].uri) !== -1) {
-                        state.annotations[annotation].ghosted = false;
-                        continue;
-                    }
-                }
-            }
+    //         state.isGhostedActive = true;
+    //         TextFragmentAnnotator.ghostAll();
+    //         TextFragmentAnnotator.ghostRemoveByUri(item.uri);
 
-            state.isGhostedActive = true;
-            TextFragmentAnnotator.ghostAll();
-            TextFragmentAnnotator.ghostRemoveByUri(item.uri);
-
-            Analytics.track('buttons', 'click', 'contextualMenu--showAllAnnotationForItem');
-        }
-    });
+    //         Analytics.track('buttons', 'click', 'contextualMenu--showAllAnnotationForItem');
+    //     }
+    // });
 
     // confirm modal
     var modalScope = $rootScope.$new();

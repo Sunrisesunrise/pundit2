@@ -255,14 +255,18 @@ angular.module('Pundit2.TripleComposer')
             return;
         }
 
+        // TODO: sanity checks on Config.modules.* ? Are they active? Think so??
         var cMenuTypes = [
             Config.modules.PageItemsContainer.cMenuType,
             Config.modules.MyItemsContainer.cMenuType,
             Config.modules.SelectorsManager.cMenuType,
             Config.modules.TextFragmentHandler.cMenuType,
-            Config.modules.TextFragmentAnnotator.cMenuType,
-            Config.modules.ImageHandler.cMenuType
+            Config.modules.TextFragmentAnnotator.cMenuType
         ];
+
+        if (typeof Config.modules.ImageHandler !== 'undefined') {
+            cMenuTypes.push(Config.modules.ImageHandler.cMenuType);
+        }
 
         ContextualMenu.addAction({
             type: cMenuTypes,

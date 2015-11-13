@@ -318,7 +318,7 @@ angular.module('Pundit2.AnnotationSidebar')
 })
 
 .service('AnnotationSidebar', function(ANNOTATIONSIDEBARDEFAULTS, $rootScope, $filter, $timeout, $injector,
-    BaseComponent, EventDispatcher, AnnotationsExchange, Annomatic, Consolidation, TypesHelper,
+    BaseComponent, EventDispatcher, AnnotationsExchange, Consolidation, TypesHelper,
     BrokenHelper, ItemsExchange, NotebookExchange, TextFragmentAnnotator, NameSpace,
     PageItemsContainer, XpointersHelper, Analytics, Config) {
 
@@ -352,7 +352,8 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var clientMode = Config.clientMode,
-        Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined;
+        Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined,
+        Annomatic = clientMode === 'pro' ? $injector.get('Annomatic') : undefined;
 
     // TODO: take startPosition from element in sidebar
     var startPosition = annotationSidebar.options.startTop,

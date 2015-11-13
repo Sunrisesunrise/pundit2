@@ -85,9 +85,11 @@ angular.module("Pundit2.MyItemsContainer")
             Config.modules.PageItemsContainer.cMenuType,
             Config.modules.MyItemsContainer.cMenuType,
             Config.modules.TextFragmentAnnotator.cMenuType,
-            Config.modules.ImageHandler.cMenuType,
             Config.modules.SelectorsManager.cMenuType
         ];
+        if (typeof Config.modules.ImageHandler !== 'undefined') {
+            cMenuTypes.push(Config.modules.ImageHandler.cMenuType);
+        }
 
         ContextualMenu.addDivider({
             priority: 97,
