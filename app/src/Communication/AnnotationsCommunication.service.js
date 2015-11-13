@@ -23,11 +23,41 @@ angular.module('Pundit2.Communication')
         }
     };
 
+    var updateAnnotationItems = function(annotation, itemsList) {
+        var itemsToKeep = {},
+            itemsToDelete = [];
+
+        // Check and remove annotation items from ItemsExchange.
+        var annotations = AnnotationsExchange.getAnnotations();
+        for (var a in annotations) {
+            if (annotation.id === annotations[a].id) {
+                continue;
+            }
+            for (var i in annotations[a].items) {
+                var uri = annotations[a].items[i].uri;
+                itemsToKeep[uri] = annotations[a].items[i];
+            }
+        }
+
+        for (var j in itemsList) {
+            if (typeof itemsToKeep[itemsList[j].uri] === 'undefined') {
+                if (ItemsExchange.isItemInContainer(itemsList[j], Config.modules.PageItemsContainer.container)) {
+                    ItemsExchange.removeItemFromContainer(itemsList[j], Config.modules.PageItemsContainer.container);
+                    itemsToDelete.push(itemsList[j]);
+                }
+            }
+        }
+
+        Consolidation.wipeItems(itemsToDelete);
+    };
+
     var updateAnnotationV1 = function(promise, annID, graph, items, targets) {
         var completed = 0;
 
         setLoading(true);
         Consolidation.requestConsolidateAll();
+
+        // TODO: update structure in V1? 
 
         $http({
             headers: {
@@ -117,6 +147,9 @@ angular.module('Pundit2.Communication')
         setLoading(true);
         // Consolidation.requestConsolidateAll();
 
+        var currentAnnotation,
+            oldItems = {};
+
         var postData = {
             graph: graph,
             items: items,
@@ -151,7 +184,11 @@ angular.module('Pundit2.Communication')
             data: postData
         }).success(function() {
             // TODO if is rejected ???
-            AnnotationsExchange.getAnnotationById(annID).update().then(function() {
+            currentAnnotation = AnnotationsExchange.getAnnotationById(annID);
+            oldItems = angular.extend({}, currentAnnotation.items);
+
+            currentAnnotation.update().then(function() {
+                var removedItems = {};
                 // Consolidation.consolidateAll();
                 EventDispatcher.sendEvent('AnnotationsCommunication.editAnnotation', annID);
                 setLoading(false);
@@ -161,6 +198,8 @@ angular.module('Pundit2.Communication')
                     timeout: 3000,
                     message: 'Your annotation has been correctly saved.'
                 });
+                removedItems = AnnotationsExchange.updateAnnotationStructureInfo(annID, oldItems);
+                updateAnnotationItems(currentAnnotation, removedItems);
                 promise.resolve();
             });
             annotationsCommunication.log('Items correctly updated: ' + annID);
@@ -348,9 +387,6 @@ angular.module('Pundit2.Communication')
                 }),
                 withCredentials: true
             }).success(function() {
-                var itemsToKeep = {},
-                    itemsToDelete = [];
-
                 annotationsCommunication.log('Success annotation: ' + annID + ' correctly deleted');
 
                 var annotation = AnnotationsExchange.getAnnotationById(annID);
@@ -362,29 +398,8 @@ angular.module('Pundit2.Communication')
                     nt.removeAnnotation(annID);
                 }
 
-                // Check and remove annotation items from ItemsExchange.
-                var annotations = AnnotationsExchange.getAnnotations();
-                for (var a in annotations) {
-                    if (annotation.id === annotations[a].id) {
-                        continue;
-                    }
-                    for (var i in annotations[a].items) {
-                        var uri = annotations[a].items[i].uri;
-                        itemsToKeep[uri] = annotations[a].items[i];
-                    }
-                }
-
-                for (var j in annotation.items) {
-                    if (typeof itemsToKeep[annotation.items[j].uri] === 'undefined') {
-                        if (ItemsExchange.isItemInContainer(annotation.items[j], Config.modules.PageItemsContainer.container)) {
-                            ItemsExchange.removeItemFromContainer(annotation.items[j], Config.modules.PageItemsContainer.container);
-                            itemsToDelete.push(annotation.items[j]);
-                        }
-                    }
-                }
-
                 AnnotationsExchange.removeAnnotation(annotation.id);
-                Consolidation.wipeItems(itemsToDelete);
+                updateAnnotationItems(annotation, annotation.items);
 
                 EventDispatcher.sendEvent('Pundit.alert', {
                     title: 'Annotation deleted',
@@ -487,7 +502,7 @@ angular.module('Pundit2.Communication')
                 params.motivatedBy = motivation;
             }
 
-            if ((typeof currentNotebook !== 'undefined' && typeof currentNotebook.id !== 'undefined') || typeof forceNotebookId !== 'undefined' ) {
+            if ((typeof currentNotebook !== 'undefined' && typeof currentNotebook.id !== 'undefined') || typeof forceNotebookId !== 'undefined') {
                 var nbId = forceNotebookId || NotebookExchange.getCurrentNotebooks().id;
                 url = NameSpace.get('asNBForcedCurrent', {
                     current: nbId
