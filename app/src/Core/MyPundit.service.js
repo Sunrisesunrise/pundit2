@@ -726,7 +726,8 @@ angular.module('Pundit2.Core')
     };
 
     var documentClickHandler = function(evt) {
-        myPundit.closeLoginPopover();
+        // Let's disable this behaviour and let's decide how to better handle it
+        // myPundit.closeLoginPopover();
     }
 
     myPundit.editProfile = function() {
