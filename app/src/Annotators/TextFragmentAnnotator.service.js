@@ -185,7 +185,8 @@ angular.module('Pundit2.Annotators')
         var fragmentId = fragmentIds[fragmentUri],
             currentIcon;
 
-        if (typeof fragmentById[fragmentId].icon === 'undefined') {
+        if (typeof fragmentById[fragmentId] !== 'undefined' &&
+            typeof fragmentById[fragmentId].icon === 'undefined') {
             currentIcon = placeIcon(fragmentId, fragmentsRefsById[fragmentId][0]);
             $compile(currentIcon)($rootScope);
         }

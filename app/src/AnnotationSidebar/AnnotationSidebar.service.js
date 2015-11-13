@@ -788,18 +788,16 @@ angular.module('Pundit2.AnnotationSidebar')
         annotationsFilters.notebooks[notebookUri].annotationsList[annotation.id] = annotation;
     };
 
-    var inizializeCommentFilter = function(annotation) {
+    var inizializeTextFilter = function(annotation) {
         if (clientMode !== 'pro') {
             return;
         }
-        annotation.allLabels = annotation.graph[NameSpace.rdf.value][0].value;
-    };
+        var target = annotation.hasTarget[0],
+            niceItem = annotation.items[target];
 
-    var inizializeHighlightFilter = function(annotation) {
-        if (clientMode !== 'pro') {
-            return;
+        if (typeof niceItem !== 'undefined') {
+           annotation.allLabels = niceItem.description;
         }
-        annotation.allLabels = annotation.firstConsolidableItem.description;
     };
 
     // Updates the list of filters and annotation positions when the consolidation is completed
@@ -829,10 +827,8 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             if (annotation.motivatedBy === 'linking') {
                 inizializeSemanticAnnotationFilters(annotation);
-            } else if (annotation.motivatedBy === 'commenting') {
-                inizializeCommentFilter(annotation);
-            } else if (annotation.motivatedBy === 'highlighting') {
-                inizializeHighlightFilter(annotation);
+            } else {
+                inizializeTextFilter(annotation);
             }
             setAnnotationPosition(annotation, dashboardHeight);
         });
