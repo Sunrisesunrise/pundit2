@@ -13,8 +13,8 @@
 .popover.pnd-annotation-popover { /* Here we fight for specificity */
     /* We assume that the initial width of the pnd-annotation-popover
     is the same for the "login" and "annotate" use case.
-    We must do that for javascript issues. */
-    width: 199px;
+    We must do that for javascript issues */
+    width: @annotation-popover-initial-width;
     height: 50px;
     min-height: 50px;
 }
@@ -30,16 +30,23 @@
 
 .popover.pnd-annotation-popover {
     &.pnd-annotation-popover-login {
-        width: 199px;
-        height: 45px;
-        min-height: 45px;
+        width: @annotation-popover-initial-width;
+        height: auto;
 
         .popover-content {
-            height: 45px;
-            padding: 0;
+            padding: 10px 15px;
             font-size: 13px;
-            line-height: 45px;
+            line-height: 1.45;
             text-align: center;
+
+            a {
+                font-weight: @font-weight-bold;
+
+                &:hover {
+                    text-decoration: none;
+                    color: @color-text-link-hover;
+                }
+            }
         }
     }
 }
@@ -54,9 +61,9 @@
 .popover.pnd-annotation-popover {
     &.pnd-annotation-popover-annotate {
         height: 30px;
-        width: 199px;
+        width: @annotation-popover-initial-width;
         min-height: 30px;
-        min-width: 199px;
+        min-width: @annotation-popover-initial-width;
 
         .popover-content {
             padding: 0;
@@ -64,7 +71,7 @@
             a {
                 display: block;
                 float: left;
-                width: 98px;
+                width: (@annotation-popover-initial-width - 3)/2; /* "3" represents 2 x 1px side borders + middle 1px pnd-annotation-popover-separator */
                 height: 30px;
                 padding: 0;
                 font-size: 13px;
