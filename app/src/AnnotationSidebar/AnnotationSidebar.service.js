@@ -813,10 +813,14 @@ angular.module('Pundit2.AnnotationSidebar')
         startPosition = annotationSidebar.options.startTop;
 
         angular.forEach(state.allAnnotations, function(annotation) {
+            var isMotivationAccepted = annotation.motivatedBy in NameSpace.motivation;
             annotation.firstConsolidableItem = findFirstConsolidateItem(annotation);
             setBrokenInfo(annotation);
             inizializeAuthorAndNotebookFilter(annotation);
-            if (annotation.motivatedBy !== 'commenting') {
+            if (isMotivationAccepted === false) {
+                annotation.motivatedBy = 'linking';
+            }
+            if (annotation.motivatedBy === 'linking') {
                 inizializeSemanticAnnotationFilters(annotation);
             } else {
                 inizializeCommentFilter(annotation);
@@ -1382,7 +1386,8 @@ angular.module('Pundit2.AnnotationSidebar')
             'Consolidation.consolidateAll',
             'AnnotationSidebar.forceUpdate',
             'Pundit.forceUpdate'
-        ], function(e) {
+        ],
+        function(e) {
             if (Consolidation.getConsolidationRequestNumber() !== 0 &&
                 e.name !== 'Pundit.forceUpdate') {
                 annotationSidebar.log('Waiting for consolidation');
@@ -1399,7 +1404,7 @@ angular.module('Pundit2.AnnotationSidebar')
             state.allAnnotations = angular.extend({}, annotationsList);
             // TODO: inizialize as first operation
             initializeFiltersAndPositions();
-    });
+        });
 
     EventDispatcher.addListener('ResizeManager.resize', function() {
         if (state.isLoading === false) {

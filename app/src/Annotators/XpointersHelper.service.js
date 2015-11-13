@@ -2,15 +2,6 @@
 
 angular.module('Pundit2.Annotators')
 
-// TODO: why?! 
-.config(function($locationProvider) {
-    // $locationProvider.html5Mode(true);
-    $locationProvider.html5Mode({
-        enabled: true,
-        requireBase: false
-    });
-})
-
 .constant('XPOINTERSHELPERDEFAULTS', {
     /**
      * @module punditConfig
@@ -734,8 +725,7 @@ angular.module('Pundit2.Annotators')
             jParentElement.addClass(htmlClass);
             jParentElement.attr('temp-fragments', tempFragmentIds.join(','));
             jParentElement.trigger('Pundit.updateFragmentBits', modParents.join(','));
-        }
-        else {
+        } else {
             wrapNode = xpointersHelper.createWrapNode(htmlTag, htmlClass, modParents);
             // Finally surround the range contents with an ad-hoc crafted html element
             r2.surroundContents(wrapNode.element);
@@ -744,7 +734,6 @@ angular.module('Pundit2.Annotators')
                 wrapNode.jElement.attr('temp-fragments', tempFragmentIds.join(','));
             }
         }
-
 
 
 
@@ -941,7 +930,8 @@ angular.module('Pundit2.Annotators')
     // Gets a safe page context, stripping out pundit-related query parameters
     xpointersHelper.getSafePageContext = function() {
         var uri = $window.location.href,
-            fragment, query, queryObject;
+            // , query, queryObject;
+            fragment;
 
         // If there's a fragment, save it and remove it from the uri
         if (uri.indexOf('#') !== -1) {
@@ -949,27 +939,30 @@ angular.module('Pundit2.Annotators')
             uri = uri.substring(0, uri.indexOf('#'));
         }
 
+        // TODO: add pundit-show support in Pundit2 
         // If there's a query, decode it and remove it from the uri. Look for the
         // pundit-show parameter and strips it out
         // TODO: 'pundit-show' should be configurable ... ?
-        if (uri.indexOf('?') !== -1) {
-            query = uri.substring(uri.indexOf('?') + 1, uri.length);
-            uri = uri.substring(0, uri.indexOf('?'));
+        // if (uri.indexOf('?') !== -1) {
+        //     query = uri.substring(uri.indexOf('?') + 1, uri.length);
+        //     uri = uri.substring(0, uri.indexOf('?'));
 
-            queryObject = $location.search();
-            delete queryObject['pundit-show'];
+        //     // there is a related issue with html5 and $location.search(): https://github.com/angular/angular.js/issues/7239
+        //     queryObject = $location.search();
+        //     delete queryObject['pundit-show'];
 
-            var queryArray = [];
-            for (var p in queryObject) {
-                queryArray.push(p + '=' + queryObject[p]);
-            }
-            query = queryArray.join('&');
-        }
+        //     var queryArray = [];
+        //     for (var p in queryObject) {
+        //         queryArray.push(p + '=' + queryObject[p]);
+        //     }
+        //     query = queryArray.join('&');
+        // }
 
-        // Build back the URI
-        if (query) {
-            uri += '?' + query;
-        }
+        // // Build back the URI
+        // if (query) {
+        //     uri += '?' + query;
+        // }
+
         if (fragment) {
             uri += '#' + fragment;
         }

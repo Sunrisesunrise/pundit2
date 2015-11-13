@@ -18,14 +18,10 @@ angular.module('Pundit2.Dashboard')
     // Will check body innerWidth and its margins and set Dashboard width
     // if needed
     var resizeContainer = function() {
-        var body = angular.element('body'),
-            innerWidth = parseInt(body.innerWidth(), 10),
-            marginLeft = parseInt(body.css('margin-left'), 10),
-            marginRight = parseInt(body.css('margin-right'), 10),
-            width = innerWidth + marginRight + marginLeft;
+        var documentWidth = $document.innerWidth();
 
-        if (width !== Dashboard.getContainerWidth()) {
-            Dashboard.setContainerWidth(width);
+        if (documentWidth !== Dashboard.getContainerWidth()) {
+            Dashboard.setContainerWidth(documentWidth);
             $rootScope.$$phase || $scope.$digest();
         }
     };

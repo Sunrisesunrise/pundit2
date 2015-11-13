@@ -5,12 +5,12 @@ testPredicates.hasComment = {
     "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
     "label": "has comment (free text)",
     "description": "Any comment related to the selected fragment of text or image",
-    "domain": [
+    "suggestedSubjectTypes": [
         "http://purl.org/pundit/ont/ao#fragment-image",
         "http://purl.org/pundit/ont/ao#fragment-text",
         "http://xmlns.com/foaf/0.1/Image"
     ],
-    "range": ["http://www.w3.org/2000/01/rdf-schema#Literal"],
+    "suggestedObjectTypes": ["http://www.w3.org/2000/01/rdf-schema#Literal"],
     "uri": "http://schema.org/comment"
 };
 
@@ -19,12 +19,12 @@ testPredicates.similarTo = {
     "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
     "label": "is similar to",
     "description": "The selected fragment (text or image fragment) is similar to another fragment (of the same or of different types)",
-    "domain": [
+    "suggestedSubjectTypes": [
         "http://purl.org/pundit/ont/ao#fragment-text",
         "http://purl.org/pundit/ont/ao#fragment-image",
         "http://xmlns.com/foaf/0.1/Image"
     ],
-    "range": [
+    "suggestedObjectTypes": [
         "http://purl.org/pundit/ont/ao#fragment-text",
         "http://purl.org/pundit/ont/ao#fragment-image",
         "http://xmlns.com/foaf/0.1/Image"
@@ -37,11 +37,11 @@ testPredicates.depicts = {
     "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
     "label": "depicts",
     "description": "An image or part of an image depicts something",
-    "domain": [
+    "suggestedSubjectTypes": [
         "http://xmlns.com/foaf/0.1/Image",
         "http://purl.org/pundit/ont/ao#fragment-image"
     ],
-    "range": [],
+    "suggestedObjectTypes": [],
     "uri": "http://xmlns.com/foaf/0.1/depicts"
 
 };
@@ -51,8 +51,8 @@ testPredicates.dates = {
     "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
     "label": "period of dates ends at",
     "description": "The selected text fragment corresponds to the specified date period which ends at the specified Date",
-    "domain": ["http://purl.org/pundit/ont/ao#fragment-text"],
-    "range": ["http://www.w3.org/2001/XMLSchema#dateTime"],
+    "suggestedSubjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
+    "suggestedObjectTypes": ["http://www.w3.org/2001/XMLSchema#dateTime"],
     "uri": "http://purl.org/pundit/ont/oa#periodEndDate"
 };
 
@@ -61,7 +61,7 @@ testPredicates.talksAbout = {
     "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
     "label": "talks about",
     "description": "The selected text fragment talks about some other text, Entity, Person or any other kind of concept",
-    "domain": ["http://purl.org/pundit/ont/ao#fragment-text"],
-    "range": [],
+    "suggestedSubjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
+    "suggestedObjectTypes": [],
     "uri": "http://purl.org/pundit/ont/oa#talksAbout"
 };

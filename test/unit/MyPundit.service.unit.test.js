@@ -29,50 +29,50 @@ describe('MyPundit service', function() {
         loginServer: "http:\/\/demo-cloud.as.thepund.it:8080\/annotationserver\/login.jsp"
     };
 
-    var iFramePostMessageSimulation = function() {
-        // TODO find a better way to do it
-        var flag0 = false;
-        var flag1 = false;
-        var flag2 = false;
+    // var iFramePostMessageSimulation = function() {
+    //     // TODO find a better way to do it
+    //     var flag0 = false;
+    //     var flag1 = false;
+    //     var flag2 = false;
 
-        setTimeout(function() {
-            flag0 = true;
-        }, 1000);
-        setTimeout(function() {
-            flag1 = true;
-        }, 3000);
-        setTimeout(function() {
-            flag2 = true;
-        }, 4000);
+    //     setTimeout(function() {
+    //         flag0 = true;
+    //     }, 1000);
+    //     setTimeout(function() {
+    //         flag1 = true;
+    //     }, 3000);
+    //     setTimeout(function() {
+    //         flag2 = true;
+    //     }, 4000);
 
-        waitsFor(function() {
-            if (flag0) {
-                $rootScope.$digest();
-            }
-            return flag0;
-        });
+    //     waitsFor(function() {
+    //         if (flag0) {
+    //             $rootScope.$digest();
+    //         }
+    //         return flag0;
+    //     });
 
-        waitsFor(
-            function() {
-                if (flag1) {
-                    window.postMessage(
-                        'userLoggedIn',
-                        'http://localhost:9876'
-                    );
-                }
-                return flag1;
-            }
-        );
+    //     waitsFor(
+    //         function() {
+    //             if (flag1) {
+    //                 window.postMessage(
+    //                     'userLoggedIn',
+    //                     'http://localhost:9876'
+    //                 );
+    //             }
+    //             return flag1;
+    //         }
+    //     );
 
-        waitsFor(
-            function() {
-                if (flag2) {
-                    $httpBackend.flush();
-                }
-                return flag2;
-            }
-        );
-    };
+    //     waitsFor(
+    //         function() {
+    //             if (flag2) {
+    //                 $httpBackend.flush();
+    //             }
+    //             return flag2;
+    //         }
+    //     );
+    // };
 
     beforeEach(module('Pundit2'));
 
@@ -269,23 +269,24 @@ describe('MyPundit service', function() {
 
 	});
 
-    it("should resolve loginPromise as false when user is not logged", function() {
-        var promiseValue;
+    // TODO: is it deprecated? 
+    // it("should resolve loginPromise as false when user is not logged", function() {
+    //     var promiseValue;
 
-        $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userNotLogged);
-        $httpBackend.whenGET('http://demo-cloud.oauth.thepund.it/pundit_login/').respond('login page');
+    //     $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userNotLogged);
+    //     $httpBackend.whenGET('http://demo-cloud.oauth.thepund.it/pundit_login/').respond('login page');
 
-        var promise = MyPundit.login();
+    //     var promise = MyPundit.login();
 
-        // loginPromise should be resolved as false 
-        promise.then(function(value) {
-            promiseValue = value;
-            MyPundit.closeLoginPopover();
-            expect(promiseValue).toBe(false);
-        });
+    //     // loginPromise should be resolved as false 
+    //     promise.then(function(value) {
+    //         promiseValue = value;
+    //         MyPundit.closeLoginPopover();
+    //         expect(promiseValue).toBe(false);
+    //     });
 
-        iFramePostMessageSimulation();
-    });
+    //     iFramePostMessageSimulation();
+    // });
     
 	it("should correctly get logout when user is logged in", function() {
 
@@ -368,24 +369,25 @@ describe('MyPundit service', function() {
         expect(serverError).toBe(true);
     });
 
-	it("should resolve loginPromise as true when user is logged in", function() {
+    // TODO: is it deprecated? 
+    // it("should resolve loginPromise as true when user is logged in", function() {
 
-		var promiseValue;
+    //     var promiseValue;
 
-        $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
-        $httpBackend.whenGET('http://demo-cloud.oauth.thepund.it/pundit_login/').respond('login page');
+    //     $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
+    //     $httpBackend.whenGET('http://demo-cloud.oauth.thepund.it/pundit_login/').respond('login page');
 
-		var promise = MyPundit.login();
+    //     var promise = MyPundit.login();
 
-		// loginPromise should be resolved as true when user is logged in
-		promise.then(function(value) {
-			promiseValue = value;
-            MyPundit.closeLoginPopover();
-            expect(promiseValue).toBe(true);
-		});
+    //     // loginPromise should be resolved as true when user is logged in
+    //     promise.then(function(value) {
+    //         promiseValue = value;
+    //         MyPundit.closeLoginPopover();
+    //         expect(promiseValue).toBe(true);
+    //     });
 
-        iFramePostMessageSimulation();
-	});
+    //     iFramePostMessageSimulation();
+    // });
 
     it("should log error if openLoginPopUp is called and loginPromise is not defined ", function() {
 

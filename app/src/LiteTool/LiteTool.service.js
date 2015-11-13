@@ -44,7 +44,7 @@ angular.module('Pundit2.LiteTool')
     debug: false
 })
 
-.service('LiteTool', function(BaseComponent, EventDispatcher, LITETOOLDEFAULTS/*, Config, MyPundit*/) {
+.service('LiteTool', function(BaseComponent, EventDispatcher, LITETOOLDEFAULTS /*, Config, MyPundit*/ ) {
 
     var liteTool = new BaseComponent('LiteTool', LITETOOLDEFAULTS);
 

@@ -84,7 +84,7 @@ describe('AnnotationsCommunication service', function() {
         // get login
         var resolved;
         MyPundit.oldLogin().then(function(){
-            $httpBackend.expectGET(new RegExp(NameSpace.get('asAnnMetaSearch'))).respond();
+            // $httpBackend.expectGET(new RegExp(NameSpace.get('asAnnMetaSearch'))).respond();
             AnnotationsCommunication.deleteAnnotation(ann.id).then(function(){
                 resolved = true;
             }, function(){

@@ -40,7 +40,7 @@ angular.module('Pundit2.Model')
         for (var metadataURI in data.metadata) {
             var metadata = data.metadata[metadataURI],
                 bodyReferences = metadata[NameSpace.annotation.hasBody];
-            
+
             var graphURI, currentGraph;
 
             if (typeof bodyReferences !== 'undefined') {
@@ -48,7 +48,7 @@ angular.module('Pundit2.Model')
                 currentGraph = data.graph[graphURI];
             } else {
                 currentGraph = {};
-            } 
+            }
 
             data.graph = currentGraph;
         }

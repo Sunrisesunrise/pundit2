@@ -337,6 +337,18 @@ angular.module('Pundit2.AnnotationSidebar')
         return results;
     };
 
+    var convertTime = function(serverdate) {
+        var annotationServerVersion = Config.annotationServerVersion;
+
+        if (annotationServerVersion === 'v2') {
+            var momentDate = moment(serverdate).utc().format('YYYY-MM-DD HH:mm:ss');
+            var localTime = moment.utc(momentDate).toDate();
+            localTime = moment(localTime).format('YYYY-MM-DD HH:mm:ss');
+            return localTime.toString();
+        }
+        return serverdate;
+    };
+
     annotationDetails.openConfirmModal = function(currentElement, currentId)  {
         // promise is needed to open modal when template is ready
         modalScope.notifyMessage = 'Are you sure you want to delete this annotation? Please be aware that deleted annotations cannot be recovered.';
@@ -474,12 +486,13 @@ angular.module('Pundit2.AnnotationSidebar')
                 currentColor = template.hasColor;
             }
 
+
             if (typeof(state.annotations[currentId]) === 'undefined') {
                 state.annotations[currentId] = {
                     id: currentId,
                     creator: currentAnnotation.creator,
                     creatorName: currentAnnotation.creatorName,
-                    created: currentAnnotation.created,
+                    created: convertTime(currentAnnotation.created),
                     notebookId: currentAnnotation.isIncludedIn,
                     notebookName: notebookName,
                     scopeReference: scope,
@@ -522,7 +535,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var buildCommentOrHighlight = function(motivation) {
             var firstTargetUri = currentAnnotation.hasTarget[0],
-                firstItem = currentAnnotation.items[firstTargetUri];
+                firstItem = currentAnnotation.items[firstTargetUri],
+                currentGraph = '';
 
             if (typeof(state.annotations[currentId]) === 'undefined') {
                 state.annotations[currentId] = {
@@ -542,7 +556,16 @@ angular.module('Pundit2.AnnotationSidebar')
                 };
 
                 if (motivation === 'commenting') {
-                    state.annotations[currentId].comment = currentAnnotation.graph[NameSpace.rdf.value][0].value;
+                    if (typeof currentAnnotation.graph[NameSpace.rdf.value] === 'undefined') {
+                        for (var first in currentAnnotation.graph) {
+                            currentGraph = currentAnnotation.graph[first];
+                            break;
+                        }
+
+                    } else {
+                        currentGraph = currentAnnotation.graph;
+                    }
+                    state.annotations[currentId].comment = currentGraph[NameSpace.rdf.value][0].value;
                 }
 
                 var cancelWatchNotebookName = $rootScope.$watch(function() {

@@ -16,12 +16,12 @@ describe('Client service', function() {
                         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
                         "label": "has comment (free text)",
                         "description": "Any comment related to the selected fragment of text or image",
-                        "domain": [
+                        "suggestedSubjectTypes": [
                             "http://purl.org/pundit/ont/ao#fragment-image",
                             "http://purl.org/pundit/ont/ao#fragment-text",
                             "http://xmlns.com/foaf/0.1/Image"
                         ],
-                        "range": ["http://www.w3.org/2000/01/rdf-schema#Literal"],
+                        "suggestedObjectTypes": ["http://www.w3.org/2000/01/rdf-schema#Literal"],
                         "uri": "http://schema.org/comment"
                     }
                 ]

@@ -1,9 +1,14 @@
 angular.module('Pundit2.Client')
 
-.config(function($locationProvider) {
-    // TODO: temporary fix: an error occurs if the server rewrites the base url,
-    // there is a related open issue: https://github.com/angular/angular.js/issues/11091
-    $locationProvider.html5Mode(false);
+.config(function($provide) {
+    // This is useful to aviod url with hash modifications 
+    $provide.decorator('$browser', function($delegate) {
+        $delegate.onUrlChange = function() {};
+        $delegate.url = function() {
+            return '';
+        };
+        return $delegate;
+    });
 })
 
 .run(function($injector, Config) {

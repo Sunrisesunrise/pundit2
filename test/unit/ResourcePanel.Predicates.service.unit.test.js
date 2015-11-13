@@ -1,4 +1,4 @@
-/*global testPredicates*/
+/*global testPredicates, testConfig*/
 
 describe('Subject Popover Resource Panel service', function() {
 
@@ -13,7 +13,7 @@ describe('Subject Popover Resource Panel service', function() {
         Item,
         MyItems,
         MyPundit,
-        Client,
+        ClientPro,
         SelectorsManager,
         $timeout,
         $window;
@@ -60,30 +60,19 @@ describe('Subject Popover Resource Panel service', function() {
         type: ["inesistente"]
     };
 
-    var testPunditConfig = {
-        modules: {
-            "KorboBasketSelector": {
-                active: false
-            },
-            "FreebaseSelector": {
-                active: false
-            }
-        }
-    };
-
     // predicates
     var hasComment, similarTo, depicts, dates, talksAbout;
 
     beforeEach(module('Pundit2'));
     beforeEach(function() {
-        window.punditConfig = testPunditConfig;
+        window.punditConfig = testConfig.resourcePanel;
         module('Pundit2');
 
     });
 
 
     beforeEach(inject(function($injector, _$rootScope_, _$httpBackend_, _$compile_, _$document_, _PageItemsContainer_, _ItemsExchange_,
-                               _Item_, _MyItems_, _MyPundit_, _Client_, _SelectorsManager_, _$timeout_, _$window_){
+                               _Item_, _MyItems_, _MyPundit_, _ClientPro_, _SelectorsManager_, _$timeout_, _$window_){
         ResourcePanel = $injector.get('ResourcePanel');
         NameSpace = $injector.get('NameSpace');
         $rootScope = _$rootScope_;
@@ -95,7 +84,7 @@ describe('Subject Popover Resource Panel service', function() {
         Item = _Item_;
         MyItems = _MyItems_;
         MyPundit = _MyPundit_;
-        Client = _Client_;
+        ClientPro = _ClientPro_;
         SelectorsManager = _SelectorsManager_;
         $timeout = _$timeout_;
         $window = _$window_;
@@ -104,19 +93,19 @@ describe('Subject Popover Resource Panel service', function() {
     var initPredicate = function() {
         // add some predicates
         hasComment = new Item(testPredicates.hasComment.uri, testPredicates.hasComment);
-        ItemsExchange.addItemToContainer(hasComment, Client.options.relationsContainer);
+        ItemsExchange.addItemToContainer(hasComment, ClientPro.options.relationsContainer);
 
         similarTo = new Item(testPredicates.similarTo.uri, testPredicates.similarTo);
-        ItemsExchange.addItemToContainer(similarTo, Client.options.relationsContainer);
+        ItemsExchange.addItemToContainer(similarTo, ClientPro.options.relationsContainer);
 
         depicts = new Item(testPredicates.depicts.uri, testPredicates.depicts);
-        ItemsExchange.addItemToContainer(depicts, Client.options.relationsContainer);
+        ItemsExchange.addItemToContainer(depicts, ClientPro.options.relationsContainer);
 
         dates = new Item(testPredicates.dates.uri, testPredicates.dates);
-        ItemsExchange.addItemToContainer(dates, Client.options.relationsContainer);
+        ItemsExchange.addItemToContainer(dates, ClientPro.options.relationsContainer);
 
         talksAbout = new Item(testPredicates.talksAbout.uri, testPredicates.talksAbout);
-        ItemsExchange.addItemToContainer(talksAbout, Client.options.relationsContainer);
+        ItemsExchange.addItemToContainer(talksAbout, ClientPro.options.relationsContainer);
     };
 
     beforeEach(function(){

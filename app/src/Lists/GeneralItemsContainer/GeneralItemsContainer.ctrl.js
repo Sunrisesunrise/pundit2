@@ -28,6 +28,7 @@ angular.module('Pundit2.GeneralItemsContainer')
     $scope.canAddItemAsObject = false;
     $scope.canBeUseAsPredicate = false;
 
+    var eraseSearch = false;
 
     var orderBtn = angular.element($element).find(GeneralItemsContainer.getOrderButtonClass($scope.type));
 
@@ -458,15 +459,14 @@ angular.module('Pundit2.GeneralItemsContainer')
         $scope.$watch(function() {
             return $scope.search.term;
         }, function(str) {
-
             // this happens when the user deletes last char in the <input>
+
             if (typeof(str) === 'undefined' || str === '') {
-                str = '';
                 $scope.search.icon = ContainerManager.options.inputIconSearch;
-                $timeout.cancel(promise);
-                return;
+                eraseSearch = true;
             } else {
                 $scope.search.icon = ContainerManager.options.inputIconClear;
+                eraseSearch = false;
             }
 
             // need to query vocab then update showed items
@@ -479,7 +479,14 @@ angular.module('Pundit2.GeneralItemsContainer')
 
         $scope.displayedItems = [];
         var updateMessage = function() {
-            if ($scope.displayedItems.length === 0 && $scope.search.term !== '' && typeof($scope.search.term) !== 'undefined') {
+            if (eraseSearch === true || search.term === '') {
+                $scope.message.text = GeneralItemsContainer.getMessage($scope.type).text;
+                $scope.displayedItems = [];
+                eraseSearch = false;
+                return;
+            }
+
+            if ($scope.displayedItems.length === 0) {
                 $scope.message.text = "No item found to: " + $scope.search.term;
             }
         };

@@ -99,10 +99,10 @@ angular.module('Pundit2.Core')
 
                     var fragmentType = consolidation.isConsolidable(item);
                     if (fragmentType === false) {
-                        consolidation.log("Not adding, item is not consolidable: " + item.label);
+                        consolidation.log('Not adding, item is not consolidable: ' + item.label);
                         continue;
                     } else if (item.uri in state.itemListByURI) {
-                        consolidation.log("Item already present: " + item.label);
+                        consolidation.log('Item already present: ' + item.label);
                         continue;
                     }
 
@@ -128,7 +128,7 @@ angular.module('Pundit2.Core')
                     state.itemListByURI[item.uri] = item;
                     state.uriTypeMap[item.uri] = fragmentType;
 
-                    consolidation.log("Added item: " + item.label + " (" + fragmentType + ")");
+                    consolidation.log('Added item: ' + item.label + ' (' + fragmentType + ')');
 
                     currentHits++;
                 }
@@ -171,10 +171,10 @@ angular.module('Pundit2.Core')
 
             var fragmentType = consolidation.isConsolidable(item);
             if (fragmentType === false) {
-                consolidation.log("Not adding, item is not consolidable: " + item.label);
+                consolidation.log('Not adding, item is not consolidable: ' + item.label);
                 continue;
             } else if (item.uri in state.itemListByURI) {
-                consolidation.log("Item already present: " + item.label);
+                consolidation.log('Item already present: ' + item.label);
                 continue;
             }
 
@@ -200,7 +200,7 @@ angular.module('Pundit2.Core')
             state.itemListByURI[item.uri] = item;
             state.uriTypeMap[item.uri] = fragmentType;
 
-            consolidation.log("Added item: " + item.label + " (" + fragmentType + ")");
+            consolidation.log('Added item: ' + item.label + ' (' + fragmentType + ')');
         }
     };
 
@@ -247,7 +247,7 @@ angular.module('Pundit2.Core')
 
         state.itemListByURI[item.uri] = item;
         state.uriTypeMap[item.uri] = fragmentType;
-        consolidation.log("Added item: " + item.label + " (" + fragmentType + ")");
+        consolidation.log('Added item: ' + item.label + ' (' + fragmentType + ')');
     };
 
     // TODO: pass an element and consolidate just that element? or a named content?
@@ -372,7 +372,7 @@ angular.module('Pundit2.Core')
 
     // Adds a new annotator to the Consolidation service
     consolidation.addAnnotator = function(annotator) {
-        consolidation.log("Adding annotable type ", annotator.label);
+        consolidation.log('Adding annotable type ', annotator.label);
         state.annotableTypes.push(annotator.label);
         state.annotators[annotator.label] = annotator;
     };
@@ -403,7 +403,7 @@ angular.module('Pundit2.Core')
             nc = XpointersHelper.options.namedContentClasses;
 
         // The page URL is for xpointers out of named contents
-        if (typeof(onlyNamedContents) === "undefined" || onlyNamedContents !== true) {
+        if (typeof(onlyNamedContents) === 'undefined' || onlyNamedContents !== true) {
             var safeUrl = XpointersHelper.getSafePageContext();
             ret.push(safeUrl);
         }

@@ -70,7 +70,7 @@ angular.module('Pundit2.Annotators')
         // TODO
     };
 
-    pageAnnotator.wipeItem = function(/*item*/) {
+    pageAnnotator.wipeItem = function( /*item*/ ) {
         //TODO: ...
     };
 
