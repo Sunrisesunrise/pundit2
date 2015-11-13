@@ -8,7 +8,13 @@
    #ANNOTATION-POPOVER
 \* ------------------------------------ */
 
-.popover.pnd-popover-literal.pnd-annotation-popover { /* Here we fight for specificity */
+/* Generic for all states of the annotation popover */
+
+.popover.pnd-annotation-popover { /* Here we fight for specificity */
+    /* We assume that the initial width of the pnd-annotation-popover
+    is the same for the "login" and "annotate" use case.
+    We must do that for javascript issues. */
+    width: 199px;
     height: 50px;
     min-height: 50px;
 }
@@ -19,8 +25,12 @@
 \* ------------------------------------ */
 
 /* Suggests the user to login */
-.popover.pnd-popover-literal.pnd-annotation-popover {
+
+// TODO Style x Giulio
+
+.popover.pnd-annotation-popover {
     &.pnd-annotation-popover-login {
+        width: 199px;
         height: 45px;
         min-height: 45px;
 
@@ -40,7 +50,8 @@
 \* ------------------------------------ */
 
 /* User choose if he want to highlight or comment */
-.popover.pnd-popover-literal.pnd-annotation-popover {
+
+.popover.pnd-annotation-popover {
     &.pnd-annotation-popover-annotate {
         height: 30px;
         width: 199px;
@@ -98,7 +109,7 @@
    #COMMENT-HIGHLIGHT-POPOVER-COMMONS
 \* ------------------------------------ */
 
-.popover.pnd-popover-literal.pnd-annotation-popover {
+.popover.pnd-annotation-popover {
     &.pnd-annotation-popover-comment, &.pnd-annotation-popover-highlight {
         width: @annotation-popover-comment-width;
         min-width: @annotation-popover-comment-width;
@@ -150,7 +161,7 @@
    #COMMENT-POPOVER
 \* ------------------------------------ */
 
-.popover.pnd-popover-literal.pnd-annotation-popover {
+.popover.pnd-annotation-popover {
     &.pnd-annotation-popover-comment {
         height: 250px;
         min-height: 250px;
@@ -172,7 +183,7 @@
    #HIGHLIGHT-POPOVER
 \* ------------------------------------ */
 
-.popover.pnd-popover-literal.pnd-annotation-popover {
+.popover.pnd-annotation-popover {
     &.pnd-annotation-popover-highlight {
         height: 80px;
         min-height: 80px;
