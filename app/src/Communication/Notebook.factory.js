@@ -6,7 +6,7 @@ angular.module('Pundit2.Communication')
 
 })
 
-.factory('Notebook', function(BaseComponent, NameSpace, MyPundit, Analytics, NotebookExchange, NOTEBOOKDEFAULTS,
+.factory('Notebook', function(BaseComponent, Config, NameSpace, MyPundit, Analytics, NotebookExchange, NOTEBOOKDEFAULTS,
     $http, $q) {
 
     var notebookComponent = new BaseComponent("Notebook", NOTEBOOKDEFAULTS);
@@ -144,11 +144,18 @@ angular.module('Pundit2.Communication')
             return false;
         }
 
+        if (Config.annotationServerVersion === 'v2') {
+            //nbData.visibility = NameSpace.notebook_v2.visibility;
+        }
+
         // Treat properties as single values inside an array, read them
         // one by one by using the correct URI taken from the NameSpace,
         // doing some sanity checks
         for (var property in ns) {
             var propertyURI = ns[property];
+            if (property === 'visibility' && Config.annotationServerVersion === 'v2') {
+                propertyURI = NameSpace.notebook_v2.visibility;
+            }
 
             if (propertyURI in nbData) {
                 if (property === 'type') {
@@ -158,6 +165,10 @@ angular.module('Pundit2.Communication')
                 }
             } else {
                 nb[property] = '';
+            }
+
+            if (property === 'visibility' && Config.annotationServerVersion === 'v2') {
+                nb[property] = nb[property] === 'true' ? 'public' : 'private';
             }
         }
 
