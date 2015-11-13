@@ -74,8 +74,8 @@
                      ng-if="annotation.mainItem.typeLabel == 'Image'">
                     <!-- Thumb -->
                     <span class="pnd-annotation-entity-image"
-                          ng-if="item.objects[0].image!='null'">
-                        <img src="{{ item.subject.image }}" alt="{{ item.subject.label }}"/> <!-- TODO Instead of "label" we shoudl use the ALT attribute if present -->
+                          ng-if="item.subject.image!='null'">
+                        <img ng-src="{{ item.subject.image }}" alt="{{ item.subject.label }}"/> <!-- TODO Instead of "label" we shoudl use the ALT attribute if present -->
                     </span>
                     <!-- Label -->
                     <span class="pnd-annotation-entity-label">
@@ -96,7 +96,7 @@
                     <!-- Thumb -->
                     <span class="pnd-annotation-entity-image"
                           ng-if="item.objects[0].image!='null'">
-                        <img src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
+                        <img ng-src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
                     </span>
                     <!-- Label -->
                     <span class="pnd-annotation-entity-label">
@@ -158,7 +158,7 @@
                      ng-if="item.objects[0].typeLabel == 'Image'">
                     <span class="pnd-annotation-entity-image"
                           ng-if="item.objects[0].image!='null'">
-                        <img src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
+                        <img ng-src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
                     </span>
                     <span class="pnd-annotation-entity-label">
                         <a href="{{ item.objects[0].description }}" target="_blank">
@@ -175,7 +175,7 @@
                      ng-if="item.objects[0].typeLabel == 'Image fragment'">
                     <span class="pnd-annotation-entity-image"
                           ng-if="item.objects[0].image!='null'">
-                        <img src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
+                        <img ng-src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
                     </span>
                     <span class="pnd-annotation-entity-label">
                         <a href="{{ item.objects[0].description }}" target="_blank">
@@ -196,7 +196,7 @@
                              item.objects[0].typeLabel != 'Image fragment'">
                     <span class="pnd-annotation-entity-image"
                           ng-if="item.objects[0].image!='null'">
-                        <img src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
+                        <img ng-src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
                     </span>
                     <span class="pnd-annotation-entity-label">
                         <a href="{{ item.objects[0].uri }}" target="_blank">
