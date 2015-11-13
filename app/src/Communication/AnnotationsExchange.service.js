@@ -150,6 +150,8 @@ angular.module('Pundit2.Communication')
                     }
                 }
             }
+            // TODO: check the previous structure of annByItemUri 
+            // to verify if the annotation was already present.
             var uris = {};
             for (var uri in ann.items) {
                 if (uris[uri]) {

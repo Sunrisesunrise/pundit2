@@ -547,6 +547,11 @@ angular.module('Pundit2.Annotators')
             textFragmentAnnotator.err("fragmentById[" + icon.fragment + "] is undefined - skipping textFragmentAnnotator.addFragmentIcon()");
             return;
         }
+        // TODO: why is addFragmentIcon called two times after annotation update with a different textFragment?
+        if (typeof fragmentById[icon.fragment].icon !== 'undefined') {
+            return;
+        }
+
         fragmentById[icon.fragment].icon = icon;
         icon.item = fragmentById[icon.fragment].item;
 
