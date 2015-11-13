@@ -131,7 +131,7 @@ angular.module('Pundit2.AnnotationSidebar')
         };
 
         if (TripleComposer.isSaving()) {
-            console.log("Still saving .. wait !!");
+            // console.log("Still saving .. wait !!");
             TripleComposer.setAfterSave(doEditAnnotation);
         } else {
             doEditAnnotation();
