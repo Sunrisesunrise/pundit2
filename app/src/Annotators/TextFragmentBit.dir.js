@@ -1,6 +1,6 @@
 angular.module('Pundit2.Annotators')
 
-.directive('textFragmentBit', function(TextFragmentAnnotator, $injector, Config, $document, $window) {
+.directive('textFragmentBit', function(TextFragmentAnnotator, $injector, Config, $rootScope, $document, $window) {
     return {
         restrict: 'A',
         scope: {
@@ -36,9 +36,10 @@ angular.module('Pundit2.Annotators')
 
             TextFragmentAnnotator.updateFragmentBit(scope, 'add');
 
-            if (Config.clientMode === 'lite') {
+            if (Config.modules.AnnotationSidebar.active) {
                 var AnnotationExchange = $injector.get('AnnotationsExchange'),
-                    FragmentPopover = $injector.get('FragmentPopover');
+                    FragmentPopover = $injector.get('FragmentPopover'),
+                    AnnotationDetails = $injector.get('AnnotationDetails');
 
                 element.on('click', function(evt) {
                     // console.log(evt);
@@ -53,7 +54,7 @@ angular.module('Pundit2.Annotators')
                             });
                         }
                     }
-                    var link;
+                    var link = {};
                     if (element.parent()[0].tagName.toUpperCase() === 'A') {
                         link = {
                             url: element.parent().attr('href'),
@@ -82,7 +83,14 @@ angular.module('Pundit2.Annotators')
                         }
                     }
 
-                    FragmentPopover.show(evt.pageX, y, data);
+                    var annotationsKeys = Object.keys(annotations),
+                        linkKeys = Object.keys(link);
+                    if (annotationsKeys.length > 1 || linkKeys.length > 0) {
+                        FragmentPopover.show(evt.pageX, y, data);
+                    } else {
+                        AnnotationDetails.openAnnotationView(annotationsKeys[0]);
+                        $rootScope.$$phase || $rootScope.$digest();                        
+                    }
 
                     evt.stopImmediatePropagation();
                     return false;
