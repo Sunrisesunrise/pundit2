@@ -30,7 +30,7 @@ angular.module('Pundit2.Annotators')
             return false;
         } else {
             if (item.type.indexOf(ia.type) !== -1) {
-                xpointerURI = item.uri;
+                xpointerURI = item.xpointer;
             } else if (item.type.indexOf(ia.typeIF) !== -1) {
                 xpointerURI = item.parentItemXP;
             }
@@ -61,7 +61,7 @@ angular.module('Pundit2.Annotators')
             parentItemXPList = {};
         for (uri in items) {
             if (items[uri].type.indexOf(ia.type) !== -1) {
-                currentUri = items[uri].uri;
+                currentUri = items[uri].xpointer;
             } else if (items[uri].type.indexOf(ia.typeIF) !== -1) {
                 currentUri = items[uri].parentItemXP;
             }
@@ -74,6 +74,7 @@ angular.module('Pundit2.Annotators')
                     parentItemXPList[items[uri].parentItemXP] = [items[uri].polygon];
                 }
             }
+            //no return?
         }
         var xpaths = XpointersHelper.getXPathsFromXPointers(xpointers);
         for (uri in xpaths) {
@@ -81,6 +82,7 @@ angular.module('Pundit2.Annotators')
             // TODO Move DOM manipulation in Xpointer service
             var imgReference = angular.element(xpaths[uri].startNode.firstElementChild);
             imgReference.addClass(imgConsClass);
+
             // if (uri in parentItemXPList){
             //     for (polyIF in parentItemXPList[uri]){
             //         ImageFragmentAnnotatorHelper.drawPolygonOverImage(parentItemXPList[uri][polyIF],  imgReference);
