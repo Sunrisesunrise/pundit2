@@ -117,8 +117,9 @@ angular.module('Pundit2.Annotators')
         var range = document.createRange();
         range.selectNode(node);
         var  index = [].indexOf.call (node.parentNode.children, el.context) + 1;
-        return TextFragmentHandler.range2xpointer(range, index);
+        return XpointersHelper.range2xpointer(range, index);
     };
+
 
     ih.turnOn = function() {
         angular.element('img').hover(mouseOver, mouseOut);
