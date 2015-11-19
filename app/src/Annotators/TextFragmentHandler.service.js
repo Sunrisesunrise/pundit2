@@ -196,16 +196,10 @@ angular.module('Pundit2.Annotators')
         }
     };
 
-    var getXPointerString = function(startUrl, startXPath, startOffset, endXPath, endOffset,imgN) {
-        if (imgN>330){
-            var a = startUrl + "#xpointer(start-point(string-range(" + startXPath +"IMG["+imgN+"]" +",''," + startOffset + "))" +"/range-to(string-range(" + startXPath +"IMG["+imgN+"]" + ",''," + endOffset +")))";
-            return a;
-        }else{
-            return startUrl + "#xpointer(start-point(string-range(" + startXPath + ",''," + startOffset + "))" +
-                "/range-to(string-range(" + endXPath + ",''," + endOffset + ")))";
-
-        }
-        };
+    var getXPointerString = function(startUrl, startXPath, startOffset, endXPath, endOffset) {
+        return startUrl + "#xpointer(start-point(string-range(" + startXPath + ",''," + startOffset + "))" +
+            "/range-to(string-range(" + endXPath + ",''," + endOffset + ")))";
+    };
 
     // Will get a clean Range out of a dirty range: skipping nodes
     // added by the annotation library (ignore nodes) and recalculate
@@ -376,13 +370,14 @@ angular.module('Pundit2.Annotators')
 
         // No node given? We recurred here with a null parent:
         // the xpath is ready!
+
         var parentNode = node.parentNode;
         if (!node) {
             return partialXpath;
         }
-
         var xp = XpointersHelper,
             nodeName = getXPathNodeName(node);
+
 
         // We reached a named content, we can build the resulting xpath using it as
         // the starting point
@@ -426,7 +421,7 @@ angular.module('Pundit2.Annotators')
         if (typeof(partialXpath) !== 'undefined') {
             partialXpath = nodeName + '[' + num + ']/' + partialXpath;
         } else {
-            partialXpath = nodeName + '[' + num + ']';
+              partialXpath = nodeName + '[' + num + ']';
         }
 
         // .. and recur into its parent
@@ -552,21 +547,20 @@ angular.module('Pundit2.Annotators')
     // - correct any wrong number inside xpaths (node number, offsets)
     // - build the xpointer starting from a named content, if present
     // - build the xpointer strings
-    textFragmentHandler.range2xpointer = function(dirtyRange,imgN) {
-        if(imgN>0){
-            var cleanRange = dirtyRange2cleanRange(dirtyRange),
-                cleanStartXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.startContainer), cleanRange.cleanStartNumber),
-                cleanEndXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.endContainer), cleanRange.cleanEndNumber),
-                xpointerURL = getContentURLFromXPath(cleanStartXPath),
-                xpointer = getXPointerString(xpointerURL, cleanStartXPath, cleanRange.startOffset, cleanEndXPath, cleanRange.endOffset,imgN);
+    textFragmentHandler.range2xpointer = function(dirtyRange, index) {
+        var cleanRange = dirtyRange2cleanRange(dirtyRange),
+            cleanStartXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.startContainer), cleanRange.cleanStartNumber),
+            cleanEndXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.endContainer), cleanRange.cleanEndNumber);
 
-        }else{
-            var cleanRange = dirtyRange2cleanRange(dirtyRange),
-                cleanStartXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.startContainer), cleanRange.cleanStartNumber),
-                cleanEndXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.endContainer), cleanRange.cleanEndNumber),
-                xpointerURL = getContentURLFromXPath(cleanStartXPath),
-                xpointer = getXPointerString(xpointerURL, cleanStartXPath, cleanRange.startOffset, cleanEndXPath, cleanRange.endOffset);
+        if(typeof index  !== 'undefined'){
+            cleanStartXPath += '/IMG[' + index +']';
+            cleanEndXPath += '/IMG[' + index +']';
         }
+
+
+        var xpointerURL = getContentURLFromXPath(cleanStartXPath),
+            xpointer = getXPointerString(xpointerURL, cleanStartXPath, cleanRange.startOffset, cleanEndXPath, cleanRange.endOffset);
+
 
         textFragmentHandler.log('range2xpointer returning an xpointer: ' + xpointer);
 

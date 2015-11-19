@@ -112,24 +112,12 @@ angular.module('Pundit2.Annotators')
 
     angular.element('img').hover(mouseOver, mouseOut);
 
-
     var getXpFromNode = function(node) {
-        var elements = node.parentNode.children;
 
-        var imgN = 0;
-        var noImg = 0;
-        for(var i=0;i<elements.length;i++){
-            if(elements[i] === el.context){
-                imgN=1+i;
-                break;
-            }
-            if(elements[i].className !== ''){
-                noImg++;
-            }
-        }
         var range = document.createRange();
         range.selectNode(node);
-        return TextFragmentHandler.range2xpointer(range,imgN);
+        var  index = [].indexOf.call (node.parentNode.children, el.context) + 1;
+        return TextFragmentHandler.range2xpointer(range, index);
     };
 
     ih.turnOn = function() {

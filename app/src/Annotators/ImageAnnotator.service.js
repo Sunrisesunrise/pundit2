@@ -56,6 +56,11 @@ angular.module('Pundit2.Annotators')
 
     ia.consolidate = function(items) {
         ia.log('Consolidating!');
+        if (!angular.isObject(items)) {
+            textFragmentAnnotator.err('Items not valid: malformed object', items);
+            return deferred.resolve();
+        }
+        var updateDOMPromise, compilePromise;
 
         var uri, currentUri, xpointers = [],
             parentItemXPList = {};
@@ -80,8 +85,9 @@ angular.module('Pundit2.Annotators')
         for (uri in xpaths) {
             // TODO So bad! Add span (like Pundit1) and use it as reference
             // TODO Move DOM manipulation in Xpointer service
-            var imgReference = angular.element(xpaths[uri].startNode.firstElementChild);
+            var imgReference = angular.element(xpaths[uri].startNode);
             imgReference.addClass(imgConsClass);
+
 
             // if (uri in parentItemXPList){
             //     for (polyIF in parentItemXPList[uri]){

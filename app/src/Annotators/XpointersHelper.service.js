@@ -262,6 +262,7 @@ angular.module('Pundit2.Annotators')
             xpointersHelper.err('Xpointer is undefined: this should not happend!');
             return false;
         }
+        if(xpointer.indexOf('IMG') != -1){return true;}
         if (xpointer.match(/#xpointer\(start-point\(string-range\(/) === null || xpointer.match(/range-to\(string-range\(/) === null) {
             return false;
         }
@@ -276,6 +277,7 @@ angular.module('Pundit2.Annotators')
         }
 
         var xpaths = xpointersHelper.xPointerToXPath(xpointer);
+        if(xpaths.startXpath.indexOf('IMG') != -1 ){return true;}
         return xpointersHelper.isValidRange(xpaths.startNode, xpaths.startOffset, xpaths.endNode, xpaths.endOffset);
     };
 
@@ -322,7 +324,9 @@ angular.module('Pundit2.Annotators')
     // purpose xpaths
     xpointersHelper.getNodeFromXpath = function(xpath) {
         // var self = this;
-        var iterator = $document[0].evaluate(xpath, $document[0], null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+
+            var iterator = $document[0].evaluate(xpath, $document[0], null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+
 
         return iterator.singleNodeValue;
     };
