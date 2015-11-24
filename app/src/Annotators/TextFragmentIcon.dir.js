@@ -13,6 +13,7 @@ angular.module('Pundit2.Annotators')
         link: function(scope, element /*, attrs */ ) {
 
                 // TODO: move this to its own controller !
+                
 
                 scope.textFragmentIconClass = XpointersHelper.options.textFragmentIconClass;
 

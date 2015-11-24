@@ -83,6 +83,21 @@ angular.module('Pundit2.Annotators')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#XpointersHelper.imageFragmentIconClass
+     *
+     * @description
+     * `string`
+     *
+     * Added by TextFragmentIcon directive, ignored when building xpointers
+     *
+     * Default value:
+     * <pre> textFragmentIconClass: "pnd-image-fragment-icon" </pre>
+     */
+    imageFragmentIconClass: 'pnd-image-fragment-icon',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#XpointersHelper.textFragmentHiddenClass
      *
      * @description
@@ -96,6 +111,21 @@ angular.module('Pundit2.Annotators')
     textFragmentHiddenClass: 'pnd-textfragment-hidden',
 
     /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#XpointersHelper.textFragmentHiddenClass
+     *
+     * @description
+     * `string`
+     *
+     * Hidden fragment class
+     *
+     * Default value:
+     * <pre> textFragmentHiddenClass: 'pnd-textfragment-hidden' </pre>
+     */
+    imageFragmentHiddenClass: 'pnd-imagefragment-hidden',
+
+        /**
      * @module punditConfig
      * @ngdoc property
      * @name modules#XpointersHelper.consolidationClasses
@@ -367,7 +397,7 @@ angular.module('Pundit2.Annotators')
     }; // getXPathsFromXPointers()
 
     xpointersHelper.isValidXpointerURI = function(xpointer) {
-        // TODO: perché in client.html si verifica xpointer undefined?! 
+        // TODO: perché in client.html si verifica xpointer undefined?!
         if (typeof(xpointer) === 'undefined') {
             xpointersHelper.err('Xpointer is undefined: this should not happend!');
             return false;
@@ -387,6 +417,7 @@ angular.module('Pundit2.Annotators')
         }
 
         var xpaths = xpointersHelper.xPointerToXPath(xpointer);
+        //if image no offset required is a valid xpath
         if(xpaths.startXpath.indexOf('IMG') != -1 ){return true;}
         return xpointersHelper.isValidRange(xpaths.startNode, xpaths.startOffset, xpaths.endNode, xpaths.endOffset);
     };
@@ -434,10 +465,7 @@ angular.module('Pundit2.Annotators')
     // purpose xpaths
     xpointersHelper.getNodeFromXpath = function(xpath) {
         // var self = this;
-
-            var iterator = $document[0].evaluate(xpath, $document[0], null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-
-
+        var iterator = $document[0].evaluate(xpath, $document[0], null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
         return iterator.singleNodeValue;
     };
 
@@ -466,12 +494,18 @@ angular.module('Pundit2.Annotators')
         // For every xpointer we create 2 entries in the array: one for starting xpath
         // and one for the ending one
         for (var xpointer in xpaths) {
-
             // Push an element for the starting xpath+offset
+            var xpathStartoffset = 0,
+                xpathEndoffset = 0;
+            //calculate offset only isnt a image
+            if (xpointer.indexOf('IMG') === -1) {
+                xpathStartoffset = xpaths[xpointer].startOffset;
+                xpathEndoffset = xpaths[xpointer].endOffset;
+            }
             var rangeStart = $document[0].createRange(),
                 node = xpointersHelper.getNodeFromXpath(xpaths[xpointer].startXpath);
             rangeStart.setStart(startNode, 0);
-            rangeStart.setEnd(node, xpaths[xpointer].startOffset);
+            rangeStart.setEnd(node, xpathStartoffset);
 
             x.push({
                 xpointer: xpointer,
@@ -485,7 +519,7 @@ angular.module('Pundit2.Annotators')
             var rangeEnd = $document[0].createRange();
             node = xpointersHelper.getNodeFromXpath(xpaths[xpointer].endXpath);
             rangeEnd.setStart(startNode, 0);
-            rangeEnd.setEnd(node, xpaths[xpointer].endOffset);
+            rangeEnd.setEnd(node, xpathEndoffset);
 
             x.push({
                 xpointer: xpointer,
@@ -494,7 +528,6 @@ angular.module('Pundit2.Annotators')
                 range: rangeEnd,
                 isTemporary: xpaths[xpointer].isTemporary
             });
-
         } // for xpointer in self.xpaths
 
         // Sort this array, using a custom function which compares the end
@@ -658,11 +691,11 @@ angular.module('Pundit2.Annotators')
             if (!xpointersHelper.isElementNode(startNode)) {
                 range.setStart(startNode, startXp.offset);
             } else {
-                range.setStart(startNode, startXp.offset);
+                range.setStart(startNode, 0);
             }
 
             if (!xpointersHelper.isElementNode(endNode)) {
-                range.setEnd(endNode, endXp.offset);
+                range.setEnd(endNode, 0);
             } else {
                 range.setEndAfter(endNode);
             }
@@ -840,16 +873,15 @@ angular.module('Pundit2.Annotators')
             jParentElement.attr('temp-fragments', tempFragmentIds.join(','));
             jParentElement.trigger('Pundit.updateFragmentBits', modParents.join(','));
         } else {
+            //is a image node
             wrapNode = xpointersHelper.createWrapNode(htmlTag, htmlClass, modParents);
             // Finally surround the range contents with an ad-hoc crafted html element
+            r2.selectNode(element);
             r2.surroundContents(wrapNode.element);
-
             if (isTemporary) {
                 wrapNode.jElement.attr('temp-fragments', tempFragmentIds.join(','));
             }
         }
-
-
 
         if (modifyWrapping && !wrapWholeTextNode) {
             updateWrappingNode();
@@ -876,11 +908,22 @@ angular.module('Pundit2.Annotators')
             currentElement = angular.element(element);
         currentElement.addClass(htmlClass);
         if (xpointersHelper.options.avoidInitialHide === false) {
-            currentElement.addClass(xpointersHelper.options.textFragmentHiddenClass);
-        }
+            if (parents[0].indexOf('IMG-fr') !== -1){
+                currentElement.addClass(xpointersHelper.options.imageFragmentHiddenClass);
+
+            } else {
+                currentElement.addClass(xpointersHelper.options.textFragmentHiddenClass);
+
+            }
+
+                    }
 
         // TODO: make this directive name configurable??
-        currentElement.attr('text-fragment-bit', '');
+        if (parents[0].indexOf('IMG-fr') !== -1) {
+            currentElement.attr('image-fragment-bit', '');
+        } else {
+            currentElement.attr('text-fragment-bit', '');
+        }
         // Parent fragment ids both in fragments attribute and in classes. First used to
         // pass them back to the TextFragmentAnnotator service, the second to being able
         // to retrieve the last of them with a css selector to place the icon
@@ -1224,7 +1267,7 @@ angular.module('Pundit2.Annotators')
             uri = uri.substring(0, uri.indexOf('#'));
         }
 
-        // TODO: add pundit-show support in Pundit2 
+        // TODO: add pundit-show support in Pundit2
         // If there's a query, decode it and remove it from the uri. Look for the
         // pundit-show parameter and strips it out
         // TODO: 'pundit-show' should be configurable ... ?

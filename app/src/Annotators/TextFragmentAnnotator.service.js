@@ -105,11 +105,10 @@ angular.module('Pundit2.Annotators')
 })
 
 .service('TextFragmentAnnotator', function(TEXTFRAGMENTANNOTATORDEFAULTS, NameSpace, BaseComponent, Consolidation,
-    XpointersHelper, ItemsExchange, Config, EventDispatcher, $compile, $q, $rootScope) {
+                                           XpointersHelper, ItemsExchange, Config, EventDispatcher, $compile, $q, $rootScope) {
 
     // Create the component and declare what we deal with: text
     var textFragmentAnnotator = new BaseComponent('TextFragmentAnnotator', TEXTFRAGMENTANNOTATORDEFAULTS);
-
     var annomaticIsRunning = false;
     var n = 0;
 
@@ -118,12 +117,12 @@ angular.module('Pundit2.Annotators')
     var fragmentIds = {},
         fragmentsRefs = {},
         fragmentsRefsById = {},
-        // For the given id it will contain an object with:
-        // .uri : uri of the original item
-        // .bits: array of scopes of the bit directives for this fragment
-        // .bitsObj: object of scopes of the bit directives for this fragment
-        // .icon: scope of the icon directive for this fragment
-        // .item: Item belonging to this id
+    // For the given id it will contain an object with:
+    // .uri : uri of the original item
+    // .bits: array of scopes of the bit directives for this fragment
+    // .bitsObj: object of scopes of the bit directives for this fragment
+    // .icon: scope of the icon directive for this fragment
+    // .item: Item belonging to this id
         fragmentById = {};
 
     var bitsQueque = {};
@@ -203,7 +202,7 @@ angular.module('Pundit2.Annotators')
                 return s.length > 0;
             }).join(','),
             elemTempFragments = elem.attr('temp-fragments'),
-            // cleanTempFragmentsA = [],
+        // cleanTempFragmentsA = [],
             cleanElemFragmentsA = cleanElemFragments.split(','),
             mergeWithPrev = false,
             frIntersectWithPrev = false,
@@ -537,8 +536,8 @@ angular.module('Pundit2.Annotators')
 
         var xpaths = XpointersHelper.getXPathsFromXPointers(xpointers, temporaryXpointers),
             sorted = XpointersHelper.splitAndSortXPaths(xpaths),
-            // After splitting and sorting each bit has a list of fragment ids it belongs to.
-            // Instead of using classes, these ids will be saved in a node attribute.
+        // After splitting and sorting each bit has a list of fragment ids it belongs to.
+        // Instead of using classes, these ids will be saved in a node attribute.
             xpathsFragmentIds = XpointersHelper.getClassesForXpaths(xpointers, sorted, xpaths, tempFragmentIds);
 
         updateDOMPromise = XpointersHelper.updateDOM(sorted, XpointersHelper.options.wrapNodeClass, xpathsFragmentIds);
@@ -571,6 +570,10 @@ angular.module('Pundit2.Annotators')
     // Called by TextFragmentIcon directives: they will be placed after each consolidated
     // fragment.
     textFragmentAnnotator.addFragmentIcon = function(icon) {
+        //if  image fragment return
+        if(icon.fragment.indexOf('IMG') !== -1){
+            return
+        };
         if (typeof fragmentById[icon.fragment] === 'undefined') {
             textFragmentAnnotator.err("fragmentById[" + icon.fragment + "] is undefined - skipping textFragmentAnnotator.addFragmentIcon()");
             return;

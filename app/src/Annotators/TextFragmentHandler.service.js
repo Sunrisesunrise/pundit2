@@ -115,7 +115,7 @@ angular.module('Pundit2.Annotators')
 
 // TODO: remove toolbar and triplecomposer dependency 
 .service('TextFragmentHandler', function($rootScope, TEXTFRAGMENTHANDLERDEFAULTS, NameSpace, BaseComponent, TextFragmentAnnotator,
-    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, Consolidation, EventDispatcher, $document, $injector, Config) {
+                                         XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, Consolidation, EventDispatcher, $document, $injector, Config) {
 
     var textFragmentHandler = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
     var clientHidden = false;
@@ -196,20 +196,6 @@ angular.module('Pundit2.Annotators')
         }
     };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Creates a proper Item from a range .. it must be a valid range, kktnx.
     textFragmentHandler.createItemFromRange = function(range) {
         var values = {};
@@ -228,7 +214,6 @@ angular.module('Pundit2.Annotators')
 
         return new Item(values.uri, values);
     };
-
 
     // Gets the user's selected range on the page, checking if it's valid.
     // Will return a DIRTY range: a valid range in the current DOM the user
