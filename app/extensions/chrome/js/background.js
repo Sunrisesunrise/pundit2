@@ -298,6 +298,7 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
     delete state.loading[tabId];
     delete state.injections[tabId];
     delete state.stopLoading[tabId];
+    delete state.tabs[tabId];
     delete state.tabsOnOff[tabId];
 });
 
