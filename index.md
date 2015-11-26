@@ -41,6 +41,13 @@ Feed allows to work with Images, RDF files and HTML pages. You can find more det
 
 - - -
 
+#Annotation Server
+
+You can download a full ZIP of the Annotations Server at [this URL](https://slack-files.com/T02SH8KFM-F0DGG6VJQ-33e37d2334)
+The currently available version is 1.6.2 and was released on 5th June 2015.
+
+- - -
+
 #More technical resources
 
 You can find more detailed info at these pages:
