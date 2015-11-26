@@ -196,6 +196,13 @@ angular.module('Pundit2.Annotators')
         }
     };
 
+    // If configured to do so, removes the user's selection from the browser
+    var removeSelection = function() {
+        if (textFragmentHandler.options.removeSelectionOnAbort) {
+            $document[0].getSelection().removeAllRanges();
+        }
+    };
+
     // Creates a proper Item from a range .. it must be a valid range, kktnx.
     textFragmentHandler.createItemFromRange = function(range) {
         var values = {};
@@ -247,13 +254,6 @@ angular.module('Pundit2.Annotators')
 
     textFragmentHandler.wipeTemporarySelection = function() {
         checkTemporaryConsolidated(true);
-    };
-
-    // If configured to do so, removes the user's selection from the browser
-    var removeSelection = function() {
-        if (textFragmentHandler.options.removeSelectionOnAbort) {
-            $document[0].getSelection().removeAllRanges();
-        }
     };
 
     // Checks if the node (or any parent) is a node which needs to be ignored

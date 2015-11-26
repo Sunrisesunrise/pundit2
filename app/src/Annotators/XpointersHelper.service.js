@@ -232,7 +232,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> avoidInitialHide: false </pre>
      */
-    avoidInitialHide: false
+    avoidInitialHide: true
 })
 
 .service('XpointersHelper', function(XPOINTERSHELPERDEFAULTS, NameSpace, BaseComponent, EventDispatcher,
@@ -272,6 +272,7 @@ angular.module('Pundit2.Annotators')
             !xpointersHelper.isUIButton(lastNode) &&
             !xpointersHelper.isWrappedTextNode(lastNode);
     };
+
     // Will get a clean Range out of a dirty range: skipping nodes
     // added by the annotation library (ignore nodes) and recalculate
     // offsets if needed
@@ -548,7 +549,6 @@ angular.module('Pundit2.Annotators')
         return ret;
     }; // splitAndSortXPaths()
 
-
     xpointersHelper.getClassesForXpaths = function(xpointers, sortedXpaths, xpaths, xpointersClasses) {
         var realXps = [],
             htmlClasses = [];
@@ -615,7 +615,6 @@ angular.module('Pundit2.Annotators')
             i = sortedXpaths.length - 1,
             deferred = $q.defer(),
             startLength = sortedXpaths.length;
-
 
         var deferredUpdate = function(promise) {
             $timeout.cancel(updateTimer);
@@ -753,6 +752,7 @@ angular.module('Pundit2.Annotators')
         // Finally check if it's in the range
         return xpointersHelper.isNodeInsideRange(node, range);
     };
+
     xpointersHelper.isImageNodeInsideRange = function(node, range) {
         // Check: it must be an element node
         if (node.nodeType !== Node.ELEMENT_NODE) {
@@ -908,9 +908,8 @@ angular.module('Pundit2.Annotators')
             currentElement = angular.element(element);
         currentElement.addClass(htmlClass);
         if (xpointersHelper.options.avoidInitialHide === false) {
-            if (parents[0].indexOf('IMG-fr') !== -1){
+            if (parents[0].indexOf('imgf') !== -1){
                 currentElement.addClass(xpointersHelper.options.imageFragmentHiddenClass);
-
             } else {
                 currentElement.addClass(xpointersHelper.options.textFragmentHiddenClass);
 
@@ -919,7 +918,7 @@ angular.module('Pundit2.Annotators')
                     }
 
         // TODO: make this directive name configurable??
-        if (parents[0].indexOf('IMG-fr') !== -1) {
+        if (parents[0].indexOf('imgf') !== -1) {
             currentElement.attr('image-fragment-bit', '');
         } else {
             currentElement.attr('text-fragment-bit', '');
