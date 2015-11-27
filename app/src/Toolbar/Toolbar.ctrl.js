@@ -102,6 +102,12 @@ angular.module('Pundit2.Toolbar')
         Analytics.track('buttons', 'click', 'toolbar--logout');
     };
 
+    var manageYourAnnotation = function() {
+        ResourcePanel.hide();
+        $window.open('https://thepund.it/app/', '_blank');
+        Analytics.track('buttons', 'click', 'toolbar--manageAnnotation');
+    };
+
     var editYourProfile = function() {
         ResourcePanel.hide();
         MyPundit.editProfile();
@@ -371,6 +377,9 @@ angular.module('Pundit2.Toolbar')
         }];
     } else {
         $scope.userLoggedInDropdown = [{
+            text: 'Manage your annotations',
+            click: manageYourAnnotation
+        }, {
             text: 'Edit your profile',
             click: editYourProfile
         }, {

@@ -1,6 +1,6 @@
 angular.module('Pundit2.LiteTool')
 
-.controller('LiteToolCtrl', function($scope, $rootScope, Status, AnnotationSidebar, EventDispatcher, MyPundit, Analytics) {
+.controller('LiteToolCtrl', function($scope, $rootScope, $window, Status, AnnotationSidebar, EventDispatcher, MyPundit, Analytics) {
 
     $scope.isUserLogged = false;
     $scope.isAnnotationSidebarExpandedv = false;
@@ -13,12 +13,20 @@ angular.module('Pundit2.LiteTool')
         Analytics.track('buttons', 'click', 'litetool--logout');
     };
 
+    var manageYourAnnotation = function() {
+        $window.open('https://thepund.it/app/', '_blank');
+        Analytics.track('buttons', 'click', 'toolbar--manageAnnotation');
+    };
+
     var editYourProfile = function() {
         MyPundit.editProfile();
         Analytics.track('buttons', 'click', 'litetool--editProfile');
     };
 
     $scope.userLoggedInDropdown = [{
+        text: 'Manage your annotations',
+        click: manageYourAnnotation
+    }, {
         text: 'Edit your profile',
         click: editYourProfile
     }, {
@@ -52,11 +60,11 @@ angular.module('Pundit2.LiteTool')
         $scope.isContextualMenuOpen = true;
     });
 
-    EventDispatcher.addListener('MyPundit.popoverClose', function(/*e*/) {
+    EventDispatcher.addListener('MyPundit.popoverClose', function( /*e*/ ) {
         $scope.isUserPopoupOpen = false;
     });
 
-    EventDispatcher.addListener('MyPundit.popoverOpen', function(/*e*/) {
+    EventDispatcher.addListener('MyPundit.popoverOpen', function( /*e*/ ) {
         $scope.isUserPopoupOpen = true;
     });
 
