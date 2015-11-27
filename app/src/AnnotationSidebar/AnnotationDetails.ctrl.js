@@ -20,6 +20,8 @@ angular.module('Pundit2.AnnotationSidebar')
         initialHeight = AnnotationSidebar.options.annotationHeight,
         currentHeight = initialHeight - 1;
 
+    var clientMode = Config.clientMode;
+
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
     $scope.moreInfo = AnnotationDetails.options.moreInfo;
@@ -171,6 +173,10 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.isUserToolShowed = function() {
         return (AnnotationDetails.isUserToolShowed($scope.annotation.creator) || ($scope.forceEdit && MyPundit.isUserLogged())) && AnnotationSidebar.isAnnotationsPanelActive();
+    };
+
+    $scope.isEditBtnShowed = function() {
+        return clientMode === 'pro' && $scope.motivation === 'linking';
     };
 
     $scope.$watch(function() {
