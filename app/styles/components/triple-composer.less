@@ -109,9 +109,15 @@
                     width: @triplecomposer-height + 1;
                     vertical-align: bottom;
                     margin: 0;
+                    padding: 0;
                     color: #fff;
+                    border-top: 0;
+                    border-right: 0;
+                    border-bottom: 0;
                     border-left-width: 1px;
                     border-left-style: solid;
+                    box-shadow: 0; /* Css conficlts */
+                    -webkit-box-shadow: 0; /* Css conficlts */
                     float: right;
 
                     &:hover,
@@ -122,6 +128,7 @@
 
                     span {
                         color: #fff;
+                        text-align: center;
                     }
 
                     &:first-child {

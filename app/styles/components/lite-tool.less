@@ -70,7 +70,7 @@
         }
 
         /* User
-        Displays the name of teh user or the 'login' button */
+        Displays the name of the user or the 'login' button */
         .pnd-lite-tool-user {
             position: absolute;
             left: @lite-tool-height + 10px;
@@ -79,7 +79,7 @@
 
             div {
                 line-height: @lite-tool-height - 2px;
-                max-width: @annotation-sidebar-exp-width - 160px;
+                max-width: @annotation-sidebar-exp-width - 168px;
                 font-size: 13px;
                 color: @color-text-link;
                 cursor: pointer;
@@ -111,6 +111,26 @@
                 line-height: @lite-tool-height - 2px;
                 font-size: 13px;
                 color: @color-text-link;
+            }
+
+            .pnd-icon {
+                vertical-align: top;
+                margin-top: 11px;
+                display: inline-block;
+                font-size: 14px;
+            }
+
+            /* Different margins around icon for close and open state */
+            .pnd-lite-tool-sidebar-toggle-close {
+                .pnd-icon {
+                    margin-left: 5px;
+                }
+            }
+
+            .pnd-lite-tool-sidebar-toggle-open {
+                .pnd-icon {
+                    margin-right: 5px;
+                }
             }
         }
     }
