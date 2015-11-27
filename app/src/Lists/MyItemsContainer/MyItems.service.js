@@ -171,7 +171,7 @@ angular.module("Pundit2.MyItemsContainer")
                 'Accept': 'application/json'
             },
             method: 'GET',
-            url: 'aaa'+NameSpace.get('asPref', {
+            url: NameSpace.get('asPref', {
                 key: myItems.options.apiPreferencesKey
             }),
             withCredentials: true

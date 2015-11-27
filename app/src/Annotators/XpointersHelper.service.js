@@ -419,7 +419,15 @@ angular.module('Pundit2.Annotators')
 
         var xpaths = xpointersHelper.xPointerToXPath(xpointer);
         //if image no offset required is a valid xpath
-        if(xpaths.startXpath.indexOf('IMG') != -1 ){return true;}
+        if(xpaths.startXpath.indexOf('IMG') != -1 ){
+            var node = xpaths.startNode;
+            if(node !== null){
+                return true;
+            }
+            xpointersHelper.log('xpath is broken', xpointer);
+            return false;
+        }
+
         return xpointersHelper.isValidRange(xpaths.startNode, xpaths.startOffset, xpaths.endNode, xpaths.endOffset);
     };
 
@@ -505,9 +513,13 @@ angular.module('Pundit2.Annotators')
             }
             var rangeStart = $document[0].createRange(),
                 node = xpointersHelper.getNodeFromXpath(xpaths[xpointer].startXpath);
-            rangeStart.setStart(startNode, 0);
-            rangeStart.setEnd(node, xpathStartoffset);
-
+            try {
+                rangeStart.setStart(startNode, 0);
+                rangeStart.setEnd(node, xpathStartoffset);
+            } catch (e) {
+                continue;
+            }
+            // TODO: perform push at the end
             x.push({
                 xpointer: xpointer,
                 xpath: xpaths[xpointer].startXpath,
@@ -699,8 +711,11 @@ angular.module('Pundit2.Annotators')
                 range.setEndAfter(endNode);
             }
         }
-
-        // Wrap the nearest element which contains the entire range
+        if(!xpointersHelper.isValidXpointer(startXp.xpointer)){
+            xpointersHelper.log('xpath broken');
+            return false;
+        }
+        // Wrap the nearestisValidXpointer()ement which contains the entire range
         xpointersHelper.wrapElement(range.commonAncestorContainer, range, htmlTag, htmlClass, parents);
 
     }; // wrapXPath

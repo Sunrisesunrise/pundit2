@@ -107,6 +107,8 @@ angular.module('Pundit2.Annotators')
                 ia.log("Item not valid: not consolidable on this page: " + xpointerURI);
                 return false;
             }
+
+
         }
 
         // TODO: it's a valid image fragment if:
