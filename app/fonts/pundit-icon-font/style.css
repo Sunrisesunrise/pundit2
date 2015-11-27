@@ -1,16 +1,17 @@
 @font-face {
 	font-family: 'pundit-icon-font';
-	src:url('fonts/pundit-icon-font.eot?we1i0e');
-	src:url('fonts/pundit-icon-font.eot?we1i0e#iefix') format('embedded-opentype'),
-		url('fonts/pundit-icon-font.ttf?we1i0e') format('truetype'),
-		url('fonts/pundit-icon-font.woff?we1i0e') format('woff'),
-		url('fonts/pundit-icon-font.svg?we1i0e#pundit-icon-font') format('svg');
+	src:url('fonts/pundit-icon-font.eot?pwei86');
+	src:url('fonts/pundit-icon-font.eot?pwei86#iefix') format('embedded-opentype'),
+		url('fonts/pundit-icon-font.ttf?pwei86') format('truetype'),
+		url('fonts/pundit-icon-font.woff?pwei86') format('woff'),
+		url('fonts/pundit-icon-font.svg?pwei86#pundit-icon-font') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
 
 [class^="pnd-icon-"], [class*=" pnd-icon-"] {
-	font-family: 'pundit-icon-font';
+    /* use !important to prevent issues with browser extensions that change fonts */
+	font-family: 'pundit-icon-font' !important;
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
@@ -23,6 +24,15 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.pnd-icon-external-link:before {
+	content: "\f045";
+}
+.pnd-icon-angle-double-left:before {
+	content: "\f100";
+}
+.pnd-icon-angle-double-right:before {
+	content: "\f101";
+}
 .pnd-icon-notebook:before {
 	content: "\e918";
 }
