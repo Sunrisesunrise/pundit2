@@ -479,7 +479,7 @@ angular.module('Pundit2.GeneralItemsContainer')
 
         $scope.displayedItems = [];
         var updateMessage = function() {
-            if (eraseSearch === true || search.term === '') {
+            if (eraseSearch === true) {
                 $scope.message.text = GeneralItemsContainer.getMessage($scope.type).text;
                 $scope.displayedItems = [];
                 eraseSearch = false;
