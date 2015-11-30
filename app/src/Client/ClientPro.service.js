@@ -259,19 +259,6 @@ angular.module('Pundit2.Client')
      */
     basicRelations: [{
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "comment",
-        "description": "Leave a comment related to the selected text fragment or web page.",
-        "suggestedSubjectTypes": [
-            "http://purl.org/pundit/ont/ao#fragment-image",
-            "http://purl.org/pundit/ont/ao#fragment-text",
-            "http://xmlns.com/foaf/0.1/Image",
-            "http://schema.org/WebPage"
-        ],
-        "suggestedObjectTypes": ["http://www.w3.org/2000/01/rdf-schema#Literal"],
-        "vocabulary": "Basic Relation",
-        "uri": "http://www.w3.org/2000/01/rdf-schema#comment"
-    }, {
-        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
         "label": "identifies",
         "description": "The selected text fragment or web page is a representation of a linked data entity. Select the right entity as object.",
         "suggestedSubjectTypes": [
