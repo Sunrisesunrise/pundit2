@@ -278,7 +278,7 @@ angular.module('Pundit2.Client')
         ],
         "suggestedObjectTypes": [],
         "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/pundit/ont/oa#isRelatedTo" // TODO Deve rispondere??? Come si fa???
+        "uri": "http://purl.org/pundit/ont/ao#isRelatedTo"
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
         "label": "describes",
