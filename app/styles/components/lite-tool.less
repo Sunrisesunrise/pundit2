@@ -13,50 +13,52 @@
 \* ------------------------------------ */
 
 .pnd-lite-tool {
-    position: relative;
+    position: fixed;
+    height: @lite-tool-height;
+    width: @lite-tool-height;
+    top: 10px;
+    right: 10px + @annotation-sidebar-coll-width;
     z-index: @zindex-pnd-litetool;
+    transition-duration: .5s;
+    transition-property: width; // , right;
 
+    /* Circle with Pundit Logo or user thumb */
+    .pnd-icon-pundit-logo {
+        display: block;
+        position: absolute;
+        left: -1px;
+        width: @lite-tool-height + 1;
+        height: @lite-tool-height + 1;
+
+        background-color: @color-brand;
+        border: 1px solid darken(@color-brand, 10%);
+        border-radius: @lite-tool-height/2;
+
+        font-size: 22px;
+        color: #FFFFFF;
+        text-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.20);
+        text-align: center;
+        line-height: @lite-tool-height;
+        z-index: 2;
+        cursor: pointer;
+
+        &.pnd-lite-tool-user-logged {
+            background-color: @color-dark-gray; // @color-dark;
+            border: 1px solid darken(@color-dark-gray, 10%); // lighten(@color-dark, 10%);
+        }
+    }
+
+    /* Wrapper of tool contents */
     .pnd-lite-tool-wrap {
-        position: fixed;
+        position: absolute;
+        right: 0;
         height: @lite-tool-height;
         width: @lite-tool-height;
-        top: 10px;
-        right: 10px + @annotation-sidebar-coll-width;
         overflow: hidden;
         border-radius: @lite-tool-height/2;
         box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
         transition-duration: .5s;
         transition-property: width; // , right;
-
-        /* Class to add when the tool must be open */
-        &.pnd-lite-tool-wrap-open {
-            width: @annotation-sidebar-exp-width - 5px;
-        }
-
-        /* Circle with Pundit Logo or user thumb */
-        .pnd-icon-pundit-logo {
-            display: block;
-            position: absolute;
-            width: @lite-tool-height;
-            height: @lite-tool-height;
-
-            background-color: @color-brand;
-            border: 1px solid darken(@color-brand, 10%);
-            border-radius: @lite-tool-height/2;
-
-            font-size: 21px;
-            color: #FFFFFF;
-            text-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.20);
-            text-align: center;
-            line-height: @lite-tool-height;
-            z-index: 2;
-            cursor: pointer;
-
-            &.pnd-lite-tool-user-logged {
-                background-color: @color-dark-gray; // @color-dark;
-                border: 1px solid darken(@color-dark-gray, 10%); // lighten(@color-dark, 10%);
-            }
-        }
 
         .pnd-lite-tool-content {
             position: absolute;
@@ -135,8 +137,17 @@
         }
     }
 
+    /* Open state */
+    &.pnd-lite-tool-open {
+        width: @annotation-sidebar-exp-width - 5px;
+        .pnd-lite-tool-wrap {
+            width: @annotation-sidebar-exp-width - 5px;
+        }
+    }
+
     /* Hover state */
     &:hover {
+        width: @annotation-sidebar-exp-width - 5px;
         .pnd-lite-tool-wrap {
             width: @annotation-sidebar-exp-width - 5px;
         }
@@ -145,7 +156,7 @@
 
 
 /* ------------------------------------ *\
-   #DROPDPWN
+   #DROPDOWN
 \* ------------------------------------ */
 .pnd-lite-tool {
     .pnd-dropdown-contextual-menu {
