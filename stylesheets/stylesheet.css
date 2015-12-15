@@ -4,6 +4,8 @@
  * Styles for Pundit developers site
  */
 
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,700,700italic,600italic,600,400italic,300italic);
+
 /* ------------------------------------ *\
    #GENERAL
 \* ------------------------------------ */
@@ -15,7 +17,7 @@
 body {
     padding: 0;
     margin: 0;
-    font-family: "Signika", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: 'Source Sans Pro', "Signika", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 100;
     font-size: 16px;
     line-height: 1.5;
