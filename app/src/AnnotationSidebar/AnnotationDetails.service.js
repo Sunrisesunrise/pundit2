@@ -339,10 +339,9 @@ angular.module('Pundit2.AnnotationSidebar')
         var annotationServerVersion = Config.annotationServerVersion;
 
         if (annotationServerVersion === 'v2') {
-            var momentDate = moment(serverdate).utc().format('YYYY-MM-DD HH:mm:ss');
+            var momentDate = moment(serverdate).utc();
             var localTime = moment.utc(momentDate).toDate();
-            localTime = moment(localTime).format('YYYY-MM-DD HH:mm:ss');
-            return localTime.toString();
+            return localTime;
         }
         return serverdate;
     };
@@ -541,7 +540,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     id: currentId,
                     creator: currentAnnotation.creator,
                     creatorName: currentAnnotation.creatorName,
-                    created: currentAnnotation.created,
+                    created: convertTime(currentAnnotation.created),
                     notebookId: currentAnnotation.isIncludedIn,
                     notebookName: notebookName,
                     scopeReference: scope,
