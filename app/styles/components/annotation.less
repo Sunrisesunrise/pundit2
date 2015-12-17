@@ -186,6 +186,7 @@
         max-height: @annotation-text-max-height;
         overflow: auto;
         font-style: italic;
+        word-wrap: break-word;
 
         span {
             background-color: @color-highlight; // @color-highlight-hover; // @color-highlight;
@@ -202,6 +203,7 @@
         display: block;
         background-color: @color-ultra-light;
         border-top: @annotation-border-size solid @annotation-border-color;
+        word-wrap: break-word;
     }
 
     .pnd-annotation-comment-text {
@@ -365,6 +367,7 @@
             display: block;
             float: none;
             clear: both;
+            word-wrap: break-word;
         }
     }
 }

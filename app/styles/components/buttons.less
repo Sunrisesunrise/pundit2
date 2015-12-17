@@ -18,7 +18,7 @@
     height: 32px;
 
     margin: 0;
-    padding: 0 10px;
+    padding: 0 8px;
 
     background: @color-button-bg;
     background-image: none;
@@ -75,9 +75,6 @@
 .pnd-btn-xsmall {
     height: 22px;
     font-size: 11px;
-    // TODO Complete this one
-    // height: auto;
-    // padding: 3px 5px; //!important
     background-image: none;
     text-shadow: none;
     line-height: normal;
@@ -168,31 +165,6 @@ button[disabled] {
 
 
 /* ------------------------------------ *\
-   #DARK
-\* ------------------------------------ */
-
-/*.pnd-btn-dark {
-    .vertical-gradient(@color-button-bg-dark, @button-gradient-level);
-    color: @color-button-cta-text;
-    .text-dark-emboss();
-
-    &:hover,
-    &:focus,
-    &.focus {
-        .vertical-gradient(darken(@color-button-bg-dark, 5), @button-gradient-level);
-    }
-
-    &.disabled,
-    &[disabled],
-    fieldset[disabled] & {
-        color: fade(@color-button-cta-text, 20%) !important; // for ovewritings on .disabled class
-        .vertical-gradient(darken(@color-button-bg-dark, 7), @button-gradient-level);
-        text-shadow: none;
-    }
-}*/
-
-
-/* ------------------------------------ *\
    #SEMANTIC-BUTTONS
 \* ------------------------------------ */
 /* Buttons with custom colors for Subject, Object, Predicate */
@@ -278,31 +250,6 @@ button[disabled] {
     }
 }
 
-
-/* ------------------------------------ *\
-   #LINK-BUTTONS
-\* ------------------------------------ */
-
-/*// Make a button look and behave like a link
-.pnd-btn-link {
-    color: @gray;
-    font-weight: normal;
-    cursor: pointer;
-    border-radius: 0;
-    line-height: 0; // PND ADD
-    background-color: transparent;
-
-    &:hover {
-        color: @color-text;
-        text-decoration: none;
-        background-color: transparent;
-    }
-
-    &:focus {
-        text-decoration: none;
-        background-color: transparent;
-    }
-}*/
 
 /* ------------------------------------ *\
    #AVAILABLE-WIDTH-FILL-BUTTONS
