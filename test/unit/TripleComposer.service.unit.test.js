@@ -34,6 +34,8 @@ describe('TripleComposer service', function() {
         NameSpace = _NameSpace_;
         $rootScope = _$rootScope_;
         $compile = _$compile_;
+
+        TripleComposer.initInstance('defaultTripleComposer');
     }));
 
     afterEach(function(){
@@ -41,7 +43,7 @@ describe('TripleComposer service', function() {
     });
 
     var compileDirective = function(){
-        var elem = $compile('<triple-composer></triple-composer>')($rootScope);
+        var elem = $compile('<triple-composer tc-name="\'defaultTripleComposer\'"></triple-composer>')($rootScope);
         angular.element('body').append(elem);
         $rootScope.$digest();
         return elem;
@@ -265,7 +267,7 @@ describe('TripleComposer service', function() {
     it('should correctly compile statement directive', function(){
         compileDirective();
         var s = TripleComposer.getStatements();
-        
+
         var scope = s[0].scope;
         expect(scope).toBeDefined();
         expect(typeof(scope)).toEqual('object');
@@ -317,8 +319,8 @@ describe('TripleComposer service', function() {
             label: 'predicate label',
             uri: 'http://predicateTestID',
             type: ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-            range: [],
-            domain: []
+            suggestedObjectTypes: [],
+            suggestedSubjetTypes: []
         };
         // add pred to relations
         var item;
@@ -352,8 +354,8 @@ describe('TripleComposer service', function() {
             label: 'predicate label',
             uri: 'http://predicateTestID',
             type: ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-            range: [],
-            domain: []
+            suggestedObjectTypes: [],
+            suggestedSubjetTypes: []
         };
         // add pred to relations
         var item;

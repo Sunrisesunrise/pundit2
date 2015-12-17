@@ -1,0 +1,32 @@
+/**
+ * NOT-WRAP
+ *
+ * Here we need to define some styles outside the wrap ("pnd-wrp" or "kee-wrp").
+ * Imported like: @import "../global/not-wrap.less";
+ */
+
+html body.pnd-annotation-sidebar-collapsed {
+    margin-right: @annotation-sidebar-coll-width;
+    background-position-x: -@annotation-sidebar-coll-width;
+}
+    
+html body.pnd-annotation-sidebar-expanded {
+    margin-right: @annotation-sidebar-exp-width;
+    background-position-x: -@annotation-sidebar-exp-width;
+    width: auto;
+}
+
+html body.pnd-contextual-menu-scroll .pnd-inner {
+    .pnd-tab-content {
+        overflow: hidden;
+    }
+}
+html body.pnd-contextual-menu-scroll {
+    .pnd-panel-tab-content-content.pnd-inner-scrollable, .pnd-triplecomposer-statements-container {
+        overflow: hidden;
+    }
+}
+
+html body .pundit-content {
+    position: relative;
+}

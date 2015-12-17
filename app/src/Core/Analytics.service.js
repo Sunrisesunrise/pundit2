@@ -1,3 +1,5 @@
+/*global mixpanel, MIXPANEL_CUSTOM_LIB_URL*/
+
 angular.module('Pundit2.Core')
 
 .constant('ANALYTICSDEFAULTS', {
@@ -28,7 +30,22 @@ angular.module('Pundit2.Core')
      * Default value:
      * <pre> trackingCode: 'UA-XXXX-Y' </pre>
      */
-    trackingCode: 'UA-50437894-1',
+    trackingCode: 'UA-50437894-1',    
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Analytics.trackingCodeMixpanel
+     *
+     * @description
+     * `string`
+     *
+     * Mixpanel user code
+     *
+     * Default value:
+     * <pre> trackingCodeMixpanel: '********************************' </pre>
+     */
+    trackingCodeMixpanel: '0b6a2f9852b34ae5bb58dd3dbd2eb565',
 
     /**
      * @module punditConfig
@@ -93,6 +110,21 @@ angular.module('Pundit2.Core')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#Analytics.doMixpanel
+     *
+     * @description
+     * `boolean`
+     *
+     * Enable / Disable Mixpanel tracking
+     *
+     * Default value:
+     * <pre> doMixpanel: false </pre>
+     */
+    doMixpanel: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#Analytics.debug
      *
      * @description
@@ -119,30 +151,85 @@ angular.module('Pundit2.Core')
     var updateHitsTimer;
     var currentHits = analytics.options.maxHits;
 
-    (function(i, s, o, g, r, a, m) {
-        i.GoogleAnalyticsObject = r;
-        i[r] = i[r] || function() {
-            (i[r].q = i[r].q || []).push(arguments);
-        };
-        i[r].l = 1 * new Date();
-        a = s.createElement(o);
-        m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        a.onload = function() {
-            analytics.log('GA async script loaded');
-            ga = $window[analytics.options.globalTracker];
-        };
-        m.parentNode.insertBefore(a, m);
-    })($window, $document[0], 'script', '//www.google-analytics.com/analytics.js', analytics.options.globalTracker); //TODO: rimuovere http: per versione finale
+    if (analytics.options.doTracking || analytics.options.doMixpanel) {
+        if (angular.element('script').length === 0) {
+            angular.element('head').append('<script type="text/javascript"></script>');
+        }
+    }
 
-    var ga = $window[analytics.options.globalTracker];
-    ga('create', analytics.options.trackingCode, {
-        'storage': 'none', // no cookies
-        'cookieDomain': 'none' // no domain
-            // 'clientId' : getClientID() // custom id
-    });
-    // ga('set', 'checkProtocolTask', function() {}); //HACK
+
+    // Google Analytics code
+    if (analytics.options.doTracking) {
+        (function(i, s, o, g, r, a, m) {
+            i.GoogleAnalyticsObject = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments);
+            };
+            i[r].l = 1 * new Date();
+            a = s.createElement(o);
+            m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            a.onload = function() {
+                analytics.log('GA async script loaded');
+                ga = $window[analytics.options.globalTracker];
+            };
+            m.parentNode.insertBefore(a, m);
+        })($window, $document[0], 'script', '//www.google-analytics.com/analytics.js', analytics.options.globalTracker); //TODO: rimuovere http: per versione finale
+
+        var ga = $window[analytics.options.globalTracker];
+        ga('create', analytics.options.trackingCode, {
+            'storage': 'none', // no cookies
+            'cookieDomain': 'none' // no domain
+                // 'clientId' : getClientID() // custom id
+        });
+        // ga('set', 'checkProtocolTask', function() {}); //HACK
+    }
+
+    // Mixpanel code
+    if (analytics.options.doMixpanel) {
+        (function(f, b) {
+            if (!b.__SV) {
+                var a, e, i, g;
+                window.mixpanel = b;
+                b._i = [];
+                b.init = function(a, e, d) {
+                    function f(b, h) {
+                        var a = h.split('.');
+                        2 === a.length && (b = b[a[0]], h = a[1]);
+                        b[h] = function() {
+                            b.push([h].concat(Array.prototype.slice.call(arguments, 0)));
+                        };
+                    }
+                    var c = b;
+                    'undefined' !== typeof d ? c = b[d] = [] : d = 'mixpanel';
+                    c.people = c.people || [];
+                    c.toString = function(b) {
+                        var a = 'mixpanel';
+                        'mixpanel' !== d && (a += '.' + d);
+                        b || (a += ' (stub)');
+                        return a;
+                    };
+                    c.people.toString = function() {
+                        return c.toString(1) + '.people (stub)';
+                    };
+                    i = 'disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user'.split(' ');
+                    for (g = 0; g < i.length; g++){
+                        f(c, i[g]);
+                    }   
+                    b._i.push([a, e, d]);
+                };
+                b.__SV = 1.2;
+                a = f.createElement('script');
+                a.type = 'text/javascript';
+                a.async = !0;
+                a.src = 'undefined' !== typeof MIXPANEL_CUSTOM_LIB_URL ? MIXPANEL_CUSTOM_LIB_URL : '//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
+                e = f.getElementsByTagName('script')[0];
+                e.parentNode.insertBefore(a, e);
+            }
+        })(document, window.mixpanel || []);
+        mixpanel.init(analytics.options.trackingCodeMixpanel);
+    }
 
     var updateHits = function() {
         if (currentHits >= analytics.options.maxHits) {
@@ -188,6 +275,16 @@ angular.module('Pundit2.Core')
         }
     };
 
+    var sendToMixpanel = function(event) {
+        if (analytics.options.doMixpanel === false) {
+            return;
+        }
+        if (event.eventAction !== 'click') {
+            return;
+        }
+        mixpanel.track(event.eventLabel, event);
+    };
+
     analytics.getHits = function() {
         return currentHits;
     };
@@ -207,6 +304,8 @@ angular.module('Pundit2.Core')
             'eventLabel': label,
             'eventValue': value
         });
+
+        sendToMixpanel(cache.events[cache.events.length - 1]);
 
         if (!isSendRunning) {
             isSendRunning = true;

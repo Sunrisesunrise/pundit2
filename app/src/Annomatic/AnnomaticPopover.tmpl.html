@@ -13,7 +13,7 @@
 
         {{ann.byNum[num].label}}
 
-        <span class="pull-right pnd-icon pnd-icon-times" ng-click="hide($event)"></span>
+        <span class="pull-right pnd-icon pnd-icon-close" ng-click="hide($event)"></span>
     </h4>
 
     <div class="popover-content">
@@ -29,27 +29,25 @@
             </div>
         </div>
 
-        <div class="btn-group pnd-annomatic-btn-group">
+        <div class="pnd-annomatic-btn-group">
             <!-- <button class="btn btn-warning pnd-button-go-prev" ng-click="goPrev()">
                 <span class="pnd-icon pnd-icon-arrow-left"></span>
             </button> -->
 
-            <button class="btn btn-success pnd-button-set-ok" ng-click="setOk($event)" ng-disabled="ann.savedByNum.indexOf(num) != -1">
+            <button class="pnd-btn pnd-btn-calltoaction pnd-button-set-ok" ng-click="setOk($event)" ng-disabled="ann.savedByNum.indexOf(num) != -1">
                 <span class="pnd-icon pnd-icon-check"></span>
-            </button>
+            </button><!--
 
-            <!-- <button class="btn btn-danger pnd-button-set-ko" ng-click="setKo()" ng-disabled="ann.savedByNum.indexOf(num) != -1">
-                <span class="pnd-icon pnd-icon-trash-o"></span>
-            </button> -->
-
-            <!-- <button
+            <button class="btn btn-danger pnd-button-set-ko" ng-click="setKo()" ng-disabled="ann.savedByNum.indexOf(num) != -1">
+                <span class="pnd-icon pnd-icon-trash"></span>
+            </button> --><!-- <button
                 ng-show="instances > 1"
                 class="btn btn-info"
                 ng-click="acceptAll()"
                 ng-mouseover="toggleSimilar()"
-                ng-mouseout="toggleSimilar(content)">accept all {{instances}}</button> -->
+                ng-mouseout="toggleSimilar(content)">accept all {{instances}}</button>
 
-            <button class="btn btn-warning" ng-click="goNext($event)">
+            --><button class="pnd-btn" ng-click="goNext($event)">
                 <span class="pnd-icon pnd-icon-arrow-right"></span>
             </button>
         </div>

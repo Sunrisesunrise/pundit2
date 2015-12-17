@@ -20,8 +20,11 @@ angular.module('Pundit2.TripleComposer')
     $scope.objectTypeLabel = '';
     $scope.objectFound = false;
     $scope.objectLiteral = false;
+    $scope.objectDate = false;
     // fixed by template
     $scope.objectFixed = false;
+
+    $scope.dateWithTime = false;
 
     $scope.canBeObjectDate = true;
     $scope.canBeObjectLiteral = true;
@@ -99,18 +102,18 @@ angular.module('Pundit2.TripleComposer')
         }
     };
 
-    var parseDate = function(date) {
-        var month = date.getMonth() + 1,
-            day = date.getDate();
+    // var parseDate = function(date) {
+    //     var month = date.getMonth() + 1,
+    //         day = date.getDate();
 
-        if (month < 10) {
-            month = "0" + month;
-        }
-        if (day < 10) {
-            day = "0" + day;
-        }
-        return date.getFullYear() + "-" + month + "-" + day;
-    };
+    //     if (month < 10) {
+    //         month = "0" + month;
+    //     }
+    //     if (day < 10) {
+    //         day = "0" + day;
+    //     }
+    //     return date.getFullYear() + "-" + month + "-" + day;
+    // };
 
     $scope.isStatementComplete = function() {
         if (triple.subject !== null && triple.predicate !== null && triple.object !== null) {
@@ -166,6 +169,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.wipeObject();
         Preview.clearItemDashboardSticky();
         EventDispatcher.sendEvent('Pundit.changeSelection');
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
     $scope.wipeSubject = function() {
@@ -179,6 +183,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.tripleComposerCtrl.isTripleErasable();
         Preview.clearItemDashboardSticky();
         EventDispatcher.sendEvent('Pundit.changeSelection');
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
     $scope.wipePredicate = function() {
@@ -193,6 +198,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.tripleComposerCtrl.isTripleErasable();
         Preview.clearItemDashboardSticky();
         EventDispatcher.sendEvent('Pundit.changeSelection');
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
     $scope.wipeObject = function() {
@@ -201,16 +207,19 @@ angular.module('Pundit2.TripleComposer')
         $scope.objectFound = false;
         $scope.objectLiteral = false;
         $scope.objectDate = false;
+        $scope.dateWithTime = false;
         $scope.objectFixed = false;
         triple.object = null;
+        triple.objType = undefined;
         ResourcePanel.hide();
         angular.element('.pnd-triplecomposer-save').addClass('disabled');
         $scope.tripleComposerCtrl.isTripleErasable();
         EventDispatcher.sendEvent('Pundit.changeSelection');
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
     $scope.onSubjectMouseOver = function() {
-        if (typeof triple.subject.uri === 'undefined' || triple.subject.uri.length == 0) {
+        if (typeof triple.subject.uri === 'undefined' || triple.subject.uri.length === 0) {
             return;
         }
         Preview.showDashboardPreview(triple.subject);
@@ -249,6 +258,15 @@ angular.module('Pundit2.TripleComposer')
         $scope.tripleComposerCtrl.isAnnotationComplete();
         $scope.tripleComposerCtrl.isTripleErasable();
         Preview.clearItemDashboardSticky();
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
+    };
+
+    var checkOpenResourcePanel = function(target) {
+        if (typeof ResourcePanel.openBy !== +'undefined' && ResourcePanel.openBy === target) {
+            ResourcePanel.hide();
+            return false;
+        }
+        return true;
     };
 
     $scope.onClickSubject = function($event) {
@@ -257,12 +275,25 @@ angular.module('Pundit2.TripleComposer')
                 Preview.setItemDashboardSticky(triple.subject);
             }
             return;
-        }
-        else if ($scope.subjectFixed) {
+        } else if ($scope.subjectFixed) {
             return;
         }
+
+        if (!checkOpenResourcePanel($event.target)) {
+            return;
+        }
+
         ResourcePanel.showItemsForSubject(triple, $event.target).then($scope.setSubject);
+
+        // Deprecating.
         ResourcePanel.lastPromiseThen = $scope.setSubject;
+        ResourcePanel.lastPromiseData = {
+            method: $scope.setSubject,
+            data: {
+                triple: triple,
+                type: 'sub'
+            }
+        };
 
         if ($scope.subjectFound) {
             EventDispatcher.sendEvent('Pundit.changeSelection');
@@ -279,14 +310,20 @@ angular.module('Pundit2.TripleComposer')
             $scope.predicateFixed = fixed;
         }
 
-        // check predicate range
-        if (typeof(item.range) !== 'undefined') {
-            if (item.range.indexOf(NameSpace.rdfs.literal) === -1 && item.range.length > 0) {
-                $scope.canBeObjectLiteral = false;
+        // check predicate suggestedObjectTypes
+        if (TripleComposer.limitToSuggestedTypes) {
+            if (typeof(item.suggestedObjectTypes) !== 'undefined') {
+                if (item.suggestedObjectTypes.indexOf(NameSpace.rdfs.literal) === -1 && item.suggestedObjectTypes.length > 0) {
+                    $scope.canBeObjectLiteral = false;
+                }
+                // TODO change data check and expand to other format (y, ym, ymd, ymdt)
+                if (item.suggestedObjectTypes.indexOf(NameSpace.dateTime) === -1 && item.suggestedObjectTypes.length > 0) {
+                    $scope.canBeObjectDate = false;
+                }
             }
-            if (item.range.indexOf(NameSpace.dateTime) === -1 && item.range.length > 0) {
-                $scope.canBeObjectDate = false;
-            }
+        } else {
+            $scope.canBeObjectLiteral = true;
+            $scope.canBeObjectDate = true;
         }
 
         ResourcePanel.hide();
@@ -294,6 +331,7 @@ angular.module('Pundit2.TripleComposer')
         $scope.tripleComposerCtrl.isAnnotationComplete();
         $scope.tripleComposerCtrl.isTripleErasable();
         Preview.clearItemDashboardSticky();
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
     $scope.onClickPredicate = function($event) {
@@ -301,6 +339,11 @@ angular.module('Pundit2.TripleComposer')
             Preview.setItemDashboardSticky(triple.predicate);
             return;
         }
+
+        if (!checkOpenResourcePanel($event.target)) {
+            return;
+        }
+
         ResourcePanel.showProperties(triple, $event.target).then($scope.setPredicate);
         if ($scope.predicateFound) {
             EventDispatcher.sendEvent('Pundit.changeSelection');
@@ -309,6 +352,10 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.setObject = function(item, fixed) {
+        if (typeof(item) === 'undefined') {
+            return;
+        }
+
         $scope.objectFound = true;
 
         if (typeof(fixed) !== 'undefined') {
@@ -322,13 +369,20 @@ angular.module('Pundit2.TripleComposer')
             $scope.objectLabel = item;
             $scope.objectTypeLabel = TypesHelper.getLabel(NameSpace.rdfs.literal);
             $scope.objectLiteral = true;
-        } else if (item instanceof Date) {
+        } else if (typeof(item.type) !== 'undefined' && item.type === 'date') {
             // date item
-            lastDate = item;
-            triple.object = parseDate(item);
+            lastDate = item.value;
+            triple.object = lastDate;
+            triple.objType = item.datatype;
             $scope.objectLabel = triple.object;
-            $scope.objectTypeLabel = TypesHelper.getLabel(NameSpace.dateTime);
+            $scope.objectTypeLabel = triple.objType;
             $scope.objectDate = true;
+
+            if (typeof(item.datatype) !== 'undefined' && item.datatype.indexOf(NameSpace.dateTime) !== -1) {
+                $scope.dateWithTime = true;
+            } else {
+                $scope.dateWithTime = false;
+            }
         } else {
             // standard item
             $scope.objectLabel = item.label;
@@ -342,17 +396,33 @@ angular.module('Pundit2.TripleComposer')
         $scope.tripleComposerCtrl.isTripleErasable();
         Preview.clearItemDashboardSticky();
 
+        EventDispatcher.sendEvent('TripleComposer.statementChanged');
     };
 
     $scope.onClickObject = function($event) {
+        var target = $event.currentTarget;
         if ($scope.templateMode && $scope.objectFixed) {
             Preview.setItemDashboardSticky(triple.object);
             return;
         }
 
-        if (triple.object === null || (!$scope.objectLiteral && !$scope.objectDate)) {
+        if (!checkOpenResourcePanel(target)) {
+            return;
+        }
+
+        if (triple.object === null || 
+            (!$scope.objectLiteral && !$scope.objectDate) ||
+            (TripleComposer.limitToSuggestedTypes === false && $scope.objectLabel === '')) {
             ResourcePanel.showItemsForObject(triple, $event.target).then($scope.setObject);
+            // Deprecating.
             ResourcePanel.lastPromiseThen = $scope.setObject;
+            ResourcePanel.lastPromiseData = {
+                method: $scope.setObject,
+                data: {
+                    triple: triple,
+                    type: 'obj'
+                }
+            };
         } else {
             if ($scope.objectLiteral) {
                 $scope.onClickObjectLiteral($event);
@@ -368,19 +438,22 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.onClickObjectCalendar = function($event) {
-        // TODO: improve parent selection
-        var target = $event.target.parentNode.parentNode.parentNode;
-        var d;
+        var target = $event.currentTarget.parentNode.parentNode.parentNode;
+        var d = {};
 
         if ($scope.objectDate) {
-            d = lastDate;
+            d.value = lastDate;
+            d.datatype = triple.objType;
         } else {
-            d = new Date();
+            d.value = '';
         }
 
+        if (!checkOpenResourcePanel($event.currentTarget)) {
+            return;
+        }
         ResourcePanel.hide();
-        ResourcePanel.showPopoverCalendar(d, target).then(function(date) {
-            if (isNaN(date)) {
+        ResourcePanel.showPopoverCalendar(d, target, $event.currentTarget).then(function(date) {
+            if (!date.valid) {
                 return;
             }
             $scope.setObject(date);
@@ -388,16 +461,18 @@ angular.module('Pundit2.TripleComposer')
     };
 
     $scope.onClickObjectLiteral = function($event) {
-        // TODO: improve parent selection
-        var target = $event.target.parentNode.parentNode.parentNode;
+        var target = $event.currentTarget.parentNode.parentNode.parentNode;
         var str = '';
 
         if (typeof(triple.object) === 'string') {
             str = triple.object;
         }
 
+        if (!checkOpenResourcePanel($event.currentTarget)) {
+            return;
+        }
         ResourcePanel.hide();
-        ResourcePanel.showPopoverLiteral(str, target).then($scope.setObject);
+        ResourcePanel.showPopoverLiteral(str, target, $event.currentTarget).then($scope.setObject);
     };
 
     $scope.showDropdown = function(event) {
@@ -416,6 +491,7 @@ angular.module('Pundit2.TripleComposer')
     // this function should be invoked only one time (in the link function)
     // when you duplicate a statement, elsewhere probably is an error
     $scope.init = function() {
+        var date = {};
         triple = $scope.duplicated;
         delete $scope.duplicated;
 
@@ -427,7 +503,10 @@ angular.module('Pundit2.TripleComposer')
         }
         if (triple.object !== null) {
             if (triple.isDate) {
-                $scope.setObject(new Date(triple.object));
+                date.type = 'date';
+                date.datatype = triple.objType;
+                date.value = triple.object;
+                $scope.setObject(date);
             } else {
                 $scope.setObject(triple.object);
             }

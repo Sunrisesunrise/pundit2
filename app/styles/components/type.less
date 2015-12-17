@@ -1,0 +1,30 @@
+/**
+ * TYPE
+ *
+ * Style for UI element representing an entity type
+ */
+
+/* ------------------------------------ *\
+   #TYPE
+\* ------------------------------------ */
+
+.pnd-type {
+    overflow: hidden;
+    margin: 0 3px 3px 0;
+    padding: 3px 6px;
+
+    // background-color: @color-type-background;
+    /* Gradient bg with mixin */
+    #gradient > .vertical(lighten(@color-type-background, 1); darken(@color-type-background, 1));
+    
+    /* border: 1px solid rgb(234, 234, 234); */
+
+    color: @color-type-text;
+    list-style: none;
+    font-family: @font;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 10px;
+    text-transform: uppercase;
+    .text-white-emboss(.4);
+}

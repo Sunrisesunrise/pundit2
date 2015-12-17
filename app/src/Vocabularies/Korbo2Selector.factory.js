@@ -77,6 +77,8 @@ angular.module('Pundit2.Vocabularies')
     instances: [{
         // where items is stored inside itemsExchange service
         container: 'korbo2',
+        //infinite scrolling
+        infiniteScrolling: false,
         // instance label tab title
         label: 'Korbo2',
         // enable or disable the instance
@@ -120,7 +122,7 @@ angular.module('Pundit2.Vocabularies')
 })
 
 .factory('Korbo2Selector', function(BaseComponent, KORBO2DEFAULTS, Item, ItemsExchange, SelectorsManager,
-    $http, $q) {
+    $http, $q, Config) {
 
     var korbo2Selector = new BaseComponent('Korbo2Selector', KORBO2DEFAULTS);
     korbo2Selector.name = 'Korbo2Selector';
@@ -161,10 +163,11 @@ angular.module('Pundit2.Vocabularies')
             params.basketId = self.config.basketID;
         }
 
+        var requestUrl = (typeof self.config.url === 'undefined' ? Config.annotationServerBaseURL + 'api/open/korbo' : self.config.url) + "/search/items";
         $http({
             //headers: { 'Content-Type': 'application/json' },
             method: 'GET',
-            url: self.config.url + "/search/items",
+            url: requestUrl,
             withCredentials: korbo2Selector.options.searchWithCredentials,
             cache: false,
             params: params

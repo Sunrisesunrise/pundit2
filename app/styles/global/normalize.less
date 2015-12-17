@@ -1,0 +1,248 @@
+//
+// Normalization of tags
+// --------------------------------------------------
+
+// This normalize file is used to reset the specifications of
+// common tags that could be influenced by the CSS
+// of pages loaded in Pundit or loading Korboee
+
+// Example: If the CSS of a Page loaded in Pundit defines the margins for the UL
+// tag and these are not defined in Pundit, this will inherit the margin from the
+// loaded page, probably changing the UI in an unwanted way.
+
+// The problem should generally apply only to general HTML tags and for this reason we
+// just define these
+
+// We're not declaring all the possible attributes for the elements but just the
+// most commonly modified (ie. margins, paddings...).
+// If we'll find situations when some other attributes are defined by the loaded pages
+// we can add the declaration to reset it
+
+
+// Common tags reset
+*, *:before, *:after {
+    background-image: none;
+    background-color: none;
+    transition: none;
+}
+
+html, body, div, span, iframe,
+h1, h2, h3, h4, h5, h6, p, a, img, strong,
+b, i, ul, li, form, table, table thead, table tbody, table tr, table tr td, table tr th, nav {
+    margin: 0;
+    padding: 0;
+    position: static;
+    border: 0;
+    outline: 0; 
+    vertical-align: baseline;
+    background: transparent;
+    background-image: none;
+    text-align: left;
+    -webkit-text-stroke: initial;
+}
+
+a span {
+    width: auto;
+    height: auto;
+    overflow: visible;
+}
+
+button span {
+    overflow: visible;
+}
+
+// Display declaration
+div, h1, h2, h3, h4, h5, h6, p, ul, li, ul li, nav ul li {
+    display: block;
+}
+
+span, img, strong, b, i {
+    display: inline;    
+}
+
+[role="navigation"] {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+// Form elements
+
+input[type='radio'] {
+    -webkit-appearance : radio; /* For css overwritings */
+}
+
+input[type='checkbox'] {
+    -webkit-appearance : checkbox; /* For css overwritings */
+}
+
+input[type='radio'] ,input[type='checkbox'] {
+    top: initial;
+    right: initial;
+    bottom: initial;
+    left: initial;
+}
+
+button, input[type="button"], input[type="submit"] {
+    background-image: none;
+    background-position: initial;
+}
+
+select, textarea, input[type="date"], input[type="datetime"], 
+input[type="datetime-local"], input[type="email"], input[type="month"], 
+input[type="number"], input[type="password"], input[type="search"], input[type="tel"], 
+input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
+    float: initial;
+    margin: 0;
+    padding: 4px 5px;
+    border-radius: 0;
+
+    &:hover {
+        border-color: @color-border-normal;
+    }
+    
+    &:focus,
+    &:active {
+        border-color: @input-border-focus;
+    }
+}
+
+select, input[type="date"], input[type="datetime"], 
+input[type="datetime-local"], input[type="email"], input[type="month"], 
+input[type="number"], input[type="password"], input[type="search"], input[type="tel"], 
+input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
+    display: block;
+    height: 26px;
+}
+
+[type=radio]::before {
+    background-image: none;
+}
+
+[type=checkbox]::before, [type=radio]::before {
+    width: auto;
+    height: auto;
+}
+
+// Typography resets
+
+* {
+    letter-spacing: normal;
+}
+
+a {
+    border-bottom: none;
+    color: @color-text-link;
+    font-weight: normal;
+    font-family: @font !important; /* Consider if this is to declare elsewhere */
+    &:hover {
+    border-bottom: none;
+    
+        &:hover:after {
+            width: 0;
+        }
+    }
+
+    &:link, &:visited {
+        color: @color-text-link;
+    }
+}
+
+div, p, ul, li, blockquote, label, table, table tr, table tr th, table tr td, {
+    font-size: inherit;
+    line-height: 1.5;
+}
+
+table, table thead, table tbody, table tr, table tr td, table tr th {
+    color: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-style: normal;
+    text-transform: none;
+    text-shadow: none;
+    letter-spacing: initial;
+}
+
+textarea, select, input[type="date"], input[type="datetime"], 
+input[type="datetime-local"], input[type="email"], input[type="month"], 
+input[type="number"], input[type="password"], input[type="search"], input[type="tel"], 
+input[type="text"], input[type="time"], input[type="url"], input[type="week"], label, nav, ul, ul li, th,  h1, h2, h3, h4, h5, h6, strong, table, p, blockquote, 
+table, td {
+    font-family: @font;
+    color: inherit;
+    text-indent: inherit;
+    font-style: normal;
+    letter-spacing: initial;
+}
+
+textarea, select, input[type="date"], input[type="datetime"], 
+input[type="datetime-local"], input[type="email"], input[type="month"], 
+input[type="number"], input[type="password"], input[type="search"], input[type="tel"], 
+input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
+    font-size: 12px;
+    font-style: normal;
+
+    &:focus {
+        box-shadow: none;/* Need vendor prefix */
+    }
+}
+
+button {
+    min-height: initial;
+    position: static;
+    overflow: hidden;
+    background-color: transparent;
+    border: 0;
+    webkit-border-radius: 0;
+    border-radius: 0;
+    text-indent: 0;
+}
+
+nav, label {
+    text-transform: initial;
+}
+
+// Lists
+ol, ul, li, ul li {
+    list-style: none;
+}
+
+ul li {
+    min-height: auto;
+}
+
+nav ul {
+    width: auto;
+    overflow: visible;
+}
+
+// Tables
+table {
+    display: table;
+}
+
+thead {
+    display: table-header-group;
+
+    tr:hover {
+        background: none;
+    }
+}
+
+tbody {
+    display: table-footer-group;
+
+    tr:hover {
+        background: none;
+    }
+}
+
+tr {
+    display: table-row;
+    border: none;
+}
+
+td, th {
+    display: table-cell;
+    border: none;
+}

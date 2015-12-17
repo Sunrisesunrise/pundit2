@@ -28,6 +28,7 @@ angular.module('Pundit2.Toolbar')
      * <pre> myNotebooks: true </pre>
      */
     myNotebooks: true,
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -36,12 +37,28 @@ angular.module('Pundit2.Toolbar')
      * @description
      * `boolean`
      *
+     * @deprecated - delete if you are sure no one is using this
+     *   and use punditConfig.askThePundit
      * Show/Hide ask the Pundit button
      *
      * Default value:
      * <pre> askThePundit: true </pre>
      */
-    askThePundit: true,
+    askThePundit: false,
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Toolbar.toolbarHeight
+     *
+     * @description
+     * `number`
+     *
+     * Toolbar height
+     *
+     * Default value:
+     * <pre> toolbarHeight: 30 </pre>
+     */
+    toolbarHeight: 30,
     /**
      * @module punditConfig
      * @ngdoc property

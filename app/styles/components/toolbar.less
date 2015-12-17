@@ -1,0 +1,382 @@
+/**
+ * TOOLBAR
+ *
+ * Style for Pundit toolbar
+ */
+
+/*
+This class gets added to the body element as soon as the toolbar is
+rendered. It needs to push down any existing content making space for us.
+(@toolbar-height is defined in pundit2.less)
+*/
+
+
+/* ------------------------------------ *\
+   #TOOLBAR
+\* ------------------------------------ */
+
+/* SHOULD THIS BE MOVED SOMEWHERE ELSE? we are inside the body .pnd-wrp
+body.pnd-toolbar-active {
+    margin-top: @toolbar-height;
+    background-position-y: @toolbar-height;
+}*/
+
+.pnd-toolbar-navbar {
+    width: 100%; /* For css overwritings */
+    min-width: 960px;
+    height: @toolbar-height;
+    min-height: @toolbar-height;
+    margin: 0;
+    padding-top: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: @zindex-pnd-toolbar;
+    background-color: @color-toolbar-bg;
+    border-radius: 0; // Undo rounded corners in static and fixed navbars
+    box-shadow: 0 1px 1px rgba(0,0,0,.1);
+    border-bottom-width: @toolbar-border-bottom;
+
+    .pnd-toolbar-navbar-container {
+        margin: 0 auto;
+        padding: 0 15px 0 0;
+        &:extend(.clearfix all);
+    }
+
+    .pnd-progress-bar {
+        height: 3px;
+        position: absolute;
+        top: 30px;
+        left:  0px;
+        background-color: rgb(72, 187, 88);
+        -webkit-transition-property: width;
+        transition-property: width;
+        transition-duration: 1s;
+        -webkit-transition-duration: 1s;
+    }
+    
+    // FROM BOOTSTRAP ELEMENTS - consider how to manage this
+    @media (min-width: @grid-float-breakpoint) { 
+        border-radius: 0;
+      }
+
+    @media (max-device-width: @screen-xs-min) and (orientation: landscape) {
+      max-height: 200px;
+    }
+}
+
+/* ------------------------------------ *\
+   #BUTTONS
+\* ------------------------------------ */
+
+.pnd-toolbar-navbar .pnd-inner-nav { //.navbar-nav
+    display: block;
+    width: auto;
+    height: auto;
+    min-height: @toolbar-height;
+    position: relative;
+    background: transparent;
+    margin: 0px;
+    padding-left: 0px;
+    list-style: none;
+    &:extend(.clearfix all);
+
+    > li {
+        display: block;
+        //width: initial;
+        height: auto;
+        margin: 0;
+        float: left;
+        position: relative;
+        border: none;
+        letter-spacing: 0;
+        text-transform: none;
+
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: @color-toolbar-button-hover;
+            text-decoration: none !important; /* For css overwritings */
+        }
+
+        /* Normal buttons */
+        > a {
+            display: block;
+            height: @toolbar-height - @toolbar-border-bottom !important; //!important for css overwritings
+            margin: 0;
+            padding: 0 10px;
+            float: none;
+            position: relative;
+
+            background-color: @color-toolbar-button;
+            border: 0;
+            border-radius: 0;
+
+            font-size: 12px;
+            color: @color-toolbar-text !important; /* For css overwritings */
+            font-family: @font;
+            line-height: 32px;
+            font-weight: normal;
+            text-transform: none;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, .25);
+            // .text-dark-emboss();
+            transition: none !important; /* Delete any transition */
+
+            &:focus {
+                background-color: @color-toolbar-button;
+                //background-image: none;
+                text-decoration: none !important; /* For css overwritings */
+            }
+
+            &:hover {
+                background-color: @color-toolbar-button-hover;
+                //background-image: none;
+                text-decoration: none !important; /* For css overwritings */
+
+                > span {
+                    color: inherit;
+                }
+            }
+
+            span {
+                background: transparent none;
+                float: initial;
+                font-size: inherit;
+                font-weight: normal;
+
+                &:after {
+                    content: none;
+                }
+            }
+        }
+
+        /* Icons inside buttons */
+        .pnd-icon {
+            font-size: 14px;
+            display: inline-block;
+            vertical-align: text-bottom;
+        }
+        
+        /* Toggle buttons like Dashboard and Sidebar: active state */
+        &.pnd-toolbar-toggle-button {
+
+            &.pnd-toolbar-button-active {
+
+                a {
+                    background-color: @color-toolbar-button-open;
+                    .text-dark-emboss();
+
+                    &:focus {
+                        background-color: @color-toolbar-button-open;
+                    }
+
+                    &:hover {
+                        background-color: @color-toolbar-button-open;
+                    }
+                }
+            }
+        }
+
+        /* Call to action buttons */
+        &.pnd-calltoaction-btn {
+
+            a {
+                background-color: @color-button-bg-cta;
+                border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 16);
+                .text-dark-emboss();
+
+                &:focus {
+                    background-color: @color-button-bg-cta;
+                }
+
+                &:hover {
+                    background-color: saturate(lighten(@color-button-bg-cta, 5), 10);
+                }
+            }
+        }
+
+        /* Triangular right border buttons... now ask the pundit */
+        /* Currently not used */
+        &.pnd-triangular-btn {
+
+            a {
+                position: relative;
+                padding-left: 10px;
+                border-right: 0;
+
+                &:after {
+                    left: 100%;
+                    top: 50%;
+                    border: solid transparent;
+                    content: " ";
+                    height: 0;
+                    width: 0;
+                    position: absolute;
+                    pointer-events: none;
+                    border-color: rgba(0, 0, 0, 0);
+                    border-left-color: @brand-success;
+                    border-width: 15px;
+                    margin-top: -15px;
+                    z-index: 100;
+                }
+
+                &:hover:after {
+                    border-left-color: darken(@brand-success, 8) !important;
+                }
+
+                &:focus:after {
+                    border-left-color: @brand-success;
+                }
+            }
+            /* Any button following a triangular button */
+            & + li a {
+                padding-left: 23px;
+            }
+        }
+
+        /* Disabled buttons */
+        &.disabled > a, .pnd-toolbar-not-active-element {
+            color: darken(@color-toolbar-text, 30) !important; // Specificity war against bootstrap
+        }
+
+        .pnd-dropdown-contextual-menu.dropdown-menu {
+            border-top-right-radius: 0;
+            border-top-left-radius: 0;
+        }
+    }
+
+    /* Left navigation*/
+    &.pnd-toolbar-navbar-left {
+        float: left;
+    }
+
+    /* Right navigation */ 
+    &.pnd-toolbar-navbar-right {
+        float: right !important;
+
+        &:last-child {
+            margin-right: -15px; /* Remove margin for right toolbar menu */
+        }
+    }
+
+    & > li > .dropdown-menu {
+        margin-top: 0;
+        border-top-right-radius: 0 !important; /* For css overwritings */
+        border-top-left-radius: 0 !important; /* For css overwritings */
+    }
+}
+
+/* ------------------------------------ *\
+   #SPECIAL-BUTTONS-STYLES
+\* ------------------------------------ */
+
+
+/* First button on the left (loading, pundit logo, error */
+.pnd-toolbar-navbar .pnd-toolbar-first-button {
+    width: 40px;
+    text-align: center;
+
+    a {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    /* First button with Pundit Logo and error icon when necessary */
+    &.pnd-toolbar-status-button-ok {
+        a {
+            padding-top: 4px;
+        }
+
+        .pnd-icon {
+            font-size: 24px;
+        }
+    }
+}
+
+/* Dashboard button */
+.pnd-toolbar-dashboard-toogle-button {
+    &.pnd-toolbar-button-active a {
+        box-shadow: 0 3px 0 @color-toolbar-button-open; /* Covers the toolbar shadow */
+    }
+}
+
+/* Buttons on the right */
+.pnd-toolbar-navbar .pnd-toolbar-navbar-right li {
+    a {
+        border-left: 0; // border-left: 1px solid lighten(@color-toolbar-button, 25);
+        border-right: 0;
+    }
+}
+
+/* Template selection button: special border color */
+.pnd-toolbar-navbar .pnd-toolbar-navbar-right li { //navbar-right
+    &.pnd-toolbar-template-menu-button {
+        a {
+            border-left: 0; // border-left: 1px solid lighten(@color-toolbar-button, 8);
+        }
+    }
+}
+
+/* Error buttons */
+.pnd-toolbar-navbar .pnd-inner-nav .pnd-toolbar-error-button { //.navbar-nav
+    > a {
+        //padding: 8px 10px;
+        background-color: @brand-warning;
+        border-right: 0; // border-right: 1px solid lighten(@color-toolbar-button, 25);
+        text-align: center;
+
+        &:hover {
+            background-color: darken(@brand-warning, 12%);
+        }
+
+        &:focus {
+            // Do we need this?
+        }
+    }
+}
+
+/* Sidebar button icon */
+.pnd-toolbar-navbar .pnd-inner-nav .pnd-toolbar-annotations-button { //.navbar-nav
+    .pnd-icon {
+        margin-left: 3px;
+        color: @color-toolbar-disabled;
+
+        &.pnd-filter-active {
+            color: @brand-primary;
+        }
+    }
+}
+
+/* Notebook selection button */
+.pnd-toolbar-notebook-menu-button {
+    a {
+        max-width: 230px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .pnd-dropdown-contextual-menu {
+        > li:hover {
+            background-color: transparent;
+        }
+    }
+}
+
+/* ------------------------------------ *\
+   #NOTIFICATION-TEXT
+\* ------------------------------------ */
+
+/* This is text showed in the toolbar while the Chrome Extension is loading */
+.pnd-toolbar-notification-text {
+    height: @toolbar-height - @toolbar-border-bottom;
+    margin: 0 auto;
+    color: @color-toolbar-text;
+    text-align: center;
+    line-height: 30px;
+    opacity: .5;
+}
+
+
+

@@ -1,7 +1,7 @@
 angular.module('Pundit2.TripleComposer')
 
 .controller('TripleComposerCtrl', function($rootScope, $scope, $http, $q, $timeout, NameSpace, EventDispatcher,
-    MyPundit, Toolbar, TripleComposer, AnnotationsCommunication, AnnotationsExchange, TemplatesExchange, Analytics) {
+    MyPundit, Toolbar, TripleComposer, AnnotationsCommunication, AnnotationsExchange, TemplatesExchange, Analytics, ModelHelper) {
 
     if (typeof $scope.name === 'undefined') {
         $scope.name = "triplecomposer-" + Math.floor((new Date()).getTime() / 100 * (Math.random() * 100) + 1);
@@ -15,17 +15,19 @@ angular.module('Pundit2.TripleComposer')
 
     $scope.showHeader = function() {
         return TripleComposer.showHeader(undefined, $scope.name);
-    }
+    };
 
     $scope.showFooter = function() {
         return TripleComposer.showFooter(undefined, $scope.name);
-    }
+    };
 
     $scope.saving = false;
+    TripleComposer.setSaving(false, $scope.name);
     $scope.textMessage = TripleComposer.options.savingMsg;
 
     $scope.headerMessage = "Create new annotation";
 
+    // TODO find a better way to change this state
     $scope.editMode = false;
     $scope.$watch(function() {
         return TripleComposer.isEditMode($scope.name);
@@ -57,8 +59,8 @@ angular.module('Pundit2.TripleComposer')
         warnShortMsg = "Warning!";
 
     var loadIcon = "pnd-icon-refresh pnd-icon-spin",
-        successIcon = "pnd-icon-check-circle",
-        warnIcon = "pnd-icon-exclamation-circle";
+        successIcon = "pnd-icon-check",
+        warnIcon = "pnd-icon-exclamation";
 
     var loadMessageClass = "pnd-message",
         successMessageClass = "pnd-message-success",
@@ -98,7 +100,7 @@ angular.module('Pundit2.TripleComposer')
 
     this.getName = function() {
         return $scope.name;
-    }
+    };
 
     $scope.isAnnotationErasable = function() {
         return !TripleComposer.isTripleEmpty($scope.name);
@@ -142,11 +144,16 @@ angular.module('Pundit2.TripleComposer')
             var savePromise = initSavingProcess();
             angular.element('.pnd-triplecomposer-cancel').addClass('disabled');
 
+            var statements = TripleComposer.getStatements($scope.name);
+            var modelData = ModelHelper.buildAllData(statements);
+
             AnnotationsCommunication.editAnnotation(
                 annID,
-                TripleComposer.buildGraph($scope.name),
-                TripleComposer.buildItems($scope.name),
-                TripleComposer.buildTargets($scope.name)
+                modelData.graph,
+                modelData.items,
+                modelData.flatTargets,
+                modelData.target,
+                modelData.type
             ).then(function() {
                 stopSavingProcess(
                     savePromise,
@@ -186,7 +193,7 @@ angular.module('Pundit2.TripleComposer')
         while (typeof(myScope) !== 'undefined' && myScope !== null);
 
         return eventLabel;
-    }
+    };
 
     // update triple composer messagge then after "time" (ms)
     // restore default template content
@@ -207,6 +214,7 @@ angular.module('Pundit2.TripleComposer')
             TripleComposer.setEditMode(false, $scope.name);
             angular.element('.pnd-triplecomposer-cancel').removeClass('disabled');
             $scope.saving = false;
+            TripleComposer.setSaving(false, $scope.name);
             TripleComposer.updateVisibility($scope.name);
         }, time);
     };
@@ -225,6 +233,7 @@ angular.module('Pundit2.TripleComposer')
         promiseResolved = false;
         //savePromise = $timeout(function(){ promiseResolved = true; }, TripleComposer.options.savingMsgTime);
         $scope.saving = true;
+        TripleComposer.setSaving(true, $scope.name);
         return $timeout(function() {
             promiseResolved = true;
         }, TripleComposer.options.savingMsgTime);
@@ -251,7 +260,8 @@ angular.module('Pundit2.TripleComposer')
 
     $scope.saveAnnotation = function() {
 
-        var promise = $q.defer();
+        var promise = $q.defer(),
+            forceConsolidation = MyPundit.isUserLogged() === false;
 
         MyPundit.login().then(function(logged) {
 
@@ -273,18 +283,30 @@ angular.module('Pundit2.TripleComposer')
 
                 var savePromise = initSavingProcess();
 
+                var statements = TripleComposer.getStatements($scope.name);
+                var modelData = ModelHelper.buildAllData(statements);
+
                 var httpPromise;
                 if ($scope.templateMode) {
                     httpPromise = AnnotationsCommunication.saveAnnotation(
-                        TripleComposer.buildGraph($scope.name),
-                        TripleComposer.buildItems($scope.name),
-                        TripleComposer.buildTargets($scope.name),
-                        TemplatesExchange.getCurrent().id);
+                        modelData.graph,
+                        modelData.items,
+                        modelData.flatTargets,
+                        TemplatesExchange.getCurrent().id,
+                        forceConsolidation, // forceConsolidation
+                        modelData.target, // Can be undefined if ModelHelper is acting in mode1
+                        modelData.type
+                    );
                 } else {
                     httpPromise = AnnotationsCommunication.saveAnnotation(
-                        TripleComposer.buildGraph($scope.name),
-                        TripleComposer.buildItems($scope.name),
-                        TripleComposer.buildTargets($scope.name));
+                        modelData.graph,
+                        modelData.items,
+                        modelData.flatTargets,
+                        undefined, // templateID
+                        forceConsolidation, // forceConsolidation
+                        modelData.target, // Can be undefined if ModelHelper is acting in mode1
+                        modelData.type
+                    );
                 }
 
                 httpPromise.then(function() {
@@ -321,16 +343,18 @@ angular.module('Pundit2.TripleComposer')
 
     }; // end save function
 
-    EventDispatcher.addListener('ResourcePanel.toggle', function(e) {
+    var evtHandlers = [];
+
+    evtHandlers.push(EventDispatcher.addListener('ResourcePanel.toggle', function(e) {
         var isResourcePanelOpend = e.args;
         if (isResourcePanelOpend) {
             angular.element('.pnd-triplecomposer-statements-container').addClass('pnd-triplecomposer-statement-not-scroll');
         } else {
             angular.element('.pnd-triplecomposer-statements-container').removeClass('pnd-triplecomposer-statement-not-scroll');
         }
-    });
+    }));
 
-    EventDispatcher.addListener('Annotators.saveAnnotation', function() {
+    evtHandlers.push(EventDispatcher.addListener('Annotators.saveAnnotation', function() {
         var uncomplete = $scope.statements.some(function(el) {
             var t = el.scope.get();
             if (t.subject === null || t.predicate === null || t.object === null) {
@@ -346,8 +370,27 @@ angular.module('Pundit2.TripleComposer')
                 TripleComposer.openTripleComposer();
             });
         }
-    });
+    }));
 
+    evtHandlers.push(EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
+        if (!e.args) {
+            TripleComposer.reset($scope.name);
+        }
+    }));
 
+    evtHandlers.push(EventDispatcher.addListener('AnnotationsCommunication.deleteAnnotation', function(e) {
+        var currentAnnId = TripleComposer.getEditAnnID($scope.name);
+        if (e.args === currentAnnId) {
+            TripleComposer.reset($scope.name);
+            angular.element('.pnd-triplecomposer-save').addClass('disabled');
+            EventDispatcher.sendEvent('Dashboard.close');
+        }
+    }));
+
+    $scope.removeEventListeners = function() {
+        for (var i in evtHandlers) {
+            EventDispatcher.removeListener(evtHandlers[i]);
+        }
+    };
 
 });

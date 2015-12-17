@@ -27,7 +27,7 @@ angular.module('Pundit2.NotebookComposer')
         while (typeof(myScope) !== 'undefined' && myScope !== null);
 
         return eventLabel;
-    }
+    };
 
     $scope.notebook = {};
     $scope.notebook.visibility = "public";
@@ -71,8 +71,8 @@ angular.module('Pundit2.NotebookComposer')
         warnShortMsg = "Warning!";
 
     var loadIcon = "pnd-icon-refresh pnd-icon-spin",
-        successIcon = "pnd-icon-check-circle",
-        warnIcon = "pnd-icon-exclamation-circle";
+        successIcon = "pnd-icon-check",
+        warnIcon = "pnd-icon-exclamation";
 
     var loadMessageClass = "pnd-message",
         successMessageClass = "pnd-message-success",
@@ -150,7 +150,7 @@ angular.module('Pundit2.NotebookComposer')
                 }
 
             });
-        
+
         var eventLabel = getHierarchyString();
         eventLabel += "--saveNewNotebook";
         Analytics.track('buttons', 'click', eventLabel);
@@ -252,5 +252,12 @@ angular.module('Pundit2.NotebookComposer')
             Analytics.track('buttons', 'click', eventLabel);
         }
     };
+
+    EventDispatcher.addListener('MyPundit.popoverClose', function() {
+        if ($scope.saving) {
+            updateMessagge(NotebookComposer.options.notificationErrorMsg, NotebookComposer.options.notificationMsgTime, true);
+            $scope.clear();
+        }
+    });    
 
 });

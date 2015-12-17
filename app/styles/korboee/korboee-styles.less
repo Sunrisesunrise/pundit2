@@ -6,7 +6,6 @@
  * component
  */
 
-
 /* ------------------------------------ *\
    #DIALOG-STRUCTURE
 \* ------------------------------------ */
@@ -16,11 +15,32 @@
     height: @kee-dialog-height;
 }
 
+&.kee-modal-container.modal {
+    z-index: @zindex-pnd-kee-modal;
+}
+
 .kee-modal-body {
-    padding: 0px 0px 0px 0px;
+    padding: 0;
     border-top: 4px solid @gray-light;
 }
 
+/* ------------------------------------ *\
+   #TABS-HEADERS
+\* ------------------------------------ */
+
+.pnd-tab-header {
+
+   > li > a {
+        text-decoration: none;
+
+        &:hover,
+        &:focus,
+        &:active {
+            text-decoration: none
+        }
+    }
+}
+ 
 
 /* ------------------------------------ *\
    #VERTICAL-TABS-ELEMENTS
@@ -28,12 +48,12 @@
 // Used in Title/Description view with language selector
 
 // Left column with tab selection
-.pnd-vertical-tabs {
+.tabbable .pnd-vertical-tabs {
     height: @kee-dialog-height - 70px - 30px - 4px;
     margin-bottom: 0;
 }
 
-.tab-content > .tab-pane {
+.pnd-tab-content > .tab-pane {
     margin-bottom: 0; // Resets bottom margin of 30px
 }
 
@@ -53,12 +73,14 @@
 
     // Button for adding or removing languages
     // TODO This should go in the vertical tabs al the last item
-    .btn {
+    .pnd-btn {
+        padding: 1px 5px;
         position: absolute;
-        left: 8px;
+        left: 9px;
         bottom: 40px;
+        background: transparent;
     }
-    .tabs-left > .nav-tabs > li > a {
+    .tabs-left > .pnd-vertical-tabs > li > a {
         min-width: 40px;
     }
 }
@@ -76,13 +98,18 @@
 
     .kee-top-area-message {
         font-size: 16px;
-        padding: 0 10px 10px 10px;
+        padding: 10px;
     }
 
     .kee-top-area-menu {
         font-size: 14px;
         margin: 0;
         padding: 0;
+
+        .pnd-btn-link {
+            padding: 5px 8px 8px;
+            background-color: #999999;
+        }
     }
 }
 
@@ -103,7 +130,7 @@
 
     .left-inner-icon {
         position: relative;
-        padding: 0px;
+        padding: 0;
 
         input {
             padding-right: 20px;
@@ -113,8 +140,8 @@
         .pnd-icon {
             position: absolute;
             color: @gray-light;
-            right: 0px;
-            top: 0px;
+            right: 0;
+            top: 0;
             padding: 7px;
             -moz-box-sizing: border-box;
             -webkit-box-sizing: border-box;
@@ -158,6 +185,17 @@
     margin-bottom: 15px;
 }
 
+/* Generic styles for pnd-btn-link */
+
+.kee-modal-body {
+    .pnd-btn-link {
+        &:hover,
+        &:focus,
+        &:active {
+            color: #277b32;
+        }
+    }
+}
 
 /* ------------------------------------ *\
    #FOOTER
@@ -171,11 +209,10 @@
     margin: 0;
     clear: both;
 
-    .btn {
+    .pnd-btn {
         float: left;
     }
 }
-
 
 /* ------------------------------------ *\
    #MESSAGES
@@ -211,7 +248,7 @@
 }
 
 .kee-server-messages {
-    padding: 5px 0px 0px 10px;
+    padding: 5px 0 0 10px;
 }
 
 .kee-server-searching {
@@ -334,231 +371,47 @@
 }
 
 
-
-
-
-
-
 /* ------------------------------------ *\
-   #TRASH
+   #AUTOCOMPLETE
 \* ------------------------------------ */
 
-//
-// override
-// --------------------------------------------------
+/* Normal forms input fields that work with Korbo.
+   An autocomplete appears allowing to select Korbo entities.
+ */
 
-/*button {
-    text-shadow: none;
-
-    &:active,
-    &.active {
-        box-shadow: none;
-        text-shadow: none;
-        *//*top: auto !important;
-        left: auto !important;
-        bottom: auto !important;
-        right: auto !important;*//*
-    }
-}*/
-
-//
-// COMPONENTS
-// --------------------------------------------------
-
-/*// TABS ----- //
-
-.nav-tabs {
-    margin: 0px 0px 1px 0px !important;
-}
-
-// VERTICAL TABS ----- //
-
-.tabs-left > .nav-tabs {
-    margin-bottom: 0px;
-    margin-right: 0px;
-
-    & > li {
-
-        .badge {
-            background-color: @gray;
-        }
-
-        &.active .badge {
-            background-color: @brand-success;
-        }
-
-    }
-}
-
-// BADGE ----- //
-
-.badge {
-    margin: 0px 0px 0px 5px;
-}
-
-// ITEM ----- //
-
-.pnd-item {
-    // no animation
-    margin-left: 0px;
-
-    .pnd-item-typeLabel {
-        display: none;
-    }
-}
-
-// TABS ----- //
-
-.nav-tabs > li {
-
-    .badge {
-        background-color: @gray-darker;
-    }
-
-    &.active .badge {
-        background-color: lighten(@gray, 20%);
-    }
-}*/
-
-//
-// SEARCH
-// --------------------------------------------------
-
-/*.kee-search {
-    background-color: #fff;
-    border-bottom: 1px solid @gray-light;
-    padding: 5px;
-    margin-bottom: 5px;
-
-    label {
-        display: inline-block;
-    }
-
-    .left-inner-icon {
-        display: inline-block;
-        position: relative;
-        padding: 0px;
-        margin-left: 5px;
-        width: 74%;
-
-        input {
-            padding-right: 20px;
-            font-weight: normal;
-        }
-
-        .pnd-icon {
-            position: absolute;
-            color: @gray-light;
-            right: 0px;
-            top: 0px;
-            padding: 7px;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-        }
-    }
-
-}*/
-
-
-
-
-//
-// CONTENT
-// --------------------------------------------------
-
-
-
-// COL RIGHT - PREVIEW ----- //
-
-/*.pnd-preview {
-    float: right;
-    width: @preview-width;
-
-    .pnd-panel-tab-content-content {
-        height: @preview-height;
-    }
-
-    .pnd-panel-tab-content-header {
-        margin-top: 0px;
-        white-space: normal;
-        line-height: normal;
-    }
-}*/
-
-
-
-// NEW RIGHT CONTENT ----- //
-
-/*.kee-right-content {
-    width: @content-width;
-    height: @preview-height;
-    float: right;
-    padding: 0px 10px 0px 10px;
-
-    // TYPES ----- //
-
-    .kee-new-types {
-
-        .left-inner-icon {
-            //display: inherit;
-            display: inline-block;
-        }
-
-        .kee-list-types {
-            overflow-y: auto;
-            height: @types-height;
-            border: 1px solid @gray-extra-light;
-
-            .pnd-icon {
-                margin-top: 4px;
-            }
-
-        }
-    }
-
-}*/
-
-
-
-
-
-
-
-
-
-//
-// AUTOCOMPLETE
-// --------------------------------------------------
-
-/*.left-inner-icon {
+.left-inner-icon {
+    padding: 0;
     position: relative;
-    padding: 0px;
 
     input {
+        width: 100% !important;
         padding-right: 20px;
         font-weight: normal;
-        width: 100% !important;
     }
 
     .pnd-icon {
-        position: absolute;
-        color: @gray-light;
-        right: 0px;
-        top: 0px;
-        padding: 7px;
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
+        padding: 7px;
+
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        color: @gray-light;
     }
 
+    /*
+    TODO: Not quite sure what this is doing... commented for now...
     .pnd-icon.pnd-icon-times:hover {
         color: @brand-success;
         cursor: pointer;
     }
+    */
 
-    // AUTOCOMPLETE LIST ----- //
-
+    /* Autocomplete list */
+    /* TODO This list should be completely replaced by the Resource Panel itself */
     .dropdown-menu li,
     .dropdown-menu li a {
         max-width: 100%;
@@ -582,32 +435,29 @@
             }
         }
 
-        // AUTOCOMPLETE FOOTER  ----- //
-
+        /* Autocomplete footer */
         .kee-footer-autocomplete {
             padding: 8px 10px;
-            margin: 0px;
+            margin: 0;
             clear: both;
 
-            .btn {
+            .pnd-btn {
                 .pnd-icon {
                     font-size: 12px;
                     position: relative;
-                    padding: 0px;
+                    padding: 0;
                     color: #fff;
                 }
             }
 
             .kee-elem-to-search {
                 font-weight: bold;
-                margin: 0px 0px 5px 0px;
+                margin: 0 0 5px 0;
                 display: block;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
-
         }
     }
-
-}*/
+}

@@ -1,0 +1,45 @@
+/**
+ * COMMENT POPOVER
+ *
+ * Style of comment popover
+ */
+
+/* ------------------------------------ *\
+   #COMMENT-POPOVER
+\* ------------------------------------ */
+
+.pnd-fragment-popover {
+    height: 100px;
+    min-height: 100px;
+    min-width: 200px;
+
+    .popover-content-wrapper {
+        ul.annotations-list {
+            margin: 5px;
+
+            li {
+                cursor: pointer;
+
+                &:hover {
+                    background-color: @color-dropdown-bg-hover;
+                }
+            }
+        }
+
+        .link-section {
+            border-top-width: 1px;
+            border-top-style: solid;
+            border-top-color: @color-border-normal;
+            padding: 5px;
+
+            .normal-link {
+                color: red;
+            }
+
+            .external-link {
+              color: blue;
+            }
+
+        }
+    }
+}

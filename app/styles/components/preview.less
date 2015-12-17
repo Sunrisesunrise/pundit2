@@ -1,0 +1,124 @@
+/**
+ * PREVIEW PANEL
+ *
+ * Styles for preview panel on the right of the dashboard
+ */
+
+ /* ------------------------------------ *\
+   #PREVIEW
+\* ------------------------------------ */
+
+.pnd-preview-item-description,
+.pnd-preview-item-allLables,
+.pnd-preview-welcome {
+    padding: 5px 10px;
+}
+
+.pnd-preview-notebook-visibility,
+.pnd-preview-notebook-annotations,
+.pnd-preview-notebook-creator,
+.pnd-preview-notebook-date,
+.pnd-preview-notebook-current {
+
+    .pnd-icon {
+        font-size: 14px;
+        color: @gray;
+        vertical-align: bottom;
+    }
+}
+
+.pnd-preview-item-image {
+    padding: 10px 10px 5px 10px;
+    float: left;
+    max-width: 50%;
+    position: relative;
+
+    img {
+        border: 1px solid @gray-extra-light;
+        padding: 2px;
+        width: 100%;
+    }
+}
+
+.pnd-preview-item-description {
+    font-size: 13px;
+}
+
+.pnd-preview-item-webpage {
+    padding: 0 10px 10px 10px;
+}
+
+/* Types of entities */
+.pnd-preview-item-types {
+    clear: both;
+    overflow: hidden;
+    position: relative;
+
+    .pnd-icon.pnd-type {
+        padding: 4px 6px;
+
+        position: absolute;
+        right: 5px;
+        top: 10px;
+
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    ul {
+        padding: 10px;
+        margin: 0 14px 0 0;
+        list-style: none;
+
+        li.pnd-type {
+            float: left;
+            border-radius: @type-border-radius;
+        }
+    }
+}
+
+&.pnd-item-image {
+
+    .pnd-preview-item-image {
+        float: none;
+
+        img {
+            max-width: 100%;
+        }
+    }
+}
+
+.pnd-preview-item-predicate {
+
+    ul {
+        margin: 0;
+        padding: 0 10px;
+
+        li {
+            padding: 6px 0;
+            list-style: none;
+            overflow-wrap: break-word;
+
+            span {
+                display: block;
+                padding: 2px 0;
+                border-bottom: 1px solid @gray-lighter;
+            }
+
+            span:last-child {
+                border-bottom: 0;
+            }
+
+            strong {
+                display: block;
+            }
+        }
+    }
+}
+
+/* More links at the bottom of the preview */
+.pnd-preview-bottom-links {
+    display: block;
+    float: left;
+    padding: 5px 0 10px 10px;
+}

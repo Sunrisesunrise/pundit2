@@ -11,7 +11,7 @@ describe('Calendar Popover Resource Panel service', function() {
 
     beforeEach(module('Pundit2'));
 
-    beforeEach(inject(function($injector, _$rootScope_, _$httpBackend_, _$compile_, _$document_, _RESOURCEPANELDEFAULTS_){
+    beforeEach(inject(function($injector, _$rootScope_, _$httpBackend_, _$compile_, _$document_, _RESOURCEPANELDEFAULTS_) {
         ResourcePanel = $injector.get('ResourcePanel');
         NameSpace = $injector.get('NameSpace');
         $rootScope = _$rootScope_;
@@ -21,7 +21,7 @@ describe('Calendar Popover Resource Panel service', function() {
         RESOURCEPANELDEFAULTS = _RESOURCEPANELDEFAULTS_;
     }));
 
-    beforeEach(function(){
+    beforeEach(function() {
         // used by service to append dropdown anchor
         // if not exist the service cannot pass element to $drodown serive
         // and cause "Cannot read property 'nodeName' of undefined"
@@ -31,7 +31,7 @@ describe('Calendar Popover Resource Panel service', function() {
 
     });
 
-    afterEach(function(){
+    afterEach(function() {
 
         var body = $document.find('body');
         body.find('.pnd-anchor').remove();
@@ -42,14 +42,14 @@ describe('Calendar Popover Resource Panel service', function() {
     });
 
     // get the modal scope
-    var getPopoverCalendarScope = function(){
+    var getPopoverCalendarScope = function() {
         var popoverCalendar = angular.element.find('.pnd-popover-calendar');
         var scope = angular.element(popoverCalendar).scope();
         return scope;
     };
 
 
-    it("should open a calendar with default date if no date is given in input", function() {
+    it("should open a calendar and the scope must be defined also if no date is given in input", function() {
 
         var anchor = angular.element('.pnd-anchor')[0];
 
@@ -61,8 +61,7 @@ describe('Calendar Popover Resource Panel service', function() {
         var calendarPopoverScope = getPopoverCalendarScope();
         // at this time popover is open and scope must be defined
         expect(calendarPopoverScope).toBeDefined();
-        // popover should be open with default date
-        expect(calendarPopoverScope.selectedDate).toBe(new Date().toString());
+        expect(calendarPopoverScope.modelDate).toBeDefined();
         // popover should have a save method
         expect(calendarPopoverScope.save).toBeDefined();
         // popover should have a cancel method
@@ -75,7 +74,12 @@ describe('Calendar Popover Resource Panel service', function() {
 
     it("should open a calendar popover with a given date", function() {
 
-        var date = new Date("1983-12-23");
+        var date = {
+            value: '1983-12-08',
+            datatype: 'http://www.w3.org/2001/XMLSchema#date'
+        };
+
+        // new Date("1983-12-23");
         var anchor = angular.element('.pnd-anchor')[0];
 
         ResourcePanel.showPopoverCalendar(date, anchor);
@@ -84,7 +88,7 @@ describe('Calendar Popover Resource Panel service', function() {
         // get popover scope
         var calendarPopoverScope = getPopoverCalendarScope();
         // popover should be open with given text
-        expect(calendarPopoverScope.selectedDate).toBe(date);
+        expect(calendarPopoverScope.modelDate.value).toBe(date.value);
 
         ResourcePanel.hide();
 
@@ -178,7 +182,7 @@ describe('Calendar Popover Resource Panel service', function() {
 
     });
 
-    it("should be close popover calling cancel method", function() {
+    it("should close popover calling cancel method", function() {
 
         var date;
         var anchor = angular.element('.pnd-anchor')[0];
@@ -196,8 +200,4 @@ describe('Calendar Popover Resource Panel service', function() {
 
 
     });
-
-
-
-
 });

@@ -1,0 +1,195 @@
+/**
+ * DASHBOARD
+ *
+ * Styles for dashboard
+ */
+
+/* ------------------------------------ *\
+   #DASHBOARD
+\* ------------------------------------ */
+
+.pnd-dashboard-container {
+    position: fixed;
+    top: @toolbar-height;
+    //right: 0; /* For css overwritings in case body has some padding, margin or border */
+    left: 0; /* For css overwritings in case body has some padding, margin or border */
+    overflow: hidden;
+    z-index: @zindex-pnd-dashboard;
+    background-color: @gray-light;
+    &:extend(.clearfix all);
+
+    .pnd-inner-nav { //also on .nav
+        float: initial;
+    }
+}
+
+.pnd-dashboard-panel {
+    top: 0;
+    position: absolute;
+}
+
+.pnd-dashboard-panel-expanded {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+     input[type="text"].form-control, select.form-control, textarea.form-control {
+        color: @color-text-light;
+    }
+
+    .pnd-btn-xs {
+        background: #fff;
+    }
+}
+
+.pnd-dashboard-footer-handler + .pnd-btn-xs,
+.pnd-dashboard-panel-collapsed-content + .pnd-btn-xs {
+    background-color: rgb(255,255,255);//!important
+    //background-position: 0 20px;
+}
+
+/* Panels: First and second expended panels have
+an internal padding on the right to leave some space to the
+vertical draggable bar */
+.pnd-dashboard-panel-not-last {
+
+    .pnd-dashboard-panel-expanded {
+        padding-right: 7px;
+    }
+}
+
+.pnd-dashboard-panel-collapsed {
+    height: 100%;
+}
+
+.pnd-dashboard-panel-last .pnd-tab-header { //.pnd-dashboard-panel-last .nav-tabs
+    margin-right: 0;
+}
+
+/* For overwritings on preview page links */
+
+.pnd-annotation-preview-item-container ul a:hover {
+    color: @color-text-link-hover !important; /* For css overwritings */
+    text-decoration: underline !important; /* For css overwritings */
+}
+
+/* ------------------------------------ *\
+   #COLLAPSE-EXPAND-BUTTONS
+\* ------------------------------------ */
+
+.pnd-dashboard-panel {
+
+    button.pnd-btn-dashboard {
+        width: 20px; /* This is modified below for not-last panels */
+        padding-bottom: 0;
+        position: absolute;
+        z-index: 1;
+        right: 0; /* This is modified below for not-last panels */
+
+
+        &.pnd-btn-xs {
+            border: 0;
+            padding-top: 2px;
+            //padding-bottom: 0;
+            background-color: #fff;
+            text-shadow: 0 1px 0 #fff;
+
+            &:hover {
+                color: @brand-success;
+            }
+
+            &:focus,
+            &:active:focus,
+            &.active:focus {
+                box-shadow: none;
+            }
+
+            .pnd-icon {
+                font-size: 12px;
+                line-height: normal;
+                padding: 0;
+            }
+
+            &.disabled,
+            &[disabled] {
+                background-color: #fff;
+                text-shadow: 0;
+                opacity: 1;
+                filter: alpha(opacity=100);
+
+                .pnd-icon {
+                    color: @gray-extra-light;
+                }
+            }
+        }
+    }
+
+    /* First and second panel (not-last) */
+    &.pnd-dashboard-panel-not-last {
+        button.pnd-btn-dashboard {
+            right: 7px;
+            width: 21px;
+        }
+    }
+}
+
+.pnd-dashboard-panel-nav {
+    width: 100%;
+    height: 20%;
+}
+
+.pnd-dashboard-panel-content {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border-top: 4px solid @gray-light;
+
+    .dropdown-menu {
+        > li > a {
+            &:hover,
+            &:focus,
+            &:active {
+                color: @color-dropdown-text !important;
+            }
+        }
+    }
+}
+
+.pnd-dashboard-panel-collapsed-content {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+}
+
+.pnd-dashboard-panel-separator {
+    position: absolute;
+    right: 0;
+    width: 7px;
+    background: @gray-light;
+    top: 0;
+    height: 100%;
+    background-image: url(img/bg-dashboard-panel-separator.png);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    cursor: col-resize;
+}
+
+.pnd-dashboard-footer-handler {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    right: 20px;
+    height: 18px;
+    background-image: url(img/bg-dashboard-footer.png);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    cursor: row-resize;
+}
+
+.pnd-dashboard-footer {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    #gradient > .vertical-three-colors(@gray-light; @gray-light; 80%; darken(@gray-light, 10));
+}

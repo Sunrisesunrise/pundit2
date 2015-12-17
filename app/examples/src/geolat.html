@@ -166,7 +166,7 @@
     ];
 
     var KeeDemoCtrl = function($scope, KorboCommunicationService, $window, ItemsExchange,
-                               Item, $timeout, EventDispatcher, CLIENTDEFAULTS, PAGEITEMSCONTAINERDEFAULTS,
+                               Item, $timeout, EventDispatcher, CLIENTPRODEFAULTS, PAGEITEMSCONTAINERDEFAULTS,
                                MYITEMSDEFAULTS, MyPundit,ResourcePanel,  SelectorsManager, Korbo2Selector, FreebaseSelector, DbpediaSelector) {
 
 
@@ -189,7 +189,7 @@
 
         for (var i in predicates) {
             var item = new Item(predicates[i].uri, predicates[i]);
-            ItemsExchange.addItemToContainer(item, CLIENTDEFAULTS.relationsContainer);
+            ItemsExchange.addItemToContainer(item, CLIENTPRODEFAULTS.relationsContainer);
         }
 
         var loadMockedItems = function(){
@@ -302,7 +302,7 @@
 
 
 </script>
-<div data-ng-app="Pundit2" class="kee-wrp pnd-wrp" >
+<div data-ng-app="Pundit2" class="pundit2 kee-wrp pnd-wrp">
     <div ng-controller="KeeDemoCtrl">
         <br>
         <korbo-entity-editor conf-name="korboEEConfig"></korbo-entity-editor>

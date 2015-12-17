@@ -7,7 +7,7 @@ describe("PageItemsContainer", function(){
     beforeEach(module('Pundit2'));
 
     beforeEach(module(
-        'src/Lists/PageItemsContainer/PageItemsContainer.dir.tmpl.html',
+        //'src/Lists/PageItemsContainer/PageItemsContainer.dir.tmpl.html',
         'src/Lists/itemList.tmpl.html'
     ));
 

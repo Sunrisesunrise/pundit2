@@ -259,7 +259,7 @@ angular.module('Pundit2.Dashboard')
 
 })
 
-.service('Dashboard', function(BaseComponent, DASHBOARDDEFAULTS, $window, $rootScope) {
+.service('Dashboard', function(BaseComponent, DASHBOARDDEFAULTS, $window, $rootScope, EventDispatcher, Keyboard) {
 
     var dashboard = new BaseComponent('Dashboard', DASHBOARDDEFAULTS);
 
@@ -303,6 +303,8 @@ angular.module('Pundit2.Dashboard')
                 panels[p].setTabContentHeight();
             }
         }
+
+        EventDispatcher.sendEvent('Dashboard.toggle', state.isDashboardVisible);
     };
 
     dashboard.isDashboardVisible = function() {
@@ -311,7 +313,7 @@ angular.module('Pundit2.Dashboard')
 
     /**** CONTAINER ****/
     dashboard.getContainerHeight = function() {
-        return state.containerHeight;
+        return state.isDashboardVisible ? state.containerHeight : 0;
     };
 
     dashboard.increaseContainerHeight = function(dy) {
@@ -673,6 +675,35 @@ angular.module('Pundit2.Dashboard')
         //dashboard.log("Added tab " + tabName + " to non-existing panel " + panelTitle + ": for later use." + ' [hierarchyString: ' + hierarchyString + ']');
         dashboard.log("Added tab " + tabName + " to non-existing panel " + panelTitle + ": for later use.");
     };
+
+    EventDispatcher.addListener('Dashboard.close', function( /*e*/ ) {
+        if (state.isDashboardVisible) {
+            dashboard.toggle();
+        }
+    });
+
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
+        if (state.isDashboardVisible) {
+            dashboard.toggle();
+        }
+    });
+
+    EventDispatcher.addListener('Client.show', function( /*e*/ ) {
+        dashboard.toggle();
+        $rootScope.$$phase || $rootScope.$digest();
+        dashboard.toggle();
+    });
+
+    Keyboard.registerHandler('DashboardService', {
+        keyCode: 27,
+        ignoreOnInput: false,
+        stopPropagation: true
+    }, function( /*event, eventKeyConfig*/ ) {
+        if (state.isDashboardVisible) {
+            dashboard.toggle();
+            $rootScope.$$phase || $rootScope.$digest();
+        }
+    });
 
     dashboard.log('Service run');
 

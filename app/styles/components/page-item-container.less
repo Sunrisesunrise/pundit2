@@ -1,0 +1,232 @@
+/**
+ * PAGE ITEMS CONTAINER
+ *
+ * Container for list of elements.
+ * Structured in: header, main content and footer
+ */
+
+
+/* ------------------------------------ *\
+   #PAGE-ITEMS-CONTAINER-HEADER
+\* ------------------------------------ */
+/* Top area including the search field */
+
+.pnd-panel-tab-content-header {
+    overflow: hidden;
+    min-height: 36px;
+    margin: 9px 0 10px 0;
+    padding: 0 0 0 7px;
+    border-bottom: 1px solid @color-border-normal;
+
+    /* Title of panel */
+    h1 {
+        margin: 0;
+        padding: 0;
+        clear: none;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 1.8;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    /* Icon defining type of item in preview panel */
+    & > .pnd-icon {
+        float: left;
+        margin-right: 5px;
+        line-height: 2.8;
+    }
+
+    &.pnd-panel-tab-content-header-no-border {
+        min-height: 35px;
+        margin-bottom: 0;
+        border-bottom: 0;
+    }
+
+    &.pnd-panel-tab-content-header-border {
+        margin-bottom: 0;
+    }
+
+    /* Div containing the INPUT for searching inside the panel list */
+    .pnd-panel-tab-search {
+        display: inline-block;
+        width: 100%;
+        padding-right: 7px;
+        position: relative;
+
+        input {
+            padding-right: 20px;
+            font-weight: normal;
+        }
+
+        .pnd-icon {
+            padding: 7px;
+            box-sizing: border-box;
+
+            position: absolute;
+            top: 0;
+            right: 7px;
+
+            color: @gray;
+            font-size: 14px;
+        }
+
+        /* Only search field with options dropdown on the right */
+        &.pnd-has-options {
+            padding-right: 30px;
+
+            .pnd-icon {
+                right: 30px;
+            }
+        }
+
+        // .pnd-icon-times is configured in *ItemsContainer.service.js defaults with
+        // inputIconClear: 'pnd-icon-times'
+        .pnd-icon.pnd-icon-times:hover {
+            color: @brand-success;
+            cursor: pointer;
+        }
+
+        & + .pnd-btn-xs {
+            padding: 5px;
+        }
+    }
+
+    /* Icon to activate the options dropdown with ordering and other stuff */
+    .pnd-panel-tab-icon {
+        position: absolute;
+        // Not very elegant solution. The top positioning
+        // cannot be relative to .pnd-panel-tab-content-header since there are some overflow
+        // problems if we assign position: relative to that element
+        top: 43px;
+        right: 13px;
+
+        &.pnd-btn:hover,
+        &.pnd-btn:focus {
+            background-image: none;
+        }
+    }
+}
+
+
+/* ------------------------------------ *\
+   #SECOND-LEVEL-TABS
+\* ------------------------------------ */
+/* Style for the second level tabs that are found under
+ the search field.
+ These tabs are usually used for filtering the items
+ in the displayed list */
+.pnd-panel-tab-content {
+
+    /* These are the second level tabs, under the search field */
+    .pnd-tab-header { //.nav-tabs
+        margin-bottom: 0;
+        margin-right: 0;
+
+        background-color: #fff;
+        border-top: 1px solid @color-border-normal;
+        border-bottom: 1px solid @color-border-normal;
+
+        > li {
+            /* Actual tabs (as links) */
+            > a {
+                margin-right: 0;
+                background-color: #fff;
+                border: 0;
+                border-top: 2px solid transparent;
+                //border-bottom: 1px solid @color-border-normal;
+
+                color: @nav-tabs-active-link-hover-color;
+                line-height: @line-height-base;
+
+                &:hover {
+                    background-color: transparent;
+                    //border-bottom: 1px solid @color-border-normal;
+
+                    color: #000;
+                    cursor: pointer;
+                }
+            }
+
+            /* Active state, and its :hover to override normal :hover */
+            &.active > a {
+                &,
+                &:hover,
+                &:focus {
+                    border-top: 2px solid @gray;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+
+/* ------------------------------------ *\
+   #CONTENT
+\* ------------------------------------ */
+
+.pnd-inner-scrollable {
+    overflow-y: auto;
+
+    &.pnd-inner-no-tabs {
+        margin: 0;
+    }
+}
+
+.pnd-inner {
+    .pnd-tab-content {
+        margin: 0;
+        overflow-y: auto;
+    }
+}
+
+.pnd-panel-tab-content-content {
+    margin: 0;
+
+    .pnd-tab-header {
+
+        .show-tabs {
+            margin-right: 7px;
+        }
+    }
+
+    .list-group {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+}
+
+
+/* ------------------------------------ *\
+   #FOOTER
+\* ------------------------------------ */
+
+.pnd-panel-tab-content-footer {
+    display: block;
+    height: 30px;
+    position: absolute;
+    bottom: 0;
+    right: 7px;
+    left: 0;
+
+    background-color: #fff;
+    border-top: 1px solid @color-border-normal;
+
+    .pnd-btn {
+        float: left;
+        //border-right: 1px solid #fff;
+    }
+
+    .pnd-btn-lists.pnd-btn {
+        float: right;
+    }
+}
+
+/* Footer Right */
+.pnd-dashboard-panel-last {
+
+    .pnd-panel-tab-content-footer {
+        right: 0;
+    }
+}

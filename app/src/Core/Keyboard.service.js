@@ -8,14 +8,15 @@ angular.module('Pundit2.Core')
  *
  * Keyboard Service offers keyboard keys and short cut handlers.
  */
-.service('Keyboard', function ($rootScope, $document, BaseComponent) {
+.service('Keyboard', function ($rootScope, $document, BaseComponent, EventDispatcher) {
     // Keyboard service instance.
     var keyboard = new BaseComponent('Keyboard');
 
     // Internal state object.
     var state = {
         keyHandlers: {},
-        consuming: {}
+        consuming: {},
+        on: false
     };
 
     // Get event identifier string; it will be a string composed by initial of modifier keys (uppercase if pressed) with keycode
@@ -137,7 +138,11 @@ angular.module('Pundit2.Core')
      * Disable serivce.
      */
     keyboard.off = function () {
+        if (!state.on) {
+            return;
+        }
         $document.off('keydown.keyboardService');
+        state.on = false;
     };
 
     /**
@@ -150,6 +155,9 @@ angular.module('Pundit2.Core')
      * Enable serivce.
      */
     keyboard.on = function () {
+        if (state.on) {
+            return;
+        }
         // Base keydown event handlers.
         $document.on('keydown.keyboardService', function (evt) {
             keyboard.log("keydown - " + keyboard.eventToString(evt));
@@ -172,6 +180,8 @@ angular.module('Pundit2.Core')
                     }
             }
         });
+
+        state.on = true;
     };
 
     /**
@@ -259,7 +269,7 @@ angular.module('Pundit2.Core')
         normalizedEventKeyConfig.callback = callback;
         normalizedEventKeyConfig.module = module;
 
-        if (handlers.length == 0) {
+        if (handlers.length === 0) {
             handlers.push(normalizedEventKeyConfig);
         }
         else {
@@ -327,6 +337,14 @@ angular.module('Pundit2.Core')
     keyboard.unregisterAllHandlers = function () {
         state.keyHandlers = {};
     };
+
+    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+        keyboard.off();
+    });
+
+    EventDispatcher.addListener('Client.show', function(/*e*/) {
+        keyboard.on();
+    });
 
     // Enable Service.
     keyboard.on();

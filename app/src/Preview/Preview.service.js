@@ -43,7 +43,7 @@ angular.module('Pundit2.Preview')
      * Default value:
      * <pre> welcomeBodyMessage: "Enjoy it" </pre>
      */
-    welcomeBodyMessage: "This is the preview area of Pundit. Just click on an element in a list to select it and see its details here. Enjoy using Pundit.",
+    welcomeBodyMessage: "This is the preview panel of Pundit. Just click on an element in a list and see its details here. Enjoy using Pundit.",
     /**
      * @module punditConfig
      * @ngdoc property
@@ -108,7 +108,8 @@ angular.module('Pundit2.Preview')
         itemDashboardPreview: null,
         itemDashboardSticky: null,
         heigthTypesDiv: null,
-        typesHidden: null
+        typesHidden: null,
+        lock: false
     };
 
     /**
@@ -161,6 +162,10 @@ angular.module('Pundit2.Preview')
      *
      */
     preview.showDashboardPreview = function(item) {
+        if (state.lock) {
+            preview.log("Preview is locked - " +item.uri);
+            return;
+        }
         state.itemDashboardPreview = item;
     };
 
@@ -285,6 +290,10 @@ angular.module('Pundit2.Preview')
         } else {
             return false;
         }
+    };
+
+    preview.setLock = function(lock) {
+        state.lock = lock;
     };
 
     return preview;

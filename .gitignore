@@ -7,6 +7,8 @@
 /coverage/
 
 /app/examples/*.html
+/app/examples/extensions
+/app/css/temporary.css
 
 .idea
 /app/src/templates.js
@@ -19,3 +21,5 @@
 
 .floo
 .flooignore
+
+/_site

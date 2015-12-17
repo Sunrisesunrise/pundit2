@@ -457,6 +457,21 @@ KORBODEFAULTCONF = {
 
     /**
      * @ngdoc property
+     * @name KORBODEFAULTCONF#confirmModalOnClose
+     *
+     * @description
+     * `boolean`
+     *
+     * Shows confirm modal on close.
+     *
+     * <pre>
+     *     confirmModalOnClose: true
+     * </pre>
+     */
+    confirmModalOnClose: false,
+
+    /**
+     * @ngdoc property
      * @name KORBODEFAULTCONF#visualizeCopyButton
      *
      * @description
@@ -658,6 +673,40 @@ KORBODEFAULTCONF = {
      * </pre>
      */
     fromLODTools: false,
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#LODToolSearchURL
+     *
+     * @description
+     * `boolean`
+     *
+     * Shows LOD Tool Search URL button.
+     * Note: enable fromLODTools first.
+     *
+     * Default value:
+     * <pre>
+     *   LODToolSearchURL: false
+     * </pre>
+     */
+    LODToolSearchURL: true,
+
+    /**
+     * @ngdoc property
+     * @name KORBODEFAULTCONF#LODToolSearchAndCopy
+     *
+     * @description
+     * `boolean`
+     *
+     * Shows LOD Tool Search And Copy button.
+     * Note: enable fromLODTools first.
+     *
+     * Default value:
+     * <pre>
+     *   LODToolSearchAndCopy: false
+     * </pre>
+     */
+    LODToolSearchAndCopy: true,
 
     /**
      * @ngdoc property

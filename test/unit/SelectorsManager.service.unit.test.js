@@ -5,7 +5,6 @@ describe('SelectorsManager service', function() {
     $q,
     $rootScope,
     $injector,
-    SELECTORMANAGERDEFAULTS,
     ItemsExchange;
 
     var testPunditConfig = {
@@ -53,9 +52,8 @@ describe('SelectorsManager service', function() {
         module('Pundit2');
     });
 
-    beforeEach(inject(function(_SELECTORMANAGERDEFAULTS_, _SelectorsManager_, _ItemsExchange_,
+    beforeEach(inject(function(_SelectorsManager_, _ItemsExchange_,
         _$httpBackend_, _$q_, _$rootScope_, _$injector_){
-        SELECTORMANAGERDEFAULTS = _SELECTORMANAGERDEFAULTS_;
         SelectorsManager = _SelectorsManager_;
         $httpBackend = _$httpBackend_;
         $q = _$q_;

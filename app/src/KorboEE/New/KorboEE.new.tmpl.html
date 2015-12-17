@@ -2,13 +2,13 @@
     <!-- Top area -->
     <div class="kee-top-area">
         <div class="kee-top-area-menu pull-right">
-            <button type="button" class="btn btn-xs btn-link" ng-click="showDropdown($event)">
+            <button type="button" class="pnd-btn pnd-btn-xs pnd-btn-link" ng-click="showDropdown($event)">
                 <span class="pnd-icon pnd-icon-gear"></span>
             </button>
         </div>
         <!--<breadcrumbs ng-show="showBreadcrumbs" bc-name="'keebreadcrumb'" empty-placeholder="'Type entity title'"></breadcrumbs>-->
         <div>
-            <ul class="nav nav-tabs">
+            <ul class="pnd-tab-header">
                 <li ng-class="{'active': innerPanes.current == 'simpleOptions'}">
                     <a href="#" id="nav-btn-entity" ng-click="changeInnerPane('simpleOptions')">{{entityTitle}}</a>
                 </li>
@@ -22,6 +22,9 @@
         </div>
         <div class="kee-top-area-message" ng-class="{'kee-error' : topArea.status == 'error'}">
             {{topArea.message}}
+            <a href="#" ng-click="toggleErrorDetailsClick()" ng-show="errorMoreInfoLink">
+                details.
+            </a>
         </div>
     </div>
     <!-- End top area -->
@@ -35,8 +38,8 @@
             <div class="kee-new-languages">
                 <div kee-languages="tabs"></div>
                 <button
-                        class="btn btn-xs btn-link pull-left"
-                        template="{{disactiveLanguagesPopoverTemplate}}"
+                        class="pnd-btn pnd-btn-xs pnd-btn-link pull-left"
+                        template-url="{{disactiveLanguagesPopoverTemplate}}"
                         data-animation="am-flip-x"
                         bs-popover>
                     <span class="pnd-icon pnd-icon-plus"></span>
@@ -119,8 +122,9 @@
                                 ng-disabled="originalUrlCheck">
                         </div>
                     </div>
-                    <button class="btn btn-info btn-xs pnd-btn-full"
+                    <button class="pnd-btn"
                             ng-disabled="originalUrlCheck"
+                            ng-show="conf.LODToolSearchURL"
                             ng-click="searchOnResourcePanel($event, 'original-url')">
                         Search original URL
                     </button>
@@ -128,8 +132,8 @@
                 <!-- End original url -->
                 <!-- Search and copy from LOD-->
                 <div class="kee-new-search-and-copy"
-                     ng-show="conf.fromLODTools">
-                    <button class="btn btn-info btn-xs pnd-btn-full"
+                     ng-show="conf.fromLODTools && conf.LODToolSearchAndCopy">
+                    <button class="pnd-btn"
                             ng-click="searchOnResourcePanel($event, 'copy-from-lod')">
                         Search and copy from LOD
                     </button>
@@ -148,7 +152,7 @@
                     <div class="form-group">
                         <button
                             type="button"
-                            class="btn btn-xs btn-link pull-right"
+                            class="pnd-btn pnd-btn-xs pnd-btn-link pull-right"
                             ng-show="!activeFilter"
                             ng-click="activeFilter = !activeFilter">
                                 <span class="pnd-icon pnd-icon-filter"></span>
@@ -180,7 +184,7 @@
                             </span>
                             <span
                                 ng-show="!typeFilter.label == ''"
-                                class="pnd-icon pnd-icon-times"
+                                class="pnd-icon pnd-icon-close"
                                 ng-click="typeFilter.label=''">
                             </span>
                             <input
@@ -229,13 +233,13 @@
                 <!-- End Types -->
                 <button
                         type="button"
-                        class="btn btn-info btn-xs pnd-btn-half"
+                        class="pnd-btn pnd-btn-small"
                         ng-click="activeAllTypes()">
                     Select all types
                 </button>
                 <button
                         type="button"
-                        class="btn btn-info btn-xs pnd-btn-half"
+                        class="pnd-btn pnd-btn-small"
                         ng-click="disableAllTypes()">
                     Deselect all types
                 </button>
@@ -244,10 +248,12 @@
         <!-- END - Inner pane: advanced options -->
 
         <!-- Inner pane: search -->
+        <!-- 
         <div class="kee-inner-pane"
              ng-show="innerPanes.panes.search.visible">
             <div ng-include="'src/KorboEE/Search/KorboEE.search.tmpl.html'"></div>
         </div>
+        -->
         <!-- END - Inner pane: search -->
 
         <!-- Inner pane: tripleComposer -->
@@ -263,7 +269,7 @@
                     Please go to the <a ng-click="changeInnerPane('advancedOptions')">advanced options</a> and select one or more types.
                     <br /><br />
                     <!-- TODO See if we can remove the button below -->
-                    <button class="btn btn-sm btn-info"
+                    <button class="pnd-btn pnd-btn-sm"
                             ng-show="!loadingStatus"
                             ng-click="changeInnerPane('advancedOptions')">Advanced options</button>
                 </p>
@@ -278,29 +284,62 @@
         Saving...
     </div>
 
+    <div class="kee-error-more-info small-modal-wrapper" ng-show="errorMoreInfo">
+        <div class="kee-error-more-info-content small-modal">
+
+            <!-- Modal contents -->
+            <div class="small-modal-content">
+                <p>
+                    The entity you are creating is <strong>not compatible with the Predicate</strong> you are using in your annotation.
+                </p>
+                <!--
+                    You are creating an entity to be used as <strong><em>{{typesErrorDetails.entityUsedAs}}</em></strong>
+                    with a predicate having <em>{{typesErrorDetails.predicateProperty}}</em> not compatible with entity types you've selected.
+                -->
+                <p>
+                    Please select at least one of following types:
+                </p>
+                <ul class="list-group">
+                    <li ng-repeat="type in typesErrorDetails.predicateTypes" title="{{type.uri}}">
+                        {{type.name}}
+                </ul>
+            </div>
+            <!-- END // Modal contents -->
+
+            <!-- Modal footer containing buttons -->
+            <div class="kee-error-more-info-content-footer small-modal-footer">
+                <button
+                        type="button"
+                        class="pnd-btn"
+                        ng-click="toggleErrorDetailsClick()">
+                    Close
+                </button>
+            </div>
+            <!-- END // Modal footer containing buttons -->
+
+        </div>
+    </div>
+
     <!-- Footer -->
     <div class="kee-footer">
         <button 
             type="button" 
-            class="btn btn-xs btn-success pnd-btn-full"
+            class="pnd-btn pnd-btn-calltoaction"
             ng-click="save()">
                 <span ng-if="!editMode">Save and add</span>
                 <span ng-if="editMode">Save</span>
-        </button>
-        <button 
+        </button><button
             type="button" 
-            class="btn btn-xs btn-info pnd-btn-full"
+            class="pnd-btn"
             ng-click="closeKeeModal()">
                 Close
-        </button>
-        <button 
+        </button><button
             ng-hide="editMode" 
             type="button" 
-            class="btn btn-xs btn-info pnd-btn-full"
+            class="pnd-btn"
             ng-click="clearForm()">
                 Clear
         </button>
-
     </div> 
     <!-- End Footer -->
 </div>

@@ -1,16 +1,22 @@
 angular.module('Pundit2.Item')
 
-.controller('ItemCtrl', function($scope, ItemsExchange, TypesHelper, Preview, ContextualMenu) {
+.controller('ItemCtrl', function($scope, ItemsExchange, TypesHelper, Preview, ContextualMenu, NotebookExchange) {
 
-    // get item by uri (passed as directive uri param)
-    $scope.item = ItemsExchange.getItemByUri($scope.uri);
-    // get item type label (then show it inside template)
-    if (typeof($scope.item.type) !== 'undefined' && $scope.item.type.length > 0) {
-        $scope.itemTypeLabel = TypesHelper.getLabel($scope.item.type[0]);
+    if ($scope.itemType === 'notebook') {
+        $scope.item = NotebookExchange.getNotebookById($scope.nid);
+    } else {
+        // get item by uri (passed as directive uri param)
+        $scope.item = ItemsExchange.getItemByUri($scope.uri);
+        // get item type label (then show it inside template)
+        if (typeof($scope.item.type) !== 'undefined' && $scope.item.type.length > 0) {
+            $scope.itemTypeLabel = TypesHelper.getLabel($scope.item.type[0]);
+        }
     }
+
 
     $scope.onItemMouseOver = function() {
         Preview.showDashboardPreview($scope.item);
+        Preview.setLock(false);
     };
 
     $scope.onItemMouseLeave = function() {

@@ -1,0 +1,167 @@
+/**
+ * CONSOLIDATION
+ *
+ * Style of inline text fragments and images involved in annotations
+ */
+
+/* ------------------------------------ *\
+   #CONSOLIDATION
+\* ------------------------------------ */
+.pnd-cons {
+    background-color: @text-fragment-color;
+    // padding: 0.2em 0em;
+    // color: darken(@brand-warning, 25%);
+    // line-height: 1.8em;
+    transition: none;
+
+    /* Hover effect */
+    &.pnd-textfragment-highlight {
+        background-color: @text-fragment-color-hover !important;
+        /* icon following text fragment */
+        & + .pnd-text-fragment-icon {
+            color: @text-fragment-color-hover !important;
+        }
+    }
+
+    /* Ghosted text fragment
+    The text fragments is shown but in a lighter colour.
+    This style is for ghosted elements that are NOT also hidden */
+    &.pnd-textfragment-ghosted:not(.pnd-textfragment-hidden) {
+        background-color: @text-fragment-ghosted !important;
+        /* icon following text fragment */
+        & + .pnd-text-fragment-icon {
+            color: @text-fragment-icon-color-ghosted !important;
+        }
+    }
+
+    /* Hidden text fragment
+    The text fragment is not shown to the user */
+    &.pnd-textfragment-hidden {
+        background-color: inherit !important;
+        /* Hides icons related to hidden text fragments */
+        & + .pnd-text-fragment-icon {
+            display: none;
+        }
+    }
+
+    /* Consolidation overlapping values */
+    &.pnd-textfragment-numbers-1 {
+        background-color: @text-fragment-color-1;
+    }
+
+    &.pnd-textfragment-numbers-2 {
+        background-color: @text-fragment-color-2;
+    }
+
+    &.pnd-textfragment-numbers-3 {
+        background-color: @text-fragment-color-3;
+    }
+
+    &.pnd-textfragment-numbers-4 {
+        background-color: @text-fragment-color-4;
+    }
+
+    &.pnd-textfragment-numbers-5 {
+        background-color: @text-fragment-color-5;
+    }
+
+    &.pnd-textfragment-numbers-6 {
+        background-color: @text-fragment-color-6;
+    }
+
+    &.pnd-textfragment-numbers-7 {
+        background-color: @text-fragment-color-6;
+    }
+
+    &.pnd-textfragment-numbers-8 {
+        background-color: @text-fragment-color-6;
+    }
+
+    &.pnd-textfragment-numbers-9 {
+        background-color: @text-fragment-color-6;
+    }
+}
+
+/* Highlight of text fragment currently used on triple composer
+ The user is building a triple whit this selected text fragment...
+ both as subject or object */
+.pnd-cons-temp, 
+.pnd-cons-temp.pnd-textfragment-hidden {
+    background-color: @text-fragment-color-hover !important;
+}
+
+/* For css font overwritings on icons */
+.pnd-wrp [class*="icon-"] {
+    font-family: 'pundit-font' !important;
+}
+
+/* The small icon next to each text fragment */
+span.pnd-text-fragment-icon {
+    display: inline-block;
+    margin-left: 0.1em;
+    margin-right: 0.1em;
+    margin-top: 0.18em;
+    margin-bottom: -0.18em;
+    font-family: 'pundit-font' !important; /* For css font overwritings on icons */
+    color: @text-fragment-icon-color; //  @brand-warning;
+    font-size: 1.18em !important; /* For css overwritings */
+    vertical-align: top;
+    text-decoration: none;
+    text-shadow: none;
+    transition: none;
+    cursor: context-menu;
+
+    &:hover {
+        color: @text-fragment-icon-color-hover; // darken(@brand-warning, 12%);
+        text-decoration: none;
+    }
+
+    &.pnd-icon-bookmark {
+        color: @text-fragment-icon-color;
+        font-size: 1.18em !important; /* For css overwritings */
+
+        &:hover {
+            color: @text-fragment-icon-color-hover; // darken(@brand-success, 12%);
+            text-decoration: none;
+        }
+    }
+
+    &.pnd-icon-tag {
+        font-size: 1.18em !important; /* For css overwritings */
+    }
+}
+
+/* Consolidation inside <A> links */
+a {
+    & .pnd-cons {
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .pnd-text-fragment-icon {
+        text-decoration: none;
+        // color: @text-fragment-icon-color; //  @brand-warning;
+
+        &:hover {
+            // color: @text-fragment-icon-color-hover; // darken(@brand-warning, 12%);
+            text-decoration: none;
+        }
+    }
+}
+
+sup {
+    .pnd-text-fragment-icon {
+        font-size: 12px;
+        position: absolute;
+        top: 0.3em;
+    }
+}
+
+
+/* ------------------------------------ *\
+   #IMAGE-CONSOLIDATION
+\* ------------------------------------ */
+
+.pnd-cons-img {
+    border: 2px solid @brand-primary !important;
+}

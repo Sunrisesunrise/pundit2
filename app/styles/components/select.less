@@ -1,0 +1,113 @@
+/**
+ * SELECT
+ *
+ * Style for pnd select
+ */
+
+/* ------------------------------------ *\
+   #SELECT
+\* ------------------------------------ */
+
+.pnd-select{
+    height: 28px;
+    min-width: 80px;
+    
+    margin: 0 4px;
+    position: relative;
+    left: 0;
+
+    display: inline-block;
+    
+    background: yellow;
+    color: blue;
+    font-size: 1em;
+    text-align: left;
+    
+    overflow: visible;
+
+    .label-selected{
+        position: relative; 
+        top: 3.5px;
+        margin: 0 4px;
+    }
+
+    .open-options{
+        height: 28px;
+        width: 24px;
+        
+        position: absolute;
+        right: 0;
+        top: 0;
+        
+        opacity: 0.5;
+
+        border-left: 1px solid black;
+        border-radius: 0 2px 2px 0;
+
+        background: red;
+        text-align: center;
+
+        cursor: pointer;
+        
+
+        &:hover{
+            opacity: 1;
+        }
+
+        .fa{
+            text-shadow:none !important;
+        }
+    }
+
+    .option-container{
+        display: block;
+        visibility: hidden;
+        height:auto;
+        max-height: 170px;
+        width: 100%;
+
+        position: absolute;
+        left: 0;
+        top:30px;
+
+        overflow-y:auto;
+        background: orange;
+
+        z-index: 400;
+
+        &.expanded{
+            visibility: visible;
+        }
+        .option{
+            height:100%;
+            width: 100%;
+            padding: 5px;
+            
+            position: relative;
+            left: 0;
+            
+            border-bottom: solid 1px black;
+
+            background: yellow;
+            color: blue;
+            
+            cursor: pointer;
+
+            &:hover{
+                background: green;
+                color: black;
+            }
+        }
+
+        .option.selected{
+            background: yellow;
+            color: black;
+            cursor: default;
+
+            &:hover{
+                background: green;
+                color: black;
+            }
+        }
+    }
+}

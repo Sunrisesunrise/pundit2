@@ -24,9 +24,14 @@ angular.module('Pundit2.ContextualMenu')
  * @description Pundit2 ContextualMenu Service
  *
  */
-.service('ContextualMenu', function($rootScope, BaseComponent, CONTEXTUALMENUDEFAULTS, $dropdown, $window) {
+.service('ContextualMenu', function($rootScope, BaseComponent, CONTEXTUALMENUDEFAULTS, $dropdown, $window, EventDispatcher) {
 
     var contextualMenu = new BaseComponent('ContextualMenu', CONTEXTUALMENUDEFAULTS);
+
+    // var scoll = {
+    //     top: undefined,
+    //     left: undefined
+    // };
 
     var state = {
         // angular strap menu reference
@@ -50,12 +55,16 @@ angular.module('Pundit2.ContextualMenu')
         init: false
     };
 
+    var scrollHandler = function() {
+        $(this).scrollTop(scroll.top).scrollLeft(scroll.left);
+    };
+
     // var overflowContentClass = contextualMenu.options.overflowContentClass;
 
 
     // create div anchor (the element bound with angular strap menu reference)
     angular.element("[data-ng-app='Pundit2']")
-        .prepend("<div class='pnd-dropdown-contextual-menu-anchor' style='position: absolute; left: -500px; top: -500px;'><div>");
+        .prepend("<div class='pnd-dropdown-contextual-menu-anchor' style='position: absolute; left: 0px; top: 0px;'><div>");
 
     state.anchor = angular.element('.pnd-dropdown-contextual-menu-anchor');
 
@@ -76,7 +85,7 @@ angular.module('Pundit2.ContextualMenu')
         } else {
             options.placement = contextualMenu.options.position;
         }
-        options.template = 'src/ContextualMenu/dropdown.tmpl.html';
+        options.templateUrl = 'src/ContextualMenu/dropdown.tmpl.html';
 
         state.init = true;
 
@@ -218,6 +227,10 @@ angular.module('Pundit2.ContextualMenu')
             state.menu = null;
         }
 
+        if (state.mockMenu !== null) {
+            state.mockMenu.hide();
+        }
+
         if (state.menuElements.length === 0) {
             contextualMenu.err('Cannot show a contextual menu without any element!!');
             return;
@@ -233,6 +246,7 @@ angular.module('Pundit2.ContextualMenu')
         state.menuResource = resource;
         state.menuType = type;
         state.content = contextualMenu.buildContent();
+        mockOptions.scope.content = state.content;
 
         if (state.content.length === 0) {
             contextualMenu.err('Tried to show menu for type ' + type + ' without any content (buildContent fail)');
@@ -241,6 +255,7 @@ angular.module('Pundit2.ContextualMenu')
 
         contextualMenu.log('Showing menu for type=' + type + ' at ' + x + ',' + y);
 
+        state.anchor.css('left', x).css('top', y);
         // state var
         state.lastX = x;
         state.lastY = y;
@@ -257,7 +272,7 @@ angular.module('Pundit2.ContextualMenu')
 
     // when mock menu show the dimensions can be readed
     // and can calculate the proper placement for the real menu
-    mockOptions.scope.$on('tooltip.show', function() {
+    mockOptions.scope.$on('dropdown.show', function() {
 
         var place = contextualMenu.position(angular.element(state.mockMenu.$element), state.lastX, state.lastY);
 
@@ -276,17 +291,15 @@ angular.module('Pundit2.ContextualMenu')
         state.menu.$promise.then(state.menu.show);
 
         // Find current scroll positions
-        var wTop = angular.element($window).scrollTop(),
-            wLeft = angular.element($window).scrollLeft();
+        scroll.top = angular.element($window).scrollTop();
+        scroll.left = angular.element($window).scrollLeft();
         // Force scroll back to original positions
-        angular.element($window).bind("scroll", function() {
-            $(this).scrollTop(wTop).scrollLeft(wLeft);
-        });
+        angular.element($window).on("scroll", scrollHandler);
         angular.element('body').addClass(contextualMenu.options.overflowClass);
     });
 
-    mockOptions.scope.$on('tooltip.hide', function() {
-        angular.element($window).unbind("scroll");
+    mockOptions.scope.$on('dropdown.hide', function() {
+        angular.element($window).off("scroll", scrollHandler);
         angular.element('body').removeClass(contextualMenu.options.overflowClass);
     });
 
@@ -446,8 +459,10 @@ angular.module('Pundit2.ContextualMenu')
 
     // used in example (define where to show the submenu)
     contextualMenu.getSubMenuPlacement = function() {
-        var i = realOptions.placement.indexOf('-'),
-            place = realOptions.placement.substring(i + 1);
+        var options = mockOptions;
+        //options = realOptions;
+        var i = options.placement.indexOf('-'),
+            place = options.placement.substring(i + 1);
 
         if (place === 'right') {
             return 'left';
@@ -455,6 +470,15 @@ angular.module('Pundit2.ContextualMenu')
             return 'right';
         }
     };
+
+    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+        if (contextualMenu !== null) {
+            contextualMenu.hide();
+        }
+        if (state.mockMenu !== null) {
+            state.mockMenu.hide();
+        }
+    });
 
     contextualMenu.log('service run');
     return contextualMenu;

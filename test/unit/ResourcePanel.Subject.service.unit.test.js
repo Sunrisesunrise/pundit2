@@ -1,3 +1,5 @@
+/*global testConfig*/
+
 describe('Subject Popover Resource Panel service', function() {
 
     var ResourcePanel,
@@ -52,20 +54,7 @@ describe('Subject Popover Resource Panel service', function() {
         loginServer: "http:\/\/demo-cloud.as.thepund.it:8080\/annotationserver\/login.jsp"
     };
 
-    var testPunditConfig = {
-        modules: {
-            "KorboBasketSelector": {
-                active: false
-            },
-            "FreebaseSelector": {
-                active: false
-            },
-            "Korbo2Selector": {
-                active: false
-            }
-        }
-    };
-
+    var testPunditConfig = testConfig.resourcePanel;
 
     beforeEach(module('Pundit2'));
     beforeEach(function() {
@@ -92,6 +81,8 @@ describe('Subject Popover Resource Panel service', function() {
         SelectorsManager = _SelectorsManager_;
         $timeout = _$timeout_;
         $window = _$window_;
+
+        MyPundit.useCookies = false;
     }));
 
     beforeEach(function(){
@@ -171,7 +162,7 @@ describe('Subject Popover Resource Panel service', function() {
         // get login
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
 
-        MyPundit.login();
+        MyPundit.oldLogin();
 
         $rootScope.$digest();
         $httpBackend.flush();
@@ -252,13 +243,13 @@ describe('Subject Popover Resource Panel service', function() {
 
     });
 
-    it("should load all page items if item predicate has empty domain", function() {
+    it("should load all page items if item predicate has empty suggestedSubjectTypes", function() {
 
         var emptyDomainPred = {
             "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
             "label": "empty domain",
             "description": "The selected text fragment is a Person, a Work, a Place or a well defined Entity",
-            "domain": "",
+            "suggestedSubjectTypes": "",
             "uri": "http://purl.org/pundit/ont/oa#identifies"
         };
 
@@ -268,7 +259,7 @@ describe('Subject Popover Resource Panel service', function() {
             object: null
         };
 
-        // add a predicate with an empty domain
+        // add a predicate with an empty suggestedSubjectTypes
         triple.predicate = new Item(emptyDomainPred.uri, emptyDomainPred);
         ItemsExchange.addItemToContainer(triple.predicate, Client.options.relationsContainer);
 
@@ -301,7 +292,7 @@ describe('Subject Popover Resource Panel service', function() {
         // get login
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
 
-        MyPundit.login();
+        MyPundit.oldLogin();
 
         $rootScope.$digest();
         $httpBackend.flush();
@@ -334,7 +325,7 @@ describe('Subject Popover Resource Panel service', function() {
             "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
             "label": "undefined domain",
             "description": "The selected text fragment is the translation of another text fragment",
-            "range": ["http://purl.org/pundit/ont/ao#fragment-text"],
+            "suggestedObjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
             "uri": "http://purl.org/pundit/ont/oa#isTranslationOf"
         };
 
@@ -377,7 +368,7 @@ describe('Subject Popover Resource Panel service', function() {
         // get login
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
 
-        MyPundit.login();
+        MyPundit.oldLogin();
 
         $rootScope.$digest();
         $httpBackend.flush();
@@ -386,11 +377,11 @@ describe('Subject Popover Resource Panel service', function() {
             "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
             "label": "depicts",
             "description": "An image or part of an image depicts something",
-            "domain": [
+            "suggestedSubjectTypes": [
                 "http://xmlns.com/foaf/0.1/Image",
                 "http://purl.org/pundit/ont/ao#fragment-image"
             ],
-            "range": [],
+            "suggestedObjectTypes": [],
             "uri": "http://xmlns.com/foaf/0.1/depicts"
         };
 
@@ -438,7 +429,7 @@ describe('Subject Popover Resource Panel service', function() {
     it("should load only fragment text items", function() {
         // get login
         $httpBackend.whenGET(NameSpace.get('asUsersCurrent')).respond(userLoggedIn);
-        MyPundit.login();
+        MyPundit.oldLogin();
         $rootScope.$digest();
         $httpBackend.flush();
 
@@ -446,8 +437,8 @@ describe('Subject Popover Resource Panel service', function() {
             "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
             "label": "quotes",
             "description": "The selected text fragment is a sentence from a Person or a Work, usually enclosed by quotations (eg: '')",
-            "domain": ["http://purl.org/pundit/ont/ao#fragment-text"],
-            "range": [
+            "suggestedSubjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
+            "suggestedObjectTypes": [
                 "http://www.freebase.com/schema/people/person",
                 "http://xmlns.com/foaf/0.1/Person",
                 "http://dbpedia.org/ontology/Person",
@@ -463,7 +454,7 @@ describe('Subject Popover Resource Panel service', function() {
             object: null
         };
 
-        // add a predicate with domain as fragment text type
+        // add a predicate with suggestedSubjectTypes as fragment text type
         triple.predicate = new Item(FragmentTextPred.uri, FragmentTextPred);
         ItemsExchange.addItemToContainer(triple.predicate, Client.options.relationsContainer);
 
@@ -490,7 +481,7 @@ describe('Subject Popover Resource Panel service', function() {
 
         var scope = getPopoverResourcePanelScope();
 
-        // should load only page items matching with predicate domain
+        // should load only page items matching with predicate suggestedSubjectTypes
         expect(scope.pageItems.length).toBe(1);
         expect(scope.pageItems[0]).toBe(item1);
         expect(scope.myItems.length).toBe(0);

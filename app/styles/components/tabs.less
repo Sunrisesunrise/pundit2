@@ -1,0 +1,203 @@
+/**
+ * TABS
+ *
+ * Style for horizontal and vertical tabs
+ */
+
+// TODO and Important: the style for tabs is dispersed in the code, lets move it here!
+
+/* ------------------------------------ *\
+   #TABS HEADER
+\* ------------------------------------ */
+
+ul.pnd-tab-header {
+    display: block;
+    //width: auto;
+    //height: auto;
+    margin: 0; // 0 0 10px 0;
+    background: @gray-light;
+
+    /* Temp fix for tabs list*/
+    height: 27px;
+    overflow-y: hidden;
+    overflow-x: visible;
+
+    //border-bottom: 1px solid #999;
+
+    &:extend(.clearfix all);
+
+    > li {
+        // Actual tabs (as links)
+        display: block;
+        margin-top: 0;
+        float: left;
+        position: relative;
+
+        > a {
+            display: block;
+            height: auto;
+            min-height: auto;
+            margin: 0;
+            padding: 6px 8px;
+            position: relative;
+            background-color: @gray-light;
+            border-radius: @tab-border-radius @tab-border-radius 0 0;
+            color: @nav-tabs-active-link-hover-color; /* For css overwritings - !important */
+            line-height: @line-height-base;
+            overflow: visible;
+
+            &:hover,
+            &:focus,
+            &:active {
+                border-color: transparent;
+                background-color: @tab-bg-hover-color;
+                color: @nav-tabs-active-link-hover-color !important;
+                text-decoration: none !important; /* For css overwritings - !important */
+                cursor: pointer;
+            }
+        }
+
+        // Active state, and its :hover to override normal :hover
+        &.active > a {
+            &,
+            &:hover,
+            &:focus {
+                margin: 0;
+                background-color: @nav-tabs-active-link-hover-bg;
+                border-bottom-color: transparent;
+                color: @nav-tabs-active-link-hover-color !important;
+                text-decoration: none !important;
+                cursor: pointer;
+                // box-shadow: 0 -1px 2px rgba(0,0,0,.18);
+            }
+        }
+    }
+
+    // Show tabs button
+    .show-tabs {
+
+        a { 
+            padding: 7px 10px 5px;
+
+            .pnd-icon {
+                display: inline-block;
+                width: auto;
+                height: auto;
+                padding: 0;
+                margin: 0;
+                font-size: 14px;
+                line-height: normal;
+
+                &.pnd-icon-dots {
+                    background: transparent none;
+                }
+            }
+        }
+
+        &.active a {
+            background-color: @nav-tabs-active-link-hover-bg;
+        }
+
+        /* For css overwritings */
+        &.pull-right {
+            top: initial;
+        }
+    }
+
+    .dropdown-menu {
+        margin: 0;
+    }
+}
+
+.tab-pane {
+    .list-group {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+}
+
+/* ------------------------------------ *\
+   #VERTICAL-TABS
+\* ------------------------------------ */
+
+.tabs-left .pnd-vertical-tabs { //nav-tabs
+    float: left;
+    border-bottom: 0;
+    background-color: lighten(@gray-lighter, 2);
+    &:extend(.clearfix all);
+
+    /* Single item */
+    & > li {
+        float: none;
+
+        .pnd-icon {
+            margin: 2px 4px 0 0;
+        }
+
+        .badge {
+            padding: 3px 7px;
+            font-size: 10px;
+            font-weight: normal;
+            background-color: lighten(@gray-light, 10%);
+            border-radius: 8px;
+        }
+
+        & > a {
+            display: block;
+            min-width: 150px;
+            margin-right: 0;
+            margin-bottom: 1px;
+            padding: 5px 8px;
+            position: relative;
+            background-color: @gray-lighter;
+            color: @gray !important; /* For css overwritings */
+            border-bottom: 1px solid #fff;
+
+            &:hover, &:focus {
+                background-color: darken(@gray-lighter, 3%);
+                border-bottom: 1px solid #fff;
+                color: @gray-darker;
+                text-decoration: none !important; /* For css overwritings */
+
+                .badge {
+                    background-color: lighten(@gray, 20%);
+                }
+            }
+        }
+
+        /* The currently active item */
+        &.active {
+            & > a {
+                background-color: #fff;
+                cursor: default;
+                border-bottom: 1px solid #fff;
+                box-shadow: none;
+
+                &:hover, &:focus {
+                    color: @gray;
+                    background-color: #fff;
+                    border-bottom: 1px solid #fff;
+
+                    .badge {
+                        background-color: lighten(@gray, 20%);
+                    }
+                }
+            }
+
+            .badge {
+                background-color: lighten(@gray, 20%);
+            }
+        }
+    }
+}
+
+.pnd-vertical-tab-content {
+
+    > .tab-pane {
+        display: none;
+    }
+
+    > .active {
+        display: block;
+    }
+}

@@ -4,19 +4,20 @@
     var punditConfig = {
         modules: {
             'Annomatic': {
-                debug: true
+                debug: true,
+                active: true
             }
         }
     };
     var AnnomaticDemoCtrl = function($rootScope, $scope, 
-                                             Annomatic) {
+                                             Annomatic, MyItemsContainer, TextFragmentAnnotator) {
         Annomatic.run();
     }
 
 </script>
 
 
-<div data-ng-app="Pundit2" class="pnd-wrp">
+<div data-ng-app="Pundit2" class="pundit2 pnd-wrp">
     <div class="container" ng-controller="AnnomaticDemoCtrl">
 
         <annomatic-panel></annomatic-panel>

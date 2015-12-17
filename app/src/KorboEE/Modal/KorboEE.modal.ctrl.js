@@ -1,5 +1,5 @@
 angular.module('KorboEE')
-.controller('KeeModalCtrl', function ($scope, $modal, KorboCommunicationService, APIService, korboConf, KorboCommunicationFactory, $window, ResourcePanel) {
+.controller('KeeModalCtrl', function ($scope, $rootScope, $modal, KorboCommunicationService, APIService, korboConf, KorboCommunicationFactory, $window, ResourcePanel) {
 
     var api = APIService.get($scope.conf.globalObjectName);
     var korboComm = new KorboCommunicationFactory();
@@ -36,12 +36,12 @@ angular.module('KorboEE')
 
     $scope.searchType = function() {
         return $scope.$parent.$parent.searchType || 'tab';
-    }
+    };
 
     var lastSearchType = 'tab';
     $scope.$watch('$parent.$parent.searchType', function() {
         var currentSearchType = $scope.searchType();
-        if (lastSearchType == 'tab' && currentSearchType == 'inner') {
+        if (lastSearchType === 'tab' && currentSearchType === 'inner') {
             freezeSearchLayoutConfig();
             var searchSubType = $scope.$parent.$parent.searchConf.subType;
             switch (searchSubType) {
@@ -57,13 +57,13 @@ angular.module('KorboEE')
             $scope.showInnerDiscardSearch.visibility = true;
             $scope.searchFieldLabel = $scope.$parent.$parent.searchConf['searchFieldLabel' + searchSubType] || 'Search entity to use:';
         }
-        else if (lastSearchType == 'inner' && currentSearchType == 'tab') {
+        else if (lastSearchType === 'inner' && currentSearchType === 'tab') {
             restoreLayoutConfig();
         }
         lastSearchType = currentSearchType;
     });
 
-    var searchLayoutConfig = undefined;
+    var searchLayoutConfig;
 
     var freezeSearchLayoutConfig = function() {
         searchLayoutConfig = {};
@@ -152,10 +152,10 @@ angular.module('KorboEE')
 
     // every time a tab in the modal (Search,New) is selected, update buttons visibility
     $scope.$watch('korboModalTabs.activeTab', function () {
-        if ($scope.korboModalTabs.activeTab == 0) {
+        if ($scope.korboModalTabs.activeTab === 0) {
             KorboCommunicationService.setSearchConf('tab');
         }
-        else if ($scope.korboModalTabs.activeTab == 1 && typeof $scope.$parent.$parent.searchConf !== 'undefined') {
+        else if ($scope.korboModalTabs.activeTab === 1 && typeof $scope.$parent.$parent.searchConf !== 'undefined') {
             KorboCommunicationService.setSearchConf('inner');
         }
         handleButton();
@@ -164,8 +164,12 @@ angular.module('KorboEE')
     // close modal
     $scope.closeKeeModal = function () {
         ResourcePanel.hide();
-        KorboCommunicationService.showConfirmModal($scope.conf.globalObjectName);
-        //KorboCommunicationService.closeModal();
+        if ($scope.conf.confirmModalOnClose) {
+            KorboCommunicationService.showConfirmModal($scope.conf.globalObjectName);
+        }
+        else {
+            KorboCommunicationService.closeModal();
+        }
     };
 
     $scope.copyAndUse = function () {
@@ -211,7 +215,6 @@ angular.module('KorboEE')
 
         },
         function () {
-            console.log("error to copy entity in korbo");
         });
     };
 
@@ -331,19 +334,19 @@ angular.module('KorboEE')
         if (typeof $scope.$parent.$parent.searchConf !== 'undefined' && typeof $scope.$parent.$parent.searchConf.selectUrl === 'function') {
             $scope.$parent.$parent.searchConf.selectUrl.apply(undefined, [$scope.itemSelected]);
         }
-    }
+    };
 
     $scope.innerCopyFromLOD = function() {
         if (typeof $scope.$parent.$parent.searchConf !== 'undefined' && typeof $scope.$parent.$parent.searchConf.copyFromLOD === 'function') {
             $scope.$parent.$parent.searchConf.copyFromLOD.apply(undefined, [$scope.itemSelected]);
         }
-    }
+    };
 
     $scope.innerDiscardSearch = function() {
         if (typeof $scope.$parent.$parent.searchConf !== 'undefined' && typeof $scope.$parent.$parent.searchConf.discardSearch === 'function') {
             $scope.$parent.$parent.searchConf.discardSearch.apply(undefined);
         }
-    }
+    };
 
     // If New Tab is selected, hide Use and Copy button
     $scope.showUseAndCopyButton = function () {
@@ -368,4 +371,7 @@ angular.module('KorboEE')
         $scope.showSaveAndAdd.visibility = $scope.korboModalTabs.activeTab === 1;
     };
 
+    $rootScope.$on('modal.hide',function(){
+        korboConf.setIsOpenModal(false);
+    });
 });

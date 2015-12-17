@@ -226,6 +226,7 @@
         basketID: PHP__BASKET_ID__PHP,
         type: PHP__TYPES__PHP,
         korboHelpURL: PHP__KORBO_HELP_URL__PHP,
+        confirmModalOnClose: false,
 
         globalObjectName: 'KK',
         limitSearchResult: 11,
@@ -280,7 +281,7 @@
     var predicates = PHP__PREDICATES__PHP;
 
     var KeeDemoCtrl = function ($scope, KorboCommunicationService, $window, ItemsExchange,
-                                Item, $timeout, EventDispatcher, CLIENTDEFAULTS, PAGEITEMSCONTAINERDEFAULTS,
+                                Item, $timeout, EventDispatcher, CLIENTPRODEFAULTS, PAGEITEMSCONTAINERDEFAULTS,
                                 MYITEMSDEFAULTS, MyPundit, ResourcePanel, SelectorsManager, Korbo2Selector, FreebaseSelector, DbpediaSelector) {
 
         var name = $window['korboEEConfig'].globalObjectName;
@@ -298,7 +299,7 @@
 
         for (var i in predicates) {
             var item = new Item(predicates[i].uri, predicates[i]);
-            ItemsExchange.addItemToContainer(item, CLIENTDEFAULTS.relationsContainer);
+            ItemsExchange.addItemToContainer(item, CLIENTPRODEFAULTS.relationsContainer);
         }
 
         $timeout(function () {
@@ -363,9 +364,9 @@
             active: true
         },
         modules: {
-            ContextualMenu: {
-                offsetX: -290,
-                offsetY: -145
+            ResourcePanel: {
+                pageItemsEnabled: false,
+                myItemsEnabled: false
             },
             SelectorsManager: {
                 active: true
@@ -444,7 +445,7 @@
 <div data-ng-app=Pundit2 class="kee-wrp pnd-wrp">
     <korbo-entity-editor conf-name=korboEEConfig
                      ng-show=false></korbo-entity-editor>
-    <div ng-controller=KeeDemoCtrl>
+    <div ng-controller="KeeDemoCtrl">
         <button id="korboee_hidden_edit" ng-click="edit()" ng-show="false"></button>
         <button id="korboee_hidden_new" ng-click="new()" ng-show="false"></button>
     </div>

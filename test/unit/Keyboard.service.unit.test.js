@@ -4,7 +4,7 @@ describe('Keyboard service', function() {
         state,
         $rootScope,
         $document,
-        $log;
+        $log,
         getTotHanlders = function() {
             var totHandlers = 0;
             for (var i in state.keyHandlers) {
@@ -13,7 +13,7 @@ describe('Keyboard service', function() {
                 }
             }
             return totHandlers;
-        }
+        };
 
     beforeEach(module('Pundit2'));
 
@@ -25,7 +25,7 @@ describe('Keyboard service', function() {
         $log = _$log_;
     }));
 
-    afterEach(function (next) {
+    afterEach(function () {
         Keyboard.off();
     });
 
@@ -74,7 +74,7 @@ describe('Keyboard service', function() {
         /**
          * Create KeyboardEvent
          */
-        var e = new window.KeyboardEvent('keydown', {
+        e = new window.KeyboardEvent('keydown', {
           bubbles: true,
           cancelable: true,
           ctrlKey: true
@@ -91,7 +91,7 @@ describe('Keyboard service', function() {
         /**
          * Create KeyboardEvent
          */
-        var e = new window.KeyboardEvent('keydown', {
+        e = new window.KeyboardEvent('keydown', {
           bubbles: true,
           cancelable: true,
           ctrlKey: true
@@ -233,7 +233,7 @@ describe('Keyboard service', function() {
         expect(getTotHanlders()).toBe(2);
         expect($log.error.logs.length).toBe(0);
 
-        var textField = '<input type="text" id="textfield0" />'
+        var textField = '<input type="text" id="textfield0" />';
         angular.element('body').append(textField);
 
         /**
@@ -258,7 +258,7 @@ describe('Keyboard service', function() {
         /**
          * Create KeyboardEvent
          */
-        var e = new window.KeyboardEvent('keydown', {
+        e = new window.KeyboardEvent('keydown', {
           bubbles: true,
           cancelable: true,
           ctrlKey: true
@@ -273,7 +273,7 @@ describe('Keyboard service', function() {
         /**
          * Create KeyboardEvent
          */
-        var e = new window.KeyboardEvent('keydown', {
+        e = new window.KeyboardEvent('keydown', {
           bubbles: true,
           cancelable: true,
           shiftKey: true
@@ -287,8 +287,8 @@ describe('Keyboard service', function() {
 
         // Repeat twice event and check that is cosumend only once (by conf).
         angular.element('#textfield0').blur();
-        for (var i=0; i<2; i++) {
-            var e = new window.KeyboardEvent('keydown', {
+        for (i=0; i<2; i++) {
+            e = new window.KeyboardEvent('keydown', {
               bubbles: true,
               cancelable: true,
               shiftKey: true
@@ -311,7 +311,7 @@ describe('Keyboard service', function() {
             Keyboard.err("Consumed hp " + eventKeyConfigObject.handlerID);
         });
 
-        var e = new window.KeyboardEvent('keydown', {
+        e = new window.KeyboardEvent('keydown', {
           bubbles: true,
           cancelable: true,
           ctrlKey: true

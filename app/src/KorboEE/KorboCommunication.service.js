@@ -9,7 +9,7 @@ angular.module('KorboEE')
 
     korboCommunication.checkUserLoggedIn = function() {
         return MyPundit.checkLoggedIn();
-    }
+    };
 
     // set autocomplete loading status
     korboCommunication.setAutocompleteLoading = function(val){
@@ -32,16 +32,17 @@ angular.module('KorboEE')
         if (typeof korboCommunication.tripleComposerStateChangeCallback === 'function') {
             korboCommunication.tripleComposerStateChangeCallback.call(undefined, evt);
         }
-    }
+    };
 
     EventDispatcher.addListener('TripleComposer.statementChange', tripleComposerStateChange);
 
     // initializa korbo modal
     var KeeModal = $modal({
         container: "[data-ng-app='Pundit2']",
-        template: 'src/KorboEE/Modal/KorboEE.modal.tmpl.html',
+        templateUrl: 'src/KorboEE/Modal/KorboEE.modal.tmpl.html',
         show: false,
-        backdrop: 'static',
+        //backdrop: 'static',
+        backdropAnimation: 'static',
         scope: KeeModalScope,
         keyboard: false
     });
@@ -68,7 +69,7 @@ angular.module('KorboEE')
 
     var confirmModal = $modal({
         container: "[data-ng-app='Pundit2']",
-        template: 'src/KorboEE/Modal/KorboEE.confirm.modal.tmpl.html',
+        templateUrl: 'src/KorboEE/Modal/KorboEE.confirm.modal.tmpl.html',
         show: false,
         backdrop: 'static',
         scope: confirmModalScope
@@ -242,7 +243,7 @@ angular.module('KorboEE')
 
         var tooltipMessageTitle = "Insert title of the entity in ";
         var tooltipMessageDescription = "Insert description of the entity in ";
-        var loadedItem = null;
+        //var loadedItem = null;
 
         results.languages = [];
 
@@ -251,8 +252,8 @@ angular.module('KorboEE')
         }
 
         korboComm.getItem(param, false, useCredentialInHttpCalls).then(function(res){
-            results.imageUrl = typeof res.depiction === 'undefined' || res.depiction == null ? '' :  res.depiction;
-            results.originalUrl = typeof res.resource === 'undefined' || res.resource == null ? '' :  res.resource;
+            results.imageUrl = typeof res.depiction === 'undefined' || res.depiction === null ? '' :  res.depiction;
+            results.originalUrl = typeof res.resource === 'undefined' || res.resource === null ? '' :  res.resource;
 
             results.types = res.type;
             results.basketId = res.basket_id;
@@ -295,8 +296,7 @@ angular.module('KorboEE')
                 promise.resolve(results);
             }
         },
-        function(error){
-            console.log("server error ", error);
+        function(){
             results = null;
             promise.reject();
         });
@@ -332,7 +332,7 @@ angular.module('KorboEE')
             KeeModalScope.searchConf = conf;
         }
         KeeModalScope.searchType = searchType;
-    }
+    };
 
     korboCommunication.tripleComposerStateChangeCallback = undefined;
 

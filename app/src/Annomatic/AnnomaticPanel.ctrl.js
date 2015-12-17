@@ -43,12 +43,15 @@ angular.module('Pundit2.Annomatic')
             // TOOD: add loading check
             AnnotationSidebar.toggleLoading();
             Consolidation.consolidate(ItemsExchange.getItemsByContainer(Annomatic.options.container));
+            setTimeout(function() {
+                TextFragmentAnnotator.showAll();
+            }, 10);
         });
     };
 
     $scope.getSuggestionsArea = function() {
         Annomatic.getAnnotationByArea();
-    }
+    };
 
     $scope.startReview = function() {
         Annomatic.reviewNext(0);

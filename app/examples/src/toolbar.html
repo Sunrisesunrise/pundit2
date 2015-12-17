@@ -3,7 +3,10 @@
 <script>
 
 var punditConfig = {
-    templates: ['http://template-test-url.com/t1']
+    templates: ['http://template-test-url.com/t1'],
+    askThePundit: true,
+    modules: {
+    }
 };
 
 var ToolbarDemoCtrl = function($scope, Toolbar, MyPundit, NotebookCommunication, TemplatesSelector) {
@@ -48,7 +51,7 @@ var ToolbarDemoCtrl = function($scope, Toolbar, MyPundit, NotebookCommunication,
 }
 
 </script>
-<div data-ng-app="Pundit2" class="pnd-wrp">
+<div data-ng-app="Pundit2" class="pundit2 pnd-wrp">
     <toolbar></toolbar>
     <dashboard></dashboard>
     <annotation-sidebar></annotation-sidebar>
