@@ -105,10 +105,12 @@ angular.module('Pundit2.Core')
                     $document.on('mousedown', mouseHandler);
                     hasMouseDownHandler = true;
                 }
-                var h = optionsContainer.height(),
-                    pageVisibleBottom = $window.scrollY +  $window.innerHeight;
-                var cHeight = optionsContainer.offset().top;
-                scope.moveTop = (cHeight + h) > pageVisibleBottom;
+
+                var optionsHeight = optionsContainer.height();
+                var pageVisibleBottom = $window.scrollY +  $window.innerHeight;
+                var optionsY = optionsContainer.offset().top;
+
+                scope.moveTop = (optionsY + optionsHeight) > pageVisibleBottom;
             };
 
             scope.collapse = function() {
