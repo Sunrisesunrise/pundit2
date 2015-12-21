@@ -109,12 +109,17 @@ angular.module('Pundit2.Core')
                 var optionsHeight = optionsContainer.height();
                 var pageVisibleBottom = $window.scrollY +  $window.innerHeight;
                 var optionsY = optionsContainer.offset().top;
-
                 scope.moveTop = (optionsY + optionsHeight) > pageVisibleBottom;
+
             };
 
             scope.collapse = function() {
                 scope.expanded = false;
+
+                // Reset optionsContainer status
+                scope.moveTop = false;
+                optionsContainer.removeClass("move-top");
+
                 if (hasMouseDownHandler) {
                     $document.off('mousedown', mouseHandler);
                     hasMouseDownHandler = false;
@@ -132,6 +137,11 @@ angular.module('Pundit2.Core')
 
             scope.showAction = function() {
                 scope.expanded = false;
+
+                // Reset optionsContainer status
+                scope.moveTop = false;
+                optionsContainer.removeClass("move-top");
+
                 fncAction = scope.optionAction.value;
                 scope.inputAction = '';
                 scope.actionInProgress = true;
