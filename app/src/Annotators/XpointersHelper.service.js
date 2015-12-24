@@ -125,7 +125,7 @@ angular.module('Pundit2.Annotators')
      */
     imageFragmentHiddenClass: 'pnd-imagefragment-hidden',
 
-        /**
+    /**
      * @module punditConfig
      * @ngdoc property
      * @name modules#XpointersHelper.consolidationClasses
@@ -325,18 +325,18 @@ angular.module('Pundit2.Annotators')
         // the starting point
         if (xpointersHelper.isNamedContentNode(node)) {
             if (typeof(partialXpath) !== 'undefined') {
-                return "//DIV[@about='" + angular.element(node).attr('about') + "']/" + partialXpath;
+                return '//DIV[@about="' + angular.element(node).attr('about') + '"]/' + partialXpath;
             } else {
-                return "//DIV[@about='" + angular.element(node).attr('about') + "']";
+                return '//DIV[@about="' + angular.element(node).attr('about') + '"]';
             }
         }
 
         // .. or if we reach body or html (!!!), start building it from this node
         if (nodeName === 'BODY' || nodeName === 'HTML') {
             if (typeof(partialXpath) !== 'undefined') {
-                return "//BODY/" + partialXpath;
+                return '//BODY/' + partialXpath;
             } else {
-                return "//BODY";
+                return '//BODY';
             }
         }
 
@@ -403,7 +403,9 @@ angular.module('Pundit2.Annotators')
             xpointersHelper.err('Xpointer is undefined: this should not happend!');
             return false;
         }
-        if(xpointer.indexOf('IMG') != -1){return true;}
+        if (xpointer.indexOf('IMG') !== -1) {
+            return true;
+        }
         if (xpointer.match(/#xpointer\(start-point\(string-range\(/) === null || xpointer.match(/range-to\(string-range\(/) === null) {
             return false;
         }
@@ -419,9 +421,9 @@ angular.module('Pundit2.Annotators')
 
         var xpaths = xpointersHelper.xPointerToXPath(xpointer);
         //if image no offset required is a valid xpath
-        if(xpaths.startXpath.indexOf('IMG') != -1 ){
+        if (xpaths.startXpath.indexOf('IMG') !== -1) {
             var node = xpaths.startNode;
-            if(node !== null){
+            if (node !== null) {
                 return true;
             }
             xpointersHelper.log('xpath is broken', xpointer);
@@ -711,7 +713,7 @@ angular.module('Pundit2.Annotators')
                 range.setEndAfter(endNode);
             }
         }
-        if(!xpointersHelper.isValidXpointer(startXp.xpointer)){
+        if (!xpointersHelper.isValidXpointer(startXp.xpointer)) {
             xpointersHelper.log('xpath broken');
             return false;
         }
@@ -923,14 +925,14 @@ angular.module('Pundit2.Annotators')
             currentElement = angular.element(element);
         currentElement.addClass(htmlClass);
         if (xpointersHelper.options.avoidInitialHide === false) {
-            if (parents[0].indexOf('imgf') !== -1){
+            if (parents[0].indexOf('imgf') !== -1) {
                 currentElement.addClass(xpointersHelper.options.imageFragmentHiddenClass);
             } else {
                 currentElement.addClass(xpointersHelper.options.textFragmentHiddenClass);
 
             }
 
-                    }
+        }
 
         // TODO: make this directive name configurable??
         if (parents[0].indexOf('imgf') !== -1) {
@@ -1214,7 +1216,7 @@ angular.module('Pundit2.Annotators')
     // gives window location
     xpointersHelper.getContentURLFromXPath = function(xpath) {
         var contentUrl = xpointersHelper.getSafePageContext(),
-        // TODO: make this attribute configurable in XpointersHelper ?
+            // TODO: make this attribute configurable in XpointersHelper ?
             index = xpath.indexOf('DIV[@about=\''),
             tagName = 'about';
 
@@ -1237,6 +1239,7 @@ angular.module('Pundit2.Annotators')
         xpointersHelper.log('ERROR: getContentURLFromXPath returning something weird? xpath = ' + xpath);
         return '';
     }; // getContentURLFromXPath()
+    
     xpointersHelper.getXPointerString = function(startUrl, startXPath, startOffset, endXPath, endOffset) {
         return startUrl + "#xpointer(start-point(string-range(" + startXPath + ",''," + startOffset + "))" +
             "/range-to(string-range(" + endXPath + ",''," + endOffset + ")))";
@@ -1247,9 +1250,9 @@ angular.module('Pundit2.Annotators')
             cleanStartXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.startContainer), cleanRange.cleanStartNumber),
             cleanEndXPath = correctXPathFinalNumber(calculateCleanXPath(cleanRange.endContainer), cleanRange.cleanEndNumber);
 
-        if(typeof index  !== 'undefined'){
-            cleanStartXPath += '/IMG[' + index +']';
-            cleanEndXPath += '/IMG[' + index +']';
+        if (typeof index !== 'undefined') {
+            cleanStartXPath += '/IMG[' + index + ']';
+            cleanEndXPath += '/IMG[' + index + ']';
         }
 
 
@@ -1264,10 +1267,7 @@ angular.module('Pundit2.Annotators')
 
 
 
-
-
-
-        // TODO: Maybe this belongs somewhere else .. need to refactor a bit of
+    // TODO: Maybe this belongs somewhere else .. need to refactor a bit of
     //       TextFragmentHandler service ....
     // Gets a safe page context, stripping out pundit-related query parameters
     xpointersHelper.getSafePageContext = function() {
@@ -1325,4 +1325,3 @@ angular.module('Pundit2.Annotators')
     xpointersHelper.log('Component up and running');
     return xpointersHelper;
 });
-
