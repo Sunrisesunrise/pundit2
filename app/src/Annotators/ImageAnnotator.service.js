@@ -1,5 +1,7 @@
 angular.module('Pundit2.Annotators')
 
+// TODO: linting, refactoring and so on .. 
+
 .constant('IMAGEANNOTATORDEFAULTS', {
     /**
      * @module punditConfig
@@ -11,8 +13,6 @@ angular.module('Pundit2.Annotators')
      *
      * Configuration object for Image Annotator module.
      */
-
-
 
     /**
      * @module punditConfig
@@ -27,19 +27,19 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> addIcon: 'true' </pre>
      */
-    addIcon: false,
+    addIcon: false
 })
 
 .service('ImageAnnotator', function(NameSpace, BaseComponent, $location,
-                                    Consolidation, XpointersHelper, ImageFragmentAnnotatorHelper,EventDispatcher, $q, $rootScope, ItemsExchange, Config, $compile) {
+    Consolidation, XpointersHelper, ImageFragmentAnnotatorHelper, EventDispatcher, $q, $rootScope, ItemsExchange, Config, $compile) {
 
     // Create the component and declare what we deal with: text
-    var ia = new BaseComponent('ImageAnnotator');
+    var imageAnnotator = new BaseComponent('ImageAnnotator');
 
-    ia.label = "image";
-    ia.type = NameSpace.types[ia.label];
-    ia.labelIF = "imagePart";
-    ia.typeIF = NameSpace.fragments[ia.labelIF];
+    imageAnnotator.label = 'image';
+    imageAnnotator.type = NameSpace.types[imageAnnotator.label];
+    imageAnnotator.labelIF = 'imagePart';
+    imageAnnotator.typeIF = NameSpace.fragments[imageAnnotator.labelIF];
 
     var fragmentIds = {},
         fragmentsRefs = {},
@@ -49,8 +49,8 @@ angular.module('Pundit2.Annotators')
         tempFragmentIds = {},
         lastTemporaryConsolidable,
         temporaryConsolidated = {},
-        imgConsClass = "pnd-cons-img";
-        //var svgTimeout;
+        imgConsClass = 'pnd-cons-img';
+    //var svgTimeout;
 
     // TODO: Move this to XpointersHelper .something() ?
     var activateFragments = function() {
@@ -68,10 +68,10 @@ angular.module('Pundit2.Annotators')
     var consolidateTemporarySelection = function() {
         for (var uri in temporaryConsolidated) {
             var temporaryFragmentId = temporaryConsolidated[uri].fragmentId,
-                temporaryFragmentUri = ia.getFragmentUriById(temporaryFragmentId);
+                temporaryFragmentUri = imageAnnotator.getFragmentUriById(temporaryFragmentId);
 
             Consolidation.updateItemListAndMap(ItemsExchange.getItemByUri(temporaryFragmentUri), 'text');
-            ia.placeIconByFragmentId(temporaryFragmentId);
+            imageAnnotator.placeIconByFragmentId(temporaryFragmentId);
 
             angular.element('.' + temporaryFragmentId)
                 .removeClass(XpointersHelper.options.textFragmentHiddenClass)
@@ -82,33 +82,31 @@ angular.module('Pundit2.Annotators')
         lastTemporaryConsolidable = undefined;
     };
 
-    ia.isConsolidable = function(item) {
+    imageAnnotator.isConsolidable = function(item) {
         var xpointerURI;
 
         if (!angular.isArray(item.type)) {
-            ia.log("Item not valid: malformed type" + item.uri);
+            imageAnnotator.log('Item not valid: malformed type' + item.uri);
             return false;
         } else if (item.type.length === 0) {
-            ia.log("Item not valid: types len 0" + item.uri);
+            imageAnnotator.log('Item not valid: types len 0' + item.uri);
             return false;
-        } else if ((item.type.indexOf(ia.type) === -1) && (item.type.indexOf(ia.typeIF) === -1)) {
-            ia.log("Item not valid: not have type image " + item.uri);
+        } else if ((item.type.indexOf(imageAnnotator.type) === -1) && (item.type.indexOf(imageAnnotator.typeIF) === -1)) {
+            imageAnnotator.log('Item not valid: not have type image ' + item.uri);
             return false;
         } else {
-            if (item.type.indexOf(ia.type) !== -1) {
+            if (item.type.indexOf(imageAnnotator.type) !== -1) {
                 xpointerURI = item.xpointer;
-            } else if (item.type.indexOf(ia.typeIF) !== -1) {
+            } else if (item.type.indexOf(imageAnnotator.typeIF) !== -1) {
                 xpointerURI = item.parentItemXP;
             }
             if (!XpointersHelper.isValidXpointerURI(xpointerURI)) {
-                ia.log("Item not valid: not a valid xpointer uri: " + xpointerURI);
+                imageAnnotator.log('Item not valid: not a valid xpointer uri: ' + xpointerURI);
                 return false;
             } else if (!XpointersHelper.isValidXpointer(xpointerURI)) {
-                ia.log("Item not valid: not consolidable on this page: " + xpointerURI);
+                imageAnnotator.log('Item not valid: not consolidable on this page: ' + xpointerURI);
                 return false;
             }
-
-
         }
 
         // TODO: it's a valid image fragment if:
@@ -116,12 +114,12 @@ angular.module('Pundit2.Annotators')
         // - has a part of
         // - .selector contains something
         // ... etc etc
-        ia.log("Item valid: " + item.label);
+        imageAnnotator.log('Item valid: ' + item.label);
         return true;
     };
 
-    ia.consolidate = function(items) {
-        ia.log('Consolidating!');
+    imageAnnotator.consolidate = function(items) {
+        imageAnnotator.log('Consolidating!');
         /*
          if (!angular.isObject(items)) {
          imageAnnotator.err('Items not valid: malformed object', items);
@@ -136,9 +134,9 @@ angular.module('Pundit2.Annotators')
             parentItemXPList = {};
 
         for (uri in items) {
-            if (items[uri].type.indexOf(ia.type) !== -1) {
+            if (items[uri].type.indexOf(imageAnnotator.type) !== -1) {
                 currentUri = items[uri].xpointer;
-            } else if (items[uri].type.indexOf(ia.typeIF) !== -1) {
+            } else if (items[uri].type.indexOf(imageAnnotator.typeIF) !== -1) {
                 currentUri = items[uri].parentItemXP;
             }
             xpointers.push(currentUri);
@@ -161,8 +159,8 @@ angular.module('Pundit2.Annotators')
         }
         var xpaths = XpointersHelper.getXPathsFromXPointers(xpointers),
             sorted = XpointersHelper.splitAndSortXPaths(xpaths),
-        // After splitting and sorting each bit has a list of fragment ids it belongs to.
-        // Instead of using classes, these ids will be saved in a node attribute.
+            // After splitting and sorting each bit has a list of fragment ids it belongs to.
+            // Instead of using classes, these ids will be saved in a node attribute.
             xpathsFragmentIds = XpointersHelper.getClassesForXpaths(xpointers, sorted, xpaths, tempFragmentIds);
 
         updateDOMPromise = XpointersHelper.updateDOM(sorted, XpointersHelper.options.wrapNodeClass, xpathsFragmentIds);
@@ -190,10 +188,12 @@ angular.module('Pundit2.Annotators')
          }*/
     };
 
+
+    // TODO: WHAAAAT?! 
     // Called by TextFragmentBit directives: they will wrap every bit of annotated content
     // for every xpointer we save an array of those bits. Each bit can belong to more
     // than one xpointer (overlaps!)
-    ia.updateFragmentBit = function(bit, action) {
+    imageAnnotator.updateFragmentBit = function(bit, action) {
         var fragments = bit.fragments,
             id = bit.bitId;
 
@@ -210,7 +210,7 @@ angular.module('Pundit2.Annotators')
             switch (action) {
                 case 'add':
                     if (typeof current === 'undefined') {
-                        ia.err("fragmentById[" + fragments[l] + "] is undefined - skipping ia.addFragmentBit()");
+                        imageAnnotator.err('fragmentById[' + fragments[l] + '] is undefined - skipping imageAnnotator.addFragmentBit()');
                         continue;
                     }
                     if (typeof current.bitsObj[id] === 'undefined') {
@@ -248,68 +248,68 @@ angular.module('Pundit2.Annotators')
                     break;
             }
         }
-        ia.log('Update consolidated fragment bit references', fragments);
+        imageAnnotator.log('Update consolidated fragment bit references', fragments);
     };
 
-    ia.getFragmentReferenceByUri = function(uri) {
+    imageAnnotator.getFragmentReferenceByUri = function(uri) {
         if (typeof(fragmentsRefs[uri]) !== 'undefined') {
             return fragmentsRefs[uri];
         }
     };
 
-    ia.getFragmentIdByUri = function(uri) {
+    imageAnnotator.getFragmentIdByUri = function(uri) {
         if (typeof(fragmentIds[uri]) !== 'undefined') {
             return fragmentIds[uri];
         }
     };
 
-    ia.getFragmentUriById = function(id) {
+    imageAnnotator.getFragmentUriById = function(id) {
         if (typeof(fragmentById[id]) !== 'undefined') {
             return fragmentById[id].uri;
         }
     };
 
-    ia.getBitsById = function(id) {
+    imageAnnotator.getBitsById = function(id) {
         if (typeof(fragmentById[id]) !== 'undefined') {
             return fragmentById[id].bits;
         }
     };
 
-    ia.highlightByUri = function(uri) {
+    imageAnnotator.highlightByUri = function(uri) {
         if (typeof(fragmentIds[uri]) === 'undefined') {
-            ia.log('Not highlighting given URI: fragment id not found');
+            imageAnnotator.log('Not highlighting given URI: fragment id not found');
             return;
         }
-        ia.highlightById(fragmentIds[uri][0]);
+        imageAnnotator.highlightById(fragmentIds[uri][0]);
     };
 
-    ia.highlightById = function(id) {
+    imageAnnotator.highlightById = function(id) {
         for (var l = fragmentById[id].bits.length; l--;) {
             fragmentById[id].bits[l].high();
         }
-        ia.log('Highlighting fragment id=' + id + ', # bits: ' + fragmentById[id].bits.length);
+        imageAnnotator.log('Highlighting fragment id=' + id + ', # bits: ' + fragmentById[id].bits.length);
     };
 
 
-    ia.clearHighlightByUri = function(uri) {
+    imageAnnotator.clearHighlightByUri = function(uri) {
         if (typeof(fragmentIds[uri]) === 'undefined') {
-            ia.log('Not clearing highlight on given URI: fragment id not found');
+            imageAnnotator.log('Not clearing highlight on given URI: fragment id not found');
             return;
         }
-        ia.clearHighlightById(fragmentIds[uri]);
+        imageAnnotator.clearHighlightById(fragmentIds[uri]);
     };
 
-    ia.clearHighlightById = function(id) {
+    imageAnnotator.clearHighlightById = function(id) {
         for (var l = fragmentById[id].bits.length; l--;) {
             fragmentById[id].bits[l].clear();
         }
-        ia.log('Clear highlight on fragment id=' + id + ', # bits: ' + fragmentById[id].bits.length);
+        imageAnnotator.log('Clear highlight on fragment id=' + id + ', # bits: ' + fragmentById[id].bits.length);
     };
 
     // Hides and shows a single fragment (identified by its item's URI)
-    ia.showByUri = function(uri) {
+    imageAnnotator.showByUri = function(uri) {
         if (typeof(fragmentIds[uri]) === 'undefined') {
-            ia.log('Not showing fragment for given URI: fragment id not found');
+            imageAnnotator.log('Not showing fragment for given URI: fragment id not found');
             return;
         }
         var id = fragmentIds[uri];
@@ -318,9 +318,9 @@ angular.module('Pundit2.Annotators')
         }
     };
 
-    ia.hideByUri = function(uri) {
+    imageAnnotator.hideByUri = function(uri) {
         if (typeof(fragmentIds[uri]) === 'undefined') {
-            ia.log('Not hiding fragment for given URI: fragment id not found');
+            imageAnnotator.log('Not hiding fragment for given URI: fragment id not found');
             return;
         }
         var id = fragmentIds[uri];
@@ -330,22 +330,22 @@ angular.module('Pundit2.Annotators')
     };
 
     // Hides and shows every fragment
-    ia.hideAll = function() {
+    imageAnnotator.hideAll = function() {
         for (var uri in fragmentIds) {
-            ia.hideByUri(uri);
+            imageAnnotator.hideByUri(uri);
         }
     };
 
-    ia.showAll = function() {
+    imageAnnotator.showAll = function() {
         for (var uri in fragmentIds) {
-            ia.showByUri(uri);
+            imageAnnotator.showByUri(uri);
         }
     };
 
     // Ghost and remove ghost from a single fragment (identified by its item's URI)
-    ia.ghostByUri = function(uri) {
+    imageAnnotator.ghostByUri = function(uri) {
         if (typeof(fragmentIds[uri]) === 'undefined') {
-            ia.log('Fragment id not found');
+            imageAnnotator.log('Fragment id not found');
             return;
         }
         var id = fragmentIds[uri];
@@ -354,9 +354,9 @@ angular.module('Pundit2.Annotators')
         }
     };
 
-    ia.ghostRemoveByUri = function(uri) {
+    imageAnnotator.ghostRemoveByUri = function(uri) {
         if (typeof(fragmentIds[uri]) === 'undefined') {
-            ia.log('Fragment id not found');
+            imageAnnotator.log('Fragment id not found');
             return;
         }
         var id = fragmentIds[uri];
@@ -366,21 +366,21 @@ angular.module('Pundit2.Annotators')
     };
 
     // Hides and shows every fragment
-    ia.ghostAll = function() {
+    imageAnnotator.ghostAll = function() {
         for (var uri in fragmentIds) {
-            ia.ghostByUri(uri);
+            imageAnnotator.ghostByUri(uri);
         }
     };
 
-    ia.ghostRemoveAll = function() {
+    imageAnnotator.ghostRemoveAll = function() {
         for (var uri in fragmentIds) {
-            ia.ghostRemoveByUri(uri);
+            imageAnnotator.ghostRemoveByUri(uri);
         }
     };
 
     // The orchestrator will be called by the consolidation service as single point of
     // interaction when it comes to deal with fragments. Let's subscribe the text type.
-    ia.wipe = function() {
+    imageAnnotator.wipe = function() {
         fragmentIds = {};
         fragmentsRefs = {};
         fragmentsRefsById = {};
@@ -405,9 +405,9 @@ angular.module('Pundit2.Annotators')
          */ // imgCons.siblings('svg.pnd-polygon-layer').remove();
     };
 
-    ia.wipeItem = function(item) {
+    imageAnnotator.wipeItem = function(item) {
         var fragmentId = fragmentIds[item.uri][0];
-        ia.wipeFragmentIds([fragmentId]);
+        imageAnnotator.wipeFragmentIds([fragmentId]);
 
     };
 
@@ -423,7 +423,7 @@ angular.module('Pundit2.Annotators')
                 return s.length > 0;
             }).join(','),
             elemTempFragments = elem.attr('temp-fragments'),
-        // cleanTempFragmentsA = [],
+            // cleanTempFragmentsA = [],
             cleanElemFragmentsA = cleanElemFragments.split(','),
             mergeWithPrev = false,
             frIntersectWithPrev = false,
@@ -454,7 +454,7 @@ angular.module('Pundit2.Annotators')
             // First we check prev sibling, if it's present and it's an element node..
             if (prev !== null && prev.nodeType === 1) {
                 jPrev = angular.element(prev);
-                // .. and if it has "pnd-cons" class we have to check if has the same fragment id(s)
+                // .. and if it has 'pnd-cons' class we have to check if has the same fragment id(s)
                 if (jPrev.hasClass(XpointersHelper.options.wrapNodeClass)) {
                     fragments = jPrev.attr('fragments');
                     if (fragments === cleanElemFragments) {
@@ -557,7 +557,7 @@ angular.module('Pundit2.Annotators')
                         }
                     });
 
-                    elem.addClass('pnd-imagefragment-numbers-' + cleanElemFragments.split(",").length);
+                    elem.addClass('pnd-imagefragment-numbers-' + cleanElemFragments.split(',').length);
                 }
             } else {
                 elem
@@ -578,12 +578,12 @@ angular.module('Pundit2.Annotators')
                     }
                 });
 
-                elem.addClass('pnd-imagefragment-numbers-' + cleanElemFragments.split(",").length);
+                elem.addClass('pnd-imagefragment-numbers-' + cleanElemFragments.split(',').length);
             }
         }
     };
 
-    ia.wipeFragmentIds = function(frIds) {
+    imageAnnotator.wipeFragmentIds = function(frIds) {
         var modifiedFragmentsId = {},
             modifiedItemsUri = [];
 
@@ -634,10 +634,10 @@ angular.module('Pundit2.Annotators')
         EventDispatcher.sendEvent('TextFragmentAnnotator.updateItems', modifiedItemsUri);
     };
 
-    ia.svgHighlightByItem = function(item) {
+    imageAnnotator.svgHighlightByItem = function(item) {
         // TODO check if the svg is yet built
         var currentUri, imgReference, xpaths = [];
-        if ((item.type.indexOf(ia.typeIF) !== -1) && (typeof(item.polygon) !== 'undefined')) {
+        if ((item.type.indexOf(imageAnnotator.typeIF) !== -1) && (typeof(item.polygon) !== 'undefined')) {
             currentUri = item.parentItemXP;
             xpaths = XpointersHelper.getXPathsFromXPointers([currentUri]);
             if (currentUri in xpaths) {
@@ -647,10 +647,10 @@ angular.module('Pundit2.Annotators')
         }
     };
 
-    ia.svgClearHighlightByItem = function( /*item*/ ) {
+    imageAnnotator.svgClearHighlightByItem = function( /*item*/ ) {
         angular.element('.' + imgConsClass).siblings('span.pnd-cons-svg').remove();
         // var currentUri, imgReference, xpaths = [];
-        // if ((item.type.indexOf(ia.typeIF) !== -1) && (typeof(item.polygon) !== 'undefined')){
+        // if ((item.type.indexOf(imageAnnotator.typeIF) !== -1) && (typeof(item.polygon) !== 'undefined')){
         //     currentUri = item.parentItemXP;
         //     xpaths = XpointersHelper.getXPathsFromXPointers([currentUri]);
         //     if (currentUri in xpaths) {
@@ -660,38 +660,38 @@ angular.module('Pundit2.Annotators')
         // }
     };
 
-    ia.highlightById = function(id) {
+    imageAnnotator.highlightById = function(id) {
         for (var l = fragmentById[id].bits.length; l--;) {
             fragmentById[id].bits[l].high();
         }
-        ia.log('Highlighting fragment id=' + id + ', # bits: ' + fragmentById[id].bits.length);
+        imageAnnotator.log('Highlighting fragment id=' + id + ', # bits: ' + fragmentById[id].bits.length);
     };
 
-    ia.clearHighlightById = function(uri) {
-            if (typeof(fragmentIds[uri]) === 'undefined') {
-                ia.log('Not clearing highlight on given URI: fragment id not found');
-                return;
-            }
-            ia.clearHighlightById(fragmentIds[uri]);
-        };
-
-    ia.highlightByUri = function(uri) {
-            if (typeof(fragmentIds[uri]) === 'undefined') {
-                ia.log('Not highlighting given URI: fragment id not found');
-                return;
-            }
-        ia.highlightById(fragmentIds[uri][0]);
-    };
-
-    ia.clearHighlightByUri = function(uri) {
+    imageAnnotator.clearHighlightById = function(uri) {
         if (typeof(fragmentIds[uri]) === 'undefined') {
-            ia.log('Not clearing highlight on given URI: fragment id not found');
+            imageAnnotator.log('Not clearing highlight on given URI: fragment id not found');
             return;
         }
-        ia.clearHighlightById(fragmentIds[uri]);
+        imageAnnotator.clearHighlightById(fragmentIds[uri]);
     };
 
-    Consolidation.addAnnotator(ia);
+    imageAnnotator.highlightByUri = function(uri) {
+        if (typeof(fragmentIds[uri]) === 'undefined') {
+            imageAnnotator.log('Not highlighting given URI: fragment id not found');
+            return;
+        }
+        imageAnnotator.highlightById(fragmentIds[uri][0]);
+    };
+
+    imageAnnotator.clearHighlightByUri = function(uri) {
+        if (typeof(fragmentIds[uri]) === 'undefined') {
+            imageAnnotator.log('Not clearing highlight on given URI: fragment id not found');
+            return;
+        }
+        imageAnnotator.clearHighlightById(fragmentIds[uri]);
+    };
+
+    Consolidation.addAnnotator(imageAnnotator);
 
     EventDispatcher.addListener('XpointersHelper.NodeAdded', function(e) {
         var elementInfo = e.args,
@@ -718,8 +718,8 @@ angular.module('Pundit2.Annotators')
 
     EventDispatcher.addListener('Consolidation.consolidateAll', function(e) {
         var myItemsList = ItemsExchange.getItemsByContainer(Config.modules.MyItemsContainer.container);
-        if (ia.options.addIcon === false &&
-            ia.options.addOnlyMyItemsIcon) {
+        if (imageAnnotator.options.addIcon === false &&
+            imageAnnotator.options.addOnlyMyItemsIcon) {
             angular.forEach(myItemsList, function(item) {
                 placeMyItemsIconByUri(item.uri);
             });
@@ -753,7 +753,7 @@ angular.module('Pundit2.Annotators')
 
         angular.forEach(fragments, function(fr) {
             if (typeof fragmentById[fr] === 'undefined') {
-                ia.err('Something wrog with this fragment ' + fr);
+                imageAnnotator.err('Something wrog with this fragment ' + fr);
                 return;
             }
 
@@ -778,6 +778,8 @@ angular.module('Pundit2.Annotators')
     ], function() {
         consolidateTemporarySelection();
     });
+
+    // TODO: copy copy copy paste .. 
     $rootScope.$on('annomatic-run', function() {
         annomaticIsRunning = true;
     });
@@ -785,8 +787,6 @@ angular.module('Pundit2.Annotators')
         annomaticIsRunning = false;
     });
 
-    ia.log('Component up and running');
-    return ia;
+    imageAnnotator.log('Component up and running');
+    return imageAnnotator;
 });
-
-
