@@ -8,43 +8,42 @@ angular.module('Pundit2.Annotators')
             fragments: '@'
         },
         link: function(scope, element) {
-            var numberOfTextFragments = scope.fragments.split(",").length;
-            var component;
-            var labelComponent;
-            if(typeof TextFragmentAnnotator === 'undefined'){
-                component=TextFragmentAnnotator;
-                labelComponent='text'
+            var numberOfTextFragments = scope.fragments.split(',').length,
+                component,
+                labelComponent;
+
+            if (typeof TextFragmentAnnotator === 'undefined') {
+                component = TextFragmentAnnotator;
+                labelComponent = 'text';
+            } else {
+                component = ImageAnnotator;
+                labelComponent = 'image';
             }
-            else{
-                component=ImageAnnotator;
-                labelComponent='image';
 
-            };
-
-            element.addClass('pnd-'+labelComponent+'fragment-numbers-' + numberOfTextFragments);
+            element.addClass('pnd-' + labelComponent + 'fragment-numbers-' + numberOfTextFragments);
 
             scope.bitId = new Date().getTime() + Math.floor(Math.random() * 100000);
             scope.isHigh = false;
-            
+
             scope.high = function() {
-                element.addClass('pnd-'+labelComponent+'fragment-highlight');
+                element.addClass('pnd-' + labelComponent + 'fragment-highlight');
             };
             scope.clear = function() {
-                element.removeClass('pnd-'+labelComponent+'fragment-highlight');
+                element.removeClass('pnd-' + labelComponent + 'fragment-highlight');
             };
 
             scope.hide = function() {
-                element.addClass('pnd-'+labelComponent+'fragment-hidden');
+                element.addClass('pnd-' + labelComponent + 'fragment-hidden');
             };
             scope.show = function() {
-                element.removeClass('pnd-'+labelComponent+'fragment-hidden');
+                element.removeClass('pnd-' + labelComponent + 'fragment-hidden');
             };
 
             scope.ghost = function() {
-                element.addClass('pnd-'+labelComponent+'fragment-ghosted');
+                element.addClass('pnd-' + labelComponent + 'fragment-ghosted');
             };
             scope.expo = function() {
-                element.removeClass('pnd-'+labelComponent+'fragment-ghosted');
+                element.removeClass('pnd-' + labelComponent + 'fragment-ghosted');
             };
 
             component.updateFragmentBit(scope, 'add');
@@ -61,6 +60,7 @@ angular.module('Pundit2.Annotators')
                         fragments = fragments.split(',');
                         for (var fi in fragments) {
                             var uri = component.getFragmentUriById(fragments[fi]);
+                            // TODO: minor refactoring
                             AnnotationExchange.getAnnotationsByItem(uri).forEach(function(ann) {
                                 annotations[ann.id] = ann;
                             });
