@@ -1,6 +1,17 @@
 angular.module('Pundit2.Annotators')
 
 .constant('IMAGEHANDLERDEFAULTS', {
+     /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ImageHandler
+     *
+     * @description
+     * `object`
+     *
+     * Configuration for Image Handler module
+     */
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -15,6 +26,7 @@ angular.module('Pundit2.Annotators')
      * <pre> removeSelectionOnAbort: true </pre>
      */
     removeSelectionOnAbort: true,
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -30,13 +42,12 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> ignoreClasses: ['pnd-ignore'] </pre>
      */
-
     ignoreClasses: ['pnd-ignore'],
 
     /**
      * @module punditConfig
      * @ngdoc property
-     * @name modules#TextFragmentHandler.useTemporarySelection
+     * @name modules#ImageHandler.useTemporarySelection
      *
      * @description
      * `boolean`
@@ -48,7 +59,7 @@ angular.module('Pundit2.Annotators')
      */
     useTemporarySelection: true,
 
-        /**
+    /**
      * @module punditConfig
      * @ngdoc property
      * @name modules#ImageHandler.container
@@ -62,9 +73,6 @@ angular.module('Pundit2.Annotators')
      * <pre> container: 'createdTextFragments' </pre>
      */
     container: "createdImage",
-
-    // Contextual menu type triggered by the text fragment handler. An Item will
-    // be passed as resource
 
     /**
      * @module punditConfig
@@ -101,7 +109,7 @@ angular.module('Pundit2.Annotators')
 .service('ImageHandler', function(IMAGEHANDLERDEFAULTS, NameSpace, BaseComponent, Config,
     TextFragmentHandler, XpointersHelper, Item, $compile, $timeout, $rootScope, ItemsExchange, TripleComposer, EventDispatcher, $document, Toolbar, Consolidation) {
 
-    var ih = new BaseComponent('ImageHandler', IMAGEHANDLERDEFAULTS);
+    var imageHandler = new BaseComponent('ImageHandler', IMAGEHANDLERDEFAULTS);
 
     // This function must be executed before than pundit is appended to DOM
     var timeoutPromise = null,
@@ -138,8 +146,8 @@ angular.module('Pundit2.Annotators')
         for (var uri in temporaryConsolidated) {
             if (forceWipe || typeof validUris[uri] === 'undefined') {
                 var temporaryFragmentId = temporaryConsolidated[uri].fragmentId;
-                ih.wipeFragmentIds([temporaryFragmentId]);
-                ih.setItemAsTemporary(uri, false);
+                imageHandler.wipeFragmentIds([temporaryFragmentId]);
+                imageHandler.setItemAsTemporary(uri, false);
                 delete temporaryConsolidated[uri];
             }
         }
@@ -153,10 +161,10 @@ angular.module('Pundit2.Annotators')
     var consolidateTemporarySelection = function() {
         for (var uri in temporaryConsolidated) {
             var temporaryFragmentId = temporaryConsolidated[uri].fragmentId,
-                temporaryFragmentUri = ih.getFragmentUriById(temporaryFragmentId);
+                temporaryFragmentUri = imageHandler.getFragmentUriById(temporaryFragmentId);
 
             Consolidation.updateItemListAndMap(ItemsExchange.getItemByUri(temporaryFragmentUri), 'text');
-            ih.placeIconByFragmentId(temporaryFragmentId);
+            imageHandler.placeIconByFragmentId(temporaryFragmentId);
 
             angular.element('.' + temporaryFragmentId)
                 .removeClass(XpointersHelper.options.textFragmentHiddenClass)
@@ -184,7 +192,7 @@ angular.module('Pundit2.Annotators')
 
     // If configured to do so, removes the user's selection from the browser
     var removeSelection = function() {
-        if (ih.options.removeSelectionOnAbort) {
+        if (imageHandler.options.removeSelectionOnAbort) {
             $document[0].getSelection().removeAllRanges();
         }
     };
@@ -200,7 +208,7 @@ angular.module('Pundit2.Annotators')
     };
 
     var mouseOver = function(evt) {
-        ih.clearTimeout();
+        imageHandler.clearTimeout();
         if (el !== null && evt.target.src !== el[0].src) {
             clear();
         }
@@ -217,7 +225,7 @@ angular.module('Pundit2.Annotators')
 
     var mouseOut = function() {
         // remove directive after 250ms
-        ih.removeDirective();
+        imageHandler.removeDirective();
     };
 
     angular.element('img').hover(mouseOver, mouseOut);
@@ -226,12 +234,14 @@ angular.module('Pundit2.Annotators')
 
         var range = document.createRange();
         range.selectNode(node);
-        var  index = [].indexOf.call (node.parentNode.children, el.context) + 1;
+        var index = [].indexOf.call(node.parentNode.children, el.context) + 1;
         return XpointersHelper.range2xpointer(range, index);
     };
 
+    // TODO: ???
     function mouseUpHandler(upEvt) {
         lastTemporaryConsolidable = undefined;
+        // TODO: please .. 
         if (clientHidden) {
             return;
         }
@@ -239,13 +249,14 @@ angular.module('Pundit2.Annotators')
         $document.off('mouseup', mouseUpHandler);
 
         var target = upEvt.target;
-        if (ih.isToBeIgnored(target)) {
+        if (imageHandler.isToBeIgnored(target)) {
+            // TODO: nain
             textFragmentHandler.log('ABORT: ignoring mouse UP event on document: ignore class spotted.');
             removeSelection();
             return;
         }
 
-        var range = ih.getSelectedRange();
+        var range = imageHandler.getSelectedRange();
         if (range === null) {
             return;
         }
@@ -257,6 +268,7 @@ angular.module('Pundit2.Annotators')
             nodesLen = nodes.length;
         while (nodesLen--) {
             if (textFragmentHandler.isToBeIgnored(nodes[nodesLen])) {
+                // TODO: nain!
                 textFragmentHandler.log('ABORT: ignoring range: ignore class spotted inside it, somewhere.');
                 removeSelection();
                 return;
@@ -270,9 +282,9 @@ angular.module('Pundit2.Annotators')
         // discarded at all.
         // Possible solution: wipe the container when triple composer is empty, ctx menu is
         // NOT shown on every dashboard open/close ?
-        var item = ih.createItemFromRange(range),
+        var item = imageHandler.createItemFromRange(range),
             currentFr = 'imgf-' + (new Date()).getTime();
-        ItemsExchange.addItemToContainer(item, ih.options.container);
+        ItemsExchange.addItemToContainer(item, imageHandler.options.container);
 
         lastTemporaryConsolidable = {
             offset: range.endOffset,
@@ -285,10 +297,10 @@ angular.module('Pundit2.Annotators')
         //XpointersHelper.wrapElement(range.commonAncestorContainer, range, 'span', "pnd-cons-temp", [lastTemporaryConsolidable.fragmentId]);
         //temporaryConsolidated[item.uri] = lastTemporaryConsolidable;
 
-        ih.log('Valid selection ended on document. Text fragment Item produced: ' + item.label);
+        imageHandler.log('Valid selection ended on document. Text fragment Item produced: ' + item.label);
 
         if (Toolbar.isActiveTemplateMode() && Config.clientMode === 'pro') {
-            ih.log('Item used as subject inside triple composer (template mode active).');
+            imageHandler.log('Item used as subject inside triple composer (template mode active).');
             TripleComposer.addToAllSubject(item);
             TripleComposer.closeAfterOp();
             addTemporarySelection();
@@ -297,16 +309,18 @@ angular.module('Pundit2.Annotators')
         }
 
         // TODO: generalize item in {data}
-        var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, ih.options.cMenuType, currentFr);
+        // TODO: -.-''' handlerMenu?! 
+        var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, imageHandler.options.cMenuType, currentFr);
         if (typeof promise !== 'undefined' && promise !== false) {
             promise.then(function() {
+                // TODO: NAIN
                 textFragmentHandler.log('textFragmentHandler handlerMenu.show promise resolved');
             });
         }
     } // mouseUpHandler()
 
     // Creates a proper Item from a range .. it must be a valid range, kktnx.
-    ih.createItemFromRange = function(range) {
+    imageHandler.createItemFromRange = function(range) {
         var values = {};
 
         values.uri = XpointersHelper.range2xpointer(range);
@@ -314,8 +328,8 @@ angular.module('Pundit2.Annotators')
         values.description = range.toString();
 
         values.label = values.description;
-        if (values.label.length > ih.options.labelMaxLength) {
-            values.label = values.label.substr(0, ih.options.labelMaxLength) + ' ..';
+        if (values.label.length > imageHandler.options.labelMaxLength) {
+            values.label = values.label.substr(0, imageHandler.options.labelMaxLength) + ' ..';
         }
 
         values.pageContext = XpointersHelper.getSafePageContext();
@@ -324,11 +338,12 @@ angular.module('Pundit2.Annotators')
         return new Item(values.uri, values);
     };
 
-    ih.getSelectedRange = function() {
+    imageHandler.getSelectedRange = function() {
         var doc = $document[0],
             range;
 
         if (doc.getSelection().rangeCount === 0) {
+            // TODO: NAIN!
             textFragmentHandler.log('getSelection().rangeCount is 0: no selected range.');
             return null;
         }
@@ -340,11 +355,11 @@ angular.module('Pundit2.Annotators')
             range.startContainer === range.endContainer &&
             range.startOffset === range.endOffset) {
 
-            ih.log('Range is not null, but start/end containers and offsets match: no selected range.');
+            imageHandler.log('Range is not null, but start/end containers and offsets match: no selected range.');
             return null;
         }
 
-        ih.log('GetSelectedRange returning a DIRTY range: ' +
+        imageHandler.log('GetSelectedRange returning a DIRTY range: ' +
             range.startContainer.nodeName + '[' + range.startOffset + '] > ' +
             range.endContainer.nodeName + '[' + range.endOffset + ']');
 
@@ -352,8 +367,8 @@ angular.module('Pundit2.Annotators')
     }; // getSelectedRange()
 
     // Checks if the node (or any parent) is a node which needs to be ignored
-    ih.isToBeIgnored = function(node) {
-        var classes = ih.options.ignoreClasses,
+    imageHandler.isToBeIgnored = function(node) {
+        var classes = imageHandler.options.ignoreClasses,
             ignoreLen = classes.length;
 
         // Traverse every parent and check if it has one of the classes we
@@ -374,28 +389,28 @@ angular.module('Pundit2.Annotators')
         return false;
     };
 
-    ih.turnOn = function() {
+    imageHandler.turnOn = function() {
         angular.element('img').hover(mouseOver, mouseOut);
     };
 
-    ih.turnOff = function() {
+    imageHandler.turnOff = function() {
         angular.element('img').unbind('mouseenter mouseleave');
     };
 
-    ih.clearTimeout = function() {
+    imageHandler.clearTimeout = function() {
         if (timeoutPromise !== null) {
             $timeout.cancel(timeoutPromise);
             timeoutPromise = null;
         }
     };
 
-    ih.removeDirective = function() {
+    imageHandler.removeDirective = function() {
         timeoutPromise = $timeout(function() {
             clear();
         }, 100);
     };
 
-    ih.createItemFromImage = function(img) {
+    imageHandler.createItemFromImage = function(img) {
         var values = {};
 
         values.uri = getXpFromNode(img);
@@ -404,8 +419,8 @@ angular.module('Pundit2.Annotators')
         values.image = img.src;
 
         values.label = values.description;
-        if (values.label.length > ih.options.labelMaxLength) {
-            values.label = values.label.substr(0, ih.options.labelMaxLength) + ' ..';
+        if (values.label.length > imageHandler.options.labelMaxLength) {
+            values.label = values.label.substr(0, imageHandler.options.labelMaxLength) + ' ..';
         }
 
         values.pageContext = XpointersHelper.getSafePageContext();
@@ -414,11 +429,11 @@ angular.module('Pundit2.Annotators')
         return new Item(values.uri, values);
     };
 
-    ih.wipeTemporarySelection = function() {
+    imageHandler.wipeTemporarySelection = function() {
         checkTemporaryConsolidated(true);
     };
 
-    if (ih.options.useTemporarySelection) {
+    if (imageHandler.options.useTemporarySelection) {
         EventDispatcher.addListeners([
             'PndPopover.addTemporarySelection',
             'TripleComposer.useAsObject',
@@ -455,6 +470,6 @@ angular.module('Pundit2.Annotators')
         });
     }
 
-    return ih;
+    return imageHandler;
 
 });
