@@ -1,7 +1,7 @@
 angular.module('Pundit2.Annotators')
 
 .constant('IMAGEHANDLERDEFAULTS', {
-     /**
+    /**
      * @module punditConfig
      * @ngdoc property
      * @name modules#ImageHandler
