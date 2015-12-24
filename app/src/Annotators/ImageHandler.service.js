@@ -72,7 +72,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> container: 'createdTextFragments' </pre>
      */
-    container: "createdImage",
+    container: 'createdImage',
 
     /**
      * @module punditConfig
@@ -87,7 +87,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> cMenuType: 'ImageHandlerItem' </pre>
      */
-    cMenuType: "imageHandlerItem",
+    cMenuType: 'imageHandlerItem',
 
     /**
      * @module punditConfig
@@ -264,7 +264,7 @@ angular.module('Pundit2.Annotators')
         // Check every node contained in this range: if we select something which starts
         // and ends inside the same text node the length will be 0: everything is ok.
         // Otherwise check that every contained node must not be ignored
-        var nodes = range.cloneContents().querySelectorAll("*"),
+        var nodes = range.cloneContents().querySelectorAll('*'),
             nodesLen = nodes.length;
         while (nodesLen--) {
             if (textFragmentHandler.isToBeIgnored(nodes[nodesLen])) {
@@ -294,7 +294,7 @@ angular.module('Pundit2.Annotators')
             itemUri: item.uri
         };
 
-        //XpointersHelper.wrapElement(range.commonAncestorContainer, range, 'span', "pnd-cons-temp", [lastTemporaryConsolidable.fragmentId]);
+        //XpointersHelper.wrapElement(range.commonAncestorContainer, range, 'span', 'pnd-cons-temp', [lastTemporaryConsolidable.fragmentId]);
         //temporaryConsolidated[item.uri] = lastTemporaryConsolidable;
 
         imageHandler.log('Valid selection ended on document. Text fragment Item produced: ' + item.label);
