@@ -25,18 +25,12 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
     $scope.moreInfo = AnnotationDetails.options.moreInfo;
-    $scope.notebookLink = Config.askThePundit;
 
     $scope.editMode = false;
     $scope.editCommentValue = '';
 
     if (typeof($scope.annotation) !== 'undefined') {
-        if (AnnotationDetails.isUserToolShowed($scope.annotation.creator)) {
-            $scope.askLink = Config.askBaseURL + '#/myNotebooks/';
-        } else {
-            $scope.askLink = Config.askBaseURL + '#/notebooks/';
-        }
-
+        $scope.notebooksHomeLink = Config.homeBaseURL + 'notebooks/';
         notebookId = $scope.annotation.notebookId;
     }
 
@@ -168,6 +162,11 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.cancelEdit = function(event) {
         $scope.editMode = false;
+        stopEvent(event);
+    };
+
+    $scope.openNotebook = function(event, id) {
+        $window.open(Config.homeBaseURL + 'annotations/' + id, '_blank');
         stopEvent(event);
     };
 

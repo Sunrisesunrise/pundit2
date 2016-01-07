@@ -19,7 +19,6 @@ angular.module('Pundit2.Toolbar')
 
     $scope.isUserLogged = false;
 
-    $scope.askThePundit = Config.askThePundit;
     $scope.myNotebooks = Toolbar.options.myNotebooks;
     $scope.dashboard = false;
     $scope.sidebar = false;
@@ -120,10 +119,6 @@ angular.module('Pundit2.Toolbar')
             $window.open(Config.lodLive.baseUrl + Config.pndPurl + 'user/' + userData.id, '_blank');
             Analytics.track('buttons', 'click', 'toolbar--openYourGraph');
         }
-    };
-
-    $scope.askThePunditClick = function() {
-        Analytics.track('buttons', 'click', 'toolbar--askThePundit--' + ($scope.isUserLogged ? 'logged' : 'anonymous'));
     };
 
     // modal
@@ -626,11 +621,6 @@ angular.module('Pundit2.Toolbar')
     // return true if user is logged in --> notebook menu is active
     $scope.isNotebookMenuActive = function() {
         return $scope.isUserLogged === true;
-    };
-
-    // get Ask the Pundit link
-    $scope.getAskLink = function() {
-        return Toolbar.getAskLink();
     };
 
     $scope.dashboardClickHandler = function() {

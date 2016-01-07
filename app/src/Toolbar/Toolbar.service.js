@@ -32,22 +32,6 @@ angular.module('Pundit2.Toolbar')
     /**
      * @module punditConfig
      * @ngdoc property
-     * @name modules#Toolbar.askThePundit
-     *
-     * @description
-     * `boolean`
-     *
-     * @deprecated - delete if you are sure no one is using this
-     *   and use punditConfig.askThePundit
-     * Show/Hide ask the Pundit button
-     *
-     * Default value:
-     * <pre> askThePundit: true </pre>
-     */
-    askThePundit: false,
-    /**
-     * @module punditConfig
-     * @ngdoc property
      * @name modules#Toolbar.toolbarHeight
      *
      * @description
@@ -203,14 +187,6 @@ angular.module('Pundit2.Toolbar')
     // get error messages and callbacks
     toolbar.getErrorMessageDropdown = function() {
         return errorMessageDropdown;
-    };
-
-    toolbar.getAskLink = function() {
-        if (MyPundit.isUserLogged()) {
-            return Config.askBaseURL + '#/myAsk/';
-        } else {
-            return Config.askBaseURL;
-        }
     };
 
     toolbar.isActiveTemplateMode = function() {

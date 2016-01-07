@@ -25,7 +25,17 @@
                 {{::annotation.creatorName}}
             </span>
             <span class="pnd-annotation-metadata">
-                {{::annotation.created | date : 'd MMM y'}} · in <span class="pnd-annotation-notebook-name">{{annotation.notebookName}}</span>
+                {{::annotation.created | date : 'd MMM y'}} · in 
+                <span 
+                    ng-if="!isUserToolShowed()">
+                    {{annotation.notebookName}}
+                </span>
+                <a 
+                    href="#" 
+                    ng-if="isUserToolShowed()"
+                    ng-click="openNotebook($event, annotation.notebookId)">
+                    {{annotation.notebookName}}
+                </a>
             </span>
 
         </div>

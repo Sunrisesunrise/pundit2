@@ -1,10 +1,9 @@
 angular.module('Pundit2.Preview')
 
-.controller('PreviewCtrl', function($scope, Preview, TypesHelper, $window, Config, Analytics) {
+.controller('PreviewCtrl', function($scope, Preview, TypesHelper, $window, MyPundit, Config, Analytics) {
 
     $scope.itemDashboardPreview = null;
-
-    $scope.askThePundit = Config.askThePundit;
+    $scope.homePundit = Config.homePundit;
 
     // getter function used to build hierarchystring.
     // hierarchystring is used for tracking events with analytics.
@@ -42,10 +41,24 @@ angular.module('Pundit2.Preview')
         return $scope.itemDashboardPreview === null;
     };
 
+    $scope.isUser = function() {
+        if (MyPundit.isUserLogged() === false) {
+            return false;
+        }
+
+        var userData = MyPundit.getUserData(),
+            userUri = userData.uri;
+
+        return $scope.itemDashboardPreview.creator === userUri;
+    };
+
     // return true if dashboard preview is empty
     $scope.isNotebook = function() {
+        // console.log(MyPundit.getUserData());
         // TODO: Use namespace
-        if ($scope.itemDashboardPreview !== null && $scope.itemDashboardPreview.type[0] === "http://purl.org/pundit/ont/ao#Notebook") {
+        if ($scope.itemDashboardPreview !== null && 
+                $scope.itemDashboardPreview.type[0] === "http://purl.org/pundit/ont/ao#Notebook" 
+                ) {
             return true;
         } else {
             return false;
@@ -87,7 +100,7 @@ angular.module('Pundit2.Preview')
     };
 
     $scope.openNotebookUrl = function(id) {
-        var url = Config.askBaseURL + '#/myNotebooks/' + id;
+        var url = Config.homeBaseURL + '/annotations/' + id;
         $window.open(url);
 
         var eventLabel = getHierarchyString();
