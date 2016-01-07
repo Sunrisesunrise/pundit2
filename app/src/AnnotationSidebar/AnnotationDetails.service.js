@@ -246,8 +246,16 @@ angular.module('Pundit2.AnnotationSidebar')
                 icon: currentItem.getIcon(),
                 typeLabel: (typeof currentItem.type[0] !== 'undefined' ? TypesHelper.getLabel(currentItem.type[0]) : null),
                 // typeLabel: TypesHelper.getLabel(currentItem.type[0]),
-                typeClass: 'uri'
+                typeClass: 'uri',
+                pageContext: currentItem.pageContext
             };
+
+            if (result.typeLabel === 'Text fragment' &&
+                result.pageContext !== undefined) {
+                if (result.pageContext !== location.href) {
+                    result.isExternal = true;
+                }
+            }
         }
         return result;
     };
