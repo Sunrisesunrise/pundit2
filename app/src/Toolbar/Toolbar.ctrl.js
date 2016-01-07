@@ -371,16 +371,20 @@ angular.module('Pundit2.Toolbar')
             click: logout
         }];
     } else {
-        $scope.userLoggedInDropdown = [{
-            text: 'Manage your annotations',
-            click: manageYourAnnotation
-        }, {
+        $scope.userLoggedInDropdown = [];
+        if (Config.homePundit) {
+            $scope.userLoggedInDropdown.push({
+                text: 'Manage your annotations',
+                click: manageYourAnnotation
+            });
+        }
+        $scope.userLoggedInDropdown.push({
             text: 'Edit your profile',
             click: editYourProfile
         }, {
             text: 'Log out',
             click: logout
-        }];
+        });
     }
 
 

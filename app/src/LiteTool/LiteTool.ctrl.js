@@ -113,10 +113,15 @@ angular.module('Pundit2.LiteTool')
         Analytics.track('buttons', 'click', 'litetool--reportBug');
     };
 
-    $scope.userLoggedInDropdown = [{
-        text: 'Manage your annotations',
-        click: manageYourAnnotation
-    }, {
+    $scope.userLoggedInDropdown = [];
+    if (Config.homePundit) {
+        $scope.userLoggedInDropdown.push({
+            text: 'Manage your annotations',
+            click: manageYourAnnotation
+        });
+    }
+
+    $scope.userLoggedInDropdown.push({
         text: 'Edit your profile',
         click: editYourProfile
     }, {
@@ -125,7 +130,8 @@ angular.module('Pundit2.LiteTool')
     }, {
         text: 'Log out',
         click: logout
-    }];
+    });
+    
     $scope.dropdownTemplate = "src/ContextualMenu/dropdown.tmpl.html";
 
     $scope.annotationsClickHandler = function() {

@@ -35,12 +35,12 @@
             <span class="pnd-annotation-metadata">
                 {{::annotation.created | date : 'd MMM y'}} · in 
                 <span 
-                    ng-if="!isUserToolShowed()">
+                    ng-if="!isUserToolShowed() || !homePundit">
                     {{annotation.notebookName}}
                 </span>
                 <a 
                     href="#" 
-                    ng-if="isUserToolShowed()"
+                    ng-if="isUserToolShowed() && homePundit"
                     ng-click="openNotebook($event, annotation.notebookId)">
                     {{annotation.notebookName}}
                 </a>
