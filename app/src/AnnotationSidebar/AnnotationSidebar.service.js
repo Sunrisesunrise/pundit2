@@ -835,37 +835,37 @@ angular.module('Pundit2.AnnotationSidebar')
         });
 
         orderAndSetPos();
-        if (BrokenHelper.getBrokenAnnotations().length && firstSendBrokenAlert) {
-            EventDispatcher.sendEvent('Pundit.alert', {
-                title: 'Broken annotations!',
-                id: "WARNING",
-                timeout: 12000,
-                message: "It looks like some annotations on the page are broken: this can happen if the <strong>text of the page has changed in the last days</strong>.<br /><br />See if you can fix the broken annotations by editing them.<br /><br />Broken annotations are shown on the top right of the sidebar and are highlighted in red.<br /><a href=\"javascript:void(0)\" data-inner-callback=\"0\">Click here</a> to open first broken annotation",
-                callbacks: [
-                    function() {
-                        var ba = BrokenHelper.getBrokenAnnotations();
-                        if (ba.length > 0) {
-                            var currentElement = angular.element('annotation-details[id="' + ba[0] + '"] .pnd-annotation-details-header');
-                            if (!annotationSidebar.isAnnotationSidebarExpanded()) {
-                                if (annotationSidebar.isFiltersExpanded()) {
-                                    annotationSidebar.toggleFiltersContent();
-                                }
-                                annotationSidebar.toggle();
-                                $timeout(function() {
-                                    var dashboardHeight = getDashboardHeight();
-                                    angular.element('body').animate({
-                                        scrollTop: currentElement.offset().top - dashboardHeight - 60
-                                    }, 'slow');
-                                }, 100);
-                            }
-                            EventDispatcher.sendEvent('AnnotationSidebar.toggleAnnotation', ba[0]);
-                        }
-                        return true; // makes allert close immediatelly.
-                    }
-                ]
-            });
-            firstSendBrokenAlert = false;
-        }
+        // if (BrokenHelper.getBrokenAnnotations().length && firstSendBrokenAlert) {
+        //     EventDispatcher.sendEvent('Pundit.alert', {
+        //         title: 'Broken annotations!',
+        //         id: "WARNING",
+        //         timeout: 12000,
+        //         message: "It looks like some annotations on the page are broken: this can happen if the <strong>text of the page has changed in the last days</strong>.<br /><br />See if you can fix the broken annotations by editing them.<br /><br />Broken annotations are shown on the top right of the sidebar and are highlighted in red.<br /><a href=\"javascript:void(0)\" data-inner-callback=\"0\">Click here</a> to open first broken annotation",
+        //         callbacks: [
+        //             function() {
+        //                 var ba = BrokenHelper.getBrokenAnnotations();
+        //                 if (ba.length > 0) {
+        //                     var currentElement = angular.element('annotation-details[id="' + ba[0] + '"] .pnd-annotation-details-header');
+        //                     if (!annotationSidebar.isAnnotationSidebarExpanded()) {
+        //                         if (annotationSidebar.isFiltersExpanded()) {
+        //                             annotationSidebar.toggleFiltersContent();
+        //                         }
+        //                         annotationSidebar.toggle();
+        //                         $timeout(function() {
+        //                             var dashboardHeight = getDashboardHeight();
+        //                             angular.element('body').animate({
+        //                                 scrollTop: currentElement.offset().top - dashboardHeight - 60
+        //                             }, 'slow');
+        //                         }, 100);
+        //                     }
+        //                     EventDispatcher.sendEvent('AnnotationSidebar.toggleAnnotation', ba[0]);
+        //                 }
+        //                 return true; // makes allert close immediatelly.
+        //             }
+        //         ]
+        //     });
+        //     firstSendBrokenAlert = false;
+        // }
         BrokenHelper.sendQueques();
 
         annotationsFilters.broken['uri:broken'].annotationsList = removeBroken(angular.extend({}, state.allAnnotations), tempBrokenList);
