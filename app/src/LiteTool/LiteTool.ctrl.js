@@ -1,12 +1,66 @@
 angular.module('Pundit2.LiteTool')
 
-.controller('LiteToolCtrl', function($scope, $rootScope, $window, Status, AnnotationSidebar, EventDispatcher, MyPundit, Analytics) {
+.controller('LiteToolCtrl', function($scope, $rootScope, $window, $modal, Config, Status, AnnotationSidebar, EventDispatcher, MyPundit, Keyboard, Analytics) {
 
     $scope.isUserLogged = false;
     $scope.isAnnotationSidebarExpandedv = false;
     $scope.isContextualMenuOpen = false;
     $scope.isUserPopoupOpen = false;
     $scope.userData = {};
+
+    // modal
+    var sendModalScope = $rootScope.$new();
+
+    var sendModal = $modal({
+        container: "[data-ng-app='Pundit2']",
+        templateUrl: 'src/Core/Templates/send.modal.tmpl.html',
+        show: false,
+        backdrop: 'static',
+        scope: sendModalScope,
+        keyboard: false
+    });
+
+    var sendMail = function(subject, body) {
+        var user = MyPundit.getUserData();
+        var link = "mailto:punditbug@netseven.it" +
+            "?cc=" +
+            "&subject=" + escape(subject) +
+            "&body=" + escape(body) +
+            "%0A%0A" + "Pundit version: " + PUNDITVERSION.version +
+            "%0A%0A" + "Configuration file: " + Config.confURL +
+            "%0A" + "Web page: " + document.URL +
+            "%0A" + "Broswer info: " + window.navigator.userAgent +
+            "%0A%0A" + "User openid: " + user.openid +
+            "%0A" + "User uri: " + user.uri +
+            "%0A" + "User name: " + user.fullName +
+            "%0A" + "User mail: " + user.email;
+
+        //window.location.href = link;
+        window.open(link);
+    };
+
+    sendModalScope.titleMessage = "Need help? Contact us!";
+    sendModalScope.text = {
+        msg: "",
+        subject: ""
+    };
+
+
+    sendModalScope.send = function() {
+        // send a mail
+        sendMail(sendModalScope.text.subject, sendModalScope.text.msg);
+        sendModal.hide();
+        Analytics.track('buttons', 'click', 'toolbar--reportBug--send');
+    };
+
+    sendModalScope.cancel = function() {
+        sendModal.hide();
+        if (typeof modalEscapeHandler !== 'undefined') {
+            Keyboard.unregisterHandler(modalEscapeHandler);
+            modalEscapeHandler = undefined;
+        }
+        Analytics.track('buttons', 'click', 'toolbar--reportBug--cancel');
+    };
 
     var logout = function() {
         MyPundit.logout();
@@ -23,12 +77,51 @@ angular.module('Pundit2.LiteTool')
         Analytics.track('buttons', 'click', 'litetool--editProfile');
     };
 
+    var modalEscapeHandler;
+    var addModalEscapeHandler = function(callback) {
+        modalEscapeHandler = Keyboard.registerHandler('LiteToolController', {
+            keyCode: 27,
+            ignoreOnInput: false,
+            stopPropagation: true
+        }, callback);
+    };
+
+    // open help modal
+    var showHelp = function() {
+        addModalEscapeHandler(function() {
+            sendModalScope.cancel();
+        });
+
+        sendModal.$promise.then(function() {
+            sendModalScope.text.msg = "";
+            sendModalScope.text.subject = "";
+            sendModal.show();
+
+            var sendBtn = angular.element('.pnd-send-modal-send');
+            $scope.$watch(function() {
+                return sendModalScope.text.subject;
+            }, function(text) {
+                if (text.length > 2) {
+                    sendBtn.removeClass('disabled');
+                } else {
+                    sendBtn.addClass('disabled');
+                }
+            }, true);
+
+        });
+
+        Analytics.track('buttons', 'click', 'litetool--reportBug');
+    };
+
     $scope.userLoggedInDropdown = [{
         text: 'Manage your annotations',
         click: manageYourAnnotation
     }, {
         text: 'Edit your profile',
         click: editYourProfile
+    }, {
+        text: 'Help',
+        click: showHelp
     }, {
         text: 'Log out',
         click: logout
