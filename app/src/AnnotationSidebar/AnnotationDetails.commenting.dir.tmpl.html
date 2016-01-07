@@ -59,7 +59,7 @@
             <div
                 class="pnd-annotation-comment-text"
                 ng-if="!editMode">
-                {{annotation.comment}}
+                <span ng-bind-html="annotation.comment | linky:'_blank'"></span>
             </div>
 
             <!-- Comment edit mode-->
