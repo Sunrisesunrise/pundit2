@@ -100,7 +100,7 @@ angular.module('Pundit2.Preview')
     };
 
     $scope.openNotebookUrl = function(id) {
-        var url = Config.homeBaseURL + '/annotations/' + id;
+        var url = Config.homeBaseURL + 'annotations/' + id;
         $window.open(url);
 
         var eventLabel = getHierarchyString();
