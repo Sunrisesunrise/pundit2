@@ -14,7 +14,6 @@ angular.module('Pundit2.Annotators')
 
                 // TODO: move this to its own controller !
 
-
                 scope.textFragmentIconClass = XpointersHelper.options.textFragmentIconClass;
 
                 // Will use the icon to calculate this fragment height with respect to

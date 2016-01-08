@@ -4,20 +4,6 @@ angular.module('Pundit2.Annotators')
     /**
      * @module punditConfig
      * @ngdoc property
-     * @name modules#ImageHandler.removeSelectionOnAbort
-     *
-     * @description
-     * `boolean`
-     *
-     * If true, whet user select some content classed as ignored (see ignoreClasses), selected content will get reseted.
-     *
-     * Default value:
-     * <pre> removeSelectionOnAbort: true </pre>
-     */
-    removeSelectionOnAbort: true,
-    /**
-     * @module punditConfig
-     * @ngdoc property
      * @name modules#ImageHandler.ignoreClasses
      *
      * @description
@@ -34,21 +20,6 @@ angular.module('Pundit2.Annotators')
     ignoreClasses: ['pnd-ignore'],
 
     /**
-     * @module punditConfig
-     * @ngdoc property
-     * @name modules#TextFragmentHandler.useTemporarySelection
-     *
-     * @description
-     * `boolean`
-     *
-     * Activate listeners for temporary selections
-     *
-     * Default value:
-     * <pre> useTemporarySelection: false </pre>
-     */
-    useTemporarySelection: true,
-
-        /**
      * @module punditConfig
      * @ngdoc property
      * @name modules#ImageHandler.container
@@ -99,7 +70,7 @@ angular.module('Pundit2.Annotators')
 })
 
 .service('ImageHandler', function(IMAGEHANDLERDEFAULTS, NameSpace, BaseComponent, Config,
-    TextFragmentHandler, XpointersHelper, Item, $compile, $timeout, $rootScope, ItemsExchange, TripleComposer, EventDispatcher, $document, Toolbar, Consolidation) {
+    TextFragmentHandler, XpointersHelper, Item, $compile, $timeout, $rootScope) {
 
     var ih = new BaseComponent('ImageHandler', IMAGEHANDLERDEFAULTS);
 
@@ -108,86 +79,6 @@ angular.module('Pundit2.Annotators')
         exist = false,
         el = null,
         dir = null;
-
-    var lastTemporaryConsolidable,
-        temporaryConsolidated = {};
-
-
-    var checkTemporaryConsolidated = function(forceWipe) {
-        if (typeof forceWipe === 'undefined') {
-            forceWipe = false;
-        }
-        if (Object.keys(temporaryConsolidated).length === 0) {
-            return;
-        }
-        var validUris = {};
-        var statements = TripleComposer.getStatements();
-        statements.forEach(function(el) {
-            if (typeof el.scope === 'undefined') {
-                return;
-            }
-            var triple = el.scope.get();
-            if (typeof triple.subject !== 'undefined' && triple.subject !== null && typeof triple.subject.uri !== 'undefined') {
-                validUris[triple.subject.uri] = true;
-            }
-            if (typeof triple.object !== 'undefined' && triple.object !== null && typeof triple.object.uri !== 'undefined') {
-                validUris[triple.object.uri] = true;
-            }
-        });
-
-        for (var uri in temporaryConsolidated) {
-            if (forceWipe || typeof validUris[uri] === 'undefined') {
-                var temporaryFragmentId = temporaryConsolidated[uri].fragmentId;
-                ih.wipeFragmentIds([temporaryFragmentId]);
-                ih.setItemAsTemporary(uri, false);
-                delete temporaryConsolidated[uri];
-            }
-        }
-
-        if (forceWipe) {
-            lastTemporaryConsolidable = undefined;
-            ItemsExchange.wipeTemporaryItems();
-        }
-    };
-
-    var consolidateTemporarySelection = function() {
-        for (var uri in temporaryConsolidated) {
-            var temporaryFragmentId = temporaryConsolidated[uri].fragmentId,
-                temporaryFragmentUri = ih.getFragmentUriById(temporaryFragmentId);
-
-            Consolidation.updateItemListAndMap(ItemsExchange.getItemByUri(temporaryFragmentUri), 'text');
-            ih.placeIconByFragmentId(temporaryFragmentId);
-
-            angular.element('.' + temporaryFragmentId)
-                .removeClass(XpointersHelper.options.textFragmentHiddenClass)
-                .removeAttr('temp-fragments')
-                .removeClass('pnd-cons-temp');
-            delete temporaryConsolidated[uri];
-        }
-        lastTemporaryConsolidable = undefined;
-    };
-
-    var addTemporarySelection = function() {
-        if (typeof lastTemporaryConsolidable !== 'undefined') {
-            XpointersHelper.wrapElement(
-                lastTemporaryConsolidable.range.commonAncestorContainer,
-                lastTemporaryConsolidable.range,
-                'span', 'pnd-cons-temp pnd-cons', [lastTemporaryConsolidable.fragmentId],
-                true,
-                lastTemporaryConsolidable.itemUri
-            );
-            temporaryConsolidated[lastTemporaryConsolidable.itemUri] = lastTemporaryConsolidable;
-            ItemsExchange.setItemAsTemporary(lastTemporaryConsolidable.itemUri, true);
-            lastTemporaryConsolidable = undefined;
-        }
-    };
-
-    // If configured to do so, removes the user's selection from the browser
-    var removeSelection = function() {
-        if (ih.options.removeSelectionOnAbort) {
-            $document[0].getSelection().removeAllRanges();
-        }
-    };
 
     var clear = function() {
         // remove css class from img
@@ -214,7 +105,6 @@ angular.module('Pundit2.Annotators')
             exist = true;
         }
     };
-
     var mouseOut = function() {
         // remove directive after 250ms
         ih.removeDirective();
@@ -223,155 +113,23 @@ angular.module('Pundit2.Annotators')
     angular.element('img').hover(mouseOver, mouseOut);
 
     var getXpFromNode = function(node) {
-
         var range = document.createRange();
         range.selectNode(node);
-        var  index = [].indexOf.call (node.parentNode.children, el.context) + 1;
+        var index =0;
+        if(XpointersHelper.isWrapNode(node.parentNode)){
+            var match = node.parentNode;
+            var range2 = document.createRange();
+            node = node.parentNode.parentNode;
+            range2.selectNode(node.parentNode);
+            index = [].indexOf.call (node.children, match) + 1;
+
+        }else {
+            range.selectNode(node);
+            index = [].indexOf.call (node.parentNode.children, el.context) + 1;
+
+        }
+
         return XpointersHelper.range2xpointer(range, index);
-    };
-
-    function mouseUpHandler(upEvt) {
-        lastTemporaryConsolidable = undefined;
-        if (clientHidden) {
-            return;
-        }
-
-        $document.off('mouseup', mouseUpHandler);
-
-        var target = upEvt.target;
-        if (ih.isToBeIgnored(target)) {
-            textFragmentHandler.log('ABORT: ignoring mouse UP event on document: ignore class spotted.');
-            removeSelection();
-            return;
-        }
-
-        var range = ih.getSelectedRange();
-        if (range === null) {
-            return;
-        }
-
-        // Check every node contained in this range: if we select something which starts
-        // and ends inside the same text node the length will be 0: everything is ok.
-        // Otherwise check that every contained node must not be ignored
-        var nodes = range.cloneContents().querySelectorAll("*"),
-            nodesLen = nodes.length;
-        while (nodesLen--) {
-            if (textFragmentHandler.isToBeIgnored(nodes[nodesLen])) {
-                textFragmentHandler.log('ABORT: ignoring range: ignore class spotted inside it, somewhere.');
-                removeSelection();
-                return;
-            }
-        }
-
-        // TODO: this will create a new item in our container at each valid user selection.
-        // how to wipe them up? If the user keeps selecting stuff we end up with LOADS and
-        // LOADS of unused items.
-        // Problem: the item might be used by the triple composer, or added to my items or
-        // discarded at all.
-        // Possible solution: wipe the container when triple composer is empty, ctx menu is
-        // NOT shown on every dashboard open/close ?
-        var item = ih.createItemFromRange(range),
-            currentFr = 'imgf-' + (new Date()).getTime();
-        ItemsExchange.addItemToContainer(item, ih.options.container);
-
-        lastTemporaryConsolidable = {
-            offset: range.endOffset,
-            range: range,
-            xpointer: item.getXPointer(),
-            fragmentId: currentFr,
-            itemUri: item.uri
-        };
-
-        //XpointersHelper.wrapElement(range.commonAncestorContainer, range, 'span', "pnd-cons-temp", [lastTemporaryConsolidable.fragmentId]);
-        //temporaryConsolidated[item.uri] = lastTemporaryConsolidable;
-
-        ih.log('Valid selection ended on document. Text fragment Item produced: ' + item.label);
-
-        if (Toolbar.isActiveTemplateMode() && Config.clientMode === 'pro') {
-            ih.log('Item used as subject inside triple composer (template mode active).');
-            TripleComposer.addToAllSubject(item);
-            TripleComposer.closeAfterOp();
-            addTemporarySelection();
-            EventDispatcher.sendEvent('Annotators.saveAnnotation');
-            return;
-        }
-
-        // TODO: generalize item in {data}
-        var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, ih.options.cMenuType, currentFr);
-        if (typeof promise !== 'undefined' && promise !== false) {
-            promise.then(function() {
-                textFragmentHandler.log('textFragmentHandler handlerMenu.show promise resolved');
-            });
-        }
-    } // mouseUpHandler()
-
-    // Creates a proper Item from a range .. it must be a valid range, kktnx.
-    ih.createItemFromRange = function(range) {
-        var values = {};
-
-        values.uri = XpointersHelper.range2xpointer(range);
-        values.type = [NameSpace.fragments.text];
-        values.description = range.toString();
-
-        values.label = values.description;
-        if (values.label.length > ih.options.labelMaxLength) {
-            values.label = values.label.substr(0, ih.options.labelMaxLength) + ' ..';
-        }
-
-        values.pageContext = XpointersHelper.getSafePageContext();
-        values.isPartOf = values.uri.split('#')[0];
-
-        return new Item(values.uri, values);
-    };
-
-    ih.getSelectedRange = function() {
-        var doc = $document[0],
-            range;
-
-        if (doc.getSelection().rangeCount === 0) {
-            textFragmentHandler.log('getSelection().rangeCount is 0: no selected range.');
-            return null;
-        }
-
-        range = doc.getSelection().getRangeAt(0);
-
-        // If the selected range is empty (this happens when the user clicks on something)...
-        if (range !== null &&
-            range.startContainer === range.endContainer &&
-            range.startOffset === range.endOffset) {
-
-            ih.log('Range is not null, but start/end containers and offsets match: no selected range.');
-            return null;
-        }
-
-        ih.log('GetSelectedRange returning a DIRTY range: ' +
-            range.startContainer.nodeName + '[' + range.startOffset + '] > ' +
-            range.endContainer.nodeName + '[' + range.endOffset + ']');
-
-        return range;
-    }; // getSelectedRange()
-
-    // Checks if the node (or any parent) is a node which needs to be ignored
-    ih.isToBeIgnored = function(node) {
-        var classes = ih.options.ignoreClasses,
-            ignoreLen = classes.length;
-
-        // Traverse every parent and check if it has one of the classes we
-        // need to ignore. As soon as we find one, return true: must ignore.
-        while (node.nodeName.toLowerCase() !== 'body') {
-            for (var i = ignoreLen; i--;) {
-                if (angular.element(node).hasClass(classes[i])) {
-                    return true;
-                }
-            }
-
-            // If there's no parent node .. even better, we didnt find anything wrong!
-            if (node.parentNode === null) {
-                return false;
-            }
-            node = node.parentNode;
-        }
-        return false;
     };
 
     ih.turnOn = function() {
@@ -414,47 +172,41 @@ angular.module('Pundit2.Annotators')
         return new Item(values.uri, values);
     };
 
-    ih.wipeTemporarySelection = function() {
-        checkTemporaryConsolidated(true);
-    };
+        ih.wipeTemporarySelection = function() {
+            checkTemporaryConsolidated(true);
+        };
 
-    if (ih.options.useTemporarySelection) {
-        EventDispatcher.addListeners([
-            'PndPopover.addTemporarySelection',
-            'TripleComposer.useAsObject',
-            'TripleComposer.useAsSubject'
-        ], function() {
-            addTemporarySelection();
-        });
+        //if (ih.options.useTemporarySelection) {
+        //
+        //    EventDispatcher.addListeners([
+        //        'PndPopover.removeTemporarySelectionImg',
+        //        'TripleComposer.statementChange',
+        //        'TripleComposer.statementChanged',
+        //        'TripleComposer.reset'
+        //    ], function() {
+        //        checkTemporaryConsolidated();
+        //    });
+        //
+        //    EventDispatcher.addListeners(
+        //        [
+        //            'PndPopover.wipeTemporarySelections',
+        //            'Consolidation.startConsolidate',
+        //            'Client.hide',
+        //        ],
+        //        function() {
+        //            checkTemporaryConsolidated(true);
+        //        }
+        //    );
+        //
+        //    EventDispatcher.addListeners([
+        //        'AnnotationsCommunication.annotationSaved',
+        //        'AnnotationsCommunication.editAnnotation'
+        //    ], function() {
+        //        consolidateTemporarySelection();
+        //    });
+        //}
 
-        EventDispatcher.addListeners([
-            'PndPopover.removeTemporarySelection',
-            'TripleComposer.statementChange',
-            'TripleComposer.statementChanged',
-            'TripleComposer.reset'
-        ], function() {
-            checkTemporaryConsolidated();
-        });
 
-        EventDispatcher.addListeners(
-            [
-                'PndPopover.wipeTemporarySelections',
-                'Consolidation.startConsolidate',
-                'Client.hide',
-            ],
-            function() {
-                checkTemporaryConsolidated(true);
-            }
-        );
+        return ih;
 
-        EventDispatcher.addListeners([
-            'AnnotationsCommunication.annotationSaved',
-            'AnnotationsCommunication.editAnnotation'
-        ], function() {
-            consolidateTemporarySelection();
-        });
-    }
-
-    return ih;
-
-});
+    });

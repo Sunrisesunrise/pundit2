@@ -1,3 +1,6 @@
+/**
+* Created by detox on 02/12/15.
+*/
 angular.module('Pundit2.Annotators')
 
 .constant('IMAGEANNOTATORDEFAULTS', {
@@ -49,19 +52,20 @@ angular.module('Pundit2.Annotators')
         tempFragmentIds = {},
         lastTemporaryConsolidable,
         temporaryConsolidated = {},
-        imgConsClass = "pnd-cons-img";
-        //var svgTimeout;
+        imgConsClass = "pnd-cons-img",
+        imgIgnore = "pnd-ignore";
+    //var svgTimeout;
 
     // TODO: Move this to XpointersHelper .something() ?
     var activateFragments = function() {
-        // var deferred = $q.defer();
+         var deferred = $q.defer();
 
         var consolidated = angular.element('.pnd-cons:not(.ng-scope)');
         $compile(consolidated)($rootScope);
         $rootScope.$$phase || $rootScope.$digest();
 
-        // deferred.resolve();
-        // return deferred.promise;
+         deferred.resolve();
+         return deferred.promise;
     };
 
 
@@ -122,6 +126,8 @@ angular.module('Pundit2.Annotators')
 
     ia.consolidate = function(items) {
         ia.log('Consolidating!');
+        var deferred = $q.defer();
+
         /*
          if (!angular.isObject(items)) {
          imageAnnotator.err('Items not valid: malformed object', items);
@@ -129,6 +135,7 @@ angular.module('Pundit2.Annotators')
          }
          */
         var updateDOMPromise,
+            consolidatePromise,
             compilePromise,
             uri,
             currentUri,
@@ -175,6 +182,14 @@ angular.module('Pundit2.Annotators')
                 }
             }
         });
+
+        $q.all([updateDOMPromise, compilePromise]).then(function() {
+            ia.log(ia.label + ' consolidation: done!');
+            deferred.resolve();
+        });
+
+        return deferred.promise;
+
         /*  for (uri in xpaths) {
          // TODO So bad! Add span (like Pundit1) and use it as reference
          // TODO Move DOM manipulation in Xpointer service
@@ -668,18 +683,18 @@ angular.module('Pundit2.Annotators')
     };
 
     ia.clearHighlightById = function(uri) {
-            if (typeof(fragmentIds[uri]) === 'undefined') {
-                ia.log('Not clearing highlight on given URI: fragment id not found');
-                return;
-            }
-            ia.clearHighlightById(fragmentIds[uri]);
-        };
+        if (typeof(fragmentIds[uri]) === 'undefined') {
+            ia.log('Not clearing highlight on given URI: fragment id not found');
+            return;
+        }
+        ia.clearHighlightById(fragmentIds[uri]);
+    };
 
     ia.highlightByUri = function(uri) {
-            if (typeof(fragmentIds[uri]) === 'undefined') {
-                ia.log('Not highlighting given URI: fragment id not found');
-                return;
-            }
+        if (typeof(fragmentIds[uri]) === 'undefined') {
+            ia.log('Not highlighting given URI: fragment id not found');
+            return;
+        }
         ia.highlightById(fragmentIds[uri][0]);
     };
 
@@ -693,7 +708,7 @@ angular.module('Pundit2.Annotators')
 
     Consolidation.addAnnotator(ia);
 
-    EventDispatcher.addListener('XpointersHelper.NodeAdded', function(e) {
+    EventDispatcher.addListener('XpointersHelper.NodeAddedImg', function(e) {
         var elementInfo = e.args,
             elementFragments = elementInfo.fragments,
             elementReferce = elementInfo.reference,

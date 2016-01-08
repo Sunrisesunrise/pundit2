@@ -1,7 +1,6 @@
 angular.module('Pundit2.Annotators')
 
 .directive('textFragmentBit', function(TextFragmentAnnotator, ImageAnnotator, $injector, Config, $document, $window) {
-
     return {
         restrict: 'A',
         scope: {
@@ -9,45 +8,33 @@ angular.module('Pundit2.Annotators')
         },
         link: function(scope, element) {
             var numberOfTextFragments = scope.fragments.split(",").length;
-            var component;
-            var labelComponent;
-            if(typeof TextFragmentAnnotator === 'undefined'){
-                component=TextFragmentAnnotator;
-                labelComponent='text'
-            }
-            else{
-                component=ImageAnnotator;
-                labelComponent='image';
-
-            };
-
-            element.addClass('pnd-'+labelComponent+'fragment-numbers-' + numberOfTextFragments);
+            element.addClass('pnd-textfragment-numbers-' + numberOfTextFragments);
 
             scope.bitId = new Date().getTime() + Math.floor(Math.random() * 100000);
             scope.isHigh = false;
             
             scope.high = function() {
-                element.addClass('pnd-'+labelComponent+'fragment-highlight');
+                element.addClass('pnd-textfragment-highlight');
             };
             scope.clear = function() {
-                element.removeClass('pnd-'+labelComponent+'fragment-highlight');
+                element.removeClass('pnd-textfragment-highlight');
             };
 
             scope.hide = function() {
-                element.addClass('pnd-'+labelComponent+'fragment-hidden');
+                element.addClass('pnd-textfragment-hidden');
             };
             scope.show = function() {
-                element.removeClass('pnd-'+labelComponent+'fragment-hidden');
+                element.removeClass('pnd-textfragment-hidden');
             };
 
             scope.ghost = function() {
-                element.addClass('pnd-'+labelComponent+'fragment-ghosted');
+                element.addClass('pnd-textfragment-ghosted');
             };
             scope.expo = function() {
-                element.removeClass('pnd-'+labelComponent+'fragment-ghosted');
+                element.removeClass('pnd-textfragment-ghosted');
             };
 
-            component.updateFragmentBit(scope, 'add');
+            TextFragmentAnnotator.updateFragmentBit(scope, 'add');
 
             if (Config.clientMode === 'lite') {
                 var AnnotationExchange = $injector.get('AnnotationsExchange'),
@@ -60,7 +47,7 @@ angular.module('Pundit2.Annotators')
                     if (typeof fragments !== 'undefined') {
                         fragments = fragments.split(',');
                         for (var fi in fragments) {
-                            var uri = component.getFragmentUriById(fragments[fi]);
+                            var uri = TextFragmentAnnotator.getFragmentUriById(fragments[fi]);
                             AnnotationExchange.getAnnotationsByItem(uri).forEach(function(ann) {
                                 annotations[ann.id] = ann;
                             });
@@ -104,11 +91,13 @@ angular.module('Pundit2.Annotators')
 
             element.on('Pundit.updateFragmentBits', function(e, data) {
                 scope.fragments = data;
-                component.updateFragmentBit(scope, 'update');
+                TextFragmentAnnotator.updateFragmentBit(scope, 'update');
+                ImageAnnotator.updateFragmentBit(scope, 'update');
             });
 
             element.on('$destroy', function() {
-                component.updateFragmentBit(scope, 'remove');
+                TextFragmentAnnotator.updateFragmentBit(scope, 'remove');
+                ImageAnnotator.updateFragmentBit(scope, 'remove');
             });
 
         } // link()
