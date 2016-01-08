@@ -103,7 +103,7 @@ angular.module('Pundit2.Toolbar')
 
     var manageYourAnnotation = function() {
         ResourcePanel.hide();
-        $window.open('https://thepund.it/app/', '_blank');
+        $window.open(Config.homeBaseURL, '_blank');
         Analytics.track('buttons', 'click', 'toolbar--manageAnnotation');
     };
 

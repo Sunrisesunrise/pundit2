@@ -68,7 +68,7 @@ angular.module('Pundit2.LiteTool')
     };
 
     var manageYourAnnotation = function() {
-        $window.open('https://thepund.it/app/', '_blank');
+        $window.open(Config.homeBaseURL, '_blank');
         Analytics.track('buttons', 'click', 'toolbar--manageAnnotation');
     };
 
