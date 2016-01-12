@@ -99,15 +99,27 @@ var injectScripts = function(tabId, force, callback) {
         }, function(response) {
             if (response) {
                 if (response.isPresent) {
-                    console.log('already present, just set flag');
+                    //console.log('already present, just set flag');
                     state.injections[tabId] = true;
                     state.tabsOnOff[tabId] = true;
                     state.tabs[tabId] = true;
                     showOnIcon(tabId);
                     setLoading(false, tabId);
-                    chrome.tabs.sendMessage(tabId, {
-                        action: 'requestAnnotationsNumber'
-                    });
+
+                    // Check if it's same c.e.
+                    if (typeof response.cid !== 'undefined' && response.cid != null && response.cid !== chrome.runtime.id) {
+                        chrome.runtime.sendMessage(response.cid, {action: 'forceClose', cid: response.cid, tabId: tabId}, function(innerResponse) {
+                            if (innerResponse.reload) {
+                                console.log("reload tab");
+                                chrome.tabs.reload(tabId);
+                            }
+                        });
+                    }
+                    else {
+                        chrome.tabs.sendMessage(tabId, {
+                            action: 'requestAnnotationsNumber'
+                        });
+                    }
                 } else {
                     doInjection(false, true);
                 }
@@ -354,6 +366,21 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
         case 'consolidation':
             //chrome.browserAction.setBadgeBackgroundColor({color: request.active ? consolidationBadgeBackgroundColor : defaultBadgeBackgroundColor, tabId: sender.tab.id});
+            break;
+    }
+});
+
+chrome.runtime.onMessageExternal.addListener(function(request, sender, sendResponse) {
+    switch (request.action) {
+        case 'forceClose':
+            window.clearInterval(request.tabId);
+            delete state.loading[request.tabId];
+            delete state.injections[request.tabId];
+            delete state.stopLoading[request.tabId];
+            delete state.tabs[request.tabId];
+            delete state.tabsOnOff[request.tabId];
+            showOffIcon(request.tabId);
+            sendResponse({reload: true});
             break;
     }
 });
