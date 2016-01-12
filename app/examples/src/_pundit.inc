@@ -59,10 +59,14 @@
     <script src="../src/Annotators/TextFragmentIcon.dir.js"></script>
     <script src="../src/Annotators/TextFragmentHandler.service.js"></script>
     <script src="../src/Annotators/ImageHandler.service.js"></script>
+    <script src="../src/Annotators/CHOHandler.service.js"></script>
+    <script src="../src/Annotators/CHOMenu.dir.js"></script>
     <script src="../src/Annotators/PageHandler.service.js"></script>
     <script src="../src/Annotators/PageAnnotator.service.js"></script>
 
+
     <script src="../src/Annotators/ImgMenu.dir.js"></script>
+    <script src="../src/Annotators/CHOMenu.dir.js"></script>
 
     <script src="../src/AlertSystem/AlertSystem.js"></script>
     <script src="../src/AlertSystem/AlertSystem.dir.js"></script>
