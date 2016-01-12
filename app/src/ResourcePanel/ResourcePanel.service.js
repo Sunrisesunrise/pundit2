@@ -596,7 +596,7 @@ angular.module('Pundit2.ResourcePanel')
 
             if (resourcePanel.options.myItemsEnabled) {
                 var myItemsForTabs = {
-                    title: 'My Items',
+                    title: 'Favourites',
                     items: myItems,
                     module: 'Pundit2',
                     isStarted: true,
@@ -610,7 +610,7 @@ angular.module('Pundit2.ResourcePanel')
         }
         if (type === 'pr') {
             var prop = {
-                title: 'Properties',
+                title: 'Predicates',
                 items: properties,
                 isStarted: true,
                 isLocal: true

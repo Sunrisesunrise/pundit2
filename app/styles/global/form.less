@@ -1,0 +1,61 @@
+/**
+ * FORM
+ *
+ * Styles for forms elements
+ */
+
+/* ------------------------------------ *\
+   #GENERAL
+\* ------------------------------------ */
+
+/*
+ATTENTION!
+".form-control" is a class used by bootstrap for form element styling.
+We've decided non to change that in HTML since it is already used in many parts of code.
+*/
+
+select, textarea, input[type="date"], input[type="datetime"],
+input[type="datetime-local"], input[type="email"], input[type="month"],
+input[type="number"], input[type="password"], input[type="search"], input[type="tel"],
+input[type="text"], input[type="time"], input[type="url"], input[type="week"],
+.form-control, select.form-control, textarea.form-control, input[type="date"].form-control, input[type="datetime"].form-control,
+input[type="datetime-local"].form-control, input[type="email"].form-control, input[type="month"].form-control,
+input[type="number"].form-control, input[type="password"].form-control, input[type="search"].form-control, input[type="tel"].form-control,
+input[type="text"].form-control, input[type="time"].form-control, input[type="url"].form-control, input[type="week"].form-control
+{
+    padding: 4px 5px;
+    min-height: auto;
+    border-radius: @input-border-radius;
+    border-color: @input-border-color;
+    font-size: 13px;
+    color: @color-text;
+    box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.05);
+
+    &:hover {
+        border-color: @input-border-color;
+    }
+
+    &:focus,
+    &:active {
+        border-color: @input-border-color-focus;
+        box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.05), 0 0 0 fade(@input-border-color-focus, 20%);
+    }
+}
+
+/* Textarea */
+textarea, textarea.form-control {
+    height: auto;
+    resize: vertical;
+}
+
+label, .checkbox label, .radio label {
+    font-weight: @font-weight-normal;
+}
+
+
+/* Placeholder text for inputs and textarea */
+
+.form-control::-webkit-input-placeholder { color: @color-text-form-placeholder; }
+.form-control:-moz-placeholder { color: @color-text-form-placeholder; }
+.form-control::-moz-placeholder { color: @color-text-form-placeholder; }
+.form-control:-ms-input-placeholder { color: @color-text-form-placeholder; }

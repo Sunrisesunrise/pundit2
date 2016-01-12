@@ -8,106 +8,157 @@
    #SELECT
 \* ------------------------------------ */
 
-.pnd-select{
+.pnd-select {
+    position: relative;
+    display: inline-block;
     height: 28px;
     min-width: 80px;
-    
     margin: 0 4px;
-    position: relative;
-    left: 0;
-
-    display: inline-block;
-    
-    background: yellow;
-    color: blue;
-    font-size: 1em;
     text-align: left;
-    
     overflow: visible;
 
-    .label-selected{
-        position: relative; 
-        top: 3.5px;
-        margin: 0 4px;
+    .pnd-select-label-selected {
+        display: block;
+        position: relative;
+        height: 28px;
+        margin: 0 23px 0 4px;
+        padding: 0 6px;
+        background-color: @color-background-light;
+        border: 1px solid @color-border-normal;
+        border-radius: 3px 0 0 3px;
+
+        font-size: 13px;
+        font-weight: @font-weight-bold;
+        line-height: 28px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        cursor: pointer;
     }
 
-    .open-options{
-        height: 28px;
-        width: 24px;
-        
+    .pnd-select-open-options {
         position: absolute;
         right: 0;
         top: 0;
-        
-        opacity: 0.5;
 
-        border-left: 1px solid black;
-        border-radius: 0 2px 2px 0;
+        height: 28px;
+        width: 23px;
 
-        background: red;
+        background-color: @color-background-light;
+        border-top: 1px solid @color-border-normal;
+        border-right: 1px solid @color-border-normal;
+        border-bottom: 1px solid @color-border-normal;
+        border-radius: 0 3px 3px 0;
+
+        line-height: 27px;
         text-align: center;
-
         cursor: pointer;
-        
 
-        &:hover{
+        &:hover {
             opacity: 1;
         }
 
-        .fa{
-            text-shadow:none !important;
+        .pnd-icon {
+            line-height: 27px;
         }
     }
 
-    .option-container{
+    .pnd-select-option-container {
         display: block;
+        position: absolute;
         visibility: hidden;
-        height:auto;
-        max-height: 170px;
+        height: auto;
+        max-height: 160px;
         width: 100%;
 
-        position: absolute;
-        left: 0;
-        top:30px;
+        background-color: @color-dropdown-bg;
+        border: 1px solid  @color-border-normal;
+        border-radius: @dropdown-round-corners;
+        box-shadow: 0 2px 2px rgba(0, 0, 0, .1);
 
-        overflow-y:auto;
-        background: orange;
+        overflow-y: auto;
+        z-index: @zindex-pnd-contextual-menu;
 
-        z-index: 400;
-
-        &.expanded{
+        &.expanded {
             visibility: visible;
         }
-        .option{
-            height:100%;
-            width: 100%;
-            padding: 5px;
-            
+
+        .option {
             position: relative;
             left: 0;
-            
-            border-bottom: solid 1px black;
+            height: auto;
+            width: 100%;
+            padding: 5px 10px;
 
-            background: yellow;
-            color: blue;
-            
+            background-color: @color-dropdown-bg;
             cursor: pointer;
 
-            &:hover{
-                background: green;
-                color: black;
+            overflow: hidden;
+
+            font-size: 13px;
+            font-weight: @font-weight-normal;
+            color: @color-dropdown-text;
+            white-space: nowrap;
+            line-height: 1.5;
+            text-overflow: ellipsis;
+            text-align: left;
+
+            &:hover {
+                background-color: @color-dropdown-bg-hover;
             }
         }
 
-        .option.selected{
-            background: yellow;
-            color: black;
+        .option.selected {
             cursor: default;
+            background-color: @color-dropdown-bg-hover;
 
             &:hover{
-                background: green;
-                color: black;
+                background-color: @color-dropdown-bg-hover;
             }
         }
+
+        .divider {
+            display: block;
+            height: 1px;
+            background-color: @color-border-normal;
+            border: none;
+            margin: 0;
+        }
+
+        .option.custom-action {
+            font-weight: @font-weight-bold;
+            color: @color-brand;
+        }
+
+        /* Option drwopdown must be shown above */
+        &.move-top {
+            bottom: 28px;
+            box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+        }
+    }
+
+    .pnd-select-item-creation {
+        /* Buttons for saving new notebook */
+        /* This is very specific for the use of the component
+        inside annotation-popover.less */
+        .pnd-select-item-creation-button {
+            position: absolute;
+            right: -5px;
+            top: 35px;
+            padding: 5px;
+            background-color: #FFF;
+
+            button {
+                margin-left: 10px;
+            }
+        }
+    }
+
+    /* Displayed while saving */
+    .pnd-select-item-saving {
+        font-size: 13px;
+        line-height: 30px;
+        font-weight: @font-weight-bold;
     }
 }

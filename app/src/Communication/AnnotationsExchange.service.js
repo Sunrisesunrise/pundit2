@@ -134,12 +134,39 @@ angular.module('Pundit2.Communication')
         }
     };
 
-    // TODO: full structure update
-    // annotationExchange.updateAnnotationStructureInfo = function(id) {
-    //     if (id in annListById) {
-    //         var ann = annListById[id];
-    //     }
-    // };
+    annotationExchange.updateAnnotationStructureInfo = function(id, oldItems) {
+        var removedItems = {};
+
+        if (id in annListById) {
+            var ann = annListById[id];
+            for (var i in oldItems) {
+                if (typeof ann.items[i] === 'undefined') {
+                    removedItems[i] = oldItems[i];
+                    annByItemUri[i] = annByItemUri[i].filter(function(e) {
+                        return e.id !== id;
+                    });
+                    if (annByItemUri[i].length === 0) {
+                        delete annByItemUri[i];
+                    }
+                }
+            }
+            // TODO: check the previous structure of annByItemUri 
+            // to verify if the annotation was already present.
+            var uris = {};
+            for (var uri in ann.items) {
+                if (uris[uri]) {
+                    continue;
+                }
+                if (typeof annByItemUri[uri] === 'undefined') {
+                    annByItemUri[uri] = [];
+                }
+                annByItemUri[uri].push(ann);
+                uris[uri] = true;
+            }
+        }
+
+        return removedItems;
+    };
 
     annotationExchange.getAnnotations = function() {
         return annList;

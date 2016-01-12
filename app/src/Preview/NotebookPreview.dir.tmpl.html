@@ -1,20 +1,40 @@
-<div class="pnd-dashboard-welcome pnd-ui-message">
-	<div class="pnd-preview-notebook-visibility">
-	    <span><strong>Visibility:</strong>
-            <span class="pnd-icon pnd-icon-group" ng-if="notebook.isPublic()"></span>
-            <span class="pnd-icon pnd-icon-lock" ng-if="!notebook.isPublic()"></span> {{notebook.visibility}}</span>
-	</div>
-	<div class="pnd-preview-notebook-annotations">
-	    <span><strong>Annotations:</strong>  </span> <span>{{notebook.includes.length}}</span>
-	</div>
-	<div class="pnd-preview-notebook-creator">
-	    <span><strong>Creator:</strong>  </span> <span>{{notebook.creatorName}}</span>
-	</div>
-	
-	<div class="pnd-preview-notebook-date">
-	    <span><strong>Creation date:</strong>  </span> <span>{{notebook.created}}</span>
-	</div>
-	<div class="pnd-preview-notebook-current" ng-show="isCurrent">
-	    <strong>current notebook</strong> <span class="pnd-icon pnd-icon-pencil"></span>
-	</div>
+<div class="pnd-dashboard-welcome pnd-preview-notebook">
+
+    <div class="pnd-preview-notebook-current pnd-preview-detail" ng-show="isCurrent">
+        <span class="pnd-preview-detail-content">
+            This is your current notebook, that's where all the annotations you will create will be stored.
+        </span>
+    </div>
+
+    <div class="pnd-preview-notebook-visibility pnd-preview-detail">
+        <span>
+            <strong class="pnd-preview-detail-label">Visibility:</strong>
+            <span class="pnd-preview-detail-content" ng-if="notebook.isPublic()">Public (visible to all users)</span>
+            <span class="pnd-preview-detail-content" ng-if="!notebook.isPublic()">Private (only visible to you)</span>
+        </span>
+    </div>
+
+    <div class="pnd-preview-notebook-annotations pnd-preview-detail">
+        <span>
+            <strong class="pnd-preview-detail-label">Annotations in the notebook:</strong>
+        </span>
+        <span class="pnd-preview-detail-content">{{notebook.includes.length}}</span>
+    </div>
+
+    <div class="pnd-preview-notebook-creator pnd-preview-detail">
+        <span>
+            <strong class="pnd-preview-detail-label">Creator:</strong>
+        </span>
+        <span class="pnd-preview-detail-content">{{notebook.creatorName}}</span>
+    </div>
+
+    <div class="pnd-preview-notebook-date pnd-preview-detail">
+        <span>
+            <strong class="pnd-preview-detail-label">Creation date:</strong>
+        </span>
+        <span class="pnd-preview-detail-content">
+            {{notebook.created | amDateFormat:'YYYY-MM-DD'}}
+        </span>
+    </div>
+
 </div>

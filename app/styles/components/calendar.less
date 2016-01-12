@@ -14,7 +14,9 @@
 \* ------------------------------------ */
 
 .pnd-popover-calendar {
+    position: fixed !important;
     max-width: @calendar-popover-width;
+    z-index: @zindex-pnd-popver;
 
     .popover-content {
         padding: 0;
@@ -46,14 +48,14 @@
 
         .pnd-date-picker {
             width: @calendar-popover-width - 2; /* Minus border */
-            border-top: 1px solid @color-border-light;
+            border-top: 1px solid @color-border-normal;
         }
 
         .pnd-format-selector {
             width: @calendar-popover-width - 2; /* Minus border */
             padding: 10px;
-            .light-bg();
-            border-top: 1px solid @color-border-light;
+            background-color: @color-background-light;
+            border-top: 1px solid @color-border-normal;
             text-align: center;
             .text-white-emboss();
 
@@ -68,7 +70,7 @@
 
                 &.pnd-format-current {
                     color: @color-text;
-                    font-weight: bold;
+                    font-weight: @font-weight-bold;
                     text-decoration: none;
                     cursor: default;
                 }

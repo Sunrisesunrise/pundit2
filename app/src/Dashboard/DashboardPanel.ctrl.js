@@ -8,7 +8,7 @@ angular.module('Pundit2.Dashboard')
     $scope.collapsedWidth = Dashboard.options.panelCollapseWidth;
     $scope.bottom = Dashboard.options.footerHeight;
 
-    // overrided in Dashbpoard.addPanel()
+    // overrided in Dashboard.addPanel()
     $scope.minWidth = 100;
     $scope.ratio = 1;
 
@@ -144,8 +144,8 @@ angular.module('Pundit2.Dashboard')
             elInner.height(h + 3);
         }
         if (elInnerScrollable.length > 0) {
-            // TODO why +2 ???
-            elInnerScrollable.height(h + 2);
+            // TODO why +4 ???
+            elInnerScrollable.height(h + 4);
         }
         if (elInnerScrollableNoHeader.length > 0) {
             // TODO why -9 ???

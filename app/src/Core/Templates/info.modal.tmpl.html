@@ -1,8 +1,9 @@
-<div class="modal pnd-info-modal-container pnd-ignore" tabindex="-1" role="dialog">
+<div class="pnd-modal modal pnd-info-modal-container pnd-ignore" tabindex="-1" role="dialog">
 
-    <div class="modal-dialog">
+    <div class="pnd-modal-dialog modal-dialog">
 
-        <div class="modal-content">
+        <!-- Modal content-->
+        <div class="pnd-modal-content modal-content">
 
             <div class="modal-header">
                 <h4 class="modal-title"> {{titleMessage}} </h4>
@@ -21,12 +22,15 @@
                 </table>                
             </div>
 
-            <div class="modal-footer pnd-info-modal-footer">
-                <button type="button" class="pnd-btn pnd-info-modal-close" ng-click="close()">Cancel</button>
+            <!-- Modal-footer -->
+            <div class="pnd-modal-footer pnd-info-modal-footer">
+                <button type="button" class="pnd-btn pnd-btn-small pnd-info-modal-close" ng-click="close()">Cancel</button>
                 <!-- <button type="button" class="btn btn-default pnd-info-modal-tell" ng-click="send()">Found a bug? tell us!</button> -->
-            </div> <!-- end modal-footer -->
+            </div>
+            <!-- END // modal-footer -->
 
-        </div> <!-- end modal content-->
+        </div>
+        <!-- END // Modal content-->
 
     </div> <!-- end modal dialog-->
 

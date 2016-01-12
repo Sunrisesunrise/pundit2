@@ -6,7 +6,7 @@ angular.module('Pundit2.Model')
 
 .service('ModelHelper', function(BaseComponent, Config, MODELHELPERDEFAULTS, Consolidation, XpointersHelper, MyPundit, NameSpace, TypesHelper, md5) {
 
-    var modelHelper = new BaseComponent("ModelHelper", MODELHELPERDEFAULTS);
+    var modelHelper = new BaseComponent('ModelHelper', MODELHELPERDEFAULTS);
 
     var annotationServerVersion = Config.annotationServerVersion;
 
@@ -206,35 +206,39 @@ angular.module('Pundit2.Model')
 
                 // If it's not already present.
                 if (typeof res[uris.target] === 'undefined') {
-                    var target = {};
-                    var selector = {};
+                    var target = {},
+                        selector = {},
+                        isPartOfArray = [],
+                        canonical = document.querySelector('link[rel="canonical"]');
+
 
                     // Building target info.
-                    // isPartOf.
-                    if (statementPart.hasOwnProperty('isPartOf')) {
-                        target[NameSpace.item.isPartOf] = [{
-                            "value": statementPart.isPartOf,
-                            "type": "uri"
-                        }];
-                    }
                     if (!statementPart.isWebPage()) {
+                        // isPartOf.
+                        if (statementPart.hasOwnProperty('isPartOf')) {
+                            isPartOfArray.push({
+                                'value': statementPart.isPartOf,
+                                'type': 'uri'
+                            });
+                        }
+
                         // hasSelector.
                         target[NameSpace.target.hasSelector] = [{
-                            "value": uris.selector,
-                            "type": "uri"
+                            'value': uris.selector,
+                            'type': 'uri'
                         }];
 
                         var context = statementPart.pageContext || statementPart[NameSpace.item.isPartOf];
                         if (context) {
                             // hasScope.
                             target[NameSpace.target.hasScope] = [{
-                                "value": context,
-                                "type": "uri"
+                                'value': context,
+                                'type': 'uri'
                             }];
                             // hasSource.
                             target[NameSpace.target.hasSource] = [{
-                                "value": statementPart.isImage() ? statementPart.image : context,
-                                "type": "uri"
+                                'value': statementPart.isImage() ? statementPart.image : context,
+                                'type': 'uri'
                             }];
                         } else {
                             error = true;
@@ -242,6 +246,18 @@ angular.module('Pundit2.Model')
                             modelHelper.err(errorMessage);
                             return;
                         }
+                    }
+
+                    if (canonical !== null &&
+                            typeof canonical.href === 'string') {
+                        isPartOfArray.push({
+                            'value': canonical.href,
+                            'type': 'uri'
+                        });
+                    }
+
+                    if (isPartOfArray.length > 0) {
+                        target[NameSpace.item.isPartOf] = isPartOfArray;
                     }
 
                     // type
@@ -267,29 +283,29 @@ angular.module('Pundit2.Model')
                         // Building selector info.
                         // conformsTo.
                         selector[NameSpace.target.conformsTo] = [{
-                            "value": "http://tools.ietf.org/rfc/rfc3023",
-                            "type": "uri"
+                            'value': 'http://tools.ietf.org/rfc/rfc3023',
+                            'type': 'uri'
                         }];
 
                         if (statementPart.isTextFragment() || statementPart.isImage()) {
                             // Type
                             selector[NameSpace.rdf.type] = [{
-                                "value": NameSpace.target.fragmentSelector,
-                                "type": "uri"
+                                'value': NameSpace.target.fragmentSelector,
+                                'type': 'uri'
                             }];
 
                             // Label
                             selector[NameSpace.rdfs.label] = [{
-                                // "lang": "it"
-                                "value": statementPart.description, // Save the description as full label
-                                "type": "literal"
+                                // 'lang': 'it'
+                                'value': statementPart.description, // Save the description as full label
+                                'type': 'literal'
                             }];
 
                             // Value
                             selector[NameSpace.rdf.value] = [{
-                                // "lang": "it"
-                                "value": statementPart.getXPointer(),
-                                "type": "literal"
+                                // 'lang': 'it'
+                                'value': statementPart.getXPointer(),
+                                'type': 'literal'
                             }];
                         } else {
                             // TODO check other types.
@@ -300,9 +316,9 @@ angular.module('Pundit2.Model')
                     } else {
                         // Add label for webpage target
                         target[NameSpace.rdfs.label] = [{
-                            "value": statementPart.label,
-                            "type": "literal"
-                            // "lang": "it"
+                            'value': statementPart.label,
+                            'type': 'literal'
+                                // 'lang': 'it'
                         }];
                     }
 
@@ -463,13 +479,13 @@ angular.module('Pundit2.Model')
             return data;
         }
 
-        if (typeof(data) === "undefined" ||
-            typeof(data.graph) === "undefined" ||
-            typeof(data.metadata) === "undefined" ||
-            typeof(data.items) === "undefined" ||
-            typeof(data.target) === "undefined") {
+        if (typeof(data) === 'undefined' ||
+            typeof(data.graph) === 'undefined' ||
+            typeof(data.metadata) === 'undefined' ||
+            typeof(data.items) === 'undefined' ||
+            typeof(data.target) === 'undefined') {
             error = true;
-            errorMessage = "Malformed annotations data";
+            errorMessage = 'Malformed annotations data';
             modelHelper.err('Malformed annotations data: ', data);
             return;
         }

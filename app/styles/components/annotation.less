@@ -1,0 +1,429 @@
+/**
+ * ANNOTATION
+ *
+ * Style of single annotation in the annotation sidebar
+ * For style of the whole annotation sidebar please refer to annotation-sidebar.less
+ */
+
+
+/* ------------------------------------ *\
+   #SINGLE-ANNOTATIONS-DETAILS
+\* ------------------------------------ */
+
+/* Annotations-details dom element */
+.pnd-annotation-details {
+    position: absolute;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* ------------------------------------ *\
+   #COLLAPSED-ANNOTATION
+\* ------------------------------------ */
+
+.pnd-annotation-collapsed {
+    height: @annotation-collapsed-height;
+    margin: 5px;
+    overflow: hidden;
+
+    background-color: @annotation-bg-color;
+    border: @annotation-border-size solid @annotation-border-color;
+    box-shadow: @annotation-box-shadow;
+    border-radius: @annotation-border-radius;
+
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* Subject */
+.pnd-annotation-collapsed-subject {
+    float: left;
+    width: 100%;
+    height: @annotation-collapsed-height;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 2px 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    // TODO Fix line height
+
+    &:not(.pnd-annotation-page) span {
+        background-color: @color-highlight;
+        font-style: italic;
+    }
+
+    &.pnd-annotation-page {
+        span {
+            font-weight: @font-weight-bold;
+        }
+    }
+}
+
+/* Hover effect */
+.pnd-annotation-collapsed:hover {
+    .pnd-annotation-collapsed-subject:not(.pnd-annotation-page) span {
+        background-color: @color-highlight-hover;
+    }
+}
+
+/* Style for semantic and commenting annotations */
+.pnd-annotation-semantic, .pnd-annotation-comment {
+    /* Subject */
+    .pnd-annotation-collapsed-subject {
+        width: 48%;
+        max-width: 48%;
+    }
+
+    /* Object */
+    .pnd-annotation-collapsed-object {
+        float: left;
+        width: 52%;
+        height: @annotation-collapsed-height;
+        max-width: 52%;
+        padding: 1px 4px 1px (@annotation-collapsed-height/2);
+        background-color: @color-ultra-light;
+        overflow: hidden;
+        white-space: nowrap;
+        border-left: 1px solid @annotation-border-color;
+        text-overflow: ellipsis;
+    }
+}
+
+/* Arrow triangle between subject and object, code inspired by Bootstrap css */
+.pnd-annotation-collapsed-caret
+{
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    top: 50%;
+    left: 48%;
+    margin-top: -(@annotation-collapsed-height/2);
+
+    border-color: transparent;
+    border-style: solid;
+    border-left-color: @color-light-gray;
+    border-right-width: 0;
+    border-width: (@annotation-collapsed-height/2);
+
+
+    &:after {
+        content: " ";
+
+        position: absolute;
+        display: block;
+        width: 0;
+        height: 0;
+        right: 1px;
+        bottom: -(@annotation-collapsed-height/2)+1;
+
+        border-color: transparent;
+        border-style: solid;
+        border-width: (@annotation-collapsed-height/2) - 1;
+        border-left-color: #FFF;
+        border-right-width: 0;
+    }
+}
+
+/* ------------------------------------ *\
+   #EXPANDED-ANNOTATION
+\* ------------------------------------ */
+
+.pnd-annotation-expanded {
+    margin: 5px;
+    // TODO Just a try
+    // margin-left: -4px;
+    overflow: hidden;
+
+    background-color: @annotation-bg-color;
+    border: @annotation-border-size solid @annotation-expanded-border-color;
+    box-shadow: @annotation-box-shadow;
+    border-radius: @annotation-border-radius;
+
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* Metadata showed on top of the annotation */
+.pnd-annotation-details-meta {
+    margin: 10px 0 0 10px;
+    padding: 0 10px 10px 0;
+    border-bottom: @annotation-border-size solid @annotation-border-color;
+
+    .pnd-annotation-user-thumb {
+        float: left;
+        margin-right: 10px;
+        border-radius: 5px;
+    }
+
+    .pnd-annotation-user-name {
+        display: block;
+        font-size: 12px;
+        font-weight: @font-weight-bold;
+        line-height: 1.3;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .pnd-annotation-metadata {
+        display: block;
+        font-size: 12px;
+        line-height: 1.3;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
+/* Annotation content */
+.pnd-annotation-details-data {
+    /* The annotated fragment shown in the annotation details */
+    .pnd-annotation-annotated-fragment, .pnd-annotation-annotated-literal {
+        display: block;
+        padding: 10px;
+        max-height: @annotation-text-max-height;
+        overflow: auto;
+        font-style: italic;
+        word-wrap: break-word;
+
+        span {
+            background-color: @color-highlight; // @color-highlight-hover; // @color-highlight;
+        }
+    }
+
+    /* Comment annotations */
+
+    /* The comment shown in the annotation details */
+    .pnd-annotation-comment-text, .pnd-annotation-comment-text-edit {
+        padding: 10px;
+        max-height: @annotation-text-max-height;
+        overflow: auto;
+        display: block;
+        background-color: @color-ultra-light;
+        border-top: @annotation-border-size solid @annotation-border-color;
+        word-wrap: break-word;
+    }
+
+    .pnd-annotation-comment-text {
+        max-height: @annotation-text-max-height;
+    }
+
+    .pnd-annotation-comment-text-edit {
+        max-height: 200px;
+    }
+
+    /* Editing of the comment */
+    .pnd-annotation-comment-text-edit {
+        padding: 10px;
+    }
+
+    /* The triangle caret between fragment and comment */
+    /* Arrow triangle between subject and object, code inspired by Bootstrap css */
+    .pnd-annotation-comment-caret
+    {
+        position: absolute;
+        display: block;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-bottom-color: @annotation-border-color;
+        border-top-width: 0;
+        border-width: 10px;
+        margin-top: -19px;
+        left: 15px;
+
+        &:after {
+            content: " ";
+            position: absolute;
+            display: block;
+            width: 0;
+            left: -9px;
+            top: 1px;
+            border-color: transparent;
+            border-style: solid;
+            border-width: 9px;
+            border-bottom-color:@color-ultra-light;
+            border-top-width: 0;
+        }
+    }
+
+    /* Semantic annotations */
+
+    /* Triple element in semantic annotations */
+    .pnd-annotation-details-triple {
+        border-bottom: 3px double @annotation-border-color;
+
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+
+    /* Subject entity (like web page) in */
+    .pnd-annotation-details-subject.pnd-annotation-entity-details {
+        padding: 10px; // 10px 10px 20px;
+    }
+
+    /* Predicate in semantic annotation */
+    .pnd-annotation-details-predicate {
+        display: inline-block;
+        position: relative;
+        height: 20px;
+        margin-left: 10px;
+        padding: 0 8px;
+        background: @color-predicate;
+
+        font-size: 13px;
+        line-height: 20px;
+        font-style: italic;
+        color: #fff;
+        text-align: center;
+        border-radius: 3px;
+        text-shadow: 0px -1px 0px rgba(0,0,0,0.10);
+
+        /* Orange carets above and below */
+        &:before, &:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 0;
+            height: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+        }
+
+        &:before {
+            top: -3px;
+            border-bottom: 3px solid @color-predicate;
+        }
+
+        &:after {
+            top: 20px;
+            border-top: 3px solid @color-predicate;
+        }
+    }
+
+    /* The Object in semantic annotations */
+    .pnd-annotation-details-object {
+        padding: 20px 10px 10px;
+        margin-top: -10px;
+        background-color: @color-ultra-light;
+        border-top: @annotation-border-size solid @annotation-border-color;
+    }
+
+    /* Entity style */
+    /* Style for rendering entities like LOD or web pages, can be used both in subject and object */
+    .pnd-annotation-entity-details {
+        display: block;
+
+        /* The thumb */
+        .pnd-annotation-entity-image {
+            display: block;
+            float: left;
+            margin: 0 6px 0 0;
+            width: 40px; // TODO Create variable
+            height: 40px; // TODO Create variable
+            overflow: hidden;
+
+            border-radius: 3px;
+            background-color: @color-light-gray;  // TODO Create variable
+            vertical-align: middle;
+            text-align: center;
+
+            img {
+                max-width:100%;
+                max-height:100%;
+            }
+        }
+
+        /* The label */
+        .pnd-annotation-entity-label {
+            display: block;
+            font-weight: @font-weight-bold;
+            line-height: 1.3;
+            margin-bottom: 5px;
+            color: @annotation-text-color;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            a {
+                font-weight: inherit;
+                color: @annotation-text-color;
+                text-decoration: none;
+
+                &:hover {
+                    color: @color-text-link;
+                }
+            }
+        }
+
+        /* The description */
+        .pnd-annotation-entity-description {
+            display: block;
+            float: none;
+            clear: both;
+            word-wrap: break-word;
+        }
+    }
+}
+
+/* Buttons at the bottom of the annotation */
+.pnd-annotation-details-buttons {
+    padding: 0 5px;
+    border-top: @annotation-border-size solid @annotation-border-color;
+
+    .pnd-annotation-details-footer {
+        text-align: right;
+    }
+
+    button {
+        padding: 4px 5px 3px 5px;
+        color: @color-dark-gray;
+        font-size: 12px;
+
+        &:hover {
+            color: @color-brand;
+        }
+    }
+}
+
+/* Buttons to save or cancel comment edit */
+.pnd-annotation-comment-text-edit-buttons {
+    text-align: right;
+    height: 40px; // TODO Create a variable!
+    padding-top: 7px;
+
+    .pnd-btn {
+        margin-right: 7px;
+    }
+}
+
+
+/* ------------------------------------ *\
+   #SPECIAL-COMMENT-ANNOTATION
+\* ------------------------------------ */
+// TODO This must stay here???
+.pnd-annotation-comment {
+    .pnd-annotation-expanded {
+        .pnd-annotation-annotated-fragment {
+            // padding: 10px 10px 14px 10px;
+        }
+    }
+}
+
+/* Highlights with a different color the text fragment
+in the expanded annotation */
+.pnd-annotation-expanded {
+    &:hover {
+        .pnd-annotation-annotated-fragment {
+            span {
+                background-color: @color-highlight-hover;
+            }
+        }
+    }
+}

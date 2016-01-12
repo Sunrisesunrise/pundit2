@@ -1,195 +1,261 @@
-<div class="pnd-annotation-details-wrap pnd-ignore">
-    <div class="pnd-annotation-details-header pnd-annotation-details-top" 
+<div class="pnd-annotation-details-wrap pnd-annotation-semantic pnd-ignore">
+
+    <!-- Collapsed view of the annotation -->
+    <div class="pnd-annotation-collapsed pnd-annotation-details-header pnd-annotation-details-top"
         ng-click="toggleAnnotation()"
+        ng-if="!annotation.expanded"
         ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
-        <div class="{{::annotation.mainItem.class}}">
-                <div class="pnd-annotation-item-header-text">
-                        <span ng-show="annotation.broken" class="pnd-annotation-icon-color">
-                            <span class="pnd-icon pnd-icon-exclamation"></span>
-                        </span>
-                        <span 
-                            ng-show="!annotation.broken" 
-                            class="pnd-annotation-icon-color"
-                            style="background-color: {{::annotation.color}};">
-                            <span 
-                                class="{{annotation.mainItem.icon}}"></span>
-                        </span>
-                        <span class="pnd-item-title">{{annotation.mainItem.label}}</span>
-                </div>    
-                <button type="button" class="pnd-btn pull-right">
-                    <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[annotation.expanded]"></span>
-                </button>
+
+        <div class="pnd-annotation-collapsed-subject"
+            ng-class="{'pnd-annotation-page': annotation.mainItem.typeLabel == 'WebPage'}">
+            <span>{{ annotation.mainItem.label }}</span> <!-- TODO For images instead of "label" we shoudl use the ALT attribute if present -->
+        </div>
+
+        <div class="pnd-annotation-collapsed-caret"></div>
+
+        <div class="pnd-annotation-collapsed-object">
+            <span>{{ annotation.itemsArray[0].objects[0].label }}</span>
         </div>
     </div>
-    <div class="pnd-annotation-details-container" ng-if="annotation.expanded">
-        <div class="pnd-annotation-details-content">
+    <!-- END // Collapsed view of the annotation -->
 
-            <!-- Meta -->
-            <div 
-                class="pnd-annotation-details-meta" 
-                ng-init="meta = false">
-                <div class="pnd-annotation-details-item-header"
-                     ng-click="meta = !meta; trackAnalyticsToggleEvent('meta', meta)"
-                     ng-class="{'pnd-annotation-details-sub-open': meta}">
-                    <div class="pnd-annotation-item-header-text">
-                        <span class="pnd-icon pnd-icon-info-circle"></span>
-                        <span>Annotation's info</span>
-                    </div>
-                    <button type="button" class="pnd-btn pnd-btn-link pull-right">
-                        <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[meta]"></span>
-                    </button>
-                </div>
+    <!-- Expanded view of the annotation -->
+    <div class="pnd-annotation-expanded pnd-annotation-details-container"
+         ng-click="toggleAnnotation()"
+         ng-if="annotation.expanded">
 
-                <div ng-show="meta" class="pnd-sub-info">
-                        <span ng-if="meta">
-                            <div class="pnd-annotation-details-info-author">
-                                <strong>Author:</strong> {{::annotation.creatorName}}
-                            </div>
-                            <div class="pnd-annotation-details-info-date">
-                                <strong>Date:</strong> {{::annotation.created | date : 'MMM d, y H:mm a'}}
-                            </div>
-                            <div class="pnd-annotation-details-info-notebook">
-                                <strong>Notebook:</strong>
-                                <a href="{{::askLink}}{{::annotation.notebookId}}"
-                                   target="_blank"
-                                   ng-click="trackAnalyticsEvent('meta--notebook')"
-                                   ng-show="notebookLink">
-                                    {{annotation.notebookName}}
-                                </a>
-                                <span ng-show="!notebookLink">
-                                    {{annotation.notebookName}}
-                                </span>
-                            </div>
-                            <div class="pnd-annotation-details-info-id">
-                                <strong>Annotation ID:</strong> {{::annotation.id}}
-                            </div>
-                            <div ng-show="lodLive">
-                                <strong>Graph:</strong>
-                                <a href="{{::openGraph}}"
-                                   target="_blank"
-                                   ng-click="trackAnalyticsEvent('meta--graph')">
-                                    open graph of the annotation
-                                </a>
-                            </div>
-                        </span>
-                </div>
-            </div>
-            <!-- // END Meta -->
+        <!-- Metadata -->
+        <div class="pnd-annotation-details-meta"
+             ng-init="meta = false">
 
-            <!-- Triples -->
-            <div class="pnd-annotation-details-item" ng-repeat="item in annotation.itemsArray">
-       
+            <img class="pnd-annotation-user-thumb" src="http://placehold.it/30x30" alt="{{ ::annotation.creatorName }}"/>
+            <span class="pnd-annotation-user-name">
+                {{ ::annotation.creatorName }}
+            </span>
+            <span class="pnd-annotation-metadata">
+                {{::annotation.created | date : 'd MMM y'}} · in 
+                <span class="pnd-annotation-notebook-name">
+                    <span 
+                        ng-if="!isUserToolShowed() || !homePundit">
+                        {{annotation.notebookName}}
+                    </span>
+                    <a 
+                        href="#" 
+                        ng-if="isUserToolShowed() && homePundit"
+                        ng-click="openNotebook($event, annotation.notebookId)">
+                        {{annotation.notebookName}}
+                    </a>
+                </span>
+            </span>
+
+        </div>
+
+        <!-- Annotation data -->
+        <div class="pnd-annotation-details-data">
+
+            <!-- Single Triple -->
+            <!-- TODO Fare una modifica qui e togliere la logica di accorpamento degli object se viene utlizzato stesso subject-predicate -->
+            <div class="pnd-annotation-details-triple" ng-repeat="item in annotation.itemsArray">
+
                 <!-- Subject -->
-                <div 
-                    class="pnd-annotation-details-subject" 
-                    ng-init="subInfo = false">
-                        <div 
-                            class="pnd-annotation-details-item-header" 
-                            ng-click="subInfo = !subInfo; trackAnalyticsToggleEvent('subInfo--subject', subInfo)"
-                            ng-class="{'pnd-annotation-details-sub-open': subInfo}">
-                            <!-- <span class="{{item.subject.icon}}"></span> -->
-                            <div class="pnd-annotation-item-header-text">
-                                <span class="pnd-icon pnd-icon-circle"></span>
-                                <span ng-bind-html="item.subject.label">{{item.subject.label}}</span>
-                            </div>
-                            <button type="button" class="pnd-btn pnd-btn-link pull-right">
-                                <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[subInfo]"></span>
-                            </button>
-                        </div>
-
-                        <div ng-show="subInfo" class="pnd-sub-info">
-                            <span ng-if="subInfo">
-                                <item-preview uri="{{item.subject.uri}}" sticking="false"></item-preview>
-                            </span>
-                        </div>
+                <!-- Text fragment -->
+                <div class="pnd-annotation-details-subject pnd-annotation-annotated-fragment"
+                     ng-if="item.subject.typeLabel != 'WebPage' &&
+                            item.subject.typeLabel != 'Image' &&
+                            item.subject.typeLabel != 'Image fragment'">
+                    <span>
+                        {{ item.subject.description }}
+                    </span>
                 </div>
-                <!-- // END Subject -->
+                <div ng-if="item.subject.isExternal">
+                    <a href="{{item.subject.pageContext}}">Open original page</a>
+                </div>
+
+                <!-- Web page -->
+                <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
+                     ng-if="annotation.subject.typeLabel == 'WebPage'">
+                    <!-- Label -->
+                    <span class="pnd-annotation-entity-label">
+                        {{ item.subject.label }}
+                    </span>
+                    <!-- Type -->
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.subject.typeLabel }}
+                    </span>
+                </div>
+
+                <!-- Image -->
+                <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
+                     ng-if="annotation.subject.typeLabel == 'Image'">
+                    <!-- Thumb -->
+                    <span class="pnd-annotation-entity-image"
+                          ng-if="item.subject.image!='null'">
+                        <img ng-src="{{ item.subject.image }}" alt="{{ item.subject.label }}"/> <!-- TODO Instead of "label" we shoudl use the ALT attribute if present -->
+                    </span>
+                    <!-- Label -->
+                    <span class="pnd-annotation-entity-label">
+                        <a href="{{ item.subject.description }}" target="_blank">
+                            {{ item.subject.label }} <!-- TODO Instead of "label" we shoudl use the ALT attribute if present -->
+                            <span class="pnd-icon-arrow-right"></span>
+                        </a>
+                    </span>
+                    <!-- Type -->
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.subject.typeLabel }}
+                    </span>
+                </div>
+
+                <!-- Image fragment -->
+                <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
+                     ng-if="annotation.subject.typeLabel == 'Image fragment'">
+                    <!-- Thumb -->
+                    <span class="pnd-annotation-entity-image"
+                          ng-if="item.subcjet.image!='null'">
+                        <img ng-src="{{ item.subcjet.image }}" alt="{{ item.subcjet.label }}"/>
+                    </span>
+                    <!-- Label -->
+                    <span class="pnd-annotation-entity-label">
+                        <a href="{{ item.subcjet.uri }}" target="_blank">
+                            {{ item.subcjet.label }} <span class="pnd-icon-arrow-right"></span>
+                        </a>
+                    </span>
+                    <!-- Type -->
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.subcjet.typeLabel }}
+                    </span>
+                </div>
 
                 <!-- Predicate -->
-                <div 
-                    class="pnd-annotation-details-predicate" 
-                    ng-init="preInfo = false">
-                        <div 
-                            class="pnd-annotation-details-item-header" 
-                            ng-click="preInfo = !preInfo; trackAnalyticsToggleEvent('subInfo--predicate', preInfo)"
-                            ng-class="{'pnd-annotation-details-sub-open': preInfo}">
-                            <div class="pnd-annotation-item-header-text">
-                                <span class="pnd-icon pnd-icon-circle"></span>
-                                <span ng-bind-html="item.predicate.label">{{item.predicate.label}}</span>
-                            </div>
-                            <button type="button" class="pnd-btn  pnd-btn-link pull-right">
-                                <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[preInfo]"></span>
-                            </button>
-                        </div>
-
-                        <div ng-show="preInfo" class="pnd-sub-info">
-                            <span ng-if="preInfo">
-                                <item-preview uri="{{item.predicate.uri}}" sticking="false"></item-preview>
-                            </span>
-                        </div>
+                <!-- TODO There's a problem with the positioning of the tooltip on "top" -->
+                <div class="pnd-annotation-details-predicate"
+                     data-trigger="hover"
+                     data-type="success"
+                     data-placement="left"
+                     data-title="{{ item.predicate.description }}"
+                     bs-tooltip>
+                    {{ item.predicate.label }}
                 </div>
-                <!-- // END Predicate -->
 
                 <!-- Object -->
-                <div ng-repeat="object in item.objects">
-                    <div 
-                        class="pnd-annotation-details-object"
-                        ng-init="objInfo = false">
-                            <div 
-                                class="pnd-annotation-details-item-header" 
-                                ng-click="objInfo = !objInfo; trackAnalyticsToggleEvent('subInfo--object', objInfo)"
-                                ng-class="{'pnd-annotation-details-sub-open': objInfo}">
-                                <!-- <span class="{{object.icon}}"></span> -->
-                                <div class="pnd-annotation-item-header-text">
-                                    <span class="pnd-icon pnd-icon-circle"></span>
-                                    <span ng-if="object.typeClass!='uri'">
-                                        {{object.label}}
-                                    </span>
-                                    <span ng-if="object.typeClass=='uri'" ng-bind-html="object.label">
-                                        {{object.label}}
-                                    </span>
-                                </div>
-                                <button type="button" class="pnd-btn  pnd-btn-link pull-right">
-                                        <span ng-class="{true:'pnd-icon-caret-up', false:'pnd-icon-caret-down'}[objInfo]"></span>
-                                </button>
-                            </div>
-                            <div ng-show="objInfo" class="pnd-sub-info">
-                                <span ng-if="objInfo">
-                                    <span ng-if="object.typeClass=='uri'">
-                                        <item-preview class="pnd-preview clearfix" uri="{{object.uri}}" sticking="false"></item-preview>
-                                    </span>
-                                    <span ng-if="object.typeClass!='uri'">
-                                        <span class="pnd-annotation-details-literal">{{object.label}}</span>
-                                    </span>
-                                </span>
-                                <p ng-if="object.class == 'pnd-item-entity' && moreInfo" class="pnd-preview-bottom-links">
-                                    <a href="{{object.uri}}" target="_blank">More info</a>
-                                </p>
-                                <p ng-if="lodLive && object.typeClass=='uri'" class="pnd-preview-bottom-links">
-                                    <a href="{{lodLiveBaseUrl}}{{object.uri}}" target="_blank">Graph</a>
-                                </p>
-                            </div>
-                    </div>
+                <!-- Text fragment -->
+                <div class="pnd-annotation-details-object pnd-annotation-annotated-fragment pnd-annotation-entity-details"
+                     ng-if="item.objects[0].typeLabel == 'Text fragment'">
+                    <span>
+                        <!-- {{ item.objects[0].description | limitTo:200 }} -->
+                        {{ item.objects[0].description }}
+                    </span>
                 </div>
-                <!-- // END Object -->
+                <div ng-if="item.objects[0].isExternal">
+                    <a href="{{item.objects[0].pageContext}}">Open original page</a>
+                </div>
+
+                <!-- Literal -->
+                <div class="pnd-annotation-details-object pnd-annotation-annotated-literal pnd-annotation-entity-details"
+                     ng-if="item.objects[0].typeLabel == 'literal'">
+                    <span>
+                        <!-- {{ item.objects[0].description | limitTo:200 }} -->
+                        <span ng-bind-html="item.objects[0].description | linky:'_blank'"></span>
+                    </span>
+                </div>
+
+                <!-- WebPage -->
+                <div class="pnd-annotation-details-object pnd-annotation-entity-details"
+                     ng-if="item.objects[0].typeLabel == 'WebPage'">
+                    <span class="pnd-annotation-entity-label">
+                        <a href="{{ item.objects[0].uri }}" target="_blank">
+                            {{ item.objects[0].label }} <span class="pnd-icon-arrow-right"></span>
+                        </a>
+                    </span>
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.objects[0].typeLabel }}
+                    </span>
+                </div>
+
+                <!-- Image -->
+                <div class="pnd-annotation-details-object pnd-annotation-entity-details"
+                     ng-if="item.objects[0].typeLabel == 'Image'">
+                    <span class="pnd-annotation-entity-image"
+                          ng-if="item.objects[0].image!='null'">
+                        <img ng-src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
+                    </span>
+                    <span class="pnd-annotation-entity-label">
+                        <a href="{{ item.objects[0].description }}" target="_blank">
+                            {{ item.objects[0].label }} <span class="pnd-icon-arrow-right"></span>
+                        </a>
+                    </span>
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.objects[0].typeLabel }}
+                    </span>
+                </div>
+
+                <!-- Image fragment -->
+                <div class="pnd-annotation-details-object pnd-annotation-entity-details"
+                     ng-if="item.objects[0].typeLabel == 'Image fragment'">
+                    <span class="pnd-annotation-entity-image"
+                          ng-if="item.objects[0].image!='null'">
+                        <img ng-src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
+                    </span>
+                    <span class="pnd-annotation-entity-label">
+                        <a href="{{ item.objects[0].description }}" target="_blank">
+                            {{ item.objects[0].label }} <span class="pnd-icon-arrow-right"></span>
+                        </a>
+                    </span>
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.objects[0].typeLabel }}
+                    </span>
+                </div>
+
+                <!-- Anything else -->
+                <div class="pnd-annotation-details-object pnd-annotation-entity-details"
+                     ng-if="item.objects[0].typeLabel != 'Text fragment' &&
+                             item.objects[0].typeLabel != 'literal' &&
+                             item.objects[0].typeLabel != 'WebPage' &&
+                             item.objects[0].typeLabel != 'Image' &&
+                             item.objects[0].typeLabel != 'Image fragment'">
+                    <span class="pnd-annotation-entity-image"
+                          ng-if="item.objects[0].image!='null'">
+                        <img ng-src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
+                    </span>
+                    <span class="pnd-annotation-entity-label">
+                        <a href="{{ item.objects[0].uri }}" target="_blank">
+                            {{ item.objects[0].label }} <span class="pnd-icon-arrow-right"></span>
+                        </a>
+                    </span>
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.objects[0].typeLabel }}
+                    </span>
+                    <span class="pnd-annotation-entity-description">
+                        {{ item.objects[0].description | limitTo:200 }}
+                    </span>
+                </div>
 
             </div>
-            <!-- // END Triples -->
+            <!-- END // Single Triple -->
 
         </div>
 
-        <!-- Footer -->
-        <div class="pnd-annotation-details-footer" ng-show="isUserToolShowed()">
-            <button 
-                type="button" 
-                ng-if="showEdit()" 
-                class="pnd-btn pnd-btn-small pnd-btn-fill-width pnd-edit"
-                ng-click="editAnnotation()">Edit</button><button
-                type="button" 
-                class="pnd-btn pnd-btn-small pnd-btn-fill-width pnd-delete"
-                ng-click="deleteAnnotation()">Delete</button>
+        <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
+        <div 
+            class="pnd-annotation-details-buttons"
+            ng-show="isUserToolShowed()">
+            <div class="pnd-annotation-details-footer">
+                <button
+                    type="button"
+                    class="pnd-edit"
+                    ng-show="isEditBtnShowed()"
+                    ng-click="editAnnotation($event)">
+                    <span class="pnd-icon-pencil"></span>
+                    Edit
+                </button> · <button
+                    type="button"
+                    class="pnd-delete"
+                    ng-click="deleteAnnotation($event)">
+                    <span class="pnd-icon-trash"></span>
+                    Delete
+                </button>
+            </div>
         </div>
-        <!-- // END Footer -->
 
     </div>
+
 </div>

@@ -23,30 +23,34 @@
     cursor: pointer;
 
     &:hover {
-        background-color: @gray-extra-lightest;
+        background-color: @color-ultra-light;
     }
 
     .pnd-item-buttons {
-        // margin-right: 7px;
         display: inline;
-        // float: left;
     }
 
     /* Item's wrapper for title and type label */
     .pnd-item-text {
         display: inline;
-        line-height: @item-height;
+        vertical-align: top;
     }
 
     /* Item's title */
     .pnd-item-label {
         display: inline;
-        color: inherit; /* Fixes css conflicts */
+        margin: 7px 0 0 3px;
+
+        color: @color-text;
         font-family: @font;
         font-size: 12px;
-        font-weight: bold;
-        line-height: @item-height - 1px;
-        margin-left: 3px;
+        line-height: @item-height;
+    }
+
+    /* Type */
+    .pnd-type {
+        margin-top: (@item-height - 20)/2;
+        float: left;
     }
 
     /* Icons */
@@ -54,16 +58,24 @@
         line-height: @item-height - 1px;
     }
 
+    /* Active icons inside buttons */
+    .pnd-btn {
+        .pnd-icon {
+            color: @color-dark-gray;
+
+            &:hover {
+                color: @color-text-link;
+            }
+        }
+    }
+
     /* Sticky/selected item */
     &.pnd-sticky-item, &.pnd-select-item {
-        background-color: @brand-success;
-        color: #fff;
+        background-color: @color-ultra-light; // @color-light-gray;
 
         .pnd-item-label {
-            font-weight: bold;
-        }
-        .pnd-icon {
-            color: #fff !important;
+            color: @color-text;
+            font-weight: @font-weight-bold;
         }
     }
 }

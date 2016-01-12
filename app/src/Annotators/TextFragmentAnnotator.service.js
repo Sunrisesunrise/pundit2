@@ -56,7 +56,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> myItemsIconClass: 'pnd-icon-bookmark' </pre>
      */
-    myItemsIconClass: 'pnd-icon-bookmark',
+    myItemsIconClass: 'pnd-icon-star',
 
     /**
      * @module punditConfig
@@ -86,7 +86,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> addIcon: 'true' </pre>
      */
-    addIcon: true,
+    addIcon: false,
 
     /**
      * @module punditConfig
@@ -185,7 +185,8 @@ angular.module('Pundit2.Annotators')
         var fragmentId = fragmentIds[fragmentUri],
             currentIcon;
 
-        if (typeof fragmentById[fragmentId].icon === 'undefined') {
+        if (typeof fragmentById[fragmentId] !== 'undefined' &&
+            typeof fragmentById[fragmentId].icon === 'undefined') {
             currentIcon = placeIcon(fragmentId, fragmentsRefsById[fragmentId][0]);
             $compile(currentIcon)($rootScope);
         }
@@ -575,6 +576,11 @@ angular.module('Pundit2.Annotators')
             textFragmentAnnotator.err("fragmentById[" + icon.fragment + "] is undefined - skipping textFragmentAnnotator.addFragmentIcon()");
             return;
         }
+        // TODO: why is addFragmentIcon called two times after annotation update with a different textFragment?
+        if (typeof fragmentById[icon.fragment].icon !== 'undefined') {
+            return;
+        }
+
         fragmentById[icon.fragment].icon = icon;
         icon.item = fragmentById[icon.fragment].item;
 

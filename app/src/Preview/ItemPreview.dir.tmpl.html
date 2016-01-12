@@ -8,11 +8,11 @@
         <div ng-show="typeHiddenPresent" ng-class="{'pnd-icon-caret-down': typeHidden, 'pnd-icon-caret-up': !typeHidden}" class="pnd-icon pnd-type" ng-click="showAlltypes()"></div>
     </div>
 
-    <div ng-if="item.isImage()" class="pnd-preview-item-image">
+    <div ng-if="item.isImage() && item.image!=null" class="pnd-preview-item-image">
         <img ng-src="{{item.image}}" />
     </div>
 
-    <div ng-show="item.isImageFragment()" class="pnd-preview-item-image">
+    <div ng-show="item.isImageFragment() && item.image!=null" class="pnd-preview-item-image">
         <img ng-src="{{item.image}}" />
     </div>
 
@@ -31,6 +31,8 @@
         <span>{{item.mergedLabel.split('_').join(', ')}}</span>
     </div>
 
+    <!--
+    This is redundant since the URL is available clicking on the "Go to page" button
     <div ng-if="item.isWebPage()" class="pnd-preview-item-webpage">
         <ul>
             <li>
@@ -38,27 +40,45 @@
             </li>
         </ul>
     </div>
+    -->
 
+    <!-- Technical details for predicates -->
     <div ng-if="item.isProperty()" class="pnd-preview-item-predicate">
+        <h1>Technical details</h1>
         <ul>
-            <li ng-if="item.uri"><strong>Uri:</strong> {{item.uri}}</li>
-            <li class="pnd-preview-item-vocab" ng-if="!item.mergedVocabulary && item.vocabulary"><strong>Vocabulary:</strong> {{item.vocabulary}}</li>
-            <li class="pnd-preview-item-vocab" ng-if="item.mergedVocabulary">
-                <strong>Vocabulary:</strong>
-                <span ng-repeat="vocab in item.mergedVocabulary">{{vocab}}</span>
+            <li class="pnd-preview-item-vocab pnd-preview-detail" ng-if="!item.mergedVocabulary && item.vocabulary">
+                <strong class="pnd-preview-detail-label">Vocabulary:</strong>
+                <span class="pnd-preview-detail-content">{{item.vocabulary}}</span>
             </li>
-            <li class="pnd-preview-item-domain" ng-if="item.suggestedSubjectTypes.length !== 0"><strong>Suggested Subject Types:</strong> 
-                <span ng-repeat="suggestedSubjectType in item.suggestedSubjectTypes">{{suggestedSubjectType}}</span>
+            <li class="pnd-preview-item-vocab pnd-preview-detail" ng-if="item.mergedVocabulary">
+                <strong class="pnd-preview-detail-label">Vocabulary:</strong>
+                <span class="pnd-preview-detail-content" ng-repeat="vocab in item.mergedVocabulary">{{vocab}}</span>
             </li>
-            <li class="pnd-preview-item-domain" ng-if="item.suggestedSubjectTypes.length === 0"><strong>Suggested Subject Types:</strong> 
-                <span>All subjects can be used</span>
+
+            <li class="pnd-preview-item-domain pnd-preview-detail" ng-if="item.suggestedSubjectTypes.length !== 0">
+                <strong class="pnd-preview-detail-label">Suggested Subject Types:</strong>
+                <span class="pnd-preview-detail-content" ng-repeat="suggestedSubjectType in item.suggestedSubjectTypes">{{suggestedSubjectType}}</span>
             </li>
-            <li class="pnd-preview-item-range" ng-if="item.suggestedObjectTypes.length !== 0"><strong>Suggested Object Types:</strong> 
-                <span ng-repeat="suggestedObjectType in item.suggestedObjectTypes">{{suggestedObjectType}}</span>
+
+            <li class="pnd-preview-item-domain pnd-preview-detail" ng-if="item.suggestedSubjectTypes.length === 0">
+                <strong class="pnd-preview-detail-label">Suggested Subject Types:</strong>
+                <span class="pnd-preview-detail-content">All subjects can be used</span>
             </li>
-            <li class="pnd-preview-item-range" ng-if="item.suggestedObjectTypes.length === 0"><strong>Suggested Object Types:</strong> 
-                <span>All objects can be used</span>
+
+            <li class="pnd-preview-item-range pnd-preview-detail" ng-if="item.suggestedObjectTypes.length !== 0">
+                <strong class="pnd-preview-detail-label">Suggested Object Types:</strong>
+                <span class="pnd-preview-detail-content" ng-repeat="suggestedObjectType in item.suggestedObjectTypes">{{suggestedObjectType}}</span>
             </li>
+            <li class="pnd-preview-item-range pnd-preview-detail" ng-if="item.suggestedObjectTypes.length === 0">
+                <strong class="pnd-preview-detail-label">Suggested Object Types:</strong>
+                <span class="pnd-preview-detail-content">All objects can be used</span>
+            </li>
+
+            <li class="pnd-preview-detail" ng-if="item.uri">
+                <strong class="pnd-preview-detail-label">Uri:</strong>
+                <span class="pnd-preview-detail-content">{{item.uri}}</span>
+            </li>
+
         </ul>
     </div>
     

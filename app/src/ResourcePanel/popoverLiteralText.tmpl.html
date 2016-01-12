@@ -1,34 +1,29 @@
-<div class="popover pnd-popover-literal">
+<div class="popover pnd-popover pnd-popover-literal">
     <div class="arrow" ng-style="{'margin-left': arrowLeft}"></div>
 
-    <!--
-    TODO Let's try without this... let's remove it if nobody complains!
-    <h3 class="popover-title">
-        Write your comment
-    </h3>
-    -->
-
     <div class="popover-content">
-        <div class="form-group">
-            <textarea
-                class="form-control pnd-popover-literal-textarea"
-                rows="6"
-                ng-model="literalText"
-                ></textarea>
-        </div>
+        <!-- TODO Remove this DIV -->
+        <!-- <div class="form-group"> -->
+        <textarea
+            class="form-control pnd-popover-literal-textarea"
+            rows="6"
+            ng-model="literalText"
+            ></textarea>
+        <!-- </div> -->
     </div>
 
     <div class="popover-footer">
         <button
-            class="pnd-btn pnd-btn-calltoaction"
+                class="pnd-btn pnd-btn-small"
+                ng-click="cancel()">
+            Cancel
+        </button>
+        <button
+            class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
             ng-class="{disabled: literalText == ''}"
             ng-show="showSaveButton(this)"
             ng-click="save()">
             Save
-        </button><button
-            class="pnd-btn"
-            ng-click="cancel()">
-            Cancel
         </button>
     </div>
 </div>

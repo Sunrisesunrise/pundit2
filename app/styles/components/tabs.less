@@ -7,43 +7,44 @@
 // TODO and Important: the style for tabs is dispersed in the code, lets move it here!
 
 /* ------------------------------------ *\
-   #TABS HEADER
+   #NORMAL-TABS
 \* ------------------------------------ */
 
+/* Tabs header */
 ul.pnd-tab-header {
     display: block;
-    //width: auto;
-    //height: auto;
-    margin: 0; // 0 0 10px 0;
-    background: @gray-light;
+    margin: 0;
+    background: @dashboard-bg-color;
 
-    /* Temp fix for tabs list*/
+    /* Temp fix for tabs list */
     height: 27px;
     overflow-y: hidden;
     overflow-x: visible;
-
-    //border-bottom: 1px solid #999;
 
     &:extend(.clearfix all);
 
     > li {
         // Actual tabs (as links)
         display: block;
-        margin-top: 0;
+        margin: 0; // 0 2px 0 0;
         float: left;
         position: relative;
 
         > a {
             display: block;
+            position: relative;
             height: auto;
             min-height: auto;
             margin: 0;
             padding: 6px 8px;
-            position: relative;
-            background-color: @gray-light;
+
+            background-color: @tab-bg-color;
             border-radius: @tab-border-radius @tab-border-radius 0 0;
-            color: @nav-tabs-active-link-hover-color; /* For css overwritings - !important */
-            line-height: @line-height-base;
+
+            font-size: 13px;
+            // font-weight: 400;
+            color: @tab-text-color; /* For css overwritings - !important */
+            line-height: @line-height-base; // TODO
             overflow: visible;
 
             &:hover,
@@ -51,7 +52,7 @@ ul.pnd-tab-header {
             &:active {
                 border-color: transparent;
                 background-color: @tab-bg-hover-color;
-                color: @nav-tabs-active-link-hover-color !important;
+                color: @tab-text-hover-color !important;
                 text-decoration: none !important; /* For css overwritings - !important */
                 cursor: pointer;
             }
@@ -63,18 +64,18 @@ ul.pnd-tab-header {
             &:hover,
             &:focus {
                 margin: 0;
-                background-color: @nav-tabs-active-link-hover-bg;
+                background-color: @tab-bg-active-color;
                 border-bottom-color: transparent;
-                color: @nav-tabs-active-link-hover-color !important;
+                color: @tab-text-active-color !important;
                 text-decoration: none !important;
                 cursor: pointer;
-                // box-shadow: 0 -1px 2px rgba(0,0,0,.18);
             }
         }
     }
 
-    // Show tabs button
+    /* Show tabs button */
     .show-tabs {
+        margin-right: 0;
 
         a { 
             padding: 7px 10px 5px;
@@ -95,7 +96,7 @@ ul.pnd-tab-header {
         }
 
         &.active a {
-            background-color: @nav-tabs-active-link-hover-bg;
+            background-color: @tab-bg-active-color;
         }
 
         /* For css overwritings */
@@ -116,6 +117,59 @@ ul.pnd-tab-header {
     }
 }
 
+
+/* ------------------------------------ *\
+   #INNER-TABS
+\* ------------------------------------ */
+
+/* Style for the second level tabs that are found under
+ the search field in the items list panel.
+ These tabs are usually used for filtering the items
+ in the displayed list */
+
+.pnd-panel-tab-content {
+    .pnd-tab-header {
+        margin-bottom: 0;
+        margin-right: 0;
+
+        background-color: @tab-inner-bg-color;
+        border-top: 1px solid @color-border-normal;
+        border-bottom: 1px solid @color-border-normal;
+
+        > li {
+            /* Actual tabs (as links) */
+            margin: 0;
+
+            > a {
+                margin-right: 0;
+                border: 0;
+                border-top: 2px solid transparent;
+                border-radius: 0;
+                color: @tab-inner-text-color;
+                line-height: @line-height-base;  // TODO
+
+                &:hover {
+                    background-color: @tab-inner-hover-bg-color;
+                    color: @tab-inner-text-hover-color;
+                    cursor: pointer;
+                }
+            }
+
+            /* Active state, and its :hover to override normal :hover */
+            &.active > a {
+                &,
+                &:hover,
+                &:focus {
+                    border-top: 2px solid @tab-inner-border-top-color;
+                    color: @tab-inner-text-active-color;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+
 /* ------------------------------------ *\
    #VERTICAL-TABS
 \* ------------------------------------ */
@@ -123,7 +177,8 @@ ul.pnd-tab-header {
 .tabs-left .pnd-vertical-tabs { //nav-tabs
     float: left;
     border-bottom: 0;
-    background-color: lighten(@gray-lighter, 2);
+    background-color: @vertical-tabs-bg-color;
+    border-right: 1px solid @vertical-tabs-tab-border-color;
     &:extend(.clearfix all);
 
     /* Single item */
@@ -136,31 +191,35 @@ ul.pnd-tab-header {
 
         .badge {
             padding: 3px 7px;
+            margin-top: 2px;
+            color: @badge-text-color;
             font-size: 10px;
-            font-weight: normal;
-            background-color: lighten(@gray-light, 10%);
-            border-radius: 8px;
+            font-weight: @font-weight-normal;
+            background-color: @badge-bg-color;
+            border-radius: 7px;
         }
 
         & > a {
             display: block;
             min-width: 150px;
-            margin-right: 0;
-            margin-bottom: 1px;
-            padding: 5px 8px;
+            margin-right: -1px;
+            padding: 5px 6px 5px 8px;
             position: relative;
-            background-color: @gray-lighter;
-            color: @gray !important; /* For css overwritings */
-            border-bottom: 1px solid #fff;
+            background-color: @vertical-tabs-tab-bg-color;
+            font-size: 13px;
+            color: @color-text !important; /* For css overwritings */
+            border-bottom: 1px solid @vertical-tabs-tab-border-color;
+            border-right: 1px solid @vertical-tabs-tab-border-color;
+            cursor: pointer;
 
             &:hover, &:focus {
-                background-color: darken(@gray-lighter, 3%);
-                border-bottom: 1px solid #fff;
-                color: @gray-darker;
+                background-color: @vertical-tabs-tab-hover-bg-color;
+                // border-bottom: 1px solid #fff;
+                color: @color-text !important; /* For css overwritings */
                 text-decoration: none !important; /* For css overwritings */
 
                 .badge {
-                    background-color: lighten(@gray, 20%);
+                    // background-color: lighten(@gray, 20%);
                 }
             }
         }
@@ -170,22 +229,23 @@ ul.pnd-tab-header {
             & > a {
                 background-color: #fff;
                 cursor: default;
-                border-bottom: 1px solid #fff;
+                border-right: 1px solid #fff;
+                // border-bottom: 1px solid #fff;
                 box-shadow: none;
 
                 &:hover, &:focus {
                     color: @gray;
                     background-color: #fff;
-                    border-bottom: 1px solid #fff;
+                    // border-bottom: 1px solid #fff;
 
                     .badge {
-                        background-color: lighten(@gray, 20%);
+                        // background-color: lighten(@gray, 20%);
                     }
                 }
             }
 
             .badge {
-                background-color: lighten(@gray, 20%);
+                // background-color: lighten(@gray, 20%);
             }
         }
     }

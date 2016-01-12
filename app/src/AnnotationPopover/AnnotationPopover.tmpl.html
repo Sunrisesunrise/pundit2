@@ -1,18 +1,33 @@
-<div class="popover pnd-annotation-popover pnd-popover-literal">
+<div class="popover pnd-popover pnd-annotation-popover"
+     ng-class="{
+     'pnd-annotation-popover-login': !isUserLogged,
+     'pnd-annotation-popover-annotate': isSwitchMode,
+     'pnd-annotation-popover-comment': isCommentMode,
+     'pnd-annotation-popover-highlight': isHighlightMode,
+     'pnd-annotation-popover-saving':savingAnnotation,
+     'pnd-annotation-popover-error':!savingAnnotation && errorSaving}"
+     ng-style="{'opacity': opacity}"
+        >
+
     <div class="arrow"></div>
 
+    <!-- Login: user must login -->
     <div class="popover-content"
          ng-if="!isUserLogged">
-        Please <a href="javascript:void(0)" ng-click="login()">login</a>
-    </div>
-    <div ng-if="currentMode === '' && isUserLogged">
-        <button ng-click="setMode('comment')">Comment</button>
-        <button ng-click="setMode('highlight')">Highlight</button>
+        <a href="javascript:void(0)" ng-click="login()">Login to Pundit to create new annotations!</a>
     </div>
 
+    <!-- Annotation type selection -->
+    <div class="popover-content" ng-if="currentMode === '' && isUserLogged">
+        <a ng-click="setMode('comment')">Comment</a><span class="pnd-annotation-popover-separator">
+        </span><a ng-click="setMode('highlight')">Highlight</a>
+    </div>
+
+    <!-- Comment Highlight creation  -->
     <div class="popover-content-wrapper"
          ng-show="!savingAnnotation && !errorSaving"
          ng-if="currentMode !== '' && isUserLogged">
+
         <div class="popover-content"
              ng-show="currentMode === 'comment'">
             <div class="form-group">
@@ -25,9 +40,10 @@
             </div>
         </div>
 
+        <!-- Notebook selector -->
         <div 
             class="popover-notebooks">
-            Save {{currentMode}} in 
+            <span class="popover-notebooks-copy">Save {{currentMode}} in</span>
             <pnd-select
                     options="availableNotebooks"
                     selected-value="$parent.selectedNotebookId"
@@ -36,32 +52,36 @@
                     placeholder-action="'Type new notebook name here'"></pnd-select>
         </div>
 
+        <!-- Footer with buttons -->
         <div class="popover-footer">
             <button
-                class="pnd-btn pnd-btn-calltoaction"
+                    class="pnd-btn pnd-btn-small"
+                    ng-click="cancel()">
+                Cancel
+            </button><button
+                class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
                 ng-class="{disabled: $parent.literalText == '' && currentMode == 'comment'}"
                 ng-click="save()">
                 Save
-            </button><button
-                class="pnd-btn"
-                ng-click="cancel()">
-                Cancel
             </button>
         </div>
     </div>
 
     <div class="popover-content-wrapper"
          ng-show="!savingAnnotation && errorSaving">
-        There was an error saving your comment, please try again later.
-        </button><button
-            class="pnd-btn"
+        <span class="pnd-icon-exclamation"></span>
+        <br />
+        There was an error saving your annotation, please try again later
+        <br />
+        <button
+            class="pnd-btn pnd-btn-small"
             ng-click="cancel()">
             Cancel
         </button>
     </div>
 
-    <div class="popover-content-wrapper"
+    <div class="popover-content-wrapper pnd-pulse"
          ng-show="savingAnnotation">
-            Saving ...
+        Saving your annotation
     </div>
 </div>

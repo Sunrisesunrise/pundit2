@@ -212,7 +212,7 @@ angular.module('Pundit2.TripleComposer')
 })
 
 .service('TripleComposer', function($rootScope, BaseComponent, EventDispatcher, TRIPLECOMPOSERDEFAULTS, TypesHelper, NameSpace, Config,
-    AnnotationsExchange, ItemsExchange, Dashboard, ContextualMenu, TemplatesExchange, Status, Utils, Analytics) {
+    AnnotationsExchange, ItemsExchange, Dashboard, ContextualMenu, TemplatesExchange, AnnotationPopover, Status, Utils, Analytics) {
 
     var tripleComposer = new BaseComponent('TripleComposer', TRIPLECOMPOSERDEFAULTS);
 
@@ -254,15 +254,58 @@ angular.module('Pundit2.TripleComposer')
         if (contextualMenuInitialized) {
             return;
         }
+
+        // TODO: sanity checks on Config.modules.* ? Are they active? Think so??
+        var cMenuTypes = [
+            Config.modules.PageItemsContainer.cMenuType,
+            Config.modules.MyItemsContainer.cMenuType,
+            Config.modules.SelectorsManager.cMenuType,
+            Config.modules.TextFragmentHandler.cMenuType,
+            Config.modules.TextFragmentAnnotator.cMenuType
+        ];
+
+        if (typeof Config.modules.ImageHandler !== 'undefined') {
+            cMenuTypes.push(Config.modules.ImageHandler.cMenuType);
+        }
+
         ContextualMenu.addAction({
-            type: [
-                Config.modules.PageItemsContainer.cMenuType,
-                Config.modules.MyItemsContainer.cMenuType,
-                Config.modules.SelectorsManager.cMenuType,
-                Config.modules.TextFragmentHandler.cMenuType,
-                Config.modules.TextFragmentAnnotator.cMenuType,
-                Config.modules.ImageHandler.cMenuType
-            ],
+            type: cMenuTypes,
+            name: 'comment',
+            label: 'Comment',
+            showIf: function(item) {
+                return true;
+            },
+            priority: 101,
+            action: function(item) {
+                var coordinates = ContextualMenu.getLastXY(),
+                    fragmentId = ContextualMenu.getLastRef();
+                AnnotationPopover.show(coordinates.x, coordinates.y, item, '', fragmentId, 'comment');
+            }
+        });
+
+        ContextualMenu.addAction({
+            type: cMenuTypes,
+            name: 'highlight',
+            label: 'Highlight',
+            showIf: function(item) {
+                return true;
+            },
+            priority: 101,
+            action: function(item) {
+                var coordinates = ContextualMenu.getLastXY(),
+                    fragmentId = ContextualMenu.getLastRef();
+                AnnotationPopover.mode = 'highlight';
+                AnnotationPopover.show(coordinates.x, coordinates.y, item, '', fragmentId, 'highlight');
+            }
+        });
+
+        ContextualMenu.addDivider({
+            priority: 101,
+            type: cMenuTypes
+        });
+
+        ContextualMenu.addAction({
+            type: cMenuTypes,
             name: 'useAsSubject',
             label: 'Use as subject',
             showIf: function(item) {
@@ -281,14 +324,7 @@ angular.module('Pundit2.TripleComposer')
         });
 
         ContextualMenu.addAction({
-            type: [
-                Config.modules.PageItemsContainer.cMenuType,
-                Config.modules.MyItemsContainer.cMenuType,
-                Config.modules.SelectorsManager.cMenuType,
-                Config.modules.TextFragmentHandler.cMenuType,
-                Config.modules.TextFragmentAnnotator.cMenuType,
-                Config.modules.ImageHandler.cMenuType
-            ],
+            type: cMenuTypes,
             name: 'useAsObject',
             label: 'Use as object',
             showIf: function(item) {

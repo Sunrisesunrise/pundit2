@@ -85,9 +85,11 @@ angular.module("Pundit2.MyItemsContainer")
             Config.modules.PageItemsContainer.cMenuType,
             Config.modules.MyItemsContainer.cMenuType,
             Config.modules.TextFragmentAnnotator.cMenuType,
-            Config.modules.ImageHandler.cMenuType,
             Config.modules.SelectorsManager.cMenuType
         ];
+        if (typeof Config.modules.ImageHandler !== 'undefined') {
+            cMenuTypes.push(Config.modules.ImageHandler.cMenuType);
+        }
 
         ContextualMenu.addDivider({
             priority: 97,
@@ -97,7 +99,7 @@ angular.module("Pundit2.MyItemsContainer")
         ContextualMenu.addAction({
             name: 'addToMyItems',
             type: cMenuTypes,
-            label: "Add to My Items",
+            label: "Add to Favourites",
             priority: 99,
             showIf: function(item) {
                 return MyPundit.isUserLogged() &&
@@ -117,7 +119,7 @@ angular.module("Pundit2.MyItemsContainer")
         ContextualMenu.addAction({
             name: 'removeFromMyItems',
             type: cMenuTypes,
-            label: "Remove from My Items",
+            label: "Remove from Favourites",
             priority: 99,
             showIf: function(item) {
                 return MyPundit.isUserLogged() &&

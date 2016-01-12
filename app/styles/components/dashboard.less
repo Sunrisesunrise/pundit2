@@ -11,11 +11,10 @@
 .pnd-dashboard-container {
     position: fixed;
     top: @toolbar-height;
-    //right: 0; /* For css overwritings in case body has some padding, margin or border */
     left: 0; /* For css overwritings in case body has some padding, margin or border */
     overflow: hidden;
     z-index: @zindex-pnd-dashboard;
-    background-color: @gray-light;
+    background-color: @dashboard-bg-color;
     &:extend(.clearfix all);
 
     .pnd-inner-nav { //also on .nav
@@ -32,18 +31,10 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-
-     input[type="text"].form-control, select.form-control, textarea.form-control {
-        color: @color-text-light;
-    }
-
-    .pnd-btn-xs {
-        background: #fff;
-    }
 }
 
-.pnd-dashboard-footer-handler + .pnd-btn-xs,
-.pnd-dashboard-panel-collapsed-content + .pnd-btn-xs {
+.pnd-dashboard-footer-handler + .pnd-btn-xsmall,
+.pnd-dashboard-panel-collapsed-content + .pnd-btn-xsmall {
     background-color: rgb(255,255,255);//!important
     //background-position: 0 20px;
 }
@@ -54,6 +45,10 @@ vertical draggable bar */
 .pnd-dashboard-panel-not-last {
 
     .pnd-dashboard-panel-expanded {
+        padding-right: 7px;
+    }
+
+    .pnd-panel-tab-content-footer {
         padding-right: 7px;
     }
 }
@@ -73,65 +68,94 @@ vertical draggable bar */
     text-decoration: underline !important; /* For css overwritings */
 }
 
+
 /* ------------------------------------ *\
    #COLLAPSE-EXPAND-BUTTONS
 \* ------------------------------------ */
 
 .pnd-dashboard-panel {
 
-    button.pnd-btn-dashboard {
-        width: 20px; /* This is modified below for not-last panels */
-        padding-bottom: 0;
+    button.pnd-dashboard-panel-toggle {
         position: absolute;
-        z-index: 1;
+        width: 20px; /* This is modified below for not-last panels */
+        height: 16px;
         right: 0; /* This is modified below for not-last panels */
+        padding-bottom: 0;
+        padding-top: 0;
+        border: 0;
+        border-radius: 0 0 3px 3px;
+        background-color: #fff;
+        color: @color-dark-gray;
+        line-height: 0.4;
+        z-index: 1;
 
+        &:hover {
+            color: @color-brand;
+        }
 
-        &.pnd-btn-xs {
-            border: 0;
-            padding-top: 2px;
-            //padding-bottom: 0;
+        &:focus,
+        &:active:focus,
+        &.active:focus {
+            box-shadow: none;
+        }
+
+        .pnd-icon {
+            font-size: 12px;
+            line-height: normal;
+            padding: 0;
+        }
+
+        &.disabled,
+        &[disabled] {
             background-color: #fff;
-            text-shadow: 0 1px 0 #fff;
-
-            &:hover {
-                color: @brand-success;
-            }
-
-            &:focus,
-            &:active:focus,
-            &.active:focus {
-                box-shadow: none;
-            }
+            text-shadow: 0;
+            opacity: 1;
+            filter: alpha(opacity=100);
 
             .pnd-icon {
-                font-size: 12px;
-                line-height: normal;
-                padding: 0;
-            }
-
-            &.disabled,
-            &[disabled] {
-                background-color: #fff;
-                text-shadow: 0;
-                opacity: 1;
-                filter: alpha(opacity=100);
-
-                .pnd-icon {
-                    color: @gray-extra-light;
-                }
+                color: @color-text-light;
             }
         }
     }
 
     /* First and second panel (not-last) */
     &.pnd-dashboard-panel-not-last {
-        button.pnd-btn-dashboard {
+        button.pnd-dashboard-panel-toggle {
             right: 7px;
             width: 21px;
         }
     }
 }
+
+
+/* ------------------------------------ *\
+   #FOOTER
+\* ------------------------------------ */
+.pnd-dashboard-footer-handler {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    right: 20px;
+    height: 18px;
+    background-image: url(img/bg-dashboard-footer.png);
+    background-repeat: no-repeat;
+    background-position: 50% 64%;
+    cursor: row-resize;
+}
+
+.pnd-dashboard-footer {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    background-color: @dashboard-bg-color;
+    border-bottom: 1px solid darken(@dashboard-bg-color, 10%);
+}
+
+
+/* ------------------------------------ *\
+   #OTHER-STUFF
+\* ------------------------------------ */
 
 .pnd-dashboard-panel-nav {
     width: 100%;
@@ -142,7 +166,7 @@ vertical draggable bar */
     width: 100%;
     height: 100%;
     background-color: #fff;
-    border-top: 4px solid @gray-light;
+    border-top: 4px solid @dashboard-bg-color;
 
     .dropdown-menu {
         > li > a {
@@ -163,33 +187,14 @@ vertical draggable bar */
 
 .pnd-dashboard-panel-separator {
     position: absolute;
+    top: 0;
     right: 0;
     width: 7px;
-    background: @gray-light;
-    top: 0;
     height: 100%;
+
+    background-color: @dashboard-bg-color;
     background-image: url(img/bg-dashboard-panel-separator.png);
     background-repeat: no-repeat;
     background-position: 50% 50%;
     cursor: col-resize;
-}
-
-.pnd-dashboard-footer-handler {
-    position: absolute;
-    z-index: 2;
-    left: 0;
-    right: 20px;
-    height: 18px;
-    background-image: url(img/bg-dashboard-footer.png);
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    cursor: row-resize;
-}
-
-.pnd-dashboard-footer {
-    width: 100%;
-    position: absolute;
-    z-index: 1;
-    bottom: 0;
-    #gradient > .vertical-three-colors(@gray-light; @gray-light; 80%; darken(@gray-light, 10));
 }

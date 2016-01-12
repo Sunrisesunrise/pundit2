@@ -259,21 +259,8 @@ angular.module('Pundit2.Client')
      */
     basicRelations: [{
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "comment",
-        "description": "Leave a comment related to the selected text fragment or web page.",
-        "suggestedSubjectTypes": [
-            "http://purl.org/pundit/ont/ao#fragment-image",
-            "http://purl.org/pundit/ont/ao#fragment-text",
-            "http://xmlns.com/foaf/0.1/Image",
-            "http://schema.org/WebPage"
-        ],
-        "suggestedObjectTypes": ["http://www.w3.org/2000/01/rdf-schema#Literal"],
-        "vocabulary": "Basic Relation",
-        "uri": "http://www.w3.org/2000/01/rdf-schema#comment"
-    }, {
-        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
         "label": "identifies",
-        "description": "The selected text fragment or web page is a representation of a linked data entity. Select the right entity as object.",
+        "description": "The Subject (a text fragment or a web page) is a representation of the Object (text fragment, web page or linked data entity).",
         "suggestedSubjectTypes": [
             "http://purl.org/pundit/ont/ao#fragment-text",
             "http://schema.org/WebPage"
@@ -284,18 +271,18 @@ angular.module('Pundit2.Client')
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
         "label": "is related to",
-        "description": "The selected text fragment or web page is somehow related to another text fragment, work, person or linked data entity.",
+        "description": "The Subject (a text fragment or a web page) has a generic relation with the Object (text fragment, web page or linked data entity).",
         "suggestedSubjectTypes": [
             "http://purl.org/pundit/ont/ao#fragment-text",
             "http://schema.org/WebPage"
         ],
         "suggestedObjectTypes": [],
         "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/pundit/ont/oa#isRelatedTo" // TODO Deve rispondere??? Come si fa???
+        "uri": "http://www.w3.org/2004/02/skos/core#related"
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
         "label": "describes",
-        "description": "The selected fragment or web page describes another text fragment, work, person or linked data entity.",
+        "description": "The Subject (a text fragment or a web page) describes the Object (text fragment, web page or linked data entity).",
         "suggestedSubjectTypes": [
             "http://purl.org/pundit/ont/ao#fragment-text",
             "http://schema.org/WebPage"
@@ -306,7 +293,7 @@ angular.module('Pundit2.Client')
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
         "label": "has author",
-        "description": "The selected text fragment or web page was written or created by a specific person. Select the right person as object",
+        "description": "The Subject (a text fragment or a web page) was written or created by a specific person identified by the Object.",
         "suggestedSubjectTypes": [
             "http://purl.org/pundit/ont/ao#fragment-text",
             "http://purl.org/pundit/ont/ao#fragment-image",
@@ -319,7 +306,7 @@ angular.module('Pundit2.Client')
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
         "label": "has type",
-        "description": "The selected text fragment or web page has a specified type. Select the right type as object.",
+        "description": "The Subject (a text fragment or a web page) has a specified type identified by the Object.",
         "suggestedSubjectTypes": [
             "http://purl.org/pundit/ont/ao#fragment-text",
             "http://schema.org/WebPage"
@@ -329,19 +316,8 @@ angular.module('Pundit2.Client')
         "uri": "http://purl.org/dc/terms/type"
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
-        "label": "replies to",
-        "description": "The selected fragment or web page is a reply to another text fragment, work, person or linked data entity.",
-        "suggestedSubjectTypes": [
-            "http://purl.org/pundit/ont/ao#fragment-text",
-            "http://schema.org/WebPage"
-        ],
-        "suggestedObjectTypes": [],
-        "vocabulary": "Basic Relation",
-        "uri": "http://purl.org/spar/cito/repliesTo"
-    }, {
-        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
         "label": "cites",
-        "description": "The selected text fragment or web page cites another text fragment, work or person.",
+        "description": "The Subject (a text fragment or a web page) cites the Object (text fragment, web page or linked data entity).",
         "suggestedSubjectTypes": [
             "http://purl.org/pundit/ont/ao#fragment-text",
             "http://schema.org/WebPage"
@@ -352,7 +328,7 @@ angular.module('Pundit2.Client')
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
         "label": "quotes",
-        "description": "The selected text fragment or web page is a sentence from a person or a work, usually enclosed by quotations (eg: '')",
+        "description": "The Subject (a text fragment or a web page) is a sentence from a person or a work identified by the Object. It is usually enclosed by quotations (eg: '').",
         "suggestedSubjectTypes": [
             "http://purl.org/pundit/ont/ao#fragment-text",
             "http://schema.org/WebPage"
@@ -362,8 +338,19 @@ angular.module('Pundit2.Client')
         "uri": "http://purl.org/spar/cito/includesQuotationFrom"
     }, {
         "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+        "label": "replies to",
+        "description": "The Subject (a text fragment or a web page) is a reply to the Object (text fragment, web page or linked data entity).",
+        "suggestedSubjectTypes": [
+            "http://purl.org/pundit/ont/ao#fragment-text",
+            "http://schema.org/WebPage"
+        ],
+        "suggestedObjectTypes": [],
+        "vocabulary": "Basic Relation",
+        "uri": "http://purl.org/spar/cito/repliesTo"
+    }, {
+        "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
         "label": "represents the date",
-        "description": "The selected text fragment corresponds to a date that can be defined by a year, a month, a day or a time. Use the calendar to select the right date as object.",
+        "description": "The Subject (a text fragment) corresponds to a date that can be defined by a year, a month, a day or a time. Use the calendar to select the right date as object.",
         "suggestedSubjectTypes": ["http://purl.org/pundit/ont/ao#fragment-text"],
         "suggestedObjectTypes": ["http://www.w3.org/2001/XMLSchema#dateTime"],
         "vocabulary": "Basic Relation",

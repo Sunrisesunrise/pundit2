@@ -129,7 +129,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         } else if (generalItemsContainer.isPageItemsType(type)) {
             text = 'No page items found.';
         } else if (generalItemsContainer.isVocabulariesType(type)) {
-            text = 'Use this panel to search entities from Linked Data providers. Once you find the desired entity you can use it as Subject, Object or add it to My Items.';
+            text = 'Use this panel to search entities from Linked Data providers. Once you find the desired entity you can use it as Subject, Object or add it to your Favourites.';
         } else if (generalItemsContainer.isMyNotebooksType(type)) {
             text = 'No notebooks found.';
         } else if (generalItemsContainer.isPredicatesType(type)) {
@@ -212,13 +212,13 @@ angular.module('Pundit2.GeneralItemsContainer')
 
         if (generalItemsContainer.isMyItemsType(type)) {
             if (MyPundit.isUserLogged() === false) {
-                return 'My Items are only available to logged users. Please log in and use this section to store and use items.';
+                return 'Favourites are only available to logged users. Please log in and use this section to store and use items.';
             }
             if (items.length === 0) {
-                return 'You can add items here selecting parts of text or entities in the Linked Data panel and clicking "Add to My Items".';
+                return 'You can add items here selecting parts of text or entities in the Linked Data panel and clicking "Add to Favourites".';
             }
             if (str === '') {
-                return 'No item found.';
+                return 'No items found.';
             } else {
                 return noItemsFound;
             }
@@ -294,22 +294,22 @@ angular.module('Pundit2.GeneralItemsContainer')
         var text = '';
         var action = '';
         var requireLoggedUser = true;
-        var btnClass = 'pnd-triplecomposer-cancel pnd-btn pnd-btn-xs pnd-btn-full';
+        var btnClass = 'pnd-triplecomposer-cancel pnd-btn pnd-btn-xsmall pnd-btn-full';
 
         if (generalItemsContainer.isMyItemsType(type)) {
-            title = 'Remove from My Items';
+            title = 'Remove from Favourites';
             text = 'Remove';
             action = 'remove';
             btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isPageItemsType(type)) {
-            title = 'Add to  My Items';
-            text = 'Add to My Items';
+            title = 'Add to Favourites';
+            text = 'Add to Favourites';
             action = 'add';
             requireLoggedUser = true;
             btnClass = 'pnd-btn';
         } else if (generalItemsContainer.isVocabulariesType(type)) {
-            title = 'Add to My Items';
-            text = 'Add to My Items';
+            title = 'Add to Favourites';
+            text = 'Add to Favourites';
             action = 'add';
             requireLoggedUser = true;
             btnClass = 'pnd-btn';

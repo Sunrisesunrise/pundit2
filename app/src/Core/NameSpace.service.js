@@ -112,6 +112,11 @@ angular.module('Pundit2.Core')
         type: ns.rdf.type
     };
 
+    // Notebook properties override for annotationServerVersion V2
+    ns.notebook_v2 =  {
+        visibility: _pnd + 'isPublic'
+    };
+
     // TODO: doc
     ns.annotation = {
         creatorName: _dce + 'creator',

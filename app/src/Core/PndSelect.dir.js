@@ -19,7 +19,7 @@ angular.module('Pundit2.Core')
             var inputElement = element.find('.creation-input').eq(0),
                 fncAction,
                 hasMouseDownHandler = false,
-                optionsContainer= element.find('.option-container');
+                optionsContainer = element.find('.pnd-select-option-container');
 
             scope.optionAction = false;
             scope.moveTop = false;
@@ -105,13 +105,21 @@ angular.module('Pundit2.Core')
                     $document.on('mousedown', mouseHandler);
                     hasMouseDownHandler = true;
                 }
-                var h = optionsContainer.height(),
-                    pageVisibleTop = $window.scrollY;
-                scope.moveTop = ($window.scrollY + h) > pageVisibleTop;
+
+                var optionsHeight = optionsContainer.height();
+                var pageVisibleBottom = $window.scrollY +  $window.innerHeight;
+                var optionsY = optionsContainer.offset().top;
+                scope.moveTop = (optionsY + optionsHeight) > pageVisibleBottom;
+
             };
 
             scope.collapse = function() {
                 scope.expanded = false;
+
+                // Reset optionsContainer status
+                scope.moveTop = false;
+                optionsContainer.removeClass("move-top");
+
                 if (hasMouseDownHandler) {
                     $document.off('mousedown', mouseHandler);
                     hasMouseDownHandler = false;
@@ -129,6 +137,11 @@ angular.module('Pundit2.Core')
 
             scope.showAction = function() {
                 scope.expanded = false;
+
+                // Reset optionsContainer status
+                scope.moveTop = false;
+                optionsContainer.removeClass("move-top");
+
                 fncAction = scope.optionAction.value;
                 scope.inputAction = '';
                 scope.actionInProgress = true;

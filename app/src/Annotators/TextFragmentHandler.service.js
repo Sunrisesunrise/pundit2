@@ -680,6 +680,7 @@ angular.module('Pundit2.Annotators')
         }
 
         // TODO: generalize item in {data}
+        // es. AnnotationPopover.show( ...
         var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType, currentFr);
         if (typeof promise !== 'undefined' && promise !== false) {
             promise.then(function() {
@@ -693,9 +694,10 @@ angular.module('Pundit2.Annotators')
     // So we bind this up handler and just remove the selection on mouseup, if there is one.
     function mouseUpHandlerToRemove() {
         $document.off('mouseup', mouseUpHandlerToRemove);
-        if (textFragmentHandler.getSelectedRange() !== null) {
-            removeSelection();
-        }
+        // TODO: is it still useful?
+        // if (textFragmentHandler.getSelectedRange() !== null) {
+        //     removeSelection();
+        // }
     }
 
     function mouseDownHandler(downEvt) {

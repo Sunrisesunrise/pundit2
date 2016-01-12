@@ -1,0 +1,49 @@
+/**
+ * POPOVER
+ *
+ * Style for popover element
+ */
+
+/* ------------------------------------ *\
+  #POPOVER
+\* ------------------------------------ */
+
+.pnd-popover {
+    max-width: 320px;
+    padding: 0;
+    background-color: @popover-bg-color;
+    border: 1px solid @popover-border-color;
+    border-radius: 3px;
+    z-index: @zindex-pnd-popver;
+    box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.07);
+    font-family: @font;
+    font-weight: @font-weight-normal;
+
+    &.top > .arrow {
+        border-top-color: @popover-border-color;
+    }
+
+    &.right > .arrow {
+        border-right-color: @popover-border-color;
+    }
+
+    &.bottom > .arrow {
+        border-bottom-color: @popover-border-color;
+    }
+
+    &.left > .arrow {
+        border-left-color: @popover-border-color;
+    }
+
+    .popover-footer {
+        height: @popover-footer-height;
+        text-align: right;
+        padding-top: 7px;
+        padding-right: 0;
+        border-top: 1px solid @color-border-normal;
+
+        .pnd-btn {
+            margin-right: 7px;
+        }
+    }
+}

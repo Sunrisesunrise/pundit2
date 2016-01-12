@@ -64,7 +64,7 @@ angular.module('Pundit2.Core')
  *
  *
  */
-.service('MyPundit', function(MYPUNDITDEFAULTS, $http, $q, $timeout, $modal, $window, $interval,
+.service('MyPundit', function(MYPUNDITDEFAULTS, Config, $http, $q, $timeout, $modal, $window, $document, $interval,
     BaseComponent, EventDispatcher, NameSpace, Analytics, $popover, $rootScope, $cookies) {
 
     var myPundit = new BaseComponent('MyPundit', MYPUNDITDEFAULTS);
@@ -74,6 +74,7 @@ angular.module('Pundit2.Core')
         editProfile,
         loginStatus,
         userData = {},
+        hasDocumentClickHandler = false,
         infoCookie = {
             templateLabel: undefined,
             templateId: undefined,
@@ -639,6 +640,10 @@ angular.module('Pundit2.Core')
             return;
         }
 
+        if (!hasDocumentClickHandler) {
+            $document.on('mouseup', documentClickHandler);
+            hasDocumentClickHandler = true;
+        }
         // popoverState.anchor = angular.element('.pnd-toolbar-login-button');
         // popoverState.popover = $popover(angular.element(".pnd-toolbar-toggle-button"), popoverState.options);
 
@@ -656,7 +661,7 @@ angular.module('Pundit2.Core')
             }
             popoverState.popover = $popover(anchor, popoverOptions);
         } else if (where === 'editProfile') {
-            anchor = angular.element(".pnd-toolbar-user-button");
+            anchor = angular.element(".pnd-user-button");
             popoverState.popover = $popover(anchor, popoverOptions);
             if (anchor.length === 0) {
                 return;
@@ -680,6 +685,7 @@ angular.module('Pundit2.Core')
 
         popoverState.popover.$promise.then(function() {
             popoverState.popover.show();
+            EventDispatcher.sendEvent('MyPundit.popoverOpen');
             popoverState.renderIFrame(where);
             checkPopoverPosition();
         });
@@ -693,9 +699,12 @@ angular.module('Pundit2.Core')
         var popoverRect = popoverState.popover.$element[0].getClientRects()[0];
         var pageVisibleRight = $window.innerWidth + $window.scrollX;
         if ($window.scrollX + popoverRect.right > pageVisibleRight) {
-            popoverState.popover.$options.placement = 'left';
+            popoverState.popover.$options.placement = 'bottom-right';
             popoverState.popover.$element.removeClass('left').removeClass('top').removeClass('right').removeClass('bottom');
-            popoverState.popover.$element.find('.arrow-top').removeClass('arrow-top').addClass('arrow-right');
+            popoverState.popover.$element.find('.arrow').removeClass('arrow-top').removeClass('arrow-right').addClass('arrow-top');
+            var popoverRect = popoverState.popover.$element[0].getClientRects()[0];
+            var marginLeft = Math.round(popoverRect.width * 0.8);
+            popoverState.popover.$element.find('.arrow').css('marginLeft', marginLeft);
             popoverState.popover.$applyPlacement();
         }
     };
@@ -712,8 +721,14 @@ angular.module('Pundit2.Core')
         popoverState.popover.hide();
         popoverState.popover.destroy();
         popoverState.popover = null;
+        EventDispatcher.sendEvent('MyPundit.popoverClose');
 
     };
+
+    var documentClickHandler = function(evt) {
+        // Closes popover login when clicking outside
+        myPundit.closeLoginPopover();
+    }
 
     myPundit.editProfile = function() {
         if (!isUserLogged) {
@@ -746,6 +761,11 @@ angular.module('Pundit2.Core')
             myPundit.addPostMessageListener();
         }
         clientHidden = false;
+    });
+
+    EventDispatcher.addListener('MyPundit.popoverClose', function(/*e*/) {
+        hasDocumentClickHandler = false;
+        $document.off('mouseup', documentClickHandler);
     });
 
     return myPundit;
