@@ -1,0 +1,121 @@
+<!-- buildexamples:section header --><!-- /buildexamples -->
+
+<style>
+    .row {
+        margin-top: 20px;
+    }
+</style>
+
+<script>
+    angular.element('body').css('height', '4200px');
+
+    var punditConfig = {
+        confURL: "http://conf.thepund.it/V2/clients/eus/eus.js",
+        annotationServerBaseURL: " https://staging.punditbrain.netseven.it:8443/annotationserver/",
+        annotationServerVersion: 'v2',
+        modules: {
+            'Client': {
+                active: true,
+                basicRelations: [{
+                    "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+                    "label": "comment",
+                    "description": "Leave a comment related to the selected text fragment or web page.",
+                    "suggestedSubjectTypes": [
+                        "http://schema.org/WebPage"
+                    ],
+                    "suggestedObjectTypes": ["http://www.w3.org/2000/01/rdf-schema#Literal"],
+                    "vocabulary": "Basic Relation",
+                    "uri": "http://www.w3.org/2000/01/rdf-schema#comment"
+                }, {
+                    "type": ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"],
+                    "description" : "Any concept coming from external vocabularies (OpenSKOS/Genre, Freebase, DbPedia) and digital objects from Europeana related to the audio resource.",
+                    "label": "has tag (talks about)",
+                    "suggestedSubjectTypes": [
+                        "http://schema.org/WebPage"
+                    ],
+                    "suggestedObjectTypes": [],
+                    "vocabulary": "Basic Relation",
+                    "uri": "http://purl.org/pundit/ont/oa#talksAbout"
+                }]
+            },
+            'Toolbar': {
+                askThePundit: false
+            },
+            'FreebaseSelector': {
+                active: true
+            },
+            'DbpediaSelector': {
+                active: true
+            },
+            'EuropeanaSelector': {
+                active: true
+            },
+            'Korbo2Selector': {
+                active: true,
+                instances: [{
+                    container: 'korbo',
+                    label: 'Genre',
+                    active: true,
+                    basketID: 2,
+                    url: 'http://korbo2.org/v1',
+                    language: 'en'
+                },
+                    {
+                        container: 'mimo',
+                        label: 'Mimo',
+                        active: true,
+                        basketID: null,
+                        language: 'en',
+                        url: 'http://korbo2.org/v1'
+                    }
+
+                ],
+                limit: 999
+            },
+            'Analytics': {
+                doTracking: true,
+                trackingCode: "UA-57917488-3"
+            },
+        },
+        // useTemplates: false,
+        // useOnlyTemplateMode: true,
+        templates: [
+            "http://conf.thepund.it/V2/templates/tagFree",
+            "http://conf.thepund.it/V2/templates/comment"
+        ],
+        disableImageAnnotation: true
+
+    }
+</script>
+
+<div data-ng-app="Pundit2"></div>
+
+<div class="container pundit-content pnd-ignore" about="http://europeana.eu/portal/record/2021613/tracks_47946392.html">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <h3 class="text-center">
+                <span>Algemene sfeer op het Rembrandtplein</span>
+            </h3>
+
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-6 column">
+            <iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=http://api.soundcloud.com/tracks/47946392" width="100%" scrolling="no" frameborder="no"></iframe>
+
+        </div>
+        <div class="col-md-6 column">
+            <br><strong>dcTitle: </strong>Algemene sfeer op het Rembrandtplein							<br><strong>dcDescription: </strong>Amsterdam: terras op het Rembrandtplein
+            <br><strong>dcCreator: </strong>http://soundcloud.com/beeldengeluid							<br><strong>dcFormat: </strong>wav							<br><strong>dcIdentifier: </strong>47946392							<br><strong>dcLanguage: </strong>nl							<br><strong>dcPublisher: </strong>http://www.geluidvannederland.nl							<br><strong>edmLandingPage: </strong>http://europeana.eu/portal/record/2021613/tracks_47946392.html							<br><strong>edmIsShownBy: </strong>urn:soundcloud:47946392							<br><strong>soundcloudId: </strong>47946392							<br><strong>API: </strong>http://www.europeana.eu/api/v2/record/2021613/tracks_47946392.json?wskey=6pxFYnQHN&amp;profile=full
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <p class="text-center">
+                <a href="index.php">Home</a> | Powered by <a href="http://www.thepund.it">Pundit</a> developed by
+                <a href="http://www.netseven.it">Net7</a>
+            </p>
+
+        </div>
+    </div>
+</div>
