@@ -641,6 +641,10 @@ angular.module('Pundit2.Annotators')
         var r2 = $document[0].createRange(),
             wrapNode;
 
+        if (range.toString().length === 0) {
+            return;
+        }
+
         var modParents = parents,
             modifyWrapping = false,
             wrapWholeTextNode = false,
@@ -797,7 +801,8 @@ angular.module('Pundit2.Annotators')
                 if (xpointersHelper.isTextNode(child) && (sibling = node.childNodes[i]) && xpointersHelper.isTextNode(sibling)) {
                     sibling.nodeValue = sibling.nodeValue + child.nodeValue;
                     node.removeChild(child);
-                } else if (xpointersHelper.isElementNode(child)) {
+                }
+                else if (xpointersHelper.isElementNode(child)) {
                     xpointersHelper.mergeTextNodes(child);
                 }
             }

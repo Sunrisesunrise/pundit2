@@ -578,8 +578,7 @@ angular.module('Pundit2.Annotators')
         EventDispatcher.addListeners([
             'PndPopover.removeTemporarySelection',
             'TripleComposer.statementChange',
-            'TripleComposer.statementChanged',
-            'TripleComposer.reset'
+            'TripleComposer.statementChanged'
         ], function() {
             checkTemporaryConsolidated();
         });
@@ -589,6 +588,7 @@ angular.module('Pundit2.Annotators')
                 'PndPopover.wipeTemporarySelections',
                 'Consolidation.startConsolidate',
                 'Client.hide',
+                'TripleComposer.reset'
             ],
             function() {
                 checkTemporaryConsolidated(true);
