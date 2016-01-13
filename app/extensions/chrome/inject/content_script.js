@@ -200,3 +200,15 @@ document.addEventListener('Pundit.userLoggedStatusChanged', function(evt){
         /*NO OP*/
     });
 });
+
+document.addEventListener('Pundit.analyticsSettings', function(evt){
+    chrome.runtime.sendMessage({action: 'analyticsSettings', number: evt.detail}, function(response) {
+        /*NO OP*/
+    });
+});
+
+document.addEventListener('Pundit.analyticsTrack', function(evt){
+    chrome.runtime.sendMessage({action: 'analyticsTrack', number: evt.detail}, function(response) {
+        /*NO OP*/
+    });
+});

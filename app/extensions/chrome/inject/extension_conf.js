@@ -6,6 +6,12 @@ var punditConfig = {
         'Client': {
             active: true
         },
+        'Analytics': {
+            doTracking: true,
+            doMixpanel: true,
+            trackingCode: "UA-72358132-1",
+            chromeExtMode: true
+        },
         'Korbo2Selector': {
             active: true,
             instances: [

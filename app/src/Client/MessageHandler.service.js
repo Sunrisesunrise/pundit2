@@ -38,7 +38,7 @@ angular.module('Pundit2.Client')
     debug: false
 })
 
-.service('MessageHandler', function(MESSAGEHANDLERDEFAULTS, $document, BaseComponent, Config,
+.service('MessageHandler', function(MESSAGEHANDLERDEFAULTS, $document, BaseComponent, Config, Analytics,
     EventDispatcher, Client, Status, MyPundit, AnnotationsExchange) {
 
     var messageHandler = new BaseComponent('MessageHandler', MESSAGEHANDLERDEFAULTS);
@@ -72,6 +72,9 @@ angular.module('Pundit2.Client')
     var userStatusUpdate = function() {
         MyPundit.checkLoggedIn(true, false);
     };
+
+    // we need to do it here due to a instance order time 
+    dispatchDocumentEvent('Pundit.analyticsSettings', Analytics.options);
 
     $document.on('Pundit.hide', Client.hideClient);
     $document.on('Pundit.show', Client.showClient);

@@ -30,7 +30,7 @@ angular.module('Pundit2.Core')
      * Default value:
      * <pre> trackingCode: 'UA-XXXX-Y' </pre>
      */
-    trackingCode: 'UA-50437894-1',    
+    trackingCode: 'UA-50437894-1',
 
     /**
      * @module punditConfig
@@ -125,6 +125,21 @@ angular.module('Pundit2.Core')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#Analytics.chromeExtMode
+     *
+     * @description
+     * `boolean`
+     *
+     * Determines the chrome extension settings
+     *
+     * Default value:
+     * <pre> chromeExtMode: false </pre>
+     */
+    chromeExtMode: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#Analytics.debug
      *
      * @description
@@ -138,7 +153,7 @@ angular.module('Pundit2.Core')
     debug: false
 })
 
-.service('Analytics', function(BaseComponent, $window, $document, $interval, $timeout, ANALYTICSDEFAULTS) {
+.service('Analytics', function(BaseComponent, EventDispatcher, $window, $document, $interval, $timeout, ANALYTICSDEFAULTS) {
 
     var analytics = new BaseComponent('Analytics', ANALYTICSDEFAULTS);
 
@@ -157,9 +172,8 @@ angular.module('Pundit2.Core')
         }
     }
 
-
     // Google Analytics code
-    if (analytics.options.doTracking) {
+    if (analytics.options.doTracking && !analytics.options.chromeExtMode) {
         (function(i, s, o, g, r, a, m) {
             i.GoogleAnalyticsObject = r;
             i[r] = i[r] || function() {
@@ -187,7 +201,7 @@ angular.module('Pundit2.Core')
     }
 
     // Mixpanel code
-    if (analytics.options.doMixpanel) {
+    if (analytics.options.doMixpanel && !analytics.options.chromeExtMode) {
         (function(f, b) {
             if (!b.__SV) {
                 var a, e, i, g;
@@ -214,9 +228,9 @@ angular.module('Pundit2.Core')
                         return c.toString(1) + '.people (stub)';
                     };
                     i = 'disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user'.split(' ');
-                    for (g = 0; g < i.length; g++){
+                    for (g = 0; g < i.length; g++) {
                         f(c, i[g]);
-                    }   
+                    }
                     b._i.push([a, e, d]);
                 };
                 b.__SV = 1.2;
@@ -256,13 +270,29 @@ angular.module('Pundit2.Core')
             numSent++;
             var currentEvent = cache.events.shift();
 
-            ga('send', {
-                'hitType': 'event',
-                'eventCategory': currentEvent.eventCategory,
-                'eventAction': currentEvent.eventAction,
-                'eventLabel': currentEvent.eventLabel,
-                'eventValue': currentEvent.eventValue
-            });
+            if (analytics.options.chromeExtMode) {
+                EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                    event: 'Pundit.analyticsTrack',
+                    data: {
+                        type: 'ga',
+                        properties: [
+                            currentEvent.eventCategory,
+                            currentEvent.eventAction,
+                            currentEvent.eventLabel,
+                            currentEvent.eventValue
+                        ]
+                    }
+                });
+            } else {
+                ga('send', {
+                    'hitType': 'event',
+                    'eventCategory': currentEvent.eventCategory,
+                    'eventAction': currentEvent.eventAction,
+                    'eventLabel': currentEvent.eventLabel,
+                    'eventValue': currentEvent.eventValue
+                });
+            }
+
             currentHits--;
 
             if (!isTimeRunning) {
@@ -282,7 +312,17 @@ angular.module('Pundit2.Core')
         if (event.eventAction !== 'click') {
             return;
         }
-        mixpanel.track(event.eventLabel, event);
+        if (analytics.options.chromeExtMode) {
+            EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                event: 'Pundit.analyticsTrack',
+                data: {
+                    type: 'mixpanel',
+                    properties: event
+                }
+            });
+        } else {
+            mixpanel.track(event.eventLabel, event);
+        }
     };
 
     analytics.getHits = function() {
