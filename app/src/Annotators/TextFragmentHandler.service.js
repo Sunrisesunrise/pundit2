@@ -115,7 +115,7 @@ angular.module('Pundit2.Annotators')
 
 // TODO: remove toolbar and triplecomposer dependency 
 .service('TextFragmentHandler', function($rootScope, TEXTFRAGMENTHANDLERDEFAULTS, NameSpace, BaseComponent, TextFragmentAnnotator,
-    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, Consolidation, EventDispatcher, $document, $injector, Config) {
+    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, Consolidation, EventDispatcher, $document, $window, $injector, Config) {
 
     var textFragmentHandler = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
     var clientHidden = false;
@@ -161,6 +161,16 @@ angular.module('Pundit2.Annotators')
         if (forceWipe) {
             lastTemporaryConsolidable = undefined;
             ItemsExchange.wipeTemporaryItems();
+
+            if ($window.getSelection) {
+                if ($window.getSelection().empty) {  // Chrome
+                    $window.getSelection().empty();
+                } else if ($window.getSelection().removeAllRanges) {  // Firefox
+                    $window.getSelection().removeAllRanges();
+                }
+            } else if ($document[0].selection) {  // IE?
+                $document[0].selection.empty();
+            }
         }
     };
 
