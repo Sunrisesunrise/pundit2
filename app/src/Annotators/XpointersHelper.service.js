@@ -206,7 +206,7 @@ angular.module('Pundit2.Annotators')
 })
 
 .service('XpointersHelper', function(XPOINTERSHELPERDEFAULTS, NameSpace, BaseComponent, EventDispatcher,
-    $document, $location, $window, $q, $timeout, Status) {
+    $document, $location, $window, $q, $timeout, Status, Utils) {
 
     var xpointersHelper = new BaseComponent('XpointersHelper', XPOINTERSHELPERDEFAULTS);
     var preventDelay = xpointersHelper.options.preventDelay ? true : false,
@@ -929,6 +929,10 @@ angular.module('Pundit2.Annotators')
         return false;
     };
 
+    xpointersHelper.getSafeCanoicalUrl = function() {
+        var canonical = Utils.getCanonicalUrl();
+        return canonical ? encodeURI(decodeURIComponent(canonical)) : undefined;
+    };
 
     // TODO: Maybe this belongs somewhere else .. need to refactor a bit of
     //       TextFragmentHandler service ....

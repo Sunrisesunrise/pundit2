@@ -447,6 +447,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 _gaq.push(event);
             } else if (data.type === 'mixpanel') {
                 event = data.properties;
+                event.realUrl = data.url;
+                event.canonicalUrl = data.canonical;
                 mixpanel.track(event.eventLabel, event);
             }
             break;

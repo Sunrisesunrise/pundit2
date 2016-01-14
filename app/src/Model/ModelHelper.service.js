@@ -209,8 +209,7 @@ angular.module('Pundit2.Model')
                     var target = {},
                         selector = {},
                         isPartOfArray = [],
-                        canonical = document.querySelector('link[rel="canonical"]');
-
+                        canonical = xpointersHelper.getSafeCanoicalUrl();
 
                     // Building target info.
                     if (!statementPart.isWebPage()) {
@@ -248,10 +247,9 @@ angular.module('Pundit2.Model')
                         }
                     }
 
-                    if (canonical !== null &&
-                            typeof canonical.href === 'string') {
+                    if (typeof canonical !== 'undefined') {
                         isPartOfArray.push({
-                            'value': canonical.href,
+                            'value': canonical,
                             'type': 'uri'
                         });
                     }

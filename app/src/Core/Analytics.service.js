@@ -153,7 +153,7 @@ angular.module('Pundit2.Core')
     debug: false
 })
 
-.service('Analytics', function(BaseComponent, EventDispatcher, $window, $document, $interval, $timeout, ANALYTICSDEFAULTS) {
+.service('Analytics', function(BaseComponent, EventDispatcher, Utils, $window, $document, $interval, $timeout, ANALYTICSDEFAULTS) {
 
     var analytics = new BaseComponent('Analytics', ANALYTICSDEFAULTS);
 
@@ -317,7 +317,9 @@ angular.module('Pundit2.Core')
                 event: 'Pundit.analyticsTrack',
                 data: {
                     type: 'mixpanel',
-                    properties: event
+                    properties: event,
+                    url: window.location.href,
+                    canonical: Utils.getCanonicalUrl()
                 }
             });
         } else {

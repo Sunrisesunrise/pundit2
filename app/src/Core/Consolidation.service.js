@@ -401,7 +401,7 @@ angular.module('Pundit2.Core')
     consolidation.getAvailableTargets = function(onlyNamedContents) {
         var ret = [],
             nc = XpointersHelper.options.namedContentClasses,
-            canonical = document.querySelector('link[rel="canonical"]');
+            canonical = XpointersHelper.getSafeCanoicalUrl();
 
         // The page URL is for xpointers out of named contents
         if (typeof(onlyNamedContents) === 'undefined' || onlyNamedContents !== true) {
@@ -425,10 +425,9 @@ angular.module('Pundit2.Core')
                 }
             }
         }
-
-        if (canonical !== null &&
-                typeof canonical.href === 'string') {
-            ret.push(canonical.href);
+        
+        if (typeof canonical !== 'undefined') {
+            ret.push(canonical);
         }
 
         return ret;
