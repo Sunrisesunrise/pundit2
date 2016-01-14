@@ -273,7 +273,7 @@ angular.module('Pundit2.TripleComposer')
             name: 'comment',
             label: 'Comment',
             showIf: function(item) {
-                return true;
+                return Config.annotationServerVersion !== 'v1';
             },
             priority: 101,
             action: function(item) {
@@ -288,7 +288,7 @@ angular.module('Pundit2.TripleComposer')
             name: 'highlight',
             label: 'Highlight',
             showIf: function(item) {
-                return true;
+                return Config.annotationServerVersion !== 'v1';
             },
             priority: 101,
             action: function(item) {
