@@ -431,6 +431,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                     })(document, window.mixpanel || []);
                     mixpanel.init(options.trackingCodeMixpanel);
                 }
+                state.analytics = true;
             }
             break;
 
