@@ -66,7 +66,7 @@
 
 
     <script src="../src/Annotators/ImgMenu.dir.js"></script>
-    <script src="../src/Annotators/CHOMenu.dir.js"></script>
+
 
     <script src="../src/AlertSystem/AlertSystem.js"></script>
     <script src="../src/AlertSystem/AlertSystem.dir.js"></script>

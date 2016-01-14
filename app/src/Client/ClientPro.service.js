@@ -363,7 +363,7 @@ angular.module('Pundit2.Client')
 .service('ClientPro', function(CLIENTPRODEFAULTS, BaseComponent, Config, EventDispatcher, Analytics, MyPundit,
     ImageAnnotator, TextFragmentAnnotator, AnnotationsCommunication,
     AnnotationsExchange, Item, ItemsExchange, MyItems, Status,
-    TextFragmentHandler, ImageHandler, PageAnnotator, AnnotationSidebar, AnnotationDetails, ResizeManager,
+    TextFragmentHandler, ImageHandler,  CHOHandler, PageAnnotator, AnnotationSidebar, AnnotationDetails, ResizeManager,
     Toolbar, Annomatic, NotebookCommunication, NotebookExchange, TemplatesExchange,
     SelectorsManager, FreebaseSelector, MurucaSelector, KorboBasketSelector, Korbo2Selector, EuropeanaSelector, DbpediaSelector, GeonamesSelector, PredicateSelector,
     TemplatesSelector, TripleComposer, ImageFragmentAnnotatorHelper,
