@@ -355,6 +355,16 @@ angular.module('Pundit2.Core')
         }
     };
 
+    EventDispatcher.addListener('MyPundit.userLoggedData', function(e) {
+        EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+            event: 'Pundit.analyticsUserData',
+            data: {
+                options: analytics.options,
+                details: e.args
+            }
+        });
+    });
+
     analytics.log('Component running');
     return analytics;
 });

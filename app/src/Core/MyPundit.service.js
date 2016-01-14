@@ -245,7 +245,6 @@ angular.module('Pundit2.Core')
 
             if (data.loginStatus === 0) {
                 isUserLogged = false;
-                EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
                 $cookies.remove('pundit.User', {
                     path: '/'
                 });
@@ -262,9 +261,11 @@ angular.module('Pundit2.Core')
                     expires: expirationDate,
                     path: '/'
                 });
-                EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
+                EventDispatcher.sendEvent('MyPundit.userLoggedData', userData);
                 promise.resolve(true);
             }
+            EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
+            
             if (dispatchDocumentEvent) {
                 EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
                     event: 'Pundit.userLoggedStatusChanged',
@@ -763,7 +764,7 @@ angular.module('Pundit2.Core')
         clientHidden = false;
     });
 
-    EventDispatcher.addListener('MyPundit.popoverClose', function(/*e*/) {
+    EventDispatcher.addListener('MyPundit.popoverClose', function( /*e*/ ) {
         hasDocumentClickHandler = false;
         $document.off('mouseup', documentClickHandler);
     });

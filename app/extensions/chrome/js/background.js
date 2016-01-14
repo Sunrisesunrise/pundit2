@@ -117,7 +117,7 @@ var injectScripts = function(tabId, force, callback) {
                             tabId: tabId
                         }, function(innerResponse) {
                             if (innerResponse.reload) {
-                                console.log("reload tab");
+                                console.log('reload tab');
                                 chrome.tabs.reload(tabId);
                             }
                         });
@@ -398,40 +398,57 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                             b._i = [];
                             b.init = function(a, e, d) {
                                 function f(b, h) {
-                                    var a = h.split(".");
+                                    var a = h.split('.');
                                     2 == a.length && (b = b[a[0]], h = a[1]);
                                     b[h] = function() {
                                         b.push([h].concat(Array.prototype.slice.call(arguments, 0)))
                                     }
                                 }
                                 var c = b;
-                                "undefined" !== typeof d ? c = b[d] = [] : d = "mixpanel";
+                                'undefined' !== typeof d ? c = b[d] = [] : d = 'mixpanel';
                                 c.people = c.people || [];
                                 c.toString = function(b) {
-                                    var a = "mixpanel";
-                                    "mixpanel" !== d && (a += "." + d);
-                                    b || (a += " (stub)");
+                                    var a = 'mixpanel';
+                                    'mixpanel' !== d && (a += '.' + d);
+                                    b || (a += ' (stub)');
                                     return a
                                 };
                                 c.people.toString = function() {
-                                    return c.toString(1) + ".people (stub)"
+                                    return c.toString(1) + '.people (stub)'
                                 };
-                                i = "disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user".split(" ");
+                                i = 'disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user'.split(' ');
                                 for (g = 0; g < i.length; g++) f(c, i[g]);
                                 b._i.push([a, e, d])
                             };
                             b.__SV = 1.2;
-                            a = f.createElement("script");
-                            a.type = "text/javascript";
+                            a = f.createElement('script');
+                            a.type = 'text/javascript';
                             a.async = !0;
-                            a.src = "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";
-                            e = f.getElementsByTagName("script")[0];
+                            a.src = 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
+                            e = f.getElementsByTagName('script')[0];
                             e.parentNode.insertBefore(a, e)
                         }
                     })(document, window.mixpanel || []);
                     mixpanel.init(options.trackingCodeMixpanel);
                 }
             }
+            break;
+
+        case 'analyticsUserData':
+            var data = request.number,
+                options = data.options,
+                user = data.details;
+
+            if (options.doMixpanel) {
+                mixpanel.identify(user.id);
+                mixpanel.people.set({
+                    '$email': user.email,
+                    '$last_login': new Date(),
+                    '$first_name': user.firstName,
+                    '$last_name': user.lastName,
+                });
+            }
+
             break;
 
         case 'analyticsTrack':
@@ -449,6 +466,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 event = data.properties;
                 event.realUrl = data.url;
                 event.canonicalUrl = data.canonical;
+
                 mixpanel.track(event.eventLabel, event);
             }
             break;
