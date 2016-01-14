@@ -209,7 +209,7 @@ angular.module('Pundit2.Model')
                     var target = {},
                         selector = {},
                         isPartOfArray = [],
-                        canonical = xpointersHelper.getSafeCanoicalUrl();
+                        canonical = XpointersHelper.getSafeCanoicalUrl();
 
                     // Building target info.
                     if (!statementPart.isWebPage()) {
