@@ -178,13 +178,14 @@ angular.module('Pundit2.Core')
     ItemFactory.prototype.isImage = function() {
         return this.type.indexOf(NameSpace.types.image) !== -1;
     };
-
-    ItemFactory.prototype.isImageFragment = function() {
-        return this.type.indexOf(NameSpace.fragments.imagePart) !== -1;
+    ItemFactory.prototype.isResource = function() {
+        return this.type.indexOf(NameSpace.types.resource) !== -1;
     };
-
+    ItemFactory.prototype.isImageFragment = function() {
+    return this.type.indexOf(NameSpace.fragments.imagePart) !== -1;
+    };
     ItemFactory.prototype.isWebPage = function() {
-        return this.type.indexOf(NameSpace.types.page) !== -1;
+    return this.type.indexOf(NameSpace.types.page) !== -1;
     };
 
     // It's an entity if it's not an image, a property, a text fragment or a webpage
