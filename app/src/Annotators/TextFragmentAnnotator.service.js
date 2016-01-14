@@ -699,7 +699,7 @@ angular.module('Pundit2.Annotators')
             textFragmentAnnotator.log('Not clearing highlight on given URI: fragment id not found');
             return;
         }
-        textFragmentAnnotator.clearHighlightById(fragmentIds[uri]);
+        textFragmentAnnotator.clearHighlightById(fragmentIds[uri][0]);
     };
 
     textFragmentAnnotator.clearHighlightById = function(id) {
@@ -717,6 +717,7 @@ angular.module('Pundit2.Annotators')
         }
         var id = fragmentIds[uri];
         if (typeof fragmentById[id] === 'undefined') {
+            textFragmentAnnotator.err('Something wrog with this uri ' + uri);
             return;
         }
         for (var l = fragmentById[id].bits.length; l--;) {
@@ -731,6 +732,7 @@ angular.module('Pundit2.Annotators')
         }
         var id = fragmentIds[uri];
         if (typeof fragmentById[id] === 'undefined') {
+            textFragmentAnnotator.err('Something wrog with this uri ' + uri);
             return;
         }
         for (var l = fragmentById[id].bits.length; l--;) {
@@ -844,7 +846,7 @@ angular.module('Pundit2.Annotators')
             delete bitsQueque[newFragmentId];
         }
 
-        fragmentIds[newFragmentUri] = typeof fragmentIds[newFragmentUri] === 'undefined' ? [newFragmentId] : fragmentIds[newFragmentUri].push(newFragmentId);
+        fragmentIds[newFragmentUri] = typeof fragmentIds[newFragmentUri] === 'undefined' ? [newFragmentId] : fragmentIds[newFragmentUri].concat([newFragmentId]);
         fragmentById[newFragmentId] = {
             uri: newFragmentUri,
             bits: bits,
