@@ -716,6 +716,9 @@ angular.module('Pundit2.Annotators')
             return;
         }
         var id = fragmentIds[uri];
+        if (typeof fragmentById[id] === 'undefined') {
+            return;
+        }
         for (var l = fragmentById[id].bits.length; l--;) {
             fragmentById[id].bits[l].show();
         }
@@ -727,6 +730,9 @@ angular.module('Pundit2.Annotators')
             return;
         }
         var id = fragmentIds[uri];
+        if (typeof fragmentById[id] === 'undefined') {
+            return;
+        }
         for (var l = fragmentById[id].bits.length; l--;) {
             fragmentById[id].bits[l].hide();
         }
