@@ -420,6 +420,7 @@ angular.module('Pundit2.Toolbar')
     var updateMyNotebooks = function() {
         var notebooks = myNotebooks;
         var j = 1;
+        $scope.userNotebooksDropdown = [];
         for (var i = 0; i < notebooks.length; i++) {
             $scope.userNotebooksDropdown[j] = {
                 text: notebooks[i].label,
