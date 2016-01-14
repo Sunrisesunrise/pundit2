@@ -70,6 +70,18 @@ angular.module('Pundit2.Core')
         return false;
     };
 
+    utils.getCanonicalUrl = function() {
+        var canonical = document.querySelector('link[rel="canonical"]'),
+            url;
+
+        if (canonical !== null &&
+            typeof canonical.href === 'string') {
+            url = canonical.href;
+        }
+
+        return url;
+    };
+
     utils.generateUID = function(separator) {
         separator = separator || "-";
 
