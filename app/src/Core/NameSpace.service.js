@@ -49,7 +49,7 @@ angular.module('Pundit2.Core')
         specificResource: _oa + 'SpecificResource',
         hasScope: _oa + 'hasScope',
         hasSource: _oa + 'hasSource',
-        hasSelector: _oa + 'hasSelector'
+        hasSelector: _oa + 'hasSelector',
             /* ns.rdf.type */
             /* ns.rdf.value */
             /* ns.rdfs.label */
@@ -152,9 +152,10 @@ angular.module('Pundit2.Core')
     ns.types = {
         page: 'http://schema.org/WebPage',
         image: 'http://xmlns.com/foaf/0.1/Image',
-        resource: 'resource', // TODO to be defined
+        resource: _oa + 'resource', // TODO to be defined
         named: _pnd + 'named-content',
-        embeddedContent: _oa + 'EmbeddedContent'
+        embeddedContent: _oa + 'EmbeddedContent',
+        CHO: _pnd + 'CHO'
     };
 
     // Our types labels, will be read by the TypesHelper

@@ -15,6 +15,9 @@
         annotationServerBaseURL: " https://staging.punditbrain.netseven.it:8443/annotationserver/",
         annotationServerVersion: 'v2',
         modules: {
+            'AnnotationsCommunication': {
+                loadMultipleAnnotations: true
+            },
             'Client': {
                 active: true,
                 basicRelations: [{

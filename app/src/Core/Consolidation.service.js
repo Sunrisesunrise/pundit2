@@ -431,6 +431,8 @@ angular.module('Pundit2.Core')
             ret.push(canonical.href);
         }
 
+        ret.push('http://data.europeana.eu/item/2021613/tracks_47946392');
+
         return ret;
     };
 
