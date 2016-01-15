@@ -31,7 +31,7 @@ angular.module('Pundit2.Annotators')
     ignoreClasses: ['pnd-ignore'],
 
     // If true, when the user selects something which starts, ends or contains ignored
-    // stuff (see ignoreClasses) the selected text will get reseted
+    // stuff (see ignoreClasses) the selected text will get reset
 
     /**
      * @module punditConfig
@@ -162,15 +162,21 @@ angular.module('Pundit2.Annotators')
             lastTemporaryConsolidable = undefined;
             ItemsExchange.wipeTemporaryItems();
 
-            if ($window.getSelection) {
-                if ($window.getSelection().empty) {  // Chrome
-                    $window.getSelection().empty();
-                } else if ($window.getSelection().removeAllRanges) {  // Firefox
-                    $window.getSelection().removeAllRanges();
-                }
-            } else if ($document[0].selection) {  // IE?
-                $document[0].selection.empty();
+            removeUserSelection();
+        }
+    };
+
+    var removeUserSelection = function() {
+        if ($window.getSelection) {
+            if ($window.getSelection().empty) {  // Chrome
+                $window.getSelection().empty();
             }
+            else if ($window.getSelection().removeAllRanges) {  // Firefox
+                $window.getSelection().removeAllRanges();
+            }
+        }
+        else if ($document[0].selection) {  // IE?
+            $document[0].selection.empty();
         }
     };
 
@@ -203,6 +209,8 @@ angular.module('Pundit2.Annotators')
             temporaryConsolidated[lastTemporaryConsolidable.itemUri] = lastTemporaryConsolidable;
             ItemsExchange.setItemAsTemporary(lastTemporaryConsolidable.itemUri, true);
             lastTemporaryConsolidable = undefined;
+
+            removeUserSelection();
         }
     };
 
