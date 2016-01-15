@@ -130,14 +130,9 @@ angular.module('Pundit2.Annotators')
                         showIf: function() {
                             return true;
                         },
-                        priority: 93
+                        priority: 92
                     });
-
-
-
-
                 };
-
 
                  //read CHO coordinate and position the directive
                 var overIcon = function() {
