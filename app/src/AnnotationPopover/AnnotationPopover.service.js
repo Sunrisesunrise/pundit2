@@ -61,7 +61,7 @@ angular.module('Pundit2.AnnotationPopover')
     };
 
     var changePopoverPosition = function(mouseX, mouseY) {
-        var state = PndPopover.getState(),
+        var state = PndPopover.getState();
             distanceFromSelectionStart = Math.pow(parseInt(mouseX - state.selectionStart.offset.left), 2) + Math.pow(parseInt(mouseY - state.selectionStart.offset.top), 2),
             distanceFromSelectionEnd = Math.pow(parseInt(mouseX - state.selectionEnd.offset.left), 2) + Math.pow(parseInt(mouseY - state.selectionEnd.offset.top), 2),
             popoverRect = state.popover.$element[0].getClientRects()[0];
@@ -142,6 +142,7 @@ angular.module('Pundit2.AnnotationPopover')
             placement: 'bottom',
             alphaRollover: true,
             lockPageScroll: true,
+            needsValidSelection:(item.isTextFragment())?true:false,
             hideCallback: function() {
                 annotationPopover.log('Annotation popover hide');
                 angular.element($window).off('resize', resizeCallback);
@@ -157,13 +158,15 @@ angular.module('Pundit2.AnnotationPopover')
 
         if (promise !== false) {
             promise.then(function() {
-                changePopoverPosition(x, y);
-                PndPopover.getState().selection.removeAllRanges();
-                resizeCallback();
-                angular.element($window).on('resize', resizeCallback);
-                $timeout(function() {
+                if(state.popoverOptions.needsValidSelection){
+                    changePopoverPosition(x, y);
+                    PndPopover.getState().selection.removeAllRanges();
                     resizeCallback();
-                }, 15);
+                    angular.element($window).on('resize', resizeCallback);
+                    $timeout(function() {
+                        resizeCallback();
+                    }, 15);
+                }
             }, function() {
                 annotationPopover.log(arguments);
             });
