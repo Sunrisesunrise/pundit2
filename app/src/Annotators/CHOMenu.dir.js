@@ -4,7 +4,7 @@ angular.module('Pundit2.Annotators')
 
     .directive('choMenu', function($rootScope, NameSpace, ContextualMenu,
         Toolbar, ImageHandler, ImageAnnotator, ItemsExchange, TemplatesExchange,
-        TripleComposer, EventDispatcher, Item, AnnotationPopover) {
+        TripleComposer, EventDispatcher, Item, AnnotationPopover, XpointersHelper) {
 
         return {
             restrict: 'C',
@@ -23,7 +23,8 @@ angular.module('Pundit2.Annotators')
                     values.cMenuType = "CHOHandlerItem";
                     values.name  = "bla bla"
                     values.label =  CHOElem.attr('pnd-resource');
-                    values.type = values.type = [NameSpace.types.image]; // TODO to be defined
+                    values.type = values.type = [NameSpace.types.resource]; // TODO to be defined
+                    values.pageContext = XpointersHelper.getSafePageContext();
 
                     return new Item(values.uri, values);
                 };
