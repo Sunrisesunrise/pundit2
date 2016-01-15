@@ -135,7 +135,16 @@ angular.module('Pundit2.Core')
      *
      */
     myPundit.isUserLogged = function () {
-        return isUserLogged;
+        if (!myPundit.useCookies) {
+            return isUserLogged;
+        }
+
+        var cookieUserdata = $cookies.getObject('pundit_' + annotationServerBaseURLHash + '_User');
+        if (typeof cookieUserdata !== 'undefined' && cookieUserdata !== null && cookieUserdata.loginStatus === 1) {
+            return true;
+        }
+
+        return false;
     };
 
     // used only in test
