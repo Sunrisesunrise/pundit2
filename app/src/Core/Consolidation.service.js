@@ -431,6 +431,7 @@ angular.module('Pundit2.Core')
             ret.push(canonical.href);
         }
 
+        // TODO: read the uri from the proper span
         ret.push('http://data.europeana.eu/item/2021613/tracks_47946392');
 
         return ret;
