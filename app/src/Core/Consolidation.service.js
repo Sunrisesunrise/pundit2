@@ -54,7 +54,7 @@ angular.module('Pundit2.Core')
      *
      * Default value:
      * <pre> bufferDelay: undefined </pre>
-     */
+*/
     preventDelay: undefined
 })
 

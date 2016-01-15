@@ -19,7 +19,7 @@ angular.module('Pundit2.Annotators')
                 var createItemFromCHO = function(CHOElem) {
                     var values = {};
 
-                    values.uri = CHOElem.attr('pnd-resource');
+                    values.uri = CHOElem.attr('about');
                     values.cMenuType = "CHOHandlerItem";
                     values.name  = "bla bla"
                     values.label =  CHOElem.parent().text().trim();

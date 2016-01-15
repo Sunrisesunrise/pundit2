@@ -61,11 +61,11 @@ angular.module('Pundit2.Annotators')
         var CHO = new BaseComponent('CHOHandler', CHOHANDLERDEFAULTS);
 
         //find pnd-resource
-        var CHOElem = angular.element("[pnd-resource]");
+        var CHOElem = angular.element(".pnd-resource");
         //add directive attribute
         CHOElem.addClass("cho-menu");
         //compile the DOM
-        $compile(angular.element("[pnd-resource]"))($rootScope);
+        $compile(angular.element(".pnd-resource"))($rootScope);
 
         return CHO;
 
