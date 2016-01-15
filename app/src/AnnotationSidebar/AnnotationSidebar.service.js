@@ -320,7 +320,7 @@ angular.module('Pundit2.AnnotationSidebar')
 .service('AnnotationSidebar', function(ANNOTATIONSIDEBARDEFAULTS, $rootScope, $filter, $timeout, $injector,
     BaseComponent, EventDispatcher, AnnotationsExchange, Consolidation, TypesHelper,
     BrokenHelper, ItemsExchange, NotebookExchange, TextFragmentAnnotator, NameSpace,
-    PageItemsContainer, XpointersHelper, Analytics, Config) {
+    PageItemsContainer, XpointersHelper, MyPundit, Analytics, Config) {
 
     var annotationSidebar = new BaseComponent('AnnotationSidebar', ANNOTATIONSIDEBARDEFAULTS);
 
@@ -350,6 +350,8 @@ angular.module('Pundit2.AnnotationSidebar')
         types: {},
         broken: {}
     };
+
+    var isUserLogged = false;
 
     var clientMode = Config.clientMode,
         Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined,
@@ -797,7 +799,7 @@ angular.module('Pundit2.AnnotationSidebar')
             niceItem = annotation.items[target];
 
         if (typeof niceItem !== 'undefined') {
-           annotation.allLabels = niceItem.description;
+            annotation.allLabels = niceItem.description;
         }
     };
 
@@ -1239,6 +1241,10 @@ angular.module('Pundit2.AnnotationSidebar')
         return state.isSuggestionsPanelActive;
     };
     annotationSidebar.activateSuggestionsPanel = function() {
+        if (isUserLogged === false) {
+            MyPundit.login();
+            return;
+        }
         if (state.isAnnotationsPanelActive) {
             if (state.isFiltersExpanded) {
                 state.isFiltersExpanded = false;
@@ -1422,6 +1428,17 @@ angular.module('Pundit2.AnnotationSidebar')
     // TODO: find a better flow for user experience
     EventDispatcher.addListener('MyItems.itemAdded', function() {
         annotationSidebar.resetFilters();
+    });
+
+    EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
+        isUserLogged = e.args;
+        if (!isUserLogged && state.isSuggestionsPanelActive) {
+            Annomatic.stop();
+            EventDispatcher.sendEvent('AnnotationSidebar.activateAnnotationsPanel');
+
+            state.isAnnotationsPanelActive = true;
+            state.isSuggestionsPanelActive = false;
+        }
     });
 
     EventDispatcher.addListener('Client.hide', function( /*e*/ ) {

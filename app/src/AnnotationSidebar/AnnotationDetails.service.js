@@ -64,7 +64,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
 .service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $window, $modal, $injector, $q,
     BaseComponent, Config, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, ModelHelper, TemplatesExchange,
-    Consolidation, ContextualMenu, ItemsExchange, MyPundit, TextFragmentAnnotator,
+    Consolidation, ContextualMenu, ItemsExchange, MyPundit, TextFragmentAnnotator, Status,
     ImageAnnotator, AnnotationsCommunication, NotebookExchange, TypesHelper, Analytics, NameSpace) {
 
     var annotationDetails = new BaseComponent('AnnotationDetails', ANNOTATIONDETAILSDEFAULTS);
@@ -647,7 +647,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var annotationId = e.args,
             targetAnnotation,
-            currentAnnotation;
+            currentAnnotation,
+            annomaticIsRunning;
 
         if (typeof(annotationId) !== 'undefined') {
 
@@ -664,6 +665,11 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             annotationDetails.closeAllAnnotationView(annotationId);
             annotationDetails.addAnnotationReference(targetAnnotation, true);
+
+            annomaticIsRunning = Status.getState('Annomatic').isRunning;
+            if (annomaticIsRunning) {
+                return;
+            }
 
             $timeout(function() {
                 var currentElement = angular.element('#' + annotationId),
