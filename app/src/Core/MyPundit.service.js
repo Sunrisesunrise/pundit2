@@ -70,9 +70,6 @@ angular.module('Pundit2.Core')
     var myPundit = new BaseComponent('MyPundit', MYPUNDITDEFAULTS);
 
     var annotationServerBaseURLHash = md5.createHash(Config.annotationServerBaseURL);
-    console.log("Config.annotationServerBaseURL");
-    console.log(Config.annotationServerBaseURL);
-    console.log(annotationServerBaseURLHash);
 
     var isUserLogged = false;
     var loginServer,
