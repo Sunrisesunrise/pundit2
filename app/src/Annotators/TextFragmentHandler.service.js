@@ -351,7 +351,9 @@ angular.module('Pundit2.Annotators')
             // If it's a text node: skip ignore nodes, counting text/element nodes
             while (currentNode = lastNode.previousSibling) { // jshint ignore:line
                 if (check1(currentNode) && (check2(lastNode) || xp.isWrappedElementNode(lastNode))) {
-                    cleanN++;
+                    if (!(xp.isTextNode(currentNode) && currentNode.nodeValue.length === 0)) {
+                        cleanN++;
+                    }
                 }
                 lastNode = currentNode;
             } // while current_node
