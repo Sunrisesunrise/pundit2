@@ -84,7 +84,7 @@ angular.module('Pundit2.Annotators')
      * Add or not the icon to the text fragments
      *
      * Default value:
-     * <pre> addIcon: 'true' </pre>
+     * <pre> addIcon: 'false' </pre>
      */
     addIcon: false,
 
@@ -807,7 +807,7 @@ angular.module('Pundit2.Annotators')
             }
             if (typeof fragmentsRefsById[currentFragment] === 'undefined') {
                 fragmentsRefsById[currentFragment] = [elementReferce];
-                if (textFragmentAnnotator.options.addIcon) {
+                if (textFragmentAnnotator.options.addIcon || annomaticIsRunning) {
                     currentIcon = placeIcon(currentFragment, elementReferce);
                     $compile(currentIcon)($rootScope);
                 }
