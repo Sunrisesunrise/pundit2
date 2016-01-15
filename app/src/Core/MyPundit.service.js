@@ -64,30 +64,36 @@ angular.module('Pundit2.Core')
  *
  *
  */
-.service('MyPundit', function(MYPUNDITDEFAULTS, Config, $http, $q, $timeout, $modal, $window, $document, $interval,
-    BaseComponent, EventDispatcher, NameSpace, Analytics, $popover, $rootScope, $cookies) {
+.service('MyPundit', function (MYPUNDITDEFAULTS, Config, $http, $q, $timeout, $modal, $window, $document, $interval,
+                               BaseComponent, EventDispatcher, NameSpace, Analytics, $popover, $rootScope, $cookies, md5) {
 
     var myPundit = new BaseComponent('MyPundit', MYPUNDITDEFAULTS);
 
+    var annotationServerBaseURLHash = md5.createHash(Config.annotationServerBaseURL);
+    console.log("Config.annotationServerBaseURL");
+    console.log(Config.annotationServerBaseURL);
+    console.log(annotationServerBaseURLHash);
+
     var isUserLogged = false;
     var loginServer,
-        editProfile,
-        loginStatus,
-        userData = {},
-        hasDocumentClickHandler = false,
-        infoCookie = {
-            templateLabel: undefined,
-            templateId: undefined,
-            templateColor: undefined,
-            notebookLabel: undefined
-        };
+    editProfile,
+    loginStatus,
+    userData = {},
+    hasDocumentClickHandler = false,
+    infoCookie = {
+        templateLabel: undefined,
+        templateId: undefined,
+        templateColor: undefined,
+        notebookLabel: undefined
+    };
 
-    var loginExecute = function(where, popoverPlacement, skipClose) {
+    var loginExecute = function (where, popoverPlacement, skipClose) {
         loginPromise = $q.defer();
 
         if (myPundit.isUserLogged()) {
             loginPromise.resolve(true);
-        } else {
+        }
+        else {
             loginStatus = 'loggedOff';
             myPundit.popoverLogin(where, popoverPlacement, skipClose);
         }
@@ -112,7 +118,7 @@ angular.module('Pundit2.Core')
      * * `waitingForLogIn`: when authentication workflow is running but user is not logged in yet
      *
      */
-    myPundit.getLoginStatus = function() {
+    myPundit.getLoginStatus = function () {
         return loginStatus;
     };
 
@@ -128,12 +134,12 @@ angular.module('Pundit2.Core')
      * @return {boolean} true if user is logged in, false otherwise
      *
      */
-    myPundit.isUserLogged = function() {
+    myPundit.isUserLogged = function () {
         return isUserLogged;
     };
 
     // used only in test
-    myPundit.setIsUserLogged = function(bool) {
+    myPundit.setIsUserLogged = function (bool) {
         isUserLogged = bool;
     };
 
@@ -158,21 +164,21 @@ angular.module('Pundit2.Core')
      * * `loginServer` - `{string}`: url to server login page
      *
      */
-    myPundit.getUserData = function() {
+    myPundit.getUserData = function () {
         if (userData !== '' && typeof(userData) !== 'undefined') {
             return userData;
         }
     };
 
-    myPundit.getInfoCookie = function() {
+    myPundit.getInfoCookie = function () {
         return infoCookie;
     };
 
-    myPundit.setInfoCookie = function(data) {
+    myPundit.setInfoCookie = function (data) {
         angular.extend(infoCookie, data);
         var expirationDate = (new Date()).getTime() + myPundit.options.userCookieExpireTime;
         expirationDate = new Date(expirationDate);
-        $cookies.putObject('pundit.Info', infoCookie, {
+        $cookies.putObject('pundit_' + annotationServerBaseURLHash + '_Info', infoCookie, {
             expires: expirationDate,
             path: '/'
         });
@@ -190,9 +196,9 @@ angular.module('Pundit2.Core')
      * @returns {Promise} the promise will be resolved as true if is logged in, false otherwise
      *
      */
-    myPundit.checkLoggedIn = function(forceHttpCall, dispatchDocumentEvent) {
+    myPundit.checkLoggedIn = function (forceHttpCall, dispatchDocumentEvent) {
         var promise = $q.defer(),
-            httpCall;
+        httpCall;
 
         if (typeof forceHttpCall === 'undefined') {
             forceHttpCall = false;
@@ -204,8 +210,8 @@ angular.module('Pundit2.Core')
         expirationDate = new Date(expirationDate);
 
         if (myPundit.useCookies && !forceHttpCall) {
-            var cookieUserdata = $cookies.getObject('pundit.User');
-            var cookieInfo = $cookies.getObject('pundit.Info');
+            var cookieUserdata = $cookies.getObject('pundit_' + annotationServerBaseURLHash + '_User');
+            var cookieInfo = $cookies.getObject('pundit_' + annotationServerBaseURLHash + '_Info');
             angular.extend(infoCookie, cookieInfo);
             if (typeof cookieUserdata !== 'undefined' && cookieUserdata !== null && cookieUserdata.loginStatus === 1) {
                 isUserLogged = true;
@@ -213,16 +219,16 @@ angular.module('Pundit2.Core')
                 userData = cookieUserdata;
                 loginServer = userData.loginServer;
                 editProfile = userData.editProfile;
-                $cookies.putObject('pundit.User', cookieUserdata, {
+                $cookies.putObject('pundit_' + annotationServerBaseURLHash + '_User', cookieUserdata, {
                     expires: expirationDate,
                     path: '/'
                 });
                 EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
-                $timeout(function() {
+                $timeout(function () {
                     promise.resolve(true);
                 }, 5);
 
-                $timeout(function() {
+                $timeout(function () {
                     myPundit.checkLoggedIn(true);
                 }, 500);
 
@@ -238,26 +244,28 @@ angular.module('Pundit2.Core')
             url: NameSpace.get('asUsersCurrent'),
             withCredentials: true
 
-        }).success(function(data) {
+        }).success(function (data) {
             loginServer = data.loginServer;
             editProfile = data.editProfile;
             // user is not logged in
 
             if (data.loginStatus === 0) {
                 isUserLogged = false;
-                $cookies.remove('pundit.User', {
+                EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
+                $cookies.remove('pundit_' + annotationServerBaseURLHash + '_User', {
                     path: '/'
                 });
-                $cookies.remove('pundit.Info', {
+                $cookies.remove('pundit_' + annotationServerBaseURLHash + '_Info', {
                     path: '/'
                 });
                 promise.resolve(false);
-            } else {
+            }
+            else {
                 // user is logged in
                 isUserLogged = true;
                 loginStatus = 'loggedIn';
                 userData = data;
-                $cookies.putObject('pundit.User', data, {
+                $cookies.putObject('pundit_' + annotationServerBaseURLHash + '_User', data, {
                     expires: expirationDate,
                     path: '/'
                 });
@@ -272,7 +280,7 @@ angular.module('Pundit2.Core')
                     data: null
                 });
             }
-        }).error(function() {
+        }).error(function () {
             myPundit.err('Server error');
             EventDispatcher.sendEvent('Pundit.alert', {
                 title: 'Oops! Something went wrong.',
@@ -303,22 +311,23 @@ angular.module('Pundit2.Core')
      * @returns {Promise} the promise will be resolved as true when user has finished authentication and is logged in correctly, false otherwise
      *
      */
-    myPundit.login = function(popoverPlacement) {
+    myPundit.login = function (popoverPlacement) {
         return loginExecute('login', popoverPlacement, false);
     };
 
-    myPundit.loginWithoutSwitch = function(popoverPlacement) {
+    myPundit.loginWithoutSwitch = function (popoverPlacement) {
         return loginExecute('login', popoverPlacement, true);
     };
 
     // TODO remove it, remove the old login popup and manage popover in unit test 
-    myPundit.oldLogin = function() {
+    myPundit.oldLogin = function () {
 
         loginPromise = $q.defer();
 
         if (myPundit.isUserLogged()) {
             loginPromise.resolve(true);
-        } else {
+        }
+        else {
             loginStatus = 'loggedOff';
             myPundit.openLoginPopUp();
         }
@@ -344,7 +353,7 @@ angular.module('Pundit2.Core')
      * If user close modal login, promise will be resolved as false
      *
      */
-    myPundit.openLoginPopUp = function() {
+    myPundit.openLoginPopUp = function () {
 
         $timeout.cancel(loginPollTimer);
         if (typeof(loginPromise) === 'undefined') {
@@ -356,40 +365,41 @@ angular.module('Pundit2.Core')
             //     myPundit.err('Login server url not defined, something wrong with client boot (?)');
             //     loginPromise.reject('login error');
             //     return;
-        } else {
+        }
+        else {
             // login status is waiting for login
             loginStatus = 'waitingForLogIn';
 
             // open popup to get login
             var loginpopup = $window.open(loginServer, 'loginpopup', 'left=260,top=120,width=480,height=360');
 
-            var stopTime = $interval(function() {
+            var stopTime = $interval(function () {
                 if (typeof(loginpopup) !== 'undefined' && (loginpopup.closed || loginpopup === null)) {
                     $interval.cancel(stopTime);
-                    $timeout(function() {
+                    $timeout(function () {
                         $timeout.cancel(loginPollTimer);
                     }, 5000);
                 }
             }, 1000);
 
             // polls for login happened
-            var check = function() {
+            var check = function () {
 
                 var promise = myPundit.checkLoggedIn();
                 promise.then(
-                    // success
-                    function(isUserLogged) {
-                        if (isUserLogged) {
-                            loginPromise.resolve(true);
-                            $interval.cancel(stopTime);
-                            $timeout.cancel(loginPollTimer);
-                            Analytics.track('main-events', 'user--login');
-                            loginpopup.close();
-                        }
-                    },
-                    function() {
-                        loginPromise.reject('login error');
+                // success
+                function (isUserLogged) {
+                    if (isUserLogged) {
+                        loginPromise.resolve(true);
+                        $interval.cancel(stopTime);
+                        $timeout.cancel(loginPollTimer);
+                        Analytics.track('main-events', 'user--login');
+                        loginpopup.close();
                     }
+                },
+                function () {
+                    loginPromise.reject('login error');
+                }
                 ); // end promise.then
 
                 loginPollTimer = $timeout(check, myPundit.options.loginPollTimerMS);
@@ -397,7 +407,7 @@ angular.module('Pundit2.Core')
 
             check();
 
-            $timeout(function() {
+            $timeout(function () {
                 $timeout.cancel(loginPollTimer);
                 //loginPromise.reject('login error');
                 loginPromise.resolve(false);
@@ -421,10 +431,10 @@ angular.module('Pundit2.Core')
      * @returns {Promise} the promise will be resolved as true when user is logged out
      *
      */
-    myPundit.logout = function() {
+    myPundit.logout = function () {
 
         var logoutPromise = $q.defer(),
-            httpCallLogout;
+        httpCallLogout;
 
         httpCallLogout = $http({
             headers: {
@@ -434,7 +444,7 @@ angular.module('Pundit2.Core')
             url: NameSpace.get('asUsersLogout'),
             withCredentials: true
 
-        }).success(function() {
+        }).success(function () {
             isUserLogged = false;
             EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
             userData = {};
@@ -444,14 +454,14 @@ angular.module('Pundit2.Core')
                 event: 'Pundit.userProfileUpdated',
                 data: null
             });
-        }).error(function() {
+        }).error(function () {
             logoutPromise.reject('logout promise error');
         });
 
-        $cookies.remove('pundit.User', {
+        $cookies.remove('pundit_' + annotationServerBaseURLHash + '_User', {
             path: '/'
         });
-        $cookies.remove('pundit.Info', {
+        $cookies.remove('pundit_' + annotationServerBaseURLHash + '_Info', {
             path: '/'
         });
 
@@ -472,7 +482,7 @@ angular.module('Pundit2.Core')
             // container: '.pnd-wrp',
             trigger: 'manual'
         },
-        renderIFrame: function(where) {
+        renderIFrame: function (where) {
             var iframeSrc = '';
             switch (where) {
                 case 'login':
@@ -484,16 +494,16 @@ angular.module('Pundit2.Core')
             }
             angular.element(".pnd-login-popover-container .iframe-container iframe").remove();
             angular.element(".pnd-login-popover-container .iframe-container")
-                .append('<iframe src="' + iframeSrc + '"></iframe>');
+            .append('<iframe src="' + iframeSrc + '"></iframe>');
             popoverState.popover.$scope.isLoading = true;
             popoverState.popover.$scope.postLoginPreCheck = false;
             popoverState.popover.$scope.loginSuccess = false;
             popoverState.popover.$scope.loginSomeError = false;
         },
-        loginSuccess: function() {
+        loginSuccess: function () {
             popoverState.popover.$scope.autoCloseIn = popoverState.autoCloseWait;
             popoverState.popover.$scope.loginSuccess = true;
-            popoverState.autoCloseIntervall = $interval(function() {
+            popoverState.autoCloseIntervall = $interval(function () {
                 if (popoverState.popover === null || typeof popoverState.popover === 'undefined') {
                     $interval.cancel(popoverState.autoCloseIntervall);
                     return;
@@ -503,7 +513,8 @@ angular.module('Pundit2.Core')
                 if (sec < 1) {
                     $interval.cancel(popoverState.autoCloseIntervall);
                     myPundit.closeLoginPopover();
-                } else {
+                }
+                else {
                     popoverState.popover.$scope.autoCloseIn = sec;
                 }
             }, 1000);
@@ -512,7 +523,7 @@ angular.module('Pundit2.Core')
     };
 
     var updateUser = false;
-    var popoverLoginPostMessageHandler = function(params) {
+    var popoverLoginPostMessageHandler = function (params) {
         if (popoverState.popover === null || typeof popoverState.popover.$scope === 'undefined') {
             return;
         }
@@ -521,76 +532,90 @@ angular.module('Pundit2.Core')
             if (params.data === 'loginPageLoaded' || params.data === 'pageLoaded') {
                 popoverState.popover.$scope.isLoading = false;
                 popoverState.popover.$scope.$digest();
-            } else if (params.data === 'loginCheck') {
-                popoverState.popover.$scope.isLoading = true;
-                popoverState.popover.$scope.postLoginPreCheck = true;
-                popoverState.popover.$scope.$digest();
-            } else if (params.data === 'profileSuccessfullyUpdated') {
-                $timeout.cancel(popoverState.autoCloseTimeout);
-                popoverState.autoCloseTimeout = $timeout(function() {
-                    myPundit.closeLoginPopover();
-                }, 2500);
-                if (!updateUser) {
-                    console.log("updating user name by event");
-                    updateUser = true;
-                    EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
-                        event: 'Pundit.userProfileUpdated',
-                        data: null
-                    });
-                    myPundit.checkLoggedIn(true).then(function() {
-                        updateUser = false;
-                        $rootScope.$$phase || $rootScope.$digest();
-                    });
+            }
+            else {
+                if (params.data === 'loginCheck') {
+                    popoverState.popover.$scope.isLoading = true;
+                    popoverState.popover.$scope.postLoginPreCheck = true;
+                    popoverState.popover.$scope.$digest();
                 }
-            } else if (params.data === 'forcePopoverClose') {
-                if (typeof popoverState.autoCloseTimeout !== 'undefined' && popoverState.autoCloseTimeout !== null) {
-                    $timeout.cancel(popoverState.autoCloseTimeout);
-                }
-                if (typeof popoverState.autoCloseIntervall !== 'undefined' && popoverState.autoCloseIntervall !== null) {
-                    $interval.cancel(popoverState.autoCloseIntervall);
-                }
-                if (!updateUser) {
-                    console.log("updating user name by force close");
-                    updateUser = true;
-                    $timeout(function() {
-                        EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
-                            event: 'Pundit.userProfileUpdated',
-                            data: null
-                        });
-                        myPundit.checkLoggedIn(true).then(function() {
-                            updateUser = false;
-                            $rootScope.$$phase || $rootScope.$digest();
-                        });
-                    }, 50);
-                }
-                myPundit.closeLoginPopover();
-            } else if (params.data === 'userLoggedIn') {
-                popoverState.popover.$scope.postLoginPreCheck = true;
-                myPundit.checkLoggedIn().then(function(status) {
-                    popoverState.popover.$scope.isLoading = false;
-                    if (status) {
-                        popoverState.loginSuccess();
-                        loginPromise.resolve(true);
-                    } else {
-                        popoverState.popover.$scope.loginSomeError = true;
-                        loginPromise.resolve(false);
+                else {
+                    if (params.data === 'profileSuccessfullyUpdated') {
+                        $timeout.cancel(popoverState.autoCloseTimeout);
+                        popoverState.autoCloseTimeout = $timeout(function () {
+                            myPundit.closeLoginPopover();
+                        }, 2500);
+                        if (!updateUser) {
+                            console.log("updating user name by event");
+                            updateUser = true;
+                            EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                                event: 'Pundit.userProfileUpdated',
+                                data: null
+                            });
+                            myPundit.checkLoggedIn(true).then(function () {
+                                updateUser = false;
+                                $rootScope.$$phase || $rootScope.$digest();
+                            });
+                        }
                     }
-                }, function() {
-                    popoverState.popover.$scope.isLoading = false;
-                    popoverState.popover.$scope.loginSomeError = true;
-                    myPundit.err('popoverLoginPostMessageHandler error');
-                });
+                    else {
+                        if (params.data === 'forcePopoverClose') {
+                            if (typeof popoverState.autoCloseTimeout !== 'undefined' && popoverState.autoCloseTimeout !== null) {
+                                $timeout.cancel(popoverState.autoCloseTimeout);
+                            }
+                            if (typeof popoverState.autoCloseIntervall !== 'undefined' && popoverState.autoCloseIntervall !== null) {
+                                $interval.cancel(popoverState.autoCloseIntervall);
+                            }
+                            if (!updateUser) {
+                                console.log("updating user name by force close");
+                                updateUser = true;
+                                $timeout(function () {
+                                    EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                                        event: 'Pundit.userProfileUpdated',
+                                        data: null
+                                    });
+                                    myPundit.checkLoggedIn(true).then(function () {
+                                        updateUser = false;
+                                        $rootScope.$$phase || $rootScope.$digest();
+                                    });
+                                }, 50);
+                            }
+                            myPundit.closeLoginPopover();
+                        }
+                        else {
+                            if (params.data === 'userLoggedIn') {
+                                popoverState.popover.$scope.postLoginPreCheck = true;
+                                myPundit.checkLoggedIn().then(function (status) {
+                                    popoverState.popover.$scope.isLoading = false;
+                                    if (status) {
+                                        popoverState.loginSuccess();
+                                        loginPromise.resolve(true);
+                                    }
+                                    else {
+                                        popoverState.popover.$scope.loginSomeError = true;
+                                        loginPromise.resolve(false);
+                                    }
+                                }, function () {
+                                    popoverState.popover.$scope.isLoading = false;
+                                    popoverState.popover.$scope.loginSomeError = true;
+                                    myPundit.err('popoverLoginPostMessageHandler error');
+                                });
+                            }
+                        }
+                    }
+                }
             }
         }
     };
 
-    var clearOldListeners = function() {
+    var clearOldListeners = function () {
         if (typeof window.punditPostMessageListeners !== 'undefined') {
             // clear old listeners.
             for (var i in window.punditPostMessageListeners) {
                 if (window.addEventListener) {
                     window.removeEventListener("message", window.punditPostMessageListeners[i]);
-                } else {
+                }
+                else {
                     if (window.attachEvent) {
                         window.detachEvent("onmessage", window.punditPostMessageListeners[i]);
                     }
@@ -600,11 +625,12 @@ angular.module('Pundit2.Core')
         window.punditPostMessageListeners = [];
     };
 
-    myPundit.addPostMessageListener = function() {
+    myPundit.addPostMessageListener = function () {
         clearOldListeners();
         if (window.addEventListener) {
             window.addEventListener("message", popoverLoginPostMessageHandler, false);
-        } else {
+        }
+        else {
             if (window.attachEvent) {
                 window.attachEvent("onmessage", popoverLoginPostMessageHandler, false);
             }
@@ -613,7 +639,7 @@ angular.module('Pundit2.Core')
     };
 
 
-    myPundit.removePostMessageListener = function() {
+    myPundit.removePostMessageListener = function () {
         clearOldListeners();
     };
 
@@ -622,7 +648,7 @@ angular.module('Pundit2.Core')
     myPundit.addPostMessageListener();
 
     // TODO This is not really a popoverLogin but more a popover toggler
-    myPundit.popoverLogin = function(where, popoverPlacement, skipClose) {
+    myPundit.popoverLogin = function (where, popoverPlacement, skipClose) {
         if (typeof(loginPromise) === 'undefined' && where !== 'editProfile') {
             return;
             // loginPromise = $q.defer();
@@ -661,11 +687,14 @@ angular.module('Pundit2.Core')
                 return loginPromise.promise;
             }
             popoverState.popover = $popover(anchor, popoverOptions);
-        } else if (where === 'editProfile') {
-            anchor = angular.element(".pnd-user-button");
-            popoverState.popover = $popover(anchor, popoverOptions);
-            if (anchor.length === 0) {
-                return;
+        }
+        else {
+            if (where === 'editProfile') {
+                anchor = angular.element(".pnd-user-button");
+                popoverState.popover = $popover(anchor, popoverOptions);
+                if (anchor.length === 0) {
+                    return;
+                }
             }
         }
 
@@ -676,15 +705,15 @@ angular.module('Pundit2.Core')
         // TODO ???
         // popoverState.popover.$scope.loadedContent = function() {};
 
-        popoverState.popover.$scope.closePopover = function() {
+        popoverState.popover.$scope.closePopover = function () {
             myPundit.closeLoginPopover();
         };
 
-        popoverState.popover.$scope.loginRetry = function() {
+        popoverState.popover.$scope.loginRetry = function () {
             popoverState.renderIFrame();
         };
 
-        popoverState.popover.$promise.then(function() {
+        popoverState.popover.$promise.then(function () {
             popoverState.popover.show();
             EventDispatcher.sendEvent('MyPundit.popoverOpen');
             popoverState.renderIFrame(where);
@@ -696,7 +725,7 @@ angular.module('Pundit2.Core')
         }
     };
 
-    var checkPopoverPosition = function() {
+    var checkPopoverPosition = function () {
         var popoverRect = popoverState.popover.$element[0].getClientRects()[0];
         var pageVisibleRight = $window.innerWidth + $window.scrollX;
         if ($window.scrollX + popoverRect.right > pageVisibleRight) {
@@ -710,11 +739,11 @@ angular.module('Pundit2.Core')
         }
     };
 
-    myPundit.getLoginPopoverSrc = function() {
+    myPundit.getLoginPopoverSrc = function () {
         return popoverState.loginSrc;
     };
 
-    myPundit.closeLoginPopover = function() {
+    myPundit.closeLoginPopover = function () {
         if (popoverState.popover === null) {
             return;
         }
@@ -726,12 +755,12 @@ angular.module('Pundit2.Core')
 
     };
 
-    var documentClickHandler = function(evt) {
+    var documentClickHandler = function (evt) {
         // Closes popover login when clicking outside
         myPundit.closeLoginPopover();
     }
 
-    myPundit.editProfile = function() {
+    myPundit.editProfile = function () {
         if (!isUserLogged) {
             myPundit.err('User not logged');
             return;
@@ -739,32 +768,32 @@ angular.module('Pundit2.Core')
         myPundit.popoverLogin('editProfile');
     };
 
-    myPundit.checkUserCookie = function() {
+    myPundit.checkUserCookie = function () {
         // TODO: expand this check
-        $cookies.remove('pundit.User', {
+        $cookies.remove('pundit_' + annotationServerBaseURLHash + '_User', {
             path: '/'
         });
-        $cookies.remove('pundit.Info', {
+        $cookies.remove('pundit_' + annotationServerBaseURLHash + '_Info', {
             path: '/'
         });
     };
 
     var clientHidden = false;
-    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
+    EventDispatcher.addListener('Client.hide', function (/*e*/) {
         if (!clientHidden) {
             myPundit.removePostMessageListener();
         }
         clientHidden = true;
     });
 
-    EventDispatcher.addListener('Client.show', function( /*e*/ ) {
+    EventDispatcher.addListener('Client.show', function (/*e*/) {
         if (clientHidden) {
             myPundit.addPostMessageListener();
         }
         clientHidden = false;
     });
 
-    EventDispatcher.addListener('MyPundit.popoverClose', function( /*e*/ ) {
+    EventDispatcher.addListener('MyPundit.popoverClose', function (/*e*/) {
         hasDocumentClickHandler = false;
         $document.off('mouseup', documentClickHandler);
     });
