@@ -22,7 +22,7 @@ angular.module('Pundit2.Annotators')
                     values.uri = CHOElem.attr('pnd-resource');
                     values.cMenuType = "CHOHandlerItem";
                     values.name  = "bla bla"
-                    values.label =  CHOElem.attr('pnd-resource');
+                    values.label =  CHOElem.parent().text().trim();
                     values.type = values.type = [NameSpace.types.resource]; // TODO to be defined
                     values.pageContext = XpointersHelper.getSafePageContext();
 
