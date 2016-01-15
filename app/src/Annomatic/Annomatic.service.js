@@ -84,9 +84,9 @@ angular.module('Pundit2.Annomatic')
      * or the complete object as pundit property convention ({uri, type, label, range, domain ...})
      *
      * Default value:
-     * <pre> property: 'http://purl.org/pundit/ont/oa#isRelatedTo' </pre>
+     * <pre> property: 'http://www.w3.org/2004/02/skos/core#related' </pre>
      */
-    property: 'http://purl.org/pundit/ont/oa#isRelatedTo',
+    property: 'http://www.w3.org/2004/02/skos/core#related',
 
     /**
      * @module punditConfig
@@ -114,7 +114,7 @@ angular.module('Pundit2.Annomatic')
      * Active/Disactive partial selection
      *
      * Default value:
-     * <pre> property: 'http://purl.org/pundit/ont/oa#isRelatedTo' </pre>
+     * <pre> partialSelection: false </pre>
      */
     partialSelection: false
 })
@@ -130,9 +130,15 @@ angular.module('Pundit2.Annomatic')
 .service('Annomatic', function(ANNOMATICDEFAULTS, BaseComponent, EventDispatcher, NameSpace,
     DataTXTResource, XpointersHelper, ItemsExchange, TextFragmentHandler, ImageHandler, TypesHelper,
     Toolbar, DBPediaSpotlightResource, Item, AnnotationsCommunication, NameEntityRecognitionResource,
-    $rootScope, $timeout, $document, $window, $q, Consolidation, ContextualMenu, TextFragmentAnnotator) {
+    $rootScope, $timeout, $document, $window, $q, Consolidation, ContextualMenu, TextFragmentAnnotator,
+    ModelHelper, MyPundit) {
 
     var annomatic = new BaseComponent('Annomatic', ANNOMATICDEFAULTS);
+
+    var state = {
+        isRunning: false
+    };
+    EventDispatcher.sendEvent('Annomatic.isRunning', state.isRunning);
 
     annomatic.ann = {
         // The annotations, by Item uri
@@ -175,9 +181,13 @@ angular.module('Pundit2.Annomatic')
             },
             priority: 10,
             action: function() {
-                Consolidation.wipe();
-                annomatic.getAnnotationByArea();
-                mouseCheck = false;
+                MyPundit.login().then(function(logged) {
+                    if (logged) {
+                        Consolidation.wipe();
+                        annomatic.getAnnotationByArea();
+                        mouseCheck = false;
+                    }
+                });
             }
         });
     }
@@ -909,6 +919,7 @@ angular.module('Pundit2.Annomatic')
             angular.element('body').on('mousedown', mouseDownHandler);
         }
 
+        EventDispatcher.sendEvent('Annomatic.isRunning', state.isRunning)
         $rootScope.$emit('annomatic-run');
     };
 
@@ -935,6 +946,7 @@ angular.module('Pundit2.Annomatic')
             angular.element('body').off('mouseup', mouseUpHandler);
         }
 
+        EventDispatcher.sendEvent('Annomatic.isRunning', state.isRunning)
         $rootScope.$emit('annomatic-stop');
     };
 
@@ -1057,12 +1069,33 @@ angular.module('Pundit2.Annomatic')
             objUri = ann.entities[entNum].uri;
         }
 
-        var items = buildRDFItems(uri, annomatic.options.property, objUri);
-        var graph = buildGraph(uri, annomatic.options.property, objUri);
-        var targets = buildTargets(uri, annomatic.options.property, objUri);
+        // var items = buildRDFItems(uri, annomatic.options.property, objUri);
+        // var graph = buildGraph(uri, annomatic.options.property, objUri);
+        // var targets = buildTargets(uri, annomatic.options.property, objUri);
 
-        // TODO add support v2
-        AnnotationsCommunication.saveAnnotation(graph, items, targets, undefined, true).then(function(annId) {
+        var currentStatement = {
+            scope: {
+                get: function() {
+                    return {
+                        subject: ItemsExchange.getItemByUri(uri),
+                        predicate: ItemsExchange.getItemByUri(annomatic.options.property),
+                        object: ItemsExchange.getItemByUri(objUri)
+                    }
+                }
+            }
+        };
+
+        var modelData = ModelHelper.buildAllData([currentStatement]);
+
+        AnnotationsCommunication.saveAnnotation(
+            modelData.graph,
+            modelData.items,
+            modelData.flatTargets,
+            undefined, // templateID
+            undefined, // skipConsolidation
+            modelData.target, // Can be undefined if ModelHelper is acting in mode1
+            modelData.type
+        ).then(function(annId) {
             annomatic.ann.savedById.push(annId);
             annomatic.ann.savedByNum.push(num);
             annomatic.setState(num, 'accepted');
@@ -1193,10 +1226,6 @@ angular.module('Pundit2.Annomatic')
         }
     };
 
-    var state = {
-        isRunning: false
-    };
-
     var createItemFromNERAnnotation = function(ann) {
         var values = {};
 
@@ -1228,7 +1257,7 @@ angular.module('Pundit2.Annomatic')
 
         var annotations = data.annotations;
         var validAnnotations = [];
-        var i,ann;
+        var i, ann;
 
         // cycle on all annotations received from NER service
         for (i = 0; i < annotations.length; i++) {

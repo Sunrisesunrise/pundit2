@@ -9,6 +9,7 @@ angular.module('Pundit2.Core')
     var status = new BaseComponent('Status', STATUSDEFAULTS);
 
     var state = {
+        Annomatic: {},
         AnnotationSidebar: {},
         Dashboard: {},
         Toolbar: {},
@@ -81,6 +82,11 @@ angular.module('Pundit2.Core')
     // MyPundit
     EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
         state.Pundit.userLogged = e.args;
+    });
+
+    // Annomatic
+    EventDispatcher.addListener('Annomatic.isRunning', function(e) {
+        state.Annomatic.isRunning = e.args;
     });
 
     // AnnotationSidebar
