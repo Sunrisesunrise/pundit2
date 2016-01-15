@@ -113,7 +113,7 @@ angular.module('Pundit2.Core')
     };
 
     // Notebook properties override for annotationServerVersion V2
-    ns.notebook_v2 =  {
+    ns.notebookV2 =  {
         visibility: _pnd + 'isPublic'
     };
 

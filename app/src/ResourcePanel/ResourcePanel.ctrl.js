@@ -204,6 +204,7 @@ angular.module('Pundit2.ResourcePanel')
             }
         }
     };
+
     var ifLogged = function(term, caller) {
         if (Config.annotationServerCallsNeedLoggedUser) {
             MyPundit.checkLoggedIn().then(function(isLoggedIn) {
@@ -217,7 +218,8 @@ angular.module('Pundit2.ResourcePanel')
             ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
         }
 
-    }
+    };
+
     $scope.select = function(item, $event) {
         // after triggering click, lastSelect object will be updated with new selected item.
         Preview.setLock(false);

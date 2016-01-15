@@ -1,3 +1,5 @@
+/*global escape, PUNDITVERSION*/
+
 angular.module('Pundit2.LiteTool')
 
 .controller('LiteToolCtrl', function($scope, $rootScope, $window, $modal, Config, Status, AnnotationSidebar, EventDispatcher, MyPundit, Keyboard, Analytics) {

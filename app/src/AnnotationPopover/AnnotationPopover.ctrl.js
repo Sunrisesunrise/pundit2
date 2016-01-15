@@ -61,7 +61,7 @@ angular.module('Pundit2.AnnotationPopover')
         }
 
         $timeout(function() {
-            var state = PndPopover.getState();
+            // var state = PndPopover.getState();
             //state.popover.$applyPlacement();
             AnnotationPopover.doResize();
             $scope.opacity = 1;

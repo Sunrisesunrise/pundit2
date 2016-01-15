@@ -212,7 +212,7 @@ angular.module('Pundit2.Annomatic')
         // Cycle over the nodes in the stack: depth first. We start from the given node
         while ((currentNode = stack.pop()) && currentAnnotationNum < annotations.length) {
 
-            annomatic.log("Popped node ", currentNode, ' current offset = ' + currentOffset);
+            annomatic.log('Popped node ', currentNode, ' current offset = ' + currentOffset);
 
             // Spaces added to the current offsets to match the real content, it will
             // be used to create valid ranges
@@ -292,7 +292,7 @@ angular.module('Pundit2.Annomatic')
                                 start + ' to ' + end + ')');
 
                             // TODO: we are losing all those annotations which are multiple words AND
-                            // in the DOM are splitted by spaces like "aa     bb" or "aa\n    bb".
+                            // in the DOM are splitted by spaces like 'aa     bb' or "aa\n    bb".
                             // It might be possible to catch this by checking if sub contains a
                             // good number of spaces (with the regexp), add that number to the end
                             // offset et voilà... should work.
@@ -919,7 +919,7 @@ angular.module('Pundit2.Annomatic')
             angular.element('body').on('mousedown', mouseDownHandler);
         }
 
-        EventDispatcher.sendEvent('Annomatic.isRunning', state.isRunning)
+        EventDispatcher.sendEvent('Annomatic.isRunning', state.isRunning);
         $rootScope.$emit('annomatic-run');
     };
 
@@ -946,107 +946,107 @@ angular.module('Pundit2.Annomatic')
             angular.element('body').off('mouseup', mouseUpHandler);
         }
 
-        EventDispatcher.sendEvent('Annomatic.isRunning', state.isRunning)
+        EventDispatcher.sendEvent('Annomatic.isRunning', state.isRunning);
         $rootScope.$emit('annomatic-stop');
     };
 
-    var buildTargets = function(subUri, predUri, objUri) {
+    // var buildTargets = function(subUri, predUri, objUri) {
 
-        var sub = ItemsExchange.getItemByUri(subUri),
-            pred = ItemsExchange.getItemByUri(predUri),
-            obj = ItemsExchange.getItemByUri(objUri),
-            res = [];
+    //     var sub = ItemsExchange.getItemByUri(subUri),
+    //         pred = ItemsExchange.getItemByUri(predUri),
+    //         obj = ItemsExchange.getItemByUri(objUri),
+    //         res = [];
 
-        if (typeof(sub) === 'undefined' || typeof(pred) === 'undefined' || typeof(obj) === 'undefined') {
-            return;
-        }
+    //     if (typeof(sub) === 'undefined' || typeof(pred) === 'undefined' || typeof(obj) === 'undefined') {
+    //         return;
+    //     }
 
-        if (sub.isTextFragment() || sub.isImage() || sub.isImageFragment()) {
-            if (res.indexOf(sub.uri) === -1) {
-                res.push(sub.uri);
-            }
-        }
-        if (pred.isTextFragment() || pred.isImage() || pred.isImageFragment()) {
-            if (res.indexOf(pred.uri) === -1) {
-                res.push(pred.uri);
-            }
-        }
-        if (obj.isTextFragment() || obj.isImage() || obj.isImageFragment()) {
-            if (res.indexOf(obj.uri) === -1) {
-                res.push(obj.uri);
-            }
-        }
+    //     if (sub.isTextFragment() || sub.isImage() || sub.isImageFragment()) {
+    //         if (res.indexOf(sub.uri) === -1) {
+    //             res.push(sub.uri);
+    //         }
+    //     }
+    //     if (pred.isTextFragment() || pred.isImage() || pred.isImageFragment()) {
+    //         if (res.indexOf(pred.uri) === -1) {
+    //             res.push(pred.uri);
+    //         }
+    //     }
+    //     if (obj.isTextFragment() || obj.isImage() || obj.isImageFragment()) {
+    //         if (res.indexOf(obj.uri) === -1) {
+    //             res.push(obj.uri);
+    //         }
+    //     }
 
-        return res;
-    };
+    //     return res;
+    // };
 
-    var buildGraph = function(subUri, predUri, objUri) {
+    // var buildGraph = function(subUri, predUri, objUri) {
 
-        var sub = ItemsExchange.getItemByUri(subUri),
-            pred = ItemsExchange.getItemByUri(predUri),
-            obj = ItemsExchange.getItemByUri(objUri),
-            res = {};
+    //     var sub = ItemsExchange.getItemByUri(subUri),
+    //         pred = ItemsExchange.getItemByUri(predUri),
+    //         obj = ItemsExchange.getItemByUri(objUri),
+    //         res = {};
 
-        if (typeof(sub) === 'undefined' || typeof(pred) === 'undefined' || typeof(obj) === 'undefined') {
-            return;
-        }
+    //     if (typeof(sub) === 'undefined' || typeof(pred) === 'undefined' || typeof(obj) === 'undefined') {
+    //         return;
+    //     }
 
-        res[sub.uri] = {};
-        res[sub.uri][pred.uri] = [{
-            type: 'uri',
-            value: obj.uri
-        }];
+    //     res[sub.uri] = {};
+    //     res[sub.uri][pred.uri] = [{
+    //         type: 'uri',
+    //         value: obj.uri
+    //     }];
 
-        return res;
-    };
+    //     return res;
+    // };
 
-    var buildRDFItems = function(subUri, predUri, objUri) {
+    // var buildRDFItems = function(subUri, predUri, objUri) {
 
-        var sub = ItemsExchange.getItemByUri(subUri),
-            pred = ItemsExchange.getItemByUri(predUri),
-            obj = ItemsExchange.getItemByUri(objUri),
-            res = {};
+    //     var sub = ItemsExchange.getItemByUri(subUri),
+    //         pred = ItemsExchange.getItemByUri(predUri),
+    //         obj = ItemsExchange.getItemByUri(objUri),
+    //         res = {};
 
-        if (typeof(sub) === 'undefined' || typeof(pred) === 'undefined' || typeof(obj) === 'undefined') {
-            return;
-        }
+    //     if (typeof(sub) === 'undefined' || typeof(pred) === 'undefined' || typeof(obj) === 'undefined') {
+    //         return;
+    //     }
 
-        // add item and its rdf properties
-        res[sub.uri] = sub.toRdf();
-        res[pred.uri] = pred.toRdf();
-        res[obj.uri] = obj.toRdf();
+    //     // add item and its rdf properties
+    //     res[sub.uri] = sub.toRdf();
+    //     res[pred.uri] = pred.toRdf();
+    //     res[obj.uri] = obj.toRdf();
 
-        // add object types and its label
-        obj.type.forEach(function(e, i) {
-            var type = obj.type[i];
-            res[type] = {};
-            res[type][NameSpace.rdfs.label] = [{
-                type: 'literal',
-                value: TypesHelper.getLabel(e)
-            }];
-        });
-        // add subject types and its label
-        sub.type.forEach(function(e, i) {
-            var type = sub.type[i];
-            res[type] = {};
-            res[type][NameSpace.rdfs.label] = [{
-                type: 'literal',
-                value: TypesHelper.getLabel(e)
-            }];
-        });
-        // add predicate types and its label
-        pred.type.forEach(function(e, i) {
-            var type = pred.type[i];
-            res[type] = {};
-            res[type][NameSpace.rdfs.label] = [{
-                type: 'literal',
-                value: TypesHelper.getLabel(e)
-            }];
-        });
+    //     // add object types and its label
+    //     obj.type.forEach(function(e, i) {
+    //         var type = obj.type[i];
+    //         res[type] = {};
+    //         res[type][NameSpace.rdfs.label] = [{
+    //             type: 'literal',
+    //             value: TypesHelper.getLabel(e)
+    //         }];
+    //     });
+    //     // add subject types and its label
+    //     sub.type.forEach(function(e, i) {
+    //         var type = sub.type[i];
+    //         res[type] = {};
+    //         res[type][NameSpace.rdfs.label] = [{
+    //             type: 'literal',
+    //             value: TypesHelper.getLabel(e)
+    //         }];
+    //     });
+    //     // add predicate types and its label
+    //     pred.type.forEach(function(e, i) {
+    //         var type = pred.type[i];
+    //         res[type] = {};
+    //         res[type][NameSpace.rdfs.label] = [{
+    //             type: 'literal',
+    //             value: TypesHelper.getLabel(e)
+    //         }];
+    //     });
 
-        return res;
+    //     return res;
 
-    };
+    // };
 
     /**
      * @ngdoc method
@@ -1080,7 +1080,7 @@ angular.module('Pundit2.Annomatic')
                         subject: ItemsExchange.getItemByUri(uri),
                         predicate: ItemsExchange.getItemByUri(annomatic.options.property),
                         object: ItemsExchange.getItemByUri(objUri)
-                    }
+                    };
                 }
             }
         };

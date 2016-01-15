@@ -819,7 +819,7 @@ angular.module('Pundit2.Annotators')
         $compile(elementReferce)($rootScope);
     });
 
-    EventDispatcher.addListener('Consolidation.consolidateAll', function(e) {
+    EventDispatcher.addListener('Consolidation.consolidateAll', function() {
         var myItemsList = ItemsExchange.getItemsByContainer(Config.modules.MyItemsContainer.container);
         if (textFragmentAnnotator.options.addIcon === false &&
             textFragmentAnnotator.options.addOnlyMyItemsIcon) {

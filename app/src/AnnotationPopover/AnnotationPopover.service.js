@@ -158,7 +158,7 @@ angular.module('Pundit2.AnnotationPopover')
         if (promise !== false) {
             promise.then(function() {
                 changePopoverPosition(x, y);
-                PndPopover.getState().selection.removeAllRanges();
+                state.selection.removeAllRanges();
                 resizeCallback();
                 angular.element($window).on('resize', resizeCallback);
                 $timeout(function() {

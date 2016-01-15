@@ -338,7 +338,7 @@ angular.module('Pundit2.AnnotationSidebar')
         annotationsByPosition = [];
 
     var tempBrokenList = {};
-    var firstSendBrokenAlert = true;
+    // var firstSendBrokenAlert = true;
 
     var isEntitiesActive = annotationSidebar.isEntitesActive = PageItemsContainer.options.active;
 

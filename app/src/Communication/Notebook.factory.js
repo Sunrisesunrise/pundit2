@@ -145,7 +145,7 @@ angular.module('Pundit2.Communication')
         }
 
         if (Config.annotationServerVersion === 'v2') {
-            //nbData.visibility = NameSpace.notebook_v2.visibility;
+            //nbData.visibility = NameSpace.notebookV2.visibility;
         }
 
         // Treat properties as single values inside an array, read them
@@ -154,7 +154,7 @@ angular.module('Pundit2.Communication')
         for (var property in ns) {
             var propertyURI = ns[property];
             if (property === 'visibility' && Config.annotationServerVersion === 'v2') {
-                propertyURI = NameSpace.notebook_v2.visibility;
+                propertyURI = NameSpace.notebookV2.visibility;
             }
 
             if (propertyURI in nbData) {
