@@ -32,7 +32,7 @@ angular.module('Pundit2.Annomatic')
         var options = {
             content: "" + $scope.num,
             placement: 'bottom',
-            template: 'src/Annomatic/AnnomaticPopover.tmpl.html',
+            templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
             trigger: 'manual'
                 //scope: $rootScope.$new(),
                 //container: "[data-ng-app='Pundit2']"
