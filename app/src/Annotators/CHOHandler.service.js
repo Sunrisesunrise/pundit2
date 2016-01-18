@@ -56,7 +56,84 @@ angular.module('Pundit2.Annotators')
     })
 
     .service('CHOHandler', function(CHOHANDLERDEFAULTS, NameSpace, BaseComponent, Config,
-                                      TextFragmentHandler, XpointersHelper, Item, $compile, $timeout, $rootScope) {
+                                      TextFragmentHandler, XpointersHelper, Item, $compile, $timeout, $rootScope, ContextualMenu, AnnotationPopover, TripleComposer) {
+
+        var initContextualMenu = function() {
+            ContextualMenu.addAction({
+                name: 'resComment',
+                type: ["CHOHandlerItem"],
+                label: 'Comment',
+                showIf: function() {
+                    return true;
+                },
+                priority: 99,
+                action: function(item) {
+                    var coordinates = ContextualMenu.getLastXY(),
+                        fragmentId = ContextualMenu.getLastRef();
+                    AnnotationPopover.show(coordinates.x, coordinates.y, item, '', fragmentId, 'comment');
+                }
+            });
+            ContextualMenu.addDivider({
+                priority: 98,
+                type: ["CHOHandlerItem"]
+            });
+            ContextualMenu.addAction({
+                name: 'resUseAsSubject',
+                type: ["CHOHandlerItem"],
+                label: 'Use as subject',
+                showIf: function() {
+                    return true;
+                },
+                priority: 97,
+                action: function(item) {
+                    TripleComposer.addToSubject(item);
+                }
+            });
+            ContextualMenu.addAction({
+                name: 'resUseAsObject',
+                type: ["CHOHandlerItem"],
+                label: 'Use as Object',
+                showIf: function() {
+                    return true;
+                },
+                priority: 96,
+                action: function(item) {
+                    TripleComposer.addToObject(item);
+                }
+            });
+            ContextualMenu.addAction({
+                name: 'resAddToFavourites',
+                type: ["CHOHandlerItem"],
+                label: 'Add to Favourites',
+                showIf: function() {
+                    return true;
+                },
+                priority: 95
+            });
+
+            ContextualMenu.addDivider({
+                priority: 94,
+                type: ["CHOHandlerItem"]
+            });
+            ContextualMenu.addAction({
+                name: 'resTemplate1',
+                type: ["CHOHandlerItem"],
+                label: 'Template1',
+                showIf: function() {
+                    return true;
+                },
+                priority: 93
+            });
+            ContextualMenu.addAction({
+                name: 'resTemplate2',
+                type: ["CHOHandlerItem"],
+                label: 'Template2',
+                showIf: function() {
+                    return true;
+                },
+                priority: 92
+            });
+        };
 
         var CHO = new BaseComponent('CHOHandler', CHOHANDLERDEFAULTS);
 
@@ -66,6 +143,7 @@ angular.module('Pundit2.Annotators')
         CHOElem.addClass("cho-menu");
         //compile the DOM
         $compile(angular.element(".pnd-resource"))($rootScope);
+        initContextualMenu();
 
         return CHO;
 

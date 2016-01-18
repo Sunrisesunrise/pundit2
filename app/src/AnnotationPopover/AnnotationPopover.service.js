@@ -61,7 +61,7 @@ angular.module('Pundit2.AnnotationPopover')
     };
 
     var changePopoverPosition = function(mouseX, mouseY) {
-        var state = PndPopover.getState();
+        var state = PndPopover.getState(),
             distanceFromSelectionStart = Math.pow(parseInt(mouseX - state.selectionStart.offset.left), 2) + Math.pow(parseInt(mouseY - state.selectionStart.offset.top), 2),
             distanceFromSelectionEnd = Math.pow(parseInt(mouseX - state.selectionEnd.offset.left), 2) + Math.pow(parseInt(mouseY - state.selectionEnd.offset.top), 2),
             popoverRect = state.popover.$element[0].getClientRects()[0];

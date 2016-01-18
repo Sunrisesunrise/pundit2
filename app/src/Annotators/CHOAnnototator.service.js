@@ -1,7 +1,6 @@
 angular.module('Pundit2.Annotators')
 
-    .service('CHOAnnotator', function(NameSpace, BaseComponent, $location,
-                                        Consolidation, XpointersHelper, ImageFragmentAnnotatorHelper) {
+    .service('CHOAnnotator', function() {
 
   /*      // Create the component and declare what we deal with: text
         var CHO = new BaseComponent('CHOAnnotator');
