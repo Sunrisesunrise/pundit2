@@ -751,6 +751,11 @@ angular.module('Pundit2.Annotators')
         } else {
             if (wrapNode && htmlClass === xpointersHelper.options.wrapNodeClass) {
                 //TODO: check type nodes (images?)
+                // Skipping and removing node if it's empty.
+                if (wrapNode.element.childNodes.length == 0 || wrapNode.element.childNodes[0].nodeValue == null || wrapNode.element.childNodes[0].nodeValue.length == 0) {
+                    wrapNode.jElement.remove();
+                    return;
+                }
                 EventDispatcher.sendEvent('XpointersHelper.NodeAdded', {
                     fragments: parents,
                     reference: wrapNode.jElement
