@@ -52,8 +52,14 @@
         <div class="pnd-annotation-details-data">
 
             <!-- Annotated text fragment -->
-            <div ng-if="annotation.mainItem.typeLabel != 'WebPage'"
+            <div ng-if="annotation.mainItem.typeLabel == 'Text fragment'"
                  ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment'}">
+                <span>{{annotation.mainItem.description}}</span>
+            </div>
+
+            <!-- Annotated resource -->
+            <div ng-if="annotation.mainItem.typeLabel == 'Resource'"
+                 ng-class="{'pnd-annotation-annotated-resource': annotation.mainItem.typeLabel == 'Resource'}">
                 <span>{{annotation.mainItem.description}}</span>
             </div>
 
@@ -62,6 +68,8 @@
                  class="pnd-annotation-annotated-webpage">
                 <span>{{annotation.mainItem.label}}</span>
             </div>
+
+
 
             <div class="pnd-annotation-comment-caret"></div>
 
