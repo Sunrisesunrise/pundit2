@@ -85,6 +85,7 @@ angular.module('Pundit2.Core')
             $timeout.cancel(updateAddTimer);
 
             if (itemsCache.length === 0) {
+                // TODO: try to consolidate unconosolidable items.
                 promise.resolve();
                 return;
             }
