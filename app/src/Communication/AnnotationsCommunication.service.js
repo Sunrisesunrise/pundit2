@@ -503,6 +503,9 @@ angular.module('Pundit2.Communication')
             if (typeof motivation !== 'undefined') {
                 params.motivatedBy = motivation;
             }
+            if (typeof motivation === 'tagging') {
+                params.motivatedBy = 'linking';
+            }
 
             if ((typeof currentNotebook !== 'undefined' && typeof currentNotebook.id !== 'undefined') || typeof forceNotebookId !== 'undefined') {
                 var nbId = forceNotebookId || NotebookExchange.getCurrentNotebooks().id;
