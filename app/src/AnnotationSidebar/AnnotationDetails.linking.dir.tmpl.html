@@ -8,7 +8,7 @@
 
         <div class="pnd-annotation-collapsed-subject"
              ng-class="{'pnd-annotation-annotated-fragment': (annotation.mainItem.typeLabel == 'Text fragment'),
-                        'pnd-annotation-annotated-resource': (annotation.mainItem.typeLabel == 'Resource'),
+                        'pnd-annotation-annotated-resource': (annotation.mainItem.typeLabel == 'resource'),
                         'pnd-annotation-page': (annotation.mainItem.typeLabel == 'WebPage')}">
             <span>{{ annotation.mainItem.label }}</span> <!-- TODO For images instead of "label" we shoudl use the ALT attribute if present -->
         </div>
