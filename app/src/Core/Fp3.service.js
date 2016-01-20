@@ -5,7 +5,7 @@ angular.module('Pundit2.Core')
     active: false,
     debug: false
 })
-.service('Fp3', function(BaseComponent, FP3DEFAULTS, Config, $http, $q, $window, $document, AnnotationsExchange, XpointersHelper, Consolidation) {
+.service('Fp3', function(BaseComponent, FP3DEFAULTS, Config, $http, $q, $window, $document, AnnotationsExchange, XpointersHelper, Consolidation, ItemsExchange) {
     
     var fp3 = new BaseComponent("Fp3", FP3DEFAULTS);
 
@@ -65,12 +65,20 @@ angular.module('Pundit2.Core')
                 newAnnotation['objectData'] = Object;
             }
 
-            if (subject.indexOf('xpointer')>-1){
+            var currentItem = ItemsExchange.getItemByUri(subject)
+
+            if (currentItem.isTextFragment()){
+            //if (subject.indexOf('xpointer')>-1){
                 //this is an xpointer
                 var punditContent = fp3.getPunditContentUrl();
-                var xp = subject.replace(punditContent , '');
+
+                //var xp = subject.replace(punditContent , '');
+                var xp = currentItem.getXPointer();
+
                 var xpath = XpointersHelper.xPointerToXPath(xp);
+
                 var start = xpath.startOffset;
+
                 var end = xpath.endOffset;
 
                 var startNodeText = xpath.startNode.data;
@@ -95,7 +103,7 @@ angular.module('Pundit2.Core')
                 newAnnotation['start'] = start;
                 newAnnotation['end'] = end;
             }
-
+ 
             newAnnotations.push(newAnnotation);
         }
 
