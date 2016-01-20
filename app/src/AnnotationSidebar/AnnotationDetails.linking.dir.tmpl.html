@@ -58,11 +58,12 @@
             <div class="pnd-annotation-details-triple" ng-repeat="item in annotation.itemsArray">
 
                 <!-- Subject -->
-                <!-- Text fragment -->
-                <div class="pnd-annotation-details-subject pnd-annotation-annotated-fragment"
-                     ng-if="item.subject.typeLabel != 'WebPage' &&
+                <!-- Text fragment || resource -->
+                <div ng-if="item.subject.typeLabel != 'WebPage' &&
                             item.subject.typeLabel != 'Image' &&
-                            item.subject.typeLabel != 'Image fragment'">
+                            item.subject.typeLabel != 'Image fragment'"
+                     ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment’,
+                            'pnd-annotation-annotated-resource': annotation.mainItem.typeLabel == 'Resource'}">
                     <span>
                         {{ item.subject.description }}
                     </span>
@@ -137,9 +138,10 @@
                 </div>
 
                 <!-- Object -->
-                <!-- Text fragment -->
+                <!-- Text fragment || resource -->
                 <div class="pnd-annotation-details-object pnd-annotation-annotated-fragment pnd-annotation-entity-details"
-                     ng-if="item.objects[0].typeLabel == 'Text fragment'">
+                     ng-if="item.objects[0].typeLabel == 'Text fragment' ||
+                            item.objects[0].typeLabel == 'Resource'">
                     <span>
                         <!-- {{ item.objects[0].description | limitTo:200 }} -->
                         {{ item.objects[0].description }}
@@ -211,7 +213,8 @@
                              item.objects[0].typeLabel != 'literal' &&
                              item.objects[0].typeLabel != 'WebPage' &&
                              item.objects[0].typeLabel != 'Image' &&
-                             item.objects[0].typeLabel != 'Image fragment'">
+                             item.objects[0].typeLabel != 'Image fragment' &&
+                             item.objects[0].typeLabel != 'Resource'">
                     <span class="pnd-annotation-entity-image"
                           ng-if="item.objects[0].image!='null'">
                         <img ng-src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>
