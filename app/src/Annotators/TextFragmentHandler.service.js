@@ -31,7 +31,7 @@ angular.module('Pundit2.Annotators')
     ignoreClasses: ['pnd-ignore'],
 
     // If true, when the user selects something which starts, ends or contains ignored
-    // stuff (see ignoreClasses) the selected text will get reseted
+    // stuff (see ignoreClasses) the selected text will get reset
 
     /**
      * @module punditConfig
@@ -115,7 +115,7 @@ angular.module('Pundit2.Annotators')
 
 // TODO: remove toolbar and triplecomposer dependency 
 .service('TextFragmentHandler', function($rootScope, TEXTFRAGMENTHANDLERDEFAULTS, NameSpace, BaseComponent, TextFragmentAnnotator,
-    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, Consolidation, EventDispatcher, $document, $injector, Config) {
+    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, Consolidation, EventDispatcher, $document, $window, $injector, Config) {
 
     var textFragmentHandler = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
     var clientHidden = false;
@@ -161,6 +161,22 @@ angular.module('Pundit2.Annotators')
         if (forceWipe) {
             lastTemporaryConsolidable = undefined;
             ItemsExchange.wipeTemporaryItems();
+
+            removeUserSelection();
+        }
+    };
+
+    var removeUserSelection = function() {
+        if ($window.getSelection) {
+            if ($window.getSelection().empty) {  // Chrome
+                $window.getSelection().empty();
+            }
+            else if ($window.getSelection().removeAllRanges) {  // Firefox
+                $window.getSelection().removeAllRanges();
+            }
+        }
+        else if ($document[0].selection) {  // IE?
+            $document[0].selection.empty();
         }
     };
 
@@ -193,6 +209,8 @@ angular.module('Pundit2.Annotators')
             temporaryConsolidated[lastTemporaryConsolidable.itemUri] = lastTemporaryConsolidable;
             ItemsExchange.setItemAsTemporary(lastTemporaryConsolidable.itemUri, true);
             lastTemporaryConsolidable = undefined;
+
+            removeUserSelection();
         }
     };
 
@@ -333,7 +351,9 @@ angular.module('Pundit2.Annotators')
             // If it's a text node: skip ignore nodes, counting text/element nodes
             while (currentNode = lastNode.previousSibling) { // jshint ignore:line
                 if (check1(currentNode) && (check2(lastNode) || xp.isWrappedElementNode(lastNode))) {
-                    cleanN++;
+                    if (!(xp.isTextNode(currentNode) && currentNode.nodeValue.length === 0)) {
+                        cleanN++;
+                    }
                 }
                 lastNode = currentNode;
             } // while current_node
@@ -578,8 +598,7 @@ angular.module('Pundit2.Annotators')
         EventDispatcher.addListeners([
             'PndPopover.removeTemporarySelection',
             'TripleComposer.statementChange',
-            'TripleComposer.statementChanged',
-            'TripleComposer.reset'
+            'TripleComposer.statementChanged'
         ], function() {
             checkTemporaryConsolidated();
         });
@@ -589,6 +608,7 @@ angular.module('Pundit2.Annotators')
                 'PndPopover.wipeTemporarySelections',
                 'Consolidation.startConsolidate',
                 'Client.hide',
+                'TripleComposer.reset'
             ],
             function() {
                 checkTemporaryConsolidated(true);
@@ -680,6 +700,7 @@ angular.module('Pundit2.Annotators')
         }
 
         // TODO: generalize item in {data}
+        // es. AnnotationPopover.show( ...
         var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType, currentFr);
         if (typeof promise !== 'undefined' && promise !== false) {
             promise.then(function() {
@@ -693,9 +714,10 @@ angular.module('Pundit2.Annotators')
     // So we bind this up handler and just remove the selection on mouseup, if there is one.
     function mouseUpHandlerToRemove() {
         $document.off('mouseup', mouseUpHandlerToRemove);
-        if (textFragmentHandler.getSelectedRange() !== null) {
-            removeSelection();
-        }
+        // TODO: is it still useful?
+        // if (textFragmentHandler.getSelectedRange() !== null) {
+        //     removeSelection();
+        // }
     }
 
     function mouseDownHandler(downEvt) {

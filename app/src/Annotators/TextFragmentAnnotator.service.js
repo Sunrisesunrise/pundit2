@@ -185,7 +185,8 @@ angular.module('Pundit2.Annotators')
         var fragmentId = fragmentIds[fragmentUri],
             currentIcon;
 
-        if (typeof fragmentById[fragmentId].icon === 'undefined') {
+        if (typeof fragmentById[fragmentId] !== 'undefined' &&
+            typeof fragmentById[fragmentId].icon === 'undefined') {
             currentIcon = placeIcon(fragmentId, fragmentsRefsById[fragmentId][0]);
             $compile(currentIcon)($rootScope);
         }
@@ -575,6 +576,11 @@ angular.module('Pundit2.Annotators')
             textFragmentAnnotator.err("fragmentById[" + icon.fragment + "] is undefined - skipping textFragmentAnnotator.addFragmentIcon()");
             return;
         }
+        // TODO: why is addFragmentIcon called two times after annotation update with a different textFragment?
+        if (typeof fragmentById[icon.fragment].icon !== 'undefined') {
+            return;
+        }
+
         fragmentById[icon.fragment].icon = icon;
         icon.item = fragmentById[icon.fragment].item;
 
@@ -693,7 +699,7 @@ angular.module('Pundit2.Annotators')
             textFragmentAnnotator.log('Not clearing highlight on given URI: fragment id not found');
             return;
         }
-        textFragmentAnnotator.clearHighlightById(fragmentIds[uri]);
+        textFragmentAnnotator.clearHighlightById(fragmentIds[uri][0]);
     };
 
     textFragmentAnnotator.clearHighlightById = function(id) {
@@ -710,6 +716,10 @@ angular.module('Pundit2.Annotators')
             return;
         }
         var id = fragmentIds[uri];
+        if (typeof fragmentById[id] === 'undefined') {
+            textFragmentAnnotator.err('Something wrog with this uri ' + uri);
+            return;
+        }
         for (var l = fragmentById[id].bits.length; l--;) {
             fragmentById[id].bits[l].show();
         }
@@ -721,6 +731,10 @@ angular.module('Pundit2.Annotators')
             return;
         }
         var id = fragmentIds[uri];
+        if (typeof fragmentById[id] === 'undefined') {
+            textFragmentAnnotator.err('Something wrog with this uri ' + uri);
+            return;
+        }
         for (var l = fragmentById[id].bits.length; l--;) {
             fragmentById[id].bits[l].hide();
         }
@@ -793,7 +807,7 @@ angular.module('Pundit2.Annotators')
             }
             if (typeof fragmentsRefsById[currentFragment] === 'undefined') {
                 fragmentsRefsById[currentFragment] = [elementReferce];
-                if (textFragmentAnnotator.options.addIcon) {
+                if (textFragmentAnnotator.options.addIcon || annomaticIsRunning) {
                     currentIcon = placeIcon(currentFragment, elementReferce);
                     $compile(currentIcon)($rootScope);
                 }
@@ -805,7 +819,7 @@ angular.module('Pundit2.Annotators')
         $compile(elementReferce)($rootScope);
     });
 
-    EventDispatcher.addListener('Consolidation.consolidateAll', function(e) {
+    EventDispatcher.addListener('Consolidation.consolidateAll', function() {
         var myItemsList = ItemsExchange.getItemsByContainer(Config.modules.MyItemsContainer.container);
         if (textFragmentAnnotator.options.addIcon === false &&
             textFragmentAnnotator.options.addOnlyMyItemsIcon) {
@@ -832,7 +846,7 @@ angular.module('Pundit2.Annotators')
             delete bitsQueque[newFragmentId];
         }
 
-        fragmentIds[newFragmentUri] = typeof fragmentIds[newFragmentUri] === 'undefined' ? [newFragmentId] : fragmentIds[newFragmentUri].push(newFragmentId);
+        fragmentIds[newFragmentUri] = typeof fragmentIds[newFragmentUri] === 'undefined' ? [newFragmentId] : fragmentIds[newFragmentUri].concat([newFragmentId]);
         fragmentById[newFragmentId] = {
             uri: newFragmentUri,
             bits: bits,

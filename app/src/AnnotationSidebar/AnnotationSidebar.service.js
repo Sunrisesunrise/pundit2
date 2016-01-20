@@ -792,7 +792,7 @@ angular.module('Pundit2.AnnotationSidebar')
         if (clientMode !== 'pro') {
             return;
         }
-        annotation.allLabels = annotation.graph[NameSpace.rdf.value][0].value;
+        annotation.allLabels = annotation.graph[NameSpace.rdf.value] ? annotation.graph[NameSpace.rdf.value][0].value : '';
     };
 
     // Updates the list of filters and annotation positions when the consolidation is completed

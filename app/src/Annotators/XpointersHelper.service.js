@@ -206,7 +206,7 @@ angular.module('Pundit2.Annotators')
 })
 
 .service('XpointersHelper', function(XPOINTERSHELPERDEFAULTS, NameSpace, BaseComponent, EventDispatcher,
-    $document, $location, $window, $q, $timeout, Status) {
+    $document, $location, $window, $q, $timeout, Status, Utils) {
 
     var xpointersHelper = new BaseComponent('XpointersHelper', XPOINTERSHELPERDEFAULTS);
     var preventDelay = xpointersHelper.options.preventDelay ? true : false,
@@ -641,6 +641,10 @@ angular.module('Pundit2.Annotators')
         var r2 = $document[0].createRange(),
             wrapNode;
 
+        if (range.toString().length === 0) {
+            return;
+        }
+
         var modParents = parents,
             modifyWrapping = false,
             wrapWholeTextNode = false,
@@ -747,6 +751,11 @@ angular.module('Pundit2.Annotators')
         } else {
             if (wrapNode && htmlClass === xpointersHelper.options.wrapNodeClass) {
                 //TODO: check type nodes (images?)
+                // Skipping and removing node if it's empty.
+                if (wrapNode.element.childNodes.length == 0 || wrapNode.element.childNodes[0].nodeValue == null || wrapNode.element.childNodes[0].nodeValue.length == 0) {
+                    wrapNode.jElement.remove();
+                    return;
+                }
                 EventDispatcher.sendEvent('XpointersHelper.NodeAdded', {
                     fragments: parents,
                     reference: wrapNode.jElement
@@ -797,7 +806,8 @@ angular.module('Pundit2.Annotators')
                 if (xpointersHelper.isTextNode(child) && (sibling = node.childNodes[i]) && xpointersHelper.isTextNode(sibling)) {
                     sibling.nodeValue = sibling.nodeValue + child.nodeValue;
                     node.removeChild(child);
-                } else if (xpointersHelper.isElementNode(child)) {
+                }
+                else if (xpointersHelper.isElementNode(child)) {
                     xpointersHelper.mergeTextNodes(child);
                 }
             }
