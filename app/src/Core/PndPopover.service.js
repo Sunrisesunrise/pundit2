@@ -31,11 +31,58 @@ angular.module('Pundit2.Core')
 
     var eventHandler = null;
 
-    var calculateSelectionCoordinates = function() {
+    var calculateSelectionCoordinates = function(type,uri) {
         // var range = state.selection.getRangeAt(0)
+        if(type === "http://www.openannotation.org/ns/resource"){
+            var ts = angular.element("span.pnd-resource[about='"+uri+"']");
+            var i = 0;
+            var pos = {
+                beforeElem: null,
+                afterElem: null
+            };
+            for (; i < ts.length; i++) {
+                if (ts.eq(0).width() === 0 ) {
+                    continue;
+                }
+                pos.beforeElem = ts.eq(i); //.before(ts);
+                break;
+            }
+            for (i = ts.length - 1; i >= 0; i--) {
+                if (ts.eq(0).width() === 0) {
+                    continue;
+                }
+                pos.afterElem = ts.eq(i); //.after(te);
+                break;
+            }
+
+            if (pos.beforeElem === null) {
+                pos.beforeElem = ts.eq(0);
+            }
+            if (pos.afterElem === null) {
+                pos.afterElem = ts.eq(ts.length - 1);
+            }
+
+            pos.beforeElem.before(ts);
+            pos.afterElem.after(ts);
+
+            state.selectionStart = {
+                label: 'start',
+                offset: 0,
+                fragmentRef: pos.beforeElem,
+                width: 0,
+                height: ts.height(),
+            };
+            state.selectionEnd = {
+                label: 'end',
+                offset: angular.copy(ts.offset()),
+                fragmentRef: pos.afterElem,
+                width: ts.eq(0).width(),
+                height: ts.height(),
+            };
+            return;
+        }
         var ts = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>'),
             te = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>');
-
         var fragmentElements = angular.element('span.' + state.data.fragmentId);
         var i = 0;
         var pos = {
@@ -93,6 +140,8 @@ angular.module('Pundit2.Core')
         if (parentTEnd.length) {
             parentTEnd[0].normalize();
         }
+
+
     };
 
     var initPopover = function(x, y, options, data) {
@@ -214,16 +263,15 @@ angular.module('Pundit2.Core')
         state.popover = initPopover(x, y, options, data);
         var innerPromise = $q.defer();
         var promise = state.popover.$promise;
-        promise.then(function() {
+        promise.then(function () {
             if (show()) {
-                if (state.popoverOptions.needsValidSelection) {
-                    calculateSelectionCoordinates();
-                }
+                calculateSelectionCoordinates(data.item.type[0],data.item.uri);
                 innerPromise.resolve();
-            } else {
+            }
+            else {
                 innerPromise.reject();
             }
-        }, function() {
+        }, function () {
             // reject popover creation.
             console.log(arguments);
         });

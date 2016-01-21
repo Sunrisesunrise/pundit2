@@ -158,15 +158,15 @@ angular.module('Pundit2.AnnotationPopover')
 
         if (promise !== false) {
             promise.then(function() {
-                if(state.popoverOptions.needsValidSelection){
-                    changePopoverPosition(x, y);
+                changePopoverPosition(x, y);
+                if(options.needsValidSelection){
                     PndPopover.getState().selection.removeAllRanges();
-                    resizeCallback();
-                    angular.element($window).on('resize', resizeCallback);
-                    $timeout(function() {
-                        resizeCallback();
-                    }, 15);
                 }
+                resizeCallback();
+                angular.element($window).on('resize', resizeCallback);
+                $timeout(function() {
+                    resizeCallback();
+                }, 15);
             }, function() {
                 annotationPopover.log(arguments);
             });
