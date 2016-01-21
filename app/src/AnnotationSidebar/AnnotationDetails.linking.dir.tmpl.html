@@ -66,7 +66,7 @@
                             item.subject.typeLabel != 'Image' &&
                             item.subject.typeLabel != 'Image fragment'"
                      ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment',
-                                'pnd-annotation-annotated-resource': annotation.mainItem.typeLabel == 'Resource'}">
+                                'pnd-annotation-annotated-resource': annotation.mainItem.typeLabel == 'resource'}">
                     <span>
                         {{ item.subject.description }}
                     </span>
@@ -144,7 +144,7 @@
                 <!-- Text fragment || resource -->
                 <div class="pnd-annotation-details-object pnd-annotation-annotated-fragment pnd-annotation-entity-details"
                      ng-if="item.objects[0].typeLabel == 'Text fragment' ||
-                            item.objects[0].typeLabel == 'Resource'">
+                            item.objects[0].typeLabel == 'resource'">
                     <span>
                         <!-- {{ item.objects[0].description | limitTo:200 }} -->
                         {{ item.objects[0].description }}
