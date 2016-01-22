@@ -3,8 +3,8 @@
 angular.module('Pundit2.Annotators')
 
     .directive('choMenu', function($rootScope, NameSpace, ContextualMenu,
-        Toolbar, ImageHandler, ImageAnnotator, ItemsExchange, TemplatesExchange,
-        TripleComposer, EventDispatcher, Item, XpointersHelper) {
+                                   Toolbar, ImageHandler, ImageAnnotator, ItemsExchange, TemplatesExchange,
+                                   TripleComposer, EventDispatcher, Item, XpointersHelper) {
 
         return {
             restrict: 'C',
@@ -14,8 +14,11 @@ angular.module('Pundit2.Annotators')
 
                 scope.element = element;
                 scope.item = null;
+                scope.selected = false;
 
-
+                scope.isSelected = function() {
+                    return scope.selected;
+                }
                 var createItemFromCHO = function(CHOElem) {
                     var values = {};
 
@@ -57,7 +60,7 @@ angular.module('Pundit2.Annotators')
 
 
 
-                 //read CHO coordinate and position the directive
+                //read CHO coordinate and position the directive
                 var overIcon = function() {
                     scope.element.css({
                         //color: gray
@@ -80,8 +83,25 @@ angular.module('Pundit2.Annotators')
                     );
                 };
                 overIcon();
+                EventDispatcher.addListeners(
+                    [
+                        'Consolidation.consolidateAll',
+                        'AnnotationsCommunication.saveAnnotation',
+                    ],
+                    function() {
+                        var item = ItemsExchange.getItemByUri(element[0].getAttribute("about"));
+                        if(typeof item !== "undefined"){
+                            scope.selected = true;
+                        }
+                    });
+                EventDispatcher.addListeners(
+                    [
+                        'AnnotationsCommunication.deleteAnnotation'
+                    ],
+                    function() {
+                        scope.selected = false;
+                    });
 
-
-            } // link()
+            }
         };
     });

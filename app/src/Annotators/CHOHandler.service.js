@@ -56,7 +56,7 @@ angular.module('Pundit2.Annotators')
     })
 
     .service('CHOHandler', function(CHOHANDLERDEFAULTS, NameSpace, BaseComponent, Config,
-                                      TextFragmentHandler, XpointersHelper, Item, $compile, $timeout, $rootScope, ContextualMenu, AnnotationPopover, TripleComposer, ItemsExchange, $q, EventDispatcher, AnnotationsExchange) {
+                                    TextFragmentHandler, XpointersHelper, Item, $compile, $timeout, $rootScope, ContextualMenu, AnnotationPopover, TripleComposer, ItemsExchange, $q, EventDispatcher, AnnotationsExchange) {
 
         var initContextualMenu = function() {
             ContextualMenu.addAction({
@@ -146,23 +146,6 @@ angular.module('Pundit2.Annotators')
         $compile(angular.element(".pnd-resource"))($rootScope);
         promise.resolve();
         initContextualMenu();
-        //hasAnnotation();
-
-        EventDispatcher.addListeners(
-            [
-                'Consolidation.consolidateAll',
-            ],
-            function() {
-                var resourceInDom = angular.element("span.pnd-resource");
-                for(var i=0;i <resourceInDom.length;i++){
-                    var item = ItemsExchange.getItemByUri(resourceInDom[i].getAttribute("about"));
-                    if(typeof item !== "undefined"){
-                        var span =  angular.element('span.pnd-resource[about="'+item.uri+'"]');
-                        span[0].style.backgroundColor = "yellow";
-                    }
-                }
-            });
-
 
         return CHO;
 
