@@ -64,20 +64,20 @@ angular.module('Pundit2.Core')
 
             pos.beforeElem.before(ts);
             pos.afterElem.after(ts);
-
+            var iconOffset = ts.offset();
             state.selectionStart = {
                 label: 'start',
-                offset: angular.copy(ts.offset()),
+                offset: {left: iconOffset.left, top:iconOffset.top},
                 fragmentRef: pos.beforeElem,
                 width: 0,
-                height: ts.height(),
+                height: ts.eq(0).height(),
             };
             state.selectionEnd = {
                 label: 'end',
-                offset: {left: state.selectionStart.offset.left + ts.width(), top: state.selectionStart.offset.top + ts.height()},
+                offset: {left: iconOffset.left, top: state.selectionStart.offset.top + ts.eq(0).height()},
                 fragmentRef: pos.afterElem,
-                width: ts.eq(0).width(),
-                height: ts.height(),
+                width:   0,
+                height:  ts.eq(0).height(),
             };
             return;
         }
