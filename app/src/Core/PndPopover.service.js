@@ -67,14 +67,14 @@ angular.module('Pundit2.Core')
 
             state.selectionStart = {
                 label: 'start',
-                offset: 0,
+                offset: angular.copy(ts.offset()),
                 fragmentRef: pos.beforeElem,
                 width: 0,
                 height: ts.height(),
             };
             state.selectionEnd = {
                 label: 'end',
-                offset: angular.copy(ts.offset()),
+                offset: {left: state.selectionStart.offset.left + ts.width(), top: state.selectionStart.offset.top + ts.height()},
                 fragmentRef: pos.afterElem,
                 width: ts.eq(0).width(),
                 height: ts.height(),
