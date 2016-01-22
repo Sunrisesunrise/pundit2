@@ -50,9 +50,7 @@ angular.module('Pundit2.Annotators')
                         return;
                     }
 
-
-                    var item = ItemsExchange.getItemByUri(scope.item.uri);
-                    ContextualMenu.show(evt.pageX, evt.pageY, item, scope.item.cMenuType);
+                    ContextualMenu.show(evt.pageX, evt.pageY, scope.item, scope.item.cMenuType);
                 });
 
                 //scope.url = attributes.pndResource;
