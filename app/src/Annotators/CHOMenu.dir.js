@@ -10,6 +10,7 @@ angular.module('Pundit2.Annotators')
             restrict: 'C',
             scope: true,
             templateUrl: 'src/Annotators/CHOMenu.dir.tmpl.html',
+            replace:true,
             link: function(scope, element) {
 
                 scope.element = element;
