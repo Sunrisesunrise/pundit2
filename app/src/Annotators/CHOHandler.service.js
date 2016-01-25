@@ -101,38 +101,39 @@ angular.module('Pundit2.Annotators')
                     TripleComposer.addToObject(item);
                 }
             });
-            ContextualMenu.addAction({
-                name: 'resAddToFavourites',
-                type: ["CHOHandlerItem"],
-                label: 'Add to Favourites',
-                showIf: function() {
-                    return true;
-                },
-                priority: 95
-            });
+            
+            // ContextualMenu.addAction({
+            //     name: 'resAddToFavourites',
+            //     type: ["CHOHandlerItem"],
+            //     label: 'Add to Favourites',
+            //     showIf: function() {
+            //         return true;
+            //     },
+            //     priority: 95
+            // });
 
             ContextualMenu.addDivider({
                 priority: 94,
                 type: ["CHOHandlerItem"]
             });
-            ContextualMenu.addAction({
-                name: 'resTemplate1',
-                type: ["CHOHandlerItem"],
-                label: 'Template1',
-                showIf: function() {
-                    return true;
-                },
-                priority: 93
-            });
-            ContextualMenu.addAction({
-                name: 'resTemplate2',
-                type: ["CHOHandlerItem"],
-                label: 'Template2',
-                showIf: function() {
-                    return true;
-                },
-                priority: 92
-            });
+            // ContextualMenu.addAction({
+            //     name: 'resTemplate1',
+            //     type: ["CHOHandlerItem"],
+            //     label: 'Template1',
+            //     showIf: function() {
+            //         return true;
+            //     },
+            //     priority: 93
+            // });
+            // ContextualMenu.addAction({
+            //     name: 'resTemplate2',
+            //     type: ["CHOHandlerItem"],
+            //     label: 'Template2',
+            //     showIf: function() {
+            //         return true;
+            //     },
+            //     priority: 92
+            // });
         };
 
         var CHO = new BaseComponent('CHOHandler', CHOHANDLERDEFAULTS);
