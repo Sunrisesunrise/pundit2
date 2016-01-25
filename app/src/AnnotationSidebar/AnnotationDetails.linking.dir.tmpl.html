@@ -66,9 +66,11 @@
                     <span>
                         {{ item.subject.description }}
                     </span>
-                </div>
-                <div ng-if="item.subject.isExternal">
-                    <a href="{{item.subject.pageContext}}">Open original page</a>
+
+                    <div class="pnd-annotation-original-page"
+                         ng-if="item.subject.isExternal">
+                        <a href="{{item.subject.pageContext}}">Open in original page</a>
+                    </div>
                 </div>
 
                 <!-- Web page -->
@@ -144,9 +146,11 @@
                         <!-- {{ item.objects[0].description | limitTo:200 }} -->
                         {{ item.objects[0].description }}
                     </span>
-                </div>
-                <div ng-if="item.objects[0].isExternal">
-                    <a href="{{item.objects[0].pageContext}}">Open original page</a>
+
+                    <div class="pnd-annotation-original-page"
+                         ng-if="item.subject.isExternal">
+                        <a href="{{item.subject.pageContext}}">Open in original page</a>
+                    </div>
                 </div>
 
                 <!-- Literal -->
