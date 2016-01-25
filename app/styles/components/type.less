@@ -9,22 +9,23 @@
 \* ------------------------------------ */
 
 .pnd-type {
+    display: inline-block;
     overflow: hidden;
+    height: 20px;
     margin: 0 3px 3px 0;
-    padding: 3px 6px;
+    padding: 0 4px;
 
-    // background-color: @color-type-background;
-    /* Gradient bg with mixin */
-    #gradient > .vertical(lighten(@color-type-background, 1); darken(@color-type-background, 1));
-    
-    /* border: 1px solid rgb(234, 234, 234); */
+    background-color: @type-color-bg;
+    border: @type-border-size solid @type-color-border;
 
-    color: @color-type-text;
+    color: @type-color-text;
     list-style: none;
-    font-family: @font;
+    // font-family: @font;
+    line-height: 19px;
     white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 10px;
     text-transform: uppercase;
-    .text-white-emboss(.4);
+    text-shadow: 0 1px 0 #FFF;
+    border-radius: 3px;
 }

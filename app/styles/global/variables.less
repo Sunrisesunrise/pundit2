@@ -10,99 +10,176 @@
 // ------------------------------------ //
 // #FONT
 // ------------------------------------ //
-// @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
-// @import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic);
-@font: "Lucida Grande", Helvetica, Verdana, Arial, sans-serif; // "'Open Sans', sans-serif; // 'Lato', sans-serif;
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300italic,300,400italic,600,600italic,700,700italic);
+@font: 'Source Sans Pro', sans-serif;
+@font-weight-normal: 100;
+@font-weight-bold: 600;
+
 
 // ------------------------------------ //
-// #COLORS
+// #GENERAL-COLORS
 // ------------------------------------ //
+
+// Color scheme
+@color-ultra-light: #FAFBFC;
+@color-light: #F2F5F7;
+@color-light-gray: #DFE2E6;
+@color-dark-gray: #9fa6ad; // #7E858C;
+@color-dark: #242D38;
+
+@color-brand: #3484E6;
+@color-error: #FF643F;
+@color-warning: #febe53;
+@color-highlight: #FFFFB8;
+@color-highlight-hover: fade(#2ee6e6, 40%);
+
+// Semantic colors
+@color-subject: #54b4e6;
+@color-predicate: #febe53;
+@color-object: #0084c8;
+@color-subject-text: lighten(@color-subject, 27);
+@color-predicate-text: lighten(@color-predicate, 25);
+@color-object-text: desaturate(lighten(@color-object, 27), 30);
+
 // Text colors
-@color-text: #555;
-@color-text-light: #808080;
-@color-text-error: #FF643F;
-@color-text-link: #48bb58; // #39b54a;
-@color-text-link-hover: darken(@color-text-link, 15%);
+@color-text: @color-dark;
+@color-text-light: #7f858c; // TODO To be added to Sketch document
+@color-text-error: @color-error;
+@color-text-link: @color-brand;
+@color-text-link-hover: #224E8C;
+@color-text-form-placeholder: #AEB1B5;
 
 // Borders
-@color-border-normal: #cacaca;
-@color-border-light: #DDD;
-@color-border-ultralight: #F0F0F0;
+@color-border-light: @color-light;
+@color-border-normal: @color-light-gray;
 
 // Backgrounds
 @color-background-base: #FFF;
-@color-background-light: lighten(#000, 96%);
-@color-background-medium: lighten(#000, 90%);
-
-// Buttons
-@color-button-bg-cta: @color-text-link;
-@color-button-bg: @color-background-medium;
-@color-button-bg-dark: #3d4042;
-@color-button-text-light: #fff;
-@color-button-text-dark: @color-text;
-
-// Shades of gray
-@gray-soft-dark: lighten(#000, 26%);
-@gray-extra-light: lighten(#000, 80%);
-@gray-extra-lighter: lighten(#000, 90%);
-@gray-extra-lightest: lighten(#000, 98%); // It's obvious some crazy guys are working on this project
-
-// Annotations in the sidebar
-@color-annotation-header: #8F999E; // @subject-color; // #aaaaaa; // @subject-color;
-@color-annotation-broken-header: @color-text-error; // @predicate-color;
-@color-annotation-header-text: #FFF;
-@color-annotation-sidebar-bg: #464b4c;
-
-// Semantic colors
-@subject-color: #54b4e6;
-@subject-color-text: lighten(@subject-color, 27);
-@predicate-color: #febe53;
-@predicate-color-text: lighten(@predicate-color, 25);
-@object-color: #0084c8;
-@object-color-text: desaturate(lighten(@object-color, 27), 30);
-
-// Toolbar
-@color-toolbar-bg: #333333;
-@color-toolbar-text: #eee;
-@color-toolbar-button: lighten(@color-toolbar-bg, 3);
-@color-toolbar-button-hover: lighten(@color-toolbar-button, 8);
-@color-toolbar-button-open: #999999; // @color-toolbar-button-hover;
-
-// Dropdown
-@color-dropdown-bg: #ffffff;
-@color-dropdown-active: darken(@color-dropdown-bg, 10);
-@color-dropdown-bg-hover: darken(@color-dropdown-bg, 5);
-@color-dropdown-text: @color-text;
-
-// Login popover colors
-@color-login-popover-background: #FFF;
-@color-login-popover-border: #979797;
-
-// Types of entities (shown in previews)
-@color-type-background: rgb(224, 227, 228);
-@color-type-text: #555;
-@type-border-radius: 3px;
-
-// Alert system
-@color-alert-success:  #48bb58;
-@color-alert-info:  @color-background-medium;
-@color-alert-warning:  #febe53;
-@color-alert-error:  @color-text-error;
-@color-alert-text-heading: #000000;
-@color-alert-text: @color-text;
-
-// Modal
-@color-modal-backdrop:  rgba(0,0,0,.5);
-
-// Various
-@color-toolbar-disabled: lighten(#000, 45%);
-@color-overlay: rgba(0,0,0,.6);
+@color-background-light: @color-ultra-light;
+@color-background-medium: @color-light;
 
 
 // ------------------------------------ //
 // #BUTTONS
 // ------------------------------------ //
-@button-gradient-level: 0; // Represents the impact of gradient in the button bg
+
+@button-font-weight: @font-weight-normal;
+
+// Button call to action
+@color-button-cta-text: #FFF;
+@color-button-cta-text-disabled: #D7E5FA;
+
+@color-button-cta-bg: @color-brand;
+@color-button-cta-bg-hover: #2E6ABF;
+@color-button-cta-bg-active: #224E8C;
+@color-button-cta-bg-disabled: #9BBFF2;
+
+// Button normal
+@color-button-text: @color-brand;
+@color-button-text-hover: #2E6ABF;
+@color-button-text-active: #224E8C;
+@color-button-text-disabled: #CDDFF8;
+
+@color-button-bg: @color-light; // #FFF;
+@color-button-bg-hover: #FFF;
+@color-button-bg-active: #FFF;
+@color-button-bg-disabled: #FFF;
+
+@color-button-border: @color-light-gray; // @color-brand;
+@color-button-border-hover: @color-light-gray;
+@color-button-border-active: @color-light-gray;
+@color-button-border-disabled: @color-light-gray;
+
+@button-border-width: 1px;
+
+// Button light bg
+@color-button-light-text: @color-brand;
+@color-button-light-text-hover: #2E6ABF;
+@color-button-light-text-active: #224E8C;
+@color-button-light-text-disabled: #CDDFF8;
+
+
+// ------------------------------------ //
+// #TOOLBAR
+// ------------------------------------ //
+
+// Toolbar colors
+@color-toolbar-background: @color-dark;
+@color-toolbar-text: #FFFFFF;
+
+// Toolbar button call to action
+@color-toolbar-button-cta-text: #FFF;
+@color-toolbar-button-cta-text-disabled: #717D8D;
+
+@color-toolbar-button-cta-bg: @color-brand;
+@color-toolbar-button-cta-bg-hover: #2E6ABF;
+@color-toolbar-button-cta-bg-active: #224E8C;
+@color-toolbar-button-cta-bg-disabled: #415166;
+
+// Toolbar button normal
+@color-toolbar-button-text: #FFF;
+@color-toolbar-button-text-disabled: #626971;
+
+@color-toolbar-button-bg: transparent; // #404852;
+@color-toolbar-button-bg-hover: #5A626A;
+@color-toolbar-button-bg-active: #7E858C;
+@color-toolbar-button-bg-disabled: #313A44;
+
+// Toolbar button light
+@color-toolbar-button-light-text: #C8CACD;
+@color-toolbar-button-light-hover: #FFF;
+@color-toolbar-button-light-text-disabled: #626971;
+
+@color-toolbar-button-light-bg: transparent;
+
+// Geometry
+@toolbar-height: 30px;
+@toolbar-border-bottom: 0;
+
+
+// ------------------------------------ //
+// #DASHBOARD
+// ------------------------------------ //
+@dashboard-bg-color: @color-dark-gray;
+
+
+// ------------------------------------ //
+// #TABS
+// ------------------------------------ //
+@tab-bg-color: transparent;
+@tab-bg-hover-color: @color-light;
+@tab-bg-active-color: #FFFFFF;
+
+@tab-text-color: @color-text;
+@tab-text-hover-color: @color-text;
+@tab-text-active-color: @color-text;
+
+@tab-inner-bg-color: transparent;
+@tab-inner-hover-bg-color: @color-light;
+@tab-inner-border-top-color: @color-dark;
+
+@tab-inner-text-color: @color-dark-gray;
+@tab-inner-text-hover-color: @color-text;
+@tab-inner-text-active-color: @color-text;
+
+@tab-border-radius: 2px;
+
+
+// ------------------------------------ //
+// #VERTICAL-TABS
+// ------------------------------------ //
+@vertical-tabs-bg-color: @color-light;
+@vertical-tabs-tab-bg-color: @color-light;
+@vertical-tabs-tab-hover-bg-color: @color-ultra-light;
+@vertical-tabs-tab-border-color: @color-border-normal;
+
+
+// ------------------------------------ //
+// #BADGE
+// ------------------------------------ //
+@badge-bg-color: @color-dark-gray;
+@badge-text-color: #FFF;
+
 
 // ------------------------------------ //
 // #INLINE-CONSOLIDATION
@@ -116,10 +193,10 @@
 @text-fragment-color-6: fade(#ffff00, 65%);
 
 // Highlights the text fragment the user is annotating
-@text-fragment-color-highlight: fade(#2ee6e6, 40%);
+@text-fragment-color-highlight: @color-highlight-hover;
 
 // Hovering on a text fragment icon or an annotations in the sidebar
-@text-fragment-color-hover: @text-fragment-color-highlight; // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
+@text-fragment-color-hover: @color-highlight-hover; // rgba(255,255,0,.75); // fade(@color-annotation-header, 30); // rgba(255,255,0,1);
 
 // When doing "Show all annotations on this item"... alle the others text fragment are ghosted
 @text-fragment-ghosted: fade(#ffff33, 15%);
@@ -131,28 +208,33 @@
 
 
 // ------------------------------------ //
-// #LOGIN-POPOVER
+// #ALERT-SYSTEM
 // ------------------------------------ //
-@login-popover-width: 430px;
-@login-popover-height: 560px;
 
+// Colors
+@color-alert-success:  #48bb58; // @color-brand;
+@color-alert-info:  @color-dark-gray;
+@color-alert-warning: @color-warning;
+@color-alert-error: @color-error;
 
-// ------------------------------------ //
-// #TOOLBAR
-// ------------------------------------ //
-@toolbar-height: 30px;
-@toolbar-border-bottom: 0; // 1px;
+@color-alert-text-heading: #FFFFFF;
+@color-alert-text: #FFFFFF;
 
 
 // ------------------------------------ //
 // #ITEM
 // ------------------------------------ //
-@item-height: 28px;
+@item-height: 30px; // 28px;
 
 
 // ------------------------------------ //
 // #TRIPLE-COMPOSER
 // ------------------------------------ //
+
+@triplecomposer-color-bg: @color-light;
+@triplecomposer-color-border: @color-light-gray;
+@triplecomposer-border-radius: 3px;
+@triplecomposer-inner-border-radius: 2px;
 @triplecomposer-height: 25px;
 @triplecomposer-padding-inner: 5px;
 @triplecomposer-spacing: 6px;
@@ -161,14 +243,33 @@
 // ------------------------------------ //
 // #ANNOTATIONS-SIDEBAR
 // ------------------------------------ //
+
 // General variables for the sidebar
-@annotation-sidebar-coll-width: 10px;
-@annotation-sidebar-exp-width: 300px;
+@annotation-sidebar-coll-width: 15px;
+@annotation-sidebar-exp-width: 326px;
+@annotation-collapsed-height: 24px;
+@annotation-text-max-height: 140px;
+
+@sidebar-bg-color: @color-ultra-light; // #FFF;
+@sidebar-border-color: @color-border-normal;
+@sidebar-border-size: 1px;
+@sidebar-overlay-color: rgba(0,0,0,.6);
+
+@annotation-bg-color: #FFF;
+@annotation-border-color: @color-light-gray;
+@annotation-expanded-border-color: @color-light-gray; // @color-dark-gray; // @color-brand;
+@annotation-border-size: 1px;
+@annotation-box-shadow: 0 2px 0 #E9ECF0;
+@annotation-border-radius: 3px;
+@annotation-text-color: @color-text;
 
 
-// Styles defining single annotations as shown in the sidebar
-@annotation-header-height: 24px;
-@annotation-header-text-shadow: 0 1px 0 rgba(0, 0, 0, .15);
+// ------------------------------------ //
+// #ANNOTATION-POPOVER
+// ------------------------------------ //
+
+/* Popover used to create comments and highlights */
+@annotation-popover-comment-width: 375px;
 
 
 // ------------------------------------ //
@@ -176,6 +277,34 @@
 // ------------------------------------ //
 @resource-panel-width: 400px;
 @resource-panel-height: 250px;
+
+
+// ------------------------------------ //
+// #POPOVER
+// ------------------------------------ //
+
+/* Popover is styled in bootstrap */
+@popover-border-color: @color-border-normal;
+@popover-bg-color: #FFF;
+@popover-footer-height: 40px;
+
+
+// ------------------------------------ //
+// #LOGIN-POPOVER
+// ------------------------------------ //
+
+// Login popover colors
+@color-login-popover-background: #FFF;
+@login-popover-width: 430px;
+@login-popover-height: 560px;
+
+
+// ------------------------------------ //
+// #ANNOTATION-POPOVER
+// ------------------------------------ //
+
+// Popover used by Annotator Light for inline annotation creation
+@annotation-popover-initial-width: 199px;
 
 
 // ------------------------------------ //
@@ -187,18 +316,13 @@
 // ------------------------------------ //
 // #DROPDOWN-CONTEXTUAL-MENU
 // ------------------------------------ //
-@dropdown-round-corners: 4px;
+@dropdown-round-corners: 3px;
 
-// ------------------------------------ //
-// #TABS
-// ------------------------------------ //
-@tab-bg-color: transparent;
-@tab-text-color: @color-text;
-@tab-bg-hover-color: #dddddd;
-@tab-text-hover-color: @color-text;
-@tab-bg-active-color: #FFFFFF;
-@tab-text-active-color: @color-text;
-@tab-border-radius: 1px;
+// Dropdown
+@color-dropdown-bg: #ffffff;
+@color-dropdown-active: @color-light;
+@color-dropdown-bg-hover: @color-light;
+@color-dropdown-text: @color-text;
 
 
 // ------------------------------------ //
@@ -215,8 +339,9 @@
 
 @zindex-pnd:                        2147483647; // Used only once by .pnd-wrp but ignored since the element has position: static that doesn't support z-index
 
-@zindex-pnd-annotation-sidebar:     10 + @zindex-pnd-base;
-@zindex-pnd-dashboard:              11 + @zindex-pnd-base;
+@zindex-pnd-annotation-sidebar:     9 + @zindex-pnd-base;
+@zindex-pnd-dashboard:              10 + @zindex-pnd-base;
+@zindex-pnd-litetool:               11 + @zindex-pnd-base;
 @zindex-pnd-toolbar:                12 + @zindex-pnd-base;
 @zindex-pnd-login:                  13 + @zindex-pnd-base;
 @zindex-pnd-image-fragment-tool:    14 + @zindex-pnd-base;
@@ -229,6 +354,40 @@
 
 
 // ------------------------------------ //
-// #ANIMATIONS-VARIABLES
+// #MOUSE-CURSOR
 // ------------------------------------ //
-@animation-fast-duration: .15s;
+
+// Disabled cursor for form controls and buttons
+@cursor-disabled: not-allowed;
+
+
+// ------------------------------------ //
+// #FORMS
+// ------------------------------------ //
+@input-border-radius: 2px;
+@input-border-color: @color-light-gray;
+@input-border-color-focus: @color-brand;
+
+
+// ------------------------------------ //
+// #TYPES
+// ------------------------------------ //
+
+// Types of entities (shown in previews)
+@type-color-bg: @color-light; // @color-brand; // @color-dark-gray; // @color-light;
+@type-color-border: @color-light-gray;
+@type-color-text: @color-dark-gray; // #FFF; // @color-dark-gray;
+@type-border-size: 1px; // 0; // 1px;
+
+@type-border-radius: 3px;
+
+
+// ------------------------------------ //
+// #MODAL
+// ------------------------------------ //
+
+@modal-width: 600px;
+@modal-padding: 20px;
+@modal-bg-color: #FFF;
+@modal-backdrop-color: rgba(0,0,0,.5);
+@modal-border-radius: 4px;

@@ -24,7 +24,7 @@
         padding: 0;
         clear: none;
         font-size: 18px;
-        font-weight: bold;
+        font-weight: @font-weight-bold;
         line-height: 1.8;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -56,18 +56,16 @@
 
         input {
             padding-right: 20px;
-            font-weight: normal;
+            // font-weight: normal;
         }
 
         .pnd-icon {
-            padding: 7px;
-            box-sizing: border-box;
-
             position: absolute;
-            top: 0;
+            box-sizing: border-box;
+            top: -1px;
             right: 7px;
-
-            color: @gray;
+            padding: 7px;
+            color: @color-text-form-placeholder;
             font-size: 14px;
         }
 
@@ -80,14 +78,12 @@
             }
         }
 
-        // .pnd-icon-times is configured in *ItemsContainer.service.js defaults with
-        // inputIconClear: 'pnd-icon-times'
         .pnd-icon.pnd-icon-times:hover {
             color: @brand-success;
             cursor: pointer;
         }
 
-        & + .pnd-btn-xs {
+        & + .pnd-btn-xsmall {
             padding: 5px;
         }
     }
@@ -98,65 +94,13 @@
         // Not very elegant solution. The top positioning
         // cannot be relative to .pnd-panel-tab-content-header since there are some overflow
         // problems if we assign position: relative to that element
-        top: 43px;
+        top: 46px;
         right: 13px;
+        padding: 2px 6px 3px;
+        color: @color-dark-gray;
 
-        &.pnd-btn:hover,
-        &.pnd-btn:focus {
-            background-image: none;
-        }
-    }
-}
-
-
-/* ------------------------------------ *\
-   #SECOND-LEVEL-TABS
-\* ------------------------------------ */
-/* Style for the second level tabs that are found under
- the search field.
- These tabs are usually used for filtering the items
- in the displayed list */
-.pnd-panel-tab-content {
-
-    /* These are the second level tabs, under the search field */
-    .pnd-tab-header { //.nav-tabs
-        margin-bottom: 0;
-        margin-right: 0;
-
-        background-color: #fff;
-        border-top: 1px solid @color-border-normal;
-        border-bottom: 1px solid @color-border-normal;
-
-        > li {
-            /* Actual tabs (as links) */
-            > a {
-                margin-right: 0;
-                background-color: #fff;
-                border: 0;
-                border-top: 2px solid transparent;
-                //border-bottom: 1px solid @color-border-normal;
-
-                color: @nav-tabs-active-link-hover-color;
-                line-height: @line-height-base;
-
-                &:hover {
-                    background-color: transparent;
-                    //border-bottom: 1px solid @color-border-normal;
-
-                    color: #000;
-                    cursor: pointer;
-                }
-            }
-
-            /* Active state, and its :hover to override normal :hover */
-            &.active > a {
-                &,
-                &:hover,
-                &:focus {
-                    border-top: 2px solid @gray;
-                    cursor: pointer;
-                }
-            }
+        &:hover, &:focus {
+            color: @color-brand;
         }
     }
 }
@@ -190,10 +134,16 @@
             margin-right: 7px;
         }
     }
+}
 
-    .list-group {
-        -webkit-box-shadow: none;
-        box-shadow: none;
+.list-group {
+    box-shadow: none;
+
+    /* Single li containing .pnd-item element */
+    .list-group-item {
+        margin: 0;
+        padding: 0;
+        border: 0;
     }
 }
 
@@ -204,18 +154,21 @@
 
 .pnd-panel-tab-content-footer {
     display: block;
-    height: 30px;
     position: absolute;
+    width: 100%;
+    height: 40px;
     bottom: 0;
-    right: 7px;
     left: 0;
+    padding-top: 7px;
+    overflow: hidden;
 
     background-color: #fff;
     border-top: 1px solid @color-border-normal;
+    text-align: right;
 
     .pnd-btn {
-        float: left;
-        //border-right: 1px solid #fff;
+        margin-right: 7px;
+        margin-bottom: 8px;
     }
 
     .pnd-btn-lists.pnd-btn {

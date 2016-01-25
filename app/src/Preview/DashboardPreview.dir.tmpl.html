@@ -3,7 +3,8 @@
     <!-- HEADER -->
 
     <div class="pnd-panel-tab-content-header pnd-panel-tab-content-header-border" ng-if="!useInKorbo || (useInKorbo && !isItemEmpty())">
-        <span ng-if="!isItemEmpty()" class="{{getItemIcon()}}"></span>
+        <!--
+        <span ng-if="!isItemEmpty()" class="{{getItemIcon()}}"></span> -->
         <h1 class="pnd-dashboard-preview-panel-heading" ng-if="isItemEmpty() && !useInKorbo">{{getWelcomeHeaderMessage()}}</h1>
         <h1 class="pnd-dashboard-preview-panel-label" ng-if="!isItemEmpty()">{{itemDashboardPreview.label}}</h1>
     </div> <!-- end pnd-panel-tab-content-header -->
@@ -21,6 +22,7 @@
         <!-- loading preview in korboEE -->
         <div class="kee-server-searching" ng-show="isLoading"><span class="pnd-icon pnd-icon-refresh pnd-icon-spin "></span></div>
         <!-- / end loading preview in korboEE -->
+
         <!-- error loading preview in korboEE -->
         <div class="kee-server-error" ng-show="errorLoading">Impossible loading preview...</div>
         <!-- / end error loading preview in korboEE -->
@@ -31,25 +33,25 @@
 
     <div class="pnd-panel-tab-content-footer" ng-hide="useInKorbo">
         <button
-            class="pnd-btn pnd-btn-transparent pnd-dashboard-preview-clear-sticky-button"
+            class="pnd-btn pnd-btn-small pnd-dashboard-preview-clear-sticky-button"
             ng-click="clearSticky()" 
             ng-class="{disabled: !isStickyItem()}">
             Clear preview
         </button><button
-            class="pnd-btn pnd-dashboard-preview-more-info-button"
+            class="pnd-btn pnd-btn-small pnd-btn-calltoaction pnd-dashboard-preview-more-info-button"
             ng-if="itemDashboardPreview.isProperty() || itemDashboardPreview.isEntity()" 
             ng-click="openUrl(itemDashboardPreview.uri)" 
             ng-class="{disabled: !isStickyItem()}">
             More info
         </button><button
-            class="pnd-btn"
+            class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
             ng-if="itemDashboardPreview.isWebPage()"
             ng-click="openUrl(itemDashboardPreview.uri)"
             ng-class="{disabled: !isStickyItem()}">
             Go to page
         </button><button
-            class="pnd-btn pnd-dashboard-preview-more-info-button"
-            ng-if="isNotebook() && askThePundit" 
+            class="pnd-btn pnd-btn-small pnd-btn-calltoaction pnd-dashboard-preview-more-info-button"
+            ng-if="homePundit && isNotebook() && isUser()" 
             ng-click="openNotebookUrl(itemDashboardPreview.id)" 
             ng-class="{disabled: !isStickyItem()}">
             More info

@@ -109,39 +109,39 @@
         </div>
 
         <div 
-            class="pnd-vertical-tab-footer-content" 
+            class="pnd-vertical-tab-footer-content pnd-panel-tab-content-footer"
             ng-if="showVerticalTabFooterContent">
-            <button 
-                class="pnd-resource-panel-use-button pnd-btn pnd-btn-calltoaction pnd-use"
-                ng-show="showSaveButton(this)"
-                ng-class="{'disabled': !isUseActive}" 
-                ng-click="save(itemSelected)">
-                Use
+            <button
+                class="pnd-resource-panel-use-button pnd-btn pnd-btn-small pnd-btn-transparent"
+                ng-click="cancel()">
+                Cancel
             </button><button
-                class="pnd-resource-panel-copy-button pnd-btn"
+                class="pnd-resource-panel-copy-button pnd-btn pnd-btn-small"
                 ng-class="{'disabled': !isUseActive}" 
                 ng-show="showUseAndCopyButton()"
                 ng-click="useAndCopy(itemSelected)">
                 Copy and Use
             </button><button
-                class="pnd-resource-panel-new-button pnd-btn"
+                class="pnd-resource-panel-new-button pnd-btn pnd-btn-small"
                 ng-class="{'disabled': !isUseActive}" 
                 ng-show="showCopyInEditorButton()" 
                 ng-click="copyInEditor()">
                 Copy in editor
             </button><button
-                class="pnd-resource-panel-new-button pnd-btn" ng-show="showNewButton()"
+                class="pnd-resource-panel-new-button pnd-btn pnd-btn-small" ng-show="showNewButton()"
                 ng-click="createNew()">
                 Create new
             </button><button
-                class="pnd-resource-panel-use-button pnd-btn"
+                class="pnd-resource-panel-use-button pnd-btn pnd-btn-small"
                 ng-show="showUseFullPageButton"
                 ng-click="useFullPage()">
                 Use web page
             </button><button
-                class="pnd-resource-panel-use-button pnd-btn"
-                ng-click="cancel()">
-                Cancel
+                class="pnd-resource-panel-use-button pnd-btn pnd-btn-small pnd-btn-calltoaction pnd-use"
+                ng-show="showSaveButton(this)"
+                ng-class="{'disabled': !isUseActive}"
+                ng-click="save(itemSelected)">
+                Use
             </button>
         </div>
     </div>

@@ -8,7 +8,8 @@ var state = {
         tabsOnOff: {},
         injections: {},
         loading: {},
-        stopLoading: {}
+        stopLoading: {},
+        analytics: false
     },
     //offIcon = devicePixelRatio !== 1 ? 'pundit-icon-38.png' : 'pundit-icon-19.png',
     //onIcon = devicePixelRatio !== 1 ? 'pundit-icon-38-close.png' : 'pundit-icon-19-close.png',
@@ -23,6 +24,8 @@ var state = {
     defaultBadgeBackgroundColor = [127, 127, 127, 255], // [75, 112, 165, 255], //#1E2E43
     consolidationBadgeBackgroundColor = [255, 191, 0, 128], //#1E2E43
     loadingBadgeBackgroundColor = [127, 127, 127, 255]; // [72, 187, 88, 128];//[255, 191, 0, 128]; //#FFBF00
+
+var _gaq = _gaq || [];
 
 var injectScripts = function(tabId, force, callback) {
     if (typeof state.injections[tabId] !== 'undefined') {
@@ -99,15 +102,30 @@ var injectScripts = function(tabId, force, callback) {
         }, function(response) {
             if (response) {
                 if (response.isPresent) {
-                    console.log('already present, just set flag');
+                    //console.log('already present, just set flag');
                     state.injections[tabId] = true;
                     state.tabsOnOff[tabId] = true;
                     state.tabs[tabId] = true;
                     showOnIcon(tabId);
                     setLoading(false, tabId);
-                    chrome.tabs.sendMessage(tabId, {
-                        action: 'requestAnnotationsNumber'
-                    });
+
+                    // Check if it's same c.e.
+                    if (typeof response.cid !== 'undefined' && response.cid != null && response.cid !== chrome.runtime.id) {
+                        chrome.runtime.sendMessage(response.cid, {
+                            action: 'forceClose',
+                            cid: response.cid,
+                            tabId: tabId
+                        }, function(innerResponse) {
+                            if (innerResponse.reload) {
+                                console.log('reload tab');
+                                chrome.tabs.reload(tabId);
+                            }
+                        });
+                    } else {
+                        chrome.tabs.sendMessage(tabId, {
+                            action: 'requestAnnotationsNumber'
+                        });
+                    }
                 } else {
                     doInjection(false, true);
                 }
@@ -354,6 +372,121 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
         case 'consolidation':
             //chrome.browserAction.setBadgeBackgroundColor({color: request.active ? consolidationBadgeBackgroundColor : defaultBadgeBackgroundColor, tabId: sender.tab.id});
+            break;
+
+        case 'analyticsSettings':
+            var options = request.number;
+            if (state.analytics === false && options.chromeExtMode) {
+                // Google Analytics code
+                if (options.doTracking) {
+                    _gaq.push(['_setAccount', options.trackingCode]);
+                    (function() {
+                        var ga = document.createElement('script');
+                        ga.type = 'text/javascript';
+                        ga.async = true;
+                        ga.src = 'https://ssl.google-analytics.com/ga.js';
+                        var s = document.getElementsByTagName('script')[0];
+                        s.parentNode.insertBefore(ga, s);
+                    })();
+                }
+                // Mixpanel code
+                if (options.doMixpanel) {
+                    (function(f, b) {
+                        if (!b.__SV) {
+                            var a, e, i, g;
+                            window.mixpanel = b;
+                            b._i = [];
+                            b.init = function(a, e, d) {
+                                function f(b, h) {
+                                    var a = h.split('.');
+                                    2 == a.length && (b = b[a[0]], h = a[1]);
+                                    b[h] = function() {
+                                        b.push([h].concat(Array.prototype.slice.call(arguments, 0)))
+                                    }
+                                }
+                                var c = b;
+                                'undefined' !== typeof d ? c = b[d] = [] : d = 'mixpanel';
+                                c.people = c.people || [];
+                                c.toString = function(b) {
+                                    var a = 'mixpanel';
+                                    'mixpanel' !== d && (a += '.' + d);
+                                    b || (a += ' (stub)');
+                                    return a
+                                };
+                                c.people.toString = function() {
+                                    return c.toString(1) + '.people (stub)'
+                                };
+                                i = 'disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user'.split(' ');
+                                for (g = 0; g < i.length; g++) f(c, i[g]);
+                                b._i.push([a, e, d])
+                            };
+                            b.__SV = 1.2;
+                            a = f.createElement('script');
+                            a.type = 'text/javascript';
+                            a.async = !0;
+                            a.src = 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
+                            e = f.getElementsByTagName('script')[0];
+                            e.parentNode.insertBefore(a, e)
+                        }
+                    })(document, window.mixpanel || []);
+                    mixpanel.init(options.trackingCodeMixpanel);
+                }
+                state.analytics = true;
+            }
+            break;
+
+        case 'analyticsUserData':
+            var data = request.number,
+                options = data.options,
+                user = data.details;
+
+            if (options.doMixpanel) {
+                mixpanel.identify(user.id);
+                mixpanel.people.set({
+                    '$email': user.email,
+                    '$last_login': new Date(),
+                    '$first_name': user.firstName,
+                    '$last_name': user.lastName,
+                });
+            }
+
+            break;
+
+        case 'analyticsTrack':
+            var data = request.number,
+                event;
+
+            if (data.type === 'ga') {
+                event = [];
+                event.push('_trackEvent');
+                for (var i in data.properties) {
+                    event.push(data.properties[i]);
+                }
+                _gaq.push(event);
+            } else if (data.type === 'mixpanel') {
+                event = data.properties;
+                event.realUrl = data.url;
+                event.canonicalUrl = data.canonical;
+
+                mixpanel.track(event.eventLabel, event);
+            }
+            break;
+    }
+});
+
+chrome.runtime.onMessageExternal.addListener(function(request, sender, sendResponse) {
+    switch (request.action) {
+        case 'forceClose':
+            window.clearInterval(request.tabId);
+            delete state.loading[request.tabId];
+            delete state.injections[request.tabId];
+            delete state.stopLoading[request.tabId];
+            delete state.tabs[request.tabId];
+            delete state.tabsOnOff[request.tabId];
+            showOffIcon(request.tabId);
+            sendResponse({
+                reload: true
+            });
             break;
     }
 });

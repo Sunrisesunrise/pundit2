@@ -1,26 +1,167 @@
 /**
  * LITE TOOL
  *
- * Style for Pundit toolbar
+ * Style for the tool that appears top right in the Pundit Annotator Light
+ * This tool allows to open/close the sidebar and to login
  */
 
-// ....
+@lite-tool-height: 38px;
+
 
 /* ------------------------------------ *\
-   #LITETOOL-STYLE
+   #LITETOOL
 \* ------------------------------------ */
 
 .pnd-lite-tool {
-    width: 10%;
-    height: 20px;
-    margin: 0;
-    padding-top: 0;
-    background-color: blue;
-    color: white;
-    z-index: 9999999999;
-    box-shadow: 0 1px 1px rgba(0,0,0,.1);
     position: fixed;
+    height: @lite-tool-height;
+    width: @lite-tool-height;
     top: 10px;
-    right: 5px;
+    right: 10px + @annotation-sidebar-coll-width;
+    z-index: @zindex-pnd-litetool;
+    transition-duration: .5s;
+    transition-property: width; // , right;
+
+    /* Circle with Pundit Logo or user thumb */
+    .pnd-icon-pundit-logo {
+        display: block;
+        position: absolute;
+        left: -1px;
+        width: @lite-tool-height + 1;
+        height: @lite-tool-height + 1;
+
+        background-color: @color-brand;
+        border: 1px solid darken(@color-brand, 10%);
+        border-radius: @lite-tool-height/2;
+
+        font-size: 22px;
+        color: #FFFFFF;
+        text-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.20);
+        text-align: center;
+        line-height: @lite-tool-height;
+        z-index: 2;
+        cursor: pointer;
+
+        &.pnd-lite-tool-user-logged {
+            background-color: @color-dark-gray; // @color-dark;
+            border: 1px solid darken(@color-dark-gray, 10%); // lighten(@color-dark, 10%);
+        }
+    }
+
+    /* Wrapper of tool contents */
+    .pnd-lite-tool-wrap {
+        position: absolute;
+        right: 0;
+        height: @lite-tool-height;
+        width: @lite-tool-height;
+        overflow: hidden;
+        border-radius: @lite-tool-height/2;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+        transition-duration: .5s;
+        transition-property: width; // , right;
+
+        .pnd-lite-tool-content {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: @lite-tool-height;
+            width: @annotation-sidebar-exp-width;
+            background: #FFFFFF;
+            border: 1px solid @color-border-normal;
+            border-radius: @lite-tool-height/2;
+        }
+
+        /* User
+        Displays the name of the user or the 'login' button */
+        .pnd-lite-tool-user {
+            position: absolute;
+            left: @lite-tool-height + 10px;
+            top: 0;
+            height: @lite-tool-height - 2px;
+
+            div {
+                line-height: @lite-tool-height - 2px;
+                max-width: @annotation-sidebar-exp-width - 168px;
+                font-size: 13px;
+                color: @color-text-link;
+                cursor: pointer;
+
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            .pnd-lite-tool-user-not-logged {
+                width: 65px;
+            }
+        }
+
+        /* Sidebar toggle
+        Allows users to open/close sidebar */
+        .pnd-lite-tool-sidebar-toggle {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: @lite-tool-height - 2px;
+            background: @color-background-light;
+            padding: 0 10px;
+            border-left: 1px solid @color-border-normal;
+            border-radius: 0 @lite-tool-height/2 - 2px @lite-tool-height/2 - 2px 0;
+            cursor: pointer;
+
+            div {
+                line-height: @lite-tool-height - 2px;
+                font-size: 13px;
+                color: @color-text-link;
+            }
+
+            .pnd-icon {
+                vertical-align: top;
+                margin-top: 11px;
+                display: inline-block;
+                font-size: 14px;
+            }
+
+            /* Different margins around icon for close and open state */
+            .pnd-lite-tool-sidebar-toggle-close {
+                .pnd-icon {
+                    margin-left: 5px;
+                }
+            }
+
+            .pnd-lite-tool-sidebar-toggle-open {
+                .pnd-icon {
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+
+    /* Open state */
+    &.pnd-lite-tool-open {
+        width: @annotation-sidebar-exp-width - 5px;
+        .pnd-lite-tool-wrap {
+            width: @annotation-sidebar-exp-width - 5px;
+        }
+    }
+
+    /* Hover state */
+    &:hover {
+        width: @annotation-sidebar-exp-width - 5px;
+        .pnd-lite-tool-wrap {
+            width: @annotation-sidebar-exp-width - 5px;
+        }
+    }
+}
+
+
+/* ------------------------------------ *\
+   #DROPDOWN
+\* ------------------------------------ */
+.pnd-lite-tool {
+    .pnd-dropdown-contextual-menu {
+        margin-top: 0;
+        border-radius: 0 0 @dropdown-round-corners @dropdown-round-corners;
+    }
 }
 

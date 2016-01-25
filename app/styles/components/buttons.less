@@ -11,57 +11,52 @@
 /* Default button */
 .pnd-btn {
     display: inline-block;
+    box-sizing: border-box;
 
     width: auto; /* for css conflicts */
     min-width: auto;
-    height: 29px;
+    height: 32px;
 
     margin: 0;
-    padding: 0 10px;
+    padding: 0 8px;
 
     background: @color-button-bg;
     background-image: none;
-    border: 0;
-    border-radius: 0;
+    border: @button-border-width solid @color-button-border;
+    border-radius: 3px;
     outline: 0;
 
-    color: @color-button-text-dark;
-    .text-white-emboss();
-    font-size: 12px;
-    font-weight: @btn-font-weight;
+    color: @color-button-text;
+    font-family: @font;
+    font-size: 13px;
+    font-weight: @button-font-weight;
     text-align: center;
     vertical-align: middle;
     white-space: nowrap;
     box-shadow: none;
     cursor: pointer;
 
+    /* Hover state */
     &:hover,
     &:focus,
     &.focus {
-        background: darken(@color-button-bg, 5);
+        color: @color-button-text-hover;
+        border-color: @color-button-border-hover;
+        // background: darken(@color-button-bg, 5); // TODO remove if not necessary
         outline: 0;
         box-shadow: none;
     }
 
-    // Remove the gradient for the pressed/active state
-    /*
-    TODO To be removed
-    This shouldn't be necessary since it's not depending on bootstrap anymore
-    Commented on 24 sep 2015
-    &:active,
-    &.active {
-        background-image: none;
-        box-shadow: none;
-        outline: 0;
-    }
-    */
+    /* Active state */
+    // TODO
 
+    /* Disabled state */
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        background: lighten(@color-button-bg, 20);
+        color: @color-button-text-disabled;
+        border-color: @color-button-border-disabled;
         cursor: @cursor-disabled;
-        color: fade(@color-button-text-dark, 50%) !important; // for ovewritings on .disabled class
         pointer-events: none; // Future-proof disabling of clicks
     }
 
@@ -72,15 +67,14 @@
 
 /* Smaller buttons */
 .pnd-btn-small {
-    height: 22px;
-    font-size: 11px;
-    padding-bottom: 2px;
+    height: 26px;
+    font-size: 12px;
 }
 
 /* X-small buttons */
-.pnd-btn-xs {
-    height: auto;
-    padding: 3px 5px; //!important
+.pnd-btn-xsmall {
+    height: 22px;
+    font-size: 11px;
     background-image: none;
     text-shadow: none;
     line-height: normal;
@@ -90,82 +84,85 @@
     }
 }
 
+/* For disabled buttons */
+button.disabled,
+button[disabled] {
+    opacity: 1;
+}
+
+
 /* ------------------------------------ *\
    #CALL-TO-ACTION-BUTTON
 \* ------------------------------------ */
 
-/* Usually green button */
 .pnd-btn-calltoaction {
-    .vertical-gradient(@color-button-bg-cta, @button-gradient-level);
-    color: @color-button-text-light;
+    color: @color-button-cta-text;
+    background-color: @color-button-cta-bg;
+    border: 0;
     .text-dark-emboss();
 
+    /* Hover state */
     &:hover,
     &:focus,
     &.focus {
-        .vertical-gradient(darken(@color-button-bg-cta, 5), @button-gradient-level);
+        color: @color-button-cta-text;
+        background-color: @color-button-cta-bg-hover;
+        border: 0;
     }
 
+    /* Active state */
+    // TODO
+
+    /* Disabled state */
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%) !important; // for ovewritings on .disabled class
+        color: @color-button-cta-text-disabled;
+        background-color: @color-button-cta-bg-disabled;
+        border: 0;
+        // color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO remove if not necessary
         text-shadow: none;
-        .vertical-gradient(lighten(@color-button-bg-cta, 20), @button-gradient-level);
     }
 }
 
 
 /* ------------------------------------ *\
-   #DARK
-\* ------------------------------------ */
-
-.pnd-btn-dark {
-    .vertical-gradient(@color-button-bg-dark, @button-gradient-level);
-    color: @color-button-text-light;
-    .text-dark-emboss();
-
-    &:hover,
-    &:focus,
-    &.focus {
-        .vertical-gradient(darken(@color-button-bg-dark, 5), @button-gradient-level);
-    }
-
-    &.disabled,
-    &[disabled],
-    fieldset[disabled] & {
-        color: fade(@color-button-text-light, 20%) !important; // for ovewritings on .disabled class
-        text-shadow: none;
-        .vertical-gradient(darken(@color-button-bg-dark, 7), @button-gradient-level);
-    }
-}
-
-/* ------------------------------------ *\
-   #TRANSPARENT-BG-BUTTON
+   #LIGHT BUTTON
 \* ------------------------------------ */
 
 .pnd-btn-transparent {
+    padding: 0 0;
+    color: @color-button-light-text;
     background-color: transparent;
     background-image: none;
-    color: @color-text;
+    border: 0;
     text-shadow: none;
 
+    /* Hover state */
     &:hover,
     &:focus,
     &.focus {
+        color: @color-button-light-text-hover;
         background-color: transparent;
         background-image: none;
+        border: 0;
     }
 
+    /* Active state */
+    // TODO
+
+    /* Disabled state */
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
+        color: @color-button-light-text-disabled;
         background-color: transparent;
         background-image: none;
-        color: fade(@color-text, 60%) !important; // for ovewritings on .disabled class
-        text-shadow: none;
+        border: 0;
+        // color: fade(@color-text, 60%) !important; // for ovewritings on .disabled class // TODO remove if not necessary
     }
 }
+
 
 /* ------------------------------------ *\
    #SEMANTIC-BUTTONS
@@ -174,93 +171,85 @@
 
 /* Subject button */
 .pnd-btn-subject {
-    .vertical-gradient(@subject-color, @button-gradient-level);
-    color: @color-button-text-light;
-    .text-dark-emboss();
+    color: @color-button-cta-text;
+    background-color: @color-subject;
+    border: 0;
 
+    /* Hover state */
     &:hover,
     &:focus,
     &.focus {
-        .vertical-gradient(darken(@subject-color, 5), @button-gradient-level);
+        color: @color-button-cta-text;
+        background-color: darken(@color-subject, 5); // TODO To be introduced as variable?
     }
 
+    /* Active state */
+    // TODO
+
+    /* Disabled state */
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%) !important; // for ovewritings on .disabled class
+        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO To be introduced as variable?
+        background-color: lighten(@color-subject, 20);
         text-shadow: none;
-        .vertical-gradient(lighten(@subject-color, 20), @button-gradient-level);
     }
-
 }
 
 /* Predicate button */
 .pnd-btn-predicate {
-    .vertical-gradient(@predicate-color, @button-gradient-level);
-    color: @color-button-text-light;
-    .text-dark-emboss();
+    color: @color-button-cta-text;
+    background-color: @color-predicate;
+    border: 0;
 
+    /* Hover state */
     &:hover,
     &:focus,
     &.focus {
-        .vertical-gradient(darken(@predicate-color, 5), @button-gradient-level);
+        color: @color-button-cta-text;
+        background-color: darken(@color-predicate, 5); // TODO To be introduced as variable?
     }
 
+    /* Active state */
+    // TODO
+
+    /* Disabled state */
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%) !important; // for ovewritings on .disabled class
+        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO To be introduced as variable?
+        background-color: lighten(@color-predicate, 20);
         text-shadow: none;
-        .vertical-gradient(lighten(@predicate-color, 20), @button-gradient-level);
     }
-
 }
 
 /* Object button */
 .pnd-btn-object {
-    .vertical-gradient(@object-color, @button-gradient-level);
-    color: @color-button-text-light;
-    .text-dark-emboss();
+    color: @color-button-cta-text;
+    background-color: @color-object;
+    border: 0;
 
+    /* Hover state */
     &:hover,
     &:focus,
     &.focus {
-        .vertical-gradient(darken(@object-color, 5), @button-gradient-level);
+        color: @color-button-cta-text;
+        background-color: darken(@color-object, 5); // TODO To be introduced as variable?
     }
 
+    /* Active state */
+    // TODO
+
+    /* Disabled state */
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-text-light, 60%) !important; // for ovewritings on .disabled class
+        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO To be introduced as variable?
+        background-color: lighten(@color-object, 20);
         text-shadow: none;
-        .vertical-gradient(lighten(@object-color, 20), @button-gradient-level);
     }
 }
 
-/* ------------------------------------ *\
-   #LINK-BUTTONS
-\* ------------------------------------ */
-
-// Make a button look and behave like a link
-.pnd-btn-link {
-    color: @gray;
-    font-weight: normal;
-    cursor: pointer;
-    border-radius: 0;
-    line-height: 0; // PND ADD
-    background-color: transparent;
-
-    &:hover {
-        color: @color-text;
-        text-decoration: none;
-        background-color: transparent;
-    }
-
-    &:focus {
-        text-decoration: none;
-        background-color: transparent;
-    }
-}
 
 /* ------------------------------------ *\
    #AVAILABLE-WIDTH-FILL-BUTTONS
@@ -288,10 +277,4 @@ can be extended to support more buttons
 .pnd-btn-fill-width:first-child:nth-last-child(3),
 .pnd-btn-fill-width:first-child:nth-last-child(3) ~ .pnd-btn-fill-width {
     width: 33.3333%;
-}
-
-/* For disabled buttons */
-button.disabled,
-button[disabled] {
-    opacity: 1;
 }

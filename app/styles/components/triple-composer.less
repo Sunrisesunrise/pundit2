@@ -17,10 +17,13 @@
     /* Single Triple */
     .pnd-statement-row {
         position: relative;
-        height: @triplecomposer-height + 2 * @triplecomposer-padding-inner;
         margin-left: @triplecomposer-spacing;
         margin-bottom: @triplecomposer-spacing;
         margin-right: @triplecomposer-spacing;
+
+        border: 1px solid @triplecomposer-color-border;
+        background-color: @triplecomposer-color-bg;
+        border-radius: @triplecomposer-border-radius;
 
         &:first-child {
             margin-top: @triplecomposer-spacing;
@@ -32,11 +35,7 @@
 
         /* Div containing the three triple blocks */
         .pnd-statement-widget {
-            position: absolute;
-            right: 24px;
-            left: 0;
-            padding: 0;
-            background-color: transparent;
+            margin-right: 25px;
         }
 
         /* Single block */
@@ -48,7 +47,6 @@
             height: @triplecomposer-height + 2 * @triplecomposer-padding-inner;
             width: 33.3%;
             float: left;
-            background-color: @gray-lighter;
         }
 
         .pnd-statement-subject {
@@ -69,13 +67,15 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            border-radius: @triplecomposer-inner-border-radius;
 
             /* Text label */
             .pnd-statement-label {
                 display: block;
                 overflow: hidden;
                 height: @triplecomposer-height;
-                padding-left: @triplecomposer-padding-inner;
+                padding-left: 8px;;
+                font-size: 12px;
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 line-height: @triplecomposer-height;
@@ -109,9 +109,15 @@
                     width: @triplecomposer-height + 1;
                     vertical-align: bottom;
                     margin: 0;
+                    padding: 0;
                     color: #fff;
+                    border-top: 0;
+                    border-right: 0;
+                    border-bottom: 0;
                     border-left-width: 1px;
                     border-left-style: solid;
+                    box-shadow: 0; /* Css conficlts */
+                    -webkit-box-shadow: 0; /* Css conficlts */
                     float: right;
 
                     &:hover,
@@ -122,12 +128,18 @@
 
                     span {
                         color: #fff;
+                        text-align: center;
+                    }
+
+                    &:first-child {
+                        border-radius: 0 @triplecomposer-inner-border-radius @triplecomposer-inner-border-radius 0;
                     }
                 }
 
-                /* Centers the icon, considering the left border */
+                /* Centers the icon */
                 .pnd-icon {
-                    margin-left: 1px;
+                    display: block;
+                    margin-left: -1px;
                 }
             }
 
@@ -141,69 +153,55 @@
         /* Subject */
         .pnd-row-button-subject {
             .pnd-statement-label, button {
-                background-color: @subject-color;
+                background-color: @color-subject;
                 &:hover {
-                    background-color: darken(@subject-color, 5);
+                    background-color: darken(@color-subject, 5);
                 }
             }
 
             .pnd-statement-label {
-                color: @subject-color-text;
+                color: @color-subject-text;
             }
 
             button {
-                border-left-color: darken(@subject-color, 10);
+                border-left-color: darken(@color-subject, 10);
             }
         }
 
         /* Predicate */
         .pnd-row-button-predicate {
             .pnd-statement-label, button {
-                background-color: @predicate-color;
+                background-color: @color-predicate;
                 &:hover {
-                    background-color: darken(@predicate-color, 5);
+                    background-color: darken(@color-predicate, 5);
                 }
             }
 
             .pnd-statement-label {
-                color: @predicate-color-text
+                color: @color-predicate-text;
             }
 
             button {
-                border-left-color: darken(@predicate-color, 10);
+                border-left-color: darken(@color-predicate, 10);
             }
         }
 
         /* Object */
         .pnd-row-button-object {
             .pnd-statement-label, button {
-                background-color: @object-color;
+                background-color: @color-object;
                 &:hover {
-                    background-color: darken(@object-color, 5);
+                    background-color: darken(@color-object, 5);
                     background-image: none;
                 }
             }
 
             .pnd-statement-label {
-                color: @object-color-text;
+                color: @color-object-text;
             }
 
             button {
-                border-left-color: darken(@object-color, 10);
-            }
-        }
-
-        /* Templates: Mandatory Subject and object for Templates */
-        .pnd-statement-object {
-            .pnd-statement-mandatory-object {
-                // border: 1px solid lighten(@brand-danger, 20%);
-            }
-        }
-
-        .pnd-statement-subject {
-            .pnd-statement-subject-text {
-                // color: lighten(@brand-danger, 20%);
-                // font-style: italic;
+                border-left-color: darken(@color-object, 10);
             }
         }
 
@@ -213,44 +211,17 @@
             right: 0;
             width: 25px;
 
-            .pnd-btn {
-                background-color: @gray-lighter;
+            button {
                 height: @triplecomposer-height + 2 * @triplecomposer-padding-inner;
-            }
-
-            .pnd-icon {
+                color: @color-dark-gray;
+                padding-left: 4px;
+                
                 &:hover {
-                    // color: @gray;
+                    color: @color-brand;
                 }
             }
         }
 
-        /* Input and icon */
-        /*
-        .left-inner-icon {
-            position: relative;
-            padding: 0;
-        }
-
-        .left-inner-icon input {
-            padding-right: 20px;
-            font-weight: normal;
-        }
-
-        .left-inner-icon .pnd-icon {
-            position: absolute;
-            color: @gray-light;
-            right: 0;
-            top: 0;
-            padding: 7px;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-        }
-        */
-
-        // .pnd-icon-times is configured in *ItemsContainer.service.js defaults with
-        // inputIconClear: 'pnd-icon-times'
         .left-inner-icon .pnd-icon.pnd-icon-times:hover {
             color: @brand-success;
             cursor: pointer;

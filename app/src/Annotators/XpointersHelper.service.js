@@ -934,6 +934,10 @@ angular.module('Pundit2.Annotators')
         return false;
     };
 
+    xpointersHelper.getSafeCanoicalUrl = function() {
+        var canonical = Utils.getCanonicalUrl();
+        return canonical ? encodeURI(decodeURIComponent(canonical)) : undefined;
+    };
 
     // TODO: Maybe this belongs somewhere else .. need to refactor a bit of
     //       TextFragmentHandler service ....

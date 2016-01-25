@@ -85,6 +85,7 @@ angular.module('Pundit2.Core')
             $timeout.cancel(updateAddTimer);
 
             if (itemsCache.length === 0) {
+                // TODO: try to consolidate unconosolidable items.
                 promise.resolve();
                 return;
             }
@@ -400,7 +401,8 @@ angular.module('Pundit2.Core')
     // be passed to the server looking for annotations.
     consolidation.getAvailableTargets = function(onlyNamedContents) {
         var ret = [],
-            nc = XpointersHelper.options.namedContentClasses;
+            nc = XpointersHelper.options.namedContentClasses,
+            canonical = XpointersHelper.getSafeCanoicalUrl();
 
         // The page URL is for xpointers out of named contents
         if (typeof(onlyNamedContents) === 'undefined' || onlyNamedContents !== true) {
@@ -423,6 +425,10 @@ angular.module('Pundit2.Core')
                     ret.push(uri);
                 }
             }
+        }
+        
+        if (typeof canonical !== 'undefined') {
+            ret.push(canonical);
         }
 
         return ret;

@@ -19,10 +19,12 @@ angular.module('Pundit2.FragmentPopover')
             var ann = data.annotations[annId];
             options.scopeData.annotations.push({
                 id: annId,
-                entities: ann.entities
+                entities: ann.entities,
+                description: ann.firstConsolidableItem.description
             });
         }
-        if (typeof data.link !== 'undefined') {
+        if (typeof data.link !== 'undefined' &&
+            typeof data.link.element !== 'undefined') {
             options.scopeData.hasLink = true;
             options.scopeData.link = {
                 url: data.link.url,
@@ -36,7 +38,7 @@ angular.module('Pundit2.FragmentPopover')
             promise.then(function() {
                 //PndPopover.getState().selection.removeAllRanges();
             }, function() {
-                console.log(arguments);
+                fragmentPopover.log(arguments);
             });
         }
         return promise;

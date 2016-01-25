@@ -2,7 +2,7 @@
     <!-- Top area -->
     <div class="kee-top-area">
         <div class="kee-top-area-menu pull-right">
-            <button type="button" class="pnd-btn pnd-btn-xs pnd-btn-link" ng-click="showDropdown($event)">
+            <button type="button" ng-click="showDropdown($event)">
                 <span class="pnd-icon pnd-icon-gear"></span>
             </button>
         </div>
@@ -38,7 +38,7 @@
             <div class="kee-new-languages">
                 <div kee-languages="tabs"></div>
                 <button
-                        class="pnd-btn pnd-btn-xs pnd-btn-link pull-left"
+                        class="pnd-btn pnd-btn-transparent pull-left"
                         template-url="{{disactiveLanguagesPopoverTemplate}}"
                         data-animation="am-flip-x"
                         bs-popover>
@@ -104,6 +104,7 @@
                     <!-- End form group -->
                 </div>
                 <!-- End image url -->
+
                 <!-- Original url-->
                 <div class="kee-new-original-url"
                      ng-show="conf.fromLODTools">
@@ -122,7 +123,7 @@
                                 ng-disabled="originalUrlCheck">
                         </div>
                     </div>
-                    <button class="pnd-btn"
+                    <button class="pnd-btn pnd-btn-small"
                             ng-disabled="originalUrlCheck"
                             ng-show="conf.LODToolSearchURL"
                             ng-click="searchOnResourcePanel($event, 'original-url')">
@@ -130,10 +131,11 @@
                     </button>
                 </div>
                 <!-- End original url -->
+
                 <!-- Search and copy from LOD-->
                 <div class="kee-new-search-and-copy"
                      ng-show="conf.fromLODTools && conf.LODToolSearchAndCopy">
-                    <button class="pnd-btn"
+                    <button class="pnd-btn pnd-btn-small"
                             ng-click="searchOnResourcePanel($event, 'copy-from-lod')">
                         Search and copy from LOD
                     </button>
@@ -152,7 +154,7 @@
                     <div class="form-group">
                         <button
                             type="button"
-                            class="pnd-btn pnd-btn-xs pnd-btn-link pull-right"
+                            class="pnd-btn pnd-btn-transparent pull-right"
                             ng-show="!activeFilter"
                             ng-click="activeFilter = !activeFilter">
                                 <span class="pnd-icon pnd-icon-filter"></span>
@@ -233,13 +235,13 @@
                 <!-- End Types -->
                 <button
                         type="button"
-                        class="pnd-btn pnd-btn-small"
+                        class="pnd-btn pnd-btn-xsmall"
                         ng-click="activeAllTypes()">
                     Select all types
                 </button>
                 <button
                         type="button"
-                        class="pnd-btn pnd-btn-small"
+                        class="pnd-btn pnd-btn-xsmall"
                         ng-click="disableAllTypes()">
                     Deselect all types
                 </button>
@@ -310,7 +312,7 @@
             <div class="kee-error-more-info-content-footer small-modal-footer">
                 <button
                         type="button"
-                        class="pnd-btn"
+                        class="pnd-btn pnd-btn-small"
                         ng-click="toggleErrorDetailsClick()">
                     Close
                 </button>
@@ -322,23 +324,23 @@
 
     <!-- Footer -->
     <div class="kee-footer">
-        <button 
+        <button
             type="button" 
-            class="pnd-btn pnd-btn-calltoaction"
-            ng-click="save()">
-                <span ng-if="!editMode">Save and add</span>
-                <span ng-if="editMode">Save</span>
-        </button><button
-            type="button" 
-            class="pnd-btn"
+            class="pnd-btn pnd-btn-small"
             ng-click="closeKeeModal()">
                 Close
         </button><button
             ng-hide="editMode" 
             type="button" 
-            class="pnd-btn"
+            class="pnd-btn pnd-btn-small"
             ng-click="clearForm()">
                 Clear
+        </button><button
+                type="button"
+                class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
+                ng-click="save()">
+            <span ng-if="!editMode">Save and add</span>
+            <span ng-if="editMode">Save</span>
         </button>
     </div> 
     <!-- End Footer -->

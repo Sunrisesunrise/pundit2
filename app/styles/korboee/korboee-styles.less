@@ -10,9 +10,11 @@
    #DIALOG-STRUCTURE
 \* ------------------------------------ */
 
-.modal-dialog {
-    width: @kee-dialog-width;
+.pnd-modal-content {
+    width: @kee-dialog-width !important;
+    min-width: @kee-dialog-width !important;
     height: @kee-dialog-height;
+    font-family: @font;
 }
 
 &.kee-modal-container.modal {
@@ -21,16 +23,51 @@
 
 .kee-modal-body {
     padding: 0;
-    border-top: 4px solid @gray-light;
 }
 
+
 /* ------------------------------------ *\
-   #TABS-HEADERS
+   #HEADER
 \* ------------------------------------ */
 
-.pnd-tab-header {
+.kee-top-area {
+    border-bottom: 1px solid @color-border-normal;
+    padding: 0;
+    margin-bottom: 0;
+    height: 74px;
 
-   > li > a {
+    .kee-top-area-message {
+        height: 30px;
+        padding: 13px 9px;
+        font-size: 14px;
+        line-height: 1;
+        overflow: hidden;
+    }
+
+    .kee-top-area-menu {
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+
+        .pnd-icon {
+            display: inline-block;
+            padding-top: 9px;
+            color: @color-dark-gray;
+
+            &:hover {
+                color: @color-text-link;
+            }
+        }
+    }
+}
+
+/* Tabs in header */
+ul.pnd-tab-header {
+    height: 34px;
+    padding-top: 4px;
+    border-radius: @modal-border-radius 0 0 0;
+
+    > li > a {
         text-decoration: none;
 
         &:hover,
@@ -40,7 +77,29 @@
         }
     }
 }
- 
+
+
+/* ------------------------------------ *\
+   #LANGUAGES-VERTICAL-TABS
+\* ------------------------------------ */
+
+.kee-new-languages {
+
+    // Button for adding or removing languages
+    // TODO This should go in the vertical tabs al the last item
+    .pnd-btn {
+        padding: 1px 5px;
+        position: absolute;
+        left: 9px;
+        bottom: 40px;
+        background: transparent;
+    }
+    .tabs-left > .pnd-vertical-tabs > li > a {
+        min-width: 40px;
+        text-align: center;
+    }
+}
+
 
 /* ------------------------------------ *\
    #VERTICAL-TABS-ELEMENTS
@@ -66,54 +125,6 @@
 
 
 /* ------------------------------------ *\
-   #LANGUAGES-VERTICAL-TABS
-\* ------------------------------------ */
-
-.kee-new-languages {
-
-    // Button for adding or removing languages
-    // TODO This should go in the vertical tabs al the last item
-    .pnd-btn {
-        padding: 1px 5px;
-        position: absolute;
-        left: 9px;
-        bottom: 40px;
-        background: transparent;
-    }
-    .tabs-left > .pnd-vertical-tabs > li > a {
-        min-width: 40px;
-    }
-}
-
-
-/* ------------------------------------ *\
-   #HEADER
-\* ------------------------------------ */
-
-.kee-top-area {
-    border-bottom: 1px solid @gray-light;
-    padding: 0;
-    margin-bottom: 0;
-    height: 70px;
-
-    .kee-top-area-message {
-        font-size: 16px;
-        padding: 10px;
-    }
-
-    .kee-top-area-menu {
-        font-size: 14px;
-        margin: 0;
-        padding: 0;
-
-        .pnd-btn-link {
-            padding: 5px 8px 8px;
-            background-color: #999999;
-        }
-    }
-}
-
-/* ------------------------------------ *\
    #CONTENT
 \* ------------------------------------ */
 
@@ -121,7 +132,7 @@
     overflow: auto;
     overflow-x: hidden;
     overflow-y: auto;
-    height: @kee-dialog-height - 70px - 30px - 4px;
+    height: @kee-dialog-height - 70px - @kee-footer-height - 4px;
 
     textarea {
         resize: none;
@@ -134,7 +145,7 @@
 
         input {
             padding-right: 20px;
-            font-weight: normal;
+            font-weight: @font-weight-normal;
         }
 
         .pnd-icon {
@@ -153,7 +164,7 @@
     .kee-inner-sub-pane-left {
         width: 50%;
         padding:  15px;
-        border-right: 1px solid @gray-extra-lighter;
+        border-right: 1px solid @color-border-normal;
         height: @kee-dialog-height - 70px - 30px - 4px;
     }
 
@@ -180,8 +191,8 @@
 
 .kee-list-types {
     overflow-y: auto;
-    height: @kee-dialog-height - 210px;;
-    border: 1px solid @gray-extra-light;
+    height: @kee-dialog-height - 220px;;
+    border: 1px solid @color-border-normal;
     margin-bottom: 15px;
 }
 
@@ -202,15 +213,15 @@
 \* ------------------------------------ */
 
 .kee-footer {
-    // background-color: #fff;
-    border-top: 1px solid @gray-light;
-    height: 30px;
-    padding: 0;
+    border-top: 1px solid @color-border-normal;
+    height: @kee-footer-height;
+    padding: 7px 0 0 0;
     margin: 0;
     clear: both;
+    text-align: right;
 
     .pnd-btn {
-        float: left;
+        margin-right: 7px;
     }
 }
 
@@ -267,32 +278,30 @@
 /* ------------------------------------ *\
    #LANGUAGES-POPOVER
 \* ------------------------------------ */
-// TODO Verify why we're not using the Dropodown component
+// TODO This should become a dropdown element and inherit standard style
 
 .pnd-korbo-languages-popover {
 
     .kee-popover-item {
-        padding: 4px 8px;
-        font-size: 12px;
+        padding: 5px 8px;
+        font-size: 13px;
 
         & ~ .kee-popover-item {
-            border-top: 1px solid @gray-lighter;
+            border-top: 1px solid @color-border-normal;
         }
 
         &[disabled="disabled"] {
-            color: @gray-extra-light;
+            color: @color-text-light;
             cursor: default;
 
             &:hover {
                 background-color: #FFFFFF;
             }
         }
-
         &:hover {
             background-color: @gray-lighter;
             cursor: pointer;
         }
-
         .pnd-icon {
             margin-right: 5px;
             color: @gray;
@@ -301,12 +310,13 @@
 }
 
 
+
 /* ------------------------------------ *\
    #IMAGE-URL
 \* ------------------------------------ */
 
 .kee-new-image-url {
-    border-bottom: 1px solid @gray-extra-lighter;
+    border-bottom: 1px solid @color-border-normal;
     margin-bottom: 15px;
 
     .kee-preview-image {
@@ -352,7 +362,7 @@
 \* ------------------------------------ */
 
 .kee-new-original-url {
-    border-bottom: 1px solid @gray-extra-lighter;
+    border-bottom: 1px solid @color-border-normal;
     margin-bottom: 15px;
     padding-bottom: 15px;
 
@@ -365,8 +375,15 @@
         width: 26px;
         height: 26px;
         font-size: 13px;
-        background-color: darkgrey;
-        color: #FFFFFF !important; // TODO No important please
+        background-color: @color-light;
+        color: @color-dark-gray !important;
+        border-radius: 3px 0 0 3px;
+        border: 1px solid @color-border-normal;
+        cursor: pointer;
+
+        &:hover {
+            color: @color-text-link !important;;
+        }
     }
 }
 
@@ -386,7 +403,7 @@
     input {
         width: 100% !important;
         padding-right: 20px;
-        font-weight: normal;
+        font-weight: @font-weight-normal;
     }
 
     .pnd-icon {
@@ -451,7 +468,7 @@
             }
 
             .kee-elem-to-search {
-                font-weight: bold;
+                font-weight: @font-weight-bold;
                 margin: 0 0 5px 0;
                 display: block;
                 white-space: nowrap;

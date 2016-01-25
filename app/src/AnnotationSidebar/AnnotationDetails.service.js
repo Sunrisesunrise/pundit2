@@ -64,7 +64,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
 .service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $window, $modal, $injector, $q,
     BaseComponent, Config, EventDispatcher, Annotation, AnnotationSidebar, AnnotationsExchange, ModelHelper, TemplatesExchange,
-    Consolidation, ContextualMenu, ImageHandler, ItemsExchange, MyPundit, TextFragmentAnnotator,
+    Consolidation, ContextualMenu, ItemsExchange, MyPundit, TextFragmentAnnotator, Status,
     ImageAnnotator, AnnotationsCommunication, NotebookExchange, TypesHelper, Analytics, NameSpace) {
 
     var annotationDetails = new BaseComponent('AnnotationDetails', ANNOTATIONDETAILSDEFAULTS);
@@ -87,58 +87,56 @@ angular.module('Pundit2.AnnotationSidebar')
         overActiveId = '',
         highlightFragments = [];
 
-    // var modalTimeoutPromise;
+    // ContextualMenu.addAction({
+    //     type: [
+    //         TextFragmentAnnotator.options.cMenuType,
+    //         ImageHandler.options.cMenuType
+    //     ],
+    //     name: 'showAllAnnotations',
+    //     label: 'Show all annotations of this item',
+    //     showIf: function(item) {
+    //         if (typeof(item) !== 'undefined') {
+    //             return Consolidation.isConsolidated(item) || (item.uri in Consolidation.getFragmentParentList());
+    //         }
+    //     },
+    //     priority: 10,
+    //     action: function(item) {
+    //         if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
+    //             AnnotationSidebar.toggle();
+    //         }
+    //         annotationDetails.closeViewAndReset();
 
-    ContextualMenu.addAction({
-        type: [
-            TextFragmentAnnotator.options.cMenuType,
-            ImageHandler.options.cMenuType
-        ],
-        name: 'showAllAnnotations',
-        label: 'Show all annotations of this item',
-        showIf: function(item) {
-            if (typeof(item) !== 'undefined') {
-                return Consolidation.isConsolidated(item) || (item.uri in Consolidation.getFragmentParentList());
-            }
-        },
-        priority: 10,
-        action: function(item) {
-            if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
-                AnnotationSidebar.toggle();
-            }
-            annotationDetails.closeViewAndReset();
+    //         if (AnnotationSidebar.isFiltersExpanded()) {
+    //             AnnotationSidebar.toggleFiltersContent();
+    //         }
 
-            if (AnnotationSidebar.isFiltersExpanded()) {
-                AnnotationSidebar.toggleFiltersContent();
-            }
+    //         AnnotationSidebar.resetFilters();
 
-            AnnotationSidebar.resetFilters();
+    //         var fragmentsListUri;
+    //         var fragmentParentList = Consolidation.getFragmentParentList();
+    //         if (item.uri in fragmentParentList) {
+    //             fragmentsListUri = fragmentParentList[item.uri];
+    //         }
 
-            var fragmentsListUri;
-            var fragmentParentList = Consolidation.getFragmentParentList();
-            if (item.uri in fragmentParentList) {
-                fragmentsListUri = fragmentParentList[item.uri];
-            }
+    //         for (var annotation in state.annotations) {
+    //             if (state.annotations[annotation].itemsUriArray.indexOf(item.uri) === -1) {
+    //                 state.annotations[annotation].ghosted = true;
+    //             }
+    //             for (var f in fragmentsListUri) {
+    //                 if (state.annotations[annotation].itemsUriArray.indexOf(fragmentsListUri[f].uri) !== -1) {
+    //                     state.annotations[annotation].ghosted = false;
+    //                     continue;
+    //                 }
+    //             }
+    //         }
 
-            for (var annotation in state.annotations) {
-                if (state.annotations[annotation].itemsUriArray.indexOf(item.uri) === -1) {
-                    state.annotations[annotation].ghosted = true;
-                }
-                for (var f in fragmentsListUri) {
-                    if (state.annotations[annotation].itemsUriArray.indexOf(fragmentsListUri[f].uri) !== -1) {
-                        state.annotations[annotation].ghosted = false;
-                        continue;
-                    }
-                }
-            }
+    //         state.isGhostedActive = true;
+    //         TextFragmentAnnotator.ghostAll();
+    //         TextFragmentAnnotator.ghostRemoveByUri(item.uri);
 
-            state.isGhostedActive = true;
-            TextFragmentAnnotator.ghostAll();
-            TextFragmentAnnotator.ghostRemoveByUri(item.uri);
-
-            Analytics.track('buttons', 'click', 'contextualMenu--showAllAnnotationForItem');
-        }
-    });
+    //         Analytics.track('buttons', 'click', 'contextualMenu--showAllAnnotationForItem');
+    //     }
+    // });
 
     // confirm modal
     var modalScope = $rootScope.$new();
@@ -248,16 +246,24 @@ angular.module('Pundit2.AnnotationSidebar')
                 icon: currentItem.getIcon(),
                 typeLabel: (typeof currentItem.type[0] !== 'undefined' ? TypesHelper.getLabel(currentItem.type[0]) : null),
                 // typeLabel: TypesHelper.getLabel(currentItem.type[0]),
-                typeClass: 'uri'
+                typeClass: 'uri',
+                pageContext: currentItem.pageContext
             };
+
+            if (result.typeLabel === 'Text fragment' &&
+                result.pageContext !== undefined) {
+                if (result.pageContext !== location.href) {
+                    result.isExternal = true;
+                }
+            }
         }
         return result;
     };
 
     var buildMainItem = function(currentAnnotation) {
-        var annotation = currentAnnotation;
-        var firstUri;
-        var mainItem = {};
+        var annotation = currentAnnotation,
+            mainItem = {},
+            firstUri;
 
         for (firstUri in annotation.graph) {
             break;
@@ -269,9 +275,10 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var buildObjectsArray = function(list) {
+        var objectValue,
+            objectType;
         var results = [];
-        var objectValue;
-        var objectType;
+
         for (var object in list) {
             objectValue = list[object].value;
             objectType = list[object].type;
@@ -300,17 +307,22 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var buildItemsArray = function(currentAnnotation) {
-        var annotation = currentAnnotation;
-        var graph = annotation.graph;
+        var annotation = currentAnnotation,
+            graph = annotation.graph,
+            object;
+
         var results = [];
 
         for (var subject in graph) {
             for (var predicate in graph[subject]) {
-                results.push({
-                    subject: buildItemDetails(subject),
-                    predicate: buildItemDetails(predicate),
-                    objects: buildObjectsArray(graph[subject][predicate], annotation)
-                });
+                for (var objectIndex in graph[subject][predicate]) {
+                    object = graph[subject][predicate][objectIndex];
+                    results.push({
+                        subject: buildItemDetails(subject),
+                        predicate: buildItemDetails(predicate),
+                        objects: buildObjectsArray([object])
+                    });
+                }
             }
         }
 
@@ -335,10 +347,9 @@ angular.module('Pundit2.AnnotationSidebar')
         var annotationServerVersion = Config.annotationServerVersion;
 
         if (annotationServerVersion === 'v2') {
-            var momentDate = moment(serverdate).utc().format('YYYY-MM-DD HH:mm:ss');
+            var momentDate = moment(serverdate).utc();
             var localTime = moment.utc(momentDate).toDate();
-            localTime = moment(localTime).format('YYYY-MM-DD HH:mm:ss');
-            return localTime.toString();
+            return localTime;
         }
         return serverdate;
     };
@@ -537,7 +548,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     id: currentId,
                     creator: currentAnnotation.creator,
                     creatorName: currentAnnotation.creatorName,
-                    created: currentAnnotation.created,
+                    created: convertTime(currentAnnotation.created),
                     notebookId: currentAnnotation.isIncludedIn,
                     notebookName: notebookName,
                     scopeReference: scope,
@@ -636,7 +647,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var annotationId = e.args,
             targetAnnotation,
-            currentAnnotation;
+            currentAnnotation,
+            annomaticIsRunning;
 
         if (typeof(annotationId) !== 'undefined') {
 
@@ -653,6 +665,11 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             annotationDetails.closeAllAnnotationView(annotationId);
             annotationDetails.addAnnotationReference(targetAnnotation, true);
+
+            annomaticIsRunning = Status.getState('Annomatic').isRunning;
+            if (annomaticIsRunning) {
+                return;
+            }
 
             $timeout(function() {
                 var currentElement = angular.element('#' + annotationId),

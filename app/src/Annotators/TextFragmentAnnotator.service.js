@@ -56,7 +56,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> myItemsIconClass: 'pnd-icon-bookmark' </pre>
      */
-    myItemsIconClass: 'pnd-icon-bookmark',
+    myItemsIconClass: 'pnd-icon-star',
 
     /**
      * @module punditConfig
@@ -84,9 +84,9 @@ angular.module('Pundit2.Annotators')
      * Add or not the icon to the text fragments
      *
      * Default value:
-     * <pre> addIcon: 'true' </pre>
+     * <pre> addIcon: 'false' </pre>
      */
-    addIcon: true,
+    addIcon: false,
 
     /**
      * @module punditConfig

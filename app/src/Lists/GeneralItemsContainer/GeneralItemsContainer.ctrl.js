@@ -395,7 +395,7 @@ angular.module('Pundit2.GeneralItemsContainer')
             "divider": true
         });
         $scope.dropdownOrdering.push({
-            text: 'Add web page to My Items',
+            text: 'Add web page to Favourites',
             click: function() {
                 //var item = PageHandler.createItemFromPage();
                 if (MyPundit.isUserLogged() && !isCurrentPageInMyItems()) {

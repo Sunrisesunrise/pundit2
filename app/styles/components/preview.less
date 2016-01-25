@@ -4,7 +4,7 @@
  * Styles for preview panel on the right of the dashboard
  */
 
- /* ------------------------------------ *\
+/* ------------------------------------ *\
    #PREVIEW
 \* ------------------------------------ */
 
@@ -27,21 +27,24 @@
     }
 }
 
+/* Container of details of previewed element */
+.pnd-annotation-preview-item-container {
+    font-size: 13px;
+    word-wrap: break-word;
+}
+
+/* Image preview */
 .pnd-preview-item-image {
-    padding: 10px 10px 5px 10px;
+    padding: 10px 10px 0 10px;
     float: left;
     max-width: 50%;
     position: relative;
 
     img {
-        border: 1px solid @gray-extra-light;
+        border: 1px solid @color-border-normal;
         padding: 2px;
         width: 100%;
     }
-}
-
-.pnd-preview-item-description {
-    font-size: 13px;
 }
 
 .pnd-preview-item-webpage {
@@ -55,7 +58,7 @@
     position: relative;
 
     .pnd-icon.pnd-type {
-        padding: 4px 6px;
+        padding: 0 4px;
 
         position: absolute;
         right: 5px;
@@ -72,7 +75,6 @@
 
         li.pnd-type {
             float: left;
-            border-radius: @type-border-radius;
         }
     }
 }
@@ -88,31 +90,24 @@
     }
 }
 
+
+/* ------------------------------------ *\
+   #PREDICATE-PREVIEW
+\* ------------------------------------ */
 .pnd-preview-item-predicate {
+
+    border-top: 1px solid @color-border-normal;
+    margin: 10px 10px 5px 10px;
+    padding-top: 13px;
+
+    h1 {
+        font-size: 13px;
+        font-weight: @font-weight-bold;
+    }
 
     ul {
         margin: 0;
-        padding: 0 10px;
-
-        li {
-            padding: 6px 0;
-            list-style: none;
-            overflow-wrap: break-word;
-
-            span {
-                display: block;
-                padding: 2px 0;
-                border-bottom: 1px solid @gray-lighter;
-            }
-
-            span:last-child {
-                border-bottom: 0;
-            }
-
-            strong {
-                display: block;
-            }
-        }
+        font-size: 12px;
     }
 }
 
@@ -121,4 +116,34 @@
     display: block;
     float: left;
     padding: 5px 0 10px 10px;
+}
+
+
+/* ------------------------------------ *\
+   #GENERAL-ELEMENTS
+\* ------------------------------------ */
+
+/* General labels and details used in the Preview */
+.pnd-preview-detail {
+    margin-bottom: 10px;
+}
+
+.pnd-preview-detail-label {
+    display: block;
+    font-weight: @font-weight-bold;
+}
+
+.pnd-preview-detail-content {
+    display: block;
+    font-weight: @font-weight-normal;
+}
+
+
+/* ------------------------------------ *\
+   #NOTEBOOK-PREVIEW
+\* ------------------------------------ */
+
+.pnd-preview-notebook {
+    padding: 10px;
+    font-size: 13px;
 }

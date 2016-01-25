@@ -19,7 +19,6 @@ angular.module('Pundit2.Toolbar')
 
     $scope.isUserLogged = false;
 
-    $scope.askThePundit = Config.askThePundit;
     $scope.myNotebooks = Toolbar.options.myNotebooks;
     $scope.dashboard = false;
     $scope.sidebar = false;
@@ -102,6 +101,12 @@ angular.module('Pundit2.Toolbar')
         Analytics.track('buttons', 'click', 'toolbar--logout');
     };
 
+    var manageYourAnnotation = function() {
+        ResourcePanel.hide();
+        $window.open(Config.homeBaseURL, '_blank');
+        Analytics.track('buttons', 'click', 'toolbar--manageAnnotation');
+    };
+
     var editYourProfile = function() {
         ResourcePanel.hide();
         MyPundit.editProfile();
@@ -114,10 +119,6 @@ angular.module('Pundit2.Toolbar')
             $window.open(Config.lodLive.baseUrl + Config.pndPurl + 'user/' + userData.id, '_blank');
             Analytics.track('buttons', 'click', 'toolbar--openYourGraph');
         }
-    };
-
-    $scope.askThePunditClick = function() {
-        Analytics.track('buttons', 'click', 'toolbar--askThePundit--' + ($scope.isUserLogged ? 'logged' : 'anonymous'));
     };
 
     // modal
@@ -370,13 +371,20 @@ angular.module('Pundit2.Toolbar')
             click: logout
         }];
     } else {
-        $scope.userLoggedInDropdown = [{
+        $scope.userLoggedInDropdown = [];
+        if (Config.homePundit) {
+            $scope.userLoggedInDropdown.push({
+                text: 'Manage your annotations',
+                click: manageYourAnnotation
+            });
+        }
+        $scope.userLoggedInDropdown.push({
             text: 'Edit your profile',
             click: editYourProfile
         }, {
             text: 'Log out',
             click: logout
-        }];
+        });
     }
 
 
@@ -412,6 +420,7 @@ angular.module('Pundit2.Toolbar')
     var updateMyNotebooks = function() {
         var notebooks = myNotebooks;
         var j = 1;
+        $scope.userNotebooksDropdown = [];
         for (var i = 0; i < notebooks.length; i++) {
             $scope.userNotebooksDropdown[j] = {
                 text: notebooks[i].label,
@@ -538,13 +547,6 @@ angular.module('Pundit2.Toolbar')
         $scope.userData = MyPundit.getUserData();
     });
 
-    // Handles userdata changes after edit profile, maybe we can remove the above
-    // $watch.
-    EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
-        $scope.isUserLogged = e.args;
-        $scope.userData = MyPundit.getUserData();
-    });
-
     // Handle changes in triple composer.
     EventDispatcher.addListeners(['TripleComposer.statementChanged', 'TripleComposer.reset'], function(e) {
         if (e.name === 'TripleComposer.reset') {
@@ -557,16 +559,16 @@ angular.module('Pundit2.Toolbar')
 
     // return true if no errors are occured --> status button ok must be visible
     $scope.showStatusButtonOk = function() {
-        return !Toolbar.getErrorShown() && !Toolbar.isLoading();
+        return !Toolbar.isLoading();
     };
 
     // return true if an error is occured --> status button error must be visible
-    $scope.showStatusButtonError = function() {
-        return Toolbar.getErrorShown();
-    };
+    // $scope.showStatusButtonError = function() {
+    //     return Toolbar.getErrorShown();
+    // };
 
     $scope.showStatusButtonLoading = function() {
-        return Toolbar.isLoading() && !Toolbar.getErrorShown();
+        return Toolbar.isLoading();
     };
 
     // return true if user is not logged in --> login button must be visible
@@ -624,11 +626,6 @@ angular.module('Pundit2.Toolbar')
     // return true if user is logged in --> notebook menu is active
     $scope.isNotebookMenuActive = function() {
         return $scope.isUserLogged === true;
-    };
-
-    // get Ask the Pundit link
-    $scope.getAskLink = function() {
-        return Toolbar.getAskLink();
     };
 
     $scope.dashboardClickHandler = function() {

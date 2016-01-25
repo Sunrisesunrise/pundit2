@@ -12,7 +12,6 @@ angular.module('Pundit2.ResourcePanel')
 
     var isTimerRunning = false;
 
-
     $scope.label = '';
 
     $scope.moduleName = 'Pundit2';
@@ -78,8 +77,8 @@ angular.module('Pundit2.ResourcePanel')
             return '';
         }
 
-        var myItemsNotLogged = tabTitle === 'My Items' && MyPundit.isUserLogged() === false,
-            userNotLoggedMessage = 'My Items are only available to logged users. Please log in to use this section or select a fragment of text in the page.';
+        var myItemsNotLogged = tabTitle === 'Favourites' && MyPundit.isUserLogged() === false,
+            userNotLoggedMessage = 'Favourites are only available to logged users. Please log in to use this section or select a fragment of text in the page.';
 
         searchLabel = typeof(searchLabel) !== 'undefined' ? searchLabel : '';
 
@@ -87,16 +86,16 @@ angular.module('Pundit2.ResourcePanel')
         if (searchLabel === '' && tabTitle !== 'My Items' && tabTitle !== 'Page items' && tabTitle !== 'Properties') {
             $scope.resetSearch = true;
 
-            return 'Search entities in ' + tabTitle +' using the input filed above. You can use the selected entity by clicking the "Use" button below.';
+            return 'Search entities in ' + tabTitle + ' using the input filed above. You can use the selected entity by clicking the "Use" button below.';
 
         }
         if (searchLabel.length > 2 &&
-            isLoading || 
+            isLoading ||
             isTimerRunning) {
             if (myItemsNotLogged) {
                 return userNotLoggedMessage;
             }
-            return (filteredItems.length > 0 && searchLabel !== '')? '' : 'Loading ...';
+            return (filteredItems.length > 0 && searchLabel !== '') ? '' : 'Loading ...';
         }
         if (selectorsLabels.indexOf(tabTitle) !== -1 &&
             searchLabel.length <= 2) {
@@ -108,9 +107,9 @@ angular.module('Pundit2.ResourcePanel')
         }
 
         tabItems = typeof(tabItems) !== 'undefined' ? tabItems : [];
-        if (tabTitle === 'My Items' &&
+        if (tabTitle === 'Favourites' &&
             tabItems.length === 0) {
-            return 'It seems you haven\'t any item stored here yet! Please add some items to My Items to use this section.';
+            return 'It seems you haven\'t any item stored here yet! Please add some items to Favourites to use this section.';
         }
         if (filteredItems.length === 0 &&
             searchLabel.length > 2 &&
@@ -205,7 +204,8 @@ angular.module('Pundit2.ResourcePanel')
             }
         }
     };
-    var ifLogged = function(term, caller){
+
+    var ifLogged = function(term, caller) {
         if (Config.annotationServerCallsNeedLoggedUser) {
             MyPundit.checkLoggedIn().then(function(isLoggedIn) {
                 if (isLoggedIn) {
@@ -218,7 +218,8 @@ angular.module('Pundit2.ResourcePanel')
             ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
         }
 
-    }
+    };
+
     $scope.select = function(item, $event) {
         // after triggering click, lastSelect object will be updated with new selected item.
         Preview.setLock(false);
@@ -332,7 +333,7 @@ angular.module('Pundit2.ResourcePanel')
     };
     $scope.updateSearch = function(term) {
         var caller = '';
-        if (typeof(term) !== 'undefined' && term.length > 2 ) {
+        if (typeof(term) !== 'undefined' && term.length > 2) {
             $scope.resetSearch = false;
             switch ($scope.type) {
                 case 'sub':
@@ -354,7 +355,7 @@ angular.module('Pundit2.ResourcePanel')
                 }, ResourcePanel.options.vocabSearchTimer);
             }
         } else {
-            if(typeof($scope.contentTabs) !== 'undefined' && term === ''){
+            if (typeof($scope.contentTabs) !== 'undefined' && term === '') {
                 $scope.resetSearch = true;
             }
 

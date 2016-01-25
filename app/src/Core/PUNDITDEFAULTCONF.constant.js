@@ -139,32 +139,32 @@ angular.module('Pundit2.Core')
     /**
      * @module punditConfig
      * @ngdoc object
-     * @name askBaseURL
+     * @name homeBaseURL
      *
      * @description
      * `string`
      *
-     * URL of Ask the Pundit
+     * URL of Pundit Home
      *
      * Default value:
-     * <pre> askBaseURL: "http://demo-cloud.ask.thepund.it/" </pre>
+     * <pre> homeBaseURL: "http://staging.punditbrain.netseven.it/auth/home/" </pre>
      */
-    askBaseURL: "http://demo-cloud.ask.thepund.it/",
+    homeBaseURL: "http://staging.punditbrain.netseven.it/auth/home/",
 
     /**
      * @module punditConfig
      * @ngdoc object
-     * @name askThePundit
+     * @name homePundit
      *
      * @description
      * `boolean`
      *
-     * Enable/Disable ask the Pundit feature
+     * Enable/Disable Pundit Home feature
      *
      * Default value:
-     * <pre> askThePundit: false </pre>
+     * <pre> homePundit: true </pre>
      */
-    askThePundit: false,
+    homePundit: true,
 
     /**
      * @module punditConfig

@@ -31,7 +31,7 @@
   //     "run_at": "document_end"
   //   }
   // ],
-  // "content_security_policy":"script-src 'self' https://example.com/remoteFolder/; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js; object-src 'self'",
   "web_accessible_resources": [
     "inject/css/fonts/*.*",
     "inject/*.*"

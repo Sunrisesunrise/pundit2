@@ -45,6 +45,7 @@ angular.module('Pundit2.ContextualMenu')
         // actual menu anchor position
         lastX: 0,
         lastY: 0,
+        lastRef: null,
         // element bound to $dropdown menu instance
         anchor: null,
         // menu content array (object is in angular strap format)
@@ -144,9 +145,9 @@ angular.module('Pundit2.ContextualMenu')
                     header: (filteredActions[i].header ? true : false),
                     disable: (filteredActions[i].disable ? true : false),
                     click: function(_i) {
-                        return function() {
+                        return function(event) {
                             if (!filteredActions[_i].disable) {
-                                filteredActions[_i].action(state.menuResource);
+                                filteredActions[_i].action(state.menuResource, event);
                             }
                         };
                     }(i)
@@ -215,8 +216,7 @@ angular.module('Pundit2.ContextualMenu')
      * @param {Object} resource
      * @param {String} type
      */
-    contextualMenu.show = function(x, y, resource, type) {
-
+    contextualMenu.show = function(x, y, resource, type, ref) {
         x += contextualMenu.options.offsetX;
         y += contextualMenu.options.offsetY;
 
@@ -260,14 +260,14 @@ angular.module('Pundit2.ContextualMenu')
         state.lastX = x;
         state.lastY = y;
 
+        state.lastRef = ref;
+
         if (!state.init) {
             state.mockMenu = init(mockOptions);
             state.mockMenu.$promise.then(state.mockMenu.show);
         } else {
             state.mockMenu.show();
         }
-
-
     };
 
     // when mock menu show the dimensions can be readed
@@ -469,6 +469,17 @@ angular.module('Pundit2.ContextualMenu')
         } else {
             return 'right';
         }
+    };
+
+    contextualMenu.getLastXY = function() {
+        return {
+            x: state.lastX,
+            y: state.lastY
+        };
+    };
+
+    contextualMenu.getLastRef = function() {
+        return state.lastRef;
     };
 
     EventDispatcher.addListener('Client.hide', function(/*e*/) {

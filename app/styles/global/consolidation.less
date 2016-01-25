@@ -91,8 +91,8 @@
 }
 
 /* For css font overwritings on icons */
-.pnd-wrp [class*="icon-"] {
-    font-family: 'pundit-font' !important;
+.pnd-wrp [class^="icon-"] {
+    font-family: 'pundit-icon-font' !important;
 }
 
 /* The small icon next to each text fragment */
@@ -102,7 +102,7 @@ span.pnd-text-fragment-icon {
     margin-right: 0.1em;
     margin-top: 0.18em;
     margin-bottom: -0.18em;
-    font-family: 'pundit-font' !important; /* For css font overwritings on icons */
+    font-family: 'pundit-icon-font' !important; /* For css font overwritings on icons */
     color: @text-fragment-icon-color; //  @brand-warning;
     font-size: 1.18em !important; /* For css overwritings */
     vertical-align: top;
@@ -116,9 +116,10 @@ span.pnd-text-fragment-icon {
         text-decoration: none;
     }
 
-    &.pnd-icon-bookmark {
+    &.pnd-icon-star {
         color: @text-fragment-icon-color;
-        font-size: 1.18em !important; /* For css overwritings */
+        font-size: 0.98em !important; /* For css overwritings */
+        margin-top: 0.25em;
 
         &:hover {
             color: @text-fragment-icon-color-hover; // darken(@brand-success, 12%);

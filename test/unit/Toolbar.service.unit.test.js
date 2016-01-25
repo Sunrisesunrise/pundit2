@@ -127,36 +127,6 @@ describe('Toolbar service', function() {
         
     });
 
-    it("should execute callback when click on error", function() {
-
-        var callbackIsExecuted = false;
-
-        var callback = function() {
-            callbackIsExecuted = true;
-        };
-
-        //add error
-        Toolbar.addError(messageError1, callback);
-
-        // at this time callback is not executed yet
-        expect(callbackIsExecuted).toBe(false);
-
-        var elem = compileToolbarDirective();
-
-        // click error button to show errors
-        var button = angular.element(elem).find('.pnd-toolbar-error-button a');
-        angular.element(button).trigger('click');
-        $rootScope.$digest();
-
-        // click on error
-        var errorList = angular.element(elem).find('.pnd-toolbar-error-button ul.dropdown-menu li a');
-        angular.element(errorList[0]).trigger('click');
-        $rootScope.$digest();
-
-        // at this time callback should be executed
-        expect(callbackIsExecuted).toBe(true);
-    });
-
     it("should correctly set loading status", function(){
         Toolbar.setLoading(true);
         expect(Toolbar.isLoading()).toBe(true);

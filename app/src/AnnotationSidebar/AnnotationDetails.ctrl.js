@@ -20,21 +20,18 @@ angular.module('Pundit2.AnnotationSidebar')
         initialHeight = AnnotationSidebar.options.annotationHeight,
         currentHeight = initialHeight - 1;
 
+    var clientMode = Config.clientMode;
+
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
     $scope.moreInfo = AnnotationDetails.options.moreInfo;
-    $scope.notebookLink = Config.askThePundit;
+    $scope.homePundit = Config.homePundit;
 
     $scope.editMode = false;
     $scope.editCommentValue = '';
 
     if (typeof($scope.annotation) !== 'undefined') {
-        if (AnnotationDetails.isUserToolShowed($scope.annotation.creator)) {
-            $scope.askLink = Config.askBaseURL + '#/myNotebooks/';
-        } else {
-            $scope.askLink = Config.askBaseURL + '#/notebooks/';
-        }
-
+        $scope.notebooksHomeLink = Config.homeBaseURL + 'notebooks/';
         notebookId = $scope.annotation.notebookId;
     }
 
@@ -56,6 +53,11 @@ angular.module('Pundit2.AnnotationSidebar')
     } else {
         $scope.forceEdit = false;
     }
+
+    var stopEvent = function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+    };
 
     $scope.toggleAnnotation = function() {
         $scope.editMode = false;
@@ -92,16 +94,18 @@ angular.module('Pundit2.AnnotationSidebar')
         Analytics.track('buttons', 'click', 'annotation--details--' + label);
     };
 
-    $scope.deleteAnnotation = function() {
+    $scope.deleteAnnotation = function(event) {
         AnnotationDetails.openConfirmModal(currentElement, currentId);
         Analytics.track('buttons', 'click', 'annotation--details--delete');
+
+        stopEvent(event);
     };
 
     $scope.showEdit = function() {
         return typeof($scope.annotation.hasTemplate) === 'undefined' || $scope.forceTemplateEdit;
     };
 
-    $scope.editAnnotation = function() {
+    $scope.editAnnotation = function(event) {
 
         var doEditAnnotation = function() {
             if (TripleComposer.isEditMode()) {
@@ -124,19 +128,23 @@ angular.module('Pundit2.AnnotationSidebar')
         };
 
         if (TripleComposer.isSaving()) {
-            console.log("Still saving .. wait !!");
+            // console.log("Still saving .. wait !!");
             TripleComposer.setAfterSave(doEditAnnotation);
         } else {
             doEditAnnotation();
         }
+
+        stopEvent(event);
     };
 
-    $scope.editComment = function() {
+    $scope.editComment = function(event) {
         $scope.editMode = true;
         $scope.editCommentValue = $scope.annotation.comment;
+
+        stopEvent(event);
     };
 
-    $scope.saveEdit = function() {
+    $scope.saveEdit = function(event) {
         var promise = AnnotationDetails.saveEditedComment(currentId, $scope.annotation.mainItem, $scope.annotation.comment);
 
         promise.then(function() {
@@ -145,14 +153,30 @@ angular.module('Pundit2.AnnotationSidebar')
             $scope.editCommentValue = '';
             $scope.editMode = false;
         });
+
+        stopEvent(event);
     };
 
-    $scope.cancelEdit = function() {
+    $scope.areaClick = function(event) {
+        stopEvent(event);
+    };
+
+    $scope.cancelEdit = function(event) {
         $scope.editMode = false;
+        stopEvent(event);
+    };
+
+    $scope.openNotebook = function(event, id) {
+        $window.open(Config.homeBaseURL + 'annotations/' + id, '_blank');
+        stopEvent(event);
     };
 
     $scope.isUserToolShowed = function() {
         return (AnnotationDetails.isUserToolShowed($scope.annotation.creator) || ($scope.forceEdit && MyPundit.isUserLogged())) && AnnotationSidebar.isAnnotationsPanelActive();
+    };
+
+    $scope.isEditBtnShowed = function() {
+        return clientMode === 'pro' && $scope.motivation === 'linking';
     };
 
     $scope.$watch(function() {

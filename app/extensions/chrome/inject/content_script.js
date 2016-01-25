@@ -20,6 +20,22 @@ var switchPundit = function(on) {
     var cssTransform = 'transform' in bodyStyle ? 'transform' : 'webkitTransform';
 
     if (on) {
+        if (typeof punditConfig === 'undefined') {
+            chrome.runtime.sendMessage({action: 'setLoading', loading: false}, function(response) {
+                if (response.action === 'updateAnnotationsNumber') {
+                    if (typeof angular !== 'undefined') {
+                        angular.element(document).trigger('Pundit.requestAnnotationsNumber');
+                    }
+                    else {
+                        dispatchDocumentEvent('Pundit.requestAnnotationsNumberRaw', 0);
+                    }
+                }
+            });
+            return;
+        }
+
+        dispatchDocumentEvent('Pundit.ce.switchOn', chrome.runtime.id);
+
         if (document.getElementById('pundit2') !== null) {
             angular.element(document).trigger('Pundit.show');
             chrome.runtime.sendMessage({action: 'setLoading', loading: false});
@@ -62,6 +78,7 @@ var switchPundit = function(on) {
         div.setAttribute('data-ng-app', 'Pundit2');
         div.setAttribute('id', 'pundit2');
         div.setAttribute('class', 'pnd-wrp');
+        div.setAttribute('data-cid', chrome.runtime.id);
         b.appendChild(div);
         
         if (isClientInLiteMode === false) {
@@ -95,14 +112,14 @@ var dispatchDocumentEvent = function(eventName, details) {
     if (document.createEventObject) {
         // dispatch for IE
         evt = document.createEventObject();
-        evt.details = details;
+        evt.detail = details;
         document.fireEvent(eventName, evt);
     }
     else {
         // dispatch for firefox + others
         evt = document.createEvent('HTMLEvents');
         evt.initEvent(eventName, true, true); // event type,bubbling,cancelable
-        evt.details = details;
+        evt.detail = details;
         return !document.dispatchEvent(evt);
     }
 };
@@ -112,24 +129,35 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log(sender);
     switch (request.action) {
         case 'checkPundit':
-            var responseObject = {isPresent: (document.getElementsByClassName('pnd-wrp').length !== 0)};
+            var elems = document.getElementsByClassName('pnd-wrp'),
+                responseObject = {isPresent: false, cid: null};
+            if (elems.length > 0) {
+                responseObject.isPresent = true;
+                responseObject.cid = elems[0].getAttribute('data-cid');
+            }
             sendResponse(responseObject);
             break;
+
         case 'switchOn':
             switchPundit(true);
             break;
+
         case 'switchOff':
             switchPundit(false);
             break;
+
         case 'livereload':
             addLivereload();
             break;
+
         case 'requestUserProfileUpdate':
             angular.element(document).trigger('Pundit.requestUserProfileUpdate');
             break;
+
         case 'requestUserLoggedStatus':
             angular.element(document).trigger('Pundit.requestUserLoggedStatus');
             break;
+
         case 'requestAnnotationsNumber':
             if (typeof angular !== 'undefined') {
                 angular.element(document).trigger('Pundit.requestAnnotationsNumber');
@@ -169,6 +197,24 @@ document.addEventListener('Pundit.userProfileUpdated', function(evt){
 
 document.addEventListener('Pundit.userLoggedStatusChanged', function(evt){
     chrome.runtime.sendMessage({action: 'userLoggedStatusChanged', number: evt.detail}, function(response) {
+        /*NO OP*/
+    });
+});
+
+document.addEventListener('Pundit.analyticsUserData', function(evt){
+    chrome.runtime.sendMessage({action: 'analyticsUserData', number: evt.detail}, function(response) {
+        /*NO OP*/
+    });
+});
+
+document.addEventListener('Pundit.analyticsSettings', function(evt){
+    chrome.runtime.sendMessage({action: 'analyticsSettings', number: evt.detail}, function(response) {
+        /*NO OP*/
+    });
+});
+
+document.addEventListener('Pundit.analyticsTrack', function(evt){
+    chrome.runtime.sendMessage({action: 'analyticsTrack', number: evt.detail}, function(response) {
         /*NO OP*/
     });
 });
