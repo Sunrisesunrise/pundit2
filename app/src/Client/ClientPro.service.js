@@ -36,21 +36,6 @@ angular.module('Pundit2.Client')
     /**
      * @module punditConfig
      * @ngdoc property
-     * @name modules#Client.relationsContainer
-     *
-     * @description
-     * `string`
-     *
-     * Name of the container used to store all of the pundit client usable relations.
-     *
-     * Default value:
-     * <pre> relationsContainer: "usableRelations" </pre>
-     */
-    relationsContainer: "usableRelations",
-
-    /**
-     * @module punditConfig
-     * @ngdoc property
      * @name modules#Client.bootModules
      *
      * @description
@@ -460,7 +445,7 @@ angular.module('Pundit2.Client')
             relations = client.options.basicRelations;
         for (var p in relations) {
             // property is automatically added to ItemsExchange default container
-            ItemsExchange.addItemToContainer(new Item(relations[p].uri, relations[p]), [client.options.relationsContainer, 'basicRelations']);
+            ItemsExchange.addItemToContainer(new Item(relations[p].uri, relations[p]), [ItemsExchange.options.defaultRelationsContainer, 'basicRelations']);
         }
         client.log('Loaded ' + num + ' basic relations');
     };
@@ -471,7 +456,7 @@ angular.module('Pundit2.Client')
 
             for (var p in res) {
                 // property is automatically added to ItemsExchange default container
-                ItemsExchange.addItemToContainer(new Item(res[p].uri, res[p]), [client.options.relationsContainer, 'vocabularyRelations']);
+                ItemsExchange.addItemToContainer(new Item(res[p].uri, res[p]), [ItemsExchange.options.defaultRelationsContainer, 'vocabularyRelations']);
                 // if necessary override the label (vocab not override template label)
                 var real = ItemsExchange.getItemByUri(res[p].uri);
                 if (typeof(res[p].label) !== 'undefined' && !ItemsExchange.isItemInContainer(real, 'templateRelations')) {

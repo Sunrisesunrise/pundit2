@@ -110,7 +110,7 @@ angular.module('Pundit2.ResourcePanel')
  *
  */
 .service('ResourcePanel', function(BaseComponent, EventDispatcher, RESOURCEPANELDEFAULTS,
-    ItemsExchange, MyItems, PageItemsContainer, Client, NameSpace, SelectorsManager,
+    ItemsExchange, MyItems, PageItemsContainer, NameSpace, SelectorsManager,
     $filter, $rootScope, $popover, $q, $timeout, Preview, $window, Config, Item,
     Utils, Analytics, Keyboard) {
 
@@ -1154,7 +1154,7 @@ angular.module('Pundit2.ResourcePanel')
 
         } else {
             hide();
-            var propertiesContainer = Client.options.relationsContainer;
+            var propertiesContainer = ItemsExchange.options.defaultRelationsContainer;
             var properties;
 
             // TODO Add some comments
