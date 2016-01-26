@@ -75,7 +75,7 @@
 
                 <!-- Web page -->
                 <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
-                     ng-if="annotation.subject.typeLabel == 'WebPage'">
+                     ng-if="item.subject.typeLabel == 'WebPage'">
                     <!-- Label -->
                     <span class="pnd-annotation-entity-label">
                         {{ item.subject.label }}
@@ -88,7 +88,7 @@
 
                 <!-- Image -->
                 <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
-                     ng-if="annotation.subject.typeLabel == 'Image'">
+                     ng-if="item.subject.typeLabel == 'Image'">
                     <!-- Thumb -->
                     <span class="pnd-annotation-entity-image"
                           ng-if="item.subject.image!='null'">
@@ -109,15 +109,15 @@
 
                 <!-- Image fragment -->
                 <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
-                     ng-if="annotation.subject.typeLabel == 'Image fragment'">
+                     ng-if="item.subject.typeLabel == 'Image fragment'">
                     <!-- Thumb -->
                     <span class="pnd-annotation-entity-image"
-                          ng-if="item.subcjet.image!='null'">
-                        <img ng-src="{{ item.subcjet.image }}" alt="{{ item.subcjet.label }}"/>
+                          ng-if="item.subject.image!='null'">
+                        <img ng-src="{{ item.subject.image }}" alt="{{ item.subject.label }}"/>
                     </span>
                     <!-- Label -->
                     <span class="pnd-annotation-entity-label">
-                        <a href="{{ item.subcjet.uri }}" target="_blank">
+                        <a href="{{ item.subject.uri }}" target="_blank">
                             {{ item.subcjet.label }} <span class="pnd-icon-arrow-right"></span>
                         </a>
                     </span>
