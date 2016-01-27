@@ -579,98 +579,29 @@ angular.module('Pundit2.Core')
         active: false,
         baseUrl: 'http://metasound.dibet.univpm.it/timelinejs/examples/pundit.html?'
     },
+
     /**
      * @module punditConfig
      * @ngdoc object
-     * @name timeline
+     * @name template
      * @description
      * `object`
      *
-     * Define if is active timeline link in Pundit. Object has the follow fields:
+     * Define if is active the template for rapid action
      *
-     * * `active`: true to active timeline link, false otherwise
-     * * `baseUrl`: base url of timeline service
+     * * `active`: true to active the rapid actions, false otherwise
+     * * `list`: list of actions
      *
      * Default:
      * <pre>
-     *
-     * timeline: {
- *  active: false,
- *  baseUrl: 'http://metasound.dibet.univpm.it/timelinejs/examples/pundit.html?'
- * }
+     *  template: {
+     *    active: false,
+     *    list: []
+     *  }
      * </pre>
      */
-    activeSubject: true, ///ACTIVE SUBJECT IN CONTEXTUAL MENU
-    activeObject: true,  ///ACTIVE OBJJECT IN CONTEXTUAL MENU
-    template: {
-        active: true,
-        list:
-            [
-            {
-                label: 'MIMO Tag',
-                types: ['','resource'],
-                triples:
-                    [{
-                        subject: {
-                            selectedItem:true
-                        },
-                        predicate: {
-                            uri:'http://purl.org/pundit/ont/oa#talksAbout'
-                        },
-                        object: {
-                            selectors:["Mimo"],
-                            forceFocus:true
-                        }
-                    }]
-            },
-                {
-                    label: 'Genre Tag',
-                    types: ['text-fragment', 'resource'],
-                    triples:
-                        [{
-                            subject: {
-                                selectedItem:true
-                            },
-                            predicate: {
-                                uri:'http://purl.org/pundit/ont/oa#talksAbout'
-                            },
-                            object: {
-                                selectors:["Genre"],
-                                forceFocus:true
-                            }
-                        }]
-                },{
-                label: 'Europeana Link',
-                types: ['text-fragment', 'resource'],
-                triples:
-                    [{
-                        subject: {
-                            selectedItem:true
-                        },
-                        predicate: {
-                            uri:'http://www.w3.org/2004/02/skos/core#related'
-                        },
-                        object: {
-                            selectors:["Europeana"],
-                            forceFocus:true
-                        }
-                    }]
-            },
-                {
-                label: 'Tag me',
-                types: ['text-fragment', 'resource'],
-                triples:
-                    [{
-                        subject: {
-                            selectedItem:true
-                        },
-                        predicate: {
-                            uri:'http://purl.org/pundit/ont/oa#talksAbout'
-                        },
-                        object: {
-                            forceFocus:true
-                        }
-                    }]
-            }]
-    }
+     template: {
+         active: false,
+         list: []
+     }
 });
