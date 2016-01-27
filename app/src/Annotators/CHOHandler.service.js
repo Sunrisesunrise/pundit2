@@ -56,9 +56,10 @@ angular.module('Pundit2.Annotators')
     })
 
     .service('CHOHandler', function(CHOHANDLERDEFAULTS, NameSpace, BaseComponent, Config,
-                                    TextFragmentHandler, XpointersHelper, Item, $compile, $timeout, $rootScope, ContextualMenu, AnnotationPopover, TripleComposer, ItemsExchange, $q, EventDispatcher, AnnotationsExchange) {
+                                    TextFragmentHandler, XpointersHelper, Item, $compile, $timeout, $rootScope, ContextualMenu, AnnotationPopover, TripleComposer, ItemsExchange, $q, EventDispatcher, ResourcePanel) {
 
         var initContextualMenu = function() {
+            var templateList = Config.template;
             ContextualMenu.addAction({
                 name: 'resComment',
                 type: ["CHOHandlerItem"],
@@ -77,31 +78,77 @@ angular.module('Pundit2.Annotators')
                 priority: 98,
                 type: ["CHOHandlerItem"]
             });
-            ContextualMenu.addAction({
-                name: 'resUseAsSubject',
-                type: ["CHOHandlerItem"],
-                label: 'Use as subject',
-                showIf: function() {
-                    return true;
-                },
-                priority: 97,
-                action: function(item) {
-                    TripleComposer.addToSubject(item);
-                }
+            if(Config.activeSubject){
+                ContextualMenu.addAction({
+                    name: 'resUseAsSubject',
+                    type: ["CHOHandlerItem"],
+                    label: 'Use as subject',
+                    showIf: function() {
+                        return true;
+                    },
+                    priority: 97,
+                    action: function(item) {
+                        TripleComposer.addToSubject(item);
+                    }
+                });
+            }
+            if(Config.activeObject){
+                ContextualMenu.addAction({
+                    name: 'resUseAsObject',
+                    type: ["CHOHandlerItem"],
+                    label: 'Use as Object',
+                    showIf: function() {
+                        return true;
+                    },
+                    priority: 96,
+                    action: function(item) {
+                        TripleComposer.addToObject(item);
+                    }
+                });
+
+            }
+            ContextualMenu.addDivider({
+                priority: 95,
+                type: ["CHOHandlerItem"]
             });
-            ContextualMenu.addAction({
-                name: 'resUseAsObject',
-                type: ["CHOHandlerItem"],
-                label: 'Use as Object',
-                showIf: function() {
-                    return true;
-                },
-                priority: 96,
-                action: function(item) {
-                    TripleComposer.addToObject(item);
+            if(templateList.active){
+                var prior = 94;
+
+                for(var i = 0; i < templateList.list.length;i++){
+                    if(templateList.list[i].types.indexOf("resource")){
+                        ContextualMenu.addAction({
+                            name: templateList.list[i].label.replace(/\s/g, ''),
+                            type: ["CHOHandlerItem"],
+                            label: templateList.list[i].label,
+
+                            showIf: function() {
+                                return true;
+                            },
+                            priority: prior--,
+                            action: (function(idx) {
+                                return function(item) {
+                                    var triple = templateList.list[idx].triples[0];
+                                    if (triple.subject.selectedItem) {
+                                        TripleComposer.addToSubject(item);
+                                    }
+                                    if (triple.object.forceFocus) {
+                                        ResourcePanel.setSelector(triple.object.selectors);
+                                    }
+                                    if (triple.predicate.uri) {
+                                        var item = ItemsExchange.getItemByUri(triple.predicate.uri);
+                                        if(typeof item === "undefined"){
+                                            item = Item.addI;
+                                        }
+                                        TripleComposer.addToPredicate(item);
+
+                                    }
+                                }
+                            })(i)
+
+                        });
+                    }
                 }
-            });
-            
+            }
             // ContextualMenu.addAction({
             //     name: 'resAddToFavourites',
             //     type: ["CHOHandlerItem"],
@@ -112,10 +159,6 @@ angular.module('Pundit2.Annotators')
             //     priority: 95
             // });
 
-            ContextualMenu.addDivider({
-                priority: 94,
-                type: ["CHOHandlerItem"]
-            });
             // ContextualMenu.addAction({
             //     name: 'resTemplate1',
             //     type: ["CHOHandlerItem"],
@@ -144,7 +187,7 @@ angular.module('Pundit2.Annotators')
         CHOElem.addClass("cho-menu");
         var promise = $q.defer();
         //compile the DOM
-        $compile(angular.element(".pnd-resource"))($rootScope);
+        $compile(CHOElem)($rootScope);
         promise.resolve();
         initContextualMenu();
 
