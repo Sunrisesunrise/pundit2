@@ -44,7 +44,7 @@ angular.module('Pundit2.ResourcePanel')
         if(typeof $scope.newSelectors !== "undefined"){
             for (var j = 0; j < selectors.length; j++) {
                 for (var i = 0; i < selectors.length; i++) {
-                    if ($scope.newSelectors[i] === selectors[j].config.label) {
+                    if (($scope.newSelectors[i] === selectors[j].config.label)||($scope.newSelectors[i] === selectors[j].config.container)) {
 
                         $scope.contentTabs.push({
                             title: selectors[j].config.label,

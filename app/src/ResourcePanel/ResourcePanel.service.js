@@ -1025,14 +1025,6 @@ angular.module('Pundit2.ResourcePanel')
             target = state.popover.clickTarget;
         }
 
-        var selectors = SelectorsManager.getActiveSelectors();
-        state.popoverOptions.scope.selectors = [];
-
-        // initialize selectors list
-        angular.forEach(selectors, function(sel) {
-            state.popoverOptions.scope.selectors.push(sel.config.container);
-        });
-
         if (state.popover !== null && state.popover.clickTarget === target /*&& state.popoverOptions.scope.label !== label*/ ) {
             //state.popoverOptions.scope.vocabObjStatus = 'loading';
             $timeout.cancel(searchTimer);
@@ -1209,12 +1201,19 @@ angular.module('Pundit2.ResourcePanel')
         hide();
     });
 
-    EventDispatcher.addListener('TripleComposer.reset', function() {
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
         hide();
     });
 
-    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
+    EventDispatcher.addListener('TripleComposer.reset', function( /*e*/ ) {
         hide();
+        var selectors = SelectorsManager.getActiveSelectors();
+        var restoreSelector= [];
+        // initialize selectors list
+        angular.forEach(selectors, function(sel) {
+            restoreSelector.push(sel.config.container);
+        });
+        resourcePanel.setSelector(restoreSelector);
     });
 
     return resourcePanel;

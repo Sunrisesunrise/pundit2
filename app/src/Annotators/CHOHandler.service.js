@@ -129,6 +129,7 @@ angular.module('Pundit2.Annotators')
                 },
                 priority: 97,
                 action: function(item) {
+
                     TripleComposer.addToSubject(item);
                 }
             });
@@ -171,6 +172,8 @@ angular.module('Pundit2.Annotators')
                         priority: prior--,
                         action: (function(idx) {
                             return function(item) {
+                                TripleComposer.wipeNotFixedItems();
+
                                 var triple = templateConfig.list[idx].triples[0];
                                 if (triple.subject.selectedItem) {
                                     TripleComposer.addToSubject(item);
@@ -180,10 +183,8 @@ angular.module('Pundit2.Annotators')
                                 }
                                 if (triple.predicate.uri) {
                                     var item = ItemsExchange.getItemByUri(triple.predicate.uri);
-                                    if (typeof item === 'undefined') {
-                                        item = Item.addI;
-                                    }
                                     TripleComposer.addToPredicate(item);
+
 
                                 }
                             }
