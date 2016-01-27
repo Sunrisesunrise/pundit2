@@ -150,14 +150,14 @@ angular.module('Pundit2.Annotators')
             });
 
         }
-
-        ContextualMenu.addDivider({
-            priority: 95,
-            type: ['CHOHandlerItem']
-        });
-
+        if (CHO.options.useAsObject||CHO.options.useAsObject) {
+            ContextualMenu.addDivider({
+                priority: 95,
+                type: ['CHOHandlerItem']
+            });
+        }
         if (templateConfig.active) {
-            var prior = 94;
+            var prior = 90;
 
             for (var i = 0; i < templateConfig.list.length; i++) {
                 if (templateConfig.list[i].types.indexOf('resource')) {
@@ -180,6 +180,10 @@ angular.module('Pundit2.Annotators')
                                 }
                                 if (triple.object.forceFocus) {
                                     ResourcePanel.setSelector(triple.object.selectors);
+                                   //TODO ASAP: handle this operation with TripleComposer.service
+                                    setTimeout(function(){
+                                        angular.element('span.pnd-statement-label[ng-click="onClickObject($event)"]').click();
+                                    }, 300);
                                 }
                                 if (triple.predicate.uri) {
                                     var item = ItemsExchange.getItemByUri(triple.predicate.uri);

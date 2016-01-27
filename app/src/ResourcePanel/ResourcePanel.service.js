@@ -992,6 +992,10 @@ angular.module('Pundit2.ResourcePanel')
         return state.resourcePromise.promise;
     };
 
+    resourcePanel.setSelector = function(selector){
+        state.popoverOptions.scope.newSelectors = selector;
+
+    };
     /**
      * @ngdoc method
      * @name ResourcePanel#showItemsForObject
@@ -1014,10 +1018,7 @@ angular.module('Pundit2.ResourcePanel')
      * @return {Promise} return a promise that will be resolved when a subject is selected
      *
      */
-    resourcePanel.setSelector = function(selector){
-        state.popoverOptions.scope.newSelectors = selector;
 
-    } ;
     resourcePanel.showItemsForObject = function(triple, target, label, overrideFooterExtraButtons) {
         resourcePanel.overrideFooterExtraButtons = overrideFooterExtraButtons;
 
