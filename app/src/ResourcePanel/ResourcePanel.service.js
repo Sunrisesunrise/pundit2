@@ -87,7 +87,8 @@ angular.module('Pundit2.ResourcePanel')
      * Default value:
      * <pre> myItemsEnabled: true </pre>
      */
-    myItemsEnabled: true
+    myItemsEnabled: false
+
 })
 
 /**
@@ -594,17 +595,17 @@ angular.module('Pundit2.ResourcePanel')
                 content.pageItems = pageItems;
             }
 
-            //if (resourcePanel.options.myItemsEnabled) {
-            //    var myItemsForTabs = {
-            //        title: 'Favourites',
-            //        items: myItems,
-            //        module: 'Pundit2',
-            //        isStarted: true,
-            //        isLocal: true
-            //    };
-            //    contentTabs.push(myItemsForTabs);
-            //    content.myItems = myItems;
-            //}
+            if (resourcePanel.options.myItemsEnabled) {
+                var myItemsForTabs = {
+                    title: 'Favourites',
+                    items: myItems,
+                    module: 'Pundit2',
+                    isStarted: true,
+                    isLocal: true
+                };
+                contentTabs.push(myItemsForTabs);
+                content.myItems = myItems;
+            }
 
             content.properties = null;
         }
