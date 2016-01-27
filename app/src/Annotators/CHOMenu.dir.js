@@ -59,31 +59,6 @@ angular.module('Pundit2.Annotators')
 
                 //scope.url = attributes.pndResource;
 
-
-
-                //read CHO coordinate and position the directive
-                var overIcon = function() {
-                    scope.element.css({
-                        //color: gray
-                        color: '#333333',
-                    });
-                    scope.element.hover(
-                        function() {
-                            $(this).css({
-                                //color: yellow
-                                color: '#F5B800',
-                                cursor: 'pointer'
-                            });
-                        },
-                        function() {
-                            $(this).css({
-                                //color: gray
-                                color: '#333333',
-                            });
-                        }
-                    );
-                };
-                overIcon();
                 EventDispatcher.addListeners(
                     [
                         'Consolidation.consolidateAll',
