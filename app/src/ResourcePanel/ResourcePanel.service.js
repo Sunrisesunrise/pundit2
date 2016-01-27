@@ -174,7 +174,7 @@ angular.module('Pundit2.ResourcePanel')
     };
 
     // initialize a popover
-    var initPopover = function(content, target, placement, type, contentTabs, tripleElemType) {
+    var initPopover = function(content, target, placement, type, contentTabs, tripleElemType, newSelector) {
         var posPopMod = 0,
             valMod = 100;
         state.popoverOptions.scope.arrowLeft = '-11px';
@@ -594,17 +594,17 @@ angular.module('Pundit2.ResourcePanel')
                 content.pageItems = pageItems;
             }
 
-            if (resourcePanel.options.myItemsEnabled) {
-                var myItemsForTabs = {
-                    title: 'Favourites',
-                    items: myItems,
-                    module: 'Pundit2',
-                    isStarted: true,
-                    isLocal: true
-                };
-                contentTabs.push(myItemsForTabs);
-                content.myItems = myItems;
-            }
+            //if (resourcePanel.options.myItemsEnabled) {
+            //    var myItemsForTabs = {
+            //        title: 'Favourites',
+            //        items: myItems,
+            //        module: 'Pundit2',
+            //        isStarted: true,
+            //        isLocal: true
+            //    };
+            //    contentTabs.push(myItemsForTabs);
+            //    content.myItems = myItems;
+            //}
 
             content.properties = null;
         }
@@ -1014,6 +1014,10 @@ angular.module('Pundit2.ResourcePanel')
      * @return {Promise} return a promise that will be resolved when a subject is selected
      *
      */
+    resourcePanel.setSelector = function(selector){
+        state.popoverOptions.scope.newSelectors = selector;
+
+    } ;
     resourcePanel.showItemsForObject = function(triple, target, label, overrideFooterExtraButtons) {
         resourcePanel.overrideFooterExtraButtons = overrideFooterExtraButtons;
 
@@ -1075,7 +1079,7 @@ angular.module('Pundit2.ResourcePanel')
                         // all items are good
                         myItems = ItemsExchange.getItemsByContainer(myItemsContainer);
                         pageItems = ItemsExchange.getItemsByContainer(pageItemsContainer);
-                        showPopoverResourcePanel(target, pageItems, myItems, "", label, 'obj', triple);
+                        showPopoverResourcePanel(target, pageItems, myItems, "", label, 'obj', triple, state.popoverOptions.scope.newSelectors);
 
                         // if predicate is literal, show popover literal
                     } else if (itemPredicate.suggestedObjectTypes.length === 1 && itemPredicate.suggestedObjectTypes[0] === NameSpace.rdfs.literal) {
@@ -1190,7 +1194,7 @@ angular.module('Pundit2.ResourcePanel')
                 if (typeof(properties) !== 'undefined' && properties.length > 0) {
                     showPopoverResourcePanel(target, "", "", properties, label, 'pr', triple);
                 } else {
-                    // TODO Show error? 
+                    // TODO Show error?
                     showPopoverResourcePanel(target, "", "", [], label, 'pr', triple);
                 }
 
