@@ -75,7 +75,10 @@ angular.module('Pundit2.Annotators')
                         'AnnotationsCommunication.deleteAnnotation'
                     ],
                     function() {
-                        scope.selected = false;
+                        var item = ItemsExchange.getItemByUri(element[0].getAttribute("about"));
+                        if(typeof item === "undefined"){
+                            scope.selected = false;
+                        }
                     });
 
             }
