@@ -109,7 +109,9 @@ angular.module('Pundit2.Annotators')
             priority: 99,
             action: function(item) {
                 var coordinates = ContextualMenu.getLastXY(),
-                    fragmentId = ContextualMenu.getLastRef();
+                    fragmentId = ContextualMenu.getLastRef(),
+                    CHOElem = angular.element("[about='" +item.uri+"']");
+                CHOElem.addClass('pnd-range-pos-icon');
                 AnnotationPopover.show(coordinates.x, coordinates.y, item, '', fragmentId, 'comment');
             }
         });
@@ -201,7 +203,8 @@ angular.module('Pundit2.Annotators')
 
     //add directive attribute
     CHOElem.addClass('cho-menu');
-    
+ //   CHOElem.addClass('pnd-range-pos-icon');
+
     //compile the DOM
     $compile(CHOElem)($rootScope);
     promise.resolve();

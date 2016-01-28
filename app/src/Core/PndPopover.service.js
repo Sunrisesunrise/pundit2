@@ -68,16 +68,16 @@ angular.module('Pundit2.Core')
             state.selectionStart = {
                 label: 'start',
                 offset: {left: iconOffset.left, top:iconOffset.top},
-                fragmentRef: pos.beforeElem,
-                width: 0,
+                fragmentRef: ts.eq(0),
+                width: ts.eq(0).width(),
                 height: ts.eq(0).height(),
             };
             state.selectionEnd = {
                 label: 'end',
-                offset: {left: iconOffset.left, top: state.selectionStart.offset.top + ts.eq(0).height()},
-                fragmentRef: pos.afterElem,
-                width:   0,
-                height:  ts.eq(0).height(),
+                offset: {left: iconOffset.left + ts.eq(0).width() , top: state.selectionStart.offset.top + ts.eq(0).height()},
+                fragmentRef: ts.eq(0),
+                width:   -ts.eq(0).width(),
+                height:  -ts.eq(0).height,
             };
             return;
         }
@@ -187,7 +187,6 @@ angular.module('Pundit2.Core')
             EventDispatcher.removeListener(eventHandler);
         }
 
-        if (state.popoverOptions.needsValidSelection) {
             var selection = $document[0].getSelection();
             if (selection.baseNode === null) {
                 pndPopover.log("Skipping show .. no valid selection");
@@ -195,16 +194,15 @@ angular.module('Pundit2.Core')
             }
             state.selection = selection;
             EventDispatcher.sendEvent('PndPopover.addTemporarySelection');
-        }
 
         state.popover.show();
 
-        if (state.popoverOptions.lockPageScroll) {
+   //     if (state.popoverOptions.lockPageScroll) {
             var win = angular.element($window);
             state.scroll.top = win.scrollTop();
             state.scroll.left = win.scrollLeft();
             win.on('scroll', scrollHandler);
-        }
+      //  }
 
         $document.on('mouseup', mouseUpHandler);
 
