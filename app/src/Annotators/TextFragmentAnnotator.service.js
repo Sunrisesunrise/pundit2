@@ -71,7 +71,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> suggestionIconClass: 'pnd-icon-pencil' </pre>
      */
-    suggestionIconClass: 'pnd-icon-pencil',
+    suggestionIconClass: 'pnd-icon-magic',
 
     /**
      * @module punditConfig

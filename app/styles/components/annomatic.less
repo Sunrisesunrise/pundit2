@@ -13,66 +13,86 @@ annomatic-panel.fixed > header {
     right: 0;
 }
 
+
 /* ------------------------------------ *\
    #ANNOMATIC-IN-ANNOTATIONS-SIDEBAR
 \* ------------------------------------ */
 .pnd-annomatic-container {
 
     .pnd-annomatic-content {
+        margin-top: 34px;
 
-        margin-top: 75px;
-
-        .pnd-btn-annomatic {
+        /* Top area contains text */
+        .pnd-annomatic-content-top {
             position: fixed;
-            top: @toolbar-height + 29; /* Is the height of the buttons above */
-            width: @annotation-sidebar-exp-width;
-            z-index: 3;
-            box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.20);
-            background-color: #464B4C;
+            z-index: 10;
+            background-color: @color-background-base;
+            border-bottom: 1px solid @color-border-normal;
 
-            button {
-                width: 100%;
-                &.pnd-button-suggestion {
-                    background-color: #fff;
-                }
+            p {
+                padding: 10px;
+                color: @color-text;
+                font-size: 13px;
             }
 
-            ul {
-                text-align: center;
-                margin-top: -1px;
-                width: 100%;
+            .value {
+                font-weight: @font-weight-bold;
             }
         }
 
-        .pnd-annomatic-info, .pnd-annomatic-count {
-            padding: 10px;
-            color: #fff;
+        /* Contains buttons... vertical center */
+        .pnd-annomatic-content-buttons {
+            position: fixed;
+            top: 50%; /* Is the height of the buttons above */
+            width: @annotation-sidebar-exp-width;
+            margin-top: 45px;
+            z-index: 3;
+            text-align: center;
         }
     }
 }
 
+
+/* ------------------------------------ *\
+   #ANNOMATIC-INLINE
+\* ------------------------------------ */
+
+/* Text background color */
 .ann-auto {
+
     &.ann-hidden {
         background-color: inherit !important;
-        color: inherit !important;
+        // color: inherit !important;
     }
     &:not(.ann-hidden) {
+
         &.ann-waiting {
-            background-color: @text-fragment-color;
+            background-color: @text-fragment-color-1;
             // color: #fff;
         }
+
         &.ann-active {
-            background-color: @brand-info;
+            background-color: @text-fragment-color-hover;
             // color: #fff;
+
+            & + .pnd-icon-magic {
+                color: @text-fragment-icon-color-hover !important;
+            }
         }
+
         &.ann-ok {
-            background-color: @brand-success;
-            color: #fff;
+            background-color: @text-fragment-color-hover;
+            // color: #fff;
+
+            & + .pnd-icon-magic {
+                display: none;
+            }
         }
+
         &.ann-removed {
-            background-color: @brand-danger;
-            color: #fff;
-            padding: 0.2em 0.3em;
+            background-color: transparent;
+            // color: #fff;
+            // padding: 0.2em 0.3em;
         }
     }
 }
@@ -81,20 +101,22 @@ annomatic-panel.fixed > header {
     display: none;
 }
 
+/* Border of area selected by the user */
 .selecting-ancestor {
-    outline: 3px solid lighten(@brand-warning, 12%);
+    outline: 3px solid @text-fragment-color-hover;
+    border-radius: 8px;
 }
 
-.pnd-icon-tag {
-    font-size: 12px;
-    margin-left: 0.5em;
-    cursor: context-menu;
-    color: @brand-warning;
+/* The icon */
+span.pnd-text-fragment-icon.pnd-icon-magic {
+    font-size: 1.1em !important;
+    margin-left: 0.2em;
+    color: @text-fragment-icon-color;
     vertical-align: baseline;
     text-decoration: none;
 
     &:hover {
-        color: darken(@brand-warning, 12%);
+        color: @text-fragment-icon-color-hover !important;
         text-decoration: none;
     }
 }
@@ -103,11 +125,6 @@ annomatic-panel.fixed > header {
 /* ------------------------------------ *\
    #ANNOMATIC-POPOVER
 \* ------------------------------------ */
-
-/* Wraps annomatic popover toghether with .pnd-wrp */
-body .pnd-wrp-annomatic {
-
-}
 
 /* The popover */
 body .pnd-annomatic-popover {
@@ -174,11 +191,6 @@ body .pnd-annomatic-popover {
     .pnd-panel-tab-content-footer {
         background-color: transparent;
     }
-
-
-
-
-
 
 
     .pnd-annomatic-popover-multi-entities {

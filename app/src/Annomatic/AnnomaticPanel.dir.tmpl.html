@@ -1,16 +1,36 @@
 <div ng-controller="AnnomaticPanelCtrl" class="pnd-annomatic-container pnd-ignore">
     <div class="pnd-annomatic-content">
-        <div class="pnd-btn-annomatic">
-            <button 
-                class="pnd-btn pnd-btn-link pnd-button-suggestion" 
-                ng-click="getSuggestions()"
-                ng-show="!gotAnnotations || Annomatic.annotationNumber == 0"
-                ng-disabled="targets.length == 0">
-                    <span class="pnd-icon pnd-icon-file"></span> Scan Page
-            </button> 
 
-            <!-- <button 
-                class="btn btn-link pnd-button-suggestion" 
+        <!-- Area on top displaying text -->
+        <div class="pnd-annomatic-content-top">
+            <p ng-show="!gotAnnotations || Annomatic.annotationNumber == 0">
+                Click on the blue button to scan the whole page or just select a part of text
+                and click on <strong>Search items in this area</strong>
+            </p>
+
+            <p ng-show="Annomatic.annotationNumber > 0" >
+                <span class="label">Suggested annotations: </span>
+                <span class="value">{{Annomatic.annotationNumber}}</span>,
+                <span class="label">Saved annotations: </span>
+                <span class="value">{{Annomatic.ann.savedByNum.length}}</span>
+                <br/>
+                Click on the <strong>Annotations</strong> tab to display your newly created annotations
+                <!-- - Rejected: {{Annomatic.ann.byState['removed'].length}} -->
+            </p>
+        </div>
+
+        <!-- Area with buttons -->
+        <div class="pnd-annomatic-content-buttons"
+             ng-show="!gotAnnotations || Annomatic.annotationNumber == 0">
+            <button 
+                class="pnd-btn pnd-btn-calltoaction"
+                ng-click="getSuggestions()"
+                ng-disabled="targets.length == 0">
+                    <span class="pnd-icon pnd-icon-file"></span> Scan whole page
+            </button>
+
+            <!-- <button
+                class="btn btn-link pnd-button-suggestion"
                 ng-click="getSuggestionsArea()"
                 ng-show="Annomatic.area != null"
                 ng-disabled="targets.length == 0">
@@ -22,10 +42,15 @@
             Select area <span class="pnd-icon pnd-icon-edit"></span>
         </button> -->
 
-        <div ng-show="Annomatic.annotationNumber > 0" class="pnd-btn-annomatic">
-            <div class="pnd-annomatic-count">
-                Suggestion: {{Annomatic.annotationNumber}} - Saved: {{Annomatic.ann.savedByNum.length}} <!-- - Rejected: {{Annomatic.ann.byState['removed'].length}} -->
-            </div>
+        <div class="pnd-annomatic-content-buttons"
+             ng-show="Annomatic.annotationNumber > 0">
+
+            <button
+                class="pnd-btn pnd-btn-calltoaction"
+                ng-click="startReview()"
+                ng-hide="Annomatic.ann.savedByNum.length > 0">
+                Start review <!-- ({{Annomatic.currAnn}}/{{Annomatic.annotationNumber}}) -->
+            </button>
 
             <!-- TODO: fix filter -->
             <!-- <button
@@ -43,12 +68,7 @@
             <!-- <button class="btn btn-success pnd-button-save-review" ng-click="saveReview()">
                 Save
             </button> -->
-            <button 
-                class="pnd-btn pnd-button-start-review" 
-                ng-click="startReview()"
-                ng-hide="Annomatic.ann.savedByNum.length > 0">
-                Start review <!-- ({{Annomatic.currAnn}}/{{Annomatic.annotationNumber}}) -->
-            </button>
+
         </div>
 
         <div ng-repeat="ann in filtered = (annotations)" style="color: black">

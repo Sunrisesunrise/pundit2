@@ -10,12 +10,28 @@
                 <!-- Buttons Anno-o-matic and annotations -->
                 <div ng-if="isAnnomaticActive"
                      class="pnd-annotation-sidebar-modes-buttons">
+
+                    <ul class="pnd-tab-header" ng-class="{'pnd-hidden-tabs': hiddenTabsToShow()}" style="overflow-y: visible; height: auto;">
+                        <li ng-class="{'active': isAnnotationsPanelActive()}"
+                            ng-click="activateAnnotationsPanel()"
+                            ng-disabled="isLoading || isAnnotationsPanelActive()">
+                            <a>Annotations ({{annotationsLength}}/{{allAnnotationsLength}})</a>
+                        </li>
+                        <li ng-class="{'active': isSuggestionsPanelActive()}"
+                            ng-click="activateSuggestionsPanel()"
+                            ng-disabled="isLoadingData || isLoading || isSuggestionsPanelActive()">
+                            <a>Ann-o-matic</a>
+                        </li>
+                    </ul>
+
+                    <!--
+                    OLD STUFF
                     <button type="button"
                             class="pnd-btn pnd-btn-sidebar pnd-btn-fill-width"
                             ng-class="{'pnd-active': isSuggestionsPanelActive()}"
                             ng-click="activateSuggestionsPanel()"
                             ng-disabled="isLoadingData || isLoading || isSuggestionsPanelActive()">
-                        Suggestions
+                        Ann-o-matic
                     </button><button type="button"
                             ng-click="activateAnnotationsPanel()"
                             ng-class="{
@@ -25,6 +41,7 @@
                             ng-disabled="isLoading || isAnnotationsPanelActive()">
                         Annotations ({{annotationsLength}}/{{allAnnotationsLength}})
                     </button>
+                    -->
                 </div>
 
                 <!-- Button to show filters -->
