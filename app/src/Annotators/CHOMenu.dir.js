@@ -60,7 +60,7 @@ angular.module('Pundit2.Annotators')
 
                     ContextualMenu.show(evt.pageX, evt.pageY, scope.item, scope.item.cMenuType);
                     //TODO: destroy listener
-                    EventDispatcher.addListeners(
+                    var listenerDelete = EventDispatcher.addListeners(
                         [
                             'AnnotationsCommunication.deleteItems'
                         ],
@@ -71,6 +71,18 @@ angular.module('Pundit2.Annotators')
                             if(scope.item.uri === e.args[0].uri){
                                 scope.selected = false;
                             }
+                            EventDispatcher.removeListener(listenerDelete);
+
+                        });
+                    var listenerSave =EventDispatcher.addListeners(
+                        [
+                            'AnnotationsCommunication.saveAnnotation'
+                        ],
+                        function(e) {
+                            if(typeof AnnotationsExchange.getAnnotationById(e.args).items[scope.item.uri] !== "undefined"){
+                                scope.selected = true;
+                            }
+                            EventDispatcher.removeListener(listenerSave);
                         });
 
 
@@ -78,16 +90,16 @@ angular.module('Pundit2.Annotators')
 
                 //scope.url = attributes.pndResource;
 
-                EventDispatcher.addListeners(
+                var listenerConsolidator =EventDispatcher.addListeners(
                     [
-                        'Consolidation.consolidateAll',
-                        'AnnotationsCommunication.saveAnnotation',
+                        'Consolidation.consolidate'
                     ],
                     function() {
                         var item = ItemsExchange.getItemByUri(element[0].getAttribute("about"));
                         if(typeof item !== "undefined"){
                             scope.selected = true;
                         }
+                        EventDispatcher.removeListener(listenerConsolidator);
                     });
 
             }

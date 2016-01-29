@@ -208,7 +208,7 @@ angular.module('Pundit2.Annotators')
     //compile the DOM
     $compile(CHOElem)($rootScope);
     promise.resolve();
-    
+
     initContextualMenu();
 
     return CHO;
