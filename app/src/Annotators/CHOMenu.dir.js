@@ -4,11 +4,11 @@ angular.module('Pundit2.Annotators')
 
     .directive('choMenu', function($rootScope, NameSpace, ContextualMenu,
                                    Toolbar, ImageHandler, ImageAnnotator, ItemsExchange, TemplatesExchange,
-                                   TripleComposer, EventDispatcher, Item, XpointersHelper) {
+                                   TripleComposer, EventDispatcher, Item, XpointersHelper, AnnotationsExchange) {
 
         return {
             restrict: 'C',
-            scope: true,
+            scope: {},
             templateUrl: 'src/Annotators/CHOMenu.dir.tmpl.html',
             replace:true,
             link: function(scope, element) {
@@ -17,8 +17,12 @@ angular.module('Pundit2.Annotators')
                 scope.item = null;
                 scope.selected = false;
 
+
                 scope.isSelected = function() {
                     return scope.selected;
+                }
+                scope.myElement = function() {
+                    return scope.element;
                 }
                 var createItemFromCHO = function(CHOElem) {
                     var values = {};
@@ -55,6 +59,21 @@ angular.module('Pundit2.Annotators')
                     }
 
                     ContextualMenu.show(evt.pageX, evt.pageY, scope.item, scope.item.cMenuType);
+                    //TODO: destroy listener
+                    EventDispatcher.addListeners(
+                        [
+                            'AnnotationsCommunication.deleteItems'
+                        ],
+                        function(e) {
+                            if(e.args.length === 0){
+                                return;
+                            }
+                            if(scope.item.uri === e.args[0].uri){
+                                scope.selected = false;
+                            }
+                        });
+
+
                 });
 
                 //scope.url = attributes.pndResource;
@@ -68,16 +87,6 @@ angular.module('Pundit2.Annotators')
                         var item = ItemsExchange.getItemByUri(element[0].getAttribute("about"));
                         if(typeof item !== "undefined"){
                             scope.selected = true;
-                        }
-                    });
-                EventDispatcher.addListeners(
-                    [
-                        'AnnotationsCommunication.deleteAnnotation'
-                    ],
-                    function() {
-                        var item = ItemsExchange.getItemByUri(element[0].getAttribute("about"));
-                        if(typeof item === "undefined"){
-                            scope.selected = false;
                         }
                     });
 

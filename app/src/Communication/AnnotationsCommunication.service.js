@@ -49,7 +49,10 @@ angular.module('Pundit2.Communication')
         }
 
         Consolidation.wipeItems(itemsToDelete);
+
+        EventDispatcher.sendEvent('AnnotationsCommunication.deleteItems', itemsToDelete);
     };
+
 
     var updateAnnotationV1 = function(promise, annID, graph, items, targets) {
         var completed = 0;
