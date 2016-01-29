@@ -69,7 +69,7 @@
 
                     <div class="pnd-annotation-original-page"
                          ng-if="item.subject.isExternal">
-                        <a href="{{item.subject.pageContext}}">Open in original page</a>
+                        <a href="{{item.subject.pageContext}}" target="_blank">Open in original page</a>
                     </div>
                 </div>
 
@@ -148,8 +148,8 @@
                     </span>
 
                     <div class="pnd-annotation-original-page"
-                         ng-if="item.subject.isExternal">
-                        <a href="{{item.subject.pageContext}}">Open in original page</a>
+                         ng-if="item.objects[0].isExternal">
+                        <a href="{{item.objects[0].pageContext}}" target="_blank">Open in original page</a>
                     </div>
                 </div>
 
