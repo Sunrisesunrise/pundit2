@@ -31,10 +31,10 @@ angular.module('Pundit2.Core')
 
     var eventHandler = null;
 
-    var calculateSelectionCoordinates = function(type,uri) {
+    var calculateSelectionCoordinates = function(data) {
         // var range = state.selection.getRangeAt(0)
-        if(type === "http://www.openannotation.org/ns/resource"){
-            var ts = angular.element("span.pnd-resource[about='"+uri+"']");
+        if(data.item.type[0] === "http://www.openannotation.org/ns/resource"){
+            var ts = angular.element("span.pnd-resource[about='"+data.item.uri+"']");
             var i = 0;
             var pos = {
                 beforeElem: null,
@@ -263,7 +263,7 @@ angular.module('Pundit2.Core')
         var promise = state.popover.$promise;
         promise.then(function () {
             if (show()) {
-                calculateSelectionCoordinates(data.item.type[0],data.item.uri);
+                calculateSelectionCoordinates(data);
                 innerPromise.resolve();
             }
             else {

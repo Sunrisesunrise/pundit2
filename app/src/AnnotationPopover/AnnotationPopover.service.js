@@ -231,7 +231,7 @@ angular.module('Pundit2.AnnotationPopover')
                 needsValidSelection: (item.isTextFragment()) ? true : false,
                 hideCallback: function() {
                     annotationPopover.log('Annotation popover hide');
-                    var CHOElem = angular.element("[about='" +item.uri+"']");
+                    var CHOElem = angular.element('.pnd-range-pos-icon');
                     CHOElem.removeClass('pnd-range-pos-icon');
                     angular.element($window).off('resize', resizeCallback);
                 }
