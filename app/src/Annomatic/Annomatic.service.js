@@ -84,9 +84,9 @@ angular.module('Pundit2.Annomatic')
      * or the complete object as pundit property convention ({uri, type, label, range, domain ...})
      *
      * Default value:
-     * <pre> property: 'http://www.w3.org/2004/02/skos/core#related' </pre>
+     * <pre> property: 'http://www.w3.org/2000/01/rdf-schema#isDefinedBy' </pre>
      */
-    property: 'http://www.w3.org/2004/02/skos/core#related',
+    property: 'http://www.w3.org/2000/01/rdf-schema#isDefinedBy',
 
     /**
      * @module punditConfig
