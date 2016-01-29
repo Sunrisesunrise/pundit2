@@ -19,27 +19,28 @@ annomatic-panel.fixed > header {
 \* ------------------------------------ */
 .pnd-annomatic-container {
 
-    .pnd-annomatic-content {
-        margin-top: 34px;
+    /* Top area contains text */
+    .pnd-annomatic-content-top {
+        position: fixed;
+        z-index: 10;
+        top: 64px;
+        width: @annotation-sidebar-exp-width;
+        background-color: @color-background-base;
+        border-bottom: 1px solid @color-border-normal;
 
-        /* Top area contains text */
-        .pnd-annomatic-content-top {
-            position: fixed;
-            z-index: 10;
-            width: @annotation-sidebar-exp-width;
-            background-color: @color-background-base;
-            border-bottom: 1px solid @color-border-normal;
-
-            p {
-                padding: 5px 10px;
-                color: @color-text;
-                font-size: 13px;
-            }
-
-            .value {
-                font-weight: @font-weight-bold;
-            }
+        p {
+            padding: 5px 10px;
+            color: @color-text;
+            font-size: 13px;
         }
+
+        .value {
+            font-weight: @font-weight-bold;
+        }
+    }
+
+    .pnd-annomatic-content {
+        margin-top: 70px;
 
         /* Contains buttons... vertical center */
         .pnd-annomatic-content-buttons {
