@@ -1,42 +1,44 @@
-<div class="pnd-wrp pnd-ignore pnd-annomatic-popover popover" ng-controller="AnnomaticPopoverCtrl">
-    <div class="arrow"></div>
+<div class="popover pnd-wrp pnd-ignore pnd-annomatic-popover"
+     ng-controller="AnnomaticPopoverCtrl">
 
-    <h4 class="popover-title" ng-click="showDetails = !showDetails">
-        <!-- TODO: decide if we want the caret or not -->
-        <span ng-show="!showDetails" class="pnd-icon pnd-icon-caret-right"></span>
-        <span ng-show="showDetails" class="pnd-icon pnd-icon-caret-down"></span>
-        
+    <div class="pnd-popover">
+
+        <div class="arrow"></div>
+
+        <h4 class="popover-title">
+
         <span
             style="opacity: {{ann.byNum[num].confidence}}"
             title="Confidence {{ann.byNum[num].confidence}}"
             class="pnd-icon pnd-icon-th-large pnd-confidence"></span>
 
-        {{ann.byNum[num].label}}
+            {{ann.byNum[num].label}}
 
-        <span class="pull-right pnd-icon pnd-icon-close" ng-click="hide($event)"></span>
-    </h4>
+            <span class="pull-right pnd-icon pnd-icon-close" ng-click="hide($event)"></span>
+        </h4>
 
-    <div class="popover-content">
-        <div ng-if="isMultiEntites" class="pnd-annomatic-popover-multi-entities text-center">
-            <div ng-show="showDetails" class="pnd-preview pnd-annomatic-popover-details clearfix">
-                <item-preview uri="{{ann.byNum[num].entities[currentEntity].uri}}" sticking="false"></item-preview>
+        <div class="popover-content">
+            <div ng-if="isMultiEntites" class="pnd-annomatic-popover-multi-entities text-center">
+                <div class="pnd-preview pnd-annomatic-popover-details clearfix">
+                    <item-preview uri="{{ann.byNum[num].entities[currentEntity].uri}}" sticking="false"></item-preview>
+                </div>
+                <button ng-if="multiLength > 0" ng-click="changeEntity()">Change selected entity</button>
             </div>
-            <button ng-if="multiLength > 0" ng-click="changeEntity()">Change selected entity</button>
-        </div>
-        <div ng-if="!isMultiEntites">
-            <div ng-show="showDetails" class="pnd-preview pnd-annomatic-popover-details clearfix">
-                <item-preview uri="{{ann.byNum[num].uri}}" sticking="false"></item-preview>
+            <div ng-if="!isMultiEntites">
+                <div ng-show="showDetails" class="pnd-preview pnd-annomatic-popover-details clearfix">
+                    <item-preview uri="{{ann.byNum[num].uri}}" sticking="false"></item-preview>
+                </div>
             </div>
-        </div>
 
-        <div class="pnd-annomatic-btn-group">
-            <!-- <button class="btn btn-warning pnd-button-go-prev" ng-click="goPrev()">
-                <span class="pnd-icon pnd-icon-arrow-left"></span>
-            </button> -->
+            <div class="pnd-annomatic-btn-group">
+                <!-- <button class="btn btn-warning pnd-button-go-prev" ng-click="goPrev()">
+                    <span class="pnd-icon pnd-icon-arrow-left"></span>
+                </button> -->
 
-            <button class="pnd-btn pnd-btn-calltoaction pnd-button-set-ok" ng-click="setOk($event)" ng-disabled="ann.savedByNum.indexOf(num) != -1">
-                <span class="pnd-icon pnd-icon-check"></span>
-            </button><!--
+                <button class="pnd-btn pnd-btn-calltoaction pnd-button-set-ok" ng-click="setOk($event)"
+                        ng-disabled="ann.savedByNum.indexOf(num) != -1">
+                    <span class="pnd-icon pnd-icon-check"></span>
+                </button><!--
 
             <button class="btn btn-danger pnd-button-set-ko" ng-click="setKo()" ng-disabled="ann.savedByNum.indexOf(num) != -1">
                 <span class="pnd-icon pnd-icon-trash"></span>
@@ -47,9 +49,11 @@
                 ng-mouseover="toggleSimilar()"
                 ng-mouseout="toggleSimilar(content)">accept all {{instances}}</button>
 
-            --><button class="pnd-btn" ng-click="goNext($event)">
-                <span class="pnd-icon pnd-icon-arrow-right"></span>
-            </button>
+            -->
+                <button class="pnd-btn" ng-click="goNext($event)">
+                    <span class="pnd-icon pnd-icon-arrow-right"></span>
+                </button>
+            </div>
         </div>
     </div>
 </div>

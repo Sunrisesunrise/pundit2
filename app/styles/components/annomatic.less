@@ -81,17 +81,6 @@ annomatic-panel.fixed > header {
     display: none;
 }
 
-.pnd-annomatic-popover {
-    width: 290px;
-    img {
-        max-width: 100px;
-        border: 1px solid #555;
-        padding: 2px;
-        margin: 2px;
-        float: left;
-    }
-}
-
 .selecting-ancestor {
     outline: 3px solid lighten(@brand-warning, 12%);
 }
@@ -110,9 +99,26 @@ annomatic-panel.fixed > header {
     }
 }
 
-.pnd-annomatic-popover {
-    position: absolute;
+/* ------------------------------------ *\
+   #ANNOMATIC-POPVER
+\* ------------------------------------ */
+body .pnd-annomatic-popover {
     margin-top: 10px;
+    width: 290px;
+
+    // From Resource Panel
+    position: absolute !important;
+    max-width: @resource-panel-width !important;
+    width: @resource-panel-width;
+    z-index: @zindex-pnd-resource-panel;
+
+    img {
+        max-width: 100px;
+        border: 1px solid #555;
+        padding: 2px;
+        margin: 2px;
+        float: left;
+    }
 
     .pnd-annomatic-popover-details {
         max-height: 200px;
