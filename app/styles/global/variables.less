@@ -268,9 +268,10 @@
 // #ANNOTATION-POPOVER
 // ------------------------------------ //
 
-/* Popover used to create comments and highlights */
+// Popover used to create comments and highlights
 @annotation-popover-comment-width: 375px;
-
+// Popover used by Annotator Light for inline annotation creation
+@annotation-popover-initial-width: 199px;
 
 // ------------------------------------ //
 // #RESOURCE-PANEL
@@ -300,11 +301,9 @@
 
 
 // ------------------------------------ //
-// #ANNOTATION-POPOVER
+// #ANNOMATIC
 // ------------------------------------ //
-
-// Popover used by Annotator Light for inline annotation creation
-@annotation-popover-initial-width: 199px;
+@annomatic-popover-width: 350px;
 
 
 // ------------------------------------ //
@@ -339,6 +338,7 @@
 
 @zindex-pnd:                        2147483647; // Used only once by .pnd-wrp but ignored since the element has position: static that doesn't support z-index
 
+@zindex-pnd-annomatic-popover:      8 + @zindex-pnd-base;
 @zindex-pnd-annotation-sidebar:     9 + @zindex-pnd-base;
 @zindex-pnd-dashboard:              10 + @zindex-pnd-base;
 @zindex-pnd-litetool:               11 + @zindex-pnd-base;

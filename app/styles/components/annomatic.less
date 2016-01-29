@@ -99,36 +99,87 @@ annomatic-panel.fixed > header {
     }
 }
 
+
 /* ------------------------------------ *\
-   #ANNOMATIC-POPVER
+   #ANNOMATIC-POPOVER
 \* ------------------------------------ */
+
+/* Wraps annomatic popover toghether with .pnd-wrp */
+body .pnd-wrp-annomatic {
+
+}
+
+/* The popover */
 body .pnd-annomatic-popover {
-    margin-top: 10px;
-    width: 290px;
+    // position: absolute !important;
+    max-width: @annomatic-popover-width !important;
+    width: @annomatic-popover-width;
+    z-index: @zindex-pnd-annomatic-popover;
+    // max-width: none !important;
 
-    // From Resource Panel
-    position: absolute !important;
-    max-width: @resource-panel-width !important;
-    width: @resource-panel-width;
-    z-index: @zindex-pnd-resource-panel;
+    /* Title area */
+    .popover-title {
+        .pnd-icon {
+            font-size: 16px;
+            margin-top: 3px;
+            cursor: pointer;
 
-    img {
-        max-width: 100px;
-        border: 1px solid #555;
-        padding: 2px;
-        margin: 2px;
-        float: left;
+            &:hover {
+                color: @color-text-link;
+            }
+        }
     }
 
-    .pnd-annomatic-popover-details {
-        max-height: 200px;
-        overflow-y: scrool;
-        overflow-x: hidden;
+    /* Content area */
+    .popover-content {
+        padding: 0 0 40px 0;
+
+        .pnd-annomatic-popover-details {
+            max-height: 200px;
+            padding: 15px;
+            overflow-y: scrool;
+            overflow-x: hidden;
+        }
+
+        .pnd-preview-item-types {
+            margin-top: 4px;
+            margin-bottom: 10px;
+
+            ul {
+                padding: 0 0 10px 0;
+            }
+        }
+
+        .pnd-preview-item-image {
+            padding: 0 10px 0 0;
+        }
+
+        .pnd-preview-item-description {
+            padding: 0;
+        }
+
+        /* Confidence indicator */
+        .pnd-annomatic-confidence {
+            border-top: 1px solid @color-border-normal;
+            background-color: @color-background-light;
+            padding: 6px 15px;
+
+            .value {
+                font-weight: @font-weight-bold;
+            }
+        }
     }
 
-    .pnd-annomatic-btn-group {
-        left: 82px;
+    /* Footer */
+    .pnd-panel-tab-content-footer {
+        background-color: transparent;
     }
+
+
+
+
+
+
 
     .pnd-annomatic-popover-multi-entities {
         padding: 8px;
