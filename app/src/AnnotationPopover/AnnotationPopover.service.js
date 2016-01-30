@@ -35,7 +35,7 @@ angular.module('Pundit2.AnnotationPopover')
             resizeData.removeTimeout = null;
         }
 
-        if (state.data.item.isResource()) {
+        if (!state.data.item.isTextFragment()) {
             //take icon position by class
             var elem = angular.element('.pnd-range-pos-icon');
             var pos = elem[0].getBoundingClientRect();
@@ -65,7 +65,7 @@ angular.module('Pundit2.AnnotationPopover')
 
         resizeData.removeTimeout = $timeout(function() {
             var state = PndPopover.getState();
-            if (!state.data.item.isResource()) {
+            if (!state.data.item.icon) {
                 annotationPopover.log('Remove temporary element');
                 var parentTS = resizeData.temporaryElement.parent();
                 resizeData.temporaryElement.remove();
@@ -121,7 +121,7 @@ angular.module('Pundit2.AnnotationPopover')
             return false;
 
         }
-        if (state.data.item.isResource()) {
+        if (!state.data.item.isTextFragment()) {
             var elem = angular.element('.pnd-range-pos-icon');
             var posArrow = elem[0].getBoundingClientRect();
             var posArrowTop = posArrow.top + posArrow.height / 2;
@@ -221,21 +221,33 @@ angular.module('Pundit2.AnnotationPopover')
 
     annotationPopover.lastUsedNotebookID = undefined;
 
-    annotationPopover.show = function(x, y, item, unUsed, fragmentId, mode) {
-        var options = {
-            templateUrl: 'src/AnnotationPopover/AnnotationPopover.tmpl.html',
-            controller: 'AnnotationPopoverCtrl',
-            placement: 'bottom',
-            alphaRollover: true,
-            lockPageScroll: true,
-            needsValidSelection: (item.isTextFragment()) ? true : false,
-            hideCallback: function() {
+    annotationPopover.show = function(x, y, item, opt, fragmentId, mode) {
+        var options;
+        if(opt === ''){
+            options = {
+                templateUrl: 'src/AnnotationPopover/AnnotationPopover.tmpl.html',
+                controller: 'AnnotationPopoverCtrl',
+                placement: 'bottom',
+                alphaRollover: true,
+                lockPageScroll: true,
+                needsValidSelection: (item.isTextFragment()) ? true : false,
+                hideCallback: function() {
+                    annotationPopover.log('Annotation popover hide');
+                    var CHOElem = angular.element('.pnd-range-pos-icon');
+                    CHOElem.removeClass('pnd-range-pos-icon');
+                    angular.element($window).off('resize', resizeCallback);
+                }
+            };
+        }else{
+            options = opt;
+            options.hideCallback = function() {
                 annotationPopover.log('Annotation popover hide');
-                var CHOElem = angular.element('.pnd-range-pos-icon');
-                CHOElem.removeClass('pnd-range-pos-icon');
+                var elem = angular.element('.pnd-range-pos-icon');
+                elem.removeClass('pnd-range-pos-icon');
                 angular.element($window).off('resize', resizeCallback);
             }
-        };
+        }
+
         var promise = PndPopover.show(x, y, options, {
             item: item,
             fragmentId: fragmentId

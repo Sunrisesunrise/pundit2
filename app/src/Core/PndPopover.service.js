@@ -33,51 +33,51 @@ angular.module('Pundit2.Core')
 
     var calculateSelectionCoordinates = function(data) {
         // var range = state.selection.getRangeAt(0)
-        if(data.item.type[0] === "http://www.openannotation.org/ns/resource"){
-            var ts = angular.element("span.pnd-resource[about='"+data.item.uri+"']");
+        if(data.item.icon){
+            var elem = angular.element('.pnd-range-pos-icon');
             var i = 0;
             var pos = {
                 beforeElem: null,
                 afterElem: null
             };
-            for (; i < ts.length; i++) {
-                if (ts.eq(0).width() === 0 ) {
+            for (; i < elem.length; i++) {
+                if (elem.eq(0).width() === 0 ) {
                     continue;
                 }
-                pos.beforeElem = ts.eq(i); //.before(ts);
+                pos.beforeElem = elem.eq(i); //.before(ts);
                 break;
             }
-            for (i = ts.length - 1; i >= 0; i--) {
-                if (ts.eq(0).width() === 0) {
+            for (i = elem.length - 1; i >= 0; i--) {
+                if (elem.eq(0).width() === 0) {
                     continue;
                 }
-                pos.afterElem = ts.eq(i); //.after(te);
+                pos.afterElem = elem.eq(i); //.after(te);
                 break;
             }
 
             if (pos.beforeElem === null) {
-                pos.beforeElem = ts.eq(0);
+                pos.beforeElem = elem.eq(0);
             }
             if (pos.afterElem === null) {
-                pos.afterElem = ts.eq(ts.length - 1);
+                pos.afterElem = elem.eq(elem.length - 1);
             }
 
-            pos.beforeElem.before(ts);
-            pos.afterElem.after(ts);
-            var iconOffset = ts.offset();
+            pos.beforeElem.before(elem);
+            pos.afterElem.after(elem);
+            var iconOffset = elem.offset();
             state.selectionStart = {
                 label: 'start',
                 offset: {left: iconOffset.left, top:iconOffset.top},
-                fragmentRef: ts.eq(0),
-                width: ts.eq(0).width(),
-                height: ts.eq(0).height(),
+                fragmentRef: elem.eq(0),
+                width: elem.eq(0).width(),
+                height: elem.eq(0).height(),
             };
             state.selectionEnd = {
                 label: 'end',
-                offset: {left: iconOffset.left + ts.eq(0).width() , top: state.selectionStart.offset.top + ts.eq(0).height()},
-                fragmentRef: ts.eq(0),
-                width:   -ts.eq(0).width(),
-                height:  -ts.eq(0).height,
+                offset: {left: iconOffset.left + elem.eq(0).width() , top: state.selectionStart.offset.top + elem.eq(0).height()},
+                fragmentRef: elem.eq(0),
+                width:   -elem.eq(0).width(),
+                height:  -elem.eq(0).height,
             };
             return;
         }
