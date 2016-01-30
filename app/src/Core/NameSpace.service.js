@@ -152,6 +152,7 @@ angular.module('Pundit2.Core')
     ns.types = {
         page: 'http://schema.org/WebPage',
         image: 'http://xmlns.com/foaf/0.1/Image',
+        resource: _oa + 'resource', // TODO to be defined
         named: _pnd + 'named-content',
         embeddedContent: _oa + 'EmbeddedContent'
     };
@@ -162,6 +163,7 @@ angular.module('Pundit2.Core')
     ns.typesLabels[ns.fragments.text] = 'Text fragment';
     ns.typesLabels[ns.types.page] = 'Web page';
     ns.typesLabels[ns.types.image] = 'Image';
+    ns.typesLabels[ns.types.image] = 'Resource'; // TODO to be defined
     ns.typesLabels[ns.types.named] = 'Named content';
 
 

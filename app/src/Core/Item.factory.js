@@ -164,7 +164,8 @@ angular.module('Pundit2.Core')
         return this.isTextFragment() ||
             this.isImage() ||
             this.isImageFragment() ||
-            this.isWebPage();
+            this.isWebPage() ||
+            this.isResource();
     };
 
     ItemFactory.prototype.isProperty = function() {
@@ -178,7 +179,9 @@ angular.module('Pundit2.Core')
     ItemFactory.prototype.isImage = function() {
         return this.type.indexOf(NameSpace.types.image) !== -1;
     };
-
+    ItemFactory.prototype.isResource = function() {
+        return this.type.indexOf(NameSpace.types.resource) !== -1;
+    };
     ItemFactory.prototype.isImageFragment = function() {
         return this.type.indexOf(NameSpace.fragments.imagePart) !== -1;
     };
@@ -194,7 +197,8 @@ angular.module('Pundit2.Core')
             !this.isTextFragment() &&
             !this.isImage() &&
             !this.isImageFragment() &&
-            !this.isWebPage();
+            !this.isWebPage() &&
+            !this.isResource();
     };
 
     ItemFactory.prototype.fromAnnotationRdf = function(annotationRDF) {
@@ -410,6 +414,9 @@ angular.module('Pundit2.Core')
                 // Do not break even if it's been discovered it's a webpage.
                 //break;
             }
+            if (target[NameSpace.rdf.type][i].value === NameSpace.types.resource) {
+                itemBaseType = NameSpace.types.resource;
+            }
             if (target[NameSpace.rdf.type][i].value === NameSpace.target.fragmentSelector) {
                 itemBaseType = NameSpace.target.fragmentSelector;
                 // No need to create item if it's a fragment Selector.
@@ -420,6 +427,10 @@ angular.module('Pundit2.Core')
         switch (itemBaseType) {
             case NameSpace.types.page: //WebPage.
                 values.label = target[NameSpace.rdfs.label][0].value;
+                break;
+            case NameSpace.types.resource: //Resource.
+                values.label = target[NameSpace.rdfs.label][0].value;
+                values.description = values.label;
                 break;
             case 'target':
                 var selector = targets[target[NameSpace.target.hasSelector][0].value];
