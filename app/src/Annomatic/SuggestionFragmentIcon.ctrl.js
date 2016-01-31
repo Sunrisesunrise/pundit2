@@ -20,10 +20,11 @@ angular.module('Pundit2.Annomatic')
 
     // For suggestions fragments
     $scope.iconClass = TextFragmentAnnotator.options.suggestionIconClass;
-    //$element.parent().attr("href","#");
-    // $element[0].parentNode.removeAttribute('href');
-    //unwrap node a
-    angular.element($element).unwrap();
+    // Element 'a' has href
+    if(typeof $element.parent().attr('href') !== 'undefined') {
+        //unwrap node a
+        angular.element($element).unwrap();
+    }
     // Will use the icon to calculate this fragment height with respect to
     // the document
     $scope.element = $element;
