@@ -7,9 +7,12 @@
         ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
 
         <div class="pnd-annotation-collapsed-subject"
-            ng-class="{'pnd-annotation-page': annotation.mainItem.typeLabel == 'WebPage'}">
-            <span>{{ annotation.mainItem.label }}</span> <!-- TODO For images instead of "label" we shoudl use the ALT attribute if present -->
+             ng-class="{'pnd-annotation-annotated-fragment': (annotation.mainItem.typeLabel == 'Text fragment'),
+                        'pnd-annotation-annotated-resource': (annotation.mainItem.typeLabel == 'resource'),
+                        'pnd-annotation-page': (annotation.mainItem.typeLabel == 'WebPage')}">
+            <span>{{ annotation.mainItem.label }}</span> <!-- TODO For images instead of "label" we should use the ALT attribute if present -->
         </div>
+
 
         <div class="pnd-annotation-collapsed-caret"></div>
 
@@ -58,11 +61,12 @@
             <div class="pnd-annotation-details-triple" ng-repeat="item in annotation.itemsArray">
 
                 <!-- Subject -->
-                <!-- Text fragment -->
-                <div class="pnd-annotation-details-subject pnd-annotation-annotated-fragment"
-                     ng-if="item.subject.typeLabel != 'WebPage' &&
+                <!-- Text fragment || resource -->
+                <div ng-if="item.subject.typeLabel != 'WebPage' &&
+                            item.subject.typeLabel != 'resource' &&
                             item.subject.typeLabel != 'Image' &&
-                            item.subject.typeLabel != 'Image fragment'">
+                            item.subject.typeLabel != 'Image fragment'"
+                     ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment'}">
                     <span>
                         {{ item.subject.description }}
                     </span>
@@ -76,6 +80,22 @@
                 <!-- Web page -->
                 <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
                      ng-if="item.subject.typeLabel == 'WebPage'">
+<<<<<<< HEAD
+=======
+                    <!-- Label -->
+                    <span class="pnd-annotation-entity-label">
+                        {{ item.subject.label }}
+                    </span>
+                    <!-- Type -->
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.subject.typeLabel }}
+                    </span>
+                </div>
+
+                <!-- Resource (i.e. Europeana Sounds CHO) -->
+                <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
+                     ng-if="item.subject.typeLabel == 'resource'">
+>>>>>>> origin/feature/europeana-features
                     <!-- Label -->
                     <span class="pnd-annotation-entity-label">
                         {{ item.subject.label }}
@@ -139,7 +159,7 @@
                 </div>
 
                 <!-- Object -->
-                <!-- Text fragment -->
+                <!-- Text fragment || resource -->
                 <div class="pnd-annotation-details-object pnd-annotation-annotated-fragment pnd-annotation-entity-details"
                      ng-if="item.objects[0].typeLabel == 'Text fragment'">
                     <span>
@@ -165,6 +185,19 @@
                 <!-- WebPage -->
                 <div class="pnd-annotation-details-object pnd-annotation-entity-details"
                      ng-if="item.objects[0].typeLabel == 'WebPage'">
+                    <span class="pnd-annotation-entity-label">
+                        <a href="{{ item.objects[0].uri }}" target="_blank">
+                            {{ item.objects[0].label }} <span class="pnd-icon-arrow-right"></span>
+                        </a>
+                    </span>
+                    <span class="pnd-annotation-entity-type pnd-type">
+                        {{ item.objects[0].typeLabel }}
+                    </span>
+                </div>
+
+                <!-- Resource (i.e. Europeana Sounds CHO) -->
+                <div class="pnd-annotation-details-object pnd-annotation-entity-details"
+                     ng-if="item.objects[0].typeLabel == 'resource'">
                     <span class="pnd-annotation-entity-label">
                         <a href="{{ item.objects[0].uri }}" target="_blank">
                             {{ item.objects[0].label }} <span class="pnd-icon-arrow-right"></span>
@@ -215,7 +248,8 @@
                              item.objects[0].typeLabel != 'literal' &&
                              item.objects[0].typeLabel != 'WebPage' &&
                              item.objects[0].typeLabel != 'Image' &&
-                             item.objects[0].typeLabel != 'Image fragment'">
+                             item.objects[0].typeLabel != 'Image fragment' &&
+                             item.objects[0].typeLabel != 'Resource'">
                     <span class="pnd-annotation-entity-image"
                           ng-if="item.objects[0].image!='null'">
                         <img ng-src="{{ item.objects[0].image }}" alt="{{ item.objects[0].label }}"/>

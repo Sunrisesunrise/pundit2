@@ -41,16 +41,35 @@ angular.module('Pundit2.ResourcePanel')
     // build tabs by reading active selectors inside selectors manager
     // TODO LOD management for subject
     if ($scope.type === 'obj') {
-        for (var j = 0; j < selectors.length; j++) {
-            $scope.contentTabs.push({
-                title: selectors[j].config.label,
-                template: 'src/Lists/itemList.tmpl.html',
-                itemsContainer: selectors[j].config.container,
-                items: [],
-                module: 'Pundit2',
-                isStarted: false,
-                selector: selectors[j]
-            });
+        if(typeof $scope.newSelectors !== "undefined"){
+            for (var j = 0; j < selectors.length; j++) {
+                for (var i = 0; i < selectors.length; i++) {
+                    if (($scope.newSelectors[i] === selectors[j].config.label)||($scope.newSelectors[i] === selectors[j].config.container)) {
+
+                        $scope.contentTabs.push({
+                            title: selectors[j].config.label,
+                            template: 'src/Lists/itemList.tmpl.html',
+                            itemsContainer: selectors[j].config.container,
+                            items: [],
+                            module: 'Pundit2',
+                            isStarted: false,
+                            selector: selectors[j]
+                        });
+                    }
+                }
+            }
+        }else {
+            for (var j = 0; j < selectors.length; j++) {
+                $scope.contentTabs.push({
+                    title: selectors[j].config.label,
+                    template: 'src/Lists/itemList.tmpl.html',
+                    itemsContainer: selectors[j].config.container,
+                    items: [],
+                    module: 'Pundit2',
+                    isStarted: false,
+                    selector: selectors[j]
+                });
+            }
         }
     }
 

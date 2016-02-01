@@ -6,9 +6,11 @@
          ng-if="!annotation.expanded"
          ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
 
-        <div class="pnd-annotation-collapsed-subject">
-            <span>{{annotation.mainItem.description}}</span>
+        <div class="pnd-annotation-collapsed-subject"
+             ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment'}">
+            <span>{{annotation.mainItem.label}}</span>
         </div>
+
     </div>
 
     <!-- Expanded view of the annotation -->

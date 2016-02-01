@@ -36,7 +36,7 @@
     cursor: pointer;
 }
 
-/* Subject */
+/* Target */
 .pnd-annotation-collapsed-subject {
     float: left;
     width: 100%;
@@ -46,14 +46,28 @@
     padding: 2px 4px;
     white-space: nowrap;
     text-overflow: ellipsis;
-    // TODO Fix line height
 
+    /*
     &:not(.pnd-annotation-page) span {
         background-color: @color-highlight;
         font-style: italic;
     }
+    */
+
+    &.pnd-annotation-annotated-fragment {
+        span {
+            background-color: @color-highlight;
+            font-style: italic;
+        }
+    }
 
     &.pnd-annotation-page {
+        span {
+            font-weight: @font-weight-bold;
+        }
+    }
+
+    &.pnd-annotation-annotated-resource {
         span {
             font-weight: @font-weight-bold;
         }
@@ -62,7 +76,14 @@
 
 /* Hover effect */
 .pnd-annotation-collapsed:hover {
+
+    /*
     .pnd-annotation-collapsed-subject:not(.pnd-annotation-page) span {
+        background-color: @color-highlight-hover;
+    }
+    */
+
+    .pnd-annotation-collapsed-subject.pnd-annotation-annotated-fragment span {
         background-color: @color-highlight-hover;
     }
 }
@@ -132,8 +153,6 @@
 
 .pnd-annotation-expanded {
     margin: 5px;
-    // TODO Just a try
-    // margin-left: -4px;
     overflow: hidden;
 
     background-color: @annotation-bg-color;
@@ -180,7 +199,8 @@
 /* Annotation content */
 .pnd-annotation-details-data {
     /* The annotated fragment shown in the annotation details */
-    .pnd-annotation-annotated-fragment, .pnd-annotation-annotated-literal {
+    // .pnd-annotation-annotated-fragment, .pnd-annotation-annotated-literal {
+    .pnd-annotation-annotated-fragment {
         display: block;
         padding: 10px;
         max-height: @annotation-text-max-height;
@@ -263,7 +283,7 @@
 
     /* Subject entity (like web page) in */
     .pnd-annotation-details-subject.pnd-annotation-entity-details {
-        padding: 10px; // 10px 10px 20px;
+        padding: 10px 10px 8px 10px;
     }
 
     /* Predicate in semantic annotation */
@@ -407,14 +427,6 @@
 /* ------------------------------------ *\
    #SPECIAL-COMMENT-ANNOTATION
 \* ------------------------------------ */
-// TODO This must stay here???
-.pnd-annotation-comment {
-    .pnd-annotation-expanded {
-        .pnd-annotation-annotated-fragment {
-            // padding: 10px 10px 14px 10px;
-        }
-    }
-}
 
 /* Highlights with a different color the text fragment
 in the expanded annotation */

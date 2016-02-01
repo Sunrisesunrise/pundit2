@@ -7,7 +7,9 @@
         ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
 
         <div class="pnd-annotation-collapsed-subject"
-            ng-class="{'pnd-annotation-page': annotation.mainItem.typeLabel == 'WebPage'}">
+             ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment',
+                        'pnd-annotation-annotated-resource': annotation.mainItem.typeLabel == 'resource',
+                        'pnd-annotation-page': annotation.mainItem.typeLabel == 'WebPage'}">
             <span>{{annotation.mainItem.label}}</span>
         </div>
 
@@ -51,16 +53,37 @@
         <!-- Annotation data -->
         <div class="pnd-annotation-details-data">
 
-            <!-- Annotated text fragment -->
-            <div ng-if="annotation.mainItem.typeLabel != 'WebPage'"
-                 class="pnd-annotation-annotated-fragment">
+            <!-- Annotated text fragment || Resource -->
+            <div ng-if="annotation.mainItem.typeLabel != 'WebPage' &&
+                        annotation.mainItem.typeLabel != 'resource'"
+                 ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment'}">
                 <span>{{annotation.mainItem.description}}</span>
             </div>
 
             <!-- Annotated web page -->
-            <div ng-if="annotation.mainItem.typeLabel == 'WebPage'"
-                 class="pnd-annotation-annotated-webpage">
-                <span>{{annotation.mainItem.label}}</span>
+            <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
+                 ng-if="annotation.mainItem.typeLabel == 'WebPage'">
+                <!-- Label -->
+                <span class="pnd-annotation-entity-label">
+                    {{ annotation.mainItem.label }}
+                </span>
+                <!-- Type -->
+                <span class="pnd-annotation-entity-type pnd-type">
+                    {{ annotation.mainItem.typeLabel }}
+                </span>
+            </div>
+
+            <!-- Annotated resource (i.e. Europeana Sounds CHO) -->
+            <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
+                 ng-if="annotation.mainItem.typeLabel == 'resource'">
+                <!-- Label -->
+                <span class="pnd-annotation-entity-label">
+                    {{ annotation.mainItem.description }}
+                </span>
+                <!-- Type -->
+                <span class="pnd-annotation-entity-type pnd-type">
+                    {{ annotation.mainItem.typeLabel }}
+                </span>
             </div>
 
             <div class="pnd-annotation-comment-caret"></div>

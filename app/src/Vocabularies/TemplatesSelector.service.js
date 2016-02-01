@@ -69,7 +69,7 @@ angular.module('Pundit2.Vocabularies')
                         trp[i].predicate.type = ["http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"];
                         trp[i].predicate.vocabulary = url + " (Template)";
                         // property is automatically added to ItemsExchange default container
-                        ItemsExchange.addItemToContainer(new Item(trp[i].predicate.uri, trp[i].predicate), [Config.modules.Client.relationsContainer, container]);
+                        ItemsExchange.addItemToContainer(new Item(trp[i].predicate.uri, trp[i].predicate), [Config.modules.ItemsExchange.defaultRelationsContainer, container]);
                         // override the label every time
                         if (typeof(trp[i].predicate.uri.label) !== 'undefined') {
                             ItemsExchange.getItemByUri(trp[i].predicate.uri).label = trp[i].predicate.uri.label;

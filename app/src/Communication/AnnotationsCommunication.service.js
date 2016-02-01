@@ -49,7 +49,10 @@ angular.module('Pundit2.Communication')
         }
 
         Consolidation.wipeItems(itemsToDelete);
+
+        EventDispatcher.sendEvent('AnnotationsCommunication.deleteItems', itemsToDelete);
     };
+
 
     var updateAnnotationV1 = function(promise, annID, graph, items, targets) {
         var completed = 0;
@@ -502,6 +505,9 @@ angular.module('Pundit2.Communication')
 
             if (typeof motivation !== 'undefined') {
                 params.motivatedBy = motivation;
+            }
+            if (typeof motivation === 'tagging') {
+                params.motivatedBy = 'linking';
             }
 
             if ((typeof currentNotebook !== 'undefined' && typeof currentNotebook.id !== 'undefined') || typeof forceNotebookId !== 'undefined') {
