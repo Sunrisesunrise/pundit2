@@ -21,10 +21,10 @@ angular.module('Pundit2.Annomatic')
     // For suggestions fragments
     $scope.iconClass = TextFragmentAnnotator.options.suggestionIconClass;
     // Element 'a' has href
-    if(typeof $element.parent().attr('href') !== 'undefined') {
-        //unwrap node a
-        angular.element($element).unwrap();
-    }
+    //if(typeof $element.parent().attr('href') !== 'undefined') {
+    //    //unwrap node a
+    //    angular.element($element).unwrap();
+    //}
     // Will use the icon to calculate this fragment height with respect to
     // the document
     $scope.element = $element;
@@ -106,9 +106,10 @@ angular.module('Pundit2.Annomatic')
         var item = createItemFromElement($scope.element);
         var pos =$scope.element[0].getBoundingClientRect();
         $scope.element.addClass('pnd-range-pos-icon');
-
         AnnotationPopover.show(pos.left, pos.top, item , options);
-
+        event.stopImmediatePropagation();
+        event.stopPropagation();
+        event.preventDefault();
 
     };
 

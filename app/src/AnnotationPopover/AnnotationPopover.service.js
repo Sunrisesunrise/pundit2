@@ -81,6 +81,7 @@ angular.module('Pundit2.AnnotationPopover')
     var changePopoverPosition = function(mouseX, mouseY) {
         var state = PndPopover.getState();
 
+
         function checkFromBottom(topInfoWhen) {
             var pageVisibleBottom = $window.innerHeight + $window.scrollY,
                 wrongArrowFix = false;
@@ -127,17 +128,19 @@ angular.module('Pundit2.AnnotationPopover')
             var posArrowTop = posArrow.top + posArrow.height / 2;
             var posArrowLeft = posArrow.left + posArrow.width;
             var placementArrow = "right";
+            state.x = posArrow.left;
+            state.y = posArrow.top;
 
             state.anchor.css({
                 top: (posArrowTop),
                 left: (posArrowLeft)
             });
             resizeData.lastSelectionUsed = {
+                top: posArrowTop,
                 left: posArrowLeft,
-                top: posArrowTop
+
             };
             resizeData.lastSelectionUsed.label = placementArrow;
-
             popoverRect = changePopoverPlacement(state, placementArrow);
             checkRight(posArrow);
             var wrongArrowFix = false;
@@ -147,15 +150,15 @@ angular.module('Pundit2.AnnotationPopover')
             var pageVisibleTop = $window.scrollY;
             if (wrongArrowFix || $window.scrollY + popoverRect.top < pageVisibleTop) {
                 state.anchor.css({
-                    top: (posArrowTop) + 'px',
-                    left: (posArrowLeft) + 'px'
+                    top: posArrowTop + 'px',
+                    left: posArrowLeft + 'px'
                 });
                 resizeData.lastSelectionUsed = state.selectionStart;
                 popoverRect = changePopoverPlacement(state, "right");
                 var pageVisibleLeft = $window.scrollX;
                 if ($window.scrollX + popoverRect.left < pageVisibleLeft) {
                     state.anchor.css({
-                        top: (posArrow.top + posArrow.height) + 'px',
+                        top:  posArrow.top  + 'px',
                         left: posArrow.left + 'px'
                     });
                     resizeData.lastSelectionUsed = state.selectionStart;
@@ -222,31 +225,23 @@ angular.module('Pundit2.AnnotationPopover')
     annotationPopover.lastUsedNotebookID = undefined;
 
     annotationPopover.show = function(x, y, item, opt, fragmentId, mode) {
-        var options;
-        if(opt === ''){
-            options = {
-                templateUrl: 'src/AnnotationPopover/AnnotationPopover.tmpl.html',
-                controller: 'AnnotationPopoverCtrl',
-                placement: 'bottom',
-                alphaRollover: true,
-                lockPageScroll: true,
-                needsValidSelection: (item.isTextFragment()) ? true : false,
-                hideCallback: function() {
-                    annotationPopover.log('Annotation popover hide');
-                    var CHOElem = angular.element('.pnd-range-pos-icon');
-                    CHOElem.removeClass('pnd-range-pos-icon');
-                    angular.element($window).off('resize', resizeCallback);
-                }
-            };
-        }else{
-            options = opt;
-            options.hideCallback = function() {
+        var options
+        var optionsDefault = {
+            templateUrl: 'src/AnnotationPopover/AnnotationPopover.tmpl.html',
+            controller: 'AnnotationPopoverCtrl',
+            placement: 'bottom',
+            alphaRollover: true,
+            lockPageScroll: true,
+            needsValidSelection: (item.isTextFragment()) ? true : false,
+            hideCallback: function() {
                 annotationPopover.log('Annotation popover hide');
                 var elem = angular.element('.pnd-range-pos-icon');
                 elem.removeClass('pnd-range-pos-icon');
                 angular.element($window).off('resize', resizeCallback);
             }
-        }
+        };
+
+        options = angular.extend(optionsDefault ,opt);
 
         var promise = PndPopover.show(x, y, options, {
             item: item,
