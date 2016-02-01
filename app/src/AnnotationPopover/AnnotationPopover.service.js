@@ -221,27 +221,6 @@ angular.module('Pundit2.AnnotationPopover')
                 }
             }
         };
-<<<<<<< HEAD
-        var promise = PndPopover.show(x, y, options, {
-            item: item,
-            fragmentId: fragmentId
-        });
-        var state = PndPopover.getState();
-
-        annotationPopover.mode = typeof mode === 'undefined' ? '' : mode;
-
-        if (promise !== false) {
-            promise.then(function() {
-                changePopoverPosition(x, y);
-                state.selection.removeAllRanges();
-                resizeCallback();
-                angular.element($window).on('resize', resizeCallback);
-                $timeout(function() {
-                    resizeCallback();
-                }, 15);
-            }, function() {
-                annotationPopover.log(arguments);
-=======
 
         annotationPopover.lastUsedNotebookID = undefined;
 
@@ -267,7 +246,6 @@ angular.module('Pundit2.AnnotationPopover')
             var promise = PndPopover.show(x, y, options, {
                 item: item,
                 fragmentId: fragmentId
->>>>>>> origin/feature/europeana-features
             });
             var state = PndPopover.getState();
 
