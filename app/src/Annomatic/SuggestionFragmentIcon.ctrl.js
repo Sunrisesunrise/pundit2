@@ -1,7 +1,7 @@
 angular.module('Pundit2.Annomatic')
 
 .controller('SuggestionFragmentIconCtrl', function($scope,  $element, $rootScope,
-    TextFragmentAnnotator, XpointersHelper, Annomatic, AnnotationPopover, Item) {
+    TextFragmentAnnotator, XpointersHelper, Annomatic, AnnotationPopover, Item, PndPopover) {
 
     var createItemFromElement = function(elem) {
         var values = {};
@@ -34,33 +34,41 @@ angular.module('Pundit2.Annomatic')
     TextFragmentAnnotator.addFragmentIcon($scope);
 
     // Let's initialize the popover, tell annomatic we exist etc..
-    //var init = function() {
-    //    $scope.uri = $scope.item.uri;
-    //    $scope.num = Annomatic.ann.uriToNumMap[$scope.uri];
-    //
-    //    // Add this $scope to annomatic, so he can call our methods
-    //    Annomatic.ann.autoAnnScopes[$scope.num] = $scope;
-    //
-    //    // Add 'ann-auto' class to every bit belonging to this fragment
-    //    // TODO: make 'ann-auto' configurable? .options?
-    //    angular.element('.' + $scope.fragment).addClass('ann-auto');
-    //
-    //    var options = {
-    //        content: "" + $scope.num,
-    //        placement: 'bottom',
-    //        templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
-    //        trigger: 'manual'
-    //            //scope: $rootScope.$new(),
-    //            //container: "[data-ng-app='Pundit2']"
-    //    };
-    //
-    //    $scope.popover = $popover(
-    //        $scope.element,
-    //        options
-    //    );
-    //
-    //};
-    //init();
+    var init = function() {
+        $scope.uri = $scope.item.uri;
+        $scope.num = Annomatic.ann.uriToNumMap[$scope.uri];
+
+        // Add this $scope to annomatic, so he can call our methods
+        Annomatic.ann.autoAnnScopes[$scope.num] = $scope;
+
+        // Add 'ann-auto' class to every bit belonging to this fragment
+        // TODO: make 'ann-auto' configurable? .options?
+        angular.element('.' + $scope.fragment).addClass('ann-auto');
+
+        //var options = {
+        //    content: "" + $scope.num,
+        //    placement: 'bottom',
+        //    templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
+        //    trigger: 'manual'
+        //        //scope: $rootScope.$new(),
+        //        //container: "[data-ng-app='Pundit2']"
+        //};
+     //TODO get this with PndPopover
+        var pos = $scope.element.position();
+        var options = {
+            content: "" + $scope.num,
+            placement: 'bottom',
+            templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
+            trigger: 'manual',
+            placement: 'bottom',
+            alphaRollover: true,
+            lockPageScroll: true
+        };
+        var item = createItemFromElement($scope.element);
+        $scope.popover = PndPopover.show(pos.x, pos.y,options,item);
+
+    };
+    init();
 
     // TODO: move this to its own controller?
     $scope.mouseoverHandler = function() {

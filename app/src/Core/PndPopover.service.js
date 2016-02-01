@@ -312,6 +312,3 @@ angular.module('Pundit2.Core')
 
         return pndPopover;
     });
-/**
- * Created by detox on 29/01/16.
- */
