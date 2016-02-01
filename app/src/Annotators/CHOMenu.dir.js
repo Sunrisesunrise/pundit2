@@ -32,6 +32,8 @@ angular.module('Pundit2.Annotators')
                     values.label =  CHOElem.parent().text().trim();
                     values.type = values.type = [NameSpace.types.resource]; // TODO to be defined
                     values.pageContext = XpointersHelper.getSafePageContext();
+                    values.icon = true;
+                    values.elem = CHOElem;
 
                     return new Item(values.uri, values);
                 };
