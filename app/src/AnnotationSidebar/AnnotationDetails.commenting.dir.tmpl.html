@@ -2,9 +2,9 @@
 
     <!-- Collapsed view of the annotation -->
     <div class="pnd-annotation-collapsed pnd-annotation-details-header pnd-annotation-details-top"
-        ng-click="toggleAnnotation()"
-        ng-if="!annotation.expanded"
-        ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
+         ng-click="toggleAnnotation()"
+         ng-if="!annotation.expanded"
+         ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
 
         <div class="pnd-annotation-collapsed-subject"
              ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment',
@@ -28,7 +28,7 @@
 
         <!-- Metadata -->
         <div class="pnd-annotation-details-meta"
-            ng-init="meta = false">
+             ng-init="meta = false">
 
             <img class="pnd-annotation-user-thumb" src="https://placehold.it/30x30" alt="{{::annotation.creatorName}}"/>
             <span class="pnd-annotation-user-name">
@@ -36,14 +36,14 @@
             </span>
             <span class="pnd-annotation-metadata">
                 {{::annotation.created | date : 'd MMM y'}} · in 
-                <span 
-                    ng-if="!isUserToolShowed() || !homePundit">
+                <span
+                        ng-if="!isUserToolShowed() || !homePundit">
                     {{annotation.notebookName}}
                 </span>
-                <a 
-                    href="#" 
-                    ng-if="isUserToolShowed() && homePundit"
-                    ng-click="openNotebook($event, annotation.notebookId)">
+                <a
+                        href="#"
+                        ng-if="isUserToolShowed() && homePundit"
+                        ng-click="openNotebook($event, annotation.notebookId)">
                     {{annotation.notebookName}}
                 </a>
             </span>
@@ -90,62 +90,142 @@
 
             <!-- Comment read mode-->
             <div
-                class="pnd-annotation-comment-text"
-                ng-if="!editMode">
+                    class="pnd-annotation-comment-text"
+                    ng-if="!editMode">
                 <span ng-bind-html="annotation.comment | linky:'_blank'"></span>
             </div>
 
             <!-- Comment edit mode-->
             <div
-                class="pnd-annotation-comment-text-edit"
-                ng-if="editMode">
+                    class="pnd-annotation-comment-text-edit"
+                    ng-if="editMode">
 
                 <textarea
-                    class="form-control pnd-popover-literal-textarea"
-                    rows="6"
-                    ng-click="areaClick($event)"
-                    ng-model="annotation.comment">
+                        class="form-control pnd-popover-literal-textarea"
+                        rows="6"
+                        ng-click="areaClick($event)"
+                        ng-model="annotation.comment">
                 </textarea>
             </div>
-        </div>
-
-        <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
-        <div 
-            class="pnd-annotation-details-buttons"
-            ng-show="isUserToolShowed()">
-            <div ng-if="!editMode"
-                 class="pnd-annotation-details-footer"
-                    >
+            <!-- Save or cancel of comment in Edit mode -->
+            <div
+                    class="pnd-annotation-comment-text-edit-buttons"
+                    ng-show="isUserToolShowed()"
+                    ng-if="editMode">
                 <button
-                    type="button"
-                    class="pnd-edit"
-                    ng-click="editComment($event)">
-                    <span class="pnd-icon-pencil"></span>
-                    Edit
-                    </button> · <button
-                    type="button"
-                    class="pnd-delete"
-                    ng-click="deleteAnnotation($event)">
-                    <span class="pnd-icon-trash"></span>
-                    Delete
+                        type="button"
+                        class="pnd-btn pnd-btn-small"
+                        ng-click="cancelEdit($event)">
+                    Cancel
+                </button>
+                <button
+                        type="button"
+                        class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
+                        ng-click="saveEdit($event)">
+                    Save
                 </button>
             </div>
         </div>
 
-        <!-- Save or cancel of comment in Edit mode -->
-        <div 
-            class="pnd-annotation-comment-text-edit-buttons"
-            ng-show="isUserToolShowed()"
-            ng-if="editMode">
+        <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
+        <div class="pnd-annotation-details-buttons"
+             ng-show="isSocialMode()||isUserToolShowed()">
+            <div class="pnd-annotation-details-footer">
+                <button
+                        type="button"
+                        class="pnd-reply"
+                        ng-if="isSocialMode()"
+                        ng-click="replyComment($event)">
+                    <span class="pnd-icon-comment"></span>
+                    reply
+                </button>
+                <span ng-if="isSocialMode()">
+                    ·
+                </span>
+
+                <button
+                        type="button"
+                        class="pnd-like"
+                        ng-if="isSocialMode()"
+                        ng-click="likeComment($event)">
+                    <span class="pnd-icon-thumb-o-up"></span>
+                    like
+                </button>
+                <span ng-if="isSocialMode()">
+                    ·
+                </span>
+
+                <button
+                        type="button"
+                        class="pnd-dislike"
+                        ng-if="isSocialMode()"
+                        ng-click="dislikeComment($event)">
+                    <span class="pnd-icon-thumb-o-down"></span>
+                    dislike
+                </button>
+                <span ng-if="isSocialMode()&&isUserToolShowed()">
+                    ·
+                </span>
+                <button
+                        type="button"
+                        class="pnd-edit"
+                        ng-if="isUserToolShowed()"
+                        ng-click="editComment($event)">
+                    <span class="pnd-icon-pencil"></span>
+                    Edit
+                </button>
+                <span ng-if="isUserToolShowed()">
+                    ·
+                </span>
+
+                <button
+                        type="button"
+                        class="pnd-delete"
+                        ng-if="isUserToolShowed()"
+                        ng-click="deleteAnnotation($event)">
+                    <span class="pnd-icon-trash"></span>
+                    Delete
+                </button>
+            </div>
+            <!-- Metadata social comment -->
+
+
+            <!-- Comment reply mode-->
+            <div
+                    class="pnd-annotation-comment-text"
+                    ng-if="replyMode">
+                 <span class="pnd-annotation-user-name">
+                    {{::userData.firstName}}{{::userData.lastName}}
+                </span>
+            </div>
+            <div
+                    class="pnd-annotation-comment-text-reply"
+                    ng-if="replyMode">
+
+                <textarea
+                        class="form-control "
+                        rows="6"
+                        ng-click="areaClick($event)"
+                        ng-model="annotation.replyComment">
+                </textarea>
+            </div>
+        </div>
+        <!-- Save or cancel of comment in reply mode -->
+
+        <div
+                class="pnd-annotation-comment-text-edit-buttons"
+                ng-show="isSocialMode()"
+                ng-if="replyMode">
             <button
                     type="button"
                     class="pnd-btn pnd-btn-small"
                     ng-click="cancelEdit($event)">
                 Cancel
-            </button><button
-                type="button"
-                class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
-                ng-click="saveEdit($event)">
+            </button>
+            <button
+                    type="button"
+                    class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
+                    ng-click="saveEdit($event)">
                 Save
             </button>
         </div>
