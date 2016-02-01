@@ -150,7 +150,7 @@ angular.module('Pundit2.AnnotationPopover')
             var pageVisibleTop = $window.scrollY;
             if (wrongArrowFix || $window.scrollY + popoverRect.top < pageVisibleTop) {
                 state.anchor.css({
-                    top: posArrowTop + 'px',
+                    top: $window.scrollY + posArrowTop + 'px',
                     left: posArrowLeft + 'px'
                 });
                 resizeData.lastSelectionUsed = state.selectionStart;
