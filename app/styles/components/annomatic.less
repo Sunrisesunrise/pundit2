@@ -133,14 +133,22 @@ body .pnd-annomatic-popover {
     // position: absolute !important;
     max-width: @annomatic-popover-width !important;
     width: @annomatic-popover-width;
+    height: @annomatic-popover-height;
     z-index: @zindex-pnd-annomatic-popover;
     // max-width: none !important;
 
     /* Title area */
     .popover-title {
+        height: 40px;
+        padding: 0 14px;
+        line-height: 40px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
         .pnd-icon {
             font-size: 16px;
-            margin-top: 3px;
+            line-height: 40px;
             cursor: pointer;
 
             &:hover {
@@ -154,9 +162,9 @@ body .pnd-annomatic-popover {
         padding: 0 0 40px 0;
 
         .pnd-annomatic-popover-details {
-            max-height: 200px;
+            height: @annomatic-popover-height - 120px; // 120 height of header, footer, confidence
             padding: 15px;
-            overflow-y: scrool;
+            overflow-y: scroll;
             overflow-x: hidden;
         }
 
@@ -179,6 +187,7 @@ body .pnd-annomatic-popover {
 
         /* Confidence indicator */
         .pnd-annomatic-confidence {
+            height: 40px;
             border-top: 1px solid @color-border-normal;
             background-color: @color-background-light;
             padding: 6px 15px;
@@ -191,9 +200,9 @@ body .pnd-annomatic-popover {
 
     /* Footer */
     .pnd-panel-tab-content-footer {
+        height: 40px;
         background-color: transparent;
     }
-
 
     .pnd-annomatic-popover-multi-entities {
         padding: 8px;
