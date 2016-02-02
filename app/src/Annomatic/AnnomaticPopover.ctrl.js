@@ -61,6 +61,7 @@ angular.module('Pundit2.Annomatic')
 
     $scope.goNext = function(event) {
         $scope.$hide();
+        angular.element('.pnd-range-pos-icon').removeClass("pnd-range-pos-icon");
         Annomatic.setLastState($scope.num);
         Annomatic.reviewNext($scope.num + 1);
         event.stopPropagation();

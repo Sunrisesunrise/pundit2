@@ -270,4 +270,5 @@ angular.module('Pundit2.AnnotationPopover')
     };
 
     return annotationPopover;
+
 });

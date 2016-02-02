@@ -852,7 +852,8 @@ angular.module('Pundit2.Annomatic')
         }
 
         if (annomatic.currAnn < annomatic.annotationNumber) {
-            annomatic.ann.autoAnnScopes[annomatic.currAnn].show();
+          var elem = annomatic.ann.autoAnnScopes[annomatic.currAnn].element;
+        EventDispatcher.sendEvent('Annomatic.goNext', elem);
         } else {
             // TODO: notify review is done for the current filters?
             // console.log('All reviewed, for the current filters!');

@@ -1,7 +1,7 @@
 angular.module('Pundit2.Annomatic')
 
 .controller('SuggestionFragmentIconCtrl', function($scope,  $element, $rootScope,
-    TextFragmentAnnotator, XpointersHelper, Annomatic, AnnotationPopover, Item, PndPopover) {
+    TextFragmentAnnotator, XpointersHelper, Annomatic, AnnotationPopover, Item, EventDispatcher) {
 
     var createItemFromElement = function(elem) {
         var values = {};
@@ -53,19 +53,33 @@ angular.module('Pundit2.Annomatic')
         //        //scope: $rootScope.$new(),
         //        //container: "[data-ng-app='Pundit2']"
         //};
-     //TODO get this with PndPopover
-        var pos = $scope.element.position();
-        var options = {
-            content: "" + $scope.num,
-            placement: 'bottom',
-            templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
-            trigger: 'manual',
-            placement: 'bottom',
-            alphaRollover: true,
-            lockPageScroll: true
-        };
-        var item = createItemFromElement($scope.element);
-        $scope.popover = PndPopover.show(pos.x, pos.y,options,item);
+        //var options = {
+        //    content: "" + $scope.num,
+        //    placement: 'bottom',
+        //    template: 'src/Annomatic/AnnomaticPopover.tmpl.html',
+        //    trigger: 'manual'
+            //scope: $rootScope.$new(),
+            //container: "[data-ng-app='Pundit2']"
+        //};
+
+        //$scope.popover = $popover(
+        //    $scope.element,
+        //    options
+        //);
+
+        //TODO get this with PndPopover
+        //var pos = $scope.element.position();
+        //var options = {
+        //    content: "" + $scope.num,
+        //    placement: 'bottom',
+        //    templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
+        //    trigger: 'manual',
+        //    placement: 'bottom',
+        //    alphaRollover: true,
+        //    lockPageScroll: true
+        //};
+        //var item = createItemFromElement($scope.element);
+        //AnnotationPopover.show(pos.left, pos.top,item,options);
 
     };
     init();
@@ -136,6 +150,9 @@ angular.module('Pundit2.Annomatic')
         }
         Annomatic.setLastState($scope.num);
         $scope.popover.hide();
+        angular.element('.pnd-range-pos-icon').removeClass("pnd-range-pos-icon");
+
+
     };
 
     $scope.setStateClass = function(from, to) {
@@ -159,5 +176,25 @@ angular.module('Pundit2.Annomatic')
     };
 
     $scope.setStateClass('', Annomatic.stateClassMap.waiting);
+    EventDispatcher.addListeners(['Annomatic.goNext'], function(e){
+        var options = {
+            content: "" + $scope.num,
+            placement: 'bottom',
+            templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
+            trigger: 'manual',
+            placement: 'bottom',
+            alphaRollover: true,
+            lockPageScroll: true
+        };
+        var item = createItemFromElement(e.args);
+        var pos =e.args[0].getBoundingClientRect();
+
+        e.args.addClass('pnd-range-pos-icon');
+        AnnotationPopover.show(pos.left, pos.top, item , options);
+        event.stopImmediatePropagation();
+        event.stopPropagation();
+        event.preventDefault();
+
+    });
 
 });
