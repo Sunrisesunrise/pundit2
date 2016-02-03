@@ -20,7 +20,11 @@
         <div class="pnd-annotation-details-meta"
              ng-init="meta = false">
 
-            <img class="pnd-annotation-user-thumb" src="https://placehold.it/30x30" alt="{{::annotation.creatorName}}"/>
+            <!-- User's thumb -->
+            <img class="pnd-annotation-user-thumb"
+                 src="../css/img/user-thumb-default.png" width="30" height="30"
+                 alt="{{::annotation.creatorName}}"/>
+
             <span class="pnd-annotation-user-name">
                 {{::annotation.creatorName}}
             </span>
