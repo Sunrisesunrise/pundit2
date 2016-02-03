@@ -124,6 +124,9 @@ angular.module('Pundit2.AnnotationPopover')
         }
         if (!state.data.item.isTextFragment()) {
             var elem = angular.element('.pnd-range-pos-icon');
+            //if(typeof elem === "undefined"){
+            //    elem =angular.element("[fragment='" + state.data.fragmentId + "']")
+            //}
             var posArrow = elem[0].getBoundingClientRect();
             var posArrowTop = posArrow.top + posArrow.height / 2;
             var posArrowLeft = posArrow.left + posArrow.width;
@@ -223,7 +226,12 @@ angular.module('Pundit2.AnnotationPopover')
     };
 
     annotationPopover.lastUsedNotebookID = undefined;
-
+    annotationPopover.hide = function () {
+        annotationPopover.log('Annotation popover hide');
+        var elem = angular.element('.pnd-range-pos-icon');
+        elem.removeClass('pnd-range-pos-icon');
+        angular.element($window).off('resize', resizeCallback);
+    }
     annotationPopover.show = function(x, y, item, opt, fragmentId, mode) {
         var options
         var optionsDefault = {
@@ -236,7 +244,7 @@ angular.module('Pundit2.AnnotationPopover')
             hideCallback: function() {
                 annotationPopover.log('Annotation popover hide');
                 var elem = angular.element('.pnd-range-pos-icon');
-                elem.removeClass('pnd-range-pos-icon');
+            //    elem.removeClass('pnd-range-pos-icon');
                 angular.element($window).off('resize', resizeCallback);
             }
         };
@@ -254,7 +262,9 @@ angular.module('Pundit2.AnnotationPopover')
         if (promise !== false) {
             promise.then(function() {
                 changePopoverPosition(x, y);
-                PndPopover.getState().selection.removeAllRanges();
+                if(state.data.needsValidSelection){
+                    PndPopover.getState().selection.removeAllRanges();
+                }
                 resizeCallback();
                 angular.element($window).on('resize', resizeCallback);
 

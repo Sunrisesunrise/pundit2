@@ -62,10 +62,8 @@ angular.module('Pundit2.Annomatic')
             //container: "[data-ng-app='Pundit2']"
         //};
 
-        //$scope.popover = $popover(
-        //    $scope.element,
-        //    options
-        //);
+        //$scope.popover.element = $scope.element;
+        //$scope.popover.isShown = false;
 
         //TODO get this with PndPopover
         //var pos = $scope.element.position();
@@ -80,7 +78,7 @@ angular.module('Pundit2.Annomatic')
         //};
         //var item = createItemFromElement($scope.element);
         //AnnotationPopover.show(pos.left, pos.top,item,options);
-
+   // console.log($scope.num, $scope.fragment, $scope.element);
     };
     init();
 
@@ -94,27 +92,29 @@ angular.module('Pundit2.Annomatic')
     };
 
     $scope.clickHandler = function(event) {
-        //if (Annomatic.ann.byNum[$scope.num].hidden) {
-        //    return;
-        //}
-        //
-        //if (!$scope.popover.$isShown) {
-        //    $scope.show();
-        //} else {
-        //    $scope.hide();
-        //}
-        //
-        //event.stopPropagation();
-        //event.preventDefault();
-        $scope.uri = $scope.item.uri;
-        $scope.num = Annomatic.ann.uriToNumMap[$scope.uri];
+        if (Annomatic.ann.byNum[$scope.num].hidden) {
+            return;
+        }
 
-        // Add this $scope to annomatic, so he can call our methods
-        Annomatic.ann.autoAnnScopes[$scope.num] = $scope;
+        if (!$scope.isShown) {
+            $scope.show();
+        } else {
+            $scope.hide();
+        }
 
-        // Add 'ann-auto' class to every bit belonging to this fragment
-        // TODO: make 'ann-auto' configurable? .options?
-        angular.element('.' + $scope.fragment).addClass('ann-auto');
+        event.stopPropagation();
+        event.preventDefault();
+
+    };
+
+    $scope.show = function() {
+        if ($scope.isShown === true) {
+            return;
+        }
+
+        $scope.isShown = !$scope.isShown;
+        angular.element('.pnd-range-pos-icon').removeClass("pnd-range-pos-icon");
+        $scope.element.addClass('pnd-range-pos-icon');
 
         var options = {
             content: "" + $scope.num,
@@ -127,30 +127,23 @@ angular.module('Pundit2.Annomatic')
         };
         var item = createItemFromElement($scope.element);
         var pos =$scope.element[0].getBoundingClientRect();
-        $scope.element.addClass('pnd-range-pos-icon');
-        AnnotationPopover.show(pos.left, pos.top, item , options);
-        event.stopImmediatePropagation();
-        event.stopPropagation();
-        event.preventDefault();
 
-    };
 
-    $scope.show = function() {
-        if ($scope.popover.$isShown === true) {
-            return;
-        }
         Annomatic.closeAll();
         Annomatic.setState($scope.num, 'active');
-        $scope.popover.show();
+        $scope.hide();
+        AnnotationPopover.show(pos.left, pos.top, item , options, $scope.fragment);
+
     };
 
     $scope.hide = function() {
-        if ($scope.popover.$isShown === false) {
+        if ($scope.isShown === false) {
             return;
         }
         Annomatic.setLastState($scope.num);
-        $scope.popover.hide();
-        angular.element('.pnd-range-pos-icon').removeClass("pnd-range-pos-icon");
+        $scope.isShown=!$scope.isShown;
+      //  AnnotationPopover.hide();
+        //angular.element('.pnd-range-pos-icon').removeClass("pnd-range-pos-icon");
 
 
     };
@@ -176,25 +169,5 @@ angular.module('Pundit2.Annomatic')
     };
 
     $scope.setStateClass('', Annomatic.stateClassMap.waiting);
-    EventDispatcher.addListeners(['Annomatic.goNext'], function(e){
-        var options = {
-            content: "" + $scope.num,
-            placement: 'bottom',
-            templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
-            trigger: 'manual',
-            placement: 'bottom',
-            alphaRollover: true,
-            lockPageScroll: true
-        };
-        var item = createItemFromElement(e.args);
-        var pos =e.args[0].getBoundingClientRect();
-
-        e.args.addClass('pnd-range-pos-icon');
-        AnnotationPopover.show(pos.left, pos.top, item , options);
-        event.stopImmediatePropagation();
-        event.stopPropagation();
-        event.preventDefault();
-
-    });
 
 });
