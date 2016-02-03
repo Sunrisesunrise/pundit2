@@ -255,6 +255,7 @@ angular.module('Pundit2.AnnotationPopover')
             item: item,
             fragmentId: fragmentId
         });
+        item.elem.addClass('pnd-range-pos-icon');
         var state = PndPopover.getState();
 
         annotationPopover.mode = typeof mode === 'undefined' ? '' : mode;
