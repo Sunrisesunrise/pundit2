@@ -133,6 +133,7 @@ angular.module('Pundit2.Annomatic')
         Annomatic.setState($scope.num, 'active');
         $scope.hide();
         AnnotationPopover.show(pos.left, pos.top, item , options, $scope.fragment);
+        $scope.element.addClass('pnd-range-pos-icon');
 
     };
 

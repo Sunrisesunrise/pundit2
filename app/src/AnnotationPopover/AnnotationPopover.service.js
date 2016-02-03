@@ -244,7 +244,7 @@ angular.module('Pundit2.AnnotationPopover')
             hideCallback: function() {
                 annotationPopover.log('Annotation popover hide');
                 var elem = angular.element('.pnd-range-pos-icon');
-            //    elem.removeClass('pnd-range-pos-icon');
+                elem.removeClass('pnd-range-pos-icon');
                 angular.element($window).off('resize', resizeCallback);
             }
         };
@@ -255,7 +255,6 @@ angular.module('Pundit2.AnnotationPopover')
             item: item,
             fragmentId: fragmentId
         });
-        item.elem.addClass('pnd-range-pos-icon');
         var state = PndPopover.getState();
 
         annotationPopover.mode = typeof mode === 'undefined' ? '' : mode;
