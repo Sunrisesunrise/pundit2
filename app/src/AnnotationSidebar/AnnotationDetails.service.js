@@ -63,17 +63,75 @@ angular.module('Pundit2.AnnotationSidebar')
         /**
          * @module punditConfig
          * @ngdoc property
-         * @name modules#AnnotationDetails.social
+         * @name modules#AnnotationDetails.reply
          *
          * @description
          * `boolean`
          *
-         * Active social
+         * Active social reply
          *
          * Default value:
-         * <pre> debug: true </pre>
+         * <pre> reply: true </pre>
          */
-        social: true
+        reply: true,
+
+        /**
+         * @module punditConfig
+         * @ngdoc property
+         * @name modules#AnnotationDetails.like
+         *
+         * @description
+         * `boolean`
+         *
+         * Active social like
+         *
+         * Default value:
+         * <pre> like: true </pre>
+         */
+        like: true,
+        /**
+         * @module punditConfig
+         * @ngdoc property
+         * @name modules#AnnotationDetails.dislike
+         *
+         * @description
+         * `boolean`
+         *
+         * Active social dislike
+         *
+         * Default value:
+         * <pre> dislike: true </pre>
+         */
+        dislike: true,
+        /**
+         * @module punditConfig
+         * @ngdoc property
+         * @name modules#AnnotationDetails.endorse
+         *
+         * @description
+         * `boolean`
+         *
+         * Active social endorse
+         *
+         * Default value:
+         * <pre> endorse: true </pre>
+         */
+        endorse: true,
+
+        /**
+         * @module punditConfig
+         * @ngdoc property
+         * @name modules#AnnotationDetails.report
+         *
+         * @description
+         * `boolean`
+         *
+         * Active social report
+         *
+         * Default value:
+         * <pre> report: true </pre>
+         */
+        report: true
     })
 
     .service('AnnotationDetails', function (ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $window, $modal, $injector, $q,
@@ -89,7 +147,11 @@ angular.module('Pundit2.AnnotationSidebar')
         var state = {
             annotations: [],
             defaultExpanded: annotationDetails.options.defaultExpanded,
-            social: annotationDetails.options.social,
+            reply: annotationDetails.options.reply,
+            like: annotationDetails.options.like,
+            dislike: annotationDetails.options.dislike,
+            endorse: annotationDetails.options.endorse,
+            report: annotationDetails.options.report,
             isUserLogged: false,
             isSidebarExpanded: false,
             isGhostedActive: false,
@@ -378,6 +440,34 @@ angular.module('Pundit2.AnnotationSidebar')
         };
 
         annotationDetails.saveEditedComment = function (annID, item, comment) {
+            var currentTarget = item,
+                currentStatement = {
+                    scope: {
+                        get: function () {
+                            return {
+                                subject: currentTarget,
+                                predicate: '',
+                                object: comment
+                            };
+                        }
+                    }
+                };
+
+            var modelData = ModelHelper.buildCommentData(currentStatement);
+
+            var editPromise = AnnotationsCommunication.editAnnotation(
+                annID,
+                modelData.graph,
+                modelData.items,
+                modelData.flatTargets,
+                modelData.target,
+                modelData.type,
+                'commenting'
+            );
+
+            return editPromise;
+        };
+        annotationDetails.saveReplyedComment = function (annID, item, comment) {
             var currentTarget = item,
                 currentStatement = {
                     scope: {

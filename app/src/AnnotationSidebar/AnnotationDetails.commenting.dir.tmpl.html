@@ -126,109 +126,15 @@
                 </button>
             </div>
         </div>
-
         <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
-        <div class="pnd-annotation-details-buttons"
-             ng-show="isSocialMode()||isUserToolShowed()">
-            <div class="pnd-annotation-details-footer">
-                <button
-                        type="button"
-                        class="pnd-reply"
-                        ng-if="isSocialMode()"
-                        ng-click="replyComment($event)">
-                    <span class="pnd-icon-comment"></span>
-                    reply
-                </button>
-                <span ng-if="isSocialMode()">
-                    ·
-                </span>
-
-                <button
-                        type="button"
-                        class="pnd-like"
-                        ng-if="isSocialMode()"
-                        ng-click="likeComment($event)">
-                    <span class="pnd-icon-thumb-o-up"></span>
-                    like
-                </button>
-                <span ng-if="isSocialMode()">
-                    ·
-                </span>
-
-                <button
-                        type="button"
-                        class="pnd-dislike"
-                        ng-if="isSocialMode()"
-                        ng-click="dislikeComment($event)">
-                    <span class="pnd-icon-thumb-o-down"></span>
-                    dislike
-                </button>
-                <span ng-if="isSocialMode()&&isUserToolShowed()">
-                    ·
-                </span>
-                <button
-                        type="button"
-                        class="pnd-edit"
-                        ng-if="isUserToolShowed()"
-                        ng-click="editComment($event)">
-                    <span class="pnd-icon-pencil"></span>
-                    Edit
-                </button>
-                <span ng-if="isUserToolShowed()">
-                    ·
-                </span>
-
-                <button
-                        type="button"
-                        class="pnd-delete"
-                        ng-if="isUserToolShowed()"
-                        ng-click="deleteAnnotation($event)">
-                    <span class="pnd-icon-trash"></span>
-                    Delete
-                </button>
+        <div class="pnd-annotation-details-buttons">
+            <div ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'" replace="true">
             </div>
             <!-- Metadata social comment -->
-
-
-            <!-- Comment reply mode-->
-            <div
-                    class="pnd-annotation-comment-text"
-                    ng-if="replyMode">
-                 <span class="pnd-annotation-user-name">
-                    {{::userData.firstName}}{{::userData.lastName}}
-                </span>
-            </div>
-            <div
-                    class="pnd-annotation-comment-text-reply"
-                    ng-if="replyMode">
-
-                <textarea
-                        class="form-control "
-                        rows="6"
-                        ng-click="areaClick($event)"
-                        ng-model="annotation.replyComment">
-                </textarea>
+            <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
+                 replace="true"
+                 >
             </div>
         </div>
-        <!-- Save or cancel of comment in reply mode -->
-
-        <div
-                class="pnd-annotation-comment-text-edit-buttons"
-                ng-show="isSocialMode()"
-                ng-if="replyMode">
-            <button
-                    type="button"
-                    class="pnd-btn pnd-btn-small"
-                    ng-click="cancelEdit($event)">
-                Cancel
-            </button>
-            <button
-                    type="button"
-                    class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
-                    ng-click="saveEdit($event)">
-                Save
-            </button>
-        </div>
-
     </div>
 </div>
