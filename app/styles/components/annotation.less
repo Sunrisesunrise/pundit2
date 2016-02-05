@@ -132,8 +132,6 @@
 
 .pnd-annotation-expanded {
     margin: 5px;
-    // TODO Just a try
-    // margin-left: -4px;
     overflow: hidden;
 
     background-color: @annotation-bg-color;
@@ -151,9 +149,23 @@
     padding: 0 10px 10px 0;
     border-bottom: @annotation-border-size solid @annotation-border-color;
 
+    /* User's real thumb (HTML img)
+     Currently hidden */
     .pnd-annotation-user-thumb {
+        display: none;
         float: left;
         margin-right: 10px;
+        border-radius: 5px;
+    }
+
+    /* User's default thumb */
+    .pnd-annotation-user-thumb-default {
+        float: left;
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+        /* Replaced by media query for retina */
+        background: transparent url('img/user-thumb-default.png') center center no-repeat;
         border-radius: 5px;
     }
 
@@ -426,4 +438,24 @@ in the expanded annotation */
             }
         }
     }
+}
+
+
+/* ------------------------------------ *\
+   #MEDIA-QUERIES-RETINA
+\* ------------------------------------ */
+
+@media only screen and (min-device-pixel-ratio: 2),
+only screen and (min-resolution: 192dpi) {
+
+    /* Metadata showed on top of the annotation */
+    .pnd-annotation-details-meta {
+
+        /* User's default thumb */
+        .pnd-annotation-user-thumb-default {
+            background: transparent url('img/user-thumb-default@2x.png') center center no-repeat;
+            background-size: 30px 30px;
+        }
+    }
+
 }
