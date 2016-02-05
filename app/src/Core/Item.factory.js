@@ -165,7 +165,8 @@ angular.module('Pundit2.Core')
             this.isImage() ||
             this.isImageFragment() ||
             this.isWebPage() ||
-            this.isResource();
+            this.isResource() ||
+            this.isAnnotation();
     };
 
     ItemFactory.prototype.isProperty = function() {
@@ -182,6 +183,9 @@ angular.module('Pundit2.Core')
     ItemFactory.prototype.isResource = function() {
         return this.type.indexOf(NameSpace.types.resource) !== -1;
     };
+    ItemFactory.prototype.isAnnotation = function() {
+        return this.type.indexOf(NameSpace.types.annotation) !== -1;
+    };
     ItemFactory.prototype.isImageFragment = function() {
     return this.type.indexOf(NameSpace.fragments.imagePart) !== -1;
     };
@@ -197,7 +201,8 @@ angular.module('Pundit2.Core')
             !this.isImage() &&
             !this.isImageFragment() &&
             !this.isWebPage() &&
-            !this.isResource();
+            !this.isResource() &&
+            !this.isAnnotation();
     };
 
     ItemFactory.prototype.fromAnnotationRdf = function(annotationRDF) {

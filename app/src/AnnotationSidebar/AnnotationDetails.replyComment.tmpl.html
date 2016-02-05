@@ -2,9 +2,6 @@
 <div
         class="pnd-annotation-comment-text"
         ng-show="isReplyDialog()">
-                 <span class="pnd-annotation-user-name">
-                    {{::userData.firstName}}{{::userData.lastName}}
-                </span>
 </div>
 <div
         class="pnd-annotation-comment-text-reply"
@@ -14,7 +11,9 @@
                         class="form-control "
                         rows="6"
                         ng-click="areaClick($event)"
-                        ng-model="annotation.replyComment">
+                        ng-model="annotation.replyCommentValue"
+                        placeholder="Reply to the annotation..."
+                        >
                 </textarea>
 </div>
 <!-- Save or cancel of comment in reply mode -->
@@ -26,13 +25,13 @@
     <button
             type="button"
             class="pnd-btn pnd-btn-small"
-            ng-click="cancelEdit($event)">
+            ng-click="cancelReply($event)">
         Cancel
     </button>
     <button
             type="button"
             class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
             ng-click="saveReply($event)">
-        Save
+        Reply
     </button>
 </div>

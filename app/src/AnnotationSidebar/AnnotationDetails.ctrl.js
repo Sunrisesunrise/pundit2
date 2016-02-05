@@ -1,12 +1,13 @@
 angular.module('Pundit2.AnnotationSidebar')
 
     .controller('AnnotationDetailsCtrl', function ($scope, $rootScope, $element, $timeout, $window,
-                                                   AnnotationSidebar, AnnotationDetails, TripleComposer, Dashboard, EventDispatcher,
-                                                   Config, MyPundit, Analytics) {
+                                                   AnnotationSidebar, AnnotationDetails, AnnotationsExchange, TripleComposer, Dashboard, EventDispatcher,
+                                                   Config, MyPundit, Analytics, Item, NameSpace) {
 
         // TODO: temporary fix waiting for server consistency
         if ($scope.motivation !== 'linking' &&
-            $scope.motivation !== 'commenting') {
+            $scope.motivation !== 'commenting' &&
+            $scope.motivation !== 'replying') {
             $scope.motivation = 'linking';
         }
 
@@ -33,8 +34,11 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.endorse = AnnotationDetails.options.endorse;
         $scope.report = AnnotationDetails.options.report;
         $scope.editCommentValue = '';
-        $scope.replyCommentValue = 'leave a comment here...';
+        $scope.replyCommentValue = '';
         $scope.userData = AnnotationDetails.userData();
+        $scope.replyTreeActivate = false;
+        $scope.replyTree = [];
+
 
         if (typeof($scope.annotation) !== 'undefined') {
             $scope.notebooksHomeLink = Config.homeBaseURL + 'notebooks/';
@@ -144,7 +148,7 @@ angular.module('Pundit2.AnnotationSidebar')
         };
 
         $scope.editComment = function (event) {
-            $scope.editMode = true;
+            $scope.editMode = !$scope.editMode;
             $scope.editCommentValue = $scope.annotation.comment;
 
             stopEvent(event);
@@ -162,8 +166,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
         }
         $scope.replyAnnotation = function (event) {
-            $scope.replyDialog = true;
-            $scope.replyCommentValue = "";
+            $scope.replyDialog = !$scope.replyDialog;
+
 
             stopEvent(event);
 
@@ -173,22 +177,44 @@ angular.module('Pundit2.AnnotationSidebar')
             var promise = AnnotationDetails.saveEditedComment(currentId, $scope.annotation.mainItem, $scope.annotation.comment);
 
             promise.then(function () {
-                $scope.editMode = false;
+                $scope.replyDialog = false;
             }, function () {
-                $scope.editCommentValue = '';
-                $scope.editMode = false;
             });
 
             stopEvent(event);
         };
         $scope.saveReply = function (event) {
-            var promise = AnnotationDetails.saveEditedComment(currentId, $scope.annotation.mainItem, $scope.annotation.comment);
+            var createItemFromAnnotation = function () {
+                var values = {};
+                values.uri = $scope.annotation.uri;
+                // values.label =  $scope.replyCommentValue.trim();
+                values.type = [NameSpace.types.annotation];
+                //values.annotation = $scope.annotation;
+                // values.typeClass ="uri";
+                // values.typeLabel = [NameSpace.types.annotation];
+                values.comment = $scope.annotation.replyCommentValue;
 
-            promise.then(function () {
-                $scope.replyMode = false;
+
+                return new Item(values.uri, values);
+            }
+            var item = createItemFromAnnotation();
+
+            var promise = AnnotationDetails.saveReplyedComment(item, $scope.annotation.replyCommentValue);
+
+
+            promise.then(function (e) {
+                $scope.replyDialog = false;
+                $scope.replyTreeActivate = true;
+                $scope.annotation.replyCommentValue = '';
+                var annotation =AnnotationsExchange.getAnnotationById(e);
+                var out = { 'creatorName' : annotation.creatorName,
+                            'comment' : annotation.graph['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0].value
+                }
+                $scope.replyTree.push(out);
+              //  console.log(AnnotationsExchange.getAnnotationById(e));
+
             }, function () {
-                $scope.replyCommentValue = '';
-                $scope.replyMode = false;
+
             });
 
             stopEvent(event);
@@ -200,10 +226,12 @@ angular.module('Pundit2.AnnotationSidebar')
 
         $scope.cancelEdit = function (event) {
             $scope.editMode = false;
-            $scope.replyDialog= false;
             stopEvent(event);
         };
-
+        $scope.cancelReply = function (event) {
+            $scope.replyDialog = false;
+            stopEvent(event);
+        };
         $scope.openNotebook = function (event, id) {
             $window.open(Config.homeBaseURL + 'annotations/' + id, '_blank');
             stopEvent(event);
@@ -213,35 +241,39 @@ angular.module('Pundit2.AnnotationSidebar')
             return (AnnotationDetails.isUserToolShowed($scope.annotation.creator) || ($scope.forceEdit && MyPundit.isUserLogged())) && AnnotationSidebar.isAnnotationsPanelActive();
         };
         $scope.isReplyMode = function () {
-            return $scope.reply
+            return $scope.reply;
         };
         $scope.isReplyDialog = function () {
-            return $scope.replyDialog
+            return $scope.replyDialog;
         };
         $scope.isLikeMode = function () {
-            return $scope.like
+            return $scope.like;
         };
         $scope.isDislikeMode = function () {
-            return  $scope.dislike
+            return $scope.dislike;
         };
         $scope.isEndorseMode = function () {
-            return  $scope.endorse
+            return $scope.endorse;
         };
         $scope.isReportMode = function () {
-            return  $scope.report
+            return $scope.report;
         };
         $scope.isLinking = function () {
-            if($scope.motivation === 'linking'){
-                return true;
+            if ($scope.motivation === 'linking') {
+                return true
             }
             return false;
-        }
+        };
+        $scope.isReplyTree = function () {
+            return $scope.replyTreeActivate;
+        };
 
         $scope.isEditBtnShowed = function () {
             return clientMode === 'pro' && $scope.motivation === 'linking';
         };
         $scope.isDetailsButtons = function () {
-            return $scope.reply||$scope.like||$scope.dislike||$scope.endorse||$scope.report;ì
+            return $scope.reply || $scope.like || $scope.dislike || $scope.endorse || $scope.report;
+            ì
         };
         $scope.$watch(function () {
             return currentElement.height();
@@ -252,6 +284,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
             }
         });
+
 
         // TODO find alternative to force digest and avoid watch delay on the height change (?)
         currentElement.bind('DOMSubtreeModified', function () {

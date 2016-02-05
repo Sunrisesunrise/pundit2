@@ -125,16 +125,28 @@
                     Save
                 </button>
             </div>
+
         </div>
         <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
         <div class="pnd-annotation-details-buttons">
-            <div ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'" replace="true">
-            </div>
-            <!-- Metadata social comment -->
-            <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
+            <div ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
                  replace="true"
-                 >
+                    >
             </div>
         </div>
+        <!-- Metadata social comment tree-->
+        <div ng-show="replyTreeActivate"
+
+             ng-include="'src/AnnotationSidebar/AnnotationDetails.replyCommentTree.tmpl.html'"
+                >
+        </div>
+        <!-- Metadata social comment box -->
+        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
+             replace="true"
+                >
+        </div>
+
+
+
     </div>
 </div>

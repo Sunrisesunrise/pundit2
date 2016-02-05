@@ -461,13 +461,14 @@ angular.module('Pundit2.AnnotationSidebar')
                 modelData.items,
                 modelData.flatTargets,
                 modelData.target,
+
                 modelData.type,
                 'commenting'
             );
 
             return editPromise;
         };
-        annotationDetails.saveReplyedComment = function (annID, item, comment) {
+        annotationDetails.saveReplyedComment = function (item, reply) {
             var currentTarget = item,
                 currentStatement = {
                     scope: {
@@ -475,7 +476,7 @@ angular.module('Pundit2.AnnotationSidebar')
                             return {
                                 subject: currentTarget,
                                 predicate: '',
-                                object: comment
+                                object: reply
                             };
                         }
                     }
@@ -483,17 +484,18 @@ angular.module('Pundit2.AnnotationSidebar')
 
             var modelData = ModelHelper.buildCommentData(currentStatement);
 
-            var editPromise = AnnotationsCommunication.editAnnotation(
-                annID,
+            var replyPromise = AnnotationsCommunication.saveAnnotation(
                 modelData.graph,
                 modelData.items,
                 modelData.flatTargets,
+                undefined,
+                '',
                 modelData.target,
                 modelData.type,
-                'commenting'
+                'commenting' //TODO support on server side for motivation: "replying"
             );
 
-            return editPromise;
+            return replyPromise;
         };
 
         annotationDetails.getAnnotationDetails = function (currentId) {
@@ -602,6 +604,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 if (typeof(state.annotations[currentId]) === 'undefined') {
                     state.annotations[currentId] = {
                         id: currentId,
+                        uri: currentAnnotation.uri,
                         creator: currentAnnotation.creator,
                         creatorName: currentAnnotation.creatorName,
                         created: convertTime(currentAnnotation.created),
@@ -653,6 +656,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 if (typeof(state.annotations[currentId]) === 'undefined') {
                     state.annotations[currentId] = {
                         id: currentId,
+                        uri: currentAnnotation.uri,
                         creator: currentAnnotation.creator,
                         creatorName: currentAnnotation.creatorName,
                         created: convertTime(currentAnnotation.created),
@@ -694,7 +698,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
                     if (typeof(force) !== 'undefined' && force) {
                         state.annotations[currentId].created = currentAnnotation.created;
-                        state.annotations[currentId].created = currentAnnotation.created;
                         state.annotations[currentId].notebookId = currentAnnotation.isIncludedIn;
                         state.annotations[currentId].scopeReference = scope;
                         state.annotations[currentId].mainItem = buildItemDetails(firstTargetUri);
@@ -716,7 +719,8 @@ angular.module('Pundit2.AnnotationSidebar')
             expandedState = (force ? true : state.defaultExpanded);
 
             if (currentAnnotation.motivatedBy === 'commenting' ||
-                currentAnnotation.motivatedBy === 'highlighting') {
+                currentAnnotation.motivatedBy === 'highlighting'||
+                currentAnnotation.motivatedBy === 'replying') {
                 buildCommentOrHighlight(currentAnnotation.motivatedBy);
             } else {
                 buildSemantic();
@@ -834,6 +838,8 @@ angular.module('Pundit2.AnnotationSidebar')
             $document.on('mousedown', mouseDownHandler);
         });
 
+
+
         $document.on('mousedown', mouseDownHandler);
 
         function mouseDownHandler(downEvt) {
@@ -847,6 +853,13 @@ angular.module('Pundit2.AnnotationSidebar')
 
             $rootScope.$$phase || $rootScope.$digest();
         }
+
+
+
+
+
+
+
 
         annotationDetails.log('Component running');
         return annotationDetails;
