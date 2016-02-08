@@ -174,10 +174,10 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         $scope.saveEdit = function (event) {
-            var promise = AnnotationDetails.saveEditedComment(currentId, $scope.annotation.mainItem, $scope.annotation.comment);
+            var promise = AnnotationDetails.saveEditedComment(currentId, $scope.annotation.itemsArray[0], $scope.annotation.comment);
 
             promise.then(function () {
-                $scope.replyDialog = false;
+                $scope.editMode = false;
             }, function () {
             });
 
@@ -187,31 +187,26 @@ angular.module('Pundit2.AnnotationSidebar')
             var createItemFromAnnotation = function () {
                 var values = {};
                 values.uri = $scope.annotation.uri;
-                // values.label =  $scope.replyCommentValue.trim();
                 values.type = [NameSpace.types.annotation];
-                //values.annotation = $scope.annotation;
-                // values.typeClass ="uri";
-                // values.typeLabel = [NameSpace.types.annotation];
-                values.comment = $scope.annotation.replyCommentValue;
-
+                values.comment = $scope.annotation.comment;
 
                 return new Item(values.uri, values);
             }
             var item = createItemFromAnnotation();
-
             var promise = AnnotationDetails.saveReplyedComment(item, $scope.annotation.replyCommentValue);
-
 
             promise.then(function (e) {
                 $scope.replyDialog = false;
                 $scope.replyTreeActivate = true;
                 $scope.annotation.replyCommentValue = '';
                 var annotation =AnnotationsExchange.getAnnotationById(e);
-                var out = { 'creatorName' : annotation.creatorName,
-                            'comment' : annotation.graph['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0].value
+                var out = {
+                    'id': annotation.id,
+                    'creatorName' : annotation.creatorName,
+                    'comment' : annotation.graph['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0].value
                 }
                 $scope.replyTree.push(out);
-              //  console.log(AnnotationsExchange.getAnnotationById(e));
+                console.log(AnnotationsExchange.getAnnotationById(e));
 
             }, function () {
 
@@ -273,7 +268,7 @@ angular.module('Pundit2.AnnotationSidebar')
         };
         $scope.isDetailsButtons = function () {
             return $scope.reply || $scope.like || $scope.dislike || $scope.endorse || $scope.report;
-            ì
+
         };
         $scope.$watch(function () {
             return currentElement.height();

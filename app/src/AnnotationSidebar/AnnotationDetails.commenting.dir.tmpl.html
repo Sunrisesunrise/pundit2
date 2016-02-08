@@ -134,19 +134,19 @@
                     >
             </div>
         </div>
-        <!-- Metadata social comment tree-->
-        <div ng-show="replyTreeActivate"
+        <!-- List of replyes to comment -->
+        <annotation-details-reply-comment-tree
+                class="pnd-annotation-details "
+                id="{{::annotation.id}}"
+                ng-repeat="annotation in replyTree track by annotation.id"
+                style="position:relative"
+                ng-if="isReplyMode()">
+        </annotation-details-reply-comment-tree>
 
-             ng-include="'src/AnnotationSidebar/AnnotationDetails.replyCommentTree.tmpl.html'"
-                >
-        </div>
         <!-- Metadata social comment box -->
         <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
              replace="true"
                 >
         </div>
-
-
-
     </div>
 </div>
