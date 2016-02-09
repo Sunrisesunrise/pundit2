@@ -1,5 +1,23 @@
 angular.module('Pundit2.Core')
 
+.constant('ITEMSEXCHANGE', {
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ItemsExchange.defaultRelationsContainer
+     *
+     * @description
+     * `string`
+     *
+     * Name of the container used to store all of the pundit client usable relations.
+     *
+     * Default value:
+     * <pre> defaultRelationsContainer: "usableRelations" </pre>
+     */
+    defaultRelationsContainer: "usableRelations"
+})
+
 .service('ItemsExchange', function(BaseComponent) {
 
     // TODO: inherit from a Store or something()? Annotations, items, ...
@@ -46,8 +64,7 @@ angular.module('Pundit2.Core')
 
         if (isTemporary) {
             temporaryItems[item.uri] = item;
-        }
-        else {
+        } else {
             delete temporaryItems[item.uri];
         }
     };

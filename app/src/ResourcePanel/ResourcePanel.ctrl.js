@@ -30,8 +30,8 @@ angular.module('Pundit2.ResourcePanel')
     $scope.showContentMessage5 = true;
     $scope.useCustomTemplate = false;
 
-    for (var i in selectors) {
-        selectorsLabels.push(selectors[i].config.label);
+    for (var s in selectors) {
+        selectorsLabels.push(selectors[s].config.label);
     }
 
     // $scope.canShowPaneList = function(title) {
@@ -41,16 +41,35 @@ angular.module('Pundit2.ResourcePanel')
     // build tabs by reading active selectors inside selectors manager
     // TODO LOD management for subject
     if ($scope.type === 'obj') {
-        for (var j = 0; j < selectors.length; j++) {
-            $scope.contentTabs.push({
-                title: selectors[j].config.label,
-                template: 'src/Lists/itemList.tmpl.html',
-                itemsContainer: selectors[j].config.container,
-                items: [],
-                module: 'Pundit2',
-                isStarted: false,
-                selector: selectors[j]
-            });
+        if (typeof $scope.newSelectors !== "undefined") {
+            for (var j = 0; j < selectors.length; j++) {
+                for (var i = 0; i < selectors.length; i++) {
+                    if (($scope.newSelectors[i] === selectors[j].config.label) || ($scope.newSelectors[i] === selectors[j].config.container)) {
+
+                        $scope.contentTabs.push({
+                            title: selectors[j].config.label,
+                            template: 'src/Lists/itemList.tmpl.html',
+                            itemsContainer: selectors[j].config.container,
+                            items: [],
+                            module: 'Pundit2',
+                            isStarted: false,
+                            selector: selectors[j]
+                        });
+                    }
+                }
+            }
+        } else {
+            for (var z = 0; z < selectors.length; z++) {
+                $scope.contentTabs.push({
+                    title: selectors[z].config.label,
+                    template: 'src/Lists/itemList.tmpl.html',
+                    itemsContainer: selectors[z].config.container,
+                    items: [],
+                    module: 'Pundit2',
+                    isStarted: false,
+                    selector: selectors[z]
+                });
+            }
         }
     }
 
@@ -217,9 +236,8 @@ angular.module('Pundit2.ResourcePanel')
         } else {
             ResourcePanel.updateVocabSearch(term, $scope.triple, caller);
         }
-
     };
-
+    
     $scope.select = function(item, $event) {
         // after triggering click, lastSelect object will be updated with new selected item.
         Preview.setLock(false);

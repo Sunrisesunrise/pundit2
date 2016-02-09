@@ -91,11 +91,11 @@ angular.module('Pundit2.Model')
             'datatype': 'http://www.w3.org/2001/XMLSchema#string',
             'value': 'text/plain'
         }];
-        // blanknode[NameSpace.dce.language] = [{
-        //     'type': 'literal',
-        //     'datatype': 'http://www.w3.org/2001/XMLSchema#string',
-        //     'value': 'it'
-        // }];
+         //blanknode[NameSpace.dce.language] = [{
+         //    'type': 'literal',
+         //    'datatype': 'http://www.w3.org/2001/XMLSchema#string',
+         //    'value': 'it'
+         //}];
         blanknode[NameSpace.rdf.value] = [{
             'type': 'literal',
             'datatype': 'http://www.w3.org/2001/XMLSchema#string',
@@ -183,9 +183,8 @@ angular.module('Pundit2.Model')
             modelHelper.err('Part of triple at null!');
             return;
         }
-
         // TODO: move the predicate type management in a better place
-        if (typeof triple.predicate.type !== 'undefined') {
+        if (typeof triple.predicate.type !== 'undefined' && !triple.subject.isResource()) {
             addTypeElem([NameSpace.target.specificResource].concat(triple.predicate.type), types);
         }
 
@@ -196,11 +195,11 @@ angular.module('Pundit2.Model')
                 return;
             }
             if (statementPart.isTarget()) {
-                if (statementPart.isWebPage()) {
+                if (statementPart.isWebPage() || statementPart.isResource()) {
                     uris = {
                         target: statementPart.uri
                     };
-                } else {
+                } else{
                     uris = targetURIs(statementPart.getXPointer());
                 }
 
@@ -212,7 +211,7 @@ angular.module('Pundit2.Model')
                         canonical = XpointersHelper.getSafeCanoicalUrl();
 
                     // Building target info.
-                    if (!statementPart.isWebPage()) {
+                    if (!statementPart.isWebPage() && !statementPart.isResource()) {
                         // isPartOf.
                         if (statementPart.hasOwnProperty('isPartOf')) {
                             isPartOfArray.push({
@@ -244,6 +243,14 @@ angular.module('Pundit2.Model')
                             errorMessage = 'Page context missing! Cannot proceed with annotation build.';
                             modelHelper.err(errorMessage);
                             return;
+                        }
+                    } else {
+
+                        if (statementPart.isResource()) {
+                            target[NameSpace.rdf.type] = ({
+                                'value': NameSpace.target.CHO,
+                                'type': 'uri'
+                            });
                         }
                     }
 
@@ -277,7 +284,7 @@ angular.module('Pundit2.Model')
 
                     addTypeElem(statementPart.type, types);
 
-                    if (!statementPart.isWebPage()) {
+                    if (!statementPart.isWebPage() && !statementPart.isResource()) {
                         // Building selector info.
                         // conformsTo.
                         selector[NameSpace.target.conformsTo] = [{

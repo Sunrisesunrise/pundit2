@@ -49,7 +49,7 @@ angular.module('Pundit2.Core')
         specificResource: _oa + 'SpecificResource',
         hasScope: _oa + 'hasScope',
         hasSource: _oa + 'hasSource',
-        hasSelector: _oa + 'hasSelector'
+        hasSelector: _oa + 'hasSelector',
             /* ns.rdf.type */
             /* ns.rdf.value */
             /* ns.rdfs.label */
@@ -137,7 +137,8 @@ angular.module('Pundit2.Core')
     ns.motivation = {
         linking: _oa + 'linking',
         commenting: _oa + 'commenting',
-        highlighting: _oa + 'highlighting'
+        highlighting: _oa + 'highlighting',
+        tagging: _oa + 'tagging'
     };
 
     // TODO: move to Consolidation.options ??
@@ -153,7 +154,8 @@ angular.module('Pundit2.Core')
         page: 'http://schema.org/WebPage',
         image: 'http://xmlns.com/foaf/0.1/Image',
         named: _pnd + 'named-content',
-        embeddedContent: _oa + 'EmbeddedContent'
+        embeddedContent: _oa + 'EmbeddedContent',
+        resource: _pnd + 'resource' // TODO to be defined
     };
 
     // Our types labels, will be read by the TypesHelper
@@ -162,8 +164,8 @@ angular.module('Pundit2.Core')
     ns.typesLabels[ns.fragments.text] = 'Text fragment';
     ns.typesLabels[ns.types.page] = 'Web page';
     ns.typesLabels[ns.types.image] = 'Image';
+    ns.typesLabels[ns.types.image] = 'Resource'; // TODO to be defined
     ns.typesLabels[ns.types.named] = 'Named content';
-
 
     ns.selectors = {
         baseURI: 'http://purl.org/pundit/selector/',

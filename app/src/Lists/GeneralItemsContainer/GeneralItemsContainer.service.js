@@ -349,7 +349,7 @@ angular.module('Pundit2.GeneralItemsContainer')
         if (generalItemsContainer.isMyNotebooksType(type)) {
             return NotebookExchange.getMyNotebooks();
         } else if (generalItemsContainer.isPredicatesType(type)) {
-            return ItemsExchange.getItemsByContainer(Config.modules.Client.relationsContainer);
+            return ItemsExchange.getItemsByContainer(Config.modules.ItemsExchange.defaultRelationsContainer);
         } else if (generalItemsContainer.isMyItemsType(type) || generalItemsContainer.isPageItemsType(type)) {
             var ContainerManager = generalItemsContainer.getManager(type);
             ItemsExchange.getItemsByContainer(ContainerManager.options.container);

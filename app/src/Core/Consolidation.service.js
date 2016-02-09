@@ -426,7 +426,8 @@ angular.module('Pundit2.Core')
                 }
             }
         }
-        
+
+
         if (typeof canonical !== 'undefined') {
             ret.push(canonical);
         }

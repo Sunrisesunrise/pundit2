@@ -36,21 +36,6 @@ angular.module('Pundit2.Client')
     /**
      * @module punditConfig
      * @ngdoc property
-     * @name modules#Client.relationsContainer
-     *
-     * @description
-     * `string`
-     *
-     * Name of the container used to store all of the pundit client usable relations.
-     *
-     * Default value:
-     * <pre> relationsContainer: "usableRelations" </pre>
-     */
-    relationsContainer: "usableRelations",
-
-    /**
-     * @module punditConfig
-     * @ngdoc property
      * @name modules#Client.bootModules
      *
      * @description
@@ -66,11 +51,11 @@ angular.module('Pundit2.Client')
     bootModules: [
         'LiteTool',
         'AnnotationSidebar'
-    ] 
+    ]
 })
 
 .service('ClientLite', function(CLIENTLITEDEFAULTS, BaseComponent, Config, EventDispatcher, Analytics, MyPundit, LiteTool,
-    TextFragmentAnnotator, AnnotationsCommunication, AnnotationsExchange, Item, ItemsExchange, Status, TextFragmentHandler, 
+    TextFragmentAnnotator, AnnotationsCommunication, AnnotationsExchange, Item, ItemsExchange, Status, TextFragmentHandler,
     AnnotationSidebar, AnnotationDetails, ResizeManager, NotebookCommunication, NotebookExchange, AnnotationPopover,
     $injector, $templateCache, $rootScope) {
 
@@ -130,7 +115,7 @@ angular.module('Pundit2.Client')
             relations = client.options.basicRelations;
         for (var p in relations) {
             // property is automatically added to ItemsExchange default container
-            ItemsExchange.addItemToContainer(new Item(relations[p].uri, relations[p]), [client.options.relationsContainer, 'basicRelations']);
+            ItemsExchange.addItemToContainer(new Item(relations[p].uri, relations[p]), [ItemsExchange.options.defaultRelationsContainer, 'basicRelations']);
         }
         client.log('Loaded ' + num + ' basic relations');
     };

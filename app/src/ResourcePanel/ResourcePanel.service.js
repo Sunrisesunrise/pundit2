@@ -88,6 +88,7 @@ angular.module('Pundit2.ResourcePanel')
      * <pre> myItemsEnabled: true </pre>
      */
     myItemsEnabled: true
+
 })
 
 /**
@@ -110,7 +111,7 @@ angular.module('Pundit2.ResourcePanel')
  *
  */
 .service('ResourcePanel', function(BaseComponent, EventDispatcher, RESOURCEPANELDEFAULTS,
-    ItemsExchange, MyItems, PageItemsContainer, Client, NameSpace, SelectorsManager,
+    ItemsExchange, MyItems, PageItemsContainer, NameSpace, SelectorsManager,
     $filter, $rootScope, $popover, $q, $timeout, Preview, $window, Config, Item,
     Utils, Analytics, Keyboard) {
 
@@ -447,7 +448,7 @@ angular.module('Pundit2.ResourcePanel')
         return state.popover;
     };
 
-    // TODO keep or delete? 
+    // TODO keep or delete?
     // var initPopover_new = function(content, target, placement, type, contentTabs, tripleElemType) {
     //     var posPopMod = 0,
     //     valMod = 100;
@@ -751,8 +752,8 @@ angular.module('Pundit2.ResourcePanel')
             'top': newTop
         });
 
-        // TODO: update angular strap and check the #871 issues on codebase 
-        // Temporary angularstrap fix 
+        // TODO: update angular strap and check the #871 issues on codebase
+        // Temporary angularstrap fix
         angular.element('.popover .arrow').css({
             'left': '50%'
         });
@@ -827,7 +828,7 @@ angular.module('Pundit2.ResourcePanel')
      *
      * Popover has two buttons: `Save` that resolve a promise and `Cancel` that close the popover.
      *
-     * @param {date} date Date selected when calendar is shown. 
+     * @param {date} date Date selected when calendar is shown.
      * @param {DOMElement} target DOM Element where to append the popover
      * @return {Promise} when Save button is clicked, promise will be resolved with the selected date
      *
@@ -992,6 +993,10 @@ angular.module('Pundit2.ResourcePanel')
         return state.resourcePromise.promise;
     };
 
+    resourcePanel.setSelector = function(selector) {
+        state.popoverOptions.scope.newSelectors = selector;
+    };
+
     /**
      * @ngdoc method
      * @name ResourcePanel#showItemsForObject
@@ -1014,6 +1019,7 @@ angular.module('Pundit2.ResourcePanel')
      * @return {Promise} return a promise that will be resolved when a subject is selected
      *
      */
+
     resourcePanel.showItemsForObject = function(triple, target, label, overrideFooterExtraButtons) {
         resourcePanel.overrideFooterExtraButtons = overrideFooterExtraButtons;
 
@@ -1021,20 +1027,12 @@ angular.module('Pundit2.ResourcePanel')
             target = state.popover.clickTarget;
         }
 
-        var selectors = SelectorsManager.getActiveSelectors();
-        state.popoverOptions.scope.selectors = [];
-
-        // initialize selectors list
-        angular.forEach(selectors, function(sel) {
-            state.popoverOptions.scope.selectors.push(sel.config.container);
-        });
-
         if (state.popover !== null && state.popover.clickTarget === target /*&& state.popoverOptions.scope.label !== label*/ ) {
             //state.popoverOptions.scope.vocabObjStatus = 'loading';
             $timeout.cancel(searchTimer);
             setLabelToSearch(label);
             searchTimer = $timeout(function() {
-                searchOnVocab(label, selectors, triple, 'object');
+                resourcePanel.updateVocabSearch(label, triple, 'object');
             }, resourcePanel.options.vocabSearchTimer);
 
         } else {
@@ -1044,7 +1042,7 @@ angular.module('Pundit2.ResourcePanel')
                 //state.popoverOptions.scope.vocabObjStatus = 'loading';
                 $timeout.cancel(searchTimer);
                 searchTimer = $timeout(function() {
-                    searchOnVocab(label, selectors, triple, 'object');
+                    resourcePanel.updateVocabSearch(label, triple, 'object');
                 }, resourcePanel.options.vocabSearchTimer);
             }
 
@@ -1075,7 +1073,7 @@ angular.module('Pundit2.ResourcePanel')
                         // all items are good
                         myItems = ItemsExchange.getItemsByContainer(myItemsContainer);
                         pageItems = ItemsExchange.getItemsByContainer(pageItemsContainer);
-                        showPopoverResourcePanel(target, pageItems, myItems, "", label, 'obj', triple);
+                        showPopoverResourcePanel(target, pageItems, myItems, "", label, 'obj', triple, state.popoverOptions.scope.newSelectors);
 
                         // if predicate is literal, show popover literal
                     } else if (itemPredicate.suggestedObjectTypes.length === 1 && itemPredicate.suggestedObjectTypes[0] === NameSpace.rdfs.literal) {
@@ -1154,7 +1152,7 @@ angular.module('Pundit2.ResourcePanel')
 
         } else {
             hide();
-            var propertiesContainer = Client.options.relationsContainer;
+            var propertiesContainer = ItemsExchange.options.defaultRelationsContainer;
             var properties;
 
             // TODO Add some comments
@@ -1190,7 +1188,7 @@ angular.module('Pundit2.ResourcePanel')
                 if (typeof(properties) !== 'undefined' && properties.length > 0) {
                     showPopoverResourcePanel(target, "", "", properties, label, 'pr', triple);
                 } else {
-                    // TODO Show error? 
+                    // TODO Show error?
                     showPopoverResourcePanel(target, "", "", [], label, 'pr', triple);
                 }
 
@@ -1205,12 +1203,21 @@ angular.module('Pundit2.ResourcePanel')
         hide();
     });
 
-    EventDispatcher.addListener('TripleComposer.reset', function() {
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
         hide();
     });
 
-    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
+    EventDispatcher.addListener('TripleComposer.reset', function( /*e*/ ) {
         hide();
+
+        // TODO: do it in a different place (?)
+        var selectors = SelectorsManager.getActiveSelectors();
+        var restoreSelector = [];
+        // initialize selectors list
+        angular.forEach(selectors, function(sel) {
+            restoreSelector.push(sel.config.container);
+        });
+        resourcePanel.setSelector(restoreSelector);
     });
 
     return resourcePanel;

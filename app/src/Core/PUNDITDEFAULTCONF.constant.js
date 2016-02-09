@@ -578,5 +578,30 @@ angular.module('Pundit2.Core')
     timeline: {
         active: false,
         baseUrl: 'http://metasound.dibet.univpm.it/timelinejs/examples/pundit.html?'
+    },
+
+    /**
+     * @module punditConfig
+     * @ngdoc object
+     * @name template
+     * @description
+     * `object`
+     *
+     * Define if is active the template for rapid action
+     *
+     * * `active`: true to active the rapid actions, false otherwise
+     * * `list`: list of actions
+     *
+     * Default:
+     * <pre>
+     *  template: {
+     *    active: false,
+     *    list: []
+     *  }
+     * </pre>
+     */
+    template: {
+        active: false,
+        list: []
     }
 });
