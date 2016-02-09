@@ -33,7 +33,7 @@ angular.module('Pundit2.Core')
 
         var calculateSelectionCoordinates = function (data) {
             // var range = state.selection.getRangeAt(0)
-            if (data.item.icon) {
+            if (typeof data ==! 'undefined' && data.item.icon) {
                 var elem = angular.element('.pnd-range-pos-icon');
                 var i = 0;
                 var pos = {
