@@ -87,7 +87,7 @@ angular.module('Pundit2.ResourcePanel')
      * Default value:
      * <pre> myItemsEnabled: true </pre>
      */
-    myItemsEnabled: false
+    myItemsEnabled: true
 
 })
 
@@ -175,7 +175,7 @@ angular.module('Pundit2.ResourcePanel')
     };
 
     // initialize a popover
-    var initPopover = function(content, target, placement, type, contentTabs, tripleElemType, newSelector) {
+    var initPopover = function(content, target, placement, type, contentTabs, tripleElemType) {
         var posPopMod = 0,
             valMod = 100;
         state.popoverOptions.scope.arrowLeft = '-11px';
@@ -448,7 +448,7 @@ angular.module('Pundit2.ResourcePanel')
         return state.popover;
     };
 
-    // TODO keep or delete? 
+    // TODO keep or delete?
     // var initPopover_new = function(content, target, placement, type, contentTabs, tripleElemType) {
     //     var posPopMod = 0,
     //     valMod = 100;
@@ -752,8 +752,8 @@ angular.module('Pundit2.ResourcePanel')
             'top': newTop
         });
 
-        // TODO: update angular strap and check the #871 issues on codebase 
-        // Temporary angularstrap fix 
+        // TODO: update angular strap and check the #871 issues on codebase
+        // Temporary angularstrap fix
         angular.element('.popover .arrow').css({
             'left': '50%'
         });
@@ -828,7 +828,7 @@ angular.module('Pundit2.ResourcePanel')
      *
      * Popover has two buttons: `Save` that resolve a promise and `Cancel` that close the popover.
      *
-     * @param {date} date Date selected when calendar is shown. 
+     * @param {date} date Date selected when calendar is shown.
      * @param {DOMElement} target DOM Element where to append the popover
      * @return {Promise} when Save button is clicked, promise will be resolved with the selected date
      *
@@ -993,10 +993,10 @@ angular.module('Pundit2.ResourcePanel')
         return state.resourcePromise.promise;
     };
 
-    resourcePanel.setSelector = function(selector){
+    resourcePanel.setSelector = function(selector) {
         state.popoverOptions.scope.newSelectors = selector;
-
     };
+
     /**
      * @ngdoc method
      * @name ResourcePanel#showItemsForObject
@@ -1032,7 +1032,7 @@ angular.module('Pundit2.ResourcePanel')
             $timeout.cancel(searchTimer);
             setLabelToSearch(label);
             searchTimer = $timeout(function() {
-                searchOnVocab(label, selectors, triple, 'object');
+                resourcePanel.updateVocabSearch(label, triple, 'object');
             }, resourcePanel.options.vocabSearchTimer);
 
         } else {
@@ -1042,7 +1042,7 @@ angular.module('Pundit2.ResourcePanel')
                 //state.popoverOptions.scope.vocabObjStatus = 'loading';
                 $timeout.cancel(searchTimer);
                 searchTimer = $timeout(function() {
-                    searchOnVocab(label, selectors, triple, 'object');
+                    resourcePanel.updateVocabSearch(label, triple, 'object');
                 }, resourcePanel.options.vocabSearchTimer);
             }
 
@@ -1209,8 +1209,10 @@ angular.module('Pundit2.ResourcePanel')
 
     EventDispatcher.addListener('TripleComposer.reset', function( /*e*/ ) {
         hide();
+
+        // TODO: do it in a different place (?)
         var selectors = SelectorsManager.getActiveSelectors();
-        var restoreSelector= [];
+        var restoreSelector = [];
         // initialize selectors list
         angular.forEach(selectors, function(sel) {
             restoreSelector.push(sel.config.container);

@@ -204,7 +204,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     'id': annotation.id,
                     'creatorName' : annotation.creatorName,
                     'comment' : annotation.graph['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0].value
-                }
+                };
                 $scope.replyTree.push(out);
                 console.log(AnnotationsExchange.getAnnotationById(e));
 

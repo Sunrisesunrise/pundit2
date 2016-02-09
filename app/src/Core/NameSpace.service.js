@@ -32,7 +32,6 @@ angular.module('Pundit2.Core')
     ns.rdfs.label = _rdfs + 'label';
     ns.rdfs.comment = _rdfs + 'comment';
     ns.rdfs.resource = _rdfs + 'Resource';
-    ns.rdfs.resource = _rdfs + 'Annotation';
     ns.rdfs.literal = _rdfs + 'Literal';
     ns.rdfs.seeAlso = _rdfs + 'seeAlso';
 
@@ -48,10 +47,9 @@ angular.module('Pundit2.Core')
         conformsTo: _dct + 'conformsTo',
         fragmentSelector: _oa + 'FragmentSelector',
         specificResource: _oa + 'SpecificResource',
-        annotation: _oa + 'Annotation',
         hasScope: _oa + 'hasScope',
         hasSource: _oa + 'hasSource',
-        hasSelector: _oa + 'hasSelector'
+        hasSelector: _oa + 'hasSelector',
             /* ns.rdf.type */
             /* ns.rdf.value */
             /* ns.rdfs.label */
@@ -156,11 +154,10 @@ angular.module('Pundit2.Core')
     ns.types = {
         page: 'http://schema.org/WebPage',
         image: 'http://xmlns.com/foaf/0.1/Image',
-        resource: _oa + 'resource', // TODO to be defined
-        annotation: _oa + 'annotation',
         named: _pnd + 'named-content',
         embeddedContent: _oa + 'EmbeddedContent',
-        CHO: _pnd + 'CHO'
+        resource: _pnd + 'resource', // TODO to be defined
+        annotation: _pnd + 'annotation'
     };
 
     // Our types labels, will be read by the TypesHelper

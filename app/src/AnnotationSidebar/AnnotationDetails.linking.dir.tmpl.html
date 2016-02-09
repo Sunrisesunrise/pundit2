@@ -2,16 +2,15 @@
 
     <!-- Collapsed view of the annotation -->
     <div class="pnd-annotation-collapsed pnd-annotation-details-header pnd-annotation-details-top"
-         ng-click="toggleAnnotation()"
-         ng-if="!annotation.expanded"
-         ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
+        ng-click="toggleAnnotation()"
+        ng-if="!annotation.expanded"
+        ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
 
         <div class="pnd-annotation-collapsed-subject"
              ng-class="{'pnd-annotation-annotated-fragment': (annotation.mainItem.typeLabel == 'Text fragment'),
                         'pnd-annotation-annotated-resource': (annotation.mainItem.typeLabel == 'resource'),
                         'pnd-annotation-page': (annotation.mainItem.typeLabel == 'WebPage')}">
-            <span>{{ annotation.mainItem.label }}</span>
-            <!-- TODO For images instead of "label" we should use the ALT attribute if present -->
+            <span>{{ annotation.mainItem.label }}</span> <!-- TODO For images instead of "label" we should use the ALT attribute if present -->
         </div>
 
 
@@ -32,22 +31,29 @@
         <div class="pnd-annotation-details-meta"
              ng-init="meta = false">
 
-            <img class="pnd-annotation-user-thumb" src="https://placehold.it/30x30"
-                 alt="{{ ::annotation.creatorName }}"/>
+            <!-- User's thumb -->
+            <!-- Currently not displayed... to show with real thumb -->
+            <img class="pnd-annotation-user-thumb"
+                 src="" width="30" height="30"
+                 alt="{{::annotation.creatorName}}"/>
+
+            <!-- Default user's thumb -->
+            <div class="pnd-annotation-user-thumb-default"></div>
+
             <span class="pnd-annotation-user-name">
                 {{ ::annotation.creatorName }}
             </span>
             <span class="pnd-annotation-metadata">
                 {{::annotation.created | date : 'd MMM y'}} · in 
                 <span class="pnd-annotation-notebook-name">
-                    <span
-                            ng-if="!isUserToolShowed() || !homePundit">
+                    <span 
+                        ng-if="!isUserToolShowed() || !homePundit">
                         {{annotation.notebookName}}
                     </span>
-                    <a
-                            href="#"
-                            ng-if="isUserToolShowed() && homePundit"
-                            ng-click="openNotebook($event, annotation.notebookId)">
+                    <a 
+                        href="#" 
+                        ng-if="isUserToolShowed() && homePundit"
+                        ng-click="openNotebook($event, annotation.notebookId)">
                         {{annotation.notebookName}}
                     </a>
                 </span>
@@ -75,7 +81,7 @@
 
                     <div class="pnd-annotation-original-page"
                          ng-if="item.subject.isExternal">
-                        <a href="{{item.subject.pageContext}}">Open in original page</a>
+                        <a href="{{item.subject.pageContext}}" target="_blank">Open in original page</a>
                     </div>
                 </div>
 
@@ -118,8 +124,7 @@
                     <!-- Label -->
                     <span class="pnd-annotation-entity-label">
                         <a href="{{ item.subject.description }}" target="_blank">
-                            {{ item.subject.label }}
-                            <!-- TODO Instead of "label" we shoudl use the ALT attribute if present -->
+                            {{ item.subject.label }} <!-- TODO Instead of "label" we shoudl use the ALT attribute if present -->
                             <span class="pnd-icon-arrow-right"></span>
                         </a>
                     </span>
@@ -275,26 +280,27 @@
         </div>
 
         <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
-        <div class="pnd-annotation-details-buttons">
-            <div ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
-                 replace="true"
-                    >
+        <div 
+            class="pnd-annotation-details-buttons"
+            ng-show="isUserToolShowed()">
+            <div class="pnd-annotation-details-footer">
+                <button
+                    type="button"
+                    class="pnd-edit"
+                    ng-show="isEditBtnShowed()"
+                    ng-click="editAnnotation($event)">
+                    <span class="pnd-icon-pencil"></span>
+                    Edit
+                </button> · <button
+                    type="button"
+                    class="pnd-delete"
+                    ng-click="deleteAnnotation($event)">
+                    <span class="pnd-icon-trash"></span>
+                    Delete
+                </button>
             </div>
         </div>
 
-        <!-- List of replyes to comment -->
-        <annotation-details-reply-comment-tree
-                class="pnd-annotation-details "
-                id="{{::annotation.id}}"
-                ng-repeat="annotation in replyTree track by annotation.id"
-                style="position:relative"
-                ng-if="isReplyMode()">
-        </annotation-details-reply-comment-tree>
-
-        <!-- Metadata social comment box -->
-        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
-             replace="true"
-                >
-        </div>
     </div>
+
 </div>

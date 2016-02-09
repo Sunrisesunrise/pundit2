@@ -169,6 +169,10 @@ angular.module('Pundit2.Core')
             this.isAnnotation();
     };
 
+    ItemFactory.prototype.isAnnotation = function() {
+        return this.type.indexOf(NameSpace.types.annotation) !== -1;
+    };
+
     ItemFactory.prototype.isProperty = function() {
         return this.type.indexOf(NameSpace.rdf.property) !== -1;
     };
@@ -180,17 +184,17 @@ angular.module('Pundit2.Core')
     ItemFactory.prototype.isImage = function() {
         return this.type.indexOf(NameSpace.types.image) !== -1;
     };
+
     ItemFactory.prototype.isResource = function() {
         return this.type.indexOf(NameSpace.types.resource) !== -1;
     };
-    ItemFactory.prototype.isAnnotation = function() {
-        return this.type.indexOf(NameSpace.types.annotation) !== -1;
-    };
+
     ItemFactory.prototype.isImageFragment = function() {
-    return this.type.indexOf(NameSpace.fragments.imagePart) !== -1;
+        return this.type.indexOf(NameSpace.fragments.imagePart) !== -1;
     };
+    
     ItemFactory.prototype.isWebPage = function() {
-    return this.type.indexOf(NameSpace.types.page) !== -1;
+        return this.type.indexOf(NameSpace.types.page) !== -1;
     };
 
     // It's an entity if it's not an image, a property, a text fragment, a reource or a webpage
@@ -437,6 +441,12 @@ angular.module('Pundit2.Core')
                 values.description = values.label;
                 break;
             case 'target':
+                if (typeof target[NameSpace.target.hasSelector] === 'undefined') {
+                    values.label = target[NameSpace.rdfs.label][0].value;
+                    values.description = values.label;
+                    break;
+                }
+
                 var selector = targets[target[NameSpace.target.hasSelector][0].value];
                 if (typeof target[NameSpace.item.isPartOf] !== 'undefined') {
                     values.isPartOf = target[NameSpace.item.isPartOf][0].value;

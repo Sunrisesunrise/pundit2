@@ -468,6 +468,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
             return editPromise;
         };
+        
         annotationDetails.saveReplyedComment = function (item, reply) {
             var currentTarget = item,
                 currentStatement = {

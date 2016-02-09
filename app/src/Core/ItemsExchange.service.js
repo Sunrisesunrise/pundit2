@@ -16,7 +16,7 @@ angular.module('Pundit2.Core')
      * <pre> defaultRelationsContainer: "usableRelations" </pre>
      */
     defaultRelationsContainer: "usableRelations"
-    })
+})
 
 .service('ItemsExchange', function(BaseComponent) {
 
@@ -64,8 +64,7 @@ angular.module('Pundit2.Core')
 
         if (isTemporary) {
             temporaryItems[item.uri] = item;
-        }
-        else {
+        } else {
             delete temporaryItems[item.uri];
         }
     };

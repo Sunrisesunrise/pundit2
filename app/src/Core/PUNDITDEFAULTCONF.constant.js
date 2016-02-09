@@ -600,8 +600,8 @@ angular.module('Pundit2.Core')
      *  }
      * </pre>
      */
-     template: {
-         active: false,
-         list: []
-     }
+    template: {
+        active: false,
+        list: []
+    }
 });

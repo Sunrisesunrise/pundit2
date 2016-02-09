@@ -142,7 +142,7 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> namedContentClasses: ['pundit-content'] </pre>
      */
-    namedContentClasses: ['pundit-content','pnd-resource'],
+    namedContentClasses: ['pundit-content', 'pnd-resource'],
 
     /**
      * @module punditConfig

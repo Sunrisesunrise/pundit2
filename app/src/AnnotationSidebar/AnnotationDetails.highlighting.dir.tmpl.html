@@ -22,7 +22,15 @@
         <div class="pnd-annotation-details-meta"
              ng-init="meta = false">
 
-            <img class="pnd-annotation-user-thumb" src="http://placehold.it/30x30" alt="{{::annotation.creatorName}}"/>
+            <!-- User's thumb -->
+            <!-- Currently not displayed... to show with real thumb -->
+            <img class="pnd-annotation-user-thumb"
+                 src="" width="30" height="30"
+                 alt="{{::annotation.creatorName}}"/>
+
+            <!-- Default user's thumb -->
+            <div class="pnd-annotation-user-thumb-default"></div>
+
             <span class="pnd-annotation-user-name">
                 {{::annotation.creatorName}}
             </span>
@@ -53,26 +61,18 @@
         </div>
 
         <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
-        <div class="pnd-annotation-details-buttons">
-            <div ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
-                 replace="true"
-                    >
+        <div 
+            class="pnd-annotation-details-buttons"
+            ng-show="isUserToolShowed()">
+            <div class="pnd-annotation-details-footer">
+                <button
+                        type="button"
+                        class="pnd-delete"
+                        ng-click="deleteAnnotation($event)">
+                    <span class="pnd-icon-trash"></span>
+                    Delete
+                </button>
             </div>
-        </div>
-
-        <!-- List of replyes to comment -->
-        <annotation-details-reply-comment-tree
-                class="pnd-annotation-details "
-                id="{{::annotation.id}}"
-                ng-repeat="annotation in replyTree track by annotation.id"
-                style="position:relative"
-                ng-if="isReplyMode()">
-        </annotation-details-reply-comment-tree>
-
-        <!-- Metadata social comment box -->
-        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
-             replace="true"
-                >
         </div>
 
     </div>

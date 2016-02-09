@@ -59,8 +59,9 @@
     <script src="../src/Annotators/TextFragmentIcon.dir.js"></script>
     <script src="../src/Annotators/TextFragmentHandler.service.js"></script>
     <script src="../src/Annotators/ImageHandler.service.js"></script>
-    <script src="../src/Annotators/CHOHandler.service.js"></script>
-    <script src="../src/Annotators/CHOMenu.dir.js"></script>
+    <script src="../src/Annotators/ResourceAnnotator.service.js"></script>
+    <script src="../src/Annotators/ResourceHandler.service.js"></script>
+    <script src="../src/Annotators/ResourceMenu.dir.js"></script>
     <script src="../src/Annotators/PageHandler.service.js"></script>
     <script src="../src/Annotators/PageAnnotator.service.js"></script>
 

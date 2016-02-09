@@ -51,11 +51,11 @@ angular.module('Pundit2.Client')
     bootModules: [
         'LiteTool',
         'AnnotationSidebar'
-    ] 
+    ]
 })
 
 .service('ClientLite', function(CLIENTLITEDEFAULTS, BaseComponent, Config, EventDispatcher, Analytics, MyPundit, LiteTool,
-    TextFragmentAnnotator, AnnotationsCommunication, AnnotationsExchange, Item, ItemsExchange, Status, TextFragmentHandler, 
+    TextFragmentAnnotator, AnnotationsCommunication, AnnotationsExchange, Item, ItemsExchange, Status, TextFragmentHandler,
     AnnotationSidebar, AnnotationDetails, ResizeManager, NotebookCommunication, NotebookExchange, AnnotationPopover,
     $injector, $templateCache, $rootScope) {
 
