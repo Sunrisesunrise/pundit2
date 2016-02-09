@@ -175,12 +175,15 @@ angular.module('Pundit2.Annotators')
                         priority: prior--,
                         action: (function(idx) {
                             return function(item) {
+                                var triple = templateConfig.list[idx].triples[0],
+                                    predicateItem = {};
+
                                 TripleComposer.wipeNotFixedItems();
 
-                                var triple = templateConfig.list[idx].triples[0];
                                 if (triple.subject.selectedItem) {
                                     TripleComposer.addToSubject(item);
                                 }
+
                                 if (triple.object.forceFocus) {
                                     ResourcePanel.setSelector(triple.object.selectors);
                                     //TODO ASAP: handle this operation with TripleComposer.service
@@ -188,13 +191,12 @@ angular.module('Pundit2.Annotators')
                                         angular.element('span.pnd-statement-label[ng-click="onClickObject($event)"]').click();
                                     }, 300);
                                 }
+
                                 if (triple.predicate.uri) {
-                                    var item = ItemsExchange.getItemByUri(triple.predicate.uri);
-                                    TripleComposer.addToPredicate(item);
-
-
+                                    predicateItem = ItemsExchange.getItemByUri(triple.predicate.uri);
+                                    TripleComposer.addToPredicate(predicateItem);
                                 }
-                            }
+                            };
                         })(i)
                     });
                 }

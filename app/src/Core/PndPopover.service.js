@@ -1,99 +1,104 @@
 angular.module('Pundit2.Core')
 
-    .service('PndPopover', function (BaseComponent, EventDispatcher, $rootScope, $popover, $document, $q, $window, $timeout) {
-        var pndPopover = new BaseComponent('PndPopover');
+.service('PndPopover', function(BaseComponent, EventDispatcher, $rootScope, $popover, $document, $q, $window, $timeout) {
+    var pndPopover = new BaseComponent('PndPopover');
 
-        var initPopoverOptions = {
-            trigger: 'manual',
-            container: null,
-            needsValidSelection: true,
-            lockPageScroll: true
-        };
+    var initPopoverOptions = {
+        trigger: 'manual',
+        container: null,
+        needsValidSelection: true,
+        lockPageScroll: true
+    };
 
-        var state = {
-            selection: undefined,
-            selectionStart: {},
-            selectionEnd: {},
-            data: undefined,
-            x: 0,
-            y: 0,
-            popoverOptions: {},
-            popover: null,
-            anchor: null,
-            fragmentId: '',
-            scroll: {
-                top: undefined,
-                left: undefined
-            },
-            lockShow: false,
-            lockShowRemoveTimeout: null
-        };
+    var state = {
+        selection: undefined,
+        selectionStart: {},
+        selectionEnd: {},
+        data: undefined,
+        x: 0,
+        y: 0,
+        popoverOptions: {},
+        popover: null,
+        anchor: null,
+        fragmentId: '',
+        scroll: {
+            top: undefined,
+            left: undefined
+        },
+        lockShow: false,
+        lockShowRemoveTimeout: null
+    };
 
-        var eventHandler = null;
+    var eventHandler = null;
 
-        var calculateSelectionCoordinates = function (data) {
-            // var range = state.selection.getRangeAt(0)
-            if (typeof data ==! 'undefined' && data.item.icon) {
-                var elem = angular.element('.pnd-range-pos-icon');
-                var i = 0;
-                var pos = {
-                    beforeElem: null,
-                    afterElem: null
-                };
-                for (; i < elem.length; i++) {
-                    if (elem.eq(0).width() === 0) {
-                        continue;
-                    }
-                    pos.beforeElem = elem.eq(i); //.before(ts);
-                    break;
-                }
-                for (i = elem.length - 1; i >= 0; i--) {
-                    if (elem.eq(0).width() === 0) {
-                        continue;
-                    }
-                    pos.afterElem = elem.eq(i); //.after(te);
-                    break;
-                }
-
-                if (pos.beforeElem === null) {
-                    pos.beforeElem = elem.eq(0);
-                }
-                if (pos.afterElem === null) {
-                    pos.afterElem = elem.eq(elem.length - 1);
-                }
-
-                pos.beforeElem.before(elem);
-                pos.afterElem.after(elem);
-                var iconOffset = data.item.elem.offset();
-
-                state.selectionStart = {
-                    label: 'start',
-                    offset: {left: iconOffset.left, top: iconOffset.top},
-                    fragmentRef: elem.eq(0),
-                    width: elem.eq(0).width(),
-                    height: elem.eq(0).height(),
-                };
-                state.selectionEnd = {
-                    label: 'end',
-                    offset: {
-                        left: iconOffset.left + elem.eq(0).width(),
-                        top: state.selectionStart.offset.top + elem.eq(0).height()
-                    },
-                    fragmentRef: elem.eq(0),
-                    width: -elem.eq(0).width(),
-                    height: -elem.eq(0).height,
-                };
-                return;
-            }
-            var ts = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>'),
-                te = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>');
-            var fragmentElements = angular.element('span.' + state.data.fragmentId);
-            var i = 0;
-            var pos = {
+    var calculateSelectionCoordinates = function(data) {
+        // var range = state.selection.getRangeAt(0)
+        var pos = {
                 beforeElem: null,
                 afterElem: null
+            },
+            iconOffset = {},
+            i = 0;
+
+        var elem, ts, te, parentTStart, parentTEnd, fragmentElements;
+
+        if (typeof data !== 'undefined' && data.item.icon) {
+            elem = angular.element('.pnd-range-pos-icon');
+
+            for (i = 0; i < elem.length; i++) {
+                if (elem.eq(0).width() === 0) {
+                    continue;
+                }
+                pos.beforeElem = elem.eq(i); //.before(ts);
+                break;
+            }
+            for (i = elem.length - 1; i >= 0; i--) {
+                if (elem.eq(0).width() === 0) {
+                    continue;
+                }
+                pos.afterElem = elem.eq(i); //.after(te);
+                break;
+            }
+
+            if (pos.beforeElem === null) {
+                pos.beforeElem = elem.eq(0);
+            }
+            if (pos.afterElem === null) {
+                pos.afterElem = elem.eq(elem.length - 1);
+            }
+
+            pos.beforeElem.before(elem);
+            pos.afterElem.after(elem);
+            iconOffset = data.item.elem.offset();
+
+            state.selectionStart = {
+                label: 'start',
+                offset: {
+                    left: iconOffset.left,
+                    top: iconOffset.top
+                },
+                fragmentRef: elem.eq(0),
+                width: elem.eq(0).width(),
+                height: elem.eq(0).height(),
             };
-            for (; i < fragmentElements.length; i++) {
+
+            state.selectionEnd = {
+                label: 'end',
+                offset: {
+                    left: iconOffset.left + elem.eq(0).width(),
+                    top: state.selectionStart.offset.top + elem.eq(0).height()
+                },
+                fragmentRef: elem.eq(0),
+                width: -elem.eq(0).width(),
+                height: -elem.eq(0).height,
+            };
+        } else {
+            ts = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>');
+            te = angular.element('<span class="pnd-range-pos-calc" style="width: 0px; overflow: hidden;display: inline-flex;">w</span>');
+
+            fragmentElements = angular.element('span.' + state.data.fragmentId);
+
+            for (i = 0; i < fragmentElements.length; i++) {
                 if (fragmentElements.eq(i).text().trim().length === 0 || !fragmentElements.eq(i).is(':visible')) {
                     continue;
                 }
@@ -118,8 +123,8 @@ angular.module('Pundit2.Core')
             pos.beforeElem.before(ts);
             pos.afterElem.after(te);
 
-            var parentTStart = ts.parent();
-            var parentTEnd = te.parent();
+            parentTStart = ts.parent();
+            parentTEnd = te.parent();
 
             state.selectionStart = {
                 label: 'start',
@@ -128,6 +133,7 @@ angular.module('Pundit2.Core')
                 width: ts.width(),
                 height: ts.height(),
             };
+
             state.selectionEnd = {
                 label: 'end',
                 offset: angular.copy(te.offset()),
@@ -137,181 +143,182 @@ angular.module('Pundit2.Core')
             };
 
             ts.remove();
+
             if (parentTStart.length) {
                 parentTStart[0].normalize();
             }
+
             te.remove();
+
             if (parentTEnd.length) {
                 parentTEnd[0].normalize();
             }
+        }
+    };
 
+    var initPopover = function(x, y, options, data) {
+        var container = angular.element('div[data-ng-app="Pundit2"]');
 
-        };
+        state.data = data;
+        state.popoverOptions = angular.merge({}, initPopoverOptions, options);
+        state.popoverOptions.container = container;
 
-        var initPopover = function (x, y, options, data) {
-            state.data = data;
+        if (state.anchor === null) {
+            state.anchor = angular.element("<div class='pnd-pnd-popover-anchor' style='position: absolute; left: 0px; top: 0px;'><div>");
+            angular.element("[data-ng-app='Pundit2']").prepend(state.anchor);
+        }
 
-            var container = angular.element('div[data-ng-app="Pundit2"]');
-            state.popoverOptions = angular.merge({}, initPopoverOptions, options);
-            state.popoverOptions.container = container;
+        pndPopover.setAnchorPosition(x, y);
 
-            if (state.anchor === null) {
-                state.anchor = angular.element("<div class='pnd-pnd-popover-anchor' style='position: absolute; left: 0px; top: 0px;'><div>");
-                angular.element("[data-ng-app='Pundit2']").prepend(state.anchor);
+        state.popover = $popover(state.anchor, state.popoverOptions);
+        if (typeof options.scopeData !== 'undefined') {
+            for (var key in options.scopeData) {
+                state.popover.$scope[key] = options.scopeData[key];
             }
+        }
+        return state.popover;
+    };
 
-            pndPopover.setAnchorPosition(x, y);
-
-            state.popover = $popover(state.anchor, state.popoverOptions);
-            if (typeof options.scopeData !== 'undefined') {
-                for (var key in options.scopeData) {
-                    state.popover.$scope[key] = options.scopeData[key];
-                }
-            }
-            return state.popover;
-        };
-
-        var mouseUpHandler = function (evt) {
-            var tagName = angular.element(evt.target).prop('tagName').toLowerCase();
-            if (angular.element(evt.target).closest('.popover').length === 0 && tagName !== 'select') {
-                hide();
-            } else {
-                evt.stopImmediatePropagation();
-                //evt.stopPropagation();
-                return false;
-            }
-        };
-
-        var scrollHandler = function () {
-            angular.element(this).scrollTop(state.scroll.top).scrollLeft(state.scroll.left);
-        };
-
-        var show = function () {
-            if (eventHandler !== null) {
-                EventDispatcher.removeListener(eventHandler);
-            }
-            if (state.popoverOptions.needsValidSelection) {
-                var selection = $document[0].getSelection();
-                if (selection.baseNode === null) {
-                    console.log("skipping show .. no valid selection");
-                    return false;
-                }
-                state.selection = selection;
-                EventDispatcher.sendEvent('PndPopover.addTemporarySelection');
-            }
-
-            state.popover.show();
-
-            //     if (state.popoverOptions.lockPageScroll) {
-            var win = angular.element($window);
-            state.scroll.top = win.scrollTop();
-            state.scroll.left = win.scrollLeft();
-            win.on('scroll', scrollHandler);
-            //  }
-
-            $document.on('mouseup', mouseUpHandler);
-
-            return true;
-        };
-
-        var startLockShowRemoveTimeout = function () {
-            if (state.lockShowRemoveTimeout === null) {
-                state.lockShowRemoveTimeout = $timeout(function () {
-                    state.lockShow = false;
-                    state.lockShowRemoveTimeout = null;
-                }, 200);
-            }
-        };
-
-        var hide = function () {
-            // TODO: REMOVE THIS LINE !!!
-            angular.element('.pnd-range-boundary').remove();
-
-            if (eventHandler !== null) {
-                EventDispatcher.removeListener(eventHandler);
-                eventHandler = null;
-            }
-
-            if (typeof state.popoverOptions.hideCallback === 'function') {
-                state.popoverOptions.hideCallback();
-            }
-
-            $document.off('mouseup', mouseUpHandler);
-            if (state.popover === null) {
-                return;
-            }
-            state.popover.hide();
-            if (state.popover) {
-                state.popover.destroy();
-            }
-            state.popover = null;
-
-            angular.element($window).off('scroll', scrollHandler);
-
-            EventDispatcher.sendEvent('PndPopover.removeTemporarySelection');
-        };
-
-        pndPopover.show = function (x, y, options, data) {
-            if (state.lockShow) {
-                startLockShowRemoveTimeout();
-                return false;
-            }
-
-            state.lockShow = true;
-            startLockShowRemoveTimeout();
-
-            if (state.popover !== null) {
-                hide();
-            }
-            state.popover = initPopover(x, y, options, data);
-            var innerPromise = $q.defer();
-            var promise = state.popover.$promise;
-            promise.then(function () {
-                if (show()) {
-                    if (state.popoverOptions.needsValidSelection) {
-                        calculateSelectionCoordinates();
-                    }
-                    innerPromise.resolve();
-                }
-                else {
-                    innerPromise.reject();
-                }
-            }, function () {
-                // reject popover creation.
-                console.log(arguments);
-            });
-            return innerPromise.promise;
-        };
-
-        pndPopover.hide = function () {
+    var mouseUpHandler = function(evt) {
+        var tagName = angular.element(evt.target).prop('tagName').toLowerCase();
+        if (angular.element(evt.target).closest('.popover').length === 0 && tagName !== 'select') {
             hide();
-        };
+        } else {
+            evt.stopImmediatePropagation();
+            //evt.stopPropagation();
+            return false;
+        }
+    };
 
-        pndPopover.setAnchorPosition = function (x, y) {
-            state.x = x;
-            state.y = y;
-            if (state.anchor !== null) {
-                state.anchor.css({
-                    left: x,
-                    top: y
-                });
+    var scrollHandler = function() {
+        angular.element(this).scrollTop(state.scroll.top).scrollLeft(state.scroll.left);
+    };
+
+    var show = function() {
+        if (eventHandler !== null) {
+            EventDispatcher.removeListener(eventHandler);
+        }
+        if (state.popoverOptions.needsValidSelection) {
+            var selection = $document[0].getSelection();
+            if (selection.baseNode === null) {
+                console.log("skipping show .. no valid selection");
+                return false;
             }
-        };
+            state.selection = selection;
+            EventDispatcher.sendEvent('PndPopover.addTemporarySelection');
+        }
 
-        pndPopover.getAnchorPosition = function () {
-            return {
-                x: state.x,
-                y: state.y
-            };
-        };
+        state.popover.show();
 
-        pndPopover.getData = function () {
-            return state.data;
-        };
+        //     if (state.popoverOptions.lockPageScroll) {
+        var win = angular.element($window);
+        state.scroll.top = win.scrollTop();
+        state.scroll.left = win.scrollLeft();
+        win.on('scroll', scrollHandler);
+        //  }
 
-        pndPopover.getState = function () {
-            return state;
-        };
+        $document.on('mouseup', mouseUpHandler);
 
-        return pndPopover;
-    });
+        return true;
+    };
+
+    var startLockShowRemoveTimeout = function() {
+        if (state.lockShowRemoveTimeout === null) {
+            state.lockShowRemoveTimeout = $timeout(function() {
+                state.lockShow = false;
+                state.lockShowRemoveTimeout = null;
+            }, 200);
+        }
+    };
+
+    var hide = function() {
+        // TODO: REMOVE THIS LINE !!!
+        angular.element('.pnd-range-boundary').remove();
+
+        if (eventHandler !== null) {
+            EventDispatcher.removeListener(eventHandler);
+            eventHandler = null;
+        }
+
+        if (typeof state.popoverOptions.hideCallback === 'function') {
+            state.popoverOptions.hideCallback();
+        }
+
+        $document.off('mouseup', mouseUpHandler);
+        if (state.popover === null) {
+            return;
+        }
+        state.popover.hide();
+        if (state.popover) {
+            state.popover.destroy();
+        }
+        state.popover = null;
+
+        angular.element($window).off('scroll', scrollHandler);
+
+        EventDispatcher.sendEvent('PndPopover.removeTemporarySelection');
+    };
+
+    pndPopover.show = function(x, y, options, data) {
+        if (state.lockShow) {
+            startLockShowRemoveTimeout();
+            return false;
+        }
+
+        state.lockShow = true;
+        startLockShowRemoveTimeout();
+
+        if (state.popover !== null) {
+            hide();
+        }
+        state.popover = initPopover(x, y, options, data);
+        var innerPromise = $q.defer();
+        var promise = state.popover.$promise;
+        promise.then(function() {
+            if (show()) {
+                if (state.popoverOptions.needsValidSelection) {
+                    calculateSelectionCoordinates();
+                }
+                innerPromise.resolve();
+            } else {
+                innerPromise.reject();
+            }
+        }, function() {
+            // reject popover creation.
+            console.log(arguments);
+        });
+        return innerPromise.promise;
+    };
+
+    pndPopover.hide = function() {
+        hide();
+    };
+
+    pndPopover.setAnchorPosition = function(x, y) {
+        state.x = x;
+        state.y = y;
+        if (state.anchor !== null) {
+            state.anchor.css({
+                left: x,
+                top: y
+            });
+        }
+    };
+
+    pndPopover.getAnchorPosition = function() {
+        return {
+            x: state.x,
+            y: state.y
+        };
+    };
+
+    pndPopover.getData = function() {
+        return state.data;
+    };
+
+    pndPopover.getState = function() {
+        return state;
+    };
+
+    return pndPopover;
+});

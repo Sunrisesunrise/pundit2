@@ -1,7 +1,7 @@
 angular.module('Pundit2.Annomatic')
 
 .controller('SuggestionFragmentIconCtrl', function($scope,  $element, $rootScope,
-    TextFragmentAnnotator, XpointersHelper, Annomatic, AnnotationPopover, Item, EventDispatcher) {
+    TextFragmentAnnotator, XpointersHelper, Annomatic, AnnotationPopover, Item) {
 
     var createItemFromElement = function(elem) {
         var values = {};
@@ -121,7 +121,6 @@ angular.module('Pundit2.Annomatic')
             placement: 'bottom',
             templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
             trigger: 'manual',
-            placement: 'bottom',
             alphaRollover: true,
             lockPageScroll: true
         };
