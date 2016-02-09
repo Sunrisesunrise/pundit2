@@ -215,8 +215,8 @@ module.exports = function(grunt) {
                         match: /\(fonts/g,
                         replacement: '(chrome-extension://__MSG_@@extension_id__/inject/css/fonts'
                     }, {
-                        match: /image:url\(img/g,
-                        replacement: 'image:url(chrome-extension://__MSG_@@extension_id__/inject/css/img'
+                        match: /url\(img/g,
+                        replacement: 'url(chrome-extension://__MSG_@@extension_id__/inject/css/img'
                     }]
                 },
                 files: [{
