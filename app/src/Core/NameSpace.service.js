@@ -153,6 +153,7 @@ angular.module('Pundit2.Core')
     ns.types = {
         page: 'http://schema.org/WebPage',
         image: 'http://xmlns.com/foaf/0.1/Image',
+        resource: _oa + 'resource', // TODO to be defined
         named: _pnd + 'named-content',
         embeddedContent: _oa + 'EmbeddedContent',
         resource: _pnd + 'resource' // TODO to be defined

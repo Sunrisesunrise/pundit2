@@ -33,7 +33,7 @@ angular.module('Pundit2.Core')
 
         var calculateSelectionCoordinates = function (data) {
             // var range = state.selection.getRangeAt(0)
-            if (data.item.icon) {
+            if (typeof data ==! 'undefined' && data.item.icon) {
                 var elem = angular.element('.pnd-range-pos-icon');
                 var i = 0;
                 var pos = {
@@ -190,14 +190,15 @@ angular.module('Pundit2.Core')
             if (eventHandler !== null) {
                 EventDispatcher.removeListener(eventHandler);
             }
-
-            var selection = $document[0].getSelection();
-            if (selection.baseNode === null) {
-                pndPopover.log("Skipping show .. no valid selection");
-                return false;
+            if (state.popoverOptions.needsValidSelection) {
+                var selection = $document[0].getSelection();
+                if (selection.baseNode === null) {
+                    console.log("skipping show .. no valid selection");
+                    return false;
+                }
+                state.selection = selection;
+                EventDispatcher.sendEvent('PndPopover.addTemporarySelection');
             }
-            state.selection = selection;
-            EventDispatcher.sendEvent('PndPopover.addTemporarySelection');
 
             state.popover.show();
 
@@ -267,7 +268,9 @@ angular.module('Pundit2.Core')
             var promise = state.popover.$promise;
             promise.then(function () {
                 if (show()) {
-                    calculateSelectionCoordinates(data);
+                    if (state.popoverOptions.needsValidSelection) {
+                        calculateSelectionCoordinates();
+                    }
                     innerPromise.resolve();
                 }
                 else {
@@ -312,6 +315,3 @@ angular.module('Pundit2.Core')
 
         return pndPopover;
     });
-/**
- * Created by detox on 29/01/16.
- */

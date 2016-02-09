@@ -124,6 +124,9 @@ angular.module('Pundit2.AnnotationPopover')
         }
         if (!state.data.item.isTextFragment()) {
             var elem = angular.element('.pnd-range-pos-icon');
+            //if(typeof elem === "undefined"){
+            //    elem =angular.element("[fragment='" + state.data.fragmentId + "']")
+            //}
             var posArrow = elem[0].getBoundingClientRect();
             var posArrowTop = posArrow.top + posArrow.height / 2;
             var posArrowLeft = posArrow.left + posArrow.width;
@@ -150,7 +153,7 @@ angular.module('Pundit2.AnnotationPopover')
             var pageVisibleTop = $window.scrollY;
             if (wrongArrowFix || $window.scrollY + popoverRect.top < pageVisibleTop) {
                 state.anchor.css({
-                    top: posArrowTop + 'px',
+                    top: $window.scrollY + posArrowTop + 'px',
                     left: posArrowLeft + 'px'
                 });
                 resizeData.lastSelectionUsed = state.selectionStart;
@@ -158,7 +161,7 @@ angular.module('Pundit2.AnnotationPopover')
                 var pageVisibleLeft = $window.scrollX;
                 if ($window.scrollX + popoverRect.left < pageVisibleLeft) {
                     state.anchor.css({
-                        top: posArrow.top + 'px',
+                        top:  posArrow.top  + 'px',
                         left: posArrow.left + 'px'
                     });
                     resizeData.lastSelectionUsed = state.selectionStart;
@@ -223,7 +226,12 @@ angular.module('Pundit2.AnnotationPopover')
     };
 
     annotationPopover.lastUsedNotebookID = undefined;
-
+    annotationPopover.hide = function () {
+        annotationPopover.log('Annotation popover hide');
+        var elem = angular.element('.pnd-range-pos-icon');
+        elem.removeClass('pnd-range-pos-icon');
+        angular.element($window).off('resize', resizeCallback);
+    }
     annotationPopover.show = function(x, y, item, opt, fragmentId, mode) {
         var options
         var optionsDefault = {
@@ -241,7 +249,7 @@ angular.module('Pundit2.AnnotationPopover')
             }
         };
 
-        options = angular.extend(optionsDefault, opt);
+        options = angular.extend(optionsDefault ,opt);
 
         var promise = PndPopover.show(x, y, options, {
             item: item,
@@ -254,7 +262,9 @@ angular.module('Pundit2.AnnotationPopover')
         if (promise !== false) {
             promise.then(function() {
                 changePopoverPosition(x, y);
-                state.selection.removeAllRanges();
+                if(state.data.needsValidSelection){
+                    PndPopover.getState().selection.removeAllRanges();
+                }
                 resizeCallback();
                 angular.element($window).on('resize', resizeCallback);
 
@@ -270,4 +280,5 @@ angular.module('Pundit2.AnnotationPopover')
     };
 
     return annotationPopover;
+
 });

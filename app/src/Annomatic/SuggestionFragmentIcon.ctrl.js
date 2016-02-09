@@ -1,14 +1,30 @@
 angular.module('Pundit2.Annomatic')
 
-.controller('SuggestionFragmentIconCtrl', function($scope, $popover, $element, $rootScope,
-    TextFragmentAnnotator, XpointersHelper, Annomatic) {
+.controller('SuggestionFragmentIconCtrl', function($scope,  $element, $rootScope,
+    TextFragmentAnnotator, XpointersHelper, Annomatic, AnnotationPopover, Item, EventDispatcher) {
 
+    var createItemFromElement = function(elem) {
+        var values = {};
+
+        values.uri = elem.attr('fragment');
+        values.cMenuType = "SuggestionFragmentIconItem";
+        values.label =  elem.parent().text().trim();
+      //  values.type = values.type = [NameSp]; // TODO to be defined
+        values.icon = true;
+        values.pageContext = XpointersHelper.getSafePageContext();
+        values.elem = elem;
+        return new Item(values.uri, values);
+    };
     // Common for all icons
     $scope.textFragmentIconClass = XpointersHelper.options.textFragmentIconClass;
 
     // For suggestions fragments
     $scope.iconClass = TextFragmentAnnotator.options.suggestionIconClass;
-
+    // Element 'a' has href
+    //if(typeof $element.parent().attr('href') !== 'undefined') {
+    //    //unwrap node a
+    //    angular.element($element).unwrap();
+    //}
     // Will use the icon to calculate this fragment height with respect to
     // the document
     $scope.element = $element;
@@ -29,20 +45,40 @@ angular.module('Pundit2.Annomatic')
         // TODO: make 'ann-auto' configurable? .options?
         angular.element('.' + $scope.fragment).addClass('ann-auto');
 
-        var options = {
-            content: "" + $scope.num,
-            placement: 'bottom',
-            templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
-            trigger: 'manual'
-                //scope: $rootScope.$new(),
-                //container: "[data-ng-app='Pundit2']"
-        };
+        //var options = {
+        //    content: "" + $scope.num,
+        //    placement: 'bottom',
+        //    templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
+        //    trigger: 'manual'
+        //        //scope: $rootScope.$new(),
+        //        //container: "[data-ng-app='Pundit2']"
+        //};
+        //var options = {
+        //    content: "" + $scope.num,
+        //    placement: 'bottom',
+        //    template: 'src/Annomatic/AnnomaticPopover.tmpl.html',
+        //    trigger: 'manual'
+            //scope: $rootScope.$new(),
+            //container: "[data-ng-app='Pundit2']"
+        //};
 
-        $scope.popover = $popover(
-            $scope.element,
-            options
-        );
+        //$scope.popover.element = $scope.element;
+        //$scope.popover.isShown = false;
 
+        //TODO get this with PndPopover
+        //var pos = $scope.element.position();
+        //var options = {
+        //    content: "" + $scope.num,
+        //    placement: 'bottom',
+        //    templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
+        //    trigger: 'manual',
+        //    placement: 'bottom',
+        //    alphaRollover: true,
+        //    lockPageScroll: true
+        //};
+        //var item = createItemFromElement($scope.element);
+        //AnnotationPopover.show(pos.left, pos.top,item,options);
+   // console.log($scope.num, $scope.fragment, $scope.element);
     };
     init();
 
@@ -60,7 +96,7 @@ angular.module('Pundit2.Annomatic')
             return;
         }
 
-        if (!$scope.popover.$isShown) {
+        if (!$scope.isShown) {
             $scope.show();
         } else {
             $scope.hide();
@@ -68,23 +104,49 @@ angular.module('Pundit2.Annomatic')
 
         event.stopPropagation();
         event.preventDefault();
+
     };
 
     $scope.show = function() {
-        if ($scope.popover.$isShown === true) {
+        if ($scope.isShown === true) {
             return;
         }
+
+        $scope.isShown = !$scope.isShown;
+        angular.element('.pnd-range-pos-icon').removeClass("pnd-range-pos-icon");
+        $scope.element.addClass('pnd-range-pos-icon');
+
+        var options = {
+            content: "" + $scope.num,
+            placement: 'bottom',
+            templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
+            trigger: 'manual',
+            placement: 'bottom',
+            alphaRollover: true,
+            lockPageScroll: true
+        };
+        var item = createItemFromElement($scope.element);
+        var pos =$scope.element[0].getBoundingClientRect();
+
+
         Annomatic.closeAll();
         Annomatic.setState($scope.num, 'active');
-        $scope.popover.show();
+        $scope.hide();
+        AnnotationPopover.show(pos.left, pos.top, item , options, $scope.fragment);
+        $scope.element.addClass('pnd-range-pos-icon');
+
     };
 
     $scope.hide = function() {
-        if ($scope.popover.$isShown === false) {
+        if ($scope.isShown === false) {
             return;
         }
         Annomatic.setLastState($scope.num);
-        $scope.popover.hide();
+        $scope.isShown=!$scope.isShown;
+      //  AnnotationPopover.hide();
+        //angular.element('.pnd-range-pos-icon').removeClass("pnd-range-pos-icon");
+
+
     };
 
     $scope.setStateClass = function(from, to) {

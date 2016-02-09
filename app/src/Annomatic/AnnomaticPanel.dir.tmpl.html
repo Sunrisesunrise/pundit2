@@ -1,21 +1,24 @@
 <div ng-controller="AnnomaticPanelCtrl" class="pnd-annomatic-container pnd-ignore">
+
+    <!-- Area on top displaying text -->
+    <div class="pnd-annomatic-content-top">
+
+        <p ng-show="!gotAnnotations || Annomatic.annotationNumber == 0">
+            Click on the blue button to scan the whole page or just select a part of text
+            and click on <strong>Search items in this area</strong>
+        </p>
+
+        <p ng-show="Annomatic.annotationNumber > 0" >
+            <span class="label">Suggested annotations: </span>
+            <span class="value">{{Annomatic.annotationNumber}}</span>,
+            <span class="label">Saved annotations: </span>
+            <span class="value">{{Annomatic.ann.savedByNum.length}}</span>
+            <!-- - Rejected: {{Annomatic.ann.byState['removed'].length}} -->
+        </p>
+
+    </div>
+
     <div class="pnd-annomatic-content">
-
-        <!-- Area on top displaying text -->
-        <div class="pnd-annomatic-content-top">
-            <p ng-show="!gotAnnotations || Annomatic.annotationNumber == 0">
-                Click on the blue button to scan the whole page or just select a part of text
-                and click on <strong>Search items in this area</strong>
-            </p>
-
-            <p ng-show="Annomatic.annotationNumber > 0" >
-                <span class="label">Suggested annotations: </span>
-                <span class="value">{{Annomatic.annotationNumber}}</span>,
-                <span class="label">Saved annotations: </span>
-                <span class="value">{{Annomatic.ann.savedByNum.length}}</span>
-                <!-- - Rejected: {{Annomatic.ann.byState['removed'].length}} -->
-            </p>
-        </div>
 
         <!-- Area with buttons -->
         <div class="pnd-annomatic-content-buttons"
