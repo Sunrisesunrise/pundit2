@@ -157,9 +157,9 @@ angular.module('Pundit2.Core')
     };
 
     var initPopover = function(x, y, options, data) {
-        state.data = data;
-
         var container = angular.element('div[data-ng-app="Pundit2"]');
+
+        state.data = data;
         state.popoverOptions = angular.merge({}, initPopoverOptions, options);
         state.popoverOptions.container = container;
 
