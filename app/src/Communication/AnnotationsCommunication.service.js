@@ -506,7 +506,8 @@ angular.module('Pundit2.Communication')
             if (typeof motivation !== 'undefined') {
                 params.motivatedBy = motivation;
             }
-            if (typeof motivation === 'tagging') {
+            
+            if (motivation === 'tagging') {
                 params.motivatedBy = 'linking';
             }
 

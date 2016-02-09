@@ -1,5 +1,3 @@
-/*global $:false */
-
 angular.module('Pundit2.Annotators')
 
 .directive('resourceMenu', function($rootScope, NameSpace, ContextualMenu,
@@ -91,8 +89,6 @@ angular.module('Pundit2.Annotators')
             };
 
             //scope.url = attributes.pndResource;
-
-
 
             ResourceAnnotator.addReference(element.attr('about'), scope);
         }

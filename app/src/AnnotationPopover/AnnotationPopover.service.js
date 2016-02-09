@@ -78,6 +78,7 @@ angular.module('Pundit2.AnnotationPopover')
         }, 300);
     };
 
+    // TODO: refactoring and linting
     var changePopoverPosition = function(mouseX, mouseY) {
         var state = PndPopover.getState();
 
@@ -122,6 +123,7 @@ angular.module('Pundit2.AnnotationPopover')
             return false;
 
         }
+
         if (!state.data.item.isTextFragment()) {
             var elem = angular.element('.pnd-range-pos-icon');
             //if(typeof elem === "undefined"){
@@ -161,7 +163,7 @@ angular.module('Pundit2.AnnotationPopover')
                 var pageVisibleLeft = $window.scrollX;
                 if ($window.scrollX + popoverRect.left < pageVisibleLeft) {
                     state.anchor.css({
-                        top:  posArrow.top  + 'px',
+                        top: posArrow.top + 'px',
                         left: posArrow.left + 'px'
                     });
                     resizeData.lastSelectionUsed = state.selectionStart;
@@ -199,11 +201,15 @@ angular.module('Pundit2.AnnotationPopover')
                 });
                 resizeData.lastSelectionUsed = state.selectionStart;
                 popoverRect = changePopoverPlacement(state, 'top');
+
                 var wrongArrowFix = false;
+
                 if (state.popover.$element.find('.arrow').css('left').indexOf('-') !== -1) {
                     wrongArrowFix = true;
                 }
+
                 var pageVisibleTop = $window.scrollY;
+
                 if (wrongArrowFix || $window.scrollY + popoverRect.top < pageVisibleTop) {
                     state.anchor.css({
                         top: (state.selectionStart.offset.top + state.selectionStart.height / 2) + 'px',
@@ -226,12 +232,12 @@ angular.module('Pundit2.AnnotationPopover')
     };
 
     annotationPopover.lastUsedNotebookID = undefined;
-    
-    annotationPopover.hide = function () {
+
+    annotationPopover.hide = function() {
         annotationPopover.log('Annotation popover hide');
 
         var elem = angular.element('.pnd-range-pos-icon');
-        
+
         elem.removeClass('pnd-range-pos-icon');
         angular.element($window).off('resize', resizeCallback);
     };
@@ -239,19 +245,19 @@ angular.module('Pundit2.AnnotationPopover')
     annotationPopover.show = function(x, y, item, opt, fragmentId, mode) {
         var options,
             optionsDefault = {
-            templateUrl: 'src/AnnotationPopover/AnnotationPopover.tmpl.html',
-            controller: 'AnnotationPopoverCtrl',
-            placement: 'bottom',
-            alphaRollover: true,
-            lockPageScroll: true,
-            needsValidSelection: (item.isTextFragment()) ? true : false,
-            hideCallback: function() {
-                annotationPopover.log('Annotation popover hide');
-                var elem = angular.element('.pnd-range-pos-icon');
-                elem.removeClass('pnd-range-pos-icon');
-                angular.element($window).off('resize', resizeCallback);
-            }
-        };
+                templateUrl: 'src/AnnotationPopover/AnnotationPopover.tmpl.html',
+                controller: 'AnnotationPopoverCtrl',
+                placement: 'bottom',
+                alphaRollover: true,
+                lockPageScroll: true,
+                needsValidSelection: (item.isTextFragment()) ? true : false,
+                hideCallback: function() {
+                    annotationPopover.log('Annotation popover hide');
+                    var elem = angular.element('.pnd-range-pos-icon');
+                    elem.removeClass('pnd-range-pos-icon');
+                    angular.element($window).off('resize', resizeCallback);
+                }
+            };
 
         options = angular.extend(optionsDefault, opt);
 
@@ -267,7 +273,7 @@ angular.module('Pundit2.AnnotationPopover')
         if (promise !== false) {
             promise.then(function() {
                 changePopoverPosition(x, y);
-                if(state.data.needsValidSelection){
+                if (state.data.needsValidSelection) {
                     PndPopover.getState().selection.removeAllRanges();
                 }
                 resizeCallback();
