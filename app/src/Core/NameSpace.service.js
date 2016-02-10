@@ -137,8 +137,8 @@ angular.module('Pundit2.Core')
     ns.motivation = {
         linking: _oa + 'linking',
         commenting: _oa + 'commenting',
-        highlighting: _oa + 'highlighting',
-        tagging: _oa + 'tagging'
+        highlighting: _oa + 'highlighting'
+        // tagging: _oa + 'tagging'
     };
 
     // TODO: move to Consolidation.options ??
