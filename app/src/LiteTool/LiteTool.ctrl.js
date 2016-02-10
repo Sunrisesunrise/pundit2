@@ -41,7 +41,7 @@ angular.module('Pundit2.LiteTool')
         window.open(link);
     };
 
-    sendModalScope.titleMessage = "Need help? Contact us!";
+    sendModalScope.titleMessage = "Feedback";
     sendModalScope.text = {
         msg: "",
         subject: ""
@@ -127,7 +127,7 @@ angular.module('Pundit2.LiteTool')
         text: 'Edit your profile',
         click: editYourProfile
     }, {
-        text: 'Help',
+        text: 'Feedback',
         click: showHelp
     }, {
         text: 'Log out',
