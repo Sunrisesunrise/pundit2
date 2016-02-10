@@ -24,9 +24,7 @@ angular.module('Pundit2.AnnotationSidebar')
          * @description
          * `boolean`
          *
-         * Initial state of the single annotation, expanded or collapsed
-         *
-         * Default value:
+         * Initial state of thposition:relative
          * <pre> defaultExpanded: false </pre>
          */
         defaultExpanded: false,
@@ -468,7 +466,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
             return editPromise;
         };
-        
+
         annotationDetails.saveReplyedComment = function (item, reply) {
             var currentTarget = item,
                 currentStatement = {
@@ -584,7 +582,8 @@ angular.module('Pundit2.AnnotationSidebar')
         };
         annotationDetails.userData = function (){
             return MyPundit.getUserData();
-        }
+        };
+
         annotationDetails.addAnnotationReference = function (scope, force) {
             var currentId = scope.id;
             var isBroken = scope.broken;
@@ -617,6 +616,7 @@ angular.module('Pundit2.AnnotationSidebar')
                         itemsUriArray: buildItemsUriArray(currentAnnotation),
                         broken: isBroken,
                         expanded: expandedState,
+                        repliesLoaded: false,
                         ghosted: false,
                         color: currentColor,
                         hasTemplate: template
@@ -669,6 +669,7 @@ angular.module('Pundit2.AnnotationSidebar')
                         itemsUriArray: [firstTargetUri],
                         broken: isBroken,
                         expanded: expandedState,
+                        repliesLoaded: false,
                         ghosted: false
                     };
 
@@ -752,6 +753,10 @@ angular.module('Pundit2.AnnotationSidebar')
                 overActiveId = '';
                 $timeout.cancel(mouseoutHandlerPromise);
             }, 100);
+        };
+
+        annotationDetails.getRepliesByAnnotationId = function(annotationId) {
+            return AnnotationsCommunication.getRepliesByAnnotationId(annotationId);
         };
 
         EventDispatcher.addListeners(['AnnotationSidebar.updateAnnotation'], function (e) {

@@ -2,7 +2,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     .controller('AnnotationDetailsCtrl', function ($scope, $rootScope, $element, $timeout, $window,
                                                    AnnotationSidebar, AnnotationDetails, AnnotationsExchange, TripleComposer, Dashboard, EventDispatcher,
-                                                   Config, MyPundit, Analytics, Item, NameSpace) {
+                                                   Config, MyPundit, Analytics, Item, NameSpace, AnnotationsCommunication) {
 
         // TODO: temporary fix waiting for server consistency
         if ($scope.motivation !== 'linking' &&
@@ -39,7 +39,6 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.replyTreeActivate = false;
         $scope.replyTree = [];
 
-
         if (typeof($scope.annotation) !== 'undefined') {
             $scope.notebooksHomeLink = Config.homeBaseURL + 'notebooks/';
             notebookId = $scope.annotation.notebookId;
@@ -72,6 +71,7 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.toggleAnnotation = function () {
             $scope.editMode = false;
 
+
             if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
                 if (AnnotationSidebar.isFiltersExpanded()) {
                     AnnotationSidebar.toggleFiltersContent();
@@ -89,8 +89,17 @@ angular.module('Pundit2.AnnotationSidebar')
             // }
             // $scope.metaInfo = false;
             AnnotationDetails.toggleAnnotationView(currentId);
+
             if (!$scope.annotation.expanded) {
                 AnnotationSidebar.setAllPosition(currentId, initialHeight);
+            }
+
+            if($scope.annotation.expanded && !$scope.annotation.repliesLoaded){
+                AnnotationDetails.getRepliesByAnnotationId(currentId).then(function(data) {
+                    $scope.replyTree = data;
+                    $scope.annotation.repliesLoaded = true;
+                    console.log("data: "+data);
+                });
             }
 
             Analytics.track('buttons', 'click', 'annotation--details--' + ($scope.annotation.expanded ? 'expand' : 'collapse'));
@@ -183,6 +192,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
             stopEvent(event);
         };
+
         $scope.saveReply = function (event) {
             var createItemFromAnnotation = function () {
                 var values = {};
@@ -191,7 +201,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 values.comment = $scope.annotation.comment;
 
                 return new Item(values.uri, values);
-            }
+            };
             var item = createItemFromAnnotation();
             var promise = AnnotationDetails.saveReplyedComment(item, $scope.annotation.replyCommentValue);
 
@@ -199,7 +209,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 $scope.replyDialog = false;
                 $scope.replyTreeActivate = true;
                 $scope.annotation.replyCommentValue = '';
-                var annotation =AnnotationsExchange.getAnnotationById(e);
+                var annotation = AnnotationsExchange.getAnnotationById(e);
                 var out = {
                     'id': annotation.id,
                     'creatorName' : annotation.creatorName,
