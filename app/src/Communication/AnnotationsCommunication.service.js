@@ -60,7 +60,7 @@ angular.module('Pundit2.Communication')
         setLoading(true);
         Consolidation.requestConsolidateAll();
 
-        // TODO: update structure in V1? 
+        // TODO: update structure in V1?
 
         $http({
             headers: {
@@ -220,6 +220,64 @@ angular.module('Pundit2.Communication')
             // Consolidation.rejectConsolidateAll();
             promise.reject();
         });
+    };
+
+    annotationsCommunication.getRepliesByAnnotationId = function(id) {
+        var promise = $q.defer(),
+            url = NameSpace.get('asOpenAnnReplies', {
+                id: id
+            });
+
+        // TODO: temporary
+        setTimeout(function() {
+
+            var mock = [{
+                id: '55544432',
+                creatorName: 'Franco',
+                annotatedBy: 'http://user-uri', // ?
+                created: '2016-02-09T10:00',
+                modified: '2016-02-09T11:00',
+                thumb: 'https://placehold.it/30x30',
+                content: 'Yuppi aiey',
+                socialCounting: {
+                    comment: 0,
+                    like: 3,
+                    dislike: 0,
+                    endors: 0
+                }
+            }, {
+                id: '55543432',
+                creatorName: 'Gino',
+                annotatedBy: 'http://user-uri', // ?
+                created: '2016-02-09T10:00',
+                modified: '2016-02-09T11:00',
+                thumb: 'https://placehold.it/30x30',
+                content: 'Yokko bocco',
+                socialCounting: {
+                    comment: 0,
+                    like: 0,
+                    dislike: 1,
+                    endors: 0
+                }
+            }];
+
+            promise.resolve(mock);
+        }, 2000);
+
+        // $http({
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     method: 'GET',
+        //     url: url,
+        //     withCredentials: false
+        // }).success(function() {
+
+        // }).error(function(msg) {
+
+        // });
+
+        return promise.promise;
     };
 
     // get all annotations of the page from the server
@@ -445,6 +503,97 @@ angular.module('Pundit2.Communication')
         return promise.promise;
     };
 
+    // TODO:
+    // annotationsCommunication.saveReply
+    // annotationsCommunication.deleteReply
+
+    annotationsCommunication.saveReply = function(content, motivation) {
+        var promise = $q.defer();
+
+        var postSaveSend = function(url, annotationId) {
+            $http({
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                url: url,
+                params: {},
+                data: {
+                    annotationID: annotationId
+                }
+            }).success(function() {
+                annotationsCommunication.log('Post save success');
+            }).error(function(error) {
+                annotationsCommunication.log('Post save error ', error);
+            });
+        };
+
+        if (MyPundit.isUserLogged()) {
+
+            var url = NameSpace.get('asReply');
+            var params = {
+                context: angular.toJson({
+                    pageContext: XpointersHelper.getSafePageContext(),
+                    pageTitle: $document[0].title || 'No title'
+                })
+            };
+
+            if (typeof motivation !== 'undefined') {
+                params.motivatedBy = motivation;
+            }
+
+            $http({
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                url: url,
+                params: params,
+                withCredentials: true,
+                data: content
+            }).success(function(data) {
+                // EventDispatcher.sendEvent('AnnotationsCommunication.annotationSaved', data.AnnotationID);
+
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'Comment saved',
+                    id: 'SUCCESS',
+                    timeout: 3000,
+                    message: 'Congratulations, your new comment has been correctly saved.'
+                });
+
+                promise.resolve(data.id);
+
+                // Call post save
+                if (typeof(Config.postSave) !== 'undefined' && Config.postSave.active) {
+                    var callbacks = Config.postSave.callbacks;
+                    angular.isArray(callbacks) && angular.forEach(callbacks, function(callback) {
+                        postSaveSend(callback, data.id);
+                    });
+                }
+            }).error(function(msg) {
+                annotationsCommunication.log('Error: impossible to save reply', msg);
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'Oops! Something went wrong',
+                    id: 'ERROR',
+                    timeout: null,
+                    message: 'Pundit couldn\'t save your comment, please try again in 5 minutes.'
+                });
+                promise.reject();
+            });
+        } else {
+            annotationsCommunication.log('Error impossible to save comment you are not logged');
+            EventDispatcher.sendEvent('Pundit.alert', {
+                title: 'Please log in',
+                id: 'WARNING',
+                timeout: 3000,
+                message: 'Please log in to Pundit to add comment.'
+            });
+            promise.reject('Error impossible to save annotation you are not logged');
+        }
+
+        return promise.promise;
+    };
+
     annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, forceConsolidation, postDataTargets, types, motivation, forceNotebookId) {
         // var completed = 0;
         var promise = $q.defer();
@@ -506,7 +655,7 @@ angular.module('Pundit2.Communication')
             if (typeof motivation !== 'undefined') {
                 params.motivatedBy = motivation;
             }
-            
+
             if (motivation === 'tagging') {
                 params.motivatedBy = 'linking';
             }
@@ -609,7 +758,6 @@ angular.module('Pundit2.Communication')
         }
 
         return promise.promise;
-
     };
 
 
