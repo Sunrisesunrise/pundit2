@@ -575,7 +575,7 @@ angular.module('Pundit2.ResourcePanel')
     // pageItems -->  page items to show
     // myItems -->  my items to show
     // properties -->  properties to show
-    var showPopoverResourcePanel = function(target, pageItems, myItems, properties, label, type, triple) {
+    var showPopoverResourcePanel = function(target, pageItems, myItems, properties, label, type, triple, rapidAction) {
         var content = {};
         var contentTabs = [];
 
@@ -595,7 +595,7 @@ angular.module('Pundit2.ResourcePanel')
                 content.pageItems = pageItems;
             }
 
-            if (resourcePanel.options.myItemsEnabled) {
+            if ((typeof rapidAction === 'undefined') && (resourcePanel.options.myItemsEnabled)) {
                 var myItemsForTabs = {
                     title: 'Favourites',
                     items: myItems,
