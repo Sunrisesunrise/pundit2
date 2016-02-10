@@ -59,6 +59,21 @@ angular.module('Pundit2.Client')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#Client.bodyClass
+     *
+     * @description
+     * `string`
+     *
+     * Class added to the body
+     *
+     * Default value:
+     * <pre> bodyClass: 'pnd-annotator-pro' </pre>
+     */
+    bodyClass: 'pnd-annotator-pro',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#Client.basicRelations
      *
      * @description
@@ -357,6 +372,9 @@ angular.module('Pundit2.Client')
     var client = new BaseComponent('Client', CLIENTPRODEFAULTS),
         // Node which will contain every other component
         root;
+
+    var body = angular.element('body');
+    body.addClass(client.options.bodyClass);    
 
     // Verifies that the root node has the wrap class
     var fixRootNode = function() {
