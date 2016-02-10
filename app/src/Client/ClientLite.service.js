@@ -51,7 +51,22 @@ angular.module('Pundit2.Client')
     bootModules: [
         'LiteTool',
         'AnnotationSidebar'
-    ]
+    ],
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Client.bodyClass
+     *
+     * @description
+     * `string`
+     *
+     * Class added to the body
+     *
+     * Default value:
+     * <pre> bodyClass: 'pnd-annotator' </pre>
+     */
+    bodyClass: 'pnd-annotator',
 })
 
 .service('ClientLite', function(CLIENTLITEDEFAULTS, BaseComponent, Config, EventDispatcher, Analytics, MyPundit, LiteTool,
@@ -62,6 +77,9 @@ angular.module('Pundit2.Client')
     var client = new BaseComponent('Client', CLIENTLITEDEFAULTS),
         // Node which will contain every other component
         root;
+
+    var body = angular.element('body');
+    body.addClass(client.options.bodyClass);
 
     // Verifies that the root node has the wrap class
     var fixRootNode = function() {

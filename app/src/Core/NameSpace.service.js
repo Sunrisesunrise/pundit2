@@ -138,8 +138,8 @@ angular.module('Pundit2.Core')
         linking: _oa + 'linking',
         commenting: _oa + 'commenting',
         highlighting: _oa + 'highlighting',
-        tagging: _oa + 'tagging',
-        replying: _oa + 'replying'
+        // replying: _oa + 'replying'
+        // tagging: _oa + 'tagging'
     };
 
     // TODO: move to Consolidation.options ??
