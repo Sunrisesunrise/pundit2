@@ -286,10 +286,16 @@
                     >
             </div>
         </div>
+        <span
+                ng-show = "!annotation.repliesLoaded">
+            Loading Replyes
+        </span>
         <!-- List of replyes to comment -->
         <annotation-details-reply-comment-tree
                 class="pnd-annotation-details "
                 id="{{::annotation.id}}"
+                data="annotation"
+                options="options"
                 ng-repeat="annotation in replyTree track by annotation.id"
                 style="position:relative"
                 ng-if="isReplyMode()">
@@ -299,6 +305,7 @@
         <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
              replace="true"
                 >
+        </div>
         </div>
 
     </div>

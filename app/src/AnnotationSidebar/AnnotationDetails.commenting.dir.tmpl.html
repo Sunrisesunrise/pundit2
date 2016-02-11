@@ -39,6 +39,13 @@
             <!-- Default user's thumb -->
             <div class="pnd-annotation-user-thumb-default"></div>
 
+            <!-- Edit Menu -->
+            <div class="pnd-icon-angle-down"
+                 ng-click="menuEdit($event); $event.stopPropagation();"
+                 style="float:right"
+                 ng-if="isUserToolShowed() && homePundit">
+            </div>
+
             <span class="pnd-annotation-user-name">
                 {{::annotation.creatorName}}
             </span>
@@ -143,13 +150,15 @@
             </div>
         </div>
         <span
-            ng-show = "{{!annotation.repliesLoaded}}">
+            ng-show = "!annotation.repliesLoaded">
             Loading Replyes
         </span>
         <!-- List of replyes to comment -->
         <annotation-details-reply-comment-tree
                 class="pnd-annotation-details "
                 id="{{::annotation.id}}"
+                data="annotation"
+                options="options"
                 ng-repeat="annotation in replyTree track by annotation.id"
                 style="position:relative"
                 ng-if="isReplyMode()">

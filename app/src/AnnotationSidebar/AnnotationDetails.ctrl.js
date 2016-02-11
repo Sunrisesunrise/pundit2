@@ -27,6 +27,7 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
         $scope.moreInfo = AnnotationDetails.options.moreInfo;
         $scope.homePundit = Config.homePundit;
+        $scope.options = AnnotationDetails.options;
         $scope.reply = AnnotationDetails.options.reply;
         $scope.replyDialog = false;
         $scope.like = AnnotationDetails.options.like;
@@ -163,24 +164,17 @@ angular.module('Pundit2.AnnotationSidebar')
             stopEvent(event);
         };
         $scope.reportAnnotation = function (event) {
-
         };
         $scope.endorseAnnotation = function (event) {
-
         };
         $scope.likeAnnotation = function (event) {
-
-        }
+        };
         $scope.dislikeAnnotation = function (event) {
-
-        }
+        };
         $scope.replyAnnotation = function (event) {
             $scope.replyDialog = !$scope.replyDialog;
-
-
             stopEvent(event);
-
-        }
+        };
 
         $scope.saveEdit = function (event) {
             var promise = AnnotationDetails.saveEditedComment(currentId, $scope.annotation.itemsArray[0], $scope.annotation.comment);
@@ -272,13 +266,15 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.isReplyTree = function () {
             return $scope.replyTreeActivate;
         };
-
         $scope.isEditBtnShowed = function () {
             return clientMode === 'pro' && $scope.motivation === 'linking';
         };
         $scope.isDetailsButtons = function () {
             return $scope.reply || $scope.like || $scope.dislike || $scope.endorse || $scope.report;
-
+        };
+        $scope.menuEdit = function (evt) {
+            AnnotationDetails.menuEdit(evt.toElement, $scope);
+            console.log("inside menu");
         };
         $scope.$watch(function () {
             return currentElement.height();

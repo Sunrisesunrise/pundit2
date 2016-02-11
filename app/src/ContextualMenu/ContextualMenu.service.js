@@ -255,7 +255,12 @@ angular.module('Pundit2.ContextualMenu')
 
         contextualMenu.log('Showing menu for type=' + type + ' at ' + x + ',' + y);
 
-        state.anchor.css('left', x).css('top', y);
+
+        state.anchor.css({
+            left: x,
+            top: y
+        });
+
         // state var
         state.lastX = x;
         state.lastY = y;

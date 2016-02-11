@@ -129,7 +129,23 @@ angular.module('Pundit2.AnnotationSidebar')
          * Default value:
          * <pre> report: true </pre>
          */
-        report: true
+        report: true,
+
+
+        /**
+         * @module punditConfig
+         * @ngdoc property
+         * @name modules#AnnotationDetails.cMenuType
+         *
+         * @description
+         * `string`
+         *
+         * Contextual menu type showed by items contained inside directive
+         *
+         * Default value:
+         * <pre> cMenuType: 'annotationDetails' </pre>
+         */
+        cMenuType: 'annotationDetails'
     })
 
     .service('AnnotationDetails', function (ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $window, $modal, $injector, $q,
@@ -157,6 +173,42 @@ angular.module('Pundit2.AnnotationSidebar')
         };
 
         var forceSkip = '';
+
+        var initContextualMenu = function() {
+
+            ContextualMenu.addAction({
+                name: 'commentEdit',
+                type:  annotationDetails.options.cMenuType,
+                label: 'Edit',
+                showIf: function() {
+                    return true;
+                },
+                priority: 99,
+                action: function(scope) {
+                    scope.editComment();
+                    console.log('dentro edit');
+                }
+            });
+
+            ContextualMenu.addDivider({
+                priority: 98,
+                type: annotationDetails.options.cMenuType
+            });
+
+            ContextualMenu.addAction({
+                name: 'commentDelete',
+                type:  annotationDetails.options.cMenuType,
+                label: 'delete',
+                showIf: function() {
+                    return true;
+                },
+                priority: 97,
+                action: function(scope) {
+                    scope.deleteAnnotation();
+                }
+            });
+        };
+        initContextualMenu();
 
         var mouseoutHandlerPromise,
             overActiveId = '',
@@ -757,6 +809,12 @@ angular.module('Pundit2.AnnotationSidebar')
 
         annotationDetails.getRepliesByAnnotationId = function(annotationId) {
             return AnnotationsCommunication.getRepliesByAnnotationId(annotationId);
+        };
+
+        annotationDetails.menuEdit = function(elem, scope){
+            var pos = elem.getBoundingClientRect()
+
+            ContextualMenu.show(pos.left + pos.width*2/3, pos.top + pos.height*2/3, scope, annotationDetails.options.cMenuType);
         };
 
         EventDispatcher.addListeners(['AnnotationSidebar.updateAnnotation'], function (e) {
