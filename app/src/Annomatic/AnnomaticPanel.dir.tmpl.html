@@ -4,8 +4,7 @@
     <div class="pnd-annomatic-content-top">
 
         <p ng-show="!gotAnnotations || Annomatic.annotationNumber == 0">
-            Click on the blue button to scan the whole page or just select a part of text
-            and click on <strong>Search items in this area</strong>
+            Click on the <strong>blue button</strong> to scan items in the selected area
         </p>
 
         <p ng-show="Annomatic.annotationNumber > 0" >
@@ -23,12 +22,12 @@
         <!-- Area with buttons -->
         <div class="pnd-annomatic-content-buttons"
              ng-show="!gotAnnotations || Annomatic.annotationNumber == 0">
-            <button 
+            <!-- <button 
                 class="pnd-btn pnd-btn-calltoaction"
                 ng-click="getSuggestions()"
                 ng-disabled="targets.length == 0">
                     <span class="pnd-icon pnd-icon-file"></span> Scan whole page
-            </button>
+            </button> -->
 
             <!-- <button
                 class="btn btn-link pnd-button-suggestion"
