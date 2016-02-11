@@ -28,10 +28,16 @@ angular.module('Pundit2.AnnotationPopover')
             elem = 'undefined',
             pos = {},
             parentTS = 'undefined';
+
+        if (typeof state.data === 'undefined') {
+            return;
+        }
+
         // No last used info.
         if (resizeData.lastSelectionUsed === null) {
             return;
         }
+
         // Clear previous timeout.
         if (resizeData.removeTimeout !== null) {
             $timeout.cancel(resizeData.removeTimeout);
@@ -43,21 +49,19 @@ angular.module('Pundit2.AnnotationPopover')
             elem = angular.element('.pnd-range-pos-icon');
             pos = elem[0].getBoundingClientRect();
 
-            // Create temporary element if not present already.
-            resizeData.temporaryElement = angular.element('.pnd-range-pos-icon');
-
-            resizeData.lastSelectionUsed.offset = angular.copy(resizeData.temporaryElement.offset());
+            resizeData.lastSelectionUsed.offset = angular.copy(elem.offset());
             changePopoverPosition(pos.left, pos.height);
-
         } else {
 
             // Create temporary element
-            resizeData.temporaryElement = angular.element('<span class="pnd-range-pos-calc" style="width: 0px;overflow: hidden;display: inline-flex;">w</span>');
-            // Add temporary element at the and or beginning of fragment ref depending on last used selection.
-            if (resizeData.lastSelectionUsed.label === 'end') {
-                resizeData.lastSelectionUsed.fragmentRef.after(resizeData.temporaryElement);
-            } else {
-                resizeData.lastSelectionUsed.fragmentRef.before(resizeData.temporaryElement);
+            if (resizeData.temporaryElement === null) {
+                resizeData.temporaryElement = angular.element('<span class="pnd-range-pos-calc" style="width: 0px;overflow: hidden;display: inline-flex;">w</span>');
+                // Add temporary element at the and or beginning of fragment ref depending on last used selection.
+                if (resizeData.lastSelectionUsed.label === 'end') {
+                    resizeData.lastSelectionUsed.fragmentRef.after(resizeData.temporaryElement);
+                } else {
+                    resizeData.lastSelectionUsed.fragmentRef.before(resizeData.temporaryElement);
+                }
             }
 
             resizeData.lastSelectionUsed.offset = angular.copy(resizeData.temporaryElement.offset());
@@ -65,18 +69,20 @@ angular.module('Pundit2.AnnotationPopover')
         }
 
         resizeData.removeTimeout = $timeout(function() {
-            state = PndPopover.getState();
+            // state = PndPopover.getState();
 
-            if (!state.data.item.icon) {
-                annotationPopover.log('Remove temporary element');
+            if (resizeData.temporaryElement !== null) {
                 parentTS = resizeData.temporaryElement.parent();
                 resizeData.temporaryElement.remove();
                 resizeData.temporaryElement = null;
+                
                 if (parentTS.length) {
                     parentTS[0].normalize();
                 }
                 resizeData.removeTimeout = null;
-            }
+            } 
+
+            annotationPopover.log('Remove temporary element');
         }, 300);
     };
 
@@ -143,9 +149,9 @@ angular.module('Pundit2.AnnotationPopover')
         };
 
         if (!state.data.item.isTextFragment()) {
-            //if(typeof elem === "undefined"){
+            // if(typeof elem === "undefined"){
             //    elem = angular.element("[fragment='" + state.data.fragmentId + "']");
-            //}
+            // }
 
             elem = angular.element('.pnd-range-pos-icon');
             posArrow = elem[0].getBoundingClientRect();
