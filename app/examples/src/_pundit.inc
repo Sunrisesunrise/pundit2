@@ -93,6 +93,7 @@
     <script src="../src/Communication/TemplatesExchange.service.js"></script>
 
     <script src="../src/Annomatic/Annomatic.js"></script>
+    <script src="../src/Annomatic/ScanBtn.dir.js"></script>
     <script src="../src/Annomatic/AnnomaticPanel.dir.js"></script>
     <script src="../src/Annomatic/AnnomaticPanel.ctrl.js"></script>
     <script src="../src/Annomatic/Annomatic.service.js"></script>
