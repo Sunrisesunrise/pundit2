@@ -1344,47 +1344,52 @@ angular.module('Pundit2.Annomatic')
         var currentTarget = event.currentTarget,
             targetsToSkip = annomatic.options.targetsToSkip,
             rects = {},
-            currentHeight, currentWidth;
+            currentHeight, currentWidth, currentTop, currentLeft;
 
         angular.element('.selecting-ancestor')
             .off('click', areaClick)
             .removeClass('selecting-ancestor');
 
-        annomatic.scanBtnStyle = {};
-
         if (TextFragmentHandler.isToBeIgnored(currentTarget) 
                 || currentTarget.nodeName === 'IMG') {
             return;
         }
+        
+        if (currentTarget.className.indexOf('pnd-wrp') !== -1 && lastUsedTarget !== null) {
+            currentTarget = lastUsedTarget;
+        }
 
-        // if (currentTarget.className.indexOf('selected-area-results') !== -1) {
-        //     angular.element('.selecting-ancestor')
-        //         .off('click', areaClick)
-        //         .removeClass('selecting-ancestor');
-        //     return;
-        // }
+        while (targetsToSkip.indexOf(currentTarget.nodeName.toLowerCase()) !== -1 
+                || angular.element(currentTarget).text().replace(' ', '').length < 90
+                && currentTarget.nodeName.toLowerCase() !== 'body') {
+            currentTarget = currentTarget.parentNode;
+        }
+
+        if (currentTarget.className.indexOf('selected-area-results') !== -1) {
+            lastUsedTarget = null;
+
+            scanBtn.scanBtnStyle = {};
+            $rootScope.$$phase || $rootScope.$digest();
+            event.stopImmediatePropagation();
+
+            return;
+        }
 
         if (angular.element('.pnd-annomatic-scan-btn').length === 0) {
             addButton();
         }
 
-        if (currentTarget.className.indexOf('pnd-wrp') !== -1 && lastUsedTarget !== null) {
-            currentTarget = lastUsedTarget;
-        } 
-
-        while (targetsToSkip.indexOf(currentTarget.nodeName.toLowerCase()) !== -1 
-                || angular.element(currentTarget).text().replace(' ', '').length < 90) {
-            currentTarget = currentTarget.parentNode;
-        }
-
         if (scanBtn !== null && lastUsedTarget !== currentTarget) {
             rects = currentTarget.getBoundingClientRect();
+            
             currentHeight = Math.max(0, rects.top > 0 ? Math.min(rects.height, window.innerHeight - rects.top) : (rects.bottom < window.innerHeight ? rects.bottom : window.innerHeight));
             currentWidth = rects.width < window.innerWidth ? rects.width : window.innerWidth;
+            currentTop = rects.top > 0 ? rects.top : 0;
+            currentLeft = rects.left > 0 ? rects.left : 0;
 
             scanBtn.scanBtnStyle = {
-                top: rects.top + (currentHeight / 2) + window.scrollY - 16,
-                left: rects.left + (currentWidth / 2) + window.scrollX - 29
+                top: currentTop + (currentHeight / 2) + window.scrollY - 16,
+                left: currentLeft + (currentWidth / 2) + window.scrollX - 29
             };
 
             $rootScope.$$phase || $rootScope.$digest();
@@ -1399,7 +1404,32 @@ angular.module('Pundit2.Annomatic')
     };
 
     function areaClick(event) {
+        if (lastUsedTarget === null) {
+            return;
+        }
+
         var annotationsRootNode = angular.element(lastUsedTarget);
+
+        var isToBeSkipped = function(node) {
+            var classToSkip = 'selected-area-results';
+
+            while (node.nodeName.toLowerCase() !== 'body') {
+                if (angular.element(node).hasClass(classToSkip)) {
+                    return true;
+                }
+                
+                if (node.parentNode === null) {
+                    return false;
+                }
+                node = node.parentNode;
+            }
+            return false;
+        };
+
+        if (isToBeSkipped(lastUsedTarget)) {
+            return;
+        }
+
         if (lastUsedTarget !== null) {
             annotationsRootNode
                 .removeClass('selecting-ancestor');
@@ -1411,7 +1441,6 @@ angular.module('Pundit2.Annomatic')
             annomatic.area = annotationsRootNode;
             annomatic.getAnnotationByArea();
         }
-        console.log('area click');
     }
 
     annomatic.addScanBtnRef = function(scope) {

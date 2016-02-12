@@ -7,9 +7,8 @@ angular.module('Pundit2.Annomatic')
         scope: {},
         templateUrl: 'src/Annomatic/ScanBtn.dir.tmpl.html',
         link: function(scope, element) {
-            console.log('init');
             Annomatic.addScanBtnRef(scope);
-        }, // link()
+        },
         replace: true
     };
 });
