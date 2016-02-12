@@ -221,6 +221,16 @@ angular.module('Pundit2.Toolbar')
         }
     });
 
+    EventDispatcher.addListener('Client.show', function() {
+        angular.element('body')
+            .addClass(toolbar.options.bodyClass);
+    });
+
+    EventDispatcher.addListener('Client.hide', function() {
+        angular.element('body')
+            .removeClass(toolbar.options.bodyClass);
+    });
+
     return toolbar;
 
 });

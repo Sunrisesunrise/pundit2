@@ -1441,10 +1441,21 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     });
 
-    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
+    EventDispatcher.addListener('Client.show', function() {
+        var expClass = state.isSidebarExpanded ? annotationSidebar.options.bodyExpandedClass : annotationSidebar.options.bodyCollapsedClass
+        angular.element('body')
+            .addClass(expClass)
+            .addClass(annotationSidebar.options.bodyClass);
+    });
+
+    EventDispatcher.addListener('Client.hide', function() {
         if (state.isSidebarExpanded) {
             annotationSidebar.toggle();
         }
+        angular.element('body')
+            .removeClass(annotationSidebar.options.bodyCollapsedClass)
+            .removeClass(annotationSidebar.options.bodyExpandedClass)
+            .removeClass(annotationSidebar.options.bodyClass);
     });
 
     annotationSidebar.log('Component running');
