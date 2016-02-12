@@ -6,6 +6,9 @@ var punditConfig = {
         'Client': {
             active: true
         },
+        'Annomatic': {
+            active: true
+        },
         'Analytics': {
             doTracking: true,
             doMixpanel: true,
