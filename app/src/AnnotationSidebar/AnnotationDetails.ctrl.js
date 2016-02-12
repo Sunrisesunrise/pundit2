@@ -192,7 +192,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 var values = {};
                 values.uri = $scope.annotation.uri;
                 values.type = [NameSpace.types.annotation];
-                values.comment = $scope.annotation.comment;
+                values.content = $scope.annotation.comment;
 
                 return new Item(values.uri, values);
             };
@@ -207,7 +207,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 var out = {
                     'id': annotation.id,
                     'creatorName' : annotation.creatorName,
-                    'comment' : annotation.graph['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0].value
+                    'content' : annotation.graph['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0].value
                 };
                 $scope.replyTree.push(out);
                 console.log(AnnotationsExchange.getAnnotationById(e));
