@@ -1346,12 +1346,21 @@ angular.module('Pundit2.Annomatic')
             rects = {},
             currentHeight, currentWidth, currentTop, currentLeft;
 
+        var stopHandler = function() {
+            lastUsedTarget = null;
+
+            scanBtn.scanBtnStyle = {};
+            $rootScope.$$phase || $rootScope.$digest();
+            event.stopImmediatePropagation();
+        };
+
         angular.element('.selecting-ancestor')
             .off('click', areaClick)
             .removeClass('selecting-ancestor');
 
         if (TextFragmentHandler.isToBeIgnored(currentTarget) 
                 || currentTarget.nodeName === 'IMG') {
+            stopHandler();
             return;
         }
         
@@ -1361,17 +1370,12 @@ angular.module('Pundit2.Annomatic')
 
         while (targetsToSkip.indexOf(currentTarget.nodeName.toLowerCase()) !== -1 
                 || angular.element(currentTarget).text().replace(' ', '').length < 90
-                && currentTarget.nodeName.toLowerCase() !== 'body') {
+                && currentTarget.parentNode.nodeName.toLowerCase() !== 'body') {
             currentTarget = currentTarget.parentNode;
         }
 
         if (currentTarget.className.indexOf('selected-area-results') !== -1) {
-            lastUsedTarget = null;
-
-            scanBtn.scanBtnStyle = {};
-            $rootScope.$$phase || $rootScope.$digest();
-            event.stopImmediatePropagation();
-
+            stopHandler();
             return;
         }
 
