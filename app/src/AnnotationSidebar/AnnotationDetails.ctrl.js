@@ -267,7 +267,7 @@ angular.module('Pundit2.AnnotationSidebar')
             return $scope.replyTreeActivate;
         };
         $scope.isEditBtnShowed = function () {
-            return clientMode === 'pro' && $scope.motivation === 'linking';
+            return clientMode === 'pro' && ($scope.motivation === 'linking' || $scope.motivation === 'commenting');
         };
         $scope.isDetailsButtons = function () {
             return $scope.reply || $scope.like || $scope.dislike || $scope.endorse || $scope.report;

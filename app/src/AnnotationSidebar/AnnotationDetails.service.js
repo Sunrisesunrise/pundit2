@@ -131,7 +131,6 @@ angular.module('Pundit2.AnnotationSidebar')
          */
         report: true,
 
-
         /**
          * @module punditConfig
          * @ngdoc property
@@ -140,12 +139,28 @@ angular.module('Pundit2.AnnotationSidebar')
          * @description
          * `string`
          *
-         * Contextual menu type showed by items contained inside directive
+         * Contextual menu type showed in edit Mode
          *
          * Default value:
-         * <pre> cMenuType: 'annotationDetails' </pre>
+         * <pre> cMenuType: 'annotationDetailsEditable' </pre>
          */
-        cMenuType: 'annotationDetails'
+
+        cMenuTypeEdit: 'annotationDetailsEditable',
+        /**
+         * @module punditConfig
+         * @ngdoc property
+         * @name modules#AnnotationDetails.cMenuType
+         *
+         * @description
+         * `string`
+         *
+         * Contextual menu type showed in no edit Mode
+         *
+         * Default value:
+         * <pre> cMenuType: 'annotationDetailsNoEditable' </pre>
+         */
+
+        cMenuTypeNoEdit: 'annotationDetailsNoEditable',
     })
 
     .service('AnnotationDetails', function (ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $window, $modal, $injector, $q,
@@ -169,42 +184,55 @@ angular.module('Pundit2.AnnotationSidebar')
             isUserLogged: false,
             isSidebarExpanded: false,
             isGhostedActive: false,
-            userData: {}
+            contextualMenuOpened: false,
+            userData: {},
         };
 
         var forceSkip = '';
 
+
         var initContextualMenu = function() {
 
+
+                ContextualMenu.addAction({
+                    name: 'Edit',
+                    type:  annotationDetails.options.cMenuTypeEdit,
+                    label: 'Edit',
+                    showIf: function() {
+                        return true;
+                    },
+                    priority: 99,
+                    action: function(scope) {
+                        var event ={};
+
+                        if(scope.motivation === 'commenting'){
+                            scope.editComment();
+                        }else{
+                            event = document.createEvent('Event');
+                            scope.editAnnotation(event)
+                        }
+                        console.log('dentro edit');
+                    }
+                });
+
+                ContextualMenu.addDivider({
+                    priority: 98,
+                    type: annotationDetails.options.cMenuTypeEdit
+                });
+
+
             ContextualMenu.addAction({
-                name: 'commentEdit',
-                type:  annotationDetails.options.cMenuType,
-                label: 'Edit',
+                name: 'Delete',
+                type:  [annotationDetails.options.cMenuTypeEdit, annotationDetails.options.cMenuTypeNoEdit],
                 showIf: function() {
                     return true;
                 },
-                priority: 99,
-                action: function(scope) {
-                    scope.editComment();
-                    console.log('dentro edit');
-                }
-            });
-
-            ContextualMenu.addDivider({
-                priority: 98,
-                type: annotationDetails.options.cMenuType
-            });
-
-            ContextualMenu.addAction({
-                name: 'commentDelete',
-                type:  annotationDetails.options.cMenuType,
-                label: 'delete',
-                showIf: function() {
-                    return true;
-                },
+                label: 'Delete',
                 priority: 97,
                 action: function(scope) {
-                    scope.deleteAnnotation();
+                    event = document.createEvent('Event');
+
+                    scope.deleteAnnotation(event);
                 }
             });
         };
@@ -254,7 +282,7 @@ angular.module('Pundit2.AnnotationSidebar')
         //                     state.annotations[annotation].ghosted = false;
         //                     continue;
         //                 }
-        //             }
+        //          init   }
         //         }
 
         //         state.isGhostedActive = true;
@@ -518,6 +546,9 @@ angular.module('Pundit2.AnnotationSidebar')
 
             return editPromise;
         };
+        annotationDetails.setEditable = function(bool){
+            state.isEditable = bool;
+        }
 
         annotationDetails.saveReplyedComment = function (item, reply) {
             var currentTarget = item,
@@ -609,16 +640,19 @@ angular.module('Pundit2.AnnotationSidebar')
         };
 
         annotationDetails.closeAnnotationView = function (currentId) {
-            if (typeof(state.annotations[currentId]) !== 'undefined') {
-                state.annotations[currentId].expanded = false;
-            } else {
-                annotationDetails.log("Cannot find this annotation: id -> " + currentId);
-            }
+                if (typeof(state.annotations[currentId]) !== 'undefined') {
+                    state.annotations[currentId].expanded = false;
+                } else {
+                    annotationDetails.log("Cannot find this annotation: id -> " + currentId);
+                }
         };
 
         annotationDetails.toggleAnnotationView = function (currentId, forceTo) {
-            annotationDetails.closeAllAnnotationView(currentId);
-            state.annotations[currentId].expanded = typeof forceTo !== 'undefined' ? forceTo : !state.annotations[currentId].expanded;
+            if(!state.contextualMenuOpened){
+                annotationDetails.closeAllAnnotationView(currentId);
+                state.annotations[currentId].expanded = typeof forceTo !== 'undefined' ? forceTo : !state.annotations[currentId].expanded;
+            }
+
         };
 
         annotationDetails.isAnnotationGhosted = function (currentId) {
@@ -812,9 +846,23 @@ angular.module('Pundit2.AnnotationSidebar')
         };
 
         annotationDetails.menuEdit = function(elem, scope){
-            var pos = elem.getBoundingClientRect()
+            var pos = elem.getBoundingClientRect();
+            var left = pos.left + pos.width*2/3 + angular.element($window).scrollLeft();
+            var top = pos.top + pos.height*2/3 + angular.element($window).scrollTop()
+            var type = '';
 
-            ContextualMenu.show(pos.left + pos.width*2/3, pos.top + pos.height*2/3, scope, annotationDetails.options.cMenuType);
+            if(typeof angular.element('.pnd-dropdown-contextual-menu')[0] === 'undefined'){
+
+                if(scope.isEditBtnShowed()){
+                    type = annotationDetails.options.cMenuTypeEdit;
+                } else {
+                    type = annotationDetails.options.cMenuTypeNoEdit;
+                }
+                ContextualMenu.show(left , top, scope, type);
+                state.contextualMenuOpened = true;
+            }else{
+                ContextualMenu.hide();
+            }
         };
 
         EventDispatcher.addListeners(['AnnotationSidebar.updateAnnotation'], function (e) {
@@ -885,6 +933,8 @@ angular.module('Pundit2.AnnotationSidebar')
         });
 
         EventDispatcher.addListener('ResizeManager.resize', function () {
+            state.contextualMenuOpened = false;
+            ContextualMenu.hide();
             annotationDetails.closeAllAnnotationView();
         });
 
@@ -901,7 +951,9 @@ angular.module('Pundit2.AnnotationSidebar')
         EventDispatcher.addListener('Client.show', function (/*e*/) {
             $document.on('mousedown', mouseDownHandler);
         });
-
+        EventDispatcher.addListener('closeContextualMenu', function(/*e*/) {
+           state.contextualMenuOpened = false;
+        });
 
 
         $document.on('mousedown', mouseDownHandler);

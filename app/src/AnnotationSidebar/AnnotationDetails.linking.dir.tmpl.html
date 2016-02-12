@@ -40,6 +40,13 @@
             <!-- Default user's thumb -->
             <div class="pnd-annotation-user-thumb-default"></div>
 
+            <!-- Edit Menu -->
+            <div class="pnd-icon-angle-down"
+                 ng-click="menuEdit($event);"
+                 style="float:right"
+                 ng-if="isUserToolShowed() && homePundit">
+            </div>
+
             <span class="pnd-annotation-user-name">
                 {{ ::annotation.creatorName }}
             </span>
