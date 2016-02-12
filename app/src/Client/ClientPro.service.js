@@ -672,7 +672,10 @@ angular.module('Pundit2.Client')
 
         client.log('Boot is completed, emitting pundit-boot-done event');
         EventDispatcher.sendEvent('Client.boot');
-        Analytics.track('main-events', 'client--endBootstrap');
+
+        setTimeout(function() {
+            Analytics.track('main-events', 'generic', 'client-bootstrap');
+        }, 200);
 
         // TODO:
         // * Lists (My, page?, vocabs?, selectors?)

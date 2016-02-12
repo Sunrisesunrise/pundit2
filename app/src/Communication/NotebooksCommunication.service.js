@@ -183,6 +183,7 @@ angular.module('Pundit2.Communication')
             }).error(function(msg) {
                 setLoading(false);
                 notebookCommunication.log('Impossible to set as public: ' + id);
+                Analytics.track('main-events', 'generic', 'change-notebook-to-public');
                 EventDispatcher.sendEvent('Pundit.alert', {
                     title: 'Public notebook not set',
                     id: "WARNING",
@@ -219,6 +220,7 @@ angular.module('Pundit2.Communication')
                 setLoading(false);
                 notebookCommunication.log(id + ' is now private');
                 NotebookExchange.getNotebookById(id).setPrivate();
+                Analytics.track('main-events', 'generic', 'change-notebook-to-private');
                 promise.resolve();
             }).error(function(msg) {
                 setLoading(false);
@@ -273,6 +275,7 @@ angular.module('Pundit2.Communication')
                     new Notebook(data.NotebookID, true).then(function() {
                         promise.resolve(data.NotebookID);
                         notebookCommunication.log("Created a new notebook: " + data.NotebookID);
+                        Analytics.track('main-events', 'generic', 'new-notebook');
                         Analytics.track('api', 'post', 'notebook create');
                     });
 

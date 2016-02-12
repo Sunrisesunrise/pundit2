@@ -104,12 +104,14 @@ angular.module('Pundit2.Toolbar')
     var manageYourAnnotation = function() {
         ResourcePanel.hide();
         $window.open(Config.homeBaseURL, '_blank');
+        Analytics.track('main-events', 'generic', 'open-home');
         Analytics.track('buttons', 'click', 'toolbar--manageAnnotation');
     };
 
     var editYourProfile = function() {
         ResourcePanel.hide();
         MyPundit.editProfile();
+        Analytics.track('main-events', 'generic', 'edit-profile');
         Analytics.track('buttons', 'click', 'toolbar--editProfile');
     };
 
@@ -263,6 +265,7 @@ angular.module('Pundit2.Toolbar')
                 }
             }, true);
 
+            Analytics.track('main-events', 'generic', 'new-feedback');
         });
     };
 

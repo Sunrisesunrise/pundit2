@@ -39,6 +39,8 @@ angular.module('Pundit2.LiteTool')
 
         //window.location.href = link;
         window.open(link);
+
+        Analytics.track('main-events', 'generic', 'new-feedback');
     };
 
     sendModalScope.titleMessage = "Feedback";
@@ -71,11 +73,13 @@ angular.module('Pundit2.LiteTool')
 
     var manageYourAnnotation = function() {
         $window.open(Config.homeBaseURL, '_blank');
+        Analytics.track('main-events', 'generic', 'open-home');
         Analytics.track('buttons', 'click', 'toolbar--manageAnnotation');
     };
 
     var editYourProfile = function() {
         MyPundit.editProfile();
+        Analytics.track('main-events', 'generic', 'edit-profile');
         Analytics.track('buttons', 'click', 'litetool--editProfile');
     };
 

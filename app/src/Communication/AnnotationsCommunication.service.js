@@ -8,7 +8,7 @@ angular.module('Pundit2.Communication')
 
 .service('AnnotationsCommunication', function(BaseComponent, EventDispatcher, NameSpace, Consolidation, MyPundit, ModelHelper,
     AnnotationsExchange, Annotation, NotebookExchange, Notebook, ItemsExchange, Config, XpointersHelper, ModelHandler,
-    $http, $q, $rootScope, $document, ANNOTATIONSCOMMUNICATIONDEFAULTS) {
+    $http, $q, $rootScope, $document, Analytics, ANNOTATIONSCOMMUNICATIONDEFAULTS) {
 
     var annotationsCommunication = new BaseComponent('AnnotationsCommunication', ANNOTATIONSCOMMUNICATIONDEFAULTS);
 
@@ -203,6 +203,18 @@ angular.module('Pundit2.Communication')
                 });
                 removedItems = AnnotationsExchange.updateAnnotationStructureInfo(annID, oldItems);
                 updateAnnotationItems(currentAnnotation, removedItems);
+
+                switch(currentAnnotation.motivatedBy) {
+                    case 'linking':
+                        Analytics.track('main-events', 'generic', 'edit-semantic');
+                        break;
+                    case 'commenting':
+                        Analytics.track('main-events', 'generic', 'edit-comment');
+                        break;
+                    default:
+                        Analytics.track('main-events', 'generic', 'edit-' + motivation);
+                }
+
                 promise.resolve();
             });
             annotationsCommunication.log('Items correctly updated: ' + annID);
@@ -394,6 +406,20 @@ angular.module('Pundit2.Communication')
 
                 var annotation = AnnotationsExchange.getAnnotationById(annID);
 
+                switch(annotation.motivatedBy) {
+                    case 'linking':
+                        Analytics.track('main-events', 'generic', 'delete-semantic');
+                        break;
+                    case 'highlighting':
+                        Analytics.track('main-events', 'generic', 'delete-highlight');
+                        break;
+                    case 'commenting':
+                        Analytics.track('main-events', 'generic', 'delete-comment');
+                        break;
+                    default:
+                        Analytics.track('main-events', 'generic', 'delete-' + motivation);
+                }
+
                 // remove annotation from relative notebook
                 var notebookID = annotation.isIncludedIn;
                 var nt = NotebookExchange.getNotebookById(notebookID);
@@ -528,6 +554,21 @@ angular.module('Pundit2.Communication')
                 data: postData
             }).success(function(data) {
                 EventDispatcher.sendEvent('AnnotationsCommunication.annotationSaved', data.AnnotationID);
+                console.log(currentNotebook)
+                switch(motivation) {
+                    case 'linking':
+                        Analytics.track('main-events', 'generic', 'new-semantic');
+                        break;
+                    case 'highlighting':
+                        Analytics.track('main-events', 'generic', 'new-highlight');
+                        break;
+                    case 'commenting':
+                        Analytics.track('main-events', 'generic', 'new-comment');
+                        break;
+                    default:
+                        Analytics.track('main-events', 'generic', 'new-' + motivation);
+                }
+
                 // TODO if is rejected ???
                 new Annotation(data.AnnotationID).then(function() {
 
