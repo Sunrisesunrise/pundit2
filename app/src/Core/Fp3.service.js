@@ -1,12 +1,14 @@
 angular.module('Pundit2.Core')
+
 .constant('FP3DEFAULTS', {
     label: 'Finish',
     link: '',
     active: false,
     debug: false
 })
+
 .service('Fp3', function(BaseComponent, FP3DEFAULTS, Config, $http, $q, $window, $document, AnnotationsExchange, XpointersHelper, Consolidation, ItemsExchange) {
-    
+
     var fp3 = new BaseComponent("Fp3", FP3DEFAULTS);
 
     // the node that containt the html text passend inside POST
@@ -38,41 +40,41 @@ angular.module('Pundit2.Core')
         Consolidation.wipe();
 
         var annotations = AnnotationsExchange.getAnnotations();
-        for (var a in annotations){
+        for (var a in annotations) {
 
-            subject = annotations[a]['entities'][0];
-            graph = annotations[a]['graph'][subject];
-            item = annotations[a]['items'][subject];
+            subject = annotations[a].entities[0];
+            graph = annotations[a].graph[subject];
+            item = annotations[a].items[subject];
 
             for (var p in graph) {
                 predicate = p;
                 object = graph[predicate][0];
             }
 
-            newAnnotation = Object();
+            newAnnotation = {};
 
-            newAnnotation['annotatedAt'] = annotations[a]['created'];
-            newAnnotation['annotatedBy'] = annotations[a]['creator'];
-            newAnnotation['anchorOf'] = item['description'];
-            newAnnotation['id'] = annotations[a]['id'];
-            newAnnotation['pageContext'] = annotations[a]['pageContext'];
-            newAnnotation['subject'] = subject;
-            newAnnotation['predicate'] = predicate;
-            newAnnotation['object'] = object['value'];
-            if( object['type'] == 'uri') {
-                newAnnotation['objectData'] = annotations[a]['items'][object['value']];
+            newAnnotation.annotatedAt = annotations[a].created;
+            newAnnotation.annotatedBy = annotations[a].creator;
+            newAnnotation.anchorOf = item.description;
+            newAnnotation.id = annotations[a].id;
+            newAnnotation.pageContext = annotations[a].pageContext;
+            newAnnotation.subject = subject;
+            newAnnotation.predicate = predicate;
+            newAnnotation.object = object.value;
+            if (object.type === 'uri') {
+                newAnnotation.objectData = annotations[a].items[object.value];
             } else {
-                newAnnotation['objectData'] = Object;
+                newAnnotation.objectData = {};
             }
 
-            var currentItem = ItemsExchange.getItemByUri(subject)
+            var currentItem = ItemsExchange.getItemByUri(subject);
 
-            if (currentItem.isTextFragment()){
-            //if (subject.indexOf('xpointer')>-1){
-                //this is an xpointer
-                var punditContent = fp3.getPunditContentUrl();
+            if (currentItem.isTextFragment()) {
+                // if (subject.indexOf('xpointer')>-1){
+                // this is an xpointer
+                // var punditContent = fp3.getPunditContentUrl();
 
-                //var xp = subject.replace(punditContent , '');
+                // var xp = subject.replace(punditContent , '');
                 var xp = currentItem.getXPointer();
 
                 var xpath = XpointersHelper.xPointerToXPath(xp);
@@ -84,26 +86,30 @@ angular.module('Pundit2.Core')
                 var startNodeText = xpath.startNode.data;
                 var endNodeText = xpath.endNode.data;
 
-                beforeStartOffset = xpath.startOffset - 10.0;
-                beforeEndOffset = xpath.startOffset;
+                var beforeStartOffset = xpath.startOffset - 10.0;
+                var beforeEndOffset = xpath.startOffset;
 
-                if (beforeStartOffset < 0) beforeStartOffset = 0;
+                if (beforeStartOffset < 0) {
+                    beforeStartOffset = 0;
+                }
 
-                afterStartOffset = xpath.endOffset;
-                afterEndOffset = parseInt(xpath.endOffset) + 10.0;
+                var afterStartOffset = xpath.endOffset;
+                var afterEndOffset = parseInt(xpath.endOffset) + 10.0;
 
-                if (afterEndOffset > endNodeText.length) afterEndOffset = endNodeText.length;
+                if (afterEndOffset > endNodeText.length) {
+                    afterEndOffset = endNodeText.length;
+                }
 
-                var before=startNodeText.substring(beforeStartOffset, beforeEndOffset)
-                var after=endNodeText.substring(afterStartOffset, afterEndOffset)
+                var before = startNodeText.substring(beforeStartOffset, beforeEndOffset);
+                var after = endNodeText.substring(afterStartOffset, afterEndOffset);
 
-                newAnnotation['before'] = before;
-                newAnnotation['after'] = after;
+                newAnnotation.before = before;
+                newAnnotation.after = after;
 
-                newAnnotation['start'] = start;
-                newAnnotation['end'] = end;
+                newAnnotation.start = start;
+                newAnnotation.end = end;
             }
- 
+
             newAnnotations.push(newAnnotation);
         }
 
@@ -127,7 +133,7 @@ angular.module('Pundit2.Core')
             method: 'POST',
             url: fp3.options.link + '?fp=on',
             data: {
-                annotations:  fp3.convertToFAM(),
+                annotations: fp3.convertToFAM(),
                 punditContent: fp3.getPunditContentUrl(),
                 punditPage: fp3.getNodeContent(),
                 annotationServerBaseURL: Config.annotationServerBaseURL
@@ -147,5 +153,4 @@ angular.module('Pundit2.Core')
     fp3.log('Up and Running');
 
     return fp3;
-
 });
