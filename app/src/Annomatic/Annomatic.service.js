@@ -212,10 +212,10 @@ angular.module('Pundit2.Annomatic')
     }
 
     var addButton = function() {
-        button = angular.element('<scan-btn></scan-btn>');
+        var button = angular.element('<scan-btn></scan-btn>');
         angular.element('.pnd-wrp').append(button);
         $compile(button)($rootScope);
-    }
+    };
 
     // Tries to find the given array of DataTXT annotations in the child nodes of the
     // given node. Finding them might be a very delicate and fun dance!
@@ -934,8 +934,6 @@ angular.module('Pundit2.Annomatic')
      *
      */
     annomatic.run = function() {
-        var button;
-
         state.isRunning = true;
         TextFragmentHandler.turnOff();
         ImageHandler.turnOff();
@@ -1051,7 +1049,7 @@ angular.module('Pundit2.Annomatic')
     //     // save all accepted annotation
     //     for (var i=0; i<annomatic.ann.byState.accepted.length; i++) {
     //         var index = annomatic.ann.byState.accepted[i];
-    //         annomatic.save(index);    
+    //         annomatic.save(index);
     //     }
     // };
 
@@ -1240,7 +1238,7 @@ angular.module('Pundit2.Annomatic')
                     });
 
                     if (typeof(ann.entities) === 'undefined') {
-                        // create item from resource 
+                        // create item from resource
                         ItemsExchange.addItemToContainer(createItemFromNERAnnotation(ann), annomatic.options.container);
                     } else {
                         for (var ent in ann.entities) {
@@ -1316,7 +1314,7 @@ angular.module('Pundit2.Annomatic')
             mouseCheck = false;
         });
         angular.element('body').on('mouseup', mouseUpHandler);
-    };
+    }
 
     function mouseUpHandler(upEvt) {
         angular.element('body').off('mouseup', mouseUpHandler);
@@ -1338,7 +1336,7 @@ angular.module('Pundit2.Annomatic')
             ContextualMenu.show(upEvt.pageX, upEvt.pageY, annotationsRootNode, annomatic.options.cMenuType);
             // $rootScope.$apply();
         }
-    };
+    }
 
     function mouseEnterHandler(event) {
         var currentTarget = event.currentTarget,
@@ -1358,19 +1356,16 @@ angular.module('Pundit2.Annomatic')
             .off('click', areaClick)
             .removeClass('selecting-ancestor');
 
-        if (TextFragmentHandler.isToBeIgnored(currentTarget) 
-                || currentTarget.nodeName === 'IMG') {
+        if (TextFragmentHandler.isToBeIgnored(currentTarget) || currentTarget.nodeName === 'IMG') {
             stopHandler();
             return;
         }
-        
+
         if (currentTarget.className.indexOf('pnd-wrp') !== -1 && lastUsedTarget !== null) {
             currentTarget = lastUsedTarget;
         }
 
-        while (targetsToSkip.indexOf(currentTarget.nodeName.toLowerCase()) !== -1 
-                || angular.element(currentTarget).text().replace(' ', '').length < 90
-                && currentTarget.parentNode.nodeName.toLowerCase() !== 'body') {
+        while (targetsToSkip.indexOf(currentTarget.nodeName.toLowerCase()) !== -1 || angular.element(currentTarget).text().replace(' ', '').length < 90 && currentTarget.parentNode.nodeName.toLowerCase() !== 'body') {
             currentTarget = currentTarget.parentNode;
         }
 
@@ -1385,7 +1380,7 @@ angular.module('Pundit2.Annomatic')
 
         if (scanBtn !== null && lastUsedTarget !== currentTarget) {
             rects = currentTarget.getBoundingClientRect();
-            
+
             currentHeight = Math.max(0, rects.top > 0 ? Math.min(rects.height, window.innerHeight - rects.top) : (rects.bottom < window.innerHeight ? rects.bottom : window.innerHeight));
             currentWidth = rects.width < window.innerWidth ? rects.width : window.innerWidth;
             currentTop = rects.top > 0 ? rects.top : 0;
@@ -1405,9 +1400,9 @@ angular.module('Pundit2.Annomatic')
             .addClass('selecting-ancestor')
             .on('click', areaClick);
         event.stopImmediatePropagation();
-    };
+    }
 
-    function areaClick(event) {
+    function areaClick() {
         if (lastUsedTarget === null) {
             return;
         }
@@ -1421,7 +1416,7 @@ angular.module('Pundit2.Annomatic')
                 if (angular.element(node).hasClass(classToSkip)) {
                     return true;
                 }
-                
+
                 if (node.parentNode === null) {
                     return false;
                 }
