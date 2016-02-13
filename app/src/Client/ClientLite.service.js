@@ -249,7 +249,10 @@ angular.module('Pundit2.Client')
 
         client.log('Boot is completed, emitting pundit-boot-done event');
         EventDispatcher.sendEvent('Client.boot');
-        Analytics.track('main-events', 'generic', 'client-bootstrap');
+
+        setTimeout(function() {
+            Analytics.track('main-events', 'generic', 'client-bootstrap');
+        }, 200);
     };
 
     client.log("Component up and running");

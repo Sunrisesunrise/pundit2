@@ -6,7 +6,7 @@ angular.module('Pundit2.Annomatic')
         restrict: 'E',
         scope: {},
         templateUrl: 'src/Annomatic/ScanBtn.dir.tmpl.html',
-        link: function(scope, element) {
+        link: function(scope) {
             Annomatic.addScanBtnRef(scope);
         },
         replace: true

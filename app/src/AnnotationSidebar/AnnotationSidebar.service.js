@@ -1373,7 +1373,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     // Clear all active filters
-    annotationSidebar.resetFilters = function() {
+    annotationSidebar.resetFilters = function(skipTrack) {
         angular.forEach(annotationSidebar.filters, function(filter) {
             if (typeof(filter.expression) === 'string') {
                 filter.expression = '';
@@ -1385,7 +1385,12 @@ angular.module('Pundit2.AnnotationSidebar')
             }
         });
 
+        if (skipTrack) {
+            return;
+        }
+
         Analytics.track('buttons', 'click', 'sidebar--filters--removeAllFilters');
+        Analytics.track('main-events', 'generic', 'reset-filters');
     };
 
     annotationSidebar.showAnnotation = function(annId) {
@@ -1427,7 +1432,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     // TODO: find a better flow for user experience
     EventDispatcher.addListener('MyItems.itemAdded', function() {
-        annotationSidebar.resetFilters();
+        annotationSidebar.resetFilters(true);
     });
 
     EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
@@ -1442,7 +1447,7 @@ angular.module('Pundit2.AnnotationSidebar')
     });
 
     EventDispatcher.addListener('Client.show', function() {
-        var expClass = state.isSidebarExpanded ? annotationSidebar.options.bodyExpandedClass : annotationSidebar.options.bodyCollapsedClass
+        var expClass = state.isSidebarExpanded ? annotationSidebar.options.bodyExpandedClass : annotationSidebar.options.bodyCollapsedClass;
         angular.element('body')
             .addClass(expClass)
             .addClass(annotationSidebar.options.bodyClass);

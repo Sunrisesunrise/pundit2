@@ -206,13 +206,14 @@ angular.module('Pundit2.Communication')
 
                 switch(currentAnnotation.motivatedBy) {
                     case 'linking':
+                    case undefined:
                         Analytics.track('main-events', 'generic', 'edit-semantic');
                         break;
                     case 'commenting':
                         Analytics.track('main-events', 'generic', 'edit-comment');
                         break;
                     default:
-                        Analytics.track('main-events', 'generic', 'edit-' + motivation);
+                        Analytics.track('main-events', 'generic', 'edit-' + currentAnnotation.motivatedBy);
                 }
 
                 promise.resolve();
@@ -408,6 +409,7 @@ angular.module('Pundit2.Communication')
 
                 switch(annotation.motivatedBy) {
                     case 'linking':
+                    case undefined:
                         Analytics.track('main-events', 'generic', 'delete-semantic');
                         break;
                     case 'highlighting':
@@ -417,7 +419,7 @@ angular.module('Pundit2.Communication')
                         Analytics.track('main-events', 'generic', 'delete-comment');
                         break;
                     default:
-                        Analytics.track('main-events', 'generic', 'delete-' + motivation);
+                        Analytics.track('main-events', 'generic', 'delete-' + annotation.motivatedBy);
                 }
 
                 // remove annotation from relative notebook
@@ -554,9 +556,10 @@ angular.module('Pundit2.Communication')
                 data: postData
             }).success(function(data) {
                 EventDispatcher.sendEvent('AnnotationsCommunication.annotationSaved', data.AnnotationID);
-                console.log(currentNotebook)
+
                 switch(motivation) {
                     case 'linking':
+                    case undefined:
                         Analytics.track('main-events', 'generic', 'new-semantic');
                         break;
                     case 'highlighting':

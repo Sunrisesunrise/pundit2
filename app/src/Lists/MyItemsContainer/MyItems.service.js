@@ -110,7 +110,6 @@ angular.module("Pundit2.MyItemsContainer")
                 Consolidation.requestConsolidateAll();
                 myItems.addItem(item).then(function() {
                     EventDispatcher.sendEvent('MyItems.itemAdded', item);
-                    Analytics.track('main-events', 'generic', 'add-favourite');
                     Consolidation.consolidateAll();
                 });
                 return true;
@@ -131,7 +130,6 @@ angular.module("Pundit2.MyItemsContainer")
                 Consolidation.requestConsolidateAll();
                 myItems.deleteItem(item).then(function() {
                     EventDispatcher.sendEvent('MyItems.itemRemoved', item);
-                    Analytics.track('main-events', 'generic', 'remove-favourite');
                     Consolidation.consolidateAll();
                 });
                 return true;
@@ -351,7 +349,7 @@ angular.module("Pundit2.MyItemsContainer")
             setLoading(false);
 
             myItems.log('Deleted from my item: ' + value.label);
-
+            Analytics.track('main-events', 'generic', 'remove-favourite');
         }).error(function(msg) {
             opInProgress = false;
             Consolidation.rejectConsolidateAll();
@@ -433,7 +431,7 @@ angular.module("Pundit2.MyItemsContainer")
             promise.resolve();
 
             myItems.log('Added item to my items: ' + value.label);
-
+            Analytics.track('main-events', 'generic', 'add-favourite');
         }).error(function(msg) {
             opInProgress = false;
             setLoading(false);
