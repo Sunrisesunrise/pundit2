@@ -3,7 +3,7 @@ layout: page
 title: Pundit RDF annotation data model
 ---
 
-#{{ page.title }}
+# {{ page.title }}
 
 In this page we shortly describe the **RDF data model**, based on Open Annotatation
 (http://www.openannotation.org/spec/core/), used in Pundit to represent annotations. We do this by showing some basic examples.
@@ -23,7 +23,7 @@ as label, description, pictures and types.
 These triples are spread in a separate named graph connected to the annotation via the `:items property`.
 
 
-##Example of a Pundit notebook represented in RDF
+## Example of a Pundit notebook represented in RDF
 
     @prefix foaf:<http://xmlns.com/foaf/0.1/> .
     @prefix : <http://purl.org/pundit/ont/ao#> .
@@ -49,7 +49,7 @@ These triples are spread in a separate named graph connected to the annotation v
         <http://purl.org/pundit/as/annotation/33024dda>
     <http://purl.org/pundit/as/notebook/89f0d845>  <http://purl.org/pundit/ont/ao#public>	true
 
-##Example of a Pundit annotation represented in RDF
+## Example of a Pundit annotation represented in RDF
 
     <http://purl.org/pundit/as/annotation/9713e5ed> a oa:Annotation ;
         dcterms:created "2013-01-14T15:39:12"^^xsd:dateTime ;
@@ -68,7 +68,7 @@ These triples are spread in a separate named graph connected to the annotation v
 
     <http://purl.org/pundit/as/notebook/969c4157> :includes <http://purl.org/pundit/as/annotation/9713e5ed>
 
-##Example of a Body named graph
+## Example of a Body named graph
 
     <http://purl.org/pundit/as/graph/annotationGraph-9713e5ed> {
     <http://metasound.dibet.univpm.it/release_bot/build/examples/Battle_of_Montaperti-1.html
@@ -83,7 +83,7 @@ These triples are spread in a separate named graph connected to the annotation v
 
     }
 
-##Example Items named graph
+## Example Items named graph
 
     <http://purl.org/pundit/as/graph/itemsGraph-9713e5ed> {
     foaf:Person	rdfs:label	"Person".
