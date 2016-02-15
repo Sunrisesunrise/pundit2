@@ -351,7 +351,8 @@ angular.module('Pundit2.AnnotationSidebar')
         broken: {}
     };
 
-    var isUserLogged = false;
+    var isUserLogged = false,
+        userData = {};
 
     var clientMode = Config.clientMode,
         Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined,
@@ -1127,13 +1128,22 @@ angular.module('Pundit2.AnnotationSidebar')
             subFiltersSet = {},
             currentAnnotationsList;
 
-        var fromDate = activeFilters.fromDate.expression,
-            toDate = activeFilters.toDate.expression;
-
-        var freeTextSearchLabel = activeFilters.freeText.expression,
-            brokenValue = annotationSidebar.filters.broken.expression;
+        var fromDate, toDate, freeTextSearchLabel, brokenValue;
 
         var results = {};
+
+        if (activeFilters.fromDate && activeFilters.toDate) {
+            fromDate = activeFilters.fromDate.expression;
+            toDate = activeFilters.toDate.expression;
+        }
+
+        if (activeFilters.freeText) {
+            freeTextSearchLabel = activeFilters.freeText.expression;
+        }
+
+        if (activeFilters.broken) {
+            brokenValue = activeFilters.broken.expression;
+        }
 
         angular.forEach(activeFilters, function(filter, key) {
             exceptionsCheckIndex = exceptionsCheckList.indexOf(key);
@@ -1156,17 +1166,17 @@ angular.module('Pundit2.AnnotationSidebar')
             }
         });
 
-        if (brokenValue === 'hideBroken') {
+        if (brokenValue && brokenValue === 'hideBroken') {
             subFiltersSet.broken = annotationsFilters.broken['uri:broken'].annotationsList;
             atLeastOneActiveFilter = true;
         }
 
-        if (isValidDate(fromDate) || isValidDate(toDate)) {
+        if ((fromDate && toDate) && (isValidDate(fromDate) || isValidDate(toDate))) {
             subFiltersSet.date = filterAnnotationsByDate(fromDate, toDate);
             atLeastOneActiveFilter = true;
         }
 
-        if (freeTextSearchLabel !== '') {
+        if (freeTextSearchLabel && freeTextSearchLabel !== '') {
             subFiltersSet.freeText = filterAnnotationsByLabel(freeTextSearchLabel, state.allAnnotations);
             atLeastOneActiveFilter = true;
         }
@@ -1180,7 +1190,7 @@ angular.module('Pundit2.AnnotationSidebar')
             updatePartialFiltersCount(annotationsFilters, subFiltersSet, results);
         }
 
-        EventDispatcher.sendEvent('AnnotationSidebar.filteredAnnotationsUpdate');
+        // EventDispatcher.sendEvent('AnnotationSidebar.filteredAnnotationsUpdate');
         annotationSidebar.log(Object.keys(results).length + ' multi result ', results);
 
         return results;
@@ -1209,10 +1219,12 @@ angular.module('Pundit2.AnnotationSidebar')
         EventDispatcher.sendEvent('AnnotationSidebar.toggleFiltersContent', state.isFiltersExpanded);
         Analytics.track('buttons', 'click', 'sidebar--' + (state.isFiltersExpanded ? 'showFilters' : 'filters--hide'));
     };
+    
     // Check if the sidebar is expanded
     annotationSidebar.isAnnotationSidebarExpanded = function() {
         return state.isSidebarExpanded;
     };
+
     // Check if the list of the filters is visible
     annotationSidebar.isFiltersExpanded = function() {
         return state.isFiltersExpanded;
@@ -1221,6 +1233,7 @@ angular.module('Pundit2.AnnotationSidebar')
     annotationSidebar.isAnnotationsPanelActive = function() {
         return state.isAnnotationsPanelActive;
     };
+
     annotationSidebar.activateAnnotationsPanel = function() {
         if (state.isFiltersExpanded) {
             annotationSidebar.toggleFiltersContent();
@@ -1240,18 +1253,33 @@ angular.module('Pundit2.AnnotationSidebar')
     annotationSidebar.isSuggestionsPanelActive = function() {
         return state.isSuggestionsPanelActive;
     };
+
     annotationSidebar.activateSuggestionsPanel = function() {
         if (isUserLogged === false) {
             MyPundit.login();
             return;
         }
+
+        var userFilter = {
+                authors: {
+                    filterName: 'authors',
+                    filterLabel: 'Author',
+                    expression: [userData.uri]
+                }
+            },
+            userAnnotations = [];
+
         if (state.isAnnotationsPanelActive) {
             if (state.isFiltersExpanded) {
                 state.isFiltersExpanded = false;
             }
+            
+            userAnnotations = getFilteredAnnotations(userFilter, annotationsFilters);
+
             Consolidation.wipe();
             EventDispatcher.sendEvent('Pundit.preventDelay', true);
-            Annomatic.run();
+
+            Annomatic.run(userAnnotations);
         }
 
         state.isSuggestionsPanelActive = true;
@@ -1443,6 +1471,12 @@ angular.module('Pundit2.AnnotationSidebar')
 
             state.isAnnotationsPanelActive = true;
             state.isSuggestionsPanelActive = false;
+        }
+
+        if (isUserLogged) {
+            userData = MyPundit.getUserData();
+        } else {
+            userData = {};
         }
     });
 

@@ -186,6 +186,7 @@ angular.module('Pundit2.Annomatic')
 
     annomatic.area = null;
     annomatic.annotationNumber = 0;
+    annomatic.userAnnotations = [];
     annomatic.scanBtnStyle = {};
 
     if (annomatic.options.partialSelection) {
@@ -642,7 +643,8 @@ angular.module('Pundit2.Annomatic')
                 var item,
                     allValidAnnotations = findAnnotations(element, data.annotations),
                     validAnnotations = [],
-                    oldAnnotationNumber = annomatic.annotationNumber;
+                    oldAnnotationNumber = annomatic.annotationNumber,
+                    skippedNum = 0;
 
                 // validAnnotations = allValidAnnotations;
                 // TODO: improve confidence management
@@ -656,8 +658,34 @@ angular.module('Pundit2.Annomatic')
                 annomatic.currAnn = 0;
 
                 for (var l = validAnnotations.length, i = 0; i < l; i++) {
-                    var currentIndex = oldAnnotationNumber + i;
+                    var currentIndex = oldAnnotationNumber + i - skippedNum,
+                        stillAccepted = false;
+
                     item = TextFragmentHandler.createItemFromRange(validAnnotations[i].range);
+
+                    // TODO: optimize it with a graph map
+                    for (a in annomatic.userAnnotations) {
+                        var currentAnnotation = annomatic.userAnnotations[a],
+                            currentGraph = currentAnnotation.graph[item.uri],
+                            annotationObjectUri = validAnnotations[i].annotation.uri;
+
+                        if (typeof currentGraph !== 'undefined') {
+                            if (typeof currentGraph[annomatic.options.property] !== 'undefined') {
+                                if (typeof currentGraph[annomatic.options.property][0] !== 'undefined') {
+                                    if (currentGraph[annomatic.options.property][0].value === annotationObjectUri)  {
+                                        stillAccepted = true;
+                                        annomatic.log('User annotation still present');
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (stillAccepted) {
+                        annomatic.annotationNumber--;
+                        skippedNum++;
+                        continue;
+                    }
 
                     annomatic.ann.byNum[currentIndex] = validAnnotations[i].annotation;
                     annomatic.ann.numToUriMap[currentIndex] = item.uri;
@@ -687,16 +715,17 @@ angular.module('Pundit2.Annomatic')
 
         values.uri = ann.uri;
 
-        if (typeof(ann.types) === "undefined") {
+        if (typeof ann.types === 'undefined') {
             values.type = ['http://dbpedia.org/ontology/Thing'];
         } else if (ann.types.length === 0) {
             values.type = ['http://dbpedia.org/ontology/Thing'];
         } else {
             values.type = angular.copy(ann.types);
         }
-        values.description = ann.abstract;
 
+        values.description = ann.abstract;
         values.label = ann.label;
+
         if (values.label.length > TextFragmentHandler.options.labelMaxLength) {
             values.label = values.label.substr(0, TextFragmentHandler.options.labelMaxLength) + ' ..';
         }
@@ -889,7 +918,6 @@ angular.module('Pundit2.Annomatic')
     annomatic.log('Component up and running');
 
 
-
     // TODO: new code to be integrated
 
     /**
@@ -933,16 +961,21 @@ angular.module('Pundit2.Annomatic')
      * Start annomatic
      *
      */
-    annomatic.run = function() {
+    annomatic.run = function(userAnnotations) {
         state.isRunning = true;
         TextFragmentHandler.turnOff();
         ImageHandler.turnOff();
+
         if (Toolbar.isActiveTemplateMode()) {
             Toolbar.toggleTemplateMode();
         }
 
         if (annomatic.options.partialSelection) {
             angular.element('body').on('mousedown', mouseDownHandler);
+        }
+
+        if (typeof userAnnotations !== 'undefined') {
+            annomatic.userAnnotations = userAnnotations;
         }
 
         angular.element('*').on('mouseenter', mouseEnterHandler);
@@ -966,7 +999,8 @@ angular.module('Pundit2.Annomatic')
     annomatic.stop = function() {
         annomatic.closeAll();
         annomatic.hardReset();
-        // ItemsExchange.wipeContainer(annomatic.options.container);
+        annomatic.userAnnotations = [];
+
         state.isRunning = false;
         TextFragmentHandler.turnOn();
         ImageHandler.turnOn();
