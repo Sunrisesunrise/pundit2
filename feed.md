@@ -3,7 +3,7 @@ layout: page
 title: Feed the Pundit
 ---
 
-#{{ page.title }}
+# {{ page.title }}
 
 **Feed** is a tool that allows to use Pundit on pages of custom digital libraries, custom projects or on any HTML web page.
 Feeds receives two parameters as GET variables:
@@ -16,7 +16,7 @@ Feeds receives two parameters as GET variables:
 
 You can <a href="http://dev.thepund.it/download/client/last-beta/docs/index.html#!/api/punditConfig" target="_blank">check here</a> an overview of the configurations available for Pundit.
 
-##How does Feed works?
+## How does Feed works?
 The content to be annotated is **pasted inside the body of the HTML page of Feed** and there it can be annotated.
 In the case of an HTML page all the content inside the *<body>* is copied and then pasted inside Feed.
 
