@@ -3,9 +3,9 @@ layout: page
 title: Annotation Server installation
 ---
 
-#{{ page.title }}
+# {{ page.title }}
 
-##1. Prerequisites
+## 1. Prerequisites
 
   - **Tomcat 6** or **Tomcat 7** installed via zip.
   - **Sesame 2.7** (see *2. Sesame installation*).
@@ -14,7 +14,7 @@ title: Annotation Server installation
 
 ---
 
-##2. Annotation server installation
+## 2. Annotation server installation
 
 1. Download the <a href="https://net7.codebasehq.com/upload/68f95571-ebde-8988-679d-863f7efb7ea9/show/original">Annotation Server Zip</a> and unzip it.
 1. Copy `./web/WEB-INF/web-example.xml` in `./web/WEB-INF/web.xml`.
@@ -43,7 +43,7 @@ title: Annotation Server installation
 
 ---
 
-##3. Build & create package
+## 3. Build & create package
 
 First open file `nbproject/project.properties` and modify following properties with your local tomcat installation:
 
@@ -57,13 +57,13 @@ then into the main directory run `ant dist`.
 
 ---
 
-##4. Deploy Annotation Server
+## 4. Deploy Annotation Server
 
 Copy `./dist/annotationserver.war` into `{TOMCAT_HOME}/webapps/` and run tomcat `{TOMCAT_HOME}/bin/startup.sh`.
 
 ---
 
-##5. Check running application
+## 5. Check running application
 
 Go to `http://{hostname}:{port}/annotationserver` to see welcome page with some configurations form `web.xml`.
 
