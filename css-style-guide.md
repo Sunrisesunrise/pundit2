@@ -3,7 +3,7 @@ layout: page
 title: CSS Style Guide
 ---
 
-#{{ page.title }}
+# {{ page.title }}
 
 
 ## 1. Introduction
@@ -79,7 +79,7 @@ The LESS file organization is quite complex due to the complexity of the Pundit 
 Into the *pundit2/app/styles/* folder in the project you fill find all LESS files you'll be working on.
 These files are grouped in these folders:
 
-###*pundit*
+### *pundit*
 
 This is the main folder for the Pundit application. The files structure allows to develop
 more than one application: the modularity both of the LESS and AngularJS files
@@ -92,7 +92,7 @@ These are the main files in this folder:
   - *pundit-variables.less:* custom variables used **only** by Pundit (not by other applications). This file is
   currently empty but it might be useful in the future (if not... we are going to delete it).
 
-###*korbo*
+### *korbo*
 
 Korbo is another application like Pundit (more info about Korbo <a href="http://korbo.muruca.org/" target="_blank">here</a>).
 The files structure is similar to the one that we've seen in Pundit.
@@ -102,11 +102,11 @@ The files structure is similar to the one that we've seen in Pundit.
   - *korboee-styles.less*: custom styles for the Korbo application. It's advisable to have as little as
   possible CSS code here: the code should be divided into components.
 
-###*global*
+### *global*
 
 Collection of LESS files that don't refer to a specific component or application (e.g. *variables*, *normalization, ...*).
 
-###*components*
+### *components*
 
 In this folder you will find all reusable components of the interface.
 When writing Pundit CSS we follow the OOCSS philosophy and so we try to keep each component independent from the
@@ -114,7 +114,7 @@ others and reusable in any context or application. The components are reusable e
 
 Some of there LESS files have a corresponding component in the source files.
 
-###*bootstrap*
+### *bootstrap*
 
 Pundit is based on <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>
 and <a href="http://mgcrea.github.io/angular-strap/" target="_blank">AngularStrap</a>.
@@ -132,7 +132,7 @@ Getting rid of Bootstrap: after months of development we've come to the conclusi
 the CSS declarations of Bootstrap, so it would be better to get rid of it as soon as possible. In the meantime
 (while we still have Bootstrap in the application) please try not to use Bootstrap classes and create custom ones.
 
-###*img*
+### *img*
 
 Images referred by CSS declarations.
 
