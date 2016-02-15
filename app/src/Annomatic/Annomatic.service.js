@@ -1390,20 +1390,25 @@ angular.module('Pundit2.Annomatic')
             .off('click', areaClick)
             .removeClass('selecting-ancestor');
 
-        if (TextFragmentHandler.isToBeIgnored(currentTarget) || currentTarget.nodeName === 'IMG') {
+        if (TextFragmentHandler.isToBeIgnored(currentTarget) || 
+            currentTarget.nodeName === 'IMG') {
             stopHandler();
             return;
         }
 
-        if (currentTarget.className.indexOf('pnd-wrp') !== -1 && lastUsedTarget !== null) {
+        if (currentTarget.className.indexOf('pnd-wrp') !== -1 && 
+            lastUsedTarget !== null) {
             currentTarget = lastUsedTarget;
         }
 
-        while (targetsToSkip.indexOf(currentTarget.nodeName.toLowerCase()) !== -1 || angular.element(currentTarget).text().replace(' ', '').length < 90 && currentTarget.parentNode.nodeName.toLowerCase() !== 'body') {
+        while (targetsToSkip.indexOf(currentTarget.nodeName.toLowerCase()) !== -1 || 
+            angular.element(currentTarget).text().replace(' ', '').length < 90 && 
+            currentTarget.parentNode.nodeName.toLowerCase() !== 'body') {
             currentTarget = currentTarget.parentNode;
         }
 
-        if (currentTarget.className.indexOf('selected-area-results') !== -1 || angular.element(currentTarget).text().replace(' ', '').length > 3200) {
+        if (currentTarget.className.indexOf('selected-area-results') !== -1 || 
+            angular.element(currentTarget).text().replace(' ', '').length > 3200) {
             stopHandler();
             return;
         }
@@ -1415,8 +1420,11 @@ angular.module('Pundit2.Annomatic')
         if (scanBtn !== null && lastUsedTarget !== currentTarget) {
             rects = currentTarget.getBoundingClientRect();
 
-            currentHeight = Math.max(0, rects.top > 0 ? Math.min(rects.height, window.innerHeight - rects.top) : (rects.bottom < window.innerHeight ? rects.bottom : window.innerHeight));
-            currentWidth = rects.width < window.innerWidth ? rects.width : window.innerWidth;
+            currentHeight = Math.max(0, rects.top > 0 ? 
+                    Math.min(rects.height, window.innerHeight - rects.top) : 
+                    (rects.bottom < window.innerHeight ? rects.bottom : window.innerHeight));
+            currentWidth = rects.width < window.innerWidth ? 
+                rects.width : window.innerWidth;
             currentTop = rects.top > 0 ? rects.top : 0;
             currentLeft = rects.left > 0 ? rects.left : 0;
 
