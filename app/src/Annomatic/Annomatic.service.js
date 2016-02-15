@@ -1403,7 +1403,7 @@ angular.module('Pundit2.Annomatic')
             currentTarget = currentTarget.parentNode;
         }
 
-        if (currentTarget.className.indexOf('selected-area-results') !== -1) {
+        if (currentTarget.className.indexOf('selected-area-results') !== -1 || angular.element(currentTarget).text().replace(' ', '').length > 3200) {
             stopHandler();
             return;
         }
