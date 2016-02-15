@@ -22,10 +22,10 @@ There are **three main ways** you can use Pundit:
 ##1. Chrome Extension
 
 This is the preferred way of using Pundit as a general purpose application to annotate **general web pages** while browsing the web.
-The extension allows you to launch Pundit on any page you want to annotate and build your semantic annotations.
-
-**The Chrome Extension will be available soon**, follow <a href="https://twitter.com/_thepundit" target="_blank">Pundit on Twitter</a> to get some fresh updates and know
-when the Extension will be released.
+The extension allows you to launch Pundit on any page you want to annotate and build your highlights, comments and semantic annotations.
+We provide two different Chrome Extensions:
+<a href="http://thepund.it/annotator" target="_blank">Pundit Annotator</a>: the basic web annotation tool that allows users to create highlights and comments on web pages;
+<a href="http://thepund.it/annotatorpro" target="_blank">Pundit Annotator Pro</a>: a more advanced tool for users who also want to create semantic annotations.
 
 ##2. Embed Pundit in your project
 
