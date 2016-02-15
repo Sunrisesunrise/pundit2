@@ -3,7 +3,7 @@ layout: page
 title: Embed Pundit setup
 ---
 
-#{{ page.title }}
+# {{ page.title }}
 
 ## 1. Setup the client
 
