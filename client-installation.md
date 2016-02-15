@@ -3,7 +3,7 @@ layout: page
 title: Pundit Client installation
 ---
 
-#{{ page.title }}
+# {{ page.title }}
 
 To install the project and be ready to develop you need a few components:
 
