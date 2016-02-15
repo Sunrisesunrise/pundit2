@@ -5,6 +5,8 @@ title: Home
 
 #What is Pundit
 
+# What is Pundit
+
 Pundit is a web application that allows users to annotate web pages.
 Compared to others annotations tool Pundit is a bit "special" since it allows to create **semantic annotations**.
 
