@@ -3,9 +3,9 @@ layout: page
 title: Annotation Server REST API
 ---
 
-#{{ page.title }}
+# {{ page.title }}
 
-##1. Support for Cross-domain Requests
+## 1. Support for Cross-domain Requests
 
 The Annotation Server support cross-domain requests using **CORS** and **JSONP**.
 CORS is completely transparent to the client and can be used in recent Web browsers for
@@ -24,7 +24,7 @@ To use JSONP for GET requests, a callback function must be specified adding the 
 
 ---
 
-##2. Consuming API
+## 2. Consuming API
 
 This set of API allow users to get all data and metadata about Notebooks and Annotations in different
 formats like: **plain text** (that can also be rendered in HTML pages using stylesheets), **JSON**, **RDF+XML** and **RDF+N3**.
@@ -33,23 +33,23 @@ Base URL:  `http://{WEBSERVER ADDRESS}/annotationserver/api`
 
 ---
 
-###GET /notebooks/current
+### GET /notebooks/current
 
 Returns the ID of the Notebook where the active user writes annotations by default (current notebook).
 
-####Output Data Formats
+#### Output Data Formats
 
   * application/json
 
-####Output Payload Formats
+#### Output Payload Formats
 
   * `{ "NotebookID": "ID" }`
 
-####Note
+#### Note
 
 For the prototype version of the Annotation Server, all users write on the same notebook.
 
-####Returned Status Code
+#### Returned Status Code
 
   * **200 OK**, in case of success
   * **204 No Content**, if there is no active Notebook
@@ -59,19 +59,19 @@ For the prototype version of the Annotation Server, all users write on the same 
 
 ----
 
-###GET /notebooks/public/*{Notebook-ID}*
+### GET /notebooks/public/*{Notebook-ID}*
 
 Check if a specified Notebook is public or not.
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 
-####Output Payload Formats
+#### Output Payload Formats
 
 * `{ "NotebookPublic": "1|0" }`: 1: the specified Notebooks is Public; 0: the specified Notebook is Private
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request is not correct
@@ -81,19 +81,19 @@ Check if a specified Notebook is public or not.
 
 ----
 
-###GET /notebooks/private/*{Notebook-ID}*
+### GET /notebooks/private/*{Notebook-ID}*
 
 Check if a specified Notebook is private or not.
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 
-####Output Payload Formats
+#### Output Payload Formats
 
 * `{ "NotebookPrivate": "1|0" }`: 1: the specified Notebooks is Private; 0: the specified Notebook is Public
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request is not correct
@@ -103,19 +103,19 @@ Check if a specified Notebook is private or not.
 
 ----
 
-###GET /notebooks/owned
+### GET /notebooks/owned
 
 Return the list of all Notebooks owned by the current logged user.
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 
-####Output Payload Formats
+#### Output Payload Formats
 
 * `{ "NotebookIDs": ["11111111", "22222222"] }`
 
-####Returned Status Code
+#### Returned Status Code
 
 * **"200 OK"**, in case of success
 * **"204 No Content"**, if the current logged user does not own any Notebooks
@@ -125,19 +125,19 @@ Return the list of all Notebooks owned by the current logged user.
 
 ----
 
-###GET /notebooks/active/*{Notebook-ID}*
+### GET /notebooks/active/*{Notebook-ID}*
 
 Check if a specified Notebook is active or not.
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 
-####Output Payload Formats
+#### Output Payload Formats
 
 * `{ "NotebookActive": "1|0" }`: 1: the specified Notebooks is set as "active"; 0: the specified Notebook is set as "not active"
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request is not correct
@@ -147,19 +147,19 @@ Check if a specified Notebook is active or not.
 
 ----
 
-###GET /notebooks/active
+### GET /notebooks/active
 
 Return the list of all active Notebooks for the current logged user.
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 
-####Output Payload Formats
+#### Output Payload Formats
 
 * `{ "NotebookIDs": ["11111111", "22222222"] }`
 
-####Returned Status Code
+#### Returned Status Code
 
 * **"200 OK"**, in case of success
 * **"204 No Content"**, if there are no active Notebooks for the current logged user
@@ -169,15 +169,15 @@ Return the list of all active Notebooks for the current logged user.
 
 ----
 
-###GET /notebooks/*{Notebook-ID}*/metadata
+### GET /notebooks/*{Notebook-ID}*/metadata
 
 Get all metadata about a specified Notebooks.
 
-####Parameters
+#### Parameters
 
 * **Notebook-ID**, a valid notebook ID
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -185,7 +185,7 @@ Get all metadata about a specified Notebooks.
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no metadata about the specified Notebooks
@@ -196,11 +196,11 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ----
 
-###GET /notebooks/*{Notebook-ID}*/annotations/metadata?limit=*limit*&offset=*offset*&orderby=*orderby*&orderingMode=*1|0*
+### GET /notebooks/*{Notebook-ID}*/annotations/metadata?limit=*limit*&offset=*offset*&orderby=*orderby*&orderingMode=*1|0*
 
 Get the list of all annotation contained within a Notebook with related metadata.
 
-####Parameters
+#### Parameters
 
 * **Notebook-ID**, a valid notebook ID
 * **limit**, (optional) specify the maximum number of annotations to retrieve. Default: -1 (all annotations)
@@ -208,7 +208,7 @@ Get the list of all annotation contained within a Notebook with related metadata
 * **orderby**, (optional) specify the RDF property used to order the annotations. Default: *dc:created*
 * **desc**, (optional) specify if the results should be sorted using a descending order (desc=1) or an ascending order (desc=0). Default: 0
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -216,7 +216,7 @@ Get the list of all annotation contained within a Notebook with related metadata
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations or triples in the specified notebooks
@@ -227,15 +227,15 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ----
 
-###GET /notebooks/current/graph
+### GET /notebooks/current/graph
 
 For each annotation contained in the current Notebook for the current logged User, return all triples without Annotation’s metadata.
 
-####Parameters
+#### Parameters
 
 * **Notebook-ID**, a valid notebook ID
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -243,7 +243,7 @@ For each annotation contained in the current Notebook for the current logged Use
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations or triples in the specified notebooks
@@ -254,15 +254,15 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ----
 
-###GET /notebooks/*{Notebook-ID}*/graph
+### GET /notebooks/*{Notebook-ID}*/graph
 
 For each annotation contained in the specified Notebook, return all triples without Annotation’s metadata.
 
-####Parameters
+#### Parameters
 
 * **Notebook-ID**, a valid notebook ID
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -270,7 +270,7 @@ For each annotation contained in the specified Notebook, return all triples with
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations or triples in the specified notebooks
@@ -281,15 +281,15 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ----
 
-###GET /annotations/*{Annotation-ID}*
+### GET /annotations/*{Annotation-ID}*
 
 Return all data about a specified Annotation (metadata + graph + items)
 
-####Parameters
+#### Parameters
 
 * **Annotation-ID**, a valid Annotation ID
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 
@@ -310,7 +310,7 @@ The output data format must be specified setting the *Accept* HTTP header. Outpu
             }
         }
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations with the specified Annotation-ID
@@ -320,15 +320,15 @@ The output data format must be specified setting the *Accept* HTTP header. Outpu
 
 ----
 
-###GET /annotations/*{Annotation-ID}*/metadata
+### GET /annotations/*{Annotation-ID}*/metadata
 
 Return all metadata about the specified Annotation.
 
-####Parameters
+#### Parameters
 
 * **Annotation-ID**, a valid Annotation ID
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -336,7 +336,7 @@ Return all metadata about the specified Annotation.
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations with the specified Annotation-ID
@@ -346,15 +346,15 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ----
 
-###GET /annotations/*{Annotation-ID}*/graph
+### GET /annotations/*{Annotation-ID}*/graph
 
 Returns all data triples (without metadata) about the specified Annotation.
 
-####Parameters
+#### Parameters
 
 * **Annotation-ID**, a valid Annotation ID
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -362,7 +362,7 @@ Returns all data triples (without metadata) about the specified Annotation.
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations with the specified Annotation-ID
@@ -372,15 +372,15 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ----
 
-###GET /annotations/*{Annotation-ID}*/items
+### GET /annotations/*{Annotation-ID}*/items
 
 Return all Items associated to a given annotation.
 
-####Parameters
+#### Parameters
 
 * **Annotation-ID**, a valid Annotation ID
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -388,7 +388,7 @@ Return all Items associated to a given annotation.
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations with the specified Annotation-ID
@@ -398,25 +398,25 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ---
 
-##3. Open API
+## 3. Open API
 
 This set of API are consuming API that rely on public data and thus they do not require any authentication process.
 
 Base URL: `http://{WEBSERVER ADDRESS}/annotationserver/api/open`
 
-###GET /notebooks/public
+### GET /notebooks/public
 
 Return a list of all public Notebooks.
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 
-####Output Payload Formats
+#### Output Payload Formats
 
 * `{ "NotebookIDs": ["11111111", "22222222"] }`
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no public Notebooks
@@ -425,11 +425,11 @@ Return a list of all public Notebooks.
 
 ----
 
-###GET /notebooks/*{Notebook-ID}*
+### GET /notebooks/*{Notebook-ID}*
 
 Return the list of all annotations contained within a Notebook with related metadata.
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 
@@ -473,7 +473,7 @@ The output data format must be specified setting the *Accept* HTTP header. Outpu
            ]
         }
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations with the specified Annotation-ID
@@ -482,15 +482,15 @@ The output data format must be specified setting the *Accept* HTTP header. Outpu
 
 ----
 
-###GET /notebooks/*{Notebook-ID}*/metadata
+### GET /notebooks/*{Notebook-ID}*/metadata
 
 Get all metadata about a specified Notebooks.
 
-####Parameters
+#### Parameters
 
 * **Notebook-ID**, a valid notebook ID
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -498,7 +498,7 @@ Get all metadata about a specified Notebooks.
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no metadata about the specified Notebooks
@@ -508,11 +508,11 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ----
 
-###GET /notebooks/*{Notebook-ID}*/annotations/metadata?limit=*limit*&offset=*offset*&orderby=*orderby*&orderingMode=*1|0*
+### GET /notebooks/*{Notebook-ID}*/annotations/metadata?limit=*limit*&offset=*offset*&orderby=*orderby*&orderingMode=*1|0*
 
 Get the list of all annotation contained within a Notebook with related metadata.
 
-####Parameters
+#### Parameters
 
 * **Notebook-ID**, a valid notebook ID
 * **limit**, (optional) specify the maximum number of annotations to retrieve. Default: -1 (all annotations)
@@ -520,7 +520,7 @@ Get the list of all annotation contained within a Notebook with related metadata
 * **orderby**, (optional) specify the RDF property used to order the annotations. Default: *dc:created*
 * **desc**, (optional) specify if the results should be sorted using a descending order (desc=1) or an ascending order (desc=0). Default: 0
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -528,7 +528,7 @@ Get the list of all annotation contained within a Notebook with related metadata
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations or triples in the specified notebooks
@@ -538,15 +538,15 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ----
 
-###GET /notebooks/*{Notebook-ID}*/graph
+### GET /notebooks/*{Notebook-ID}*/graph
 
 For each annotation contained in the specified Notebook, return all triples without Annotation’s metadata.
 
-####Parameters
+#### Parameters
 
 * **Notebook-ID**, a valid notebook ID
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -554,7 +554,7 @@ For each annotation contained in the specified Notebook, return all triples with
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations or triples in the specified notebooks
@@ -564,15 +564,15 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ----
 
-###GET /annotations/*{Annotation-ID}*/metadata
+### GET /annotations/*{Annotation-ID}*/metadata
 
 Return all metadata about the specified Annotation.
 
-####Parameters
+#### Parameters
 
 * **Annotation-ID**, a valid Annotation ID
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -580,7 +580,7 @@ Return all metadata about the specified Annotation.
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations with the specified Annotation-ID
@@ -589,15 +589,15 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ----
 
-###GET /annotations/*{Annotation-ID}*/graph
+### GET /annotations/*{Annotation-ID}*/graph
 
 Returns all data triples (without metadata) about the specified Annotation.
 
-####Parameters
+#### Parameters
 
 * **Annotation-ID**, a valid Annotation ID
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -605,7 +605,7 @@ Returns all data triples (without metadata) about the specified Annotation.
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations with the specified Annotation-ID
@@ -614,15 +614,15 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ----
 
-###GET /annotations/*{Annotation-ID}*/items
+### GET /annotations/*{Annotation-ID}*/items
 
 Return all Items associated to a given annotation.
 
-####Parameters
+#### Parameters
 
 * **Annotation-ID**, a valid Annotation ID
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -630,7 +630,7 @@ Return all Items associated to a given annotation.
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations with the specified Annotation-ID
@@ -639,19 +639,19 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ----
 
-###GET /metadata/search?query=*query*
+### GET /metadata/search?query=*query*
 
 Searches for all Annotation’s metadata according to the specified parameters. In the current version, the only supported searching parameter is *resources*. Specifying one or more resources, this API return all metadata of Annotations that have one of the specified resource as *hasTarget* and *hasPageContext*. In addition, this API returns all metadata of Annotations that have as *hasTarget* a resource that *isPartOf* of one of the specified resources.
 
-####Parameters
+#### Parameters
 
 * **query**, specify the searching parameters. These parameters must be in JSON format. Example of searching parameters: `{ ”resources”: [”URL1”, ”URL2”, ...] }`
 
-####Request Headers and Output Data Formats
+#### Request Headers and Output Data Formats
 
 * **Accept*** (mandatory), specify the encoding format of the output payload. Possible values: *application/json*, *application/rdf+xml*, *text/rdf+n3*
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no metadata according to the specified searching parameters
@@ -660,7 +660,7 @@ Searches for all Annotation’s metadata according to the specified parameters. 
 
 ---
 
-###GET /count/search?query=*query*&scope=all
+### GET /count/search?query=*query*&scope=all
 
 Retrieves all resources whose URL matches the query and that are involved in at lest one annotation. For each resource returns its URL and the corresponding number of annotations.
 For example the query "mywebsite.org" could match the following URLs: "http://mywebsite.org/index.html", "http://mywebsite.org/blog/posts/1.php", "http://mywebsite.org/imgs/picture_1.jpg".
@@ -672,7 +672,7 @@ A resource is involved in an annotation when:
 
 Note: An annotation can involve more that one resource (e.g. two distinct images from the same web page).
 
-####Parameters
+#### Parameters
 
 * **query**, specify the searching parameters. These parameters must be in JSON format.
 
@@ -685,7 +685,7 @@ OR
 `{ ”resources”: [”REGEX1”, ”REGEX2”, ...], "startDate":"date-in-xsd-format","endDate":"date-in-xsd-format" }`
 **startDate** and  **endDate** are optional parameters that delimitate research to Annotation created after  startDate value or before endDate value
 
-####Output Data Formats
+#### Output Data Formats
 
 Return  *application/json*, file
 
@@ -697,7 +697,7 @@ Return  *application/json*, file
 
 The first element rapresent the url that match at least one regular expression passed as argument, the second one instead the number of Annotations that contain the uri as  *hasTarget* and *hasPageContext* property
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request is not correct or if the searching parameters are not correct
@@ -706,17 +706,17 @@ The first element rapresent the url that match at least one regular expression p
 
 ---
 
-##4. Authoring API
+## 4. Authoring API
 
 This set of API allow user to create new notebooks and annotations as well as edit or delete existing ones and modify their metadata.
 
 Base URL:  `http://{WEBSERVER ADDRESS}/annotationserver/api`
 
-####PUT /notebooks/public/*{Notebook-ID}*
+#### PUT /notebooks/public/*{Notebook-ID}*
 
 Set the specified Notebook as Public.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request is not correct
@@ -726,11 +726,11 @@ Set the specified Notebook as Public.
 
 ----
 
-###PUT /notebooks/private/*{Notebook-ID}*
+### PUT /notebooks/private/*{Notebook-ID}*
 
 Set the specified Notebook as Private.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request is not correct
@@ -740,11 +740,11 @@ Set the specified Notebook as Private.
 
 ----
 
-###DELETE /notebooks/private/*{Notebook-ID}*
+### DELETE /notebooks/private/*{Notebook-ID}*
 
 Set the specified Notebook as Public. This API is an alias of the API `PUT /notebooks/*{Notebook-ID}*/public
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request is not correct
@@ -754,11 +754,11 @@ Set the specified Notebook as Public. This API is an alias of the API `PUT /note
 
 ----
 
-###DELETE /notebooks/public/*{Notebook-ID}*
+### DELETE /notebooks/public/*{Notebook-ID}*
 
 Set the specified Notebook as Private. This API is an alias of the API `PUT /notebooks/*{Notebook-ID}*/private
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request is not correct
@@ -768,11 +768,11 @@ Set the specified Notebook as Private. This API is an alias of the API `PUT /not
 
 ----
 
-###PUT /notebooks/current/*{Notebook-ID}*
+### PUT /notebooks/current/*{Notebook-ID}*
 
 Set the specified Notebooks as "current". If another Notebook is already set as "current", this API set it as "not current".
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request is not correct
@@ -782,11 +782,11 @@ Set the specified Notebooks as "current". If another Notebook is already set as 
 
 ----
 
-###PUT /notebooks/active/*{Notebook-ID}*
+### PUT /notebooks/active/*{Notebook-ID}*
 
 Activate a specified Notebook
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request or the specified Notebooks ID is not correct
@@ -796,11 +796,11 @@ Activate a specified Notebook
 
 ----
 
-###DELETE /notebooks/active/*{Notebook-ID}*
+### DELETE /notebooks/active/*{Notebook-ID}*
 
 Deactivate a specified Notebook. By default a Notebook set as current can not be deactivated. If a user try to deactivate a Notebook that is set as current, this API return a 403 HTTP error.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request or the specified Notebooks ID is not correct
@@ -810,23 +810,23 @@ Deactivate a specified Notebook. By default a Notebook set as current can not be
 
 ----
 
-###POST /notebooks/
+### POST /notebooks/
 
 Creates a new Notebook. This API return the ID of the created Notebook in response’s payload in JSON format and the full URL of the Notebook adding a *Location* header into the HTTP response. The name of the new Notebook can be specified sending a specific payload.
 
-####Request Payload
+#### Request Payload
 
 * Payload must be encoded in JSON format and it is optional. If the Notebook’s name is not specified, the Annotation Server will create a new Notebook with a default name (e.g. Notebook 27-09-2011). Payload format: `{ ”NotebookName”: ”My new Notebook” }`
 
-####Request Headers
+#### Request Headers
 
 * **Content-Type**, required if the request includes the payload to specify the notebook’s name. Possible values: *application/json*
 
-####Otuput Data Formats
+#### Otuput Data Formats
 
 * **Data format**: application/json, the ID of the new Notebooks. Response example: `{ ”NotebookID”: ”4C82F27D” }`
 
-####Returned Status Code
+#### Returned Status Code
 
 * **201 Created**, in case of success
 * **400 Bad Request**, if the request is not correct or if the request’s payload is not valid
@@ -834,16 +834,16 @@ Creates a new Notebook. This API return the ID of the created Notebook in respon
 
 ----
 
-###POST /notebooks/*{Notebook-ID}*?context=*{JSON-DATA}*
+### POST /notebooks/*{Notebook-ID}*?context=*{JSON-DATA}*
 
 Creates a new Annotation with a unique ID in the specified Notebooks. The Annotation’s triples must be sent in JSON format in the request’s payload. The payload must contains the Annotation's triples and optionally the Annotation's items. The ID of the new Annotation is returned to the client in the response’s payload. This API also returns the full URL of the created Annotation adding a *Location* header into the HTTP response. This is the API that should always used to create new Annotations.
 
-####Parameters
+#### Parameters
 
 * **Notebook-ID**, a valid Notebook ID
 * **JSON-DATA** (optional), additional annotation metadata in JSON format. The JSON data must be URL encoded. Example of JSON-DATA: `{ ”targets”: [ ”URL1”, ”URL2”, ..], ”pageContext”: ”URL3” }`
 
-####Request Payload
+#### Request Payload
 
 * Request’s payload must contains the Annotation’s triples encoded in JSON/RDF and optionally the Annotation's items in JSON/RDF format. Example:
 
@@ -858,15 +858,15 @@ Creates a new Annotation with a unique ID in the specified Notebooks. The Annota
             }
         }
 
-####Request Headers and Input Data Formats
+#### Request Headers and Input Data Formats
 
 * **Content-Type**, specify the encoding of the input payload. Possible values: *application/json*
 
-####Output Format and Data
+#### Output Format and Data
 
 * **Data format**: *application/json*, the ID of the new Annotation. Response example: `{ ”AnnotationID”: ”AF82E22D”}`
 
-####Returned Status Code
+#### Returned Status Code
 
 * **201 Created**, in case of success
 * **400 Bad Request**, if the request is not correct or if the request’s payload is not valid
@@ -875,28 +875,28 @@ Creates a new Annotation with a unique ID in the specified Notebooks. The Annota
 
 ----
 
-###POST /notebooks/graph/*{Notebook-ID}*?context=*{JSON-DATA}*
+### POST /notebooks/graph/*{Notebook-ID}*?context=*{JSON-DATA}*
 
 Creates a new Annotation with a unique ID in the specified Notebooks. The Annotation’s triples must be sent in the request’s payload. The ID of the new Annotation is returned to the client in the response’s payload. This API also returns the full URL of the created Annotation adding a *Location* header into the HTTP response.
 
-####Parameters
+#### Parameters
 
 * **Notebook-ID**, a valid Notebook ID
 * **JSON-DATA** (optional), additional annotation metadata in JSON format. The JSON data must be URL encoded. Example of JSON-DATA: `{ ”targets”: [ ”URL1”, ”URL2”, ..], ”pageContext”: ”URL3” }`
 
-####Request Payload
+#### Request Payload
 
 * Request’s payload must contains the Annotation’s triples encoded using one of the supported data formats, which must be specified by the *Content-Type* header of the HTTP request.
 
-####Request Headers and Input Data Formats
+#### Request Headers and Input Data Formats
 
 * **Content-Type**, specify the encoding of the input payload. Possible values: *application/json*, *application/rdf+xml*, *text/rdf+n3*
 
-####Output Format and Data
+#### Output Format and Data
 
 * **Data format**: *application/json*, the ID of the new Annotation. Response example: `{ ”AnnotationID”: ”AF82E22D”}`
 
-####Returned Status Code
+#### Returned Status Code
 
 * **201 Created**, in case of success
 * **400 Bad Request**, if the request is not correct or if the request’s payload is not valid
@@ -905,19 +905,19 @@ Creates a new Annotation with a unique ID in the specified Notebooks. The Annota
 
 ----
 
-###POST /notebooks/current
+### POST /notebooks/current
 
 Create a new Annotation e put it into the default Notebooks of the current active user. The Annotation’s triples must be sent in the request’s payload. The ID of the new Annotation is returned to the client in the response’s payload. This API also returns the full URL of the created Annotation adding a *Location* header into the HTTP response.
 
-####Request Payload
+#### Request Payload
 
 Request’s payload must contains the Annotation’s triples encoded using one of the supported data formats, which must be specified by the *Content-Type* header of the HTTP request.
 
-####Request Headers and Input Data Formats
+#### Request Headers and Input Data Formats
 
 * **Content-Type**, specify the encoding of the input payload. Possible values: *application/json*, *application/rdf+xml*, *text/rdf+n3*
 
-####Output Format and Data
+#### Output Format and Data
 
 * **Data format**: *application/json*, the ID of the new Annotation. Response example: `{ ”AnnotationID”: ”AF82E22D”}`
 
@@ -930,23 +930,23 @@ Request’s payload must contains the Annotation’s triples encoded using one o
 
 ----
 
-###POST /annotations/*{Annotation-ID}*
+### POST /annotations/*{Annotation-ID}*
 
 Add new triples to an already existing Annotations. This API does not duplicate already existing triples. The new triples must be sent in the request’s payload and must be encoded in one of the supported data formats.
 
-####Parameters
+#### Parameters
 
 * **Annotation-ID**, the ID of an existing Annotation
 
-####Request Payload
+#### Request Payload
 
 * Request’s payload must contains the Annotation’s triples encoded using one of the supported data formats, which must be specified by the **Content-Type** header of the HTTP request
 
-####Request Headers and Input Data Formats
+#### Request Headers and Input Data Formats
 
 * **Content-Type**, specify the encoding of the input payload. Possible values: *application/json*, *application/rdf+xml*, *text/rdf+n3*
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 Ok**, in case of success
 * **400 Bad Request**, if the request is not correct, if the request’s payload or if the Annotation ID is not valid
@@ -956,23 +956,23 @@ Add new triples to an already existing Annotations. This API does not duplicate 
 
 ----
 
-###PUT /notebooks/*{Notebook-ID}*
+### PUT /notebooks/*{Notebook-ID}*
 
 Modify the metadata of an existing Notebook. In the current version, this API can be used only to change the Notebook’s name. The new Notebook’s name must be sent as request’s payload and must be encoded in JSON format.
 
-####Parameters
+#### Parameters
 
 * **Notebook-ID**, the ID of an existing Notebook
 
-####Request Payload
+#### Request Payload
 
 * Payload must be encoded in JSON format. Payload format: `{ ”NotebookName”: ”My new Notebook” }`
 
-####Request Headers
+#### Request Headers
 
 * **Content-Type**, specify the payload data type. Possible values: *application/json*
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 Ok**, in case of success
 * **400 Bad Request**, if the request is not correct, if the request’s payload or if the Notebook ID is not valid
@@ -982,23 +982,23 @@ Modify the metadata of an existing Notebook. In the current version, this API ca
 
 ----
 
-###PUT /annotations/*{Annotation-ID}*/content
+### PUT /annotations/*{Annotation-ID}*/content
 
 Overwrites the triples of an existing Annotation and modifies the related metadata (e.g. modified date). The new triples must be sent in the request’s payload and must be encoded in one of the supported data formats.
 
-####Parameters
+#### Parameters
 
 * **Annotation-ID**, the ID of an existing Annotation
 
-####Request Payload
+#### Request Payload
 
 * Request’s payload must contains the Annotation’s triples encoded using one of the supported data formats, which must be specified by the *Content-Type* header of the HTTP request
 
-####Request Headers
+#### Request Headers
 
 * **Content-Type**, specify the payload data type. Possible values: *application/json*, *application/rdf+xml*, *text/rdf+n3*
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request is not correct, if the request’s payload or if the Annotation ID is not valid
@@ -1008,23 +1008,23 @@ Overwrites the triples of an existing Annotation and modifies the related metada
 
 ----
 
-###POST /annotations/*{Annotation-ID}*/items
+### POST /annotations/*{Annotation-ID}*/items
 
 Add new Items to an existig annotation specified by the annotation ID.
 
-####Parameters
+#### Parameters
 
 * **Annotation-ID**, the ID of an existing Annotation
 
-####Request Payload
+#### Request Payload
 
 * Request’s payload must contains the Annotation’s Items encoded using one of the supported data formats, which must be specified by the *Content-Type* header of the HTTP request
 
-####Request Headers
+#### Request Headers
 
 * **Content-Type**, specify the payload data type. Possible values: *application/json*, *application/rdf+xml*, *text/rdf+n3*
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request is not correct, if the request’s payload or if the Annotation ID is not valid
@@ -1034,23 +1034,23 @@ Add new Items to an existig annotation specified by the annotation ID.
 
 ----
 
-###PUT  /annotations/*{Annotation-ID}*/items
+### PUT  /annotations/*{Annotation-ID}*/items
 
 Overwrite triples of an existig annotation specified by the annotation ID.
 
-####Parameters
+#### Parameters
 
 * **Annotation-ID**, the ID of an existing Annotation
 
-####Request Payload
+#### Request Payload
 
 * Request’s payload must contains the Annotation’s Items encoded using one of the supported data formats, which must be specified by the *Content-Type* header of the HTTP request
 
-####Request Headers
+#### Request Headers
 
 * **Content-Type**, specify the payload data type. Possible values: *application/json*, *application/rdf+xml*, *text/rdf+n3*
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the request is not correct, if the request’s payload or if the Annotation ID is not valid
@@ -1060,15 +1060,15 @@ Overwrite triples of an existig annotation specified by the annotation ID.
 
 ----
 
-###DELETE /notebooks/*{Notebook-ID}*
+### DELETE /notebooks/*{Notebook-ID}*
 
 Delete the Notebook with the specified ID. If the notebook contains some Annotations, this API also deletes all Annotations contained within it.
 
-####Parameters
+#### Parameters
 
 * **Notebook-ID**, the ID of an existing Notebook
 
-####Returned Status Code
+#### Returned Status Code
 
 * **204 No Content**, in case of success
 * **400 Bad Request**, if the request is not correct or if the Notebook ID is not valid
@@ -1078,15 +1078,15 @@ Delete the Notebook with the specified ID. If the notebook contains some Annotat
 
 ----
 
-###DELETE /annotations/*{Annotation-ID}*
+### DELETE /annotations/*{Annotation-ID}*
 
 Delete the Annotation with the specified ID.
 
-####Parameters
+#### Parameters
 
 * **Annotation-ID**, the ID of an existing Annotation
 
-####Returned Status Code
+#### Returned Status Code
 
 * **204 No Content**, in case of success
 * **400 Bad Request**, if the request is not correct or if the Annotation ID is not valid
@@ -1096,25 +1096,25 @@ Delete the Annotation with the specified ID.
 
 ---
 
-##5. Searching API
+## 5. Searching API
 
 This set of API allow users to search for Notebooks and Annotations basing on specific searching parameters. The prototype version of the Annotation Server provides only a single searching API with simple searching parameters.
 
 Base URL:  `http://{WEBSERVER ADDRESS}/annotationserver/api`
 
-###GET /notebooks/*{Notebook-ID}*/search?query=**query**
+### GET /notebooks/*{Notebook-ID}*/search?query=**query**
 
 Searches for all Annotation’s metadata in a specified Notebook according to the specified parameters. In the current version, the only supported searching parameter is *resources*. Specifying one or more resources, this API return all metadata of Annotations that have one of the specified resource as *hasTarget* and *hasPageContext*. In addition, this API returns all metadata of Annotations that have as *hasTarget* a resource that *isPartOf* of one of the specified resources.
 
-####Parameters
+#### Parameters
 
 * **query**, specify the searching parameters. These parameters must be in JSON format.
 
-####Request Headers and Output Data Formats
+#### Request Headers and Output Data Formats
 
 * **Accept*** (mandatory), specify the encoding format of the output payload. Possible values: *application/json*, *application/rdf+xml*, *text/rdf+n3*
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no metadata according to the specified searching parameters
@@ -1124,20 +1124,20 @@ Searches for all Annotation’s metadata in a specified Notebook according to th
 
 ----
 
-###GET /annotations/metadata/search?query=*query*
+### GET /annotations/metadata/search?query=*query*
 
 Searches for all Annotation’s metadata according to the specified parameters. In the current version, the only supported searching parameter is *resources*. Specifying one or more resources, this API return all metadata of Annotations that have one of the specified resource as *hasTarget* and *hasPageContext*. In addition, this API returns all metadata of Annotations that have as *hasTarget* a resource that *isPartOf* of one of the specified resources.
 
-####Parameters
+#### Parameters
 
 * **query**, specify the searching parameters. These parameters must be in JSON format. Example of searching parameters: `{ ”resources”: [”URL1”, ”URL2”, ...] }`
 * **scope**, possible values: **all** (default), search in all public Notebooks; **active**, search in all Notebook set as "active" by the current logged user
 
-####Request Headers and Output Data Formats
+#### Request Headers and Output Data Formats
 
 * **Accept*** (mandatory), specify the encoding format of the output payload. Possible values: *application/json*, *application/rdf+xml*, *text/rdf+n3*
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no metadata according to the specified searching parameters
@@ -1146,16 +1146,16 @@ Searches for all Annotation’s metadata according to the specified parameters. 
 
 ----
 
-###GET /annotations/*{Annotation-ID}*/items/search
+### GET /annotations/*{Annotation-ID}*/items/search
 
 Search for all annotation's Items basing on specific searching parameters.
 
-####Parameters
+#### Parameters
 
 * **Annotation-ID**, a valid Annotation ID
 * **query**,  specify the searching parameters. These parameters must be in JSON format.
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -1163,7 +1163,7 @@ Search for all annotation's Items basing on specific searching parameters.
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if there are no annotations with the specified Annotation-ID
@@ -1173,21 +1173,21 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ---
 
-##6. Users API
+## 6. Users API
 
 This set of API can be used to obtain all information about a registered user of the AnnotationServer or to perform specific operations regarding users management.
 
 Base URL:  `http://{WEBSERVER ADDRESS}/annotationserver/api/`
 
-###GET /users/current
+### GET /users/current
 
 Return all information about the current logged user in JSON format. The API can return different results basing on the login status of the current user (see Output Data Model section for more information).
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 
-####Output Data Model
+#### Output Data Model
 
 1. For logged users
 
@@ -1208,42 +1208,42 @@ Return all information about the current logged user in JSON format. The API can
 About the returned JSON for logged users: `USER_ID` is a value that is independent from the user's openID (example: 3C9AFF08); `USER_ID_URI` is the URI generated starting from the `USER_ID` (example: `http://swickynotes.org/notebook/resource/3c9aff08`); `USER_OPRNID` is the user's OpenID URI. Other fields such as `firstName`, `lastName`, `fullName`, `email` are optional.
 
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 Ok**, in case of success
 * **500 Internal Server Error***, if some internal server errors have occurred
 
 ----
 
-###GET /users/logout
+### GET /users/logout
 
 Logout the current logged user and return the results of the logout operation as JSON data (see Output Data Model for more information).
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 
-####Output Data Model
+#### Output Data Model
 
 1. If this API is called when the user is not logged yet, it returns this JSON data: `{ “logout”: 0 }`
 2. if this API is called when the user is logged and the logout process is correctly performed, it returns this JSON data: `{ “logout”: 1 }`
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 Ok**, in case of success
 * **500 Internal Server Error***, if some internal server errors have occurred
 
 ----
 
-###GET /users/*{USER-ID}*
+### GET /users/*{USER-ID}*
 
 Return all information about a specified user in different data formats.
 
-####Parameters
+#### Parameters
 
 * **user-id**, a valid user ID
 
-####Output Data Formats
+#### Output Data Formats
 
 * application/json
 * application/rdf+xml
@@ -1251,7 +1251,7 @@ Return all information about a specified user in different data formats.
 
 The output data format must be specified setting the *Accept* HTTP header.
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the user ID is not specified or if it is not valid
@@ -1260,21 +1260,21 @@ The output data format must be specified setting the *Accept* HTTP header.
 
 ---
 
-##5. Services API
+## 5. Services API
 
 This set of API contains the implementation of useful services for the AnnotationServer.
 
 Base URL:  `http://{WEBSERVER ADDRESS}/annotationserver/api/services/`
 
-###GET /proxy?url=*ENCODED_URL*
+### GET /proxy?url=*ENCODED_URL*
 
 This API implement an HTTP transparent proxy. In can be used to download any textual contents or files that is hosted in third party servers in order to overcome the limits imposed by *the same-origin-policy*. This API return the same *Content-Type* and the same  HTTP response code returned by the original request (same *Content-Type* and same HTTP response code returned if the user request the *ENCODED_URL* without using the proxy). If the server the hosted the resource identified by the *ENCODED_URL* supports different output data formats, it is possible to specify the preferred data format specifying the *Accept* header before sending the request to the proxy.
 
-####Parameters
+#### Parameters
 
 * **ENCODED_URL**, the encoded absolute URL of the resource to download
 
-####Returned Status Code
+#### Returned Status Code
 
 * **400 Bad Request**, if the request is not correct or if the requested resource is hosted in a server that does not support the HTTP protocol (e.g. FTP server)
 * **403 Forbidden**, if the current logged user has not the correct rights to use the proxy service
@@ -1284,15 +1284,15 @@ This API implement an HTTP transparent proxy. In can be used to download any tex
 
 ---
 
-###POST /favorites
+### POST /favorites
 
 This API provides a storage for general data mapping the data itself with a key called *favorites*. The data must be sent as payload. The API is independent from the sent data format.
 
-####Request Payload
+#### Request Payload
 
 * Data to store
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the payload is not specified or is not valid
@@ -1302,15 +1302,15 @@ This API provides a storage for general data mapping the data itself with a key 
 
 ----
 
-###GET /favorites
+### GET /favorites
 
 This API return all stored data mapped with the key *favorites* related to the current logged user (if the authentication is enabled) or to the anonymous user.
 
-####Output Data Formats
+#### Output Data Formats
 
 * Any (the client have to interpret the data)
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **204 No Content**, if no data has been mapped with the key *favorites*
@@ -1320,11 +1320,11 @@ This API return all stored data mapped with the key *favorites* related to the c
 
 ----
 
-###POST /email
+### POST /email
 
 Given a Subject, Text, Name, Email and Identifier it creates an email  and send it to all receivers listed into 'identifier' field stored into  DB table 'emails'
 
-####Parameters
+#### Parameters
 
 * **SUBJECT**, the email subject
 * **TEXT**, the email text
@@ -1332,11 +1332,11 @@ Given a Subject, Text, Name, Email and Identifier it creates an email  and send 
 * **EMAIL**, the sender's email
 * **IDENTIFIER**, the identifier list for receivers
 
-####Output Data Formats
+#### Output Data Formats
 
 * None
 
-####Returned Status Code
+#### Returned Status Code
 
 * **200 OK**, in case of success
 * **400 Bad Request**, if the payload is not specified or is not valid
