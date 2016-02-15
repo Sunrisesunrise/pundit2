@@ -3,8 +3,6 @@ layout: homepage
 title: Home
 ---
 
-#What is Pundit
-
 # What is Pundit
 
 Pundit is a web application that allows users to annotate web pages.
@@ -17,11 +15,11 @@ the blog please visit the <a href="http://thepund.it/" target="_blank">Pundit we
 
 - - -
 
-#How to use Pundit
+# How to use Pundit
 
 There are **three main ways** you can use Pundit:
 
-##1. Chrome Extension
+## 1. Chrome Extension
 
 This is the preferred way of using Pundit as a general purpose application to annotate **general web pages** while browsing the web.
 The extension allows you to launch Pundit on any page you want to annotate and build your highlights, comments and semantic annotations.<br /><br />
@@ -29,28 +27,28 @@ We provide two different Chrome Extensions:<br />
 <a href="http://thepund.it/annotator" target="_blank">Pundit Annotator</a>: the basic web annotation tool that allows users to create highlights and comments on web pages;<br />
 <a href="http://thepund.it/annotatorpro" target="_blank">Pundit Annotator Pro</a>: a more advanced tool for users who also want to create semantic annotations.
 
-##2. Embed Pundit in your project
+## 2. Embed Pundit in your project
 
 In the case of custom archives or web sites where is possible to hard code some HTML code inside the pages we can directly inject the Pundit code.
 So Pundit will be launched as the page loads.
 In this case we can use a custom configuration there properties ontologies and entities can be used.
 This case is detailed at [this page](embed-pundit.html)
 
-##3. Feed the Pundit
+## 3. Feed the Pundit
 
 For custom archives where we don't want to embed the Pundit code we can use also **Feed**.
 Feed allows to work with Images, RDF files and HTML pages. You can find more detailed information about Feed at [this page](feed.html)
 
 - - -
 
-#Annotation Server
+# Annotation Server
 
 You can download a full ZIP of the Annotations Server at [this URL](https://slack-files.com/T02SH8KFM-F0DGG6VJQ-33e37d2334)
 The currently available version is 1.6.2 and was released on 5th June 2015.
 
 - - -
 
-#More technical resources
+# More technical resources
 
 You can find more detailed info at these pages:
 
@@ -63,7 +61,7 @@ You can find more detailed info at these pages:
 
  - - -
 
-#Publications
+# Publications
 
   - Marco Grassi, Christian Morbidoni, Michele Nucci, Simone Fonda and Francesco Piazza. <strong>Pundit: Augmenting Web Contents with Semantics</strong>. <em>Literary & Linguisting Computing</em>, 2013
   - Christian Morbidoni, Marco Grassi, Michele Nucci and Simone Fonda. <strong>Semantic Augmentation and Externalization in the Humanities: a Demonstrative Use Case</strong>. In <em>Proceedings of the Digital Humanities 2013, Lincoln, Nebraska, July 16-19, 2013. 201</em>, 2013
@@ -75,7 +73,7 @@ You can find more detailed info at these pages:
 
 - - -
 
-#Slides
+# Slides
 
   - Simone Fonda, 10th of January at the Centre Alexandre Koyré Histoire des Sciences et des Techniques, Paris. 2014, <a href="http://www.slideshare.net/simonefonda/pundit-at-the-koyre-centre-in-paris" target="_blank">Watch the slides here</a>
   - Marco Grassi, Christian Morbidoni, Michele Nucci, Simone Fonda and Francesca Di Donato. “Pundit: Creating, Exploring and Consuming Semantic Annotations”. In Proceedings of the 3nd International Workshop on Semantic Digital Archives, Valletta, Malta, September 26, 2013. 2013, <a href="http://www.slideshare.net/margra75/sda2013-pundit-creating-exploring-and-consuming-annotations" target="_blank">Watch the slides here</a>
@@ -84,7 +82,7 @@ You can find more detailed info at these pages:
 
 - - -
 
-#Videos
+# Videos
 
   - Pundit: augment web pages with semantically structured annotations, <a href="https://www.youtube.com/watch?v=Bo4udUcnP-A" target="_blank">Watch the video here</a>
   - DM2E Pundit Introduction, <a href="https://vimeo.com/85261745" target="_blank">Watch the video here</a>
@@ -93,6 +91,6 @@ You can find more detailed info at these pages:
 
 - - -
 
-#License
+# License
 
 You can find information about the <a href="http://thepund.it/license/" target="_blank">license here</a>.
