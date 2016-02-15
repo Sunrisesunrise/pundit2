@@ -3,7 +3,7 @@ layout: page
 title: Javascript coding and naming policies
 ---
 
-#{{ page.title }}
+# {{ page.title }}
 
 ## 1. Modules
 
