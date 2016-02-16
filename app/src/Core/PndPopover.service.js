@@ -210,6 +210,7 @@ angular.module('Pundit2.Core')
 
         state.popover.show();
 
+        // TODO ASAP: WTF?! 
         //     if (state.popoverOptions.lockPageScroll) {
         var win = angular.element($window);
         state.scroll.top = win.scrollTop();

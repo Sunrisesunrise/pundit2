@@ -1,6 +1,6 @@
 angular.module('Pundit2.Annomatic')
 
-.controller('AnnomaticPopoverCtrl', function($rootScope, $scope, Annomatic, EventDispatcher, MyPundit) {
+.controller('AnnomaticPopoverCtrl', function($rootScope, $scope, Annomatic, EventDispatcher, MyPundit, PndPopover) {
 
     // Using popover's content variable to pass the number of the 
     // annotation
@@ -29,6 +29,9 @@ angular.module('Pundit2.Annomatic')
         Annomatic.setLastState($scope.num);
         event.stopPropagation();
         event.preventDefault();
+
+        // TODO: temporary fix: use AnnotationPopover and check why this function is not used
+        PndPopover.hide();
     };
 
     $scope.setOk = function(event) {

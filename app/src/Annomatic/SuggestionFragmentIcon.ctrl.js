@@ -134,7 +134,6 @@ angular.module('Pundit2.Annomatic')
         $scope.hide();
         AnnotationPopover.show(pos.left, pos.top, item, options, $scope.fragment);
         $scope.element.addClass('pnd-range-pos-icon');
-
     };
 
     $scope.hide = function() {
@@ -144,7 +143,7 @@ angular.module('Pundit2.Annomatic')
         Annomatic.setLastState($scope.num);
         $scope.isShown = !$scope.isShown;
 
-        // AnnotationPopover.hide();
+        AnnotationPopover.hide();
         // angular.element('.pnd-range-pos-icon').removeClass("pnd-range-pos-icon");
     };
 

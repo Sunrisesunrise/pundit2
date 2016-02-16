@@ -270,6 +270,8 @@ angular.module('Pundit2.AnnotationPopover')
         elem.removeClass('pnd-range-pos-icon');
         angular.element($window).off('resize', resizeCallback);
 
+        // TODO: why PndPopover.hide() is not used here?
+
         annotationPopover.log('Annotation popover hide');
     };
 
