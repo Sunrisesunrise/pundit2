@@ -87,6 +87,8 @@ angular.module('Pundit2.AnnotationPopover')
     };
 
     var changePopoverPosition = function(mouseX, mouseY) {
+        // TODO: how many time this function is called? why? 
+
         var state = PndPopover.getState(),
             elem = 'undefined',
             posArrow = {},
@@ -148,19 +150,26 @@ angular.module('Pundit2.AnnotationPopover')
             return false;
         };
 
+        // TODO: check for this check? 
         if (!state.data.item.isTextFragment()) {
             // if(typeof elem === "undefined"){
             //    elem = angular.element("[fragment='" + state.data.fragmentId + "']");
             // }
 
+            // TODO: umh
             elem = angular.element('.pnd-range-pos-icon');
             posArrow = elem[0].getBoundingClientRect();
             posArrowTop = posArrow.top + posArrow.height / 2;
             posArrowLeft = posArrow.left + posArrow.width;
+            
+            // TODO: umh
             placementArrow = "right";
+
+            // TODO: ?
             state.x = posArrow.left;
             state.y = posArrow.top;
 
+            // TODO: drug?
             state.anchor.css({
                 top: (posArrowTop),
                 left: (posArrowLeft)
@@ -169,17 +178,19 @@ angular.module('Pundit2.AnnotationPopover')
             resizeData.lastSelectionUsed = {
                 top: posArrowTop,
                 left: posArrowLeft,
-
+                // TODO: tralalala
             };
 
             resizeData.lastSelectionUsed.label = placementArrow;
             popoverRect = changePopoverPlacement(state, placementArrow);
             checkRight(posArrow);
 
+            // TODO: gnawn
             if (state.popover.$element.find('.arrow').css('left').indexOf('-') !== -1) {
                 wrongArrowFix = true;
             }
 
+            // TODO: .. a = b, use b and then let me introduce a for a quick 'hello, nice to see you today'
             pageVisibleTop = $window.scrollY;
 
             if (wrongArrowFix || $window.scrollY + popoverRect.top < pageVisibleTop) {
@@ -190,6 +201,8 @@ angular.module('Pundit2.AnnotationPopover')
 
                 resizeData.lastSelectionUsed = state.selectionStart;
                 popoverRect = changePopoverPlacement(state, "right");
+
+                // TODO: and again .. 
                 pageVisibleLeft = $window.scrollX;
 
                 if ($window.scrollX + popoverRect.left < pageVisibleLeft) {
