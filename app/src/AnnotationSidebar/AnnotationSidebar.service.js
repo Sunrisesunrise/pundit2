@@ -683,7 +683,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     if (typeof(annotationsFilters.entities[entUri]) === 'undefined') {
                         annotationsFilters.entities[entUri] = {
                             uri: entUri,
-                            label: annotation.items[entUri].label, // TODO add check ?
+                            label: annotation.items[entUri] ? annotation.items[entUri].label : '_broken_',
                             active: false,
                             partial: 1,
                             annotationsList: {}

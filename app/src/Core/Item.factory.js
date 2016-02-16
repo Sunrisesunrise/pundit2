@@ -187,7 +187,7 @@ angular.module('Pundit2.Core')
     ItemFactory.prototype.isImageFragment = function() {
         return this.type.indexOf(NameSpace.fragments.imagePart) !== -1;
     };
-    
+
     ItemFactory.prototype.isWebPage = function() {
         return this.type.indexOf(NameSpace.types.page) !== -1;
     };
@@ -435,19 +435,28 @@ angular.module('Pundit2.Core')
                 values.description = values.label;
                 break;
             case 'target':
-                if (typeof target[NameSpace.target.hasSelector] === 'undefined') {
-                    values.label = target[NameSpace.rdfs.label][0].value;
-                    values.description = values.label;
-                    break;
+                if (typeof target[NameSpace.target.hasSelector] === 'undefined' ||
+                    typeof target[NameSpace.target.hasScope] === 'undefined' ||
+                    typeof target[NameSpace.target.hasSource] === 'undefined') {
+                    itemComponent.err('Something wrong with this target: ', target);
+                    return null;
                 }
 
                 var selector = targets[target[NameSpace.target.hasSelector][0].value];
+                
                 if (typeof target[NameSpace.item.isPartOf] !== 'undefined') {
                     values.isPartOf = target[NameSpace.item.isPartOf][0].value;
                 }
+
                 values.hasScope = target[NameSpace.target.hasScope][0].value;
                 values.hasSource = target[NameSpace.target.hasSource][0].value;
                 values.pageContext = target[NameSpace.target.hasSource][0].value;
+
+                if (typeof selector[NameSpace.rdf.value] === 'undefined') {
+                    itemComponent.err('Something wrong with this selector: ', selector);
+                    return null;
+                }
+
                 values.xpointer = selector[NameSpace.rdf.value][0].value;
                 values.label = selector[NameSpace.rdfs.label][0].value;
                 values.description = values.label;
