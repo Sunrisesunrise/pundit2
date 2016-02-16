@@ -74,7 +74,8 @@
                             item.subject.typeLabel != 'resource' &&
                             item.subject.typeLabel != 'Image' &&
                             item.subject.typeLabel != 'Image fragment'"
-                     ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment'}">
+                     ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment',
+                     'pnd-annotation-annotated-fragment-external': item.subject.isExternal}">
                     <span>
                         {{ item.subject.description }}
                     </span>
@@ -168,6 +169,7 @@
                 <!-- Object -->
                 <!-- Text fragment || resource -->
                 <div class="pnd-annotation-details-object pnd-annotation-annotated-fragment pnd-annotation-entity-details"
+                     ng-class="{'pnd-annotation-annotated-fragment-external': item.objects[0].isExternal}"
                      ng-if="item.objects[0].typeLabel == 'Text fragment'">
                     <span>
                         <!-- {{ item.objects[0].description | limitTo:200 }} -->
@@ -175,8 +177,8 @@
                     </span>
 
                     <div class="pnd-annotation-original-page"
-                         ng-if="item.subject.isExternal">
-                        <a href="{{item.subject.pageContext}}">Open in original page</a>
+                         ng-if="item.objects[0].isExternal">
+                        <a href="{{item.objects[0].pageContext}}" target="_blank">Open in original page</a>
                     </div>
                 </div>
 
