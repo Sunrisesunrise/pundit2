@@ -1,13 +1,16 @@
 <div ng-controller="AnnomaticPanelCtrl" class="pnd-annomatic-container pnd-ignore">
 
     <!-- Area on top displaying text -->
-    <div class="pnd-annomatic-content-top">
+    <div class="pnd-annomatic-content-top"
+         ng-show="Annomatic.annotationNumber > 0">
 
-        <p ng-show="!gotAnnotations || Annomatic.annotationNumber == 0">
+        <!--
+        <p ng-show="Annomatic.annotationNumber == 0">
             Click on the <strong>blue button</strong> to scan items in the selected area
         </p>
+        -->
 
-        <p ng-show="Annomatic.annotationNumber > 0" >
+        <p >
             <span class="label">Suggested annotations: </span>
             <span class="value">{{Annomatic.annotationNumber}}</span>,
             <span class="label">Saved annotations: </span>
@@ -41,6 +44,16 @@
         <!-- <button class="btn btn-success pnd-button-select-area" ng-click="selectAreaMode()">
             Select area <span class="pnd-icon pnd-icon-edit"></span>
         </button> -->
+
+        <div class="pnd-annomatic-content-text"
+             ng-show="Annomatic.annotationNumber == 0">
+            <h1>Welcome to Ann-o-matic!</h1>
+            <p>
+                Hover with the mouse cursor on the text area you wish to scan for automatic annotations.
+                <br />
+                Click on the <strong>Discover</strong> button.
+            </p>
+        </div>
 
         <div class="pnd-annomatic-content-buttons"
              ng-show="Annomatic.annotationNumber > 0">

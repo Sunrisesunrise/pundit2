@@ -65,6 +65,13 @@
     }
 }
 
+/* Large buttons */
+.pnd-btn-large {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 13px;
+}
+
 /* Smaller buttons */
 .pnd-btn-small {
     height: 26px;
@@ -160,6 +167,40 @@ button[disabled] {
         background-image: none;
         border: 0;
         // color: fade(@color-text, 60%) !important; // for ovewritings on .disabled class // TODO remove if not necessary
+    }
+}
+
+
+/* ------------------------------------ *\
+   #DARK BUTTON
+\* ------------------------------------ */
+
+.pnd-btn-dark {
+    color: @color-button-cta-text; // TODO Create variable
+    background-color: rgba(0,0,0,.8); // TODO Create variable
+    border: 0;
+    .text-dark-emboss();
+
+    /* Hover state */
+    &:hover,
+    &:focus,
+    &.focus {
+        color: @color-button-cta-text;
+        background-color: rgba(0,0,0,.95); // TODO Create variable
+        border: 0;
+    }
+
+    /* Active state */
+    // TODO
+
+    /* Disabled state */
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: @color-button-cta-text-disabled; // TODO Create variable
+        background-color: rgba(0,0,0,.6); // TODO Create variable
+        border: 0;
+        text-shadow: none;
     }
 }
 

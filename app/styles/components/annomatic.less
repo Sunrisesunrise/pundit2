@@ -57,6 +57,25 @@ body .pnd-wrp .pnd-annomatic-scan-btn {
             z-index: 3;
             text-align: center;
         }
+
+        /* Contains text... vertical center */
+        .pnd-annomatic-content-text {
+            position: fixed;
+            top: 50%; /* Is the height of the buttons above */
+            margin-top: -14px;
+            width: @annotation-sidebar-exp-width;
+            z-index: 3;
+            text-align: center;
+            h1, p {
+                margin: 0 10px;
+                text-align: center;
+            }
+
+            h1 {
+                font-size: 22px;
+                color: @color-text-light;
+            }
+        }
     }
 }
 
