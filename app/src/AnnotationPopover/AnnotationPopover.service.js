@@ -139,8 +139,8 @@ angular.module('Pundit2.AnnotationPopover')
 
             if ($window.scrollX + popoverRect.right > pageVisibleRight) {
                 state.anchor.css({
-                    top: (posArrow.top + posArrow.height),
-                    left: (posArrow.left + posArrow.width / 2)
+                    top: ($window.scrollY + posArrow.top + posArrow.height),
+                    left: ($window.scrollX + posArrow.left + posArrow.width / 2)
                 });
                 changePopoverPlacement(state, 'bottom');
 
