@@ -25,7 +25,6 @@ angular.module('Pundit2.AnnotationPopover')
 
     var resizeCallback = function() {
         var state = PndPopover.getState(),
-            elem = 'undefined',
             pos = {},
             parentTS = 'undefined';
 
@@ -44,13 +43,12 @@ angular.module('Pundit2.AnnotationPopover')
             resizeData.removeTimeout = null;
         }
 
-        if (!state.data.item.isTextFragment()) {
+        if (typeof state.data.elemReference !== 'undefined') {
             //take icon position by class
-            elem = angular.element('.pnd-range-pos-icon');
-            pos = elem[0].getBoundingClientRect();
+            pos = state.data.elemReference[0].getBoundingClientRect();
+            resizeData.lastSelectionUsed.offset = angular.copy(state.data.elemReference.offset());
 
-            resizeData.lastSelectionUsed.offset = angular.copy(elem.offset());
-            changePopoverPosition(pos.left, pos.height);
+            changePopoverPosition(pos.left, pos.height, state.data.elemReference);
         } else {
 
             // Create temporary element
@@ -69,13 +67,12 @@ angular.module('Pundit2.AnnotationPopover')
         }
 
         resizeData.removeTimeout = $timeout(function() {
-            // state = PndPopover.getState();
 
             if (resizeData.temporaryElement !== null) {
                 parentTS = resizeData.temporaryElement.parent();
                 resizeData.temporaryElement.remove();
                 resizeData.temporaryElement = null;
-                
+
                 if (parentTS.length) {
                     parentTS[0].normalize();
                 }
@@ -86,11 +83,10 @@ angular.module('Pundit2.AnnotationPopover')
         }, 300);
     };
 
-    var changePopoverPosition = function(mouseX, mouseY) {
+    var changePopoverPosition = function(mouseX, mouseY, iconReference) {
         // TODO: how many time this function is called? why? 
 
         var state = PndPopover.getState(),
-            elem = 'undefined',
             posArrow = {},
             posArrowTop = 0,
             posArrowLeft = 0,
@@ -98,7 +94,8 @@ angular.module('Pundit2.AnnotationPopover')
             pageVisibleLeft = 0,
             distanceFromSelectionStart = 0,
             distanceFromSelectionEnd = 0,
-            placementArrow = '',
+            popoverRight = 0,
+            placementArrow = state.popoverOptions.placement,
             wrongArrowFix = false,
             popoverRect = {};
 
@@ -134,10 +131,9 @@ angular.module('Pundit2.AnnotationPopover')
         };
 
         var checkRight = function(posArrow) {
-            var pageVisibleRight = $window.innerWidth + $window.scrollX,
-                popoverRect = changePopoverPlacement(state, 'right');
+            var pageVisibleRight = $window.innerWidth + $window.scrollX;
 
-            if ($window.scrollX + popoverRect.right > pageVisibleRight) {
+            if ($window.scrollX + popoverRight > pageVisibleRight) {
                 state.anchor.css({
                     top: ($window.scrollY + posArrow.top + posArrow.height),
                     left: ($window.scrollX + posArrow.left + posArrow.width / 2)
@@ -146,75 +142,38 @@ angular.module('Pundit2.AnnotationPopover')
 
                 return true;
             }
-
             return false;
         };
 
-        // TODO: check for this check? 
-        if (!state.data.item.isTextFragment()) {
-            // if(typeof elem === "undefined"){
-            //    elem = angular.element("[fragment='" + state.data.fragmentId + "']");
-            // }
+        if (typeof iconReference !== 'undefined') {
 
-            // TODO: umh
-            elem = angular.element('.pnd-range-pos-icon');
-            posArrow = elem[0].getBoundingClientRect();
-            posArrowTop = posArrow.top + posArrow.height / 2;
-            posArrowLeft = posArrow.left + posArrow.width;
-            
-            // TODO: umh
-            placementArrow = "right";
+            posArrow = iconReference[0].getBoundingClientRect();
 
-            // TODO: ?
-            state.x = posArrow.left;
-            state.y = posArrow.top;
+            if
+            (placementArrow === 'right'){
+                posArrowTop = $window.scrollY + posArrow.top + posArrow.height / 2;
+                posArrowLeft = $window.scrollX + posArrow.left + posArrow.width;
+            }else{
+                posArrowTop = $window.scrollY + posArrow.top + posArrow.height;
+                posArrowLeft = $window.scrollX  +posArrow.left + posArrow.width / 2;
+            }
 
-            // TODO: drug?
+            // set first anchor and lastSelectionUsed for maintain consistency with textfragment mode
             state.anchor.css({
-                top: (posArrowTop),
-                left: (posArrowLeft)
+                top: posArrowTop + 'px',
+                left: posArrowLeft + 'px'
             });
 
             resizeData.lastSelectionUsed = {
-                top: posArrowTop,
-                left: posArrowLeft,
-                // TODO: tralalala
+                top: posArrowTop + 'px',
+                left: posArrowLeft + 'px'
             };
 
             resizeData.lastSelectionUsed.label = placementArrow;
             popoverRect = changePopoverPlacement(state, placementArrow);
+            popoverRight = popoverRect.right;
             checkRight(posArrow);
 
-            // TODO: gnawn
-            if (state.popover.$element.find('.arrow').css('left').indexOf('-') !== -1) {
-                wrongArrowFix = true;
-            }
-
-            // TODO: .. a = b, use b and then let me introduce a for a quick 'hello, nice to see you today'
-            pageVisibleTop = $window.scrollY;
-
-            if (wrongArrowFix || $window.scrollY + popoverRect.top < pageVisibleTop) {
-                state.anchor.css({
-                    top: $window.scrollY + posArrowTop + 'px',
-                    left: posArrowLeft + 'px'
-                });
-
-                resizeData.lastSelectionUsed = state.selectionStart;
-                popoverRect = changePopoverPlacement(state, "right");
-
-                // TODO: and again .. 
-                pageVisibleLeft = $window.scrollX;
-
-                if ($window.scrollX + popoverRect.left < pageVisibleLeft) {
-                    state.anchor.css({
-                        top: posArrow.top + 'px',
-                        left: posArrow.left + 'px'
-                    });
-
-                    resizeData.lastSelectionUsed = state.selectionStart;
-                    popoverRect = changePopoverPlacement(state, "bottom");
-                }
-            }
         } else {
             distanceFromSelectionStart = Math.pow(parseInt(mouseX - state.selectionStart.offset.left), 2) + Math.pow(parseInt(mouseY - state.selectionStart.offset.top), 2);
             distanceFromSelectionEnd = Math.pow(parseInt(mouseX - state.selectionEnd.offset.left), 2) + Math.pow(parseInt(mouseY - state.selectionEnd.offset.top), 2);
@@ -288,12 +247,12 @@ angular.module('Pundit2.AnnotationPopover')
         annotationPopover.log('Annotation popover hide');
     };
 
-    annotationPopover.show = function(x, y, item, opt, fragmentId, mode) {
+    annotationPopover.show = function(x, y, item, opt, fragmentId, mode, iconReference) {
         var options,
             optionsDefault = {
                 templateUrl: 'src/AnnotationPopover/AnnotationPopover.tmpl.html',
                 controller: 'AnnotationPopoverCtrl',
-                placement: 'bottom',
+                placement: 'right',
                 alphaRollover: true,
                 lockPageScroll: true,
                 needsValidSelection: (item.isTextFragment()) ? true : false,
@@ -309,7 +268,8 @@ angular.module('Pundit2.AnnotationPopover')
 
         var promise = PndPopover.show(x, y, options, {
             item: item,
-            fragmentId: fragmentId
+            fragmentId: fragmentId,
+            elemReference: iconReference
         });
 
         var state = PndPopover.getState();
@@ -318,7 +278,7 @@ angular.module('Pundit2.AnnotationPopover')
 
         if (promise !== false) {
             promise.then(function() {
-                changePopoverPosition(x, y);
+                changePopoverPosition(x, y, iconReference);
                 if (state.data.needsValidSelection) {
                     PndPopover.getState().selection.removeAllRanges();
                 }

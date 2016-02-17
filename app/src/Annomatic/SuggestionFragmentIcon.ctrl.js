@@ -119,7 +119,7 @@ angular.module('Pundit2.Annomatic')
 
         var options = {
             content: "" + $scope.num,
-            placement: 'bottom',
+            placement: 'right',
             templateUrl: 'src/Annomatic/AnnomaticPopover.tmpl.html',
             trigger: 'manual',
             alphaRollover: true,
@@ -132,8 +132,7 @@ angular.module('Pundit2.Annomatic')
         Annomatic.closeAll();
         Annomatic.setState($scope.num, 'active');
         $scope.hide();
-        AnnotationPopover.show(pos.left, pos.top, item, options, $scope.fragment);
-        $scope.element.addClass('pnd-range-pos-icon');
+        AnnotationPopover.show(pos.left, pos.top, item, options, $scope.fragment, undefined, $scope.element);
     };
 
     $scope.hide = function() {
