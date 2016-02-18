@@ -308,6 +308,8 @@ angular.module('Pundit2.ContextualMenu')
         angular.element('body').removeClass(contextualMenu.options.overflowClass);
 
         EventDispatcher.sendEvent('closeContextualMenu');
+
+
     });
 
     /**

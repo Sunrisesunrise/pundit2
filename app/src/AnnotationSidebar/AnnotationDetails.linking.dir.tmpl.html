@@ -21,6 +21,15 @@
         </div>
     </div>
     <!-- END // Collapsed view of the annotation -->
+    <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
+    <div class="pnd-annotation-collapsed pnd-annotation-details-buttons"
+         ng-if="!annotation.expanded">
+        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
+             replace="true"
+                >
+        </div>
+    </div>
+
 
     <!-- Expanded view of the annotation -->
     <div class="pnd-annotation-expanded pnd-annotation-details-container"

@@ -5,7 +5,7 @@
             ng-if="reply"
             ng-click="replyAnnotation($event)">
         <span class="pnd-icon-comment"></span>
-        reply
+        {{social.counting.comment}}
     </button>
                 <span ng-if="isReplyMode()&&!isLinking()">
                     ·
@@ -13,11 +13,11 @@
 
     <button
             type="button"
-            class="pnd-like"
             ng-show="like"
-            ng-click="likeAnnotation($event)">
+            ng-click="likeAnnotation($event)"
+            ng-class="{'pnd-annotation-details-social-activate': social.status.like }">
         <span class="pnd-icon-thumb-o-up"></span>
-        like
+        {{social.counting.like}}
     </button>
                 <span ng-if="like">
                     ·
@@ -25,11 +25,11 @@
 
     <button
             type="button"
-            class="pnd-dislike"
             ng-show="dislike"
-            ng-click="dislikeAnnotation($event)">
+            ng-click="dislikeAnnotation($event)"
+            ng-class="{'pnd-annotation-details-social-activate': social.status.dislike }">
         <span class="pnd-icon-thumb-o-down"></span>
-        dislike
+        {{social.counting.dislike}}
     </button>
                 <span ng-if="dislike">
                     ·
@@ -38,9 +38,10 @@
             type="button"
             class="pnd-endorse"
             ng-show="endorse"
-            ng-click="endorseAnnotation($event)">
+            ng-click="endorseAnnotation($event)"
+            ng-class="{'pnd-annotation-details-social-activate': social.status.endors }">
         <span class="pnd-icon-check"></span>
-        endorse
+        {{social.counting.endors}}
     </button>
                 <span ng-if="endorse">
                     ·
@@ -50,9 +51,10 @@
             type="button"
             class="pnd-report"
             ng-if="report"
-            ng-click="reportAnnotation($event)">
+            ng-click="reportAnnotation($event)"
+            ng-class="{'pnd-annotation-details-social-activate': social.status.report }">
         <span class="pnd-icon-exclamation"></span>
-        report
+        {{social.counting.report}}
     </button>
                 <!--<span ng-if="report&&isUserToolShowed()">-->
                     <!--·-->

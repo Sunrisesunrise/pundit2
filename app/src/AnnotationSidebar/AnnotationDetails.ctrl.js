@@ -2,7 +2,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     .controller('AnnotationDetailsCtrl', function ($scope, $rootScope, $element, $timeout, $window,
                                                    AnnotationSidebar, AnnotationDetails, AnnotationsExchange, TripleComposer, Dashboard, EventDispatcher,
-                                                   Config, MyPundit, Analytics, Item, NameSpace, AnnotationsCommunication) {
+                                                   Config, MyPundit, Analytics, Item, NameSpace) {
 
         // TODO: temporary fix waiting for server consistency
         if ($scope.motivation !== 'linking' &&
@@ -24,6 +24,25 @@ angular.module('Pundit2.AnnotationSidebar')
         var clientMode = Config.clientMode;
 
         $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
+        //mock
+        $scope.annotation.social = {
+            counting : {
+                comment: 0,
+                like: 3,
+                dislike: 0,
+                endors: 0,
+                report: 2
+            },
+            status: {
+                comment: false,
+                like: false,
+                dislike: false,
+                endors: false,
+                report: true
+            }
+        };
+
+        $scope.social = $scope.annotation.social;
         $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
         $scope.moreInfo = AnnotationDetails.options.moreInfo;
         $scope.homePundit = Config.homePundit;
@@ -71,7 +90,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
         $scope.toggleAnnotation = function () {
             $scope.editMode = false;
-
 
             if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
                 if (AnnotationSidebar.isFiltersExpanded()) {
@@ -164,14 +182,164 @@ angular.module('Pundit2.AnnotationSidebar')
             stopEvent(event);
         };
         $scope.reportAnnotation = function (event) {
+            var promise ={};
+
+            if(!$scope.social.status.report) {
+
+                promise = AnnotationDetails.report(currentId, 'add');
+
+                promise.then(function (status) {
+                    if(status) {
+
+                        if($scope.social.status.endors){
+                            $scope.social.status.endors = !$scope.social.status.endors;
+                            $scope.social.counting.endors = parseInt($scope.social.counting.endors) - 1;
+                        }
+
+                        $scope.social.counting.report = parseInt($scope.social.counting.report) + 1;
+                    }
+                });
+            }else{
+                promise = AnnotationDetails.report(currentId, 'remove');
+
+                promise.then(function (status) {
+                    if(status) {
+
+                        if($scope.social.status.endors){
+                            $scope.social.status.endors = !$scope.social.status.endors;
+                            $scope.social.counting.endors = parseInt($scope.social.counting.endors) - 1;
+                        }
+
+                        $scope.social.counting.report = parseInt($scope.social.counting.report) - 1;
+                    }
+                });
+
+            }
+            $scope.social.status.report = !$scope.social.status.report;
+            stopEvent(event);
         };
+
         $scope.endorseAnnotation = function (event) {
+            var promise ={};
+
+            if(!$scope.social.status.endors) {
+
+                promise = AnnotationDetails.endors(currentId, 'add');
+
+                promise.then(function (status) {
+                    if(status) {
+
+                        if($scope.social.status.report){
+                            $scope.social.status.report = !$scope.social.status.report;
+                            $scope.social.counting.report = parseInt($scope.social.counting.report) - 1;
+                        }
+
+                        $scope.social.counting.endors = parseInt($scope.social.counting.endors) + 1;
+                    }
+                });
+            }else{
+                promise = AnnotationDetails.endors(currentId, 'remove');
+
+                promise.then(function (status) {
+                    if(status) {
+
+                        if($scope.social.status.report){
+                            $scope.social.status.report = !$scope.social.status.report;
+                            $scope.social.counting.report = parseInt($scope.social.counting.report) - 1;
+                        }
+
+                        $scope.social.counting.endors = parseInt($scope.social.counting.endors) - 1;
+                    }
+                });
+
+            }
+            $scope.social.status.endors = !$scope.social.status.endors;
+            stopEvent(event);
+
         };
+
         $scope.likeAnnotation = function (event) {
+            var promise ={};
+
+            if(!$scope.social.status.like) {
+
+                promise = AnnotationDetails.like(currentId, 'add');
+
+                promise.then(function (status) {
+                    if(status) {
+
+                        if($scope.social.status.dislike){
+                            $scope.social.status.dislike = !$scope.social.status.dislike;
+                            $scope.social.counting.dislike = parseInt($scope.social.counting.dislike) - 1;
+                        }
+
+                        $scope.social.counting.like = parseInt($scope.social.counting.like) + 1;
+                    }
+                });
+            }else{
+                promise = AnnotationDetails.like(currentId, 'remove');
+
+                promise.then(function (status) {
+                    if(status) {
+
+                        if($scope.social.status.dislike){
+                            $scope.social.status.dislike = !$scope.social.status.dislike;
+                            $scope.social.counting.dislike = parseInt($scope.social.counting.dislike) - 1;
+                        }
+
+                        $scope.social.counting.like = parseInt($scope.social.counting.like) - 1;
+                    }
+                });
+
+            }
+            $scope.social.status.like = !$scope.social.status.like;
+            stopEvent(event);
         };
+
         $scope.dislikeAnnotation = function (event) {
+            var promise ={};
+
+            if(!$scope.social.status.dislike) {
+
+                promise = AnnotationDetails.dislike(currentId, 'add');
+
+                promise.then(function (status) {
+                    if(status) {
+
+                        if($scope.social.status.like){
+                            $scope.social.status.like = !$scope.social.status.like;
+                            $scope.social.counting.like = parseInt($scope.social.counting.like) - 1;
+                        }
+
+                        $scope.social.counting.dislike = parseInt($scope.social.counting.dislike) + 1;
+                    }
+                });
+            }else{
+                promise = AnnotationDetails.dislike(currentId, 'remove');
+
+                promise.then(function (status) {
+                    if(status) {
+
+                        if($scope.social.status.like){
+                            $scope.social.status.like = !$scope.social.status.like;
+                            $scope.social.counting.like = parseInt($scope.social.counting.like) - 1;
+                        }
+
+                        $scope.social.counting.dislike = parseInt($scope.social.counting.dislike) - 1;
+                    }
+                });
+
+            }
+            $scope.social.status.dislike = !$scope.social.status.dislike;
+            stopEvent(event);
         };
+
         $scope.replyAnnotation = function (event) {
+
+            if(!$scope.annotation.expanded){
+                $scope.toggleAnnotation();
+            }
+
             $scope.replyDialog = !$scope.replyDialog;
             stopEvent(event);
         };
@@ -259,7 +427,7 @@ angular.module('Pundit2.AnnotationSidebar')
         };
         $scope.isLinking = function () {
             if ($scope.motivation === 'linking') {
-                return true
+                return true;
             }
             return false;
         };

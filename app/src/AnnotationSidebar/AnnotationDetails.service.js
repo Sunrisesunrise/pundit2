@@ -185,6 +185,7 @@ angular.module('Pundit2.AnnotationSidebar')
             isSidebarExpanded: false,
             isGhostedActive: false,
             contextualMenuOpened: false,
+            openAnnotation: false,
             userData: {},
         };
 
@@ -209,7 +210,7 @@ angular.module('Pundit2.AnnotationSidebar')
                             scope.editComment();
                         }else{
                             event = document.createEvent('Event');
-                            scope.editAnnotation(event)
+                            scope.editAnnotation(event);
                         }
                         console.log('dentro edit');
                     }
@@ -230,9 +231,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 label: 'Delete',
                 priority: 97,
                 action: function(scope) {
-                    event = document.createEvent('Event');
-
-                    scope.deleteAnnotation(event);
+                    scope.deleteAnnotation(document.createEvent('Event'));
                 }
             });
         };
@@ -548,7 +547,7 @@ angular.module('Pundit2.AnnotationSidebar')
         };
         annotationDetails.setEditable = function(bool){
             state.isEditable = bool;
-        }
+        };
 
         annotationDetails.saveReplyedComment = function (item, reply) {
             var currentTarget = item,
@@ -652,7 +651,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 annotationDetails.closeAllAnnotationView(currentId);
                 state.annotations[currentId].expanded = typeof forceTo !== 'undefined' ? forceTo : !state.annotations[currentId].expanded;
             }
-
         };
 
         annotationDetails.isAnnotationGhosted = function (currentId) {
@@ -845,10 +843,30 @@ angular.module('Pundit2.AnnotationSidebar')
             return AnnotationsCommunication.getRepliesByAnnotationId(annotationId);
         };
 
+        annotationDetails.likeOn = function(annotationId){
+            return AnnotationsCommunication.likeOn(annotationId);
+        };
+
+        annotationDetails.like = function(annotationId, operation) {
+            return AnnotationsCommunication.like(annotationId, operation);
+        };
+
+        annotationDetails.dislike = function(annotationId, operation) {
+            return AnnotationsCommunication.dislike(annotationId, operation);
+        };
+
+        annotationDetails.endors = function(annotationId, operation) {
+            return AnnotationsCommunication.endors(annotationId, operation);
+        };
+
+        annotationDetails.report = function(annotationId, operation) {
+            return AnnotationsCommunication.report(annotationId, operation);
+        };
+
         annotationDetails.menuEdit = function(elem, scope){
             var pos = elem.getBoundingClientRect();
             var left = pos.left + pos.width*2/3 + angular.element($window).scrollLeft();
-            var top = pos.top + pos.height*2/3 + angular.element($window).scrollTop()
+            var top = pos.top + pos.height*2/3 + angular.element($window).scrollTop();
             var type = '';
 
             if(typeof angular.element('.pnd-dropdown-contextual-menu')[0] === 'undefined'){
@@ -955,7 +973,6 @@ angular.module('Pundit2.AnnotationSidebar')
            state.contextualMenuOpened = false;
         });
 
-
         $document.on('mousedown', mouseDownHandler);
 
         function mouseDownHandler(downEvt) {
@@ -969,13 +986,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
             $rootScope.$$phase || $rootScope.$digest();
         }
-
-
-
-
-
-
-
 
         annotationDetails.log('Component running');
         return annotationDetails;

@@ -209,12 +209,20 @@ angular.module('Pundit2.Core')
 
     ns.asReply = ns.as + 'api/reply';
     ns.asOpenAnnReplies = ns.as + 'api/open/annotations/{{id}}/replies';
+    ns.asLike = ns.as +  '/api/annotations/{annotation-id}/like';
+    ns.asUnLike = ns.as +  '/api/annotations/{annotation-id}/unLike';
+    ns.asDislike = ns.as +  '/api/annotations/{annotation-id}/disLike';
+    ns.asUnDislike = ns.as +  '/api/annotations/{annotation-id}/unDisLike';
+    ns.asEndors = ns.as +  '/api/annotations/{annotation-id}/endorse';
+    ns.asUnEndors = ns.as +  '/api/annotations/{annotation-id}/unEndorse';
+    ns.asReport = ns.as +  '/api/annotations/{annotation-id}/report';
+    ns.asUnReport = ns.as +  '/api/annotations/{annotation-id}/unReport';
 
     ns.asPref = ns.as + 'api/services/preferences/{{key}}';
     ns.asUrlPrefix = ns.as + 'api/open/urlprefix';
 
 
-    // Gets a key of the namespace, interpolating variables if needed
+    // Gets a key of thelike namespace, interpolating variables if needed
     ns.get = function(key, context) {
 
         // If it's not a string, it's nothing we can return (this
