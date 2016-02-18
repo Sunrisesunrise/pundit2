@@ -14,7 +14,7 @@
     <button
             type="button"
             ng-show="like"
-            ng-click="likeAnnotation($event)"
+            ng-click="socialEvent($event, 'like')"
             ng-class="{'pnd-annotation-details-social-activate': social.status.like }">
         <span class="pnd-icon-thumb-o-up"></span>
         {{social.counting.like}}
@@ -26,7 +26,7 @@
     <button
             type="button"
             ng-show="dislike"
-            ng-click="dislikeAnnotation($event)"
+            ng-click="socialEvent($event, 'dislike')"
             ng-class="{'pnd-annotation-details-social-activate': social.status.dislike }">
         <span class="pnd-icon-thumb-o-down"></span>
         {{social.counting.dislike}}
@@ -38,7 +38,7 @@
             type="button"
             class="pnd-endorse"
             ng-show="endorse"
-            ng-click="endorseAnnotation($event)"
+            ng-click="socialEvent($event, 'endors')"
             ng-class="{'pnd-annotation-details-social-activate': social.status.endors }">
         <span class="pnd-icon-check"></span>
         {{social.counting.endors}}
@@ -51,7 +51,7 @@
             type="button"
             class="pnd-report"
             ng-if="report"
-            ng-click="reportAnnotation($event)"
+            ng-click="socialEvent($event, 'report')"
             ng-class="{'pnd-annotation-details-social-activate': social.status.report }">
         <span class="pnd-icon-exclamation"></span>
         {{social.counting.report}}

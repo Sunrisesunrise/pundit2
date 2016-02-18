@@ -4,6 +4,18 @@ angular.module('Pundit2.AnnotationSidebar')
                                                    AnnotationSidebar, AnnotationDetails, AnnotationsExchange, TripleComposer, Dashboard, EventDispatcher,
                                                    Config, MyPundit, Analytics, Item, NameSpace) {
 
+        function compare(a,b) {
+            if (a.created < b.created){
+                return 1;
+            }
+                else if (a.created > b.created){
+                return -1;
+            }
+            else{
+                return 0;
+            }
+        }
+
         // TODO: temporary fix waiting for server consistency
         if ($scope.motivation !== 'linking' &&
             $scope.motivation !== 'commenting' &&
@@ -115,6 +127,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
             if($scope.annotation.expanded && !$scope.annotation.repliesLoaded){
                 AnnotationDetails.getRepliesByAnnotationId(currentId).then(function(data) {
+                    data.sort(compare);
                     $scope.replyTree = data;
                     $scope.annotation.repliesLoaded = true;
                     console.log("data: "+data);
@@ -181,156 +194,42 @@ angular.module('Pundit2.AnnotationSidebar')
 
             stopEvent(event);
         };
-        $scope.reportAnnotation = function (event) {
-            var promise ={};
 
-            if(!$scope.social.status.report) {
+        $scope.socialEvent = function (event, type) {
+            var contrary = {
+                like : 'dislike',
+                dislike : 'like',
+                endors : 'report',
+                report : 'endors'
+            },
+                promise = {},
+                operation = '';
 
-                promise = AnnotationDetails.report(currentId, 'add');
-
-                promise.then(function (status) {
-                    if(status) {
-
-                        if($scope.social.status.endors){
-                            $scope.social.status.endors = !$scope.social.status.endors;
-                            $scope.social.counting.endors = parseInt($scope.social.counting.endors) - 1;
-                        }
-
-                        $scope.social.counting.report = parseInt($scope.social.counting.report) + 1;
-                    }
-                });
-            }else{
-                promise = AnnotationDetails.report(currentId, 'remove');
-
-                promise.then(function (status) {
-                    if(status) {
-
-                        if($scope.social.status.endors){
-                            $scope.social.status.endors = !$scope.social.status.endors;
-                            $scope.social.counting.endors = parseInt($scope.social.counting.endors) - 1;
-                        }
-
-                        $scope.social.counting.report = parseInt($scope.social.counting.report) - 1;
-                    }
-                });
-
+            if(typeof type === 'undefined'){
+                return;
             }
-            $scope.social.status.report = !$scope.social.status.report;
-            stopEvent(event);
-        };
-
-        $scope.endorseAnnotation = function (event) {
-            var promise ={};
-
-            if(!$scope.social.status.endors) {
-
-                promise = AnnotationDetails.endors(currentId, 'add');
-
-                promise.then(function (status) {
-                    if(status) {
-
-                        if($scope.social.status.report){
-                            $scope.social.status.report = !$scope.social.status.report;
-                            $scope.social.counting.report = parseInt($scope.social.counting.report) - 1;
-                        }
-
-                        $scope.social.counting.endors = parseInt($scope.social.counting.endors) + 1;
-                    }
-                });
-            }else{
-                promise = AnnotationDetails.endors(currentId, 'remove');
-
-                promise.then(function (status) {
-                    if(status) {
-
-                        if($scope.social.status.report){
-                            $scope.social.status.report = !$scope.social.status.report;
-                            $scope.social.counting.report = parseInt($scope.social.counting.report) - 1;
-                        }
-
-                        $scope.social.counting.endors = parseInt($scope.social.counting.endors) - 1;
-                    }
-                });
-
+            if(!$scope.social.status[type]){
+                operation = 'add';
+            }else {
+                operation = 'remove';
             }
-            $scope.social.status.endors = !$scope.social.status.endors;
-            stopEvent(event);
+            if(!$scope.social.status[type]) {
 
-        };
-
-        $scope.likeAnnotation = function (event) {
-            var promise ={};
-
-            if(!$scope.social.status.like) {
-
-                promise = AnnotationDetails.like(currentId, 'add');
+                promise = AnnotationDetails.socialEvent(currentId, type, operation);
 
                 promise.then(function (status) {
                     if(status) {
 
-                        if($scope.social.status.dislike){
-                            $scope.social.status.dislike = !$scope.social.status.dislike;
-                            $scope.social.counting.dislike = parseInt($scope.social.counting.dislike) - 1;
+                        if($scope.social.status[contrary[type]]){
+                            $scope.social.status[contrary[type]] = !$scope.social.status[contrary[type]];
+                            $scope.social.counting[contrary[type]] = parseInt($scope.social.counting[contrary[type]]) - 1;
                         }
 
-                        $scope.social.counting.like = parseInt($scope.social.counting.like) + 1;
+                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) + 1;
                     }
                 });
-            }else{
-                promise = AnnotationDetails.like(currentId, 'remove');
-
-                promise.then(function (status) {
-                    if(status) {
-
-                        if($scope.social.status.dislike){
-                            $scope.social.status.dislike = !$scope.social.status.dislike;
-                            $scope.social.counting.dislike = parseInt($scope.social.counting.dislike) - 1;
-                        }
-
-                        $scope.social.counting.like = parseInt($scope.social.counting.like) - 1;
-                    }
-                });
-
             }
-            $scope.social.status.like = !$scope.social.status.like;
-            stopEvent(event);
-        };
-
-        $scope.dislikeAnnotation = function (event) {
-            var promise ={};
-
-            if(!$scope.social.status.dislike) {
-
-                promise = AnnotationDetails.dislike(currentId, 'add');
-
-                promise.then(function (status) {
-                    if(status) {
-
-                        if($scope.social.status.like){
-                            $scope.social.status.like = !$scope.social.status.like;
-                            $scope.social.counting.like = parseInt($scope.social.counting.like) - 1;
-                        }
-
-                        $scope.social.counting.dislike = parseInt($scope.social.counting.dislike) + 1;
-                    }
-                });
-            }else{
-                promise = AnnotationDetails.dislike(currentId, 'remove');
-
-                promise.then(function (status) {
-                    if(status) {
-
-                        if($scope.social.status.like){
-                            $scope.social.status.like = !$scope.social.status.like;
-                            $scope.social.counting.like = parseInt($scope.social.counting.like) - 1;
-                        }
-
-                        $scope.social.counting.dislike = parseInt($scope.social.counting.dislike) - 1;
-                    }
-                });
-
-            }
-            $scope.social.status.dislike = !$scope.social.status.dislike;
+            $scope.social.status[type] = !$scope.social.status[type];
             stopEvent(event);
         };
 
@@ -375,15 +274,32 @@ angular.module('Pundit2.AnnotationSidebar')
                 var out = {
                     'id': annotation.id,
                     'creatorName' : annotation.creatorName,
-                    'content' : annotation.graph['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0].value
+                    'content' : annotation.graph['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0].value,
+                    'created' : Date(),
+                    'social' : {
+                        counting: {
+                            comment: 0,
+                            like: 0,
+                            dislike: 0,
+                            endors: 0,
+                            report: 0
+                        },
+                        status: {
+                            comment: false,
+                            like: false,
+                            dislike: false,
+                            endors: false,
+                            report: false,
+                        }
+                    }
                 };
-                $scope.replyTree.push(out);
+                $scope.replyTree.unshift(out);
                 console.log(AnnotationsExchange.getAnnotationById(e));
 
             }, function () {
 
             });
-
+            EventDispatcher.sendEvent('openIsReply');
             stopEvent(event);
         };
 

@@ -843,24 +843,8 @@ angular.module('Pundit2.AnnotationSidebar')
             return AnnotationsCommunication.getRepliesByAnnotationId(annotationId);
         };
 
-        annotationDetails.likeOn = function(annotationId){
-            return AnnotationsCommunication.likeOn(annotationId);
-        };
-
-        annotationDetails.like = function(annotationId, operation) {
-            return AnnotationsCommunication.like(annotationId, operation);
-        };
-
-        annotationDetails.dislike = function(annotationId, operation) {
-            return AnnotationsCommunication.dislike(annotationId, operation);
-        };
-
-        annotationDetails.endors = function(annotationId, operation) {
-            return AnnotationsCommunication.endors(annotationId, operation);
-        };
-
-        annotationDetails.report = function(annotationId, operation) {
-            return AnnotationsCommunication.report(annotationId, operation);
+        annotationDetails.socialEvent = function(annotationId, type, operation) {
+            return AnnotationsCommunication.socialEvent(annotationId, type, operation);
         };
 
         annotationDetails.menuEdit = function(elem, scope){

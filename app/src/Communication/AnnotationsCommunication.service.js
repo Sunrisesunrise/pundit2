@@ -309,7 +309,36 @@ angular.module('Pundit2.Communication')
             promise.resolve(mock);
             return promise.promise;
         };
+    annotationsCommunication.socialEvent = function(id, type, operation) {
+            var promise = {},
+                url = '',
+                route = {
+                    like: {
+                        add: 'asLike',
+                        remove: 'asUnlike'
+                    },
+                    dislike: {
+                        add: 'asDislike',
+                        remove: 'adUnDislike'
+                    },
+                    endors: {
+                        add: 'asEndors',
+                        remove: 'asUnEndors'
+                    },
+                    report: {
+                        add: 'asReport',
+                        remove: 'asUnReport'
+                    }
+                };
 
+            promise = $q.defer();
+            url = NameSpace.get(route[type][operation], {
+                id: id
+            });
+            var mock =  true;
+            promise.resolve(mock);
+            return promise.promise;
+        };
     annotationsCommunication.getRepliesByAnnotationId = function(id) {
         var promise = $q.defer(),
             url = NameSpace.get('asOpenAnnReplies', {
@@ -347,7 +376,7 @@ angular.module('Pundit2.Communication')
                 id: '55543432',
                 creatorName: 'Gino',
                 annotatedBy: 'http://user-uri', // ?
-                created: '2016-02-09T10:00',
+                created: '2016-02-09T14:00',
                 modified: '2016-02-09T11:00',
                 thumb: 'https://placehold.it/30x30',
                 content: 'Yokko bocco',

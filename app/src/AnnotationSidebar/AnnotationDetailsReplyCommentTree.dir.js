@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-    .directive('annotationDetailsReplyCommentTree', function(AnnotationDetails, Analytics, EventDispatcher) {
+    .directive('annotationDetailsReplyCommentTree', function(AnnotationDetails, Analytics) {
         return {
             restrict: 'E',
             scope: {
@@ -50,155 +50,41 @@ angular.module('Pundit2.AnnotationSidebar')
                     stopEvent(event);
                 };
 
-                scope.likeAnnotation = function (event) {
-                    var promise ={};
+                scope.socialEvent = function (event, type) {
+                    var contrary = {
+                        like : 'dislike',
+                        dislike : 'like',
+                        endors : 'report',
+                        report : 'endors'
+                        },
+                    promise ={},
+                    operation = '';
 
-                    if(!scope.social.status.like) {
-
-                        promise = AnnotationDetails.like(scope.id, 'add');
-
-                        promise.then(function (status) {
-                            if(status) {
-
-                                if(scope.social.status.dislike){
-                                    scope.social.status.dislike = !scope.social.status.dislike;
-                                    scope.social.counting.dislike = parseInt(scope.social.counting.dislike) - 1;
-                                }
-
-                                scope.social.counting.like = parseInt(scope.social.counting.like) + 1;
-                            }
-                        });
-                    }else{
-                        promise = AnnotationDetails.like(scope.id, 'remove');
-
-                        promise.then(function (status) {
-                            if(status) {
-
-                                if(scope.social.status.dislike){
-                                    scope.social.status.dislike = !scope.social.status.dislike;
-                                    scope.social.counting.dislike = parseInt(scope.social.counting.dislike) - 1;
-                                }
-
-                                scope.social.counting.like = parseInt(scope.social.counting.like) - 1;
-                            }
-                        });
-
+                    if(typeof type === 'undefined'){
+                        return;
                     }
-                    scope.social.status.like = !scope.social.status.like;
-                    stopEvent(event);
-                };
-
-                scope.dislikeAnnotation = function () {
-                    var promise ={};
-
-                    if(!scope.social.status.dislike) {
-
-                        promise = AnnotationDetails.dislike(scope.id, 'add');
-
-                        promise.then(function (status) {
-                            if(status) {
-
-                                if(scope.social.status.like){
-                                    scope.social.status.like = scope.social.status.like;
-                                    scope.social.counting.like = parseInt(scope.social.counting.like) - 1;
-                                }
-
-                                scope.social.counting.dislike = parseInt(scope.social.counting.dislike) + 1;
-                            }
-                        });
-                    }else{
-                        promise = AnnotationDetails.dislike(scope.id, 'remove');
-
-                        promise.then(function (status) {
-                            if(status) {
-
-                                if(scope.social.status.like){
-                                    scope.social.status.like = !scope.social.status.like;
-                                    scope.social.counting.like = parseInt(scope.social.counting.like) - 1;
-                                }
-
-                                scope.social.counting.dislike = parseInt(scope.social.counting.dislike) - 1;
-                            }
-                        });
-
+                    if(!scope.social.status[type]){
+                        operation = 'add';
+                    }else {
+                        operation = 'remove';
                     }
-                    scope.social.status.dislike = !scope.social.status.dislike;
-                    stopEvent(event);
-                };
+                    if(!scope.social.status[type]) {
 
-                scope.reportAnnotation = function () {
-                    var promise ={};
-
-                    if(!scope.social.status.report) {
-
-                        promise = AnnotationDetails.report(scope.id, 'add');
+                        promise = AnnotationDetails.socialEvent(scope.id, type, operation);
 
                         promise.then(function (status) {
                             if(status) {
 
-                                if(scope.social.status.endors){
-                                    scope.social.status.endors = !scope.social.status.endors;
-                                    scope.social.counting.endors = parseInt(scope.social.counting.endors) - 1;
+                                if(scope.social.status[contrary[type]]){
+                                    scope.social.status[contrary[type]] = !scope.social.status[contrary[type]];
+                                    scope.social.counting[contrary[type]] = parseInt(scope.social.counting[contrary[type]]) - 1;
                                 }
 
-                                scope.social.counting.report = parseInt(scope.social.counting.report) + 1;
+                                scope.social.counting[type] = parseInt(scope.social.counting[type]) + 1;
                             }
                         });
-                    }else{
-                        promise = AnnotationDetails.report(scope.id, 'remove');
-
-                        promise.then(function (status) {
-                            if(status) {
-
-                                if(scope.social.status.endors){
-                                    scope.social.status.endors = !scope.social.status.endors;
-                                    scope.social.counting.endors = parseInt(scope.social.counting.endors) - 1;
-                                }
-
-                                scope.social.counting.report = parseInt(scope.social.counting.report) - 1;
-                            }
-                        });
-
                     }
-                    scope.social.status.report = !scope.social.status.report;
-                    stopEvent(event);
-                };
-
-                scope.endorseAnnotation = function () {
-                    var promise ={};
-
-                    if(!scope.social.status.endors) {
-
-                        promise = AnnotationDetails.endors(scope.id, 'add');
-
-                        promise.then(function (status) {
-                            if(status) {
-
-                                if(scope.social.status.report){
-                                    scope.social.status.report = !scope.social.status.report;
-                                    scope.social.counting.report = parseInt(scope.social.counting.report) - 1;
-                                }
-
-                                scope.social.counting.endors = parseInt(scope.social.counting.endors) + 1;
-                            }
-                        });
-                    }else{
-                        promise = AnnotationDetails.endors(scope.id, 'remove');
-
-                        promise.then(function (status) {
-                            if(status) {
-
-                                if(scope.social.status.report){
-                                    scope.social.status.report = !scope.social.status.report;
-                                    scope.social.counting.report = parseInt(scope.social.counting.report) - 1;
-                                }
-
-                                scope.social.counting.endors = parseInt(scope.social.counting.endors) - 1;
-                            }
-                        });
-
-                    }
-                    scope.social.status.endors = !scope.social.status.endors;
+                    scope.social.status[type] = !scope.social.status[type];
                     stopEvent(event);
                 };
             }

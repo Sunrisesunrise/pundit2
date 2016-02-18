@@ -306,6 +306,11 @@
                 ng-show = "!annotation.repliesLoaded">
             Loading Replyes
         </span>
+        <!-- Metadata social comment box -->
+        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
+             replace="true"
+                >
+        </div>
         <!-- List of replyes to comment -->
         <annotation-details-reply-comment-tree
                 class="pnd-annotation-details "
@@ -317,11 +322,7 @@
                 ng-if="isReplyMode()">
         </annotation-details-reply-comment-tree>
 
-        <!-- Metadata social comment box -->
-        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
-             replace="true"
-                >
-        </div>
+
         </div>
 
     </div>
