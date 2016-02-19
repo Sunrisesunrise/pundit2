@@ -18,6 +18,7 @@ angular.module('Pundit2.AnnotationPopover')
     $scope.isSwitchMode = $scope.isUserLogged;
     $scope.isCommentMode = false;
     $scope.isHighlightMode = false;
+    $scope.message = 'Login to Pundit to create new annotations!';
 
     var lastSelectedNotebookId;
 
@@ -57,6 +58,10 @@ angular.module('Pundit2.AnnotationPopover')
                 break;
             case 'highlight':
                 $scope.isHighlightMode = $scope.isUserLogged;
+                break;
+            case 'alert':
+                $scope.isCommentMode = $scope.isUserLogged;
+                $scope.message = 'Login to Pundit to use social events';
                 break;
         }
 

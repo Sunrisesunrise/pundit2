@@ -14,7 +14,7 @@
     <!-- Login: user must login -->
     <div class="popover-content"
          ng-if="!isUserLogged">
-        <a href="javascript:void(0)" ng-click="login()">Login to Pundit to create new annotations!</a>
+        <a href="javascript:void(0)" ng-click="login()">{{message}}</a>
     </div>
 
     <!-- Annotation type selection -->
