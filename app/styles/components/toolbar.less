@@ -84,7 +84,6 @@ body.pnd-toolbar-active {
         &:hover,
         &:focus,
         &:active {
-            // background-color: @color-toolbar-button-hover;
             text-decoration: none !important; /* For css overwritings */
         }
 
@@ -111,7 +110,7 @@ body.pnd-toolbar-active {
             transition: none !important; /* Delete any transition */
 
             /* Hover state */
-            &:hover {
+            &:hover, &:focus:hover {
                 background-color: @color-toolbar-button-bg-hover;
                 text-decoration: none !important; /* For css overwritings */
                 > span {
