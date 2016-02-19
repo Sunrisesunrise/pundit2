@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.directive('annotationDetailsReplyCommentTree', function(AnnotationDetails, Analytics) {
+.directive('annotationDetailsReplyCommentTree', function(AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit) {
     return {
         restrict: 'E',
         scope: {
@@ -17,6 +17,7 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.dislike = scope.options.dislike;
             scope.endorse = scope.options.endorse;
             scope.report = scope.options.report;
+
             var stopEvent = function(event) {
                 event.stopPropagation();
                 event.preventDefault();
@@ -50,6 +51,15 @@ angular.module('Pundit2.AnnotationSidebar')
             };
 
             scope.socialEvent = function(event, type) {
+                var createItemFromResource = function(event) {
+                    var values = {};
+
+                    values.uri = 'lool';
+                    values.icon = true;
+                    values.elem = event.currentTarget;
+
+                    return new Item(values.uri, values);
+                };
                 var contrary = {
                         like: 'dislike',
                         dislike: 'like',
@@ -72,14 +82,21 @@ angular.module('Pundit2.AnnotationSidebar')
                     promise = AnnotationDetails.socialEvent(scope.id, type, operation);
 
                     promise.then(function(status) {
-                        if (status) {
 
-                            if (scope.social.status[contrary[type]]) {
-                                scope.social.status[contrary[type]] = !scope.social.status[contrary[type]];
-                                scope.social.counting[contrary[type]] = parseInt(scope.social.counting[contrary[type]]) - 1;
+                        if (!MyPundit.isUserLogged()) {
+                            angular.element(event.target).addClass('pnd-range-pos-icon');
+                            AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert');
+                        } else {
+
+                            if (status) {
+
+                                if (scope.social.status[contrary[type]]) {
+                                    scope.social.status[contrary[type]] = !scope.social.status[contrary[type]];
+                                    scope.social.counting[contrary[type]] = parseInt(scope.social.counting[contrary[type]]) - 1;
+                                }
+
+                                scope.social.counting[type] = parseInt(scope.social.counting[type]) + 1;
                             }
-
-                            scope.social.counting[type] = parseInt(scope.social.counting[type]) + 1;
                         }
                     });
                 }

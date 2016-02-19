@@ -2,7 +2,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
 .controller('AnnotationDetailsCtrl', function($scope, $rootScope, $element, $timeout, $window,
     AnnotationSidebar, AnnotationDetails, AnnotationsExchange, TripleComposer, Dashboard, EventDispatcher,
-    Config, MyPundit, Analytics, Item, NameSpace) {
+    Config, MyPundit, Analytics, Item, NameSpace, AnnotationPopover) {
 
     function compare(a, b) {
         if (a.created < b.created) {
@@ -194,6 +194,15 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.socialEvent = function(event, type) {
+        var createItemFromResource = function(event) {
+            var values = {};
+
+            values.uri = 'lool';
+            values.icon = true;
+            values.elem = event.currentTarget;
+
+            return new Item(values.uri, values);
+        };
         var contrary = {
                 like: 'dislike',
                 dislike: 'like',
@@ -216,14 +225,21 @@ angular.module('Pundit2.AnnotationSidebar')
             promise = AnnotationDetails.socialEvent(currentId, type, operation);
 
             promise.then(function(status) {
-                if (status) {
 
-                    if ($scope.social.status[contrary[type]]) {
-                        $scope.social.status[contrary[type]] = !$scope.social.status[contrary[type]];
-                        $scope.social.counting[contrary[type]] = parseInt($scope.social.counting[contrary[type]]) - 1;
+                if (!MyPundit.isUserLogged()) {
+                    angular.element(event.target).addClass('pnd-range-pos-icon');
+                    AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert');
+                } else {
+
+                    if (status) {
+
+                        if ($scope.social.status[contrary[type]]) {
+                            $scope.social.status[contrary[type]] = !$scope.social.status[contrary[type]];
+                            $scope.social.counting[contrary[type]] = parseInt($scope.social.counting[contrary[type]]) - 1;
+                        }
+
+                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) + 1;
                     }
-
-                    $scope.social.counting[type] = parseInt($scope.social.counting[type]) + 1;
                 }
             });
         }
@@ -267,6 +283,7 @@ angular.module('Pundit2.AnnotationSidebar')
             $scope.replyDialog = false;
             $scope.replyTreeActivate = true;
             $scope.annotation.replyCommentValue = '';
+            $scope.isUserLogged = MyPundit.isUserLogged();
             var annotation = AnnotationsExchange.getAnnotationById(e);
             var out = {
                 'id': annotation.id,
