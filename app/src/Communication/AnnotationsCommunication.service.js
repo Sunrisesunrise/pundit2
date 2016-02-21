@@ -222,123 +222,125 @@ angular.module('Pundit2.Communication')
         });
     };
 
-    annotationsCommunication.like = function(id, operation)  {
+    annotationsCommunication.like = function(id, operation) {
         var promise = {},
             url = '';
 
-        if(typeof  operation !== 'undefined' && operation === 'add'){
+        if (typeof operation !== 'undefined' && operation === 'add') {
             promise = $q.defer(),
                 url = NameSpace.get('asLike', {
                     id: id
                 });
         }
-        if(typeof  operation !== 'undefined' && operation === 'remove'){
+        if (typeof operation !== 'undefined' && operation === 'remove') {
             promise = $q.defer(),
                 url = NameSpace.get('asUnLike', {
                     id: id
                 });
         }
 
-        var mock =  true;
+        var mock = true;
         promise.resolve(mock);
         return promise.promise;
     };
 
-    annotationsCommunication.dislike = function(id, operation)  {
+    annotationsCommunication.dislike = function(id, operation) {
         var promise = {},
             url = '';
 
-        if(typeof  operation !== 'undefined' && operation === 'add'){
+        if (typeof operation !== 'undefined' && operation === 'add') {
             promise = $q.defer(),
                 url = NameSpace.get('asDislike', {
                     id: id
                 });
         }
-        if(typeof  operation !== 'undefined' && operation === 'remove'){
+        if (typeof operation !== 'undefined' && operation === 'remove') {
             promise = $q.defer(),
                 url = NameSpace.get('asUnDislike', {
                     id: id
                 });
         }
 
-        var mock =  true;
+        var mock = true;
         promise.resolve(mock);
         return promise.promise;
     };
 
-    annotationsCommunication.endors = function(id, operation)  {
-            var promise = {},
-                url = '';
+    annotationsCommunication.endors = function(id, operation) {
+        var promise = {},
+            url = '';
 
-            if(typeof  operation !== 'undefined' && operation === 'add'){
-                promise = $q.defer(),
-                    url = NameSpace.get('asEndors', {
-                        id: id
-                    });
-            }
-            if(typeof  operation !== 'undefined' && operation === 'remove'){
-                promise = $q.defer(),
-                    url = NameSpace.get('asUnEndors', {
-                        id: id
-                    });
-            }
+        if (typeof operation !== 'undefined' && operation === 'add') {
+            promise = $q.defer(),
+                url = NameSpace.get('asEndors', {
+                    id: id
+                });
+        }
+        if (typeof operation !== 'undefined' && operation === 'remove') {
+            promise = $q.defer(),
+                url = NameSpace.get('asUnEndors', {
+                    id: id
+                });
+        }
 
-            var mock =  true;
-            promise.resolve(mock);
-            return promise.promise;
-        };
+        var mock = true;
+        promise.resolve(mock);
+        return promise.promise;
+    };
 
-    annotationsCommunication.report = function(id, operation)  {
-            var promise = {},
-                url = '';
+    annotationsCommunication.report = function(id, operation) {
+        var promise = {},
+            url = '';
 
-            if(typeof  operation !== 'undefined' && operation === 'add'){
-                promise = $q.defer(),
-                    url = NameSpace.get('asReport', {
-                        id: id
-                    });
-            }
-            if(typeof  operation !== 'undefined' && operation === 'remove'){
-                promise = $q.defer(),
-                    url = NameSpace.get('asUnReport', {
-                        id: id
-                    });
-            }
+        if (typeof operation !== 'undefined' && operation === 'add') {
+            promise = $q.defer(),
+                url = NameSpace.get('asReport', {
+                    id: id
+                });
+        }
+        if (typeof operation !== 'undefined' && operation === 'remove') {
+            promise = $q.defer(),
+                url = NameSpace.get('asUnReport', {
+                    id: id
+                });
+        }
 
-            var mock =  true;
-            promise.resolve(mock);
-            return promise.promise;
-        };
+        var mock = true;
+        promise.resolve(mock);
+        return promise.promise;
+    };
+
     annotationsCommunication.socialEvent = function(id, type, operation) {
-            var promise = {},
-                url = '',
-                route = {
-                    like: {
-                        add: 'asLike',
-                        remove: 'asUnlike'
-                    },
-                    dislike: {
-                        add: 'asDislike',
-                        remove: 'adUnDislike'
-                    },
-                    endors: {
-                        add: 'asEndors',
-                        remove: 'asUnEndors'
-                    },
-                    report: {
-                        add: 'asReport',
-                        remove: 'asUnReport'
-                    }
-                };
+        var promise = {},
+            url = '',
+            route = {
+                like: {
+                    add: 'asLike',
+                    remove: 'asUnlike'
+                },
+                dislike: {
+                    add: 'asDislike',
+                    remove: 'adUnDislike'
+                },
+                endors: {
+                    add: 'asEndors',
+                    remove: 'asUnEndors'
+                },
+                report: {
+                    add: 'asReport',
+                    remove: 'asUnReport'
+                }
+            };
 
-            promise = $q.defer();
-            url = NameSpace.get(route[type][operation], {
-                id: id
-            });
-            var mock =  true;
-            promise.resolve(mock);
-            return promise.promise;
-        };
+        promise = $q.defer();
+        url = NameSpace.get(route[type][operation], {
+            id: id
+        });
+        var mock = true;
+        promise.resolve(mock);
+        return promise.promise;
+    };
+    
     annotationsCommunication.getRepliesByAnnotationId = function(id) {
         var promise = $q.defer(),
             url = NameSpace.get('asOpenAnnReplies', {
