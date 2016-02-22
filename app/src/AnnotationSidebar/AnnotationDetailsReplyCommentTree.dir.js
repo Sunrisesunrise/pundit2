@@ -69,40 +69,47 @@ angular.module('Pundit2.AnnotationSidebar')
                     promise = {},
                     operation = '';
 
+                if (!MyPundit.isUserLogged()) {
+                    angular.element(event.target).addClass('pnd-range-pos-icon');
+                    AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert');
+                }
+
                 if (typeof type === 'undefined') {
                     return;
                 }
+
                 if (!scope.social.status[type]) {
                     operation = 'add';
                 } else {
                     operation = 'remove';
                 }
-                if (!scope.social.status[type]) {
 
-                    promise = AnnotationDetails.socialEvent(scope.id, type, operation);
+                promise = AnnotationDetails.socialEvent(scope.id, type, operation);
 
-                    promise.then(function(status) {
+                promise.then(function(status) {
 
-                        if (!MyPundit.isUserLogged()) {
-                            angular.element(event.target).addClass('pnd-range-pos-icon');
-                            AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert');
-                        } else {
+                    if (status) {
 
-                            if (status) {
-
-                                if (scope.social.status[contrary[type]]) {
-                                    scope.social.status[contrary[type]] = !scope.social.status[contrary[type]];
-                                    scope.social.counting[contrary[type]] = parseInt(scope.social.counting[contrary[type]]) - 1;
-                                }
-
-                                scope.social.counting[type] = parseInt(scope.social.counting[type]) + 1;
-                            }
+                        if (scope.social.status[type] && !scope.social.status[contrary[type]]) {
+                            scope.social.counting[type] = parseInt(scope.social.counting[type]) - 1;
                         }
-                    });
-                }
-                scope.social.status[type] = !scope.social.status[type];
+
+                        if (!scope.social.status[type] && !scope.social.status[contrary[type]]) {
+                            scope.social.counting[type] = parseInt(scope.social.counting[type]) + 1;
+                        }
+
+                        if (!scope.social.status[type] && scope.social.status[contrary[type]]) {
+                            scope.social.status[contrary[type]] = !scope.social.status[contrary[type]];
+                            scope.social.counting[type] = parseInt(scope.social.counting[type]) + 1;
+                            scope.social.counting[contrary[type]] = parseInt(scope.social.counting[contrary[type]]) - 1;
+                        }
+
+                        scope.social.status[type] = !scope.social.status[type];
+                    }
+                });
                 stopEvent(event);
             };
+
         }
     };
 });

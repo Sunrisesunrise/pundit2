@@ -316,11 +316,11 @@ angular.module('Pundit2.Communication')
             route = {
                 like: {
                     add: 'asLike',
-                    remove: 'asUnlike'
+                    remove: 'asUnLike'
                 },
                 dislike: {
                     add: 'asDislike',
-                    remove: 'adUnDislike'
+                    remove: 'asUnDislike'
                 },
                 endors: {
                     add: 'asEndors',
