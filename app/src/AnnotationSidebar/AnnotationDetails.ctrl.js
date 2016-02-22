@@ -101,6 +101,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.toggleAnnotation = function() {
         $scope.editMode = false;
 
+
         if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
             if (AnnotationSidebar.isFiltersExpanded()) {
                 AnnotationSidebar.toggleFiltersContent();
@@ -121,6 +122,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if (!$scope.annotation.expanded) {
             AnnotationSidebar.setAllPosition(currentId, initialHeight);
+            $scope.replyDialog = false;
+            $scope.annotation.replyCommentValue = '';
         }
 
         if ($scope.annotation.expanded && !$scope.annotation.repliesLoaded) {
