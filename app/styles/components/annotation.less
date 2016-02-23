@@ -23,15 +23,13 @@
 \* ------------------------------------ */
 
 .pnd-annotation-collapsed {
-    height: @annotation-collapsed-height;
-    margin: 5px;
+    height: @annotation-collapsed-height * 2; // @annotation-collapsed-height;
+    margin: 0 5px; // 5px;
     overflow: hidden;
-
     background-color: @annotation-bg-color;
     border: @annotation-border-size solid @annotation-border-color;
     box-shadow: @annotation-box-shadow;
     border-radius: @annotation-border-radius;
-
     font-size: 13px;
     cursor: pointer;
 }
@@ -43,16 +41,9 @@
     height: @annotation-collapsed-height;
     max-width: 100%;
     overflow: hidden;
-    padding: 2px 4px;
+    padding: 2px 9px 2px 4px;
     white-space: nowrap;
     text-overflow: ellipsis;
-
-    /*
-    &:not(.pnd-annotation-page) span {
-        background-color: @color-highlight;
-        font-style: italic;
-    }
-    */
 
     &.pnd-annotation-annotated-fragment {
         span {
@@ -61,13 +52,7 @@
         }
     }
 
-    &.pnd-annotation-page {
-        span {
-            font-weight: @font-weight-bold;
-        }
-    }
-
-    &.pnd-annotation-annotated-resource {
+    &.pnd-annotation-page, &.pnd-annotation-annotated-resource {
         span {
             font-weight: @font-weight-bold;
         }
@@ -77,12 +62,6 @@
 /* Hover effect */
 .pnd-annotation-collapsed:hover {
 
-    /*
-    .pnd-annotation-collapsed-subject:not(.pnd-annotation-page) span {
-        background-color: @color-highlight-hover;
-    }
-    */
-
     .pnd-annotation-collapsed-subject.pnd-annotation-annotated-fragment span {
         background-color: @color-highlight-hover;
     }
@@ -90,18 +69,19 @@
 
 /* Style for semantic and commenting annotations */
 .pnd-annotation-semantic, .pnd-annotation-comment {
+
     /* Subject */
     .pnd-annotation-collapsed-subject {
-        width: 48%;
-        max-width: 48%;
+        width: 50%;
+        max-width: 50%;
     }
 
     /* Object */
     .pnd-annotation-collapsed-object {
         float: left;
-        width: 52%;
+        width: 50%;
+        max-width: 50%;
         height: @annotation-collapsed-height;
-        max-width: 52%;
         padding: 1px 4px 1px (@annotation-collapsed-height/2);
         background-color: @color-ultra-light;
         overflow: hidden;
@@ -118,14 +98,14 @@
     display: block;
     width: 0;
     height: 0;
-    top: 50%;
-    left: 48%;
-    margin-top: -(@annotation-collapsed-height/2);
+    top: 1px; // 50%;
+    left: 43%;
+    margin-top: 0; // -(@annotation-collapsed-height/2);
 
     border-color: transparent;
     border-style: solid;
-    border-left-color: @color-light-gray;
-    border-right-width: 0;
+    border-right-color: @color-light-gray;
+    border-left-width: 0;
     border-width: (@annotation-collapsed-height/2);
 
 
@@ -136,15 +116,22 @@
         display: block;
         width: 0;
         height: 0;
-        right: 1px;
+        right: -12px;
         bottom: -(@annotation-collapsed-height/2)+1;
 
         border-color: transparent;
         border-style: solid;
         border-width: (@annotation-collapsed-height/2) - 1;
-        border-left-color: #FFF;
-        border-right-width: 0;
+        border-right-color: @color-ultra-light;
+        border-left-width: 0;
     }
+}
+
+/* Footer containing social buttons */
+.pnd-annotation-collapsed-social-footer {
+    border-top: 1px solid @color-border-normal;
+    clear: both;
+    text-align: right;
 }
 
 /* ------------------------------------ *\
@@ -435,6 +422,48 @@
     .pnd-btn {
         margin-right: 7px;
     }
+}
+
+
+/* ------------------------------------ *\
+   #SOCIAL-BUTTONS
+\* ------------------------------------ */
+
+
+/* Generic style for social buttons in the annotation */
+.pnd-annotation-social-buttons {
+    padding-right: 8px;
+    color: @color-text-light;
+    font-size: 12px;
+    line-height: 20px;
+
+    button {
+
+        &.pnd-annotation-details-social-activate {
+            font-weight: @font-weight-bold;
+
+            &.pnd-reply, &.pnd-like {
+                color: @color-text-link;
+            }
+
+            &.pnd-report, &.pnd-dislike {
+                color: @color-error;
+            }
+
+            &.pnd-endorse {
+                color: @color-green;
+            }
+        }
+
+        &:hover:not(.pnd-annotation-details-social-activate) {
+            color: @color-text-link;
+        }
+
+        span {
+            vertical-align: middle;
+        }
+    }
+
 }
 
 

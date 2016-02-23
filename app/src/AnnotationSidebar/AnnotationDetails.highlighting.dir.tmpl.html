@@ -7,11 +7,16 @@
          ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
 
         <div class="pnd-annotation-collapsed-subject"
-             ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment'}">
+             ng-class="{'pnd-annotation-annotated-fragment': (annotation.mainItem.typeLabel == 'Text fragment')}">
             <span>{{annotation.mainItem.label}}</span>
         </div>
 
+        <div class="pnd-annotation-collapsed-social-footer pnd-annotation-social-buttons"
+             ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
+             replace="true">
+        </div>
     </div>
+    <!-- END // Collapsed view of the annotation -->
 
     <!-- Expanded view of the annotation -->
     <div class="pnd-annotation-expanded pnd-annotation-details-container"

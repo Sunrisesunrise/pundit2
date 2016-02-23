@@ -7,10 +7,10 @@
          ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
 
         <div class="pnd-annotation-collapsed-subject"
-             ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment',
-                        'pnd-annotation-annotated-resource': annotation.mainItem.typeLabel == 'resource',
-                        'pnd-annotation-page': annotation.mainItem.typeLabel == 'WebPage'}">
-            <span>{{annotation.mainItem.label}}</span>
+             ng-class="{'pnd-annotation-annotated-fragment': (annotation.mainItem.typeLabel == 'Text fragment'),
+                        'pnd-annotation-annotated-resource': (annotation.mainItem.typeLabel == 'resource'),
+                        'pnd-annotation-page': (annotation.mainItem.typeLabel == 'WebPage')}">
+            <span>{{ annotation.mainItem.label }}</span> <!-- TODO For images instead of "label" we should use the ALT attribute if present -->
         </div>
 
         <div class="pnd-annotation-collapsed-caret"></div>
@@ -18,17 +18,22 @@
         <div class="pnd-annotation-collapsed-object">
             <span>{{ annotation.comment }}</span>
         </div>
-        <br>
-    </div>
-    <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
-    <div class="pnd-annotation-collapsed pnd-annotation-details-buttons"
-         ng-if="!annotation.expanded">
-        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
-             replace="true"
-                >
+
+        <div class="pnd-annotation-collapsed-social-footer pnd-annotation-social-buttons"
+             ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
+             replace="true">
         </div>
     </div>
 
+    <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
+    <!--
+    <div class="pnd-annotation-collapsed pnd-annotation-details-buttons"
+         ng-if="!annotation.expanded">
+        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
+             replace="true">
+        </div>
+    </div>
+    -->
     <!-- END // Collapsed view of the annotation -->
 
     <!-- Expanded view of the annotation -->
@@ -179,6 +184,7 @@
                 ng-if="isReplyMode()">
         </annotation-details-reply-comment-tree>
 
-
     </div>
+    <!-- END // Expanded view of the annotation -->
+
 </div>
