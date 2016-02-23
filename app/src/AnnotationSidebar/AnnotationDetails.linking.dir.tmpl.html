@@ -301,22 +301,22 @@
         </div>
 
         <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
-        <div class="pnd-annotation-details-buttons">
-            <div ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
-                 replace="true"
-                    >
-            </div>
+        <div class="pnd-annotation-social-buttons"
+             ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
+             replace="true">
         </div>
-        <span
-                ng-show = "!annotation.repliesLoaded">
-            Loading Replyes
+
+        <!-- Displayed while loading replies -->
+        <span ng-show = "!annotation.repliesLoaded">
+            Loading Replies
         </span>
+
         <!-- Metadata social comment box -->
         <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
-             replace="true"
-                >
+             replace="true">
         </div>
-        <!-- List of replyes to comment -->
+
+        <!-- List of replies to comment -->
         <annotation-details-reply-comment-tree
                 class="pnd-annotation-details "
                 id="{{::annotation.id}}"
@@ -327,9 +327,7 @@
                 ng-if="isReplyMode()">
         </annotation-details-reply-comment-tree>
 
-
-        </div>
-
     </div>
+    <!-- END // Expanded view of the annotation -->
 
 </div>

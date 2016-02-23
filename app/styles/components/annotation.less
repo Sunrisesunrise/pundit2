@@ -5,6 +5,8 @@
  * For style of the whole annotation sidebar please refer to annotation-sidebar.less
  */
 
+@color-prova: #afafaf;
+
 
 /* ------------------------------------ *\
    #SINGLE-ANNOTATIONS-DETAILS
@@ -129,10 +131,9 @@
 
 /* Footer containing social buttons */
 .pnd-annotation-collapsed-social-footer {
-    border-top: 1px solid @color-border-normal;
-    clear: both;
-    text-align: right;
+
 }
+
 
 /* ------------------------------------ *\
    #EXPANDED-ANNOTATION
@@ -151,56 +152,10 @@
     cursor: pointer;
 }
 
-/* Metadata showed on top of the annotation */
-.pnd-annotation-details-meta {
-    margin: 10px 0 0 10px;
-    padding: 0 10px 10px 0;
-    border-bottom: @annotation-border-size solid @annotation-border-color;
-
-    /* User's real thumb (HTML img)
-     Currently hidden */
-    .pnd-annotation-user-thumb {
-        display: none;
-        float: left;
-        margin-right: 10px;
-        border-radius: 5px;
-    }
-
-    /* User's default thumb */
-    .pnd-annotation-user-thumb-default {
-        float: left;
-        width: 30px;
-        height: 30px;
-        margin-right: 10px;
-        /* Replaced by media query for retina */
-        background: transparent url('img/user-thumb-default.png') center center no-repeat;
-        border-radius: 5px;
-    }
-
-    .pnd-annotation-user-name {
-        display: block;
-        font-size: 12px;
-        font-weight: @font-weight-bold;
-        line-height: 1.3;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-
-    .pnd-annotation-metadata {
-        display: block;
-        font-size: 12px;
-        line-height: 1.3;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-}
-
 /* Annotation content */
 .pnd-annotation-details-data {
+
     /* The annotated fragment shown in the annotation details */
-    // .pnd-annotation-annotated-fragment, .pnd-annotation-annotated-literal {
     .pnd-annotation-annotated-fragment {
         display: block;
         padding: 10px;
@@ -210,12 +165,11 @@
         word-wrap: break-word;
 
         span {
-            background-color: @color-highlight; // @color-highlight-hover; // @color-highlight;
+            background-color: @color-highlight; // @color-highlight-hover;
         }
     }
 
     /* Comment annotations */
-
     /* The comment shown in the annotation details */
     .pnd-annotation-comment-text, .pnd-annotation-comment-text-edit {
         padding: 10px;
@@ -394,7 +348,7 @@
 }
 
 /* Buttons at the bottom of the annotation */
-.pnd-annotation-details-buttons {
+/*.pnd-annotation-details-buttons {
     padding: 0 5px;
     border-top: @annotation-border-size solid @annotation-border-color;
 
@@ -411,7 +365,7 @@
             color: @color-brand;
         }
     }
-}
+}*/
 
 /* Buttons to save or cancel comment edit */
 .pnd-annotation-comment-text-edit-buttons {
@@ -426,16 +380,140 @@
 
 
 /* ------------------------------------ *\
+   #ANNOTATION-METADATA
+\* ------------------------------------ */
+/* Metadata showed on top of the annotation */
+.pnd-annotation-details-meta {
+    margin: 10px 0 0 10px;
+    padding: 0 10px 10px 0;
+    border-bottom: @annotation-border-size solid @annotation-border-color;
+
+    /* There's the edit caret on the right.... more space needed */
+    &.pnd-annotation-details-meta-edit {
+        padding-right: 30px;
+    }
+
+    .pnd-annotation-user-name {
+        display: block;
+        font-size: 12px;
+        font-weight: @font-weight-bold;
+        line-height: 1.3;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .pnd-annotation-metadata {
+        display: block;
+        font-size: 12px;
+        line-height: 1.3;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    /* Toggles edit dropdown */
+    .pnd-annotation-edit-toggle {
+        position: absolute;
+        right: 17px;
+    }
+}
+
+
+/* ------------------------------------ *\
+   #USER-THUMB
+\* ------------------------------------ */
+/* User's real thumb (HTML img)
+     Currently hidden */
+.pnd-annotation-user-thumb {
+    display: none;
+    float: left;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+/* User's default thumb */
+.pnd-annotation-user-thumb-default {
+    float: left;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    /* Replaced by media query for retina */
+    background: transparent url('img/user-thumb-default.png') center center no-repeat;
+    border-radius: 5px;
+}
+
+
+/* ------------------------------------ *\
+   #REPLIES
+\* ------------------------------------ */
+.pnd-annotation-reply {
+    border-top: 1px solid @color-border-normal;
+    padding: 10px;
+
+    .pnd-annotation-user {
+        font-weight: @font-weight-bold;
+    }
+
+    .pnd-annotation-reply-content {
+        margin-left: 40px;
+    }
+
+    .pnd-annotation-reply-footer {
+        height: 20px;
+        margin-top: 10px;
+        padding-top: 4px;
+        border-top: 1px solid @color-border-light;
+    }
+
+    .pnd-annotation-reply-date {
+        max-width: 50%;
+        overflow: hidden;
+        float: left;
+        color: @color-prova; // @color-text-light;
+        font-size: 12px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .pnd-annotation-social-buttons {
+        float: right;
+        clear: none;
+        height: 20px;
+        padding: 0;
+        border: 0;
+        line-height: 17px;
+    }
+}
+
+
+/* ------------------------------------ *\
+   #EDIT-TOGGLE
+\* ------------------------------------ */
+/* Toggles the dropdown for editing annotations and replies */
+.pnd-annotation-edit-toggle {
+    color: @color-dark-gray;
+
+    &:hover {
+        color: @color-text-link;
+    }
+}
+
+
+/* ------------------------------------ *\
    #SOCIAL-BUTTONS
 \* ------------------------------------ */
 
-
 /* Generic style for social buttons in the annotation */
 .pnd-annotation-social-buttons {
+    clear: both;
+    height: 24px;
     padding-right: 8px;
-    color: @color-text-light;
+    border-top: 1px solid @color-border-normal;
+    color: @color-prova; // fade(@color-text-light, 70%);
     font-size: 12px;
-    line-height: 20px;
+    text-align: right;
+    line-height: 22px;
 
     button {
 
@@ -463,7 +541,6 @@
             vertical-align: middle;
         }
     }
-
 }
 
 
@@ -491,14 +568,10 @@ in the expanded annotation */
 @media only screen and (min-device-pixel-ratio: 2),
 only screen and (min-resolution: 192dpi) {
 
-    /* Metadata showed on top of the annotation */
-    .pnd-annotation-details-meta {
-
-        /* User's default thumb */
-        .pnd-annotation-user-thumb-default {
-            background: transparent url('img/user-thumb-default@2x.png') center center no-repeat;
-            background-size: 30px 30px;
-        }
+    /* User's default thumb */
+    .pnd-annotation-user-thumb-default {
+        background: transparent url('img/user-thumb-default@2x.png') center center no-repeat;
+        background-size: 30px 30px;
     }
 
 }

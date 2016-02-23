@@ -1,93 +1,64 @@
-<div class="pnd-annotation-expanded">
+<!-- Reply read mode -->
+<div class="pnd-annotation-reply">
 
-    <!-- Metadata -->
-    <div class="pnd-annotation-details-meta"
-         ng-init="meta = false">
+    <!-- User's thumb -->
+    <img class="pnd-annotation-user-thumb"
+         src="" width="30" height="30"
+         alt="{{::annotation.creatorName}}"/>
 
-        <img class="pnd-annotation-user-thumb" src="https://placehold.it/30x30" alt="{{::data.creatorName}}"/>
-            <span class="pnd-annotation-user-name">
-                {{::data.creatorName}}
-            </span>
-        <!--<span class="pnd-annotation-metadata">-->
-        <!--{{::annotation.created | date : 'd MMM y'}}-->
-        <!--<span-->
-        <!--ng-if="!isUserToolShowed() || !homePundit">-->
-        <!--{{annotation.notebookName}}-->
-        <!--</span>-->
-        <!--<a-->
-        <!--href="#"-->
-        <!--ng-if="isUserToolShowed() && homePundit"-->
-        <!--ng-click="openNotebook($event, annotation.notebookId)">-->
-        <!--{{annotation.notebookName}}-->
-        <!--</a>-->
-        <!--</span>-->
-        <br>
-    </div>
+    <!-- Default user's thumb -->
+    <div class="pnd-annotation-user-thumb-default"></div>
 
-    <!-- Annotation data -->
-    <div class="pnd-annotation-details-data">
-        <div class="pnd-annotation-comment-caret"></div>
+    <!-- Reply content -->
+    <div class="pnd-annotation-reply-content">
 
-        <!-- Comment read mode-->
-        <div
-                class="pnd-annotation-comment-text"
-                >
-            <span ng-bind-html="data.content | linky:'_blank'"></span>
+        <div class="pnd-annotation-reply-text">
+            <span class="pnd-annotation-user">{{::data.creatorName}}</span> <span ng-bind-html="data.content | linky:'_blank'"></span>
         </div>
-        <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
-        <div class="pnd-annotation-details-buttons">
-            <div ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
-                 replace="true"
-                    >
+
+        <div class="pnd-annotation-reply-footer">
+            <div class="pnd-annotation-reply-date">
+                {{::data.created}}
+            </div>
+            <div class="pnd-annotation-social-buttons"
+                 ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
+                 replace="true">
             </div>
         </div>
+
     </div>
 
-    <!-- Comment edit mode-->
-    <div
-            class="pnd-annotation-comment-text-edit"
-            ng-if="editMode">
-
-                <textarea
-                        class="form-control pnd-popover-literal-textarea"
-                        rows="6"
-                        ng-click="areaClick($event)"
-                        ng-model="data.content">
-                </textarea>
-    </div>
-    <!-- Save or cancel of comment in Edit mode -->
-    <div
-            class="pnd-annotation-comment-text-edit-buttons"
-            ng-show="isUserToolShowed()"
-            ng-if="editMode">
-        <button
-                type="button"
-                class="pnd-btn pnd-btn-small"
-                ng-click="cancelEdit($event)">
-            Cancel
-        </button>
-        <button
-                type="button"
-                class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
-                ng-click="saveEdit($event)">
-            Save
-        </button>
-    </div>
-    <!--<div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyCommentTree.tmpl.html'"-->
-
-    <!-->
-    <!--</div>-->
 </div>
-<!--&lt;!&ndash; Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) &ndash;&gt;-->
-<!--<div class="pnd-annotation-details-buttons">-->
-<!--<div ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'" replace="true">-->
-<!--</div>-->
+<!-- END // Reply read mode -->
 
-<!--</div>-->
-<!--&lt;!&ndash; Metadata social comment &ndash;&gt;-->
-<!--<div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"-->
-<!--replace="true"-->
-<!-->
-<!--</div>-->
-<!-- Metadata social comment tree-->
+<!-- Reply edit mode -->
+<div class="pnd-annotation-comment-text-edit"
+     ng-if="editMode">
 
+    <textarea
+            class="form-control pnd-popover-literal-textarea"
+            rows="6"
+            ng-click="areaClick($event)"
+            ng-model="data.content">
+    </textarea>
+
+</div>
+<!-- Save or cancel of comment in Edit mode -->
+<div
+        class="pnd-annotation-comment-text-edit-buttons"
+        ng-show="isUserToolShowed()"
+        ng-if="editMode">
+    <button
+            type="button"
+            class="pnd-btn pnd-btn-small"
+            ng-click="cancelEdit($event)">
+        Cancel
+    </button>
+    <button
+            type="button"
+            class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
+            ng-click="saveEdit($event)">
+        Save
+    </button>
+</div>
+<!-- END // Reply edit mode -->

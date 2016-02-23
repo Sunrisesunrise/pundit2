@@ -43,6 +43,7 @@
 
         <!-- Metadata -->
         <div class="pnd-annotation-details-meta"
+             ng-class="{ 'pnd-annotation-details-meta-edit':( isUserToolShowed() ) }"
              ng-init="meta = false">
 
             <!-- User's thumb -->
@@ -55,10 +56,9 @@
             <div class="pnd-annotation-user-thumb-default"></div>
 
             <!-- Edit Menu -->
-            <div class="pnd-icon-angle-down"
+            <div class="pnd-icon-angle-down pnd-annotation-edit-toggle"
                  ng-click="menuEdit($event);"
-                 style="float:right"
-                 ng-if="isUserToolShowed() && homePundit">
+                 ng-if="isUserToolShowed()">
             </div>
 
             <span class="pnd-annotation-user-name">
@@ -67,7 +67,7 @@
             <span class="pnd-annotation-metadata">
                 {{::annotation.created | date : 'd MMM y'}} · in
                 <span
-                        ng-if="!isUserToolShowed() || !homePundit">
+                    ng-if="!isUserToolShowed() || !homePundit">
                     {{annotation.notebookName}}
                 </span>
                 <a
@@ -157,23 +157,24 @@
             </div>
 
         </div>
+
         <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
-        <div class="pnd-annotation-details-buttons">
-            <div ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
-                 replace="true"
-                    >
-            </div>
+        <div class="pnd-annotation-social-buttons"
+             ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
+             replace="true">
         </div>
-        <span
-                ng-show = "!annotation.repliesLoaded">
-            Loading Replyes
+
+        <!-- Displayed while loading replies -->
+        <span ng-show = "!annotation.repliesLoaded">
+            Loading Replies
         </span>
+
         <!-- Metadata social comment box -->
         <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
-             replace="true"
-                >
+             replace="true">
         </div>
-        <!-- List of replyes to comment -->
+
+        <!-- List of replies to comment -->
         <annotation-details-reply-comment-tree
                 class="pnd-annotation-details "
                 id="{{::annotation.id}}"

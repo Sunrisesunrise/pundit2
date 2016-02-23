@@ -1,91 +1,90 @@
-<!-- <div class="pnd-annotation-details-footer"> -->
-    <button
-            type="button"
-            class="pnd-reply"
-            ng-if="reply"
-            ng-click="replyAnnotation($event)">
-        <span class="pnd-icon-comment"></span>
-        {{social.counting.comment}}
-    </button>
+<button
+    type="button"
+    class="pnd-reply"
+    ng-if="reply"
+    ng-click="replyAnnotation($event)">
+    <span class="pnd-icon-comment"></span>
+    {{social.counting.comment}}
+</button>
 
-    <span ng-if="isReplyMode()&&!isLinking()">
+<span ng-if="isReplyMode()&&!isLinking()">
         ·
     </span>
 
-    <button
-            type="button"
-            class="pnd-like"
-            ng-show="like"
-            ng-click="socialEvent($event, 'like')"
-            ng-class="{'pnd-annotation-details-social-activate': social.status.like }">
-        <span class="pnd-icon-thumb-o-up"></span>
-        {{social.counting.like}}
-    </button>
+<button
+    type="button"
+    class="pnd-like"
+    ng-show="like"
+    ng-click="socialEvent($event, 'like')"
+    ng-class="{'pnd-annotation-details-social-activate': social.status.like }">
+    <span class="pnd-icon-thumb-o-up"></span>
+    {{social.counting.like}}
+</button>
 
-    <span ng-if="like">
+<span ng-if="like">
         ·
     </span>
 
-    <button
-            type="button"
-            class="pnd-dislike"
-            ng-show="dislike"
-            ng-click="socialEvent($event, 'dislike')"
-            ng-class="{'pnd-annotation-details-social-activate': social.status.dislike }">
-        <span class="pnd-icon-thumb-o-down"></span>
-        {{social.counting.dislike}}
-    </button>
+<button
+    type="button"
+    class="pnd-dislike"
+    ng-show="dislike"
+    ng-click="socialEvent($event, 'dislike')"
+    ng-class="{'pnd-annotation-details-social-activate': social.status.dislike }">
+    <span class="pnd-icon-thumb-o-down"></span>
+    {{social.counting.dislike}}
+</button>
 
-    <span ng-if="dislike">
+<span ng-if="dislike">
         ·
     </span>
 
-    <button
-            type="button"
-            class="pnd-endorse"
-            ng-show="endorse"
-            ng-click="socialEvent($event, 'endors')"
-            ng-class="{'pnd-annotation-details-social-activate': social.status.endors }">
-        <span class="pnd-icon-check"></span>
-        {{social.counting.endors}}
-    </button>
+<button
+    type="button"
+    class="pnd-endorse"
+    ng-show="endorse"
+    ng-click="socialEvent($event, 'endors')"
+    ng-class="{'pnd-annotation-details-social-activate': social.status.endors }">
+    <span class="pnd-icon-check"></span>
+    {{social.counting.endors}}
+</button>
 
-    <span ng-if="endorse">
+<span ng-if="endorse">
         ·
     </span>
 
-    <button
-            type="button"
-            class="pnd-report"
-            ng-if="report"
-            ng-click="socialEvent($event, 'report')"
-            ng-class="{'pnd-annotation-details-social-activate': social.status.report }">
-        <span class="pnd-icon-exclamation"></span>
-        {{social.counting.report}}
-    </button>
-                <!--<span ng-if="report&&isUserToolShowed()">-->
-                    <!--·-->
-                <!--</span>-->
+<button
+    type="button"
+    class="pnd-report"
+    ng-if="report"
+    ng-click="socialEvent($event, 'report')"
+    ng-class="{'pnd-annotation-details-social-activate': social.status.report }">
+    <span class="pnd-icon-exclamation"></span>
+    {{social.counting.report}}
+</button>
+<!--<span ng-if="report&&isUserToolShowed()">-->
+<!--·-->
+<!--</span>-->
 
-    <!--<button-->
-            <!--type="button"-->
-            <!--class="pnd-edit"-->
-            <!--ng-if="isUserToolShowed()"-->
-            <!--ng-click="editComment($event)">-->
-        <!--<span class="pnd-icon-pencil"></span>-->
-        <!--Edit-->
-    <!--</button>-->
-                <!--<span ng-if="isUserToolShowed()">-->
-                    <!--·-->
-                <!--</span>-->
+<!--<button-->
+<!--type="button"-->
+<!--class="pnd-edit"-->
+<!--ng-if="isUserToolShowed()"-->
+<!--ng-click="editComment($event)">-->
+<!--<span class="pnd-icon-pencil"></span>-->
+<!--Edit-->
+<!--</button>-->
+<!--<span ng-if="isUserToolShowed()">-->
+<!--·-->
+<!--</span>-->
 
-    <!--<button-->
-            <!--type="button"-->
-            <!--class="pnd-delete"-->
-            <!--ng-if="isUserToolShowed()"-->
-            <!--ng-click="deleteAnnotation($event)">-->
-        <!--<span class="pnd-icon-trash"></span>-->
-        <!--Delete-->
-    <!--</button>-->
-<!-- </div> -->
+<!--<button-->
+<!--type="button"-->
+<!--class="pnd-delete"-->
+<!--ng-if="isUserToolShowed()"-->
+<!--ng-click="deleteAnnotation($event)">-->
+<!--<span class="pnd-icon-trash"></span>-->
+<!--Delete-->
+<!--</button>-->
+
 <!-- Metadata social comment -->
