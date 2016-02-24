@@ -1,37 +1,40 @@
 <!-- Comment reply mode-->
-<div
-        class="pnd-annotation-comment-text"
-        ng-show="isReplyDialog()">
-</div>
-<div
-        class="pnd-annotation-comment-text-reply"
-        ng-show="isReplyDialog()">
 
-                <textarea
-                        class="form-control "
-                        rows="6"
-                        ng-click="areaClick($event)"
-                        ng-model="annotation.replyCommentValue"
-                        placeholder="Reply to the annotation..."
-                        >
-                </textarea>
+<!--
+TODO What is this empty DIV doing?
+<div class="pnd-annotation-comment-text"
+    ng-show="isReplyDialog()">
+</div>
+-->
+
+<div class="pnd-annotation-reply-textarea"
+    ng-show="isReplyDialog()">
+
+    <textarea
+        class="form-control"
+        rows="6"
+        ng-click="areaClick($event)"
+        ng-model="annotation.replyCommentValue"
+        placeholder="Reply to the annotation...">
+    </textarea>
 </div>
 <!-- Save or cancel of comment in reply mode -->
 
 <div
-        class="pnd-annotation-comment-text-edit-buttons"
-        ng-show="isReplyDialog()"
-        >
+    class="pnd-annotation-reply-buttons"
+    ng-show="isReplyDialog()">
+
     <button
-            type="button"
-            class="pnd-btn pnd-btn-small"
-            ng-click="cancelReply($event)">
+        type="button"
+        class="pnd-btn pnd-btn-small"
+        ng-click="cancelReply($event)">
         Cancel
     </button>
     <button
-            type="button"
-            class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
-            ng-click="saveReply($event)">
+        type="button"
+        class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
+        ng-click="saveReply($event)">
         Reply
     </button>
+
 </div>

@@ -137,10 +137,6 @@
     }
 }
 
-.pnd-annotation-collapsed-social-footer {
-    // background-color: @color-background-medium;
-}
-
 
 /* ------------------------------------ *\
    #EXPANDED-ANNOTATION
@@ -192,13 +188,11 @@
         max-height: @annotation-text-max-height;
     }
 
-    .pnd-annotation-comment-text-edit {
-        max-height: 200px;
-    }
-
     /* Editing of the comment */
     .pnd-annotation-comment-text-edit {
+        max-height: 200px;
         padding: 10px;
+        // border-bottom: @annotation-border-size solid @annotation-border-color;
     }
 
     /* The triangle caret between fragment and comment */
@@ -354,31 +348,12 @@
     }
 }
 
-/* Buttons at the bottom of the annotation */
-/*.pnd-annotation-details-buttons {
-    padding: 0 5px;
-    border-top: @annotation-border-size solid @annotation-border-color;
-
-    .pnd-annotation-details-footer {
-        text-align: right;
-    }
-
-    button {
-        padding: 4px 5px 3px 5px;
-        color: @color-dark-gray;
-        font-size: 12px;
-
-        &:hover {
-            color: @color-brand;
-        }
-    }
-}*/
-
 /* Buttons to save or cancel comment edit */
 .pnd-annotation-comment-text-edit-buttons {
     text-align: right;
-    height: 40px; // TODO Create a variable!
-    padding-top: 7px;
+    height: 33px;
+    // padding-top: 7px;
+    background-color: @color-background-light;
 
     .pnd-btn {
         margin-right: 7px;
@@ -490,6 +465,23 @@
         padding: 0;
         border: 0;
         line-height: 17px;
+    }
+}
+
+/* Text area and buttons for replying */
+.pnd-annotation-reply-textarea {
+    max-height: 200px;
+    padding: 10px;
+    border-top: 1px solid @color-border-normal;
+}
+
+/* Buttons to save or cancel comment edit */
+.pnd-annotation-reply-buttons {
+    text-align: right;
+    height: 33px;
+
+    .pnd-btn {
+        margin-right: 7px;
     }
 }
 
