@@ -25,7 +25,7 @@
 \* ------------------------------------ */
 
 .pnd-annotation-collapsed {
-    height: @annotation-collapsed-height * 2; // @annotation-collapsed-height;
+    height: @annotation-collapsed-header-height + @annotation-collapsed-footer-height; // @annotation-collapsed-height;
     margin: 0 5px; // 5px;
     overflow: hidden;
     background-color: @annotation-bg-color;
@@ -34,16 +34,20 @@
     border-radius: @annotation-border-radius;
     font-size: 13px;
     cursor: pointer;
+
+    span {
+        line-height: @annotation-collapsed-header-height;
+    }
 }
 
 /* Target */
 .pnd-annotation-collapsed-subject {
     float: left;
     width: 100%;
-    height: @annotation-collapsed-height;
+    height: @annotation-collapsed-header-height;
     max-width: 100%;
     overflow: hidden;
-    padding: 2px 9px 2px 4px;
+    padding: 0 9px 0 6px;
     white-space: nowrap;
     text-overflow: ellipsis;
 
@@ -83,8 +87,8 @@
         float: left;
         width: 50%;
         max-width: 50%;
-        height: @annotation-collapsed-height;
-        padding: 1px 4px 1px (@annotation-collapsed-height/2);
+        height: @annotation-collapsed-header-height;
+        padding: 1px 4px 1px (@annotation-collapsed-header-height/2);
         background-color: @color-ultra-light;
         overflow: hidden;
         white-space: nowrap;
@@ -101,14 +105,14 @@
     width: 0;
     height: 0;
     top: 1px; // 50%;
-    left: 43%;
-    margin-top: 0; // -(@annotation-collapsed-height/2);
+    left: 42%;
+    margin-top: 0; // -(@annotation-collapsed-header-height/2);
 
     border-color: transparent;
     border-style: solid;
     border-right-color: @color-light-gray;
     border-left-width: 0;
-    border-width: (@annotation-collapsed-height/2);
+    border-width: (@annotation-collapsed-header-height/2);
 
 
     &:after {
@@ -118,20 +122,19 @@
         display: block;
         width: 0;
         height: 0;
-        right: -12px;
-        bottom: -(@annotation-collapsed-height/2)+1;
+        right: -(@annotation-collapsed-header-height/2);
+        bottom: -(@annotation-collapsed-header-height/2)+1;
 
         border-color: transparent;
         border-style: solid;
-        border-width: (@annotation-collapsed-height/2) - 1;
+        border-width: (@annotation-collapsed-header-height/2) - 1;
         border-right-color: @color-ultra-light;
         border-left-width: 0;
     }
 }
 
-/* Footer containing social buttons */
 .pnd-annotation-collapsed-social-footer {
-
+    background-color: @color-background-medium;
 }
 
 
@@ -507,15 +510,17 @@
 /* Generic style for social buttons in the annotation */
 .pnd-annotation-social-buttons {
     clear: both;
-    height: 24px;
+    height: 22px;
     padding-right: 8px;
     border-top: 1px solid @color-border-normal;
     color: @color-prova; // fade(@color-text-light, 70%);
-    font-size: 12px;
+    font-size: 11px;
     text-align: right;
     line-height: 22px;
 
-    button {
+    a {
+        height: 22px;
+        line-height: 22px;
 
         &.pnd-annotation-details-social-activate {
             font-weight: @font-weight-bold;
@@ -538,6 +543,8 @@
         }
 
         span {
+            height: 22px;
+            line-height: 22px;
             vertical-align: middle;
         }
     }
