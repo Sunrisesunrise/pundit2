@@ -25,7 +25,7 @@
 \* ------------------------------------ */
 
 .pnd-annotation-collapsed {
-    height: @annotation-collapsed-header-height + @annotation-collapsed-footer-height; // @annotation-collapsed-height;
+    height: @annotation-collapsed-header-height + @annotation-social-buttons-height + 2px; // 2px = borders // @annotation-collapsed-height;
     margin: 0 5px; // 5px;
     overflow: hidden;
     background-color: @annotation-bg-color;
@@ -34,10 +34,6 @@
     border-radius: @annotation-border-radius;
     font-size: 13px;
     cursor: pointer;
-
-    span {
-        line-height: @annotation-collapsed-header-height;
-    }
 }
 
 /* Target */
@@ -47,7 +43,7 @@
     height: @annotation-collapsed-header-height;
     max-width: 100%;
     overflow: hidden;
-    padding: 0 9px 0 6px;
+    padding: 1px 9px 0 6px;
     white-space: nowrap;
     text-overflow: ellipsis;
 
@@ -62,6 +58,10 @@
         span {
             font-weight: @font-weight-bold;
         }
+    }
+
+    span {
+        line-height: @annotation-collapsed-header-height;
     }
 }
 
@@ -88,12 +88,16 @@
         width: 50%;
         max-width: 50%;
         height: @annotation-collapsed-header-height;
-        padding: 1px 4px 1px (@annotation-collapsed-header-height/2);
+        padding: 1px 4px 0 (@annotation-collapsed-header-height/2);
         background-color: @color-ultra-light;
         overflow: hidden;
         white-space: nowrap;
         border-left: 1px solid @annotation-border-color;
         text-overflow: ellipsis;
+
+        span {
+            line-height: @annotation-collapsed-header-height;
+        }
     }
 }
 
@@ -134,7 +138,7 @@
 }
 
 .pnd-annotation-collapsed-social-footer {
-    background-color: @color-background-medium;
+    // background-color: @color-background-medium;
 }
 
 
@@ -510,17 +514,18 @@
 /* Generic style for social buttons in the annotation */
 .pnd-annotation-social-buttons {
     clear: both;
-    height: 22px;
+    height: @annotation-social-buttons-height;
     padding-right: 8px;
+    // background-color: @color-background-medium;
     border-top: 1px solid @color-border-normal;
-    color: @color-prova; // fade(@color-text-light, 70%);
+    color: @color-text-light;
     font-size: 11px;
     text-align: right;
-    line-height: 22px;
+    line-height: @annotation-social-buttons-height;
 
-    a {
-        height: 22px;
-        line-height: 22px;
+    button {
+        height: @annotation-social-buttons-height;
+        line-height: @annotation-social-buttons-height;
 
         &.pnd-annotation-details-social-activate {
             font-weight: @font-weight-bold;
@@ -543,8 +548,8 @@
         }
 
         span {
-            height: 22px;
-            line-height: 22px;
+            height: @annotation-social-buttons-height;
+            line-height: @annotation-social-buttons-height;
             vertical-align: middle;
         }
     }

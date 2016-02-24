@@ -1,54 +1,64 @@
-<a class="pnd-reply"
+<button
+    type="button"
+    class="pnd-reply"
     ng-if="reply"
     ng-click="replyAnnotation($event)"
     href="#">
     <span class="pnd-icon-comment"></span>
     {{social.counting.comment}}
-</a>
+</button>
 
 <span ng-if="isReplyMode()"> · </span>
 
-<a class="pnd-like"
+<button
+    type="button"
+    class="pnd-like"
     ng-show="like"
     ng-click="socialEvent($event, 'like')"
     ng-class="{'pnd-annotation-details-social-activate': social.status.like }"
     href="#">
     <span class="pnd-icon-thumb-o-up"></span>
     {{social.counting.like}}
-</a>
+</button>
 
 <span ng-if="like"> · </span>
 
-<a class="pnd-dislike"
+<button
+    type="button"
+    class="pnd-dislike"
     ng-show="dislike"
     ng-click="socialEvent($event, 'dislike')"
     ng-class="{'pnd-annotation-details-social-activate': social.status.dislike }"
     href="#">
     <span class="pnd-icon-thumb-o-down"></span>
     {{social.counting.dislike}}
-</a>
+</button>
 
 <span ng-if="dislike"> · </span>
 
-<a class="pnd-endorse"
+<button
+    type="button"
+    class="pnd-endorse"
     ng-show="endorse"
     ng-click="socialEvent($event, 'endors')"
     ng-class="{'pnd-annotation-details-social-activate': social.status.endors }"
     href="#">
     <span class="pnd-icon-check"></span>
     {{social.counting.endors}}
-</a>
+</button>
 
 <span ng-if="endorse"> · </span>
 
-<a class="pnd-report"
+<button
+    type="button"
+    class="pnd-report"
     ng-if="report"
     ng-click="socialEvent($event, 'report')"
     ng-class="{'pnd-annotation-details-social-activate': social.status.report }"
     href="#">
     <span class="pnd-icon-exclamation"></span>
     {{social.counting.report}}
-</a>
+</button>
 
 
 
