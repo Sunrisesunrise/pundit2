@@ -128,7 +128,7 @@ angular.module('Pundit2.Communication')
                         message: 'Your annotation has been correctly saved.'
                     });
                     promise.resolve();
-                });withCredentials: true
+                });
             }
             completed++;
             annotationsCommunication.log('Items correctly updated: ' + annID);
@@ -224,6 +224,7 @@ angular.module('Pundit2.Communication')
 
     annotationsCommunication.socialEvent = function(id, ancestor, type, operation, comment) {
         var promise = {},
+            data = {},
             url = '',
             route = {
                 like: {
@@ -254,7 +255,6 @@ angular.module('Pundit2.Communication')
         url = NameSpace.get(route[type][operation], {
             id: id
         });
-        var mock = true;
 
         $http({
             headers: {
@@ -264,19 +264,19 @@ angular.module('Pundit2.Communication')
             url: url,
             withCredentials: true,
             params: {
-                    topmostAncestor: ancestor,
-                    context: angular.toJson({
-                        pageContext: XpointersHelper.getSafePageContext(),
-                        pageTitle: $document[0].title || 'No title'
-                    })
+                topmostAncestor: ancestor,
+                context: angular.toJson({
+                    pageContext: XpointersHelper.getSafePageContext(),
+                    pageTitle: $document[0].title || 'No title'
+                })
             },
+            data: comment
         }).success(function() {
-
-        }).error(function() {
+            data = AnnotationsExchange.getAnnotationById(id);
         }).error(function() {
 
         });
-        promise.resolve(mock);
+        promise.resolve(data);
         return promise.promise;
     };
 
@@ -342,19 +342,22 @@ angular.module('Pundit2.Communication')
         //    promise.resolve(mock);
         //}, 600);
 
-         $http({
-             headers: {
-                 'Content-Type': 'application/json'
-             },
-             method: 'POST',
-             url: url,
-             withCredentials: true
-         }).success(function() {
+        $http({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            url: url,
+            withCredentials: true
+        }).success(function(data) {
+            //TODO return data
+            var parsedData = ModelHelper.parseAnnotations(data);
 
-         }).error(function(msg) {
+            promise.resolve(parsedData);
+        }).error(function() {
 
-         });
-        promise.resolve(true);
+        });
+
         return promise.promise;
     };
 

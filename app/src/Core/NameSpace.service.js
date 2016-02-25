@@ -50,9 +50,9 @@ angular.module('Pundit2.Core')
         hasScope: _oa + 'hasScope',
         hasSource: _oa + 'hasSource',
         hasSelector: _oa + 'hasSelector',
-            /* ns.rdf.type */
-            /* ns.rdf.value */
-            /* ns.rdfs.label */
+        /* ns.rdf.type */
+        /* ns.rdf.value */
+        /* ns.rdfs.label */
     };
 
     ns.string = _xsd + 'string';
@@ -113,7 +113,7 @@ angular.module('Pundit2.Core')
     };
 
     // Notebook properties override for annotationServerVersion V2
-    ns.notebookV2 =  {
+    ns.notebookV2 = {
         visibility: _pnd + 'isPublic'
     };
 
@@ -214,16 +214,16 @@ angular.module('Pundit2.Core')
     ns.asAnnItems = ns.as + 'api/annotations/{{id}}/items';
     ns.asAnnBroken = ns.as + 'api/annotations/broken';
 
-    ns.asReply = ns.as + 'api/reply';
+    ns.asReply = ns.as + 'api/annotations/{{id}}/reply';
     ns.asOpenAnnReplies = ns.as + 'api/open/annotations/{{id}}/replies';
-    ns.asLike = ns.as +  'api/annotations/{{id}}/like';
-    ns.asUnLike = ns.as +  'api/annotations/{{id}}/unLike';
-    ns.asDislike = ns.as +  'api/annotations/{{id}}/dislike';
-    ns.asUnDislike = ns.as +  'api/annotations/{{id}}/unDislike';
-    ns.asEndors = ns.as +  'api/annotations/{{id}}/endorse';
-    ns.asUnEndors = ns.as +  'api/annotations/{{id}}/unEndorse';
-    ns.asReport = ns.as +  'api/annotations/{{id}}/report';
-    ns.asUnReport = ns.as +  'api/annotations/{{id}}/unReport';
+    ns.asLike = ns.as + 'api/annotations/{{id}}/like';
+    ns.asUnLike = ns.as + 'api/annotations/{{id}}/unLike';
+    ns.asDislike = ns.as + 'api/annotations/{{id}}/dislike';
+    ns.asUnDislike = ns.as + 'api/annotations/{{id}}/unDislike';
+    ns.asEndors = ns.as + 'api/annotations/{{id}}/endorse';
+    ns.asUnEndors = ns.as + 'api/annotations/{{id}}/unEndorse';
+    ns.asReport = ns.as + 'api/annotations/{{id}}/report';
+    ns.asUnReport = ns.as + 'api/annotations/{{id}}/unReport';
 
     ns.asPref = ns.as + 'api/services/preferences/{{key}}';
     ns.asUrlPrefix = ns.as + 'api/open/urlprefix';

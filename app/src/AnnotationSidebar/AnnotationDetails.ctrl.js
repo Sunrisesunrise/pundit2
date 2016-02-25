@@ -4,15 +4,23 @@ angular.module('Pundit2.AnnotationSidebar')
     AnnotationSidebar, AnnotationDetails, AnnotationsExchange, TripleComposer, Dashboard, EventDispatcher,
     Config, MyPundit, Analytics, Item, NameSpace, AnnotationPopover) {
 
-    function compare(a, b) {
-        if (a.created < b.created) {
-            return 1;
-        } else if (a.created > b.created) {
-            return -1;
-        } else {
+    var isDefined = function(a) {
+        if (typeof a === 'undefined') {
             return 0;
+        } else {
+            return a;
         }
-    }
+    };
+
+    //function compare(a, b) {
+    //    if (a.created < b.created) {
+    //        return 1;
+    //    } else if (a.created > b.created) {
+    //        return -1;
+    //    } else {
+    //        return 0;
+    //    }
+    //}
 
     // TODO: temporary fix waiting for server consistency
     if ($scope.motivation !== 'linking' &&
@@ -33,22 +41,23 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
 
-        $scope.annotation.social = {
-            counting: {
-                comment: $scope.annotation.replies,
-                like: $scope.annotation.likes,
-                dislike: $scope.annotation.dislike,
-                endors: $scope.annotation.endorses,
-                report: $scope.annotation.report
-            },
-            status: {
-                comment: false,
-                like: false,
-                dislike: false,
-                endors: false,
-                report: false,
-            }
+    $scope.annotation.social = {
+        counting: {
+            comment: isDefined($scope.annotation.replies),
+            like: isDefined($scope.annotation.likes),
+            dislike: isDefined($scope.annotation.dislike),
+            endors: isDefined($scope.annotation.endorses),
+            report: isDefined($scope.annotation.report)
+        },
+        status: {
+            comment: false,
+            like: false,
+            dislike: false,
+            endors: false,
+            report: false,
+        }
     };
+    $scope.ancestor = $scope.id;
     $scope.annotation.ancestor = $scope.id;
     $scope.social = $scope.annotation.social;
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
@@ -68,7 +77,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.replyTreeActivate = false;
     $scope.replyTree = [];
 
-    if($scope.options.replyTree === false){
+    if ($scope.options.replyTree === false) {
         $scope.optionsReplyes.reply = false;
     }
 
@@ -132,8 +141,8 @@ angular.module('Pundit2.AnnotationSidebar')
         if ($scope.annotation.expanded && !$scope.annotation.repliesLoaded) {
             AnnotationDetails.getRepliesByAnnotationId(currentId).then(function(data) {
 
-                if(typeof data !== 'undefined'){
-                    data.sort(compare);
+                if (typeof data !== 'undefined') {
+                    //data.sort(compare);
                     $scope.replyTree = data;
                 }
 
@@ -234,7 +243,7 @@ angular.module('Pundit2.AnnotationSidebar')
             return;
         }
         if (type === 'comment') {
-            promise = AnnotationDetails.socialEvent(currentId, $scope.options.ancestor, type, 'add', $scope.annotation.replyCommentValue);
+            promise = AnnotationDetails.socialEvent(currentId, $scope.ancestor, type, 'add', $scope.annotation.replyCommentValue);
         } else {
 
             if (!$scope.social.status[type]) {
@@ -243,7 +252,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 operation = 'remove';
             }
 
-            promise = AnnotationDetails.socialEvent(currentId, $scope.options.ancestor, type, operation);
+            promise = AnnotationDetails.socialEvent(currentId, $scope.ancestor, type, operation);
 
             promise.then(function(status) {
 
@@ -317,23 +326,23 @@ angular.module('Pundit2.AnnotationSidebar')
                 'creator': annotation.creator,
                 'content': annotation.graph['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0].value,
                 'created': Date(),
-                'motivation':annotation.motivatedBy
-                //'social': {
-                //    counting: {
-                //        comment: 0,
-                //        like: 0,
-                //        dislike: 0,
-                //        endors: 0,
-                //        report: 0
-                //    },
-                //    status: {
-                //        comment: false,
-                //        like: false,
-                //        dislike: false,
-                //        endors: false,
-                //        report: false,
-                //    }
-                //}
+                'motivation': annotation.motivatedBy
+                    //'social': {
+                    //    counting: {
+                    //        comment: 0,
+                    //        like: 0,
+                    //        dislike: 0,
+                    //        endors: 0,
+                    //        report: 0
+                    //    },
+                    //    status: {
+                    //        comment: false,
+                    //        like: false,
+                    //        dislike: false,
+                    //        endors: false,
+                    //        report: false,
+                    //    }
+                    //}
             };
             $scope.replyTree.unshift(out);
             console.log(AnnotationsExchange.getAnnotationById(e));
