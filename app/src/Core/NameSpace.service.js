@@ -134,11 +134,12 @@ angular.module('Pundit2.Core')
         isBrokenYet: _pnd + 'isBroken',
         likes: _pnd + 'likes',
         unLikes: _pnd + 'unLikes',
-        dislike: _pnd + 'dislikes',
-        unDislike: _pnd + 'unDislikes',
+        dislikes: _pnd + 'dislikes',
+        unDislikes: _pnd + 'unDislikes',
         replies: _pnd + 'replies',
         disagrees: _pnd + 'disagrees',
-        endorses: _pnd + 'endorses'
+        endorses: _pnd + 'endorses',
+        reports: _pnd + 'reports'
     };
 
     ns.motivation = {

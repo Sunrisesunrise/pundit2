@@ -45,9 +45,9 @@ angular.module('Pundit2.AnnotationSidebar')
         counting: {
             comment: isDefined($scope.annotation.replies),
             like: isDefined($scope.annotation.likes),
-            dislike: isDefined($scope.annotation.dislike),
+            dislike: isDefined($scope.annotation.dislikes),
             endors: isDefined($scope.annotation.endorses),
-            report: isDefined($scope.annotation.report)
+            report: isDefined($scope.annotation.reports)
         },
         status: {
             comment: false,

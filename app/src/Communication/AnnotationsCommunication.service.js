@@ -271,10 +271,10 @@ angular.module('Pundit2.Communication')
                 })
             },
             data: comment
-        }).success(function() {
-            data = AnnotationsExchange.getAnnotationById(id);
+        }).success(function(data) {
+            annotationsCommunication.log('Post save success',data);
         }).error(function() {
-
+            annotationsCommunication.log('Post save ERROR',data);
         });
         promise.resolve(data);
         return promise.promise;
@@ -346,7 +346,7 @@ angular.module('Pundit2.Communication')
             headers: {
                 'Content-Type': 'application/json'
             },
-            method: 'POST',
+            method: 'GET',
             url: url,
             withCredentials: true
         }).success(function(data) {
