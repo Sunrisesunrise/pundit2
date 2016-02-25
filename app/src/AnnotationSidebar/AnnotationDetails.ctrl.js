@@ -46,7 +46,7 @@ angular.module('Pundit2.AnnotationSidebar')
             like: false,
             dislike: false,
             endors: false,
-            report: true
+            report: false
         }
     };
 
@@ -132,11 +132,17 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if ($scope.annotation.expanded && !$scope.annotation.repliesLoaded) {
             AnnotationDetails.getRepliesByAnnotationId(currentId).then(function(data) {
-                data.sort(compare);
-                $scope.replyTree = data;
-                $scope.annotation.repliesLoaded = true;
+
+                if(typeof data !== 'undefined'){
+                    data.sort(compare);
+                    $scope.replyTree = data;
+                }
+
                 console.log("data: " + data);
+                $scope.annotation.repliesLoaded = true;
             });
+
+
         }
 
         Analytics.track('buttons', 'click', 'annotation--details--' + ($scope.annotation.expanded ? 'expand' : 'collapse'));
