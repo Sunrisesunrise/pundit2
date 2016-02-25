@@ -260,7 +260,7 @@ angular.module('Pundit2.Communication')
             headers: {
                 'Content-Type': 'application/json'
             },
-            method: 'GET',
+            method: 'POST',
             url: url,
             withCredentials: false,
             params: {
