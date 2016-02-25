@@ -262,7 +262,7 @@ angular.module('Pundit2.Communication')
             },
             method: 'POST',
             url: url,
-            withCredentials: false,
+            withCredentials: true,
             params: {
                     topmostAncestor: ancestor,
                     context: angular.toJson({
