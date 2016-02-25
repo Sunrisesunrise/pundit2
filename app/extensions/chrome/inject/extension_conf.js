@@ -8,7 +8,8 @@ var punditConfig = {
             active: true
         },
         'Annomatic': {
-            active: true
+            active: true,
+            sourceLang: 'fr' // test
         },
         'Analytics': {
             doTracking: true,

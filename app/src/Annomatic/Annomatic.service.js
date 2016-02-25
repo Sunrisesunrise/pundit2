@@ -60,6 +60,22 @@ angular.module('Pundit2.Annomatic')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#Annomatic.sourceLang
+     *
+     * @description
+     * `string`
+     *
+     * Set the lang for DataTXT
+     * TODO: the default conf can't be read in DataTXT service, but can be overwritten by an external conf
+     *
+     * Default value:
+     * <pre> sourceLang: undefined </pre>
+     */
+    sourceLang: undefined,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#Annomatic.sourceURL
      *
      * @description
