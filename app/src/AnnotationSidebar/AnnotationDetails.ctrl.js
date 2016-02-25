@@ -31,8 +31,6 @@ angular.module('Pundit2.AnnotationSidebar')
         initialHeight = AnnotationSidebar.options.annotationHeight,
         currentHeight = initialHeight - 1;
 
-    var clientMode = Config.clientMode;
-
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
     //mock
     $scope.annotation.social = {
@@ -57,6 +55,8 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.moreInfo = AnnotationDetails.options.moreInfo;
     $scope.homePundit = Config.homePundit;
     $scope.options = AnnotationDetails.options;
+    $scope.options.ancestor = $scope.id;
+    $scope.optionsReplyes = angular.copy($scope.options);
     $scope.reply = AnnotationDetails.options.reply;
     $scope.replyDialog = false;
     $scope.like = AnnotationDetails.options.like;
@@ -68,6 +68,10 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.userData = AnnotationDetails.userData();
     $scope.replyTreeActivate = false;
     $scope.replyTree = [];
+
+    if($scope.options.replyTree === false){
+        $scope.optionsReplyes.reply = false;
+    }
 
     if (typeof($scope.annotation) !== 'undefined') {
         $scope.notebooksHomeLink = Config.homeBaseURL + 'notebooks/';
@@ -224,36 +228,42 @@ angular.module('Pundit2.AnnotationSidebar')
         if (typeof type === 'undefined') {
             return;
         }
-
-        if (!$scope.social.status[type]) {
-            operation = 'add';
+        if (type === 'comment') {
+            promise = AnnotationDetails.socialEvent(currentId, $scope.options.ancestor, type, 'add', $scope.annotation.replyCommentValue);
         } else {
-            operation = 'remove';
+
+            if (!$scope.social.status[type]) {
+                operation = 'add';
+            } else {
+                operation = 'remove';
+            }
+
+            promise = AnnotationDetails.socialEvent(currentId, $scope.options.ancestor, type, operation);
+
+            promise.then(function(status) {
+
+                if (status) {
+
+                    if ($scope.social.status[type] && !$scope.social.status[contrary[type]]) {
+                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) - 1;
+                    }
+
+                    if (!$scope.social.status[type] && !$scope.social.status[contrary[type]]) {
+                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) + 1;
+                    }
+
+                    if (!$scope.social.status[type] && $scope.social.status[contrary[type]]) {
+                        $scope.social.status[contrary[type]] = !$scope.social.status[contrary[type]];
+                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) + 1;
+                        $scope.social.counting[contrary[type]] = parseInt($scope.social.counting[contrary[type]]) - 1;
+                    }
+
+                    $scope.social.status[type] = !$scope.social.status[type];
+                }
+            });
         }
 
-        promise = AnnotationDetails.socialEvent(currentId, type, operation);
 
-        promise.then(function(status) {
-
-            if (status) {
-
-                if ($scope.social.status[type] && !$scope.social.status[contrary[type]]) {
-                    $scope.social.counting[type] = parseInt($scope.social.counting[type]) - 1;
-                }
-
-                if (!$scope.social.status[type] && !$scope.social.status[contrary[type]]) {
-                    $scope.social.counting[type] = parseInt($scope.social.counting[type]) + 1;
-                }
-
-                if (!$scope.social.status[type] && $scope.social.status[contrary[type]]) {
-                    $scope.social.status[contrary[type]] = !$scope.social.status[contrary[type]];
-                    $scope.social.counting[type] = parseInt($scope.social.counting[type]) + 1;
-                    $scope.social.counting[contrary[type]] = parseInt($scope.social.counting[contrary[type]]) - 1;
-                }
-
-                $scope.social.status[type] = !$scope.social.status[type];
-            }
-        });
         stopEvent(event);
     };
 
@@ -287,7 +297,7 @@ angular.module('Pundit2.AnnotationSidebar')
             return new Item(values.uri, values);
         };
         var item = createItemFromAnnotation();
-        var promise = AnnotationDetails.saveReplyedComment(item, $scope.annotation.replyCommentValue);
+        var promise = AnnotationDetails.saveReply(item, $scope.annotation.replyCommentValue);
 
         promise.then(function(e) {
             $scope.replyDialog = false;
@@ -296,10 +306,13 @@ angular.module('Pundit2.AnnotationSidebar')
             $scope.isUserLogged = MyPundit.isUserLogged();
             var annotation = AnnotationsExchange.getAnnotationById(e);
             var out = {
+                'annotation': annotation,
                 'id': annotation.id,
                 'creatorName': annotation.creatorName,
+                'creator': annotation.creator,
                 'content': annotation.graph['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0].value,
                 'created': Date(),
+                'motivation':annotation.motivatedBy,
                 'social': {
                     counting: {
                         comment: 0,
@@ -345,7 +358,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.isUserToolShowed = function() {
-        return (AnnotationDetails.isUserToolShowed($scope.annotation.creator) || ($scope.forceEdit && MyPundit.isUserLogged())) && AnnotationSidebar.isAnnotationsPanelActive();
+        return AnnotationDetails.isUserToolShowed($scope.annotation.creator);
     };
     $scope.isReplyMode = function() {
         return $scope.reply;
@@ -375,7 +388,7 @@ angular.module('Pundit2.AnnotationSidebar')
         return $scope.replyTreeActivate;
     };
     $scope.isEditBtnShowed = function() {
-        return clientMode === 'pro' && ($scope.motivation === 'linking' || $scope.motivation === 'commenting');
+        return AnnotationDetails.isEditBtnShowed($scope.motivation);
     };
     $scope.isDetailsButtons = function() {
         return $scope.reply || $scope.like || $scope.dislike || $scope.endorse || $scope.report;

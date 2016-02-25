@@ -19,10 +19,16 @@
             <span>{{ annotation.comment }}</span>
         </div>
 
-        <div class="pnd-annotation-collapsed-social-footer pnd-annotation-social-buttons"
-             ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
-             replace="true">
+        <!--<div class="pnd-annotation-collapsed-social-footer pnd-annotation-social-buttons"-->
+             <!--ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"-->
+             <!--replace="true">-->
+        <!--</div>-->
+        <div class="annotation-details-footer-buttons pnd-annotation-collapsed-social-footer pnd-annotation-social-buttons"
+             id="{{::annotation.id}}"
+             data="annotation"
+             options="options">
         </div>
+
     </div>
 
     <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
@@ -159,13 +165,15 @@
         </div>
 
         <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
-        <div class="pnd-annotation-social-buttons"
-             ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
-             replace="true">
+
+        <div class="annotation-details-footer-buttons pnd-annotation-social-buttons"
+             id="{{::annotation.id}}"
+             data="annotation"
+             options="options">
         </div>
 
         <!-- Displayed while loading replies -->
-        <span ng-show = "!annotation.repliesLoaded">
+        <span ng-show = "!annotation.repliesLoaded && replyTreeActivate">
             Loading Replies
         </span>
 
@@ -179,7 +187,7 @@
                 class="pnd-annotation-details "
                 id="{{::annotation.id}}"
                 data="annotation"
-                options="options"
+                options="optionsReplyes"
                 ng-repeat="annotation in replyTree track by annotation.id"
                 style="position:relative"
                 ng-if="isReplyMode()">

@@ -5,7 +5,11 @@
     <img class="pnd-annotation-user-thumb"
          src="" width="30" height="30"
          alt="{{::annotation.creatorName}}"/>
-
+    <!-- Edit Menu -->
+    <div class="pnd-icon-angle-down pnd-annotation-edit-toggle"
+         ng-click="menuEdit($event);"
+         ng-if="isUserToolShowed()">
+    </div>
     <!-- Default user's thumb -->
     <div class="pnd-annotation-user-thumb-default"></div>
 
@@ -20,9 +24,10 @@
             <div class="pnd-annotation-reply-date">
                 {{::data.created}}
             </div>
-            <div class="pnd-annotation-social-buttons"
-                 ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
-                 replace="true">
+            <div class="annotation-details-footer-buttons pnd-annotation-social-buttons"
+                 id="{{::annotation.id}}"
+                 data="data"
+                 options="options">
             </div>
         </div>
 

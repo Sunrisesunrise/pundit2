@@ -72,6 +72,20 @@ angular.module('Pundit2.AnnotationSidebar')
      * <pre> reply: true </pre>
      */
     reply: true,
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.replyTree
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social replyTree
+     *
+     * Default value:
+     * <pre> replyTree: true </pre>
+     */
+    replyTree: false,
 
     /**
      * @module punditConfig
@@ -549,7 +563,7 @@ angular.module('Pundit2.AnnotationSidebar')
         state.isEditable = bool;
     };
 
-    annotationDetails.saveReplyedComment = function(item, reply) {
+    annotationDetails.saveReply = function(item, reply) {
         var currentTarget = item,
             currentStatement = {
                 scope: {
@@ -662,8 +676,17 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationDetails.isUserToolShowed = function(creator) {
-        return state.isUserLogged === true && creator === state.userData.uri;
+        var forceEdit = false;
+        if (typeof(Config.forceEditAndDelete) !== 'undefined' && Config.forceEditAndDelete) {
+            forceEdit = true;
+        }
+        return ((state.isUserLogged === true && creator === state.userData.uri)|| (forceEdit && MyPundit.isUserLogged())) && AnnotationSidebar.isAnnotationsPanelActive();
     };
+
+    annotationDetails.isEditBtnShowed = function(motivation){
+        return Config.clientMode === 'pro' && (motivation === 'linking' || motivation === 'commenting');
+    };
+
     annotationDetails.userData = function() {
         return MyPundit.getUserData();
     };
@@ -843,8 +866,8 @@ angular.module('Pundit2.AnnotationSidebar')
         return AnnotationsCommunication.getRepliesByAnnotationId(annotationId);
     };
 
-    annotationDetails.socialEvent = function(annotationId, type, operation) {
-        return AnnotationsCommunication.socialEvent(annotationId, type, operation);
+    annotationDetails.socialEvent = function(annotationId, ancestor, type, operation, comment) {
+        return AnnotationsCommunication.socialEvent(annotationId, ancestor, type, operation, comment);
     };
 
     annotationDetails.menuEdit = function(elem, scope) {
@@ -853,9 +876,13 @@ angular.module('Pundit2.AnnotationSidebar')
         var top = pos.top + pos.height * 2 / 3 + angular.element($window).scrollTop();
         var type = '';
 
+        if(typeof scope.motivation === 'undefined'){
+            scope.motivation = scope.data.motivation;
+        }
+
         if (typeof angular.element('.pnd-dropdown-contextual-menu')[0] === 'undefined') {
 
-            if (scope.isEditBtnShowed()) {
+            if (annotationDetails.isEditBtnShowed(scope.motivation)) {
                 type = annotationDetails.options.cMenuTypeEdit;
             } else {
                 type = annotationDetails.options.cMenuTypeNoEdit;

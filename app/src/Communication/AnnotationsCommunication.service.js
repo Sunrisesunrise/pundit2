@@ -222,95 +222,7 @@ angular.module('Pundit2.Communication')
         });
     };
 
-    annotationsCommunication.like = function(id, operation) {
-        var promise = {},
-            url = '';
-
-        if (typeof operation !== 'undefined' && operation === 'add') {
-            promise = $q.defer(),
-                url = NameSpace.get('asLike', {
-                    id: id
-                });
-        }
-        if (typeof operation !== 'undefined' && operation === 'remove') {
-            promise = $q.defer(),
-                url = NameSpace.get('asUnLike', {
-                    id: id
-                });
-        }
-
-        var mock = true;
-        promise.resolve(mock);
-        return promise.promise;
-    };
-
-    annotationsCommunication.dislike = function(id, operation) {
-        var promise = {},
-            url = '';
-
-        if (typeof operation !== 'undefined' && operation === 'add') {
-            promise = $q.defer(),
-                url = NameSpace.get('asDislike', {
-                    id: id
-                });
-        }
-        if (typeof operation !== 'undefined' && operation === 'remove') {
-            promise = $q.defer(),
-                url = NameSpace.get('asUnDislike', {
-                    id: id
-                });
-        }
-
-        var mock = true;
-        promise.resolve(mock);
-        return promise.promise;
-    };
-
-    annotationsCommunication.endors = function(id, operation) {
-        var promise = {},
-            url = '';
-
-        if (typeof operation !== 'undefined' && operation === 'add') {
-            promise = $q.defer(),
-                url = NameSpace.get('asEndors', {
-                    id: id
-                });
-        }
-        if (typeof operation !== 'undefined' && operation === 'remove') {
-            promise = $q.defer(),
-                url = NameSpace.get('asUnEndors', {
-                    id: id
-                });
-        }
-
-        var mock = true;
-        promise.resolve(mock);
-        return promise.promise;
-    };
-
-    annotationsCommunication.report = function(id, operation) {
-        var promise = {},
-            url = '';
-
-        if (typeof operation !== 'undefined' && operation === 'add') {
-            promise = $q.defer(),
-                url = NameSpace.get('asReport', {
-                    id: id
-                });
-        }
-        if (typeof operation !== 'undefined' && operation === 'remove') {
-            promise = $q.defer(),
-                url = NameSpace.get('asUnReport', {
-                    id: id
-                });
-        }
-
-        var mock = true;
-        promise.resolve(mock);
-        return promise.promise;
-    };
-
-    annotationsCommunication.socialEvent = function(id, type, operation) {
+    annotationsCommunication.socialEvent = function(id, ancestor, type, operation, comment) {
         var promise = {},
             url = '',
             route = {
@@ -329,18 +241,45 @@ angular.module('Pundit2.Communication')
                 report: {
                     add: 'asReport',
                     remove: 'asUnReport'
+                },
+                comment: {
+                    add: 'asReply'
                 }
             };
+        if (typeof operation === 'undefined') {
+            operation = 'add';
+        }
 
         promise = $q.defer();
         url = NameSpace.get(route[type][operation], {
             id: id
         });
         var mock = true;
+
+        $http({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'GET',
+            url: url,
+            withCredentials: false,
+            params: {
+                    topmostAncestor: ancestor,
+                    context: angular.toJson({
+                        pageContext: XpointersHelper.getSafePageContext(),
+                        pageTitle: $document[0].title || 'No title'
+                    })
+            },
+        }).success(function() {
+
+        }).error(function() {
+        }).error(function() {
+
+        });
         promise.resolve(mock);
         return promise.promise;
     };
-    
+
     annotationsCommunication.getRepliesByAnnotationId = function(id) {
         var promise = $q.defer(),
             url = NameSpace.get('asOpenAnnReplies', {
@@ -348,60 +287,60 @@ angular.module('Pundit2.Communication')
             });
 
         // TODO: temporary
-        setTimeout(function() {
-
-            var mock = [{
-                id: '55544432',
-                creatorName: 'Franco',
-                annotatedBy: 'http://user-uri', // ?
-                created: '2016-02-09T10:00',
-                modified: '2016-02-09T11:00',
-                thumb: 'https://placehold.it/30x30',
-                content: 'Yuppi aiey',
-                social: {
-                    counting: {
-                        comment: 0,
-                        like: 3,
-                        dislike: 0,
-                        endors: 0,
-                        report: 13
-                    },
-                    status: {
-                        comment: false,
-                        like: false,
-                        dislike: false,
-                        endors: false,
-                        report: true,
-                    }
-                }
-            }, {
-                id: '55543432',
-                creatorName: 'Gino',
-                annotatedBy: 'http://user-uri', // ?
-                created: '2016-02-09T14:00',
-                modified: '2016-02-09T11:00',
-                thumb: 'https://placehold.it/30x30',
-                content: 'Yokko bocco',
-                social: {
-                    counting: {
-                        comment: 0,
-                        like: 13,
-                        dislike: 20,
-                        endors: 0,
-                        report: 2
-                    },
-                    status: {
-                        comment: false,
-                        like: false,
-                        dislike: false,
-                        endors: false,
-                        report: false
-                    }
-                }
-            }];
-
-            promise.resolve(mock);
-        }, 200);
+        //setTimeout(function() {
+        //
+        //    var mock = [{
+        //        id: '55544432',
+        //        creatorName: 'Franco',
+        //        annotatedBy: 'http://user-uri', // ?
+        //        created: '2016-02-09T10:00',
+        //        modified: '2016-02-09T11:00',
+        //        thumb: 'https://placehold.it/30x30',
+        //        content: 'Yuppi aiey',
+        //        social: {
+        //            counting: {
+        //                comment: 0,
+        //                like: 3,
+        //                dislike: 0,
+        //                endors: 0,
+        //                report: 13
+        //            },
+        //            status: {
+        //                comment: false,
+        //                like: false,
+        //                dislike: false,
+        //                endors: false,
+        //                report: true,
+        //            }
+        //        }
+        //    }, {
+        //        id: '55543432',
+        //        creatorName: 'Gino',
+        //        annotatedBy: 'http://user-uri', // ?
+        //        created: '2016-02-09T14:00',
+        //        modified: '2016-02-09T11:00',
+        //        thumb: 'https://placehold.it/30x30',
+        //        content: 'Yokko bocco',
+        //        social: {
+        //            counting: {
+        //                comment: 0,
+        //                like: 13,
+        //                dislike: 20,
+        //                endors: 0,
+        //                report: 2
+        //            },
+        //            status: {
+        //                comment: false,
+        //                like: false,
+        //                dislike: false,
+        //                endors: false,
+        //                report: false
+        //            }
+        //        }
+        //    }];
+        //
+        //    promise.resolve(mock);
+        //}, 200);
 
         // $http({
         //     headers: {
