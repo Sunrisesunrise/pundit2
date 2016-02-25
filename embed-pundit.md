@@ -19,7 +19,7 @@ Then create a configuration file (**e.g.: pundit-conf.js**) as described in 1.1 
 
 Right after this, copy this snippet of code:
 
-    <div data-ng-app="Pundit2" class="pnd-wrp ng-scope">
+    <div data-ng-app="Pundit2" class="pnd-wrp ng-scope"></div>
     <script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript" ></script>
     <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript" ></script>
 
