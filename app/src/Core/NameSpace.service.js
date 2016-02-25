@@ -131,7 +131,14 @@ angular.module('Pundit2.Core')
         hasTemplate: _pnd + 'hasTemplate',
         annotatedBy: _oa + 'annotatedBy',
         annotatedAt: _oa + 'annotatedAt',
-        isBrokenYet: _pnd + 'isBroken'
+        isBrokenYet: _pnd + 'isBroken',
+        likes: _pnd + 'likes',
+        unLikes: _pnd + 'unLikes',
+        dislike: _pnd + 'dislikes',
+        unDislike: _pnd + 'unDislikes',
+        replies: _pnd + 'replies',
+        disagrees: _pnd + 'disagrees',
+        endorses: _pnd + 'endorses'
     };
 
     ns.motivation = {

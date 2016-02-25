@@ -221,7 +221,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 var event = {};
 
                 if (scope.motivation === 'commenting') {
-                    scope.editComment();
+                    scope.editComment(event);
                 } else {
                     event = document.createEvent('Event');
                     scope.editAnnotation(event);
@@ -726,7 +726,12 @@ angular.module('Pundit2.AnnotationSidebar')
                     repliesLoaded: false,
                     ghosted: false,
                     color: currentColor,
-                    hasTemplate: template
+                    hasTemplate: template,
+                    likes: currentAnnotation.likes,
+                    dislikes: currentAnnotation.dislikes,
+                    replies: currentAnnotation.replies,
+                    disagrees: currentAnnotation.disagrees,
+                    endorses: currentAnnotation.endorses
                 };
 
                 var cancelWatchNotebookName = $rootScope.$watch(function() {
@@ -777,7 +782,12 @@ angular.module('Pundit2.AnnotationSidebar')
                     broken: isBroken,
                     expanded: expandedState,
                     repliesLoaded: false,
-                    ghosted: false
+                    ghosted: false,
+                    likes: currentAnnotation.likes,
+                    dislikes: currentAnnotation.dislikes,
+                    replies: currentAnnotation.replies,
+                    disagrees: currentAnnotation.disagrees,
+                    endorses: currentAnnotation.endorses
                 };
 
                 if (motivation === 'commenting') {

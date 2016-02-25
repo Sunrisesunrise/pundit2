@@ -32,30 +32,29 @@ angular.module('Pundit2.AnnotationSidebar')
         currentHeight = initialHeight - 1;
 
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
-    //mock
-    $scope.annotation.social = {
-        counting: {
-            comment: 0,
-            like: 3,
-            dislike: 0,
-            endors: 0,
-            report: 2
-        },
-        status: {
-            comment: false,
-            like: false,
-            dislike: false,
-            endors: false,
-            report: false
-        }
-    };
 
+        $scope.annotation.social = {
+            counting: {
+                comment: $scope.annotation.replies,
+                like: $scope.annotation.likes,
+                dislike: $scope.annotation.dislike,
+                endors: $scope.annotation.endorses,
+                report: $scope.annotation.report
+            },
+            status: {
+                comment: false,
+                like: false,
+                dislike: false,
+                endors: false,
+                report: false,
+            }
+    };
+    $scope.annotation.ancestor = $scope.id;
     $scope.social = $scope.annotation.social;
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
     $scope.moreInfo = AnnotationDetails.options.moreInfo;
     $scope.homePundit = Config.homePundit;
     $scope.options = AnnotationDetails.options;
-    $scope.options.ancestor = $scope.id;
     $scope.optionsReplyes = angular.copy($scope.options);
     $scope.reply = AnnotationDetails.options.reply;
     $scope.replyDialog = false;
@@ -318,23 +317,23 @@ angular.module('Pundit2.AnnotationSidebar')
                 'creator': annotation.creator,
                 'content': annotation.graph['http://www.w3.org/1999/02/22-rdf-syntax-ns#value'][0].value,
                 'created': Date(),
-                'motivation':annotation.motivatedBy,
-                'social': {
-                    counting: {
-                        comment: 0,
-                        like: 0,
-                        dislike: 0,
-                        endors: 0,
-                        report: 0
-                    },
-                    status: {
-                        comment: false,
-                        like: false,
-                        dislike: false,
-                        endors: false,
-                        report: false,
-                    }
-                }
+                'motivation':annotation.motivatedBy
+                //'social': {
+                //    counting: {
+                //        comment: 0,
+                //        like: 0,
+                //        dislike: 0,
+                //        endors: 0,
+                //        report: 0
+                //    },
+                //    status: {
+                //        comment: false,
+                //        like: false,
+                //        dislike: false,
+                //        endors: false,
+                //        report: false,
+                //    }
+                //}
             };
             $scope.replyTree.unshift(out);
             console.log(AnnotationsExchange.getAnnotationById(e));
