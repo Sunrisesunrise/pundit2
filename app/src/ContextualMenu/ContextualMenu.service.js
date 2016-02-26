@@ -307,7 +307,7 @@ angular.module('Pundit2.ContextualMenu')
         angular.element($window).off("scroll", scrollHandler);
         angular.element('body').removeClass(contextualMenu.options.overflowClass);
 
-       // EventDispatcher.sendEvent('closeContextualMenu');
+        EventDispatcher.sendEvent('closeContextualMenu');
 
 
     });
