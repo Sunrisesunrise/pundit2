@@ -995,6 +995,9 @@ angular.module('Pundit2.AnnotationSidebar')
     EventDispatcher.addListener('closeContextualMenu', function( /*e*/ ) {
         state.contextualMenuOpened = false;
     });
+    EventDispatcher.addListener('openContextualMenu', function( /*e*/ ) {
+        state.contextualMenuOpened = true;
+    });
     $document.on('mousedown', mouseDownHandler);
 
     function mouseDownHandler(downEvt) {
