@@ -2,7 +2,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
 .controller('AnnotationDetailsCtrl', function($scope, $rootScope, $element, $timeout, $window,
     AnnotationSidebar, AnnotationDetails, AnnotationsExchange, TripleComposer, Dashboard, EventDispatcher,
-    Config, MyPundit, Analytics, Item, NameSpace, AnnotationPopover) {
+    Config, MyPundit, Analytics) {
 
     var isDefined = function(a) {
         if (typeof a === 'undefined') {
@@ -58,7 +58,7 @@ angular.module('Pundit2.AnnotationSidebar')
             report: false,
         }
     };
-    $scope.ancestor = $scope.id;
+    $scope.annotation.ancestor = $scope.id;
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
     $scope.moreInfo = AnnotationDetails.options.moreInfo;
     $scope.homePundit = Config.homePundit;
@@ -206,78 +206,11 @@ angular.module('Pundit2.AnnotationSidebar')
         stopEvent(event);
     };
 
-    $scope.editComment = function(event) {
+    $scope.editComment = function() {
         $scope.editMode = !$scope.editMode;
         $scope.editCommentValue = $scope.annotation.comment;
 
         //stopEvent(event);
-    };
-
-    $scope.socialEvent = function(event, type) {
-        var createItemFromResource = function(event) {
-            var values = {};
-
-            values.uri = 'lool';
-            values.icon = true;
-            values.elem = event.currentTarget;
-
-            return new Item(values.uri, values);
-        };
-        var contrary = {
-                like: 'dislike',
-                dislike: 'like',
-                endors: 'report',
-                report: 'endors'
-            },
-            promise = {},
-            operation = '';
-
-        if (!MyPundit.isUserLogged()) {
-            angular.element(event.target).addClass('pnd-range-pos-icon');
-            AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert');
-            return;
-        }
-
-        if (typeof type === 'undefined') {
-            return;
-        }
-        if (type === 'comment') {
-            promise = AnnotationDetails.socialEvent(currentId, $scope.ancestor, type, 'add', $scope.annotation.replyCommentValue);
-        } else {
-
-            if (!$scope.social.status[type]) {
-                operation = 'add';
-            } else {
-                operation = 'remove';
-            }
-
-            promise = AnnotationDetails.socialEvent(currentId, $scope.ancestor, type, operation);
-
-            promise.then(function(status) {
-
-                if (status) {
-
-                    if ($scope.social.status[type] && !$scope.social.status[contrary[type]]) {
-                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) - 1;
-                    }
-
-                    if (!$scope.social.status[type] && !$scope.social.status[contrary[type]]) {
-                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) + 1;
-                    }
-
-                    if (!$scope.social.status[type] && $scope.social.status[contrary[type]]) {
-                        $scope.social.status[contrary[type]] = !$scope.social.status[contrary[type]];
-                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) + 1;
-                        $scope.social.counting[contrary[type]] = parseInt($scope.social.counting[contrary[type]]) - 1;
-                    }
-
-                    $scope.social.status[type] = !$scope.social.status[type];
-                }
-            });
-        }
-
-
-        stopEvent(event);
     };
 
     $scope.saveEdit = function(event) {
