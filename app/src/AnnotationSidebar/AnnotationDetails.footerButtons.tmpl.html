@@ -14,13 +14,23 @@
     <span ng-if="options.reply&&!isLinking()">
         ·
     </span>
+<!--<label data-placement="bottom-left" data-type="info" data-animation="am-fade-and-scale" bs-tooltip="tooltip" bs-enabled="tooltip.checked">-->
+    <!--<input type="checkbox" ng-model="tooltip.checked" > Check me to enable my tooltip-->
+<!--</label>-->
 
     <button
             type="button"
             class="pnd-like"
             ng-show="options.like"
             ng-click="socialEvent($event, 'like')"
-            ng-class="{'pnd-annotation-details-social-activate': data.social.status.like }">
+            ng-class="{'pnd-annotation-details-social-activate': data.social.status.like }"
+            data-trigger="hover"
+            data-type="success"
+            data-placement="auto top"
+            data-toggle="tooltip"
+            data-title="like"
+            bs-tooltip="tooltip"
+            bs-enabled="tooltip.checked">
         <span class="pnd-icon-thumb-o-up"></span>
         {{data.social.counting.like}}
     </button>
@@ -34,7 +44,13 @@
             class="pnd-dislike"
             ng-show="options.dislike"
             ng-click="socialEvent($event, 'dislike')"
-            ng-class="{'pnd-annotation-details-social-activate': data.social.status.dislike }">
+            ng-class="{'pnd-annotation-details-social-activate': data.social.status.dislike }"
+            data-trigger="hover"
+            data-type="success"
+            data-toggle="tooltip"
+            data-title="dislike"
+            bs-tooltip="tooltip"
+            bs-enabled="tooltip.checked">
         <span class="pnd-icon-thumb-o-down"></span>
         {{data.social.counting.dislike}}
     </button>
@@ -48,7 +64,13 @@
             class="pnd-endorse"
             ng-show="options.endorse"
             ng-click="socialEvent($event, 'endors')"
-            ng-class="{'pnd-annotation-details-social-activate': data.social.status.endors }">
+            ng-class="{'pnd-annotation-details-social-activate': data.social.status.endors }"
+            data-trigger="hover"
+            data-type="success"
+            data-toggle="tooltip"
+            data-title="endors"
+            bs-tooltip="tooltip"
+            bs-enabled="tooltip.checked">
         <span class="pnd-icon-check"></span>
         {{data.social.counting.endors}}
     </button>
@@ -62,7 +84,14 @@
             class="pnd-report"
             ng-if="options.report"
             ng-click="socialEvent($event, 'report')"
-            ng-class="{'pnd-annotation-details-social-activate': data.social.status.report }">
+            ng-class="{'pnd-annotation-details-social-activate': data.social.status.report }"
+            data-trigger="hover"
+            data-type="success"
+            data-toggle="tooltip"
+            data-title="report"
+            bs-tooltip="tooltip"
+            data-animation="am-fade-and-scale"
+            bs-enabled="tooltip.checked">
         <span class="pnd-icon-exclamation"></span>
         {{data.social.counting.report}}
     </button>

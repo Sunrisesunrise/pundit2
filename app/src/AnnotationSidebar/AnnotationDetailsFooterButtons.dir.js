@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.directive('annotationDetailsFooterButtons', function(AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher) {
+.directive('annotationDetailsFooterButtons', function( AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher) {
     return {
         restrict: 'C',
         scope: {
@@ -42,6 +42,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 stopEvent(event);
             };
             scope.socialEvent = function(event, type) {
+
                 var createItemFromResource = function(event) {
                     var values = {};
                     values.uri = 'lool';
@@ -50,6 +51,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
                     return new Item(values.uri, values);
                 };
+
                 var contrary = {
                         like: 'dislike',
                         dislike: 'like',
