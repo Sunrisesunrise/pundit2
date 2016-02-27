@@ -9,6 +9,7 @@ angular.module('Pundit2.Core')
         _pnd = 'http://purl.org/pundit/ont/ao#',
         _skos = 'http://www.w3.org/2004/02/skos/core#',
         _oa = 'http://www.openannotation.org/ns/',
+        _img = 'http://xmlns.com/foaf/0.1/',
         _xsd = 'http://www.w3.org/2001/XMLSchema#';
 
     $window.PUNDIT.ns = ns;
@@ -69,7 +70,7 @@ angular.module('Pundit2.Core')
         description: _dce + 'description',
 
         // Image contained in the text fragment, or associated with the item
-        image: 'http://xmlns.com/foaf/0.1/depiction',
+        image: _img + 'depiction',
 
         // TODO: the items have an rdfType field which contains the types, call
         //       this rdfTypes as well?
@@ -122,6 +123,7 @@ angular.module('Pundit2.Core')
         creatorName: _dce + 'creator',
         created: _dct + 'created',
         creator: _dct + 'creator',
+        thumbnail:  _img + 'thumbnail',
         modified: _dct + 'modified',
         pageContext: _pnd + 'hasPageContext',
         hasTarget: _oa + 'hasTarget',
@@ -161,7 +163,7 @@ angular.module('Pundit2.Core')
     // TODO: do we need more? Other components might want to add&read stuff here?
     ns.types = {
         page: 'http://schema.org/WebPage',
-        image: 'http://xmlns.com/foaf/0.1/Image',
+        image: _img + 'Image',
         named: _pnd + 'named-content',
         embeddedContent: _oa + 'EmbeddedContent',
         resource: _pnd + 'resource', // TODO to be defined

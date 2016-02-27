@@ -700,6 +700,13 @@ angular.module('Pundit2.AnnotationSidebar')
         var template;
         var currentColor;
 
+        //check thumbnail if null set default
+        if(currentAnnotation.thumbnail === ''){
+            currentAnnotation.thumbnail = 'http://s9.postimg.org/uylsxjghr/people_dialer_photo.png';
+        }
+        console.log(currentAnnotation.creatorName +' '+ currentAnnotation.thumbnail+' '+currentAnnotation.id );
+
+
         var buildSemantic = function() {
             template = TemplatesExchange.getTemplateById(currentAnnotation.hasTemplate);
 
@@ -715,6 +722,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     creator: currentAnnotation.creator,
                     creatorName: currentAnnotation.creatorName,
                     created: convertTime(currentAnnotation.created),
+                    thumbnail:currentAnnotation.thumbnail,
                     notebookId: currentAnnotation.isIncludedIn,
                     notebookName: notebookName,
                     scopeReference: scope,
@@ -776,6 +784,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     created: convertTime(currentAnnotation.created),
                     notebookId: currentAnnotation.isIncludedIn,
                     notebookName: notebookName,
+                    thumbnail:currentAnnotation.thumbnail,
                     scopeReference: scope,
                     mainItem: buildItemDetails(firstTargetUri),
                     itemsArray: [firstItem],

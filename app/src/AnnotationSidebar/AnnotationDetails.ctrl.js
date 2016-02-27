@@ -40,6 +40,7 @@ angular.module('Pundit2.AnnotationSidebar')
         currentHeight = initialHeight - 1;
 
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
+        console.log('thumbnail ' + $scope.annotation.thumbnail);
 
     $scope.annotation.social = {
         counting: {
