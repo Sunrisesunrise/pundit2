@@ -30,6 +30,7 @@
 
         <!-- Metadata -->
         <div class="pnd-annotation-details-meta"
+             ng-class="{ 'pnd-annotation-details-meta-edit':( isUserToolShowed() ) }"
              ng-init="meta = false">
 
             <!-- User's thumb -->
@@ -42,10 +43,9 @@
             <!--<div class="pnd-annotation-user-thumb-default"></div>-->
 
             <!-- Edit Menu -->
-            <div class="pnd-icon-angle-down"
+            <div class="pnd-icon-angle-down pnd-annotation-edit-toggle"
                  ng-click="menuEdit($event);"
-                 style="float:right"
-                 ng-if="isUserToolShowed() && homePundit">
+                 ng-if="isUserToolShowed()">
             </div>
 
             <span class="pnd-annotation-user-name">
