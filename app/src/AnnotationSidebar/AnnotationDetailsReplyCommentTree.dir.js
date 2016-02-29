@@ -19,6 +19,7 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.report = scope.options.report;
             scope.annotation = AnnotationDetails.getAnnotationDetails(scope.id);
             //angular.extend(scope.annotation, scope.data.annotation);
+            scope.data.social.counting = scope.data.social.counting[0];
 
             var stopEvent = function(event) {
                 event.stopPropagation();

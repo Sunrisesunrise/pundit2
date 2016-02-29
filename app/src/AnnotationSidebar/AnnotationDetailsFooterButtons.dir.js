@@ -33,7 +33,7 @@ angular.module('Pundit2.AnnotationSidebar')
             };
 
             scope.saveEdit = function(event) {
-                var promise = AnnotationDetails.saveEditedComment(scope.id, scope.data.annotation.itemsArray[0], scope.data.annotation.comment);
+                var promise = AnnotationDetails.saveEditedComment(scope.data.id, scope.data.annotation.itemsArray[0], scope.data.annotation.comment);
 
                 promise.then(function() {
                     scope.data.scopeReference.replyDialog = false;
@@ -70,7 +70,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     return;
                 }
                 if (type === 'comment') {
-                    promise = AnnotationDetails.socialEvent(scope.id, scope.data.ancestor, type, 'add', scope.annotation.replyCommentValue);
+                    promise = AnnotationDetails.socialEvent(scope.data.id, scope.data.parentId, type, 'add', scope.annotation.replyCommentValue);
                 } else {
 
                     if (!scope.data.social.status[type]) {
@@ -79,7 +79,7 @@ angular.module('Pundit2.AnnotationSidebar')
                         operation = 'remove';
                     }
 
-                    promise = AnnotationDetails.socialEvent(scope.id, scope.data.ancestor, type, operation);
+                    promise = AnnotationDetails.socialEvent(scope.data.id, scope.data.parentId, type, operation);
 
                     promise.then(function(status) {
 
