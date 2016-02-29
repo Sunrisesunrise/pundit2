@@ -149,6 +149,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 $scope.annotation.repliesLoaded = true;
             });
 
+            $scope.annotation.repliesLoaded = true;
 
         }
 
@@ -211,6 +212,103 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.editCommentValue = $scope.annotation.comment;
 
         //stopEvent(event);
+    };
+
+    $scope.socialEvent = function(event, type) {
+        var createItemFromResource = function(event) {
+            var values = {};
+
+            values.uri = 'lool';
+            values.icon = true;
+            values.elem = event.currentTarget;
+
+            return new Item(values.uri, values);
+        };
+        var contrary = {
+                like: 'dislike',
+                dislike: 'like',
+                endors: 'report',
+                report: 'endors'
+            },
+            promise = {},
+            operation = '';
+
+        if (!MyPundit.isUserLogged()) {
+            angular.element(event.target).addClass('pnd-range-pos-icon');
+            AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert');
+            return;
+        }
+
+        if (typeof type === 'undefined') {
+            return;
+        }
+        if (type === 'comment') {
+            promise = AnnotationDetails.socialEvent(currentId, $scope.annotation.ancestor, type, 'add', $scope.annotation.replyCommentValue);
+
+            promise.then(function(data) {
+                $scope.replyDialog = false;
+                $scope.replyTreeActivate = true;
+                $scope.annotation.replyCommentValue = '';
+                $scope.isUserLogged = MyPundit.isUserLogged();
+                var annotation = AnnotationsExchange.getAnnotationById(data);
+
+                annotation.social = {
+                    counting: {
+                        comment: 0,
+                        like: 0,
+                        dislike: 0,
+                        endors: 0,
+                        report: 0
+                    },
+                    status: {
+                        comment: false,
+                        like: false,
+                        dislike: false,
+                        endors: false,
+                        report: false
+                    }
+                };
+
+                $scope.replyTree.unshift(annotation);
+
+
+            });
+        } else {
+
+            if (!$scope.social.status[type]) {
+                operation = 'add';
+            } else {
+                operation = 'remove';
+            }
+
+            promise = AnnotationDetails.socialEvent(currentId, $scope.annotation.ancestor, type, operation);
+
+            promise.then(function(status) {
+
+                if (status) {
+
+                    if ($scope.social.status[type] && !$scope.social.status[contrary[type]]) {
+                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) - 1;
+                    }
+
+                    if (!$scope.social.status[type] && !$scope.social.status[contrary[type]]) {
+                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) + 1;
+                    }
+
+                    if (!$scope.social.status[type] && $scope.social.status[contrary[type]]) {
+                        $scope.social.status[contrary[type]] = !$scope.social.status[contrary[type]];
+                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) + 1;
+                        $scope.social.counting[contrary[type]] = parseInt($scope.social.counting[contrary[type]]) - 1;
+                    }
+
+                    $scope.social.status[type] = !$scope.social.status[type];
+                }
+                var data = $scope.annotation;
+            });
+        }
+
+
+        stopEvent(event);
     };
 
     $scope.saveEdit = function(event) {
