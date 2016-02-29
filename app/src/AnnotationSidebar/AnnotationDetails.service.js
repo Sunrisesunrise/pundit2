@@ -61,6 +61,20 @@ angular.module('Pundit2.AnnotationSidebar')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#AnnotationDetails.social
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social event
+     *
+     * Default value:
+     * <pre> social: true </pre>
+     */
+    social: false,
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#AnnotationDetails.reply
      *
      * @description
@@ -190,6 +204,7 @@ angular.module('Pundit2.AnnotationSidebar')
     var state = {
         annotations: [],
         defaultExpanded: annotationDetails.options.defaultExpanded,
+        social: annotationDetails.options.social,
         reply: annotationDetails.options.reply,
         like: annotationDetails.options.like,
         dislike: annotationDetails.options.dislike,

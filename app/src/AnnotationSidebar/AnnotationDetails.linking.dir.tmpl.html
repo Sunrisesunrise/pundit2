@@ -26,7 +26,9 @@
         <div class="annotation-details-footer-buttons pnd-annotation-collapsed-social-footer pnd-annotation-social-buttons"
              id="{{::annotation.id}}"
              data="annotation"
-             options="options">
+             options="options"
+             ng-show="social"
+             ng-class="{'pnd-no-social': !social}">
         </div>
     </div>
 
@@ -309,7 +311,9 @@
         <div class="annotation-details-footer-buttons  pnd-annotation-social-buttons"
              id="{{::annotation.id}}"
              data="annotation"
-             options="options">
+             options="options"
+             ng-show="social"
+             ng-class="{'pnd-no-social': !social}">
         </div>
 
         <!-- Displayed while loading replies -->
@@ -324,10 +328,12 @@
                 class="pnd-annotation-details "
                 id="{{::annotation.id}}"
                 data="annotation"
-                options="options"
+                options="optionsReplyes"
                 ng-repeat="annotation in replyTree track by annotation.id"
                 style="position:relative"
-                ng-if="reply">
+                ng-if="reply"
+                ng-show="social"
+                ng-class="{'pnd-no-social': !social}">
         </annotation-details-reply-comment-tree>
 
         <!-- Metadata social comment box -->
