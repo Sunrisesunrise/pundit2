@@ -258,7 +258,8 @@ angular.module('Pundit2.Communication')
 
         $http({
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             method: 'POST',
             url: url,
@@ -287,66 +288,11 @@ angular.module('Pundit2.Communication')
             url = NameSpace.get('asOpenAnnReplies', {
                 id: id
             });
-        //
-        //// TODO: temporary
-        //setTimeout(function() {
-        //
-        //    //var mock = [{
-        //    //    id: '55544432',
-        //    //    creatorName: 'Franco',
-        //    //    annotatedBy: 'http://user-uri', // ?
-        //    //    created: '2016-02-09T10:00',
-        //    //    modified: '2016-02-09T11:00',
-        //    //    thumb: 'https://placehold.it/30x30',
-        //    //    content: 'Yuppi aiey',
-        //    //    social: {
-        //    //        counting: {
-        //    //            comment: 0,
-        //    //            like: 3,
-        //    //            dislike: 0,
-        //    //            endors: 0,
-        //    //            report: 13
-        //    //        },
-        //    //        status: {
-        //    //            comment: false,
-        //    //            like: false,
-        //    //            dislike: false,
-        //    //            endors: false,
-        //    //            report: true,
-        //    //        }
-        //    //    }
-        //    //}, {
-        //    //    id: '55543432',
-        //    //    creatorName: 'Gino',
-        //    //    annotatedBy: 'http://user-uri', // ?
-        //    //    created: '2016-02-09T14:00',
-        //    //    modified: '2016-02-09T11:00',
-        //    //    thumb: 'https://placehold.it/30x30',
-        //    //    content: 'Yokko bocco',
-        //    //    social: {
-        //    //        counting: {
-        //    //            comment: 0,
-        //    //            like: 13,
-        //    //            dislike: 20,
-        //    //            endors: 0,
-        //    //            report: 2
-        //    //        },
-        //    //        status: {
-        //    //            comment: false,
-        //    //            like: false,
-        //    //            dislike: false,
-        //    //            endors: false,
-        //    //            report: false
-        //    //        }
-        //    //    }
-        //    //}];
-        //
-        //    promise.resolve(mock);
-        //}, 600);
 
         $http({
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             method: 'GET',
             url: url,

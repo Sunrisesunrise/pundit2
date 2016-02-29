@@ -249,14 +249,13 @@ angular.module('Pundit2.AnnotationSidebar')
                 $scope.replyDialog = false;
                 $scope.replyTreeActivate = true;
                 $scope.isUserLogged = MyPundit.isUserLogged();
-                var currentAnnotation = $scope.annotation;
+                var currentUser = MyPundit.getUserData();
                 var reply = {
                     id: data.AnnotationID,
-                    content: currentAnnotation.replyCommentValue,
-                    'creatorName': currentAnnotation.creatorName,
+                    content: $scope.annotation.replyCommentValue,
+                    'creatorName': currentUser.fullName,
                     'created': Date(),
-                    'motivation': currentAnnotation.motivatedBy,
-                    'thumbnail': currentAnnotation.thumbnail,
+                    'thumbnail': currentUser.thumbnail,
                     social: {
                         counting: {
                             comment: 0,
