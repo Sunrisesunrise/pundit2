@@ -248,28 +248,35 @@ angular.module('Pundit2.AnnotationSidebar')
             promise.then(function(data) {
                 $scope.replyDialog = false;
                 $scope.replyTreeActivate = true;
-                $scope.annotation.replyCommentValue = '';
                 $scope.isUserLogged = MyPundit.isUserLogged();
-                var annotation = AnnotationsExchange.getAnnotationById(data);
-
-                annotation.social = {
-                    counting: {
-                        comment: 0,
-                        like: 0,
-                        dislike: 0,
-                        endors: 0,
-                        report: 0
-                    },
-                    status: {
-                        comment: false,
-                        like: false,
-                        dislike: false,
-                        endors: false,
-                        report: false
+                var currentAnnotation = $scope.annotation;
+                var reply = {
+                    id: data.AnnotationID,
+                    content: currentAnnotation.replyCommentValue,
+                    'creatorName': currentAnnotation.creatorName,
+                    'created': Date(),
+                    'motivation': currentAnnotation.motivatedBy,
+                    'thumbnail': currentAnnotation.thumbnail,
+                    social: {
+                        counting: {
+                            comment: 0,
+                            like: 0,
+                            dislike: 0,
+                            endors: 0,
+                            report: 0
+                        },
+                        status: {
+                            comment: false,
+                            like: false,
+                            dislike: false,
+                            endors: false,
+                            report: false
+                        }
                     }
                 };
+                $scope.annotation.replyCommentValue = '';
 
-                $scope.replyTree.unshift(annotation);
+                $scope.replyTree.unshift(reply);
 
 
             });

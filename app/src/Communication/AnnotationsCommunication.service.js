@@ -272,67 +272,13 @@ angular.module('Pundit2.Communication')
             },
             data: comment
         }).success(function(data) {
-            EventDispatcher.sendEvent('AnnotationsCommunication.annotationSaved', data.AnnotationID);
-            // TODO if is rejected ???
-            new Annotation(data.AnnotationID).then(function() {
-
-                var ann = AnnotationsExchange.getAnnotationById(data.AnnotationID);
-
-                // get notebook that include the new annotation
-                var nb = NotebookExchange.getNotebookById(ann.isIncludedIn);
-
-                // if no notebook is defined, it means that user is logged in a new user in Pundit and has not any notebooks
-                // so create a new notebook and add annotation in new notebook in NotebookExchange
-                if (typeof(nb) === 'undefined') {
-                    new Notebook(ann.isIncludedIn, true).then(function(id) {
-                        NotebookExchange.getNotebookById(id).addAnnotation(data.AnnotationID);
-                    });
-                } else {
-                    // otherwise if user has a notebook yet, use it to add new annotation in that notebook in NotebookExchange
-                    NotebookExchange.getNotebookById(ann.isIncludedIn).addAnnotation(data.AnnotationID);
-                }
-
-                EventDispatcher.sendEvent('AnnotationsCommunication.saveAnnotation', data.AnnotationID);
-                //if (forceConsolidation) {
-                //    Consolidation.consolidateAll();
-                //}
-
-                EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
-                    event: 'Pundit.updateAnnotationsNumber',
-                    data: AnnotationsExchange.getAnnotations().length
-                });
-
-                EventDispatcher.sendEvent('Pundit.alert', {
-                    title: 'Annotation saved',
-                    id: 'SUCCESS',
-                    timeout: 3000,
-                    message: 'Congratulations, your new annotation has been correctly saved.'
-                });
-
-                // TODO move inside notebook then?
-                setLoading(false);
-                promise.resolve(ann.id);
-            }, function() {
-                // rejected, impossible to download annotation from server
-                annotationsCommunication.log('Error: impossible to get annotation from server after save');
-                setLoading(false);
-                if (forceConsolidation) {
-                    Consolidation.rejectConsolidateAll();
-                }
-                promise.reject();
-            });
-
-            // Call post save
-            if (typeof(Config.postSave) !== 'undefined' && Config.postSave.active) {
-                var callbacks = Config.postSave.callbacks;
-                angular.isArray(callbacks) && angular.forEach(callbacks, function(callback) {
-                    postSaveSend(callback, data.AnnotationID);
-                });
-            }
+            annotationsCommunication.log('Post save success',data);
+            promise.resolve(data);
         }).error(function() {
             annotationsCommunication.log('Post save ERROR',data);
+            promise.reject(data);
         });
-        //promise.resolve(data);
+
         return promise.promise;
     };
 
