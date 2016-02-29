@@ -177,11 +177,6 @@
             Loading Replies
         </span>
 
-        <!-- Metadata social comment box -->
-        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
-             replace="true">
-        </div>
-
         <!-- List of replies to comment -->
         <annotation-details-reply-comment-tree
                 class="pnd-annotation-details "
@@ -192,6 +187,11 @@
                 style="position:relative"
                 ng-if="replyDialog">
         </annotation-details-reply-comment-tree>
+
+        <!-- Metadata social comment box -->
+        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
+             replace="true">
+        </div>
 
     </div>
     <!-- END // Expanded view of the annotation -->
