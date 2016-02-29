@@ -71,7 +71,7 @@ angular.module('Pundit2.AnnotationSidebar')
      * Default value:
      * <pre> social: true </pre>
      */
-    social: false,
+    social: true,
     /**
      * @module punditConfig
      * @ngdoc property

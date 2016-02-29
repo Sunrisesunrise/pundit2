@@ -58,7 +58,7 @@ angular.module('Pundit2.AnnotationSidebar')
             report: false,
         }
     };
-    $scope.social = Config.social;
+    $scope.social = AnnotationDetails.options.social;
     $scope.annotation.ancestor = $scope.id;
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
     $scope.moreInfo = AnnotationDetails.options.moreInfo;

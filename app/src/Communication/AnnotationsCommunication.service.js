@@ -298,14 +298,9 @@ angular.module('Pundit2.Communication')
             url: url,
             withCredentials: true
         }).success(function(data) {
-            //TODO return data
-            var parsedData = ModelHelper.parseAnnotations(data);
-
-            promise.resolve(parsedData);
-        }).error(function(data) {
-            console.log(data);
+            promise.resolve(data);
+        }).error(function() {
             promise.reject(false);
-
         });
 
         return promise.promise;
