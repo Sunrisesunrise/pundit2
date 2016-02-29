@@ -102,19 +102,19 @@
 }
 
 /* Arrow triangle between subject and object, code inspired by Bootstrap css */
-.pnd-annotation-collapsed-caret
+.pnd-annotation-highlight .pnd-annotation-collapsed-caret, .pnd-annotation-comment .pnd-annotation-collapsed-caret
 {
     position: absolute;
     display: block;
     width: 0;
     height: 0;
     top: 1px; // 50%;
-    left: 42%;
+    left: 136px;
     margin-top: 0; // -(@annotation-collapsed-header-height/2);
 
     border-color: transparent;
     border-style: solid;
-    border-right-color: @color-light-gray;
+    border-right-color: @color-border-normal;
     border-left-width: 0;
     border-width: (@annotation-collapsed-header-height/2);
 
@@ -136,6 +136,63 @@
         border-left-width: 0;
     }
 }
+
+
+.pnd-annotation-semantic .pnd-annotation-collapsed-caret {
+
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    top: 1px; // 50%;
+    left: 136px;
+    margin-top: 0; // -(@annotation-collapsed-header-height/2);
+
+    border-color: transparent;
+    border-style: solid;
+    border-right-color: @color-predicate;
+    border-left-width: 0;
+    border-width: (@annotation-collapsed-header-height/2);
+
+
+    &:after {
+        content: " ";
+
+        position: absolute;
+        display: block;
+        width: 0;
+        height: 0;
+        right: -(@annotation-collapsed-header-height/2);
+        bottom: -(@annotation-collapsed-header-height/2)+1;
+
+        border-color: transparent;
+        border-style: solid;
+        border-width: (@annotation-collapsed-header-height/2) - 1;
+        border-right-color: @color-ultra-light;
+        border-left-width: 0;
+    }
+
+    /*position: absolute;
+    display: block;
+    left: 156px;
+    top: 1px;
+    width: 0;
+    height: 0;
+    border: 7px solid transparent;
+    border-bottom-color: @color-predicate;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: -7px;
+        top: 7px;
+        width: 0;
+        height: 0;
+        border: 7px solid transparent;
+        border-top-color: @color-predicate;
+    }*/
+}
+
 
 
 /* ------------------------------------ *\
@@ -362,7 +419,7 @@
 
 
 /* ------------------------------------ *\
-   #ANNOTATION-METADATA
+   #METADATA
 \* ------------------------------------ */
 /* Metadata showed on top of the annotation */
 .pnd-annotation-details-meta {
@@ -377,19 +434,21 @@
 
     .pnd-annotation-user-name {
         display: block;
+        overflow: hidden;
+        color: @color-text;
         font-size: 12px;
         font-weight: @font-weight-bold;
         line-height: 1.3;
-        overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
 
     .pnd-annotation-metadata {
         display: block;
+        overflow: hidden;
+        color: @color-text-light;
         font-size: 12px;
         line-height: 1.3;
-        overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
@@ -397,7 +456,10 @@
     /* Toggles edit dropdown */
     .pnd-annotation-edit-toggle {
         position: absolute;
-        right: 17px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+        text-align: center;
     }
 }
 
@@ -517,7 +579,16 @@
 
     button {
         height: @annotation-social-buttons-height;
+        margin-left: 3px;
         line-height: @annotation-social-buttons-height;
+
+        /* Middot */
+        &:not(:first-child):before {
+            content: '\b7';
+            margin-right: 3px;
+            color: fade(@color-text-light, 50%);
+            font-weight: @font-weight-normal;
+        }
 
         &.pnd-annotation-details-social-activate {
             font-weight: @font-weight-bold;
@@ -544,6 +615,20 @@
             line-height: @annotation-social-buttons-height;
             vertical-align: middle;
         }
+    }
+}
+
+.pnd-annotation-collapsed .pnd-annotation-social-buttons {
+    button.pnd-annotation-details-social-zero {
+        color: fade(@color-text-light, 50%);
+        transition-property: color;
+        transition-duration: .3s;
+    }
+}
+
+.pnd-annotation-collapsed:hover {
+    button.pnd-annotation-details-social-zero {
+        color: @color-text-light;
     }
 }
 
