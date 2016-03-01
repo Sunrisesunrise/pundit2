@@ -26,8 +26,8 @@
     border-radius: 3px;
     outline: 0;
 
-    color: @color-button-text;
-    font-family: @font;
+    color: @color-button-text !important; // Fixes CSS conflicts
+    font-family: @font !important; // Fixes CSS conflicts
     font-size: 13px;
     font-weight: @button-font-weight;
     text-align: center;
@@ -40,9 +40,9 @@
     &:hover,
     &:focus,
     &.focus {
-        color: @color-button-text-hover;
+        background: @color-button-bg !important; // Fix CSS conflicts
         border-color: @color-button-border-hover;
-        // background: darken(@color-button-bg, 5); // TODO remove if not necessary
+        color: @color-button-text-hover !important; // Fixes CSS conflicts
         outline: 0;
         box-shadow: none;
     }
@@ -54,14 +54,15 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: @color-button-text-disabled;
+        background: @color-button-bg !important; // Fix CSS conflicts
+        //color: @color-button-text-disabled;
         border-color: @color-button-border-disabled;
-        cursor: @cursor-disabled;
+        cursor: @cursor-disabled !important; // Fixes CSS conflicts
         pointer-events: none; // Future-proof disabling of clicks
     }
 
     i {
-        color: inherit;
+        color: inherit !important; // Fixes CSS conflicts
     }
 }
 
@@ -103,7 +104,7 @@ button[disabled] {
 \* ------------------------------------ */
 
 .pnd-btn-calltoaction {
-    color: @color-button-cta-text;
+    color: @color-button-cta-text !important; // Fixes CSS conflicts
     background-color: @color-button-cta-bg;
     border: 0;
     .text-dark-emboss();
@@ -112,8 +113,8 @@ button[disabled] {
     &:hover,
     &:focus,
     &.focus {
-        color: @color-button-cta-text;
-        background-color: @color-button-cta-bg-hover;
+        color: @color-button-cta-text !important; // Fixes CSS conflicts
+        background-color: @color-button-cta-bg-hover !important; // Fix CSS conflicts
         border: 0;
     }
 
@@ -124,8 +125,8 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: @color-button-cta-text-disabled;
-        background-color: @color-button-cta-bg-disabled;
+        color: @color-button-cta-text-disabled !important; // Fixes CSS conflicts
+        background-color: @color-button-cta-bg-disabled !important; // Fix CSS conflicts
         border: 0;
         // color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO remove if not necessary
         text-shadow: none;
@@ -139,8 +140,8 @@ button[disabled] {
 
 .pnd-btn-transparent {
     padding: 0 0;
-    color: @color-button-light-text;
-    background-color: transparent;
+    color: @color-button-light-text !important; // Fixes CSS conflicts
+    background-color: transparent !important; // Fix CSS conflicts
     background-image: none;
     border: 0;
     text-shadow: none;
@@ -149,8 +150,8 @@ button[disabled] {
     &:hover,
     &:focus,
     &.focus {
-        color: @color-button-light-text-hover;
-        background-color: transparent;
+        color: @color-button-light-text-hover !important; // Fixes CSS conflicts
+        background-color: transparent !important; // Fix CSS conflicts
         background-image: none;
         border: 0;
     }
@@ -162,11 +163,10 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: @color-button-light-text-disabled;
-        background-color: transparent;
+        color: @color-button-light-text-disabled !important; // Fixes CSS conflicts
+        background-color: transparent !important; // Fix CSS conflicts
         background-image: none;
         border: 0;
-        // color: fade(@color-text, 60%) !important; // for ovewritings on .disabled class // TODO remove if not necessary
     }
 }
 
@@ -176,7 +176,7 @@ button[disabled] {
 \* ------------------------------------ */
 
 .pnd-btn-dark {
-    color: @color-button-cta-text; // TODO Create variable
+    color: @color-button-cta-text !important; // Fixes CSS conflicts TODO Create variable
     background-color: rgba(0,0,0,.8); // TODO Create variable
     border: 0;
     .text-dark-emboss();
@@ -185,7 +185,7 @@ button[disabled] {
     &:hover,
     &:focus,
     &.focus {
-        color: @color-button-cta-text;
+        color: @color-button-cta-text !important; // Fixes CSS conflicts
         background-color: rgba(0,0,0,.95); // TODO Create variable
         border: 0;
     }
@@ -197,7 +197,7 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: @color-button-cta-text-disabled; // TODO Create variable
+        color: @color-button-cta-text-disabled !important; // Fixes CSS conflicts TODO Create variable
         background-color: rgba(0,0,0,.6); // TODO Create variable
         border: 0;
         text-shadow: none;
@@ -212,7 +212,7 @@ button[disabled] {
 
 /* Subject button */
 .pnd-btn-subject {
-    color: @color-button-cta-text;
+    color: @color-button-cta-text !important; // Fixes CSS conflicts
     background-color: @color-subject;
     border: 0;
 
@@ -220,7 +220,7 @@ button[disabled] {
     &:hover,
     &:focus,
     &.focus {
-        color: @color-button-cta-text;
+        color: @color-button-cta-text !important; // Fixes CSS conflicts
         background-color: darken(@color-subject, 5); // TODO To be introduced as variable?
     }
 
@@ -231,7 +231,7 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO To be introduced as variable?
+        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class TODO To be introduced as variable?
         background-color: lighten(@color-subject, 20);
         text-shadow: none;
     }
@@ -239,7 +239,7 @@ button[disabled] {
 
 /* Predicate button */
 .pnd-btn-predicate {
-    color: @color-button-cta-text;
+    color: @color-button-cta-text !important; // Fixes CSS conflicts
     background-color: @color-predicate;
     border: 0;
 
@@ -247,7 +247,7 @@ button[disabled] {
     &:hover,
     &:focus,
     &.focus {
-        color: @color-button-cta-text;
+        color: @color-button-cta-text !important; // Fixes CSS conflicts
         background-color: darken(@color-predicate, 5); // TODO To be introduced as variable?
     }
 
@@ -258,7 +258,7 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO To be introduced as variable?
+        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class TODO To be introduced as variable?
         background-color: lighten(@color-predicate, 20);
         text-shadow: none;
     }
@@ -266,7 +266,7 @@ button[disabled] {
 
 /* Object button */
 .pnd-btn-object {
-    color: @color-button-cta-text;
+    color: @color-button-cta-text !important; // Fixes CSS conflicts
     background-color: @color-object;
     border: 0;
 
@@ -274,7 +274,7 @@ button[disabled] {
     &:hover,
     &:focus,
     &.focus {
-        color: @color-button-cta-text;
+        color: @color-button-cta-text !important; // Fixes CSS conflicts
         background-color: darken(@color-object, 5); // TODO To be introduced as variable?
     }
 
@@ -285,7 +285,7 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO To be introduced as variable?
+        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class TODO To be introduced as variable?
         background-color: lighten(@color-object, 20);
         text-shadow: none;
     }
