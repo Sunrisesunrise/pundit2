@@ -285,7 +285,7 @@ angular.module('Pundit2.Communication')
 
     annotationsCommunication.getRepliesByAnnotationId = function(id) {
         var promise = $q.defer(),
-            url = NameSpace.get('asOpenAnnReplies', {
+            url = NameSpace.get('asAnnReplies', {
                 id: id
             });
 
