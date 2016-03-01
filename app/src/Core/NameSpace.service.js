@@ -223,8 +223,8 @@ angular.module('Pundit2.Core')
     ns.asUnLike = ns.as + 'api/annotations/{{id}}/unLike';
     ns.asDislike = ns.as + 'api/annotations/{{id}}/dislike';
     ns.asUnDislike = ns.as + 'api/annotations/{{id}}/unDislike';
-    ns.asEndors = ns.as + 'api/annotations/{{id}}/endorse';
-    ns.asUnEndors = ns.as + 'api/annotations/{{id}}/unEndorse';
+    ns.asEndorse = ns.as + 'api/annotations/{{id}}/endorse';
+    ns.asUnEndorse = ns.as + 'api/annotations/{{id}}/unEndorse';
     ns.asReport = ns.as + 'api/annotations/{{id}}/report';
     ns.asUnReport = ns.as + 'api/annotations/{{id}}/unReport';
 

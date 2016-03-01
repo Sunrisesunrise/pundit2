@@ -53,8 +53,8 @@ angular.module('Pundit2.AnnotationSidebar')
                 var contrary = {
                         like: 'dislike',
                         dislike: 'like',
-                        endors: 'report',
-                        report: 'endors'
+                        endorse: 'report',
+                        report: 'endorse'
                     },
                     promise = {},
                     operation = '';

@@ -5,7 +5,7 @@ angular.module('Pundit2.AnnotationSidebar')
     Config, MyPundit, Analytics) {
 
     var isDefined = function(a) {
-        if (typeof a === 'undefined') {
+        if (typeof a === '') {
             return 0;
         } else {
             return a;
@@ -46,7 +46,7 @@ angular.module('Pundit2.AnnotationSidebar')
             comment: isDefined($scope.annotation.replies),
             like: isDefined($scope.annotation.likes),
             dislike: isDefined($scope.annotation.dislikes),
-            endors: isDefined($scope.annotation.endorses),
+            endorse: isDefined($scope.annotation.endorses),
             report: isDefined($scope.annotation.reports)
         },
         status: {
@@ -227,8 +227,8 @@ angular.module('Pundit2.AnnotationSidebar')
         var contrary = {
                 like: 'dislike',
                 dislike: 'like',
-                endors: 'report',
-                report: 'endors'
+                endorse: 'report',
+                report: 'endorse'
             },
             promise = {},
             operation = '';
@@ -261,14 +261,14 @@ angular.module('Pundit2.AnnotationSidebar')
                             comment: 0,
                             like: 0,
                             dislike: 0,
-                            endors: 0,
+                            endorse: 0,
                             report: 0
                         },
                         status: {
                             comment: false,
                             like: false,
                             dislike: false,
-                            endors: false,
+                            endorse: false,
                             report: false
                         }
                     }

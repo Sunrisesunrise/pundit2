@@ -236,8 +236,8 @@ angular.module('Pundit2.Communication')
                     remove: 'asUnDislike'
                 },
                 endors: {
-                    add: 'asEndors',
-                    remove: 'asUnEndors'
+                    add: 'asEndorse',
+                    remove: 'asUnEndorse'
                 },
                 report: {
                     add: 'asReport',

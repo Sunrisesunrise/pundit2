@@ -53,10 +53,10 @@
             type="button"
             class="pnd-endorse"
             ng-show="options.endorse"
-            ng-click="socialEvent($event, 'endors')"
-            ng-class="{'pnd-annotation-details-social-activate': data.social.status.endors, 'pnd-annotation-details-social-zero': data.social.counting.endors==0 }">
+            ng-click="socialEvent($event, 'endorse')"
+            ng-class="{'pnd-annotation-details-social-activate': data.social.status.endorse, 'pnd-annotation-details-social-zero': data.social.counting.endorse==0 }">
         <span class="pnd-icon-check"></span>
-        {{data.social.counting.endors}}
+        {{data.social.counting.endorse}}
     </button>
 
     <!--
