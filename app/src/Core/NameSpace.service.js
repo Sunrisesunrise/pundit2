@@ -141,7 +141,7 @@ angular.module('Pundit2.Core')
         replies: _pnd + 'replies',
         disagrees: _pnd + 'disagrees',
         endorses: _pnd + 'endorses',
-        reports: _pnd + 'reports'
+        reports: _pnd + 'reports',
     };
 
     ns.motivation = {

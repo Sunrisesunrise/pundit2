@@ -50,11 +50,11 @@ angular.module('Pundit2.AnnotationSidebar')
             report: isDefined($scope.annotation.reports)
         },
         status: {
-            comment: false,
-            like: false,
-            dislike: false,
-            endors: false,
-            report: false,
+            comment: $scope.annotation.social.comment,
+            like: $scope.annotation.social.like,
+            dislike: $scope.annotation.social.dislike,
+            endorse: $scope.annotation.social.endorse,
+            report: $scope.annotation.social.report,
         }
     };
     $scope.social = AnnotationDetails.options.social;
@@ -275,7 +275,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 };
                 $scope.annotation.replyCommentValue = '';
 
-                $scope.replyTree.unshift(reply);
+                $scope.replyTree.push(reply);
 
 
             });

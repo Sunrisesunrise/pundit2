@@ -755,7 +755,8 @@ angular.module('Pundit2.AnnotationSidebar')
                     replies: currentAnnotation.replies,
                     disagrees: currentAnnotation.disagrees,
                     endorses: currentAnnotation.endorses,
-                    reports: currentAnnotation.reports
+                    reports: currentAnnotation.reports,
+                    social: currentAnnotation.social
                 };
 
                 var cancelWatchNotebookName = $rootScope.$watch(function() {
@@ -813,7 +814,8 @@ angular.module('Pundit2.AnnotationSidebar')
                     replies: currentAnnotation.replies,
                     disagrees: currentAnnotation.disagrees,
                     endorses: currentAnnotation.endorses,
-                    reports: currentAnnotation.reports
+                    reports: currentAnnotation.reports,
+                    social: currentAnnotation.social
                 };
 
                 if (motivation === 'commenting') {

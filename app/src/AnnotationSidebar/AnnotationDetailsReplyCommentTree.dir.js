@@ -20,6 +20,7 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.annotation = AnnotationDetails.getAnnotationDetails(scope.id);
             //angular.extend(scope.annotation, scope.data.annotation);
             scope.data.social.counting = scope.data.social.counting[0];
+            scope.data.social.status = scope.data.social.status[0];
 
             var stopEvent = function(event) {
                 event.stopPropagation();
