@@ -40,7 +40,6 @@ angular.module('Pundit2.AnnotationSidebar')
         currentHeight = initialHeight - 1;
 
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
-        console.log('thumbnail ' + $scope.annotation.thumbnail);
 
     $scope.annotation.social = {
         counting: {
@@ -59,7 +58,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
     $scope.social = AnnotationDetails.options.social;
-    $scope.annotation.ancestor = $scope.id;
+    $scope.annotation.parentId = $scope.id;
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
     $scope.moreInfo = AnnotationDetails.options.moreInfo;
     $scope.homePundit = Config.homePundit;
@@ -244,7 +243,7 @@ angular.module('Pundit2.AnnotationSidebar')
             return;
         }
         if (type === 'comment') {
-            promise = AnnotationDetails.socialEvent(currentId, $scope.annotation.ancestor, type, 'add', $scope.annotation.replyCommentValue);
+            promise = AnnotationDetails.socialEvent(currentId, $scope.annotation.parentId, type, 'add', $scope.annotation.replyCommentValue);
 
             promise.then(function(data) {
                 $scope.replyDialog = false;
