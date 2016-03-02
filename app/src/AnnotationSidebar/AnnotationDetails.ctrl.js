@@ -51,13 +51,14 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.social = AnnotationDetails.options.social;
     $scope.annotation.parentId = $scope.id;
+    $scope.annotation.repliesLoaded = false;
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
     $scope.moreInfo = AnnotationDetails.options.moreInfo;
     $scope.homePundit = Config.homePundit;
     $scope.options = AnnotationDetails.options;
     $scope.optionsReplyes = angular.copy($scope.options);
     $scope.reply = AnnotationDetails.options.reply;
-    $scope.replyDialog = false;
+    $scope.annotation.replyDialog = false;
     $scope.like = AnnotationDetails.options.like;
     $scope.dislike = AnnotationDetails.options.dislike;
     $scope.endorse = AnnotationDetails.options.endorse;
@@ -125,7 +126,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if (!$scope.annotation.expanded) {
             AnnotationSidebar.setAllPosition(currentId, initialHeight);
-            $scope.replyDialog = false;
+            $scope.annotation.replyDialog = false;
             $scope.annotation.replyCommentValue = '';
         }
 
@@ -133,19 +134,24 @@ angular.module('Pundit2.AnnotationSidebar')
             AnnotationDetails.getRepliesByAnnotationId(currentId).then(function(data) {
 
                 if (typeof data !== 'undefined') {
-                    //data.sort(compare);
                     $scope.replyTree = data;
+                    $scope.annotation.repliesLoaded = true;
                 }
 
                 console.log("data: " + data);
-                $scope.annotation.repliesLoaded = true;
+
             });
 
-            $scope.annotation.repliesLoaded = true;
 
         }
 
         Analytics.track('buttons', 'click', 'annotation--details--' + ($scope.annotation.expanded ? 'expand' : 'collapse'));
+    };
+
+    $scope.replyAnnotation = function(event) {
+        $scope.annotation.replyDialog = !$scope.annotation.replyDialog;
+        $scope.toggleAnnotation(event);
+        stopEvent(event);
     };
 
     $scope.trackAnalyticsToggleEvent = function(label, expanded) {
@@ -245,7 +251,7 @@ angular.module('Pundit2.AnnotationSidebar')
             promise = AnnotationDetails.socialEvent(currentId, $scope.annotation.parentId, type, 'add', $scope.annotation.replyCommentValue);
 
             promise.then(function(data) {
-                $scope.replyDialog = false;
+                $scope.annotation.replyDialog = false;
                 $scope.replyTreeActivate = true;
                 $scope.isUserLogged = MyPundit.isUserLogged();
                 var currentUser = MyPundit.getUserData();
@@ -335,7 +341,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.cancelReply = function(event) {
-        $scope.replyDialog = false;
+        $scope.annotation.replyDialog = false;
         stopEvent(event);
     };
 

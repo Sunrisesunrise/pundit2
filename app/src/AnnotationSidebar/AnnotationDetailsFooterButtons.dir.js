@@ -71,7 +71,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     AnnotationDetails.openAnnotationView(scope.id);
                 }
 
-                scope.data.scopeReference.replyDialog = !scope.data.scopeReference.replyDialog;
+                scope.data.replyDialog = !scope.data.replyDialog;
                 EventDispatcher.sendEvent('AnnotationDetails.openBox', true);
                 stopEvent(event);
             };
