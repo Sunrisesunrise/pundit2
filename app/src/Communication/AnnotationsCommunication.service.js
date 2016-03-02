@@ -224,7 +224,6 @@ angular.module('Pundit2.Communication')
 
     annotationsCommunication.socialEvent = function(id, ancestor, type, operation, comment) {
         var promise = {},
-            data = {},
             url = '',
             route = {
                 like: {
@@ -235,7 +234,7 @@ angular.module('Pundit2.Communication')
                     add: 'asDislike',
                     remove: 'asUnDislike'
                 },
-                endors: {
+                endorse: {
                     add: 'asEndorse',
                     remove: 'asUnEndorse'
                 },
@@ -272,12 +271,12 @@ angular.module('Pundit2.Communication')
                 })
             },
             data: comment
-        }).success(function(data) {
-            annotationsCommunication.log('Post save success',data);
-            promise.resolve(data);
+        }).success(function() {
+            annotationsCommunication.log('Post save success');
+            promise.resolve(true);
         }).error(function() {
-            annotationsCommunication.log('Post save ERROR',data);
-            promise.reject(data);
+            annotationsCommunication.log('Post save ERROR');
+            promise.reject(false);
         });
 
         return promise.promise;

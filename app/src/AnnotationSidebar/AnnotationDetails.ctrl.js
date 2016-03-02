@@ -2,25 +2,15 @@ angular.module('Pundit2.AnnotationSidebar')
 
 .controller('AnnotationDetailsCtrl', function($scope, $rootScope, $element, $timeout, $window,
     AnnotationSidebar, AnnotationDetails, AnnotationsExchange, TripleComposer, Dashboard, EventDispatcher,
-    Config, MyPundit, Analytics) {
+    Config, MyPundit, Analytics, Item, AnnotationPopover) {
 
     var isDefined = function(a) {
-        if (typeof a === '') {
+        if (a === '' || typeof a === 'undefined') {
             return 0;
         } else {
             return a;
         }
     };
-
-    //function compare(a, b) {
-    //    if (a.created < b.created) {
-    //        return 1;
-    //    } else if (a.created > b.created) {
-    //        return -1;
-    //    } else {
-    //        return 0;
-    //    }
-    //}
 
     // TODO: temporary fix waiting for server consistency
     if ($scope.motivation !== 'linking' &&
@@ -50,13 +40,15 @@ angular.module('Pundit2.AnnotationSidebar')
             report: isDefined($scope.annotation.reports)
         },
         status: {
-            comment: $scope.annotation.social.comment,
-            like: $scope.annotation.social.like,
-            dislike: $scope.annotation.social.dislike,
-            endorse: $scope.annotation.social.endorse,
-            report: $scope.annotation.social.report,
+            comment: ((typeof $scope.annotation.social === 'undefined') ? false : $scope.annotation.social.comment),
+            like: ((typeof $scope.annotation.social === 'undefined') ? false : $scope.annotation.social.like),
+            dislike: ((typeof $scope.annotation.social === 'undefined') ? false : $scope.annotation.social.dislike),
+            endorse: ((typeof $scope.annotation.social === 'undefined') ? false : $scope.annotation.social.endorse),
+            report: ((typeof $scope.annotation.social === 'undefined') ? false : $scope.annotation.social.report),
         }
     };
+
+
     $scope.social = AnnotationDetails.options.social;
     $scope.annotation.parentId = $scope.id;
     $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
@@ -309,7 +301,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
                     $scope.social.status[type] = !$scope.social.status[type];
                 }
-                var data = $scope.annotation;
             });
         }
 

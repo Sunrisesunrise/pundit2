@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.directive('annotationDetailsReplyCommentTree', function(AnnotationDetails, Analytics, AnnotationSidebar) {
+.directive('annotationDetailsReplyCommentTree', function(AnnotationDetails, Analytics) {
     return {
         restrict: 'E',
         scope: {
@@ -19,8 +19,6 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.report = scope.options.report;
             scope.annotation = AnnotationDetails.getAnnotationDetails(scope.id);
             //angular.extend(scope.annotation, scope.data.annotation);
-            scope.data.social.counting = scope.data.social.counting[0];
-            scope.data.social.status = scope.data.social.status[0];
 
             var stopEvent = function(event) {
                 event.stopPropagation();
