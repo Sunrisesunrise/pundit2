@@ -156,7 +156,7 @@ angular.module('Pundit2.AnnotationSidebar')
         Analytics.track('buttons', 'click', 'annotation--details--' + label);
     };
 
-    $scope.deleteAnnotation = function(event) {
+    $scope.cAnnotation = function(event) {
         AnnotationDetails.openConfirmModal(currentElement, currentId);
         Analytics.track('buttons', 'click', 'annotation--details--delete');
 

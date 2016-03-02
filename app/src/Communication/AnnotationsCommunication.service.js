@@ -476,17 +476,18 @@ angular.module('Pundit2.Communication')
                 annotationsCommunication.log('Success annotation: ' + annID + ' correctly deleted');
 
                 var annotation = AnnotationsExchange.getAnnotationById(annID);
+                if (typeof annotation !== 'undefined') {
 
-                // remove annotation from relative notebook
-                var notebookID = annotation.isIncludedIn;
-                var nt = NotebookExchange.getNotebookById(notebookID);
-                if (typeof(nt) !== 'undefined') {
-                    nt.removeAnnotation(annID);
+                    // remove annotation from relative notebook
+                    var notebookID = annotation.isIncludedIn;
+                    var nt = NotebookExchange.getNotebookById(notebookID);
+                    if (typeof(nt) !== 'undefined') {
+                        nt.removeAnnotation(annID);
+                    }
+
+                    AnnotationsExchange.removeAnnotation(annotation.id);
+                    updateAnnotationItems(annotation, annotation.items);
                 }
-
-                AnnotationsExchange.removeAnnotation(annotation.id);
-                updateAnnotationItems(annotation, annotation.items);
-
                 EventDispatcher.sendEvent('Pundit.alert', {
                     title: 'Annotation deleted',
                     id: 'SUCCESS',

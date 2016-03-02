@@ -60,7 +60,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 stopEvent(event);
             };
 
-            scope.deleteAnnotationLeaf = function(event) {
+            scope.deleteAnnotation = function(event) {
                 AnnotationDetails.openConfirmModal(element, scope.id);
                 Analytics.track('buttons', 'click', 'annotation--details--delete');
 
