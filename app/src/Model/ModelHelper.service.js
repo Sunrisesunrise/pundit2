@@ -511,7 +511,7 @@ angular.module('Pundit2.Model')
 
             if (annotationServerVersion === 'v2') {
                 // add social status
-                metadata.social = JSON.parse(data.social[metadataURI]);
+                metadata.social = data.social[metadataURI];
             }
 
             // Get Annotation ID.
