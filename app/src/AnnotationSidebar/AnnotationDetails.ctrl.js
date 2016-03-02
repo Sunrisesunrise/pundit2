@@ -31,6 +31,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
 
+    //add standard social structure
     $scope.annotation.social = {
         counting: {
             comment: isDefined($scope.annotation.replies),
@@ -47,27 +48,31 @@ angular.module('Pundit2.AnnotationSidebar')
             report: ((typeof $scope.annotation.social === 'undefined') ? false : $scope.annotation.social.report),
         }
     };
-
-
-    $scope.social = AnnotationDetails.options.social;
     $scope.annotation.parentId = $scope.id;
     $scope.annotation.repliesLoaded = false;
-    $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
-    $scope.moreInfo = AnnotationDetails.options.moreInfo;
-    $scope.homePundit = Config.homePundit;
-    $scope.options = AnnotationDetails.options;
-    $scope.optionsReplyes = angular.copy($scope.options);
-    $scope.reply = AnnotationDetails.options.reply;
     $scope.annotation.replyDialog = false;
+    $scope.annotation.editCommentValue = '';
+    $scope.annotation.replyCommentValue = '';
+
+    $scope.replyTreeActivate = false;
+    $scope.replyTree = [];
+    $scope.editMode = false;
+    //options value
+    $scope.social = AnnotationDetails.options.social;
+    $scope.moreInfo = AnnotationDetails.options.moreInfo;
+    $scope.reply = AnnotationDetails.options.reply;
     $scope.like = AnnotationDetails.options.like;
     $scope.dislike = AnnotationDetails.options.dislike;
     $scope.endorse = AnnotationDetails.options.endorse;
     $scope.report = AnnotationDetails.options.report;
-    $scope.editCommentValue = '';
-    $scope.replyCommentValue = '';
+
+    $scope.openGraph = Config.lodLive.baseUrl + Config.pndPurl + 'annotation/' + currentId;
+    $scope.homePundit = Config.homePundit;
     $scope.userData = AnnotationDetails.userData();
-    $scope.replyTreeActivate = false;
-    $scope.replyTree = [];
+
+    //set reply options
+    $scope.options = AnnotationDetails.options;
+    $scope.optionsReplyes = angular.copy($scope.options);
 
     if ($scope.options.replyTree === false) {
         $scope.optionsReplyes.reply = false;
@@ -104,7 +109,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.toggleAnnotation = function() {
         $scope.editMode = false;
-
 
         if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
             if (AnnotationSidebar.isFiltersExpanded()) {
@@ -214,12 +218,10 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.editComment = function() {
         $scope.editMode = !$scope.editMode;
-        $scope.editCommentValue = $scope.annotation.comment;
-
-        //stopEvent(event);
     };
 
     $scope.socialEvent = function(event, type) {
+
         var createItemFromResource = function(event) {
             var values = {};
 
@@ -229,6 +231,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
             return new Item(values.uri, values);
         };
+
         var contrary = {
                 like: 'dislike',
                 dislike: 'like',
@@ -247,20 +250,26 @@ angular.module('Pundit2.AnnotationSidebar')
         if (typeof type === 'undefined') {
             return;
         }
+
         if (type === 'comment') {
+
             promise = AnnotationDetails.socialEvent(currentId, $scope.annotation.parentId, type, 'add', $scope.annotation.replyCommentValue);
 
             promise.then(function(data) {
+
                 $scope.annotation.replyDialog = false;
                 $scope.replyTreeActivate = true;
                 $scope.isUserLogged = MyPundit.isUserLogged();
+
                 var currentUser = MyPundit.getUserData();
+
                 var reply = {
                     id: data.AnnotationID,
                     content: $scope.annotation.replyCommentValue,
-                    'creatorName': currentUser.fullName,
-                    'created': Date(),
-                    'thumbnail': currentUser.thumbnail,
+                    creatorName: currentUser.fullName,
+                    created: Date(),
+                    creator: $scope.annotation.creator,
+                    thumb: currentUser.thumbnail,
                     social: {
                         counting: {
                             comment: 0,
@@ -278,11 +287,9 @@ angular.module('Pundit2.AnnotationSidebar')
                         }
                     }
                 };
+
                 $scope.annotation.replyCommentValue = '';
-
                 $scope.replyTree.push(reply);
-
-
             });
         } else {
 
@@ -379,7 +386,6 @@ angular.module('Pundit2.AnnotationSidebar')
             }
         }
     });
-
 
     // TODO find alternative to force digest and avoid watch delay on the height change (?)
     currentElement.bind('DOMSubtreeModified', function() {
