@@ -11,6 +11,7 @@ angular.module('Pundit2.AnnotationSidebar')
         templateUrl: 'src/AnnotationSidebar/AnnotationDetails.replyCommentTree.dir.tmpl.html',
         // require: '^annotationSidebar',
         link: function(scope, element) {
+            scope.leaf = true;
             scope.reply = false;
             scope.replyDialog = false;
             scope.like = scope.options.like;
@@ -60,8 +61,8 @@ angular.module('Pundit2.AnnotationSidebar')
                 stopEvent(event);
             };
 
-            scope.deleteAnnotation = function(event) {
-                AnnotationDetails.openConfirmModal(element, scope.id);
+            scope.deleteAnnotationLeaf = function(event) {
+                AnnotationDetails.openConfirmModalReply(element, scope.id);
                 Analytics.track('buttons', 'click', 'annotation--details--delete');
 
                 stopEvent(event);

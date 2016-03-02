@@ -199,6 +199,13 @@ angular.module('Pundit2.AnnotationSidebar')
         stopEvent(event);
     };
 
+    $scope.deleteAnnotation = function(event) {
+        AnnotationDetails.openConfirmModal(currentElement, currentId);
+        Analytics.track('buttons', 'click', 'annotation--details--delete');
+
+        stopEvent(event);
+    };
+
     $scope.editComment = function() {
         $scope.editMode = !$scope.editMode;
         $scope.editCommentValue = $scope.annotation.comment;

@@ -189,6 +189,22 @@ angular.module('Pundit2.AnnotationSidebar')
      */
 
     cMenuTypeNoEdit: 'annotationDetailsNoEditable',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.cMenuTypeLeaf
+     *
+     * @description
+     * `string`
+     *
+     * Contextual menu type showed in no edit Mode
+     *
+     * Default value:
+     * <pre> cMenuType: 'annotationDetailsLeaf' </pre>
+     */
+
+    cMenuTypeLeaf: 'annotationDetailsLeaf',
 })
 
 .service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $window, $modal, $injector, $q,
@@ -261,6 +277,19 @@ angular.module('Pundit2.AnnotationSidebar')
             priority: 97,
             action: function(scope) {
                 scope.deleteAnnotation(document.createEvent('Event'));
+            }
+        });
+
+        ContextualMenu.addAction({
+            name: 'Delete reply',
+            type: [annotationDetails.options.cMenuTypeLeaf],
+            showIf: function() {
+                return true;
+            },
+            label: 'Delete',
+            priority: 97,
+            action: function(scope) {
+                scope.deleteAnnotationLeaf(document.createEvent('Event'));
             }
         });
     };
@@ -340,10 +369,22 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if (MyPundit.isUserLogged()) {
             currentElement.addClass('pnd-annotation-details-delete-in-progress');
-            AnnotationsCommunication.deleteAnnotation(currentId).finally(function() {
-                confirmModal.hide();
-                currentElement.removeClass('pnd-annotation-details-delete-in-progress');
-            });
+            if (confirmModal.isReply) {
+                AnnotationsCommunication.deleteReply(currentId).finally(function() {
+                    confirmModal.hide();
+                    currentElement.removeClass('pnd-annotation-details-delete-in-progress');
+                    //EventDispatcher.addListeners(['deleteReply'], function(e) {
+                    //    var element = document.getElementById(e.args);
+                    //    element.hide();
+                    //});
+                });
+            } else {
+                AnnotationsCommunication.deleteAnnotation(currentId).finally(function() {
+                    confirmModal.hide();
+                    currentElement.removeClass('pnd-annotation-details-delete-in-progress');
+                });
+            }
+
         }
 
         Analytics.track('buttons', 'click', 'annotation--details--delete--confirm');
@@ -542,6 +583,17 @@ angular.module('Pundit2.AnnotationSidebar')
         modalScope.notifyMessage = 'Are you sure you want to delete this annotation? Please be aware that deleted annotations cannot be recovered.';
         modalScope.elementReference = currentElement;
         modalScope.annotationId = currentId;
+        confirmModal.isReply = false;
+        confirmModal.$promise.then(confirmModal.show);
+    };
+
+    annotationDetails.openConfirmModalReply = function(currentElement, currentId) {
+        // promise is needed to open modal when template is ready
+        modalScope.titleMessage = 'Delete reply';
+        modalScope.notifyMessage = 'Are you sure you want to delete this reply? Please be aware that deleted replies cannot be recovered.';
+        modalScope.elementReference = currentElement;
+        modalScope.annotationId = currentId;
+        confirmModal.isReply = true;
         confirmModal.$promise.then(confirmModal.show);
     };
 
@@ -695,10 +747,10 @@ angular.module('Pundit2.AnnotationSidebar')
         if (typeof(Config.forceEditAndDelete) !== 'undefined' && Config.forceEditAndDelete) {
             forceEdit = true;
         }
-        return ((state.isUserLogged === true && creator === state.userData.uri)|| (forceEdit && MyPundit.isUserLogged())) && AnnotationSidebar.isAnnotationsPanelActive();
+        return ((state.isUserLogged === true && creator === state.userData.uri) || (forceEdit && MyPundit.isUserLogged())) && AnnotationSidebar.isAnnotationsPanelActive();
     };
 
-    annotationDetails.isEditBtnShowed = function(motivation){
+    annotationDetails.isEditBtnShowed = function(motivation) {
         return Config.clientMode === 'pro' && (motivation === 'linking' || motivation === 'commenting');
     };
 
@@ -716,10 +768,10 @@ angular.module('Pundit2.AnnotationSidebar')
         var currentColor;
 
         //check thumbnail if null set default
-        if(currentAnnotation.thumbnail === ''){
+        if (currentAnnotation.thumbnail === '') {
             currentAnnotation.thumbnail = 'http://s9.postimg.org/uylsxjghr/people_dialer_photo.png';
         }
-        console.log(currentAnnotation.creatorName +' '+ currentAnnotation.thumbnail+' '+currentAnnotation.id );
+        console.log(currentAnnotation.creatorName + ' ' + currentAnnotation.thumbnail + ' ' + currentAnnotation.id);
 
 
         var buildSemantic = function() {
@@ -737,7 +789,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     creator: currentAnnotation.creator,
                     creatorName: currentAnnotation.creatorName,
                     created: convertTime(currentAnnotation.created),
-                    thumbnail:currentAnnotation.thumbnail,
+                    thumbnail: currentAnnotation.thumbnail,
                     notebookId: currentAnnotation.isIncludedIn,
                     notebookName: notebookName,
                     scopeReference: scope,
@@ -800,7 +852,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     created: convertTime(currentAnnotation.created),
                     notebookId: currentAnnotation.isIncludedIn,
                     notebookName: notebookName,
-                    thumbnail:currentAnnotation.thumbnail,
+                    thumbnail: currentAnnotation.thumbnail,
                     scopeReference: scope,
                     mainItem: buildItemDetails(firstTargetUri),
                     itemsArray: [firstItem],
@@ -914,7 +966,7 @@ angular.module('Pundit2.AnnotationSidebar')
         var top = pos.top + pos.height * 2 / 3 + angular.element($window).scrollTop();
         var type = '';
 
-        if(typeof scope.motivation === 'undefined'){
+        if (typeof scope.motivation === 'undefined') {
             scope.motivation = scope.data.motivation;
         }
 
@@ -922,6 +974,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
             if (annotationDetails.isEditBtnShowed(scope.motivation)) {
                 type = annotationDetails.options.cMenuTypeEdit;
+            } else if (typeof scope.leaf !== 'undefined') {
+                type = annotationDetails.options.cMenuTypeLeaf;
             } else {
                 type = annotationDetails.options.cMenuTypeNoEdit;
             }
