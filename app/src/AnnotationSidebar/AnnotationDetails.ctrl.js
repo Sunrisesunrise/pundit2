@@ -293,6 +293,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     }
                 };
                 $scope.annotation.social.counting.comment = $scope.annotation.social.counting.comment + 1;
+                $scope.annotation.social.status.comment = true;
                 $scope.annotation.replyCommentValue = '';
                 $scope.replyTree.push(reply);
             });

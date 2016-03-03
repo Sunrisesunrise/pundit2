@@ -19,6 +19,7 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.endorse = scope.options.endorse;
             scope.report = scope.options.report;
             scope.data.showReply = true;
+            scope.userData = AnnotationDetails.userData();
             //angular.extend(scope.annotation, scope.data.annotation);
 
             var stopEvent = function(event) {
@@ -53,17 +54,24 @@ angular.module('Pundit2.AnnotationSidebar')
             };
 
             var hideReply = function() {
-                //scope.data.showReply = false;
+                var zero = false;
+
                 for (var i = 0, len = scope.options.replyTreeArray.length; i < len; i++) {
                     if (scope.options.replyTreeArray[i].id === scope.id) {
                         scope.options.replyTreeArray.splice(i, 1);
                         break;
                     }
                 }
-                scope.options.parentAnnotation.social.counting.comment = scope.options.parentAnnotation.social.counting.comment - 1;
-                if (scope.options.parentAnnotation.social.counting.comment == 0) {
-                    scope.options.parentAnnotation.social.status.comment = false;
+
+                for (var i = 0, len = scope.options.replyTreeArray.length; i < len; i++) {
+                    if (scope.options.replyTreeArray[i].creator === scope.userData.uri) {
+                        zero = true;
+                        break;
+                    }
                 }
+
+                scope.options.parentAnnotation.social.counting.comment = scope.options.parentAnnotation.social.counting.comment - 1;
+                scope.options.parentAnnotation.social.status.comment = zero;
             };
 
 
