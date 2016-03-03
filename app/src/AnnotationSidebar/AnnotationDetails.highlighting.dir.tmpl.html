@@ -36,13 +36,9 @@
              ng-init="meta = false">
 
             <!-- User's thumb -->
-            <!-- Currently not displayed... to show with real thumb -->
             <img class="pnd-annotation-user-thumb"
                  src="{{annotation.thumbnail}}" width="30" height="30"
                  alt="{{::annotation.creatorName}}"/>
-
-            <!-- Default user's thumb -->
-            <!--<div class="pnd-annotation-user-thumb-default"></div>-->
 
             <!-- Edit Menu -->
             <div class="pnd-icon-angle-down pnd-annotation-edit-toggle"
@@ -96,10 +92,13 @@
         </div>
 
         <!-- Displayed while loading replies -->
-        <span
-            ng-show = "!annotation.repliesLoaded">
-            Loading Replyes
-        </span>
+        <div ng-show = "!annotation.repliesLoaded"
+             class="pnd-annotation-loading-replies">
+            <p class="pnd-pulse">
+                Loading Replies
+            </p>
+        </div>
+
         <!-- List of replyes to comment -->
         <annotation-details-reply-comment-tree
                 class="pnd-annotation-details "

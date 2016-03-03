@@ -467,23 +467,10 @@
 /* ------------------------------------ *\
    #USER-THUMB
 \* ------------------------------------ */
-/* User's real thumb (HTML img)
-     Currently hidden */
+/* User's real thumb (HTML img) */
 .pnd-annotation-user-thumb {
-    //display: none;
     float: left;
     margin-right: 10px;
-    border-radius: 5px;
-}
-
-/* User's default thumb */
-.pnd-annotation-user-thumb-default {
-    float: left;
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
-    /* Replaced by media query for retina */
-    background: transparent url('img/user-thumb-default.png') center center no-repeat;
     border-radius: 5px;
 }
 
@@ -493,19 +480,20 @@
 \* ------------------------------------ */
 .pnd-annotation-reply {
     border-top: 1px solid @color-border-normal;
-    padding: 10px;
+    padding: 10px 10px 10px 20px;
 
     .pnd-annotation-user {
         font-weight: @font-weight-bold;
     }
 
     .pnd-annotation-reply-content {
-        margin-left: 40px;
+        margin-left: 30px;
+        font-size: 12px;
     }
 
     .pnd-annotation-reply-footer {
         height: 20px;
-        margin-top: 10px;
+        margin-top: 6px;
         padding-top: 4px;
         border-top: 1px solid @color-border-light;
     }
@@ -524,6 +512,7 @@
         float: right;
         clear: none;
         height: 20px;
+        margin-top: -3px;
         padding: 0;
         border: 0;
         line-height: 17px;
@@ -544,6 +533,17 @@
 
     .pnd-btn {
         margin-right: 7px;
+    }
+}
+
+/* Displayed while loading replies */
+.pnd-annotation-loading-replies {
+    height: 70px;
+    border-top: 1px solid @color-border-normal;
+
+    p {
+        margin-top: 24px;
+        text-align: center;
     }
 }
 
@@ -579,13 +579,13 @@
 
     button {
         height: @annotation-social-buttons-height;
-        margin-left: 3px;
+        margin-left: 2px;
         line-height: @annotation-social-buttons-height;
 
         /* Middot */
         &:not(:first-child):before {
             content: '\b7';
-            margin-right: 3px;
+            margin-right: 2px;
             color: fade(@color-text-light, 50%);
             font-weight: @font-weight-normal;
         }
