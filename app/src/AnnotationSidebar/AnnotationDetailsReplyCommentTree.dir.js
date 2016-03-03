@@ -18,9 +18,7 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.dislike = scope.options.dislike;
             scope.endorse = scope.options.endorse;
             scope.report = scope.options.report;
-            scope.userData = AnnotationDetails.userData();
-            //set right creator of reply
-            scope.data.creator = scope.userData.uri;
+            scope.data.showReply = true;
             //angular.extend(scope.annotation, scope.data.annotation);
 
             var stopEvent = function(event) {
@@ -31,6 +29,7 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.replyDialog = true;
             scope.social = scope.data.social;
             // console.log("inside directive "+AnnotationsExchange.getAnnotationById(scope.id).item);
+
 
             scope.replyAnnotation = function(event) {
                 scope.replyDialog = !scope.replyDialog;
@@ -53,10 +52,24 @@ angular.module('Pundit2.AnnotationSidebar')
                 stopEvent(event);
             };
 
-            scope.deleteAnnotationLeaf = function(event) {
-                AnnotationDetails.openConfirmModalReply(element, scope.id);
-                Analytics.track('buttons', 'click', 'annotation--details--delete');
+            var hideReply = function() {
+                //scope.data.showReply = false;
+                for (var i = 0, len = scope.options.replyTreeArray.length; i < len; i++) {
+                    if (scope.options.replyTreeArray[i].id === scope.id) {
+                        scope.options.replyTreeArray.splice(i, 1);
+                        break;
+                    }
+                }
+                scope.options.parentAnnotation.social.counting.comment = scope.options.parentAnnotation.social.counting.comment - 1;
+                if (scope.options.parentAnnotation.social.counting.comment == 0) {
+                    scope.options.parentAnnotation.social.status.comment = false;
+                }
+            };
 
+
+            scope.deleteAnnotationLeaf = function(event) {
+                AnnotationDetails.openConfirmModalReply(element, scope.id, hideReply);
+                Analytics.track('buttons', 'click', 'annotation--details--delete');
                 stopEvent(event);
             };
 

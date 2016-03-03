@@ -272,7 +272,7 @@ angular.module('Pundit2.Communication')
             },
             data: comment
         }).success(function(e) {
-            annotationsCommunication.log('Post save success',e);
+            annotationsCommunication.log('Post save success', e);
             promise.resolve(e);
         }).error(function() {
             annotationsCommunication.log('Post save ERROR');
@@ -532,62 +532,62 @@ angular.module('Pundit2.Communication')
     // TODO optimize (we must reload all annotation from server? i think that is not necessary)
     annotationsCommunication.deleteReply = function(annID) {
 
-            var promise = $q.defer();
+        var promise = $q.defer();
 
-            EventDispatcher.sendEvent('Pundit.preventDelay', true);
+        EventDispatcher.sendEvent('Pundit.preventDelay', true);
 
-            if (MyPundit.isUserLogged()) {
-                setLoading(true);
-                $http({
-                    method: 'DELETE',
-                    url: NameSpace.get('asAnn', {
-                        id: annID
-                    }),
-                    withCredentials: true
-                }).success(function() {
-                    annotationsCommunication.log('Success reply: ' + annID + ' correctly deleted');
+        if (MyPundit.isUserLogged()) {
+            setLoading(true);
+            $http({
+                method: 'DELETE',
+                url: NameSpace.get('asAnn', {
+                    id: annID
+                }),
+                withCredentials: true
+            }).success(function() {
+                annotationsCommunication.log('Success reply: ' + annID + ' correctly deleted');
 
-                    EventDispatcher.sendEvent('Pundit.alert', {
-                        title: 'reply deleted',
-                        id: 'SUCCESS',
-                        timeout: 3000,
-                        message: 'Your reply has been correctly deleted.'
-                    });
-                    //EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
-                    //    event: 'Pundit.updateAnnotationsNumber',
-                    //    data: AnnotationsExchange.getAnnotations().length
-                    //});
-                    //// Used in annotationSidebar, add annotation to delete queue.
-                    EventDispatcher.sendEvent('AnnotationsCommunication.deleteAnnotation', annID);
-                    EventDispatcher.sendEvent('ResizeManager.resize');
-                    //EventDispatcher.sendEvent('deleteReply',annID);
-
-                    setLoading(false);
-                    promise.resolve(annID);
-                }).error(function() {
-                    setLoading(false);
-                    annotationsCommunication.log('Error impossible to delete reply: ' + annID + ' please retry.');
-                    EventDispatcher.sendEvent('Pundit.alert', {
-                        title: 'Oops! Something went wrong',
-                        id: 'WARNING',
-                        timeout: 3000,
-                        message: 'Pundit couldn\'t delete your reply, please try again in 5 minutes'
-                    });
-                    promise.reject('Error impossible to delete reply: ' + annID);
-                });
-            } else {
-                annotationsCommunication.log('Error impossible to delete reply: ' + annID + ' you are not logged');
                 EventDispatcher.sendEvent('Pundit.alert', {
-                    title: 'Please log in',
+                    title: 'reply deleted',
+                    id: 'SUCCESS',
+                    timeout: 3000,
+                    message: 'Your reply has been correctly deleted.'
+                });
+                //EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                //    event: 'Pundit.updateAnnotationsNumber',
+                //    data: AnnotationsExchange.getAnnotations().length
+                //});
+                //// Used in annotationSidebar, add annotation to delete queue.
+                // EventDispatcher.sendEvent('AnnotationsCommunication.deleteAnnotation', annID);
+                //EventDispatcher.sendEvent('ResizeManager.resize');
+                //EventDispatcher.sendEvent('deleteReply',annID);
+
+                setLoading(false);
+                promise.resolve(annID);
+            }).error(function() {
+                setLoading(false);
+                annotationsCommunication.log('Error impossible to delete reply: ' + annID + ' please retry.');
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'Oops! Something went wrong',
                     id: 'WARNING',
                     timeout: 3000,
-                    message: 'Please log in to Pundit to delete an reply.'
+                    message: 'Pundit couldn\'t delete your reply, please try again in 5 minutes'
                 });
-                promise.reject('Error impossible to delete reply: ' + annID + ' you are not logged');
-            }
+                promise.reject('Error impossible to delete reply: ' + annID);
+            });
+        } else {
+            annotationsCommunication.log('Error impossible to delete reply: ' + annID + ' you are not logged');
+            EventDispatcher.sendEvent('Pundit.alert', {
+                title: 'Please log in',
+                id: 'WARNING',
+                timeout: 3000,
+                message: 'Please log in to Pundit to delete an reply.'
+            });
+            promise.reject('Error impossible to delete reply: ' + annID + ' you are not logged');
+        }
 
-            return promise.promise;
-        };
+        return promise.promise;
+    };
 
     // TODO:
     // annotationsCommunication.saveReply

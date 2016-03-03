@@ -11,7 +11,6 @@ angular.module('Pundit2.AnnotationSidebar')
             return a;
         }
     };
-
     // TODO: temporary fix waiting for server consistency
     if ($scope.motivation !== 'linking' &&
         $scope.motivation !== 'commenting' &&
@@ -54,6 +53,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.annotation.editCommentValue = '';
     $scope.annotation.replyCommentValue = '';
 
+
     $scope.replyTreeActivate = false;
     $scope.replyTree = [];
     $scope.editMode = false;
@@ -73,6 +73,7 @@ angular.module('Pundit2.AnnotationSidebar')
     //set reply options
     $scope.options = AnnotationDetails.options;
     $scope.optionsReplyes = angular.copy($scope.options);
+    $scope.optionsReplyes.parentAnnotation = $scope.annotation;
 
     if ($scope.options.replyTree === false) {
         $scope.optionsReplyes.reply = false;
@@ -138,7 +139,9 @@ angular.module('Pundit2.AnnotationSidebar')
             AnnotationDetails.getRepliesByAnnotationId(currentId).then(function(data) {
 
                 if (typeof data !== 'undefined') {
+                    data.annotation = $scope.annotation;
                     $scope.replyTree = data;
+                    $scope.optionsReplyes.replyTreeArray = data;
                     $scope.annotation.repliesLoaded = true;
                 }
 
@@ -289,7 +292,7 @@ angular.module('Pundit2.AnnotationSidebar')
                         }
                     }
                 };
-
+                $scope.annotation.social.counting.comment = $scope.annotation.social.counting.comment + 1;
                 $scope.annotation.replyCommentValue = '';
                 $scope.replyTree.push(reply);
             });

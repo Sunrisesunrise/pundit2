@@ -373,11 +373,11 @@ angular.module('Pundit2.AnnotationSidebar')
                 AnnotationsCommunication.deleteReply(currentId).finally(function() {
                     confirmModal.hide();
                     currentElement.removeClass('pnd-annotation-details-delete-in-progress');
+                    modalScope.hideReply();
                     //EventDispatcher.addListeners(['deleteReply'], function(e) {
                     //    var element = document.getElementById(e.args);
                     //    element.hide();
                     //});
-                    annotationDetails.decreaseComment(state.id);
                     EventDispatcher.sendEvent('deleteReply', state.id);
                 });
             } else {
@@ -590,13 +590,15 @@ angular.module('Pundit2.AnnotationSidebar')
         confirmModal.$promise.then(confirmModal.show);
     };
 
-    annotationDetails.openConfirmModalReply = function(currentElement, currentId) {
+    annotationDetails.openConfirmModalReply = function(currentElement, currentId, hideReply) {
         // promise is needed to open modal when template is ready
         modalScope.titleMessage = 'Delete reply';
         modalScope.notifyMessage = 'Are you sure you want to delete this reply? Please be aware that deleted replies cannot be recovered.';
         modalScope.elementReference = currentElement;
         modalScope.annotationId = currentId;
+        modalScope.hideReply = hideReply;
         confirmModal.isReply = true;
+
         confirmModal.$promise.then(confirmModal.show);
     };
 
