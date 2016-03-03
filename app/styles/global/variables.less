@@ -11,9 +11,13 @@
 // #FONT
 // ------------------------------------ //
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300italic,300,400italic,600,600italic,700,700italic);
-// @import url(https://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700,700italic,900,900italic);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic);
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,300,100italic,300italic,400italic,500,500italic,700,700italic,900,900italic);
+@import url(https://fonts.googleapis.com/css?family=Lato:400,100,100italic,300,300italic,400italic,700,700italic,900,900italic);
 @font: 'Source Sans Pro', sans-serif;
 // @font: 'Lato', sans-serif;
+// @font: 'Open Sans', sans-serif;
+// @font: 'Roboto', sans-serif;
 @font-weight-normal: 100; // 400;
 @font-weight-bold: 600; // 900;
 // @font-weight-normal: 400;
@@ -26,11 +30,11 @@
 // ------------------------------------ //
 
 // Color scheme
-@color-ultra-light: #f5f6f7; // #FAFBFC;
-@color-light: #F2F5F7;
-@color-light-gray: #d7dbe0; // #DFE2E6;
-@color-dark-gray: #9fa6ad; // #7E858C;
-@color-dark: #242D38;
+@color-ultra-light: #f7f7f7; // #FAFBFC;
+@color-light: #e8ebed;
+@color-light-gray: #d5d9de; // #DFE2E6;
+@color-dark-gray: #b5babd; // #7E858C;
+@color-dark: #394047; // #242D38;
 
 @color-brand: #3484E6;
 @color-error: #FF643F;
@@ -69,11 +73,9 @@
 // #BUTTONS
 // ------------------------------------ //
 
-@button-font-weight: @font-weight-normal;
-
 // Button call to action
 @color-button-cta-text: #FFF;
-@color-button-cta-text-disabled: #D7E5FA;
+@color-button-cta-text-disabled: fade(#FFF, 75%); // #D7E5FA;
 
 @color-button-cta-bg: @color-brand;
 @color-button-cta-bg-hover: #2E6ABF;
@@ -84,12 +86,12 @@
 @color-button-text: @color-brand;
 @color-button-text-hover: #2E6ABF;
 @color-button-text-active: #224E8C;
-@color-button-text-disabled: #CDDFF8;
+@color-button-text-disabled: fade(@color-brand, 50%); // #CDDFF8;
 
-@color-button-bg: @color-light; // #FFF;
-@color-button-bg-hover: #FFF;
-@color-button-bg-active: #FFF;
-@color-button-bg-disabled: #FFF;
+@color-button-bg: @color-background-light; // #FFF;
+@color-button-bg-hover: @color-background-medium;
+@color-button-bg-active: @color-background-medium;
+@color-button-bg-disabled: @color-background-light;
 
 @color-button-border: @color-light-gray; // @color-brand;
 @color-button-border-hover: @color-light-gray;
@@ -247,8 +249,8 @@
 // #TRIPLE-COMPOSER
 // ------------------------------------ //
 
-@triplecomposer-color-bg: @color-light;
-@triplecomposer-color-border: @color-light-gray;
+@triplecomposer-color-bg: @color-background-light;
+@triplecomposer-color-border: @color-border-light;
 @triplecomposer-border-radius: 3px;
 @triplecomposer-inner-border-radius: 2px;
 @triplecomposer-height: 25px;
@@ -274,7 +276,7 @@
 
 @annotation-bg-color: #FFF;
 @annotation-border-color: @color-light-gray;
-@annotation-expanded-border-color: @color-light-gray; // @color-dark-gray; // @color-brand;
+@annotation-expanded-border-color: @color-dark-gray; // @color-dark-gray; // @color-brand;
 @annotation-border-size: 1px;
 @annotation-box-shadow: 0 2px 0 fade(@color-border-normal, 80%); // #E9ECF0;
 @annotation-border-radius: 3px;
@@ -392,9 +394,9 @@
 // ------------------------------------ //
 
 // Types of entities (shown in previews)
-@type-color-bg: @color-light; // @color-brand; // @color-dark-gray; // @color-light;
-@type-color-border: @color-light-gray;
-@type-color-text: @color-dark-gray; // #FFF; // @color-dark-gray;
+@type-color-bg: @color-background-medium; // @color-brand; // @color-dark-gray; // @color-light;
+@type-color-border: @color-border-normal;
+@type-color-text: @color-text-light; // @color-dark-gray; // #FFF; // @color-dark-gray;
 @type-border-size: 1px; // 0; // 1px;
 
 @type-border-radius: 3px;

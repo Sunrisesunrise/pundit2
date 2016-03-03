@@ -150,7 +150,7 @@
 
     border-color: transparent;
     border-style: solid;
-    border-right-color: @color-predicate;
+    border-right-color: @color-border-normal;
     border-left-width: 0;
     border-width: (@annotation-collapsed-header-height/2);
 
@@ -204,7 +204,8 @@
     overflow: hidden;
 
     background-color: @annotation-bg-color;
-    border: @annotation-border-size solid @annotation-expanded-border-color;
+    // border: @annotation-border-size solid @annotation-expanded-border-color;
+    border: @annotation-border-size solid darken(@color-border-normal, 5%);
     box-shadow: @annotation-box-shadow;
     border-radius: @annotation-border-radius;
 

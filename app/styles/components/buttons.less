@@ -20,7 +20,7 @@
     margin: 0;
     padding: 0 8px;
 
-    background: @color-button-bg;
+    background-color: @color-button-bg;
     background-image: none;
     border: @button-border-width solid @color-button-border;
     border-radius: 3px;
@@ -29,7 +29,7 @@
     color: @color-button-text;
     font-family: @font;
     font-size: 13px;
-    font-weight: @button-font-weight;
+    font-weight: @font-weight-normal;
     text-align: center;
     vertical-align: middle;
     white-space: nowrap;
@@ -42,6 +42,7 @@
     &.focus {
         color: @color-button-text-hover;
         border-color: @color-button-border-hover;
+        background-color: @color-button-bg-hover;
         // background: darken(@color-button-bg, 5); // TODO remove if not necessary
         outline: 0;
         box-shadow: none;
@@ -54,9 +55,10 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
+        background-color: @color-button-bg-disabled;
         color: @color-button-text-disabled;
         border-color: @color-button-border-disabled;
-        cursor: @cursor-disabled;
+        cursor: @cursor-disabled !important;
         pointer-events: none; // Future-proof disabling of clicks
     }
 
@@ -122,6 +124,7 @@ button[disabled] {
         border: 0;
         // color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO remove if not necessary
         text-shadow: none;
+        cursor: not-allowed;
     }
 }
 
@@ -190,7 +193,7 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO To be introduced as variable?
+        color: @color-button-cta-text-disabled;
         background-color: lighten(@color-subject, 20);
         text-shadow: none;
     }
@@ -217,7 +220,7 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO To be introduced as variable?
+        color: @color-button-cta-text-disabled;
         background-color: lighten(@color-predicate, 20);
         text-shadow: none;
     }
@@ -244,7 +247,7 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO To be introduced as variable?
+        color: @color-button-cta-text-disabled;
         background-color: lighten(@color-object, 20);
         text-shadow: none;
     }
