@@ -69,6 +69,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 if (!scope.data.expanded) {
                     //scope.toggleAnnotation();
                     AnnotationDetails.openAnnotationView(scope.id);
+                    //   AnnotationDetails.toggleAnnotationView(scope.id,true);
                 }
 
                 scope.data.replyDialog = !scope.data.replyDialog;
@@ -77,7 +78,7 @@ angular.module('Pundit2.AnnotationSidebar')
             };
 
             scope.saveEdit = function(event) {
-                var promise = AnnotationDetails.saveEditedComment(scope.data.id, scope.data.annotation.itemsArray[0], scope.data.annotation.comment);
+                var promise = AnnotationDetails.saveEditedComment(scope.data.id, scope.data.itemsArray[0], scope.data.comment);
 
                 promise.then(function() {
                     scope.data.scopeReference.replyDialog = false;
@@ -115,7 +116,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     return;
                 }
                 if (type === 'comment') {
-                    promise = AnnotationDetails.socialEvent(scope.data.id, scope.data.parentId, type, 'add', scope.annotation.replyCommentValue);
+                    promise = AnnotationDetails.socialEvent(scope.data.id, scope.data.parentId, type, 'add', scope.data.replyCommentValue);
                 } else {
 
 

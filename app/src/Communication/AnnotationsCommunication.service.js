@@ -271,9 +271,9 @@ angular.module('Pundit2.Communication')
                 })
             },
             data: comment
-        }).success(function() {
-            annotationsCommunication.log('Post save success');
-            promise.resolve(true);
+        }).success(function(e) {
+            annotationsCommunication.log('Post save success',e);
+            promise.resolve(e);
         }).error(function() {
             annotationsCommunication.log('Post save ERROR');
             promise.reject(false);

@@ -18,7 +18,9 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.dislike = scope.options.dislike;
             scope.endorse = scope.options.endorse;
             scope.report = scope.options.report;
-            scope.annotation = AnnotationDetails.getAnnotationDetails(scope.id);
+            scope.userData = AnnotationDetails.userData();
+            //set right creator of reply
+            scope.data.creator = scope.userData.uri;
             //angular.extend(scope.annotation, scope.data.annotation);
 
             var stopEvent = function(event) {
@@ -32,16 +34,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
             scope.replyAnnotation = function(event) {
                 scope.replyDialog = !scope.replyDialog;
-
-                stopEvent(event);
-            };
-
-            scope.saveEdit = function(event) {
-                var promise = AnnotationDetails.saveEditedComment(scope.id, scope.annotation.itemsArray[0], scope.editCommentValue);
-
-                promise.then(function() {
-                    scope.replyDialog = !scope.replyDialog;
-                }, function() {});
 
                 stopEvent(event);
             };

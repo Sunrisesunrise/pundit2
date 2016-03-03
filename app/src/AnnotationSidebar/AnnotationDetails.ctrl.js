@@ -269,7 +269,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     creatorName: currentUser.fullName,
                     created: Date(),
                     creator: $scope.annotation.creator,
-                    thumb: currentUser.thumbnail,
+                    thumbnail: currentUser.thumbnail,
                     social: {
                         counting: {
                             comment: 0,

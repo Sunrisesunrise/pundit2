@@ -377,6 +377,8 @@ angular.module('Pundit2.AnnotationSidebar')
                     //    var element = document.getElementById(e.args);
                     //    element.hide();
                     //});
+                    annotationDetails.decreaseComment(state.id);
+                    EventDispatcher.sendEvent('deleteReply', state.id);
                 });
             } else {
                 AnnotationsCommunication.deleteAnnotation(currentId).finally(function() {
@@ -580,6 +582,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     annotationDetails.openConfirmModal = function(currentElement, currentId) {
         // promise is needed to open modal when template is ready
+        modalScope.titleMessage = 'Delete Annotation';
         modalScope.notifyMessage = 'Are you sure you want to delete this annotation? Please be aware that deleted annotations cannot be recovered.';
         modalScope.elementReference = currentElement;
         modalScope.annotationId = currentId;
@@ -714,6 +717,7 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             annotationDetails.closeAllAnnotationView(currentId);
             state.annotations[currentId].expanded = true;
+
         } else {
             annotationDetails.log("Cannot find this annotation: id -> " + currentId);
         }
