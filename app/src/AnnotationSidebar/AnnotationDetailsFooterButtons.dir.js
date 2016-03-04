@@ -108,7 +108,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 if (!scope.data.expanded) {
                     AnnotationDetails.openAnnotationView(scope.id);
                 }
-                scope.data.repliesLoaded = false;
 
                 EventDispatcher.sendEvent('AnnotationDetails.openBox', true);
                 stopEvent(event);
