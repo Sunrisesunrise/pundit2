@@ -48,7 +48,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
     $scope.annotation.parentId = $scope.id;
-    $scope.annotation.repliesLoaded = false;
+    $scope.annotation.repliesLoaded = undefined;
     $scope.annotation.replyDialog = false;
     $scope.annotation.editCommentValue = '';
     $scope.annotation.replyCommentValue = '';
@@ -112,6 +112,10 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.toggleAnnotation = function() {
         $scope.editMode = false;
+
+        if(typeof $scope.repliesLoaded === 'undefined'){
+            $scope.repliesLoaded = false;
+        }
 
         if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
             if (AnnotationSidebar.isFiltersExpanded()) {
