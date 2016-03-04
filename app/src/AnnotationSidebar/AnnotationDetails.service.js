@@ -236,6 +236,9 @@ angular.module('Pundit2.AnnotationSidebar')
 
     var forceSkip = '';
 
+    var scopeReference = {},
+        repliesReference = {};
+
 
     var initContextualMenu = function() {
 
@@ -580,6 +583,34 @@ angular.module('Pundit2.AnnotationSidebar')
         return serverdate;
     };
 
+    annotationDetails.addScopeReference = function(id, value) {
+        scopeReference[id] = value;
+    };
+
+    annotationDetails.getScopeReference = function(id) {
+        return scopeReference[id];
+    };
+
+    annotationDetails.addRepliesReference = function(id, value) {
+        repliesReference[id] = value;
+    };
+
+    annotationDetails.getRepliesReference = function(id) {
+        return repliesReference[id];
+    };
+
+    annotationDetails.checkCreatorRepliesReference = function(creator) {
+        for (var i = 0, len = repliesReference.length; i < len; i++) {
+            if (repliesReference[i].annotation.creator === creator) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    annotationDetails.removeRepliesReference = function(id) {
+        delete repliesReference[id];
+    };
     annotationDetails.openConfirmModal = function(currentElement, currentId) {
         // promise is needed to open modal when template is ready
         modalScope.titleMessage = 'Delete Annotation';
@@ -959,7 +990,9 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationDetails.getRepliesByAnnotationId = function(annotationId) {
-        return AnnotationsCommunication.getRepliesByAnnotationId(annotationId);
+        annotationDetails.addRepliesReference(annotationId, AnnotationsCommunication.getRepliesByAnnotationId(annotationId));
+
+        return annotationDetails.getRepliesReference(annotationId);
     };
 
     annotationDetails.socialEvent = function(annotationId, ancestor, type, operation, comment) {

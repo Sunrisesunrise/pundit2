@@ -74,6 +74,8 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.options = AnnotationDetails.options;
     $scope.optionsReplyes = angular.copy($scope.options);
     $scope.optionsReplyes.parentAnnotation = $scope.annotation;
+    AnnotationDetails.addScopeReference($scope.id, $scope);
+
 
     if ($scope.options.replyTree === false) {
         $scope.optionsReplyes.reply = false;
@@ -143,6 +145,8 @@ angular.module('Pundit2.AnnotationSidebar')
                     $scope.replyTree = data;
                     $scope.optionsReplyes.replyTreeArray = data;
                     $scope.annotation.repliesLoaded = true;
+                    AnnotationDetails.addRepliesReference($scope.id, data);
+
                 }
 
                 console.log("data: " + data);
@@ -296,6 +300,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 $scope.annotation.social.status.comment = true;
                 $scope.annotation.replyCommentValue = '';
                 $scope.replyTree.push(reply);
+                AnnotationDetails.addRepliesReference(data.AnnotationID, reply);
             });
         } else {
 

@@ -54,24 +54,13 @@ angular.module('Pundit2.AnnotationSidebar')
             };
 
             var hideReply = function() {
-                var zero = false;
+                var scopeRef = AnnotationDetails.getScopeReference(scope.options.parentAnnotation.id);
+                AnnotationDetails.removeRepliesReference(scope.id);
+                scopeRef.replyTree = AnnotationDetails.getRepliesReference(scope.id);
 
-                for (var i = 0, len = scope.options.replyTreeArray.length; i < len; i++) {
-                    if (scope.options.replyTreeArray[i].id === scope.id) {
-                        scope.options.replyTreeArray.splice(i, 1);
-                        break;
-                    }
-                }
 
-                for (var i = 0, len = scope.options.replyTreeArray.length; i < len; i++) {
-                    if (scope.options.replyTreeArray[i].creator === scope.userData.uri) {
-                        zero = true;
-                        break;
-                    }
-                }
-
-                scope.options.parentAnnotation.social.counting.comment = scope.options.parentAnnotation.social.counting.comment - 1;
-                scope.options.parentAnnotation.social.status.comment = zero;
+                scopeRef.annotation.social.counting.comment = scopeRef.annotation.social.counting.comment - 1;
+                scopeRef.annotation.social.status.comment = AnnotationDetails.checkCreatorRepliesReference(scope.userData.uri);
             };
 
 

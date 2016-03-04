@@ -65,14 +65,27 @@ angular.module('Pundit2.AnnotationSidebar')
 
 
             scope.replyAnnotation = function(event) {
-
-                if (!scope.data.expanded) {
-                    //scope.toggleAnnotation();
-                    AnnotationDetails.openAnnotationView(scope.id);
-                    //   AnnotationDetails.toggleAnnotationView(scope.id,true);
-                }
+                var scopeRef = AnnotationDetails.getScopeReference(scope.id);
 
                 scope.data.replyDialog = !scope.data.replyDialog;
+
+                if (typeof scopeRef.replyTree === 'undefined') {
+                    scopeRef.replyTree = [];
+                }
+
+                if (scopeRef.replyTree.length === 0) {
+                    AnnotationDetails.getRepliesByAnnotationId(scope.id).then(function(data) {
+
+                        scopeRef.replyTree = data;
+                        AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded = true;
+
+                    });
+                }
+
+                if (!scope.data.expanded) {
+                    AnnotationDetails.openAnnotationView(scope.id);
+                }
+
                 EventDispatcher.sendEvent('AnnotationDetails.openBox', true);
                 stopEvent(event);
             };
