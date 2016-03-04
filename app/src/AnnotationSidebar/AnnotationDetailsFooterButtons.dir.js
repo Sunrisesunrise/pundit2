@@ -62,7 +62,13 @@ angular.module('Pundit2.AnnotationSidebar')
 
             scope.data.social = checkSocial(scope.data.social);
 
-
+            scope.disabled = {
+                'like' : false,
+                'dislike' : false,
+                'comment' : false,
+                'endorse' : false,
+                'report' :false
+            };
 
             scope.replyAnnotation = function(event) {
                 var scopeRef = AnnotationDetails.getScopeReference(scope.id);
@@ -154,12 +160,11 @@ angular.module('Pundit2.AnnotationSidebar')
 
                     promise = AnnotationDetails.socialEvent(scope.data.id, scope.data.parentId, type, operation);
 
+                    scope.disabled[type] = true;
+
                     promise.then(function(status) {
 
-                        if (status) {
-                            console.log('socialEvent:OK');
-
-                        } else {
+                        if (status === false) {
                             EventDispatcher.sendEvent('Pundit.alert', {
                                 title: 'Broken social ' + type,
                                 id: "WARNING",
@@ -169,7 +174,12 @@ angular.module('Pundit2.AnnotationSidebar')
 
                                 ]
                             });
+
+                        } else {
+                            console.log('socialEvent:OK');
+
                         }
+                        scope.disabled[type] = false;
                     });
                 }
 
