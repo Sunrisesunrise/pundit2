@@ -75,6 +75,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
                 scope.data.replyDialog = !scope.data.replyDialog;
 
+
                 if (typeof scopeRef.replyTree === 'undefined') {
                     scopeRef.replyTree = [];
                 }
@@ -84,13 +85,30 @@ angular.module('Pundit2.AnnotationSidebar')
 
                         scopeRef.replyTree = data;
                         AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded = true;
+                        if(scope.data.replyDialog === true){
+                            setTimeout(function(){
+                                angular.element('html,body').animate({
+                                        scrollTop: angular.element(".pnd-annotation-reply-textarea").offset().top - 120},
+                                    'slow');
+                            }, 800);
+
+                        }
 
                     });
+
+                }
+                if(scope.data.replyDialog === true && scope.data.repliesLoaded){
+                    setTimeout(function(){
+                        angular.element('html,body').animate({
+                                scrollTop: angular.element(".pnd-annotation-reply-textarea").offset().top - 120},
+                            'slow');
+                    }, 300);
                 }
 
                 if (!scope.data.expanded) {
                     AnnotationDetails.openAnnotationView(scope.id);
                 }
+                scope.data.repliesLoaded = false;
 
                 EventDispatcher.sendEvent('AnnotationDetails.openBox', true);
                 stopEvent(event);
@@ -138,49 +156,52 @@ angular.module('Pundit2.AnnotationSidebar')
                     promise = AnnotationDetails.socialEvent(scope.data.id, scope.data.parentId, type, 'add', scope.data.replyCommentValue);
                 } else {
 
+                    if(!scope.disabled[type]){
 
-                    if ((scope.data.social.status[type])) {
-                        scope.data.social.counting[type] = parseInt(scope.data.social.counting[type]) - 1;
-                        scope.data.social.status[type] = false;
-                        operation = 'remove';
+                        if ((scope.data.social.status[type])) {
+                            scope.data.social.counting[type] = parseInt(scope.data.social.counting[type]) - 1;
+                            scope.data.social.status[type] = false;
+                            operation = 'remove';
 
 
-                    } else if (!scope.data.social.status[type] && !scope.data.social.status[contrary[type]]) {
-                        scope.data.social.counting[type] = parseInt(scope.data.social.counting[type]) + 1;
-                        scope.data.social.status[type] = true;
-                        operation = 'add';
-                    } else if (!scope.data.social.status[type] && scope.data.social.status[contrary[type]]) {
-                        scope.data.social.status[contrary[type]] = false;
-                        scope.data.social.counting[type] = parseInt(scope.data.social.counting[type]) + 1;
-                        scope.data.social.counting[contrary[type]] = parseInt(scope.data.social.counting[contrary[type]]) - 1;
-                        scope.data.social.status[type] = true;
-                        operation = 'add';
+                        } else if (!scope.data.social.status[type] && !scope.data.social.status[contrary[type]]) {
+                            scope.data.social.counting[type] = parseInt(scope.data.social.counting[type]) + 1;
+                            scope.data.social.status[type] = true;
+                            operation = 'add';
+                        } else if (!scope.data.social.status[type] && scope.data.social.status[contrary[type]]) {
+                            scope.data.social.status[contrary[type]] = false;
+                            scope.data.social.counting[type] = parseInt(scope.data.social.counting[type]) + 1;
+                            scope.data.social.counting[contrary[type]] = parseInt(scope.data.social.counting[contrary[type]]) - 1;
+                            scope.data.social.status[type] = true;
+                            operation = 'add';
+                        }
+
+
+                        promise = AnnotationDetails.socialEvent(scope.data.id, scope.data.parentId, type, operation);
+
+                        scope.disabled[type] = true;
+
+                        promise.then(function(status) {
+
+                            if (status === false) {
+                                EventDispatcher.sendEvent('Pundit.alert', {
+                                    title: 'Broken social ' + type,
+                                    id: "WARNING",
+                                    timeout: 12000,
+                                    message: "It looks like some annotations on the page are broken: this can happen if the <strong>text of the page has changed in the last days</strong>.<br /><br />See if you can fix the broken annotations by editing them.<br /><br />Broken annotations are shown on the top right of the sidebar and are highlighted in red.<br /><a href=\"javascript:void(0)\" data-inner-callback=\"0\">Click here</a> to open first broken annotation",
+                                    callbacks: [
+
+                                    ]
+                                });
+
+                            } else {
+                                console.log('socialEvent:OK');
+
+                            }
+                            scope.disabled[type] = false;
+                        });
                     }
 
-
-                    promise = AnnotationDetails.socialEvent(scope.data.id, scope.data.parentId, type, operation);
-
-                    scope.disabled[type] = true;
-
-                    promise.then(function(status) {
-
-                        if (status === false) {
-                            EventDispatcher.sendEvent('Pundit.alert', {
-                                title: 'Broken social ' + type,
-                                id: "WARNING",
-                                timeout: 12000,
-                                message: "It looks like some annotations on the page are broken: this can happen if the <strong>text of the page has changed in the last days</strong>.<br /><br />See if you can fix the broken annotations by editing them.<br /><br />Broken annotations are shown on the top right of the sidebar and are highlighted in red.<br /><a href=\"javascript:void(0)\" data-inner-callback=\"0\">Click here</a> to open first broken annotation",
-                                callbacks: [
-
-                                ]
-                            });
-
-                        } else {
-                            console.log('socialEvent:OK');
-
-                        }
-                        scope.disabled[type] = false;
-                    });
                 }
 
 
