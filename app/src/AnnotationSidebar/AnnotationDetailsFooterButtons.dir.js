@@ -73,8 +73,13 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.replyAnnotation = function(event) {
                 var scopeRef = AnnotationDetails.getScopeReference(scope.id);
                 var screen =  angular.element(window) ;
-
                 scope.data.replyDialog = !scope.data.replyDialog;
+
+                if (!scope.data.expanded) {
+                    AnnotationDetails.openAnnotationView(scope.id);
+                    scope.data.replyDialog = true;
+
+                }
 
 
                 if (typeof scopeRef.replyTree === 'undefined') {
@@ -136,9 +141,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     }, 800);
                 }
 
-                if (!scope.data.expanded) {
-                    AnnotationDetails.openAnnotationView(scope.id);
-                }
+
 
                 EventDispatcher.sendEvent('AnnotationDetails.openBox', true);
                 stopEvent(event);
