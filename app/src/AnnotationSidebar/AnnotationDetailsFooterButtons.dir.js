@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.directive('annotationDetailsFooterButtons', function(AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher) {
+.directive('annotationDetailsFooterButtons', function(AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher, $window) {
     return {
         restrict: 'C',
         scope: {
@@ -72,6 +72,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
             scope.replyAnnotation = function(event) {
                 var scopeRef = AnnotationDetails.getScopeReference(scope.id);
+                var screen =  angular.element(window) ;
 
                 scope.data.replyDialog = !scope.data.replyDialog;
 
@@ -86,11 +87,26 @@ angular.module('Pundit2.AnnotationSidebar')
                         scopeRef.replyTree = data;
                         AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded = true;
                         if(scope.data.replyDialog === true){
-                            setTimeout(function(){
-                                angular.element('html,body').animate({
-                                        scrollTop: angular.element(".pnd-annotation-reply-textarea").offset().top - 120},
-                                    'slow');
-                            }, 800);
+
+                                setTimeout(function () {
+                                    var element = angular.element(".pnd-annotation-reply-textarea")[0].getBoundingClientRect();
+                                    var parentElement = angular.element(".pnd-annotation-expanded")[0];
+                                    var parentElementOffset = parentElement.getBoundingClientRect();
+
+                                    if(element.height + element.top + 90> screen.height()) {
+                                        if(parentElementOffset.height < screen.height()){
+                                            angular.element('html,body').animate({
+                                                    scrollTop: $window.scrollY + parentElementOffset.top - 70
+                                                },
+                                                'slow');
+                                        } else{
+
+                                            angular.element('html,body').animate({
+                                                    scrollTop: $window.scrollY + element.top - element.height*2 + 23
+                                                },
+                                                'slow');
+                                        }
+                                    }       }, 800);
 
                         }
 
@@ -99,10 +115,25 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
                 if(scope.data.replyDialog === true && scope.data.repliesLoaded){
                     setTimeout(function(){
-                        angular.element('html,body').animate({
-                                scrollTop: angular.element(".pnd-annotation-reply-textarea").offset().top - 120},
-                            'slow');
-                    }, 300);
+                        var element = angular.element(".pnd-annotation-reply-textarea")[0].getBoundingClientRect();
+                        var parentElement = angular.element(".pnd-annotation-expanded")[0];
+                        var parentElementOffset = parentElement.getBoundingClientRect();
+
+                        if(element.height + element.top + 90> screen.height()) {
+                            if(parentElementOffset.height < screen.height()){
+                                angular.element('html,body').animate({
+                                        scrollTop: $window.scrollY + parentElementOffset.top - 70
+                                    },
+                                    'slow');
+                            } else{
+
+                                angular.element('html,body').animate({
+                                        scrollTop: $window.scrollY + element.top - element.height*2 + 23
+                                    },
+                                    'slow');
+                            }
+                        }
+                    }, 800);
                 }
 
                 if (!scope.data.expanded) {
