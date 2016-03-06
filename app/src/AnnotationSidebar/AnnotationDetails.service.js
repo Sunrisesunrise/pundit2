@@ -835,7 +835,6 @@ angular.module('Pundit2.AnnotationSidebar')
                     itemsUriArray: buildItemsUriArray(currentAnnotation),
                     broken: isBroken,
                     expanded: expandedState,
-                    repliesLoaded: false,
                     ghosted: false,
                     color: currentColor,
                     hasTemplate: template,
@@ -845,7 +844,9 @@ angular.module('Pundit2.AnnotationSidebar')
                     disagrees: currentAnnotation.disagrees,
                     endorses: currentAnnotation.endorses,
                     reports: currentAnnotation.reports,
-                    social: currentAnnotation.social
+                    social: currentAnnotation.social,
+                    modified: currentAnnotation.modified,
+
                 };
 
                 var cancelWatchNotebookName = $rootScope.$watch(function() {
@@ -896,7 +897,6 @@ angular.module('Pundit2.AnnotationSidebar')
                     itemsUriArray: [firstTargetUri],
                     broken: isBroken,
                     expanded: expandedState,
-                    repliesLoaded: false,
                     ghosted: false,
                     likes: currentAnnotation.likes,
                     dislikes: currentAnnotation.dislikes,
@@ -904,7 +904,8 @@ angular.module('Pundit2.AnnotationSidebar')
                     disagrees: currentAnnotation.disagrees,
                     endorses: currentAnnotation.endorses,
                     reports: currentAnnotation.reports,
-                    social: currentAnnotation.social
+                    social: currentAnnotation.social,
+                    modified: currentAnnotation.modified
                 };
 
                 if (motivation === 'commenting') {

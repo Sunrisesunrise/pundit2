@@ -16,6 +16,8 @@
         <div class="pnd-annotation-collapsed-caret"></div>
 
         <div class="pnd-annotation-collapsed-object">
+            <span>{{ annotation.modified }}</span>
+
             <span>{{ annotation.comment }}</span>
         </div>
 
@@ -173,7 +175,7 @@
         </div>
 
         <!-- Displayed while loading replies -->
-        <div ng-show = "annotation.repliesLoaded == false"
+        <div ng-show = "checkLoaded()"
             class="pnd-annotation-loading-replies">
             <p class="pnd-pulse">
                 Loading Replies

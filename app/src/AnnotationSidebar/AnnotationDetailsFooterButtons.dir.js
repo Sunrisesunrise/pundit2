@@ -75,6 +75,10 @@ angular.module('Pundit2.AnnotationSidebar')
                 var screen =  angular.element(window) ;
                 scope.data.replyDialog = !scope.data.replyDialog;
 
+                if(typeof scope.data.annotation.repliesLoaded === 'undefined'){
+                    scope.data.annotation.repliesLoaded = false;
+                }
+
                 if (!scope.data.expanded) {
                     AnnotationDetails.openAnnotationView(scope.id);
                     scope.data.replyDialog = true;

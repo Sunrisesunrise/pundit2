@@ -110,11 +110,19 @@ angular.module('Pundit2.AnnotationSidebar')
         event.preventDefault();
     };
 
+    $scope.checkLoaded = function(){
+
+    if($scope.annotation.repliesLoaded === false ){
+          return true
+      }
+        return false;
+    };
+
     $scope.toggleAnnotation = function() {
         $scope.editMode = false;
 
-        if(typeof $scope.repliesLoaded === 'undefined'){
-            $scope.repliesLoaded = false;
+        if(typeof $scope.annotation.repliesLoaded === 'undefined'){
+            $scope.annotation.repliesLoaded = false;
         }
 
         if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
