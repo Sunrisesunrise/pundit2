@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationPopover')
 
-.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout, EventDispatcher) {
+.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout, EventDispatcher, Config) {
     var annotationPopover = new BaseComponent('AnnotationPopover');
 
     var changePopoverPlacement = function(state, placement) {
@@ -16,6 +16,7 @@ angular.module('Pundit2.AnnotationPopover')
         temporaryElement: null,
         removeTimeout: null
     };
+    var alert = undefined;
 
     annotationPopover.mode = '';
 
@@ -176,6 +177,22 @@ angular.module('Pundit2.AnnotationPopover')
 
             };
 
+            if(alert){
+                posArrowTop = posArrow.top + posArrow.height;
+                posArrowLeft = posArrow.left + posArrow.width/2;
+
+                state.anchor.css({
+                    top: $window.scrollY + posArrowTop + 'px',
+                    left: posArrowLeft + 'px'
+                });
+
+                resizeData.lastSelectionUsed = state.selectionStart;
+                popoverRect = changePopoverPlacement(state, "bottom");
+                return;
+            }
+
+
+
             resizeData.lastSelectionUsed.label = placementArrow;
             popoverRect = changePopoverPlacement(state, placementArrow);
             checkRight(posArrow);
@@ -276,7 +293,6 @@ angular.module('Pundit2.AnnotationPopover')
 
         annotationPopover.log('Annotation popover hide');
     };
-
     annotationPopover.show = function(x, y, item, opt, fragmentId, mode) {
         var options,
             optionsDefault = {
@@ -305,6 +321,11 @@ angular.module('Pundit2.AnnotationPopover')
         var state = PndPopover.getState();
 
         annotationPopover.mode = typeof mode === 'undefined' ? '' : mode;
+
+        if(typeof mode !== 'undefined'){
+            alert = true;
+        }
+
 
         if (promise !== false) {
             promise.then(function() {
