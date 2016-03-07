@@ -149,6 +149,10 @@ angular.module('Pundit2.AnnotationSidebar')
             $scope.annotation.replyCommentValue = '';
         }
 
+        if (!MyPundit.isUserLogged()){
+            $scope.annotation.repliesLoaded = true;
+        }
+
         if ($scope.annotation.expanded && !$scope.annotation.repliesLoaded) {
             if (Config.modules.AnnotationDetails.social) {
 
@@ -269,6 +273,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if (!MyPundit.isUserLogged()) {
             angular.element(event.target).addClass('pnd-range-pos-icon');
+
             AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert');
             return;
         }
