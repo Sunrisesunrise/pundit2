@@ -222,9 +222,9 @@ angular.module('Pundit2.AnnotationSidebar')
      * The height of the annotations in the sidebar for positioning
      *
      * Default value:
-     * <pre> annotationHeight: 25 </pre>
+     * <pre> annotationHeight: 28 </pre>
      */
-    annotationHeight: 58,
+    annotationHeight: 28,
 
     /**
      * @module punditConfig
@@ -404,6 +404,10 @@ angular.module('Pundit2.AnnotationSidebar')
             expression: ''
         }
     };
+
+    if (Config.modules.AnnotationDetails.social == true) {
+        annotationSidebar.options.annotationHeight = annotationSidebar.options.annotationHeight * 2;
+    }
 
     if (isEntitiesActive) {
         annotationsFilters.entities = {};
@@ -718,7 +722,7 @@ angular.module('Pundit2.AnnotationSidebar')
             });
         });
 
-        // FreeText 
+        // FreeText
         annotation.allLabels = '';
 
         for (var i in annotation.items) {
@@ -1138,7 +1142,7 @@ angular.module('Pundit2.AnnotationSidebar')
         angular.forEach(activeFilters, function(filter, key) {
             exceptionsCheckIndex = exceptionsCheckList.indexOf(key);
 
-            // if there aren't subfilter active or we should skip a specific subfilter 
+            // if there aren't subfilter active or we should skip a specific subfilter
             if (exceptionsCheckIndex !== -1 || filter.expression.length === 0) {
                 if (exceptionsCheckIndex === -1) {
                     subFiltersSet[key] = {};
@@ -1357,7 +1361,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
-    // Disable a specific filter 
+    // Disable a specific filter
     annotationSidebar.removeFilter = function(filterKey, uriValue) {
         var currentIndex;
         var currentFilter = annotationSidebar.filters[filterKey].expression;

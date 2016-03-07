@@ -110,18 +110,18 @@ angular.module('Pundit2.AnnotationSidebar')
         event.preventDefault();
     };
 
-    $scope.checkLoaded = function(){
+    $scope.checkLoaded = function() {
 
-    if($scope.annotation.repliesLoaded === false ){
-          return true
-      }
+        if ($scope.annotation.repliesLoaded === false) {
+            return true
+        }
         return false;
     };
 
     $scope.toggleAnnotation = function() {
         $scope.editMode = false;
 
-        if(typeof $scope.annotation.repliesLoaded === 'undefined'){
+        if (typeof $scope.annotation.repliesLoaded === 'undefined') {
             $scope.annotation.repliesLoaded = false;
         }
 
@@ -150,20 +150,27 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         if ($scope.annotation.expanded && !$scope.annotation.repliesLoaded) {
-            AnnotationDetails.getRepliesByAnnotationId(currentId).then(function(data) {
+            if (Config.modules.AnnotationDetails.social) {
 
-                if (typeof data !== 'undefined') {
-                    data.annotation = $scope.annotation;
-                    $scope.replyTree = data;
-                    $scope.optionsReplyes.replyTreeArray = data;
-                    $scope.annotation.repliesLoaded = true;
-                    AnnotationDetails.addRepliesReference($scope.id, data);
+                AnnotationDetails.getRepliesByAnnotationId(currentId).then(function(data) {
 
-                }
+                    if (typeof data !== 'undefined') {
+                        data.annotation = $scope.annotation;
+                        $scope.replyTree = data;
+                        $scope.optionsReplyes.replyTreeArray = data;
+                        $scope.annotation.repliesLoaded = true;
+                        AnnotationDetails.addRepliesReference($scope.id, data);
 
-                console.log("data: " + data);
+                    }
 
-            });
+                    console.log("data: " + data);
+
+                });
+
+            } else {
+                $scope.annotation.repliesLoaded = true;
+            }
+
 
 
         }
