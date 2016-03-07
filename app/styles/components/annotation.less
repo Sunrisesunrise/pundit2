@@ -5,9 +5,6 @@
  * For style of the whole annotation sidebar please refer to annotation-sidebar.less
  */
 
-@color-prova: #afafaf;
-
-
 /* ------------------------------------ *\
    #SINGLE-ANNOTATIONS-DETAILS
 \* ------------------------------------ */
@@ -41,11 +38,12 @@
     float: left;
     width: 100%;
     height: @annotation-collapsed-header-height;
+    line-height: @annotation-collapsed-header-height;
     max-width: 100%;
-    overflow: hidden;
     padding: 1px 9px 0 6px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    // overflow: hidden;
+    // white-space: nowrap;
+    // text-overflow: ellipsis;
 
     &.pnd-annotation-annotated-fragment {
         span {
@@ -61,7 +59,13 @@
     }
 
     span {
-        line-height: @annotation-collapsed-header-height;
+        display: inline-block;
+        margin-top: 6px; // Needed for vertical alignment
+        max-width: 95%;
+        line-height: @annotation-collapsed-header-height/2;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 }
 
@@ -500,10 +504,10 @@
     }
 
     .pnd-annotation-reply-date {
-        max-width: 50%;
+        max-width: 48%;
         overflow: hidden;
         float: left;
-        color: @color-prova; // @color-text-light;
+        color: @color-dark-gray;
         font-size: 12px;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -580,13 +584,13 @@
 
     button {
         height: @annotation-social-buttons-height;
-        margin-left: 2px;
+        margin-left: 1px;
         line-height: @annotation-social-buttons-height;
 
         /* Middot */
         &:not(:first-child):before {
             content: '\b7';
-            margin-right: 2px;
+            margin-right: 1px;
             color: fade(@color-text-light, 50%);
             font-weight: @font-weight-normal;
         }
