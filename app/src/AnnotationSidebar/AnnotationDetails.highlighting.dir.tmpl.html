@@ -1,4 +1,5 @@
-<div class="pnd-annotation-details-wrap pnd-annotation-highlight pnd-ignore">
+<div class="pnd-annotation-details-wrap pnd-annotation-highlight pnd-ignore"
+     ng-class="{'pnd-annotation-has-social': social}">
 
     <!-- Collapsed view of the annotation -->
     <div class="pnd-annotation-collapsed pnd-annotation-details-header pnd-annotation-details-top"
@@ -92,7 +93,7 @@
         </div>
 
         <!-- Displayed while loading replies -->
-        <div ng-show = "checkLoaded()"
+        <div ng-show = "checkLoaded() && social"
              class="pnd-annotation-loading-replies">
             <p class="pnd-pulse">
                 Loading Replies

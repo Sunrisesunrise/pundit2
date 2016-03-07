@@ -22,7 +22,7 @@
 \* ------------------------------------ */
 
 .pnd-annotation-collapsed {
-    height: @annotation-collapsed-header-height + @annotation-social-buttons-height + 2px; // 2px = borders // @annotation-collapsed-height;
+    height: @annotation-collapsed-header-height + 2px;
     margin: 0 5px; // 5px;
     overflow: hidden;
     background-color: @annotation-bg-color;
@@ -33,6 +33,13 @@
     cursor: pointer;
 }
 
+/* Height of collapsed annotation with social features */
+.pnd-annotation-has-social {
+    .pnd-annotation-collapsed {
+        height: @annotation-collapsed-header-height + @annotation-social-buttons-height + 2px; // 2px = borders // @annotation-collapsed-height;
+    }
+}
+
 /* Target */
 .pnd-annotation-collapsed-subject {
     float: left;
@@ -41,9 +48,6 @@
     line-height: @annotation-collapsed-header-height;
     max-width: 100%;
     padding: 1px 9px 0 6px;
-    // overflow: hidden;
-    // white-space: nowrap;
-    // text-overflow: ellipsis;
 
     &.pnd-annotation-annotated-fragment {
         span {
@@ -60,7 +64,7 @@
 
     span {
         display: inline-block;
-        margin-top: 6px; // Needed for vertical alignment
+        margin-top: 6px; // Needed for correct vertical alignment
         max-width: 95%;
         line-height: @annotation-collapsed-header-height/2;
         overflow: hidden;
@@ -105,8 +109,8 @@
     }
 }
 
-/* Arrow triangle between subject and object, code inspired by Bootstrap css */
-.pnd-annotation-highlight .pnd-annotation-collapsed-caret, .pnd-annotation-comment .pnd-annotation-collapsed-caret
+/* Arrow between subject and object for comments */
+.pnd-annotation-comment .pnd-annotation-collapsed-caret
 {
     position: absolute;
     display: block;
@@ -141,7 +145,7 @@
     }
 }
 
-
+/* Arrow between subject and object for semantic annotations */
 .pnd-annotation-semantic .pnd-annotation-collapsed-caret {
 
     position: absolute;
@@ -198,7 +202,6 @@
 }
 
 
-
 /* ------------------------------------ *\
    #EXPANDED-ANNOTATION
 \* ------------------------------------ */
@@ -208,7 +211,6 @@
     overflow: hidden;
 
     background-color: @annotation-bg-color;
-    // border: @annotation-border-size solid @annotation-expanded-border-color;
     border: @annotation-border-size solid darken(@color-border-normal, 5%);
     box-shadow: @annotation-box-shadow;
     border-radius: @annotation-border-radius;
@@ -254,7 +256,6 @@
     .pnd-annotation-comment-text-edit {
         max-height: 200px;
         padding: 10px;
-        // border-bottom: @annotation-border-size solid @annotation-border-color;
     }
 
     /* The triangle caret between fragment and comment */
@@ -414,7 +415,6 @@
 .pnd-annotation-comment-text-edit-buttons {
     text-align: right;
     height: 33px;
-    // padding-top: 7px;
     background-color: @color-background-light;
 
     .pnd-btn {
