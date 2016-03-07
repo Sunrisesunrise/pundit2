@@ -79,6 +79,10 @@ angular.module('Pundit2.AnnotationSidebar')
                     scope.data.repliesLoaded = false;
                 }
 
+                if (!MyPundit.isUserLogged()){
+                    scope.data.repliesLoaded = true;
+                }
+
                 if (!scope.data.expanded) {
                     AnnotationDetails.openAnnotationView(scope.id);
                     scope.data.replyDialog = true;
