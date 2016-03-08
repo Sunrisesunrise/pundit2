@@ -112,7 +112,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.checkLoaded = function() {
 
-        if ($scope.annotation.repliesLoaded === false) {
+        if ($scope.annotation.repliesLoaded === false && $scope.social === true) {
             return true
         }
         return false;

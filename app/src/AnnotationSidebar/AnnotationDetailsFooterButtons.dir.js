@@ -93,6 +93,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 if (!MyPundit.isUserLogged()) {
                     angular.element(event.target).addClass('pnd-range-pos-icon');
                     scope.data.repliesLoaded = true;
+                    scope.data.replyDialog = false;
                     AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert');
                     EventDispatcher.sendEvent('openContextualMenu');
                     return;
