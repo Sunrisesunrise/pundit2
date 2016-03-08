@@ -230,6 +230,7 @@ angular.module('Pundit2.AnnotationSidebar')
         isSidebarExpanded: false,
         isGhostedActive: false,
         contextualMenuOpened: false,
+        enableToggle: true,
         openAnnotation: false,
         userData: {},
     };
@@ -765,7 +766,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationDetails.toggleAnnotationView = function(currentId, forceTo) {
-        if (!state.contextualMenuOpened) {
+        if (!state.contextualMenuOpened && state.enableToggle) {
             annotationDetails.closeAllAnnotationView(currentId);
             state.annotations[currentId].expanded = typeof forceTo !== 'undefined' ? forceTo : !state.annotations[currentId].expanded;
         }
@@ -1117,6 +1118,12 @@ angular.module('Pundit2.AnnotationSidebar')
     });
     EventDispatcher.addListener('openContextualMenu', function( /*e*/ ) {
         state.contextualMenuOpened = true;
+    });
+    EventDispatcher.addListener('disableToggle', function( /*e*/ ) {
+        state.enableToggle = false;
+    });
+    EventDispatcher.addListener('enableToggle', function( /*e*/ ) {
+        state.enableToggle = true;
     });
     $document.on('mousedown', mouseDownHandler);
 

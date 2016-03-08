@@ -73,20 +73,20 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.data.social = checkSocial(scope.data.social);
 
             scope.disabled = {
-                'like' : false,
-                'dislike' : false,
-                'comment' : false,
-                'endorse' : false,
-                'report' :false
+                'like': false,
+                'dislike': false,
+                'comment': false,
+                'endorse': false,
+                'report': false
             };
 
             scope.replyAnnotation = function(event) {
                 var scopeRef = AnnotationDetails.getScopeReference(scope.id);
-                var screen =  angular.element(window) ;
+                var screen = angular.element(window);
                 scope.data.replyDialog = !scope.data.replyDialog;
 
 
-                if(typeof scope.data.repliesLoaded === 'undefined'){
+                if (typeof scope.data.repliesLoaded === 'undefined') {
                     scope.data.repliesLoaded = false;
                 }
 
@@ -115,49 +115,50 @@ angular.module('Pundit2.AnnotationSidebar')
 
                         scopeRef.replyTree = data;
                         AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded = true;
-                        if(scope.data.replyDialog === true){
+                        if (scope.data.replyDialog === true) {
 
-                                setTimeout(function () {
-                                    var element = angular.element(".pnd-annotation-reply-textarea")[0].getBoundingClientRect();
-                                    var parentElement = angular.element(".pnd-annotation-expanded")[0];
-                                    var parentElementOffset = parentElement.getBoundingClientRect();
+                            setTimeout(function() {
+                                var element = angular.element(".pnd-annotation-reply-textarea")[0].getBoundingClientRect();
+                                var parentElement = angular.element(".pnd-annotation-expanded")[0];
+                                var parentElementOffset = parentElement.getBoundingClientRect();
 
-                                    if(element.height + element.top + 90> screen.height()) {
-                                        if(parentElementOffset.height < screen.height()){
-                                            angular.element('html,body').animate({
-                                                    scrollTop: $window.scrollY + parentElementOffset.top - 70
-                                                },
-                                                'slow');
-                                        } else{
+                                if (element.height + element.top + 90 > screen.height()) {
+                                    if (parentElementOffset.height < screen.height()) {
+                                        angular.element('html,body').animate({
+                                                scrollTop: $window.scrollY + parentElementOffset.top - 70
+                                            },
+                                            'slow');
+                                    } else {
 
-                                            angular.element('html,body').animate({
-                                                    scrollTop: $window.scrollY + element.top - element.height*2 + 23
-                                                },
-                                                'slow');
-                                        }
-                                    }       }, 800);
+                                        angular.element('html,body').animate({
+                                                scrollTop: $window.scrollY + element.top - element.height * 2 + 23
+                                            },
+                                            'slow');
+                                    }
+                                }
+                            }, 800);
 
                         }
 
                     });
 
                 }
-                if(scope.data.replyDialog === true && scope.data.repliesLoaded){
-                    setTimeout(function(){
+                if (scope.data.replyDialog === true && scope.data.repliesLoaded) {
+                    setTimeout(function() {
                         var element = angular.element(".pnd-annotation-reply-textarea")[0].getBoundingClientRect();
                         var parentElement = angular.element(".pnd-annotation-expanded")[0];
                         var parentElementOffset = parentElement.getBoundingClientRect();
 
-                        if(element.height + element.top + 90> screen.height()) {
-                            if(parentElementOffset.height < screen.height()){
+                        if (element.height + element.top + 90 > screen.height()) {
+                            if (parentElementOffset.height < screen.height()) {
                                 angular.element('html,body').animate({
                                         scrollTop: $window.scrollY + parentElementOffset.top - 70
                                     },
                                     'slow');
-                            } else{
+                            } else {
 
                                 angular.element('html,body').animate({
-                                        scrollTop: $window.scrollY + element.top - element.height*2 + 23
+                                        scrollTop: $window.scrollY + element.top - element.height * 2 + 23
                                     },
                                     'slow');
                             }
@@ -165,9 +166,6 @@ angular.module('Pundit2.AnnotationSidebar')
                     }, 800);
                 }
 
-
-
-                EventDispatcher.sendEvent('AnnotationDetails.openBox', true);
                 stopEvent(event);
             };
 
@@ -205,7 +203,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     promise = AnnotationDetails.socialEvent(scope.data.id, scope.data.parentId, type, 'add', scope.data.replyCommentValue);
                 } else {
 
-                    if(!scope.disabled[type]){
+                    if (!scope.disabled[type]) {
 
                         if ((scope.data.social.status[type])) {
                             scope.data.social.counting[type] = parseInt(scope.data.social.counting[type]) - 1;
@@ -234,7 +232,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
                             if (status === false) {
                                 EventDispatcher.sendEvent('Pundit.alert', {
-                                    title: 'Broken social ' + type,
+                                    title: 'Broken reply ' + type,
                                     id: "WARNING",
                                     timeout: 12000,
                                     message: "It looks like some annotations on the page are broken: this can happen if the <strong>text of the page has changed in the last days</strong>.<br /><br />See if you can fix the broken annotations by editing them.<br /><br />Broken annotations are shown on the top right of the sidebar and are highlighted in red.<br /><a href=\"javascript:void(0)\" data-inner-callback=\"0\">Click here</a> to open first broken annotation",

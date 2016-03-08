@@ -57,6 +57,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.replyTreeActivate = false;
     $scope.replyTree = [];
     $scope.editMode = false;
+    $scope.isSaving = false;
     //options value
     $scope.social = AnnotationDetails.options.social;
     $scope.moreInfo = AnnotationDetails.options.moreInfo;
@@ -118,8 +119,21 @@ angular.module('Pundit2.AnnotationSidebar')
         return false;
     };
 
+    $scope.checkSaving = function() {
+
+        if ($scope.annotation.repliesLoaded === false && $scope.social === true) {
+            return true
+        }
+        return false;
+    };
+
     $scope.toggleAnnotation = function() {
         $scope.editMode = false;
+
+
+        if (!$scope.annotation.expanded) {
+            EventDispatcher.sendEvent('enableToggle');
+        }
 
         if (typeof $scope.annotation.repliesLoaded === 'undefined') {
             $scope.annotation.repliesLoaded = false;
@@ -250,6 +264,17 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.editMode = !$scope.editMode;
     };
 
+    $scope.isEmpty = function() {
+
+        if ($scope.annotation.replyCommentValue == '' && $scope.annotation.replyDialog === true) {
+            EventDispatcher.sendEvent('disableToggle');
+            return true;
+        } else {
+            EventDispatcher.sendEvent('enableToggle');
+            return false;
+        }
+    };
+
     $scope.socialEvent = function(event, type) {
 
         var createItemFromResource = function(event) {
@@ -283,12 +308,14 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         if (type === 'comment') {
+            $scope.annotation.replyDialog = false;
+            $scope.isSaving = true
 
             promise = AnnotationDetails.socialEvent(currentId, $scope.annotation.parentId, type, 'add', $scope.annotation.replyCommentValue);
 
             promise.then(function(data) {
 
-                $scope.annotation.replyDialog = false;
+                $scope.isSaving = false;
                 $scope.replyTreeActivate = true;
                 $scope.isUserLogged = MyPundit.isUserLogged();
                 $scope.userData = AnnotationDetails.userData();
