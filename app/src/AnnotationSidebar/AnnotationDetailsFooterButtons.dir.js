@@ -17,6 +17,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 event.stopPropagation();
                 event.preventDefault();
             };
+
             var checkSocial = function(social) {
                 if ((typeof social.counting === 'undefined') || social.counting.comment === '') {
                     social.counting.comment = 0;
@@ -60,6 +61,15 @@ angular.module('Pundit2.AnnotationSidebar')
                 return social;
             };
 
+            var createItemFromResource = function(event) {
+                var values = {};
+                values.uri = 'lool';
+                values.icon = true;
+                values.elem = event.currentTarget;
+
+                return new Item(values.uri, values);
+            };
+
             scope.data.social = checkSocial(scope.data.social);
 
             scope.disabled = {
@@ -75,12 +85,17 @@ angular.module('Pundit2.AnnotationSidebar')
                 var screen =  angular.element(window) ;
                 scope.data.replyDialog = !scope.data.replyDialog;
 
+
                 if(typeof scope.data.repliesLoaded === 'undefined'){
                     scope.data.repliesLoaded = false;
                 }
 
-                if (!MyPundit.isUserLogged()){
+                if (!MyPundit.isUserLogged()) {
+                    angular.element(event.target).addClass('pnd-range-pos-icon');
                     scope.data.repliesLoaded = true;
+                    AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert');
+                    EventDispatcher.sendEvent('openContextualMenu');
+                    return;
                 }
 
                 if (!scope.data.expanded) {
@@ -166,14 +181,6 @@ angular.module('Pundit2.AnnotationSidebar')
             };
 
             scope.socialEvent = function(event, type) {
-                var createItemFromResource = function(event) {
-                    var values = {};
-                    values.uri = 'lool';
-                    values.icon = true;
-                    values.elem = event.currentTarget;
-
-                    return new Item(values.uri, values);
-                };
                 var contrary = {
                         like: 'dislike',
                         dislike: 'like',
