@@ -163,9 +163,9 @@ angular.module('Pundit2.AnnotationSidebar')
             $scope.annotation.replyCommentValue = '';
         }
 
-        if (!MyPundit.isUserLogged()){
-            $scope.annotation.repliesLoaded = true;
-        }
+        //if (!MyPundit.isUserLogged()){
+        //    $scope.annotation.repliesLoaded = true;
+        //}
 
         if ($scope.annotation.expanded && !$scope.annotation.repliesLoaded) {
             if (Config.modules.AnnotationDetails.social) {
