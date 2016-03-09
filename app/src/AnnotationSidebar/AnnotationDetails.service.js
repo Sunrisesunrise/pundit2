@@ -805,10 +805,12 @@ angular.module('Pundit2.AnnotationSidebar')
         var template;
         var currentColor;
 
-        //check thumbnail if null set default
-        if (currentAnnotation.thumbnail === '') {
-            currentAnnotation.thumbnail = 'http://s9.postimg.org/uylsxjghr/people_dialer_photo.png';
-        }
+        ////check thumbnail if null set default
+        //if (currentAnnotation.thumbnail === '') {
+        //    scope.thumbDefault = true;
+        //}else{
+        //    scope.thumbDefault = false;
+        //}
         console.log(currentAnnotation.creatorName + ' ' + currentAnnotation.thumbnail + ' ' + currentAnnotation.id);
 
 

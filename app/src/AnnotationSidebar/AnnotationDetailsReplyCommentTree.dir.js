@@ -29,6 +29,11 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.editMode = false;
             scope.replyDialog = true;
             scope.social = scope.data.social;
+            scope.data.defaultThumb = false;
+
+            if(scope.data.thumbnail == ''){
+                scope.data.defaultThumb = true;
+            }
             // console.log("inside directive "+AnnotationsExchange.getAnnotationById(scope.id).item);
 
 

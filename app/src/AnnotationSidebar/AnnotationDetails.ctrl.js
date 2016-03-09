@@ -52,6 +52,11 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.annotation.replyDialog = false;
     $scope.annotation.editCommentValue = '';
     $scope.annotation.replyCommentValue = '';
+    $scope.annotation.defaultThumb = false;
+
+    if($scope.annotation.thumbnail == ''){
+        $scope.annotation.defaultThumb = true;
+    }
 
 
     $scope.replyTreeActivate = false;

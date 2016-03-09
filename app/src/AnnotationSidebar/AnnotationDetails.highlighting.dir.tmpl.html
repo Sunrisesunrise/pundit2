@@ -37,11 +37,13 @@
              ng-init="meta = false">
 
             <!-- Default user's thumb -->
-            <div class="pnd-annotation-user-thumb-default"></div>
+            <div class="pnd-annotation-user-thumb-default"
+                 ng-show="annotation.defaultThumb"></div>
 
             <!-- User's thumb -->
             <img class="pnd-annotation-user-thumb"
                  src="{{annotation.thumbnail}}" width="30" height="30"
+                 ng-hide="annotation.defaultThumb"
                  alt="{{::annotation.creatorName}}"/>
 
             <!-- Edit Menu -->

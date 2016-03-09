@@ -2,10 +2,14 @@
 <div class="pnd-annotation-reply" ng-show="data.showReply">
 
     <!-- Default user's thumb -->
-    <div class="pnd-annotation-user-thumb-default"></div>
+    <div class="pnd-annotation-user-thumb-default"
+            ng-show="data.defaultThumb">
+
+    </div>
 
     <!-- User's thumb -->
     <img class="pnd-annotation-user-thumb"
+         ng-hide="data.defaultThumb"
          src="{{::data.thumbnail}}" width="20" height="20"
          alt="{{::data.creatorName}}"/>
 
