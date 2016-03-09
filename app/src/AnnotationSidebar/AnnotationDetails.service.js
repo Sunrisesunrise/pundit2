@@ -162,6 +162,64 @@ angular.module('Pundit2.AnnotationSidebar')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#AnnotationDetails.replyLike
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social reply like
+     *
+     * Default value:
+     * <pre> replyLike: true </pre>
+     */
+    replyLike: true,
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.replyDislike
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social dislike
+     *
+     * Default value:
+     * <pre> replyDislike: true </pre>
+     */
+    replyDislike: true,
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.replyEndorse
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social endorse
+     *
+     * Default value:
+     * <pre> replyEndorse: true </pre>
+     */
+    replyEndorse: true,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.replyReport
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social report
+     *
+     * Default value:
+     * <pre> replyReport: true </pre>
+     */
+    replyReport: true,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#AnnotationDetails.cMenuType
      *
      * @description

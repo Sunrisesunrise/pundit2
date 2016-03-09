@@ -80,6 +80,11 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.options = AnnotationDetails.options;
     $scope.optionsReplyes = angular.copy($scope.options);
     $scope.optionsReplyes.parentAnnotation = $scope.annotation;
+    $scope.optionsReplyes.like = $scope.options.replyLike;
+    $scope.optionsReplyes.dislike = $scope.options.replyDislike;
+    $scope.optionsReplyes.report = $scope.options.replyReport;
+    $scope.optionsReplyes.endorse = $scope.options.replyEndorse;
+
     AnnotationDetails.addScopeReference($scope.id, $scope);
 
 
