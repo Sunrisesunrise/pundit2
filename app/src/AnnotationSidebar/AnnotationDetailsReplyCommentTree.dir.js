@@ -31,8 +31,12 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.social = scope.data.social;
             scope.data.defaultThumb = false;
 
-            if(scope.data.thumbnail == ''){
+            if(scope.data.thumbnail == '' || (typeof scope.data.thumbnail === 'undefined')){
                 scope.data.defaultThumb = true;
+            }
+
+            if(scope.data.creatorName == '' || (typeof scope.data.creatorName === 'undefined')){
+                scope.data.creatorName = scope.userData.fullName;
             }
             // console.log("inside directive "+AnnotationsExchange.getAnnotationById(scope.id).item);
 
