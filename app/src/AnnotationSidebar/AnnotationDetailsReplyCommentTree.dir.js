@@ -31,6 +31,8 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.social = scope.data.social;
             scope.data.defaultThumb = false;
 
+            // @peppe: OPEN SLACK (!)
+
             if(scope.data.thumbnail == '' || (typeof scope.data.thumbnail === 'undefined')){
                 scope.data.defaultThumb = true;
             }
