@@ -36,6 +36,9 @@
              ng-class="{ 'pnd-annotation-details-meta-edit':( isUserToolShowed() ) }"
              ng-init="meta = false">
 
+            <!-- Default user's thumb -->
+            <div class="pnd-annotation-user-thumb-default"></div>
+
             <!-- User's thumb -->
             <img class="pnd-annotation-user-thumb"
                  src="{{annotation.thumbnail}}" width="30" height="30"

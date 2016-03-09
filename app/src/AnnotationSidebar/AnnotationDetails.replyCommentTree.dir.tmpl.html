@@ -1,6 +1,9 @@
 <!-- Reply read mode -->
 <div class="pnd-annotation-reply" ng-show="data.showReply">
 
+    <!-- Default user's thumb -->
+    <div class="pnd-annotation-user-thumb-default"></div>
+
     <!-- User's thumb -->
     <img class="pnd-annotation-user-thumb"
          src="{{::data.thumbnail}}" width="20" height="20"
@@ -12,9 +15,6 @@
          style="float:right"
          ng-if="isUserToolShowed()">
     </div>
-
-    <!-- Default user's thumb -->
-    <!--<div class="pnd-annotation-user-thumb-default"></div>-->
 
     <!-- Reply content -->
     <div class="pnd-annotation-reply-content">
