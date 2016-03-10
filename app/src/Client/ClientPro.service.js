@@ -607,6 +607,11 @@ angular.module('Pundit2.Client')
         $rootScope.$$phase || $rootScope.$digest();
     };
 
+    client.showClientBoot = function() {
+        Config.modules.Client.hiddenBootstrap = false;
+        client.showClient();
+    };
+
     // Reads the conf and initializes the active components, bootstrap what needs to be
     // bootstrapped (gets annotations, check if the user is logged in, etc)
     client.boot = function() {
@@ -695,7 +700,7 @@ angular.module('Pundit2.Client')
             Analytics.track('main-events', 'generic', 'client-bootstrap');
         }, 200);
 
-        if(client.options.hiddenBootstrap){
+        if (client.options.hiddenBootstrap) {
             client.hideClient();
         }
 

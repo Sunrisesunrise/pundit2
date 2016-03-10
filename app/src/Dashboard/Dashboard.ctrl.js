@@ -1,6 +1,6 @@
 angular.module('Pundit2.Dashboard')
 
-.controller('DashboardCtrl', function($document, $window, $rootScope, $scope, $compile, Dashboard) {
+.controller('DashboardCtrl', function($document, $window, $rootScope, $scope, $compile, Dashboard, Config) {
 
     var jqElement = {
         container: angular.element('.pnd-dashboard-container'),
@@ -54,15 +54,17 @@ angular.module('Pundit2.Dashboard')
     $scope.$watch(function() {
         return Dashboard.getContainerHeight();
     }, function(newHeight) {
-        jqElement.container.css({
-            'height': newHeight
-        });
+        if (!Config.modules.Client.hiddenBootstrap) {
+            jqElement.container.css({
+                'height': newHeight
+            });
 
-        // Push the body element down too
-        var top = parseInt(jqElement.container.css('top'), 10);
-        jqElement.body.css({
-            'marginTop': top + newHeight
-        });
+            // Push the body element down too
+            var top = parseInt(jqElement.container.css('top'), 10);
+            jqElement.body.css({
+                'marginTop': top + newHeight
+            });
+        }
     });
 
     $scope.$watch(function() {
@@ -80,14 +82,16 @@ angular.module('Pundit2.Dashboard')
     }, function(newVis, oldVis) {
         $scope.isDashboardVisible = newVis;
 
-        // If we are really toggling, set the new top: toolbar height if we
-        // are collapsed, else add our height too
-        if (typeof(newVis) !== "undefined" && typeof(oldVis) !== "undefined") {
-            var currentTop = parseInt(jqElement.container.css('top'), 10),
-                newTop = newVis ? currentTop + Dashboard.getContainerHeight() : currentTop;
-            jqElement.body.css({
-                'marginTop': newTop
-            });
+        if (!Config.modules.Client.hiddenBootstrap) {
+            // If we are really toggling, set the new top: toolbar height if we
+            // are collapsed, else add our height too
+            if (typeof(newVis) !== "undefined" && typeof(oldVis) !== "undefined") {
+                var currentTop = parseInt(jqElement.container.css('top'), 10),
+                    newTop = newVis ? currentTop + Dashboard.getContainerHeight() : currentTop;
+                jqElement.body.css({
+                    'marginTop': newTop
+                });
+            }
         }
     });
 
