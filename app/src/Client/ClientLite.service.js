@@ -67,6 +67,20 @@ angular.module('Pundit2.Client')
      * <pre> bodyClass: 'pnd-annotator' </pre>
      */
     bodyClass: 'pnd-annotator',
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Client.hiddenBootstrap
+     *
+     * @description
+     * `bool`
+     *
+     * hide pundit on bootstrap
+     *
+     * Default value:
+     * <pre> hiddenBootstrap: false </pre>
+     */
+    hiddenBootstrap: false
 })
 
 .service('ClientLite', function(CLIENTLITEDEFAULTS, BaseComponent, Config, EventDispatcher, Analytics, MyPundit, LiteTool,
@@ -250,9 +264,17 @@ angular.module('Pundit2.Client')
         client.log('Boot is completed, emitting pundit-boot-done event');
         EventDispatcher.sendEvent('Client.boot');
 
+
         setTimeout(function() {
             Analytics.track('main-events', 'generic', 'client-bootstrap');
         }, 200);
+
+        if(client.options.hiddenBootstrap){
+            client.hideClient();
+        }
+
+        Analytics.track('main-events', 'client--endBootstrap');
+
     };
 
     client.log("Component up and running");
