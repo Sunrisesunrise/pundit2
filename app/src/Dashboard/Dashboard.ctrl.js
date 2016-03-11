@@ -1,6 +1,6 @@
 angular.module('Pundit2.Dashboard')
 
-.controller('DashboardCtrl', function($document, $window, $rootScope, $scope, $compile, Dashboard, Config) {
+.controller('DashboardCtrl', function($document, $window, $rootScope, $scope, $compile, Dashboard) {
 
     var jqElement = {
         container: angular.element('.pnd-dashboard-container'),
@@ -54,7 +54,7 @@ angular.module('Pundit2.Dashboard')
     $scope.$watch(function() {
         return Dashboard.getContainerHeight();
     }, function(newHeight) {
-        if (!Config.modules.Client.hiddenBootstrap) {
+        if (typeof window.bootstrap === 'undefined' || (typeof window.bootstrap !== 'undefined' && window.bootstrap)) {
             jqElement.container.css({
                 'height': newHeight
             });
@@ -82,7 +82,7 @@ angular.module('Pundit2.Dashboard')
     }, function(newVis, oldVis) {
         $scope.isDashboardVisible = newVis;
 
-        if (!Config.modules.Client.hiddenBootstrap) {
+        if (typeof window.bootstrap === 'undefined' || (typeof window.bootstrap !== 'undefined' && window.bootstrap)) {
             // If we are really toggling, set the new top: toolbar height if we
             // are collapsed, else add our height too
             if (typeof(newVis) !== "undefined" && typeof(oldVis) !== "undefined") {

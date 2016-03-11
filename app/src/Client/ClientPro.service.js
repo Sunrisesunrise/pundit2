@@ -387,6 +387,9 @@ angular.module('Pundit2.Client')
         // Node which will contain every other component
         root;
 
+    if(Config.modules.Client.hiddenBootstrap){
+        window.bootstrap = false;
+    }
 
     var body = angular.element('body');
     body.addClass(client.options.bodyClass);
@@ -608,7 +611,8 @@ angular.module('Pundit2.Client')
     };
 
     client.showClientBoot = function() {
-        Config.modules.Client.hiddenBootstrap = false;
+        //Config.modules.Client.hiddenBootstrap = false;
+        $window.bootstrap = true;
         client.showClient();
     };
 
