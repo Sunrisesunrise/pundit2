@@ -17,8 +17,6 @@ angular.module('Pundit2.Annomatic')
         params.lang = Config.modules.Annomatic.sourceLang
     }
 
-    console.log(params)
-
     return $resource(baseURL, {}, {
         getAnnotations: {
             params: params,
