@@ -27,8 +27,9 @@ input[type="text"].form-control, input[type="time"].form-control, input[type="ur
     min-height: auto;
     border-radius: @input-border-radius;
     border-color: @input-border-color;
-    font-size: 13px;
     color: @color-text;
+    font-family: @font !important; // Fixes CSS conflicts
+    font-size: 13px;
     box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.05);
 
     &:hover {
@@ -49,6 +50,7 @@ textarea, textarea.form-control {
 }
 
 label, .checkbox label, .radio label {
+    font-family: @font !important; // Fixes CSS conflicts
     font-weight: @font-weight-normal;
 }
 

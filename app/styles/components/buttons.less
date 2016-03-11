@@ -20,16 +20,16 @@
     margin: 0;
     padding: 0 8px;
 
-    background-color: @color-button-bg;
+    background: @color-button-bg;
     background-image: none;
     border: @button-border-width solid @color-button-border;
     border-radius: 3px;
     outline: 0;
 
-    color: @color-button-text;
-    font-family: @font;
+    color: @color-button-text !important; // Fixes CSS conflicts
+    font-family: @font !important; // Fixes CSS conflicts
     font-size: 13px;
-    font-weight: @font-weight-normal;
+    font-weight: @button-font-weight;
     text-align: center;
     vertical-align: middle;
     white-space: nowrap;
@@ -40,10 +40,9 @@
     &:hover,
     &:focus,
     &.focus {
-        color: @color-button-text-hover;
+        background: @color-button-bg !important; // Fix CSS conflicts
         border-color: @color-button-border-hover;
-        background-color: @color-button-bg-hover;
-        // background: darken(@color-button-bg, 5); // TODO remove if not necessary
+        color: @color-button-text-hover !important; // Fixes CSS conflicts
         outline: 0;
         box-shadow: none;
     }
@@ -55,16 +54,23 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        background-color: @color-button-bg-disabled;
-        color: @color-button-text-disabled;
+        background: @color-button-bg !important; // Fix CSS conflicts
+        //color: @color-button-text-disabled;
         border-color: @color-button-border-disabled;
-        cursor: @cursor-disabled !important;
+        cursor: @cursor-disabled !important; // Fixes CSS conflicts
         pointer-events: none; // Future-proof disabling of clicks
     }
 
     i {
-        color: inherit;
+        color: inherit !important; // Fixes CSS conflicts
     }
+}
+
+/* Large buttons */
+.pnd-btn-large {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 13px;
 }
 
 /* Smaller buttons */
@@ -98,8 +104,8 @@ button[disabled] {
 \* ------------------------------------ */
 
 .pnd-btn-calltoaction {
-    color: @color-button-cta-text;
-    background-color: @color-button-cta-bg;
+    color: @color-button-cta-text !important; // Fixes CSS conflicts
+    background-color: @color-button-cta-bg !important;
     border: 0;
     .text-dark-emboss();
 
@@ -107,8 +113,8 @@ button[disabled] {
     &:hover,
     &:focus,
     &.focus {
-        color: @color-button-cta-text;
-        background-color: @color-button-cta-bg-hover;
+        color: @color-button-cta-text !important; // Fixes CSS conflicts
+        background-color: @color-button-cta-bg-hover !important; // Fix CSS conflicts
         border: 0;
     }
 
@@ -119,12 +125,11 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: @color-button-cta-text-disabled;
-        background-color: @color-button-cta-bg-disabled;
+        color: @color-button-cta-text-disabled !important; // Fixes CSS conflicts
+        background-color: @color-button-cta-bg-disabled !important; // Fix CSS conflicts
         border: 0;
         // color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class // TODO remove if not necessary
         text-shadow: none;
-        cursor: not-allowed;
     }
 }
 
@@ -135,8 +140,8 @@ button[disabled] {
 
 .pnd-btn-transparent {
     padding: 0 0;
-    color: @color-button-light-text;
-    background-color: transparent;
+    color: @color-button-light-text !important; // Fixes CSS conflicts
+    background-color: transparent !important; // Fix CSS conflicts
     background-image: none;
     border: 0;
     text-shadow: none;
@@ -145,8 +150,8 @@ button[disabled] {
     &:hover,
     &:focus,
     &.focus {
-        color: @color-button-light-text-hover;
-        background-color: transparent;
+        color: @color-button-light-text-hover !important; // Fixes CSS conflicts
+        background-color: transparent !important; // Fix CSS conflicts
         background-image: none;
         border: 0;
     }
@@ -158,11 +163,44 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: @color-button-light-text-disabled;
-        background-color: transparent;
+        color: @color-button-light-text-disabled !important; // Fixes CSS conflicts
+        background-color: transparent !important; // Fix CSS conflicts
         background-image: none;
         border: 0;
-        // color: fade(@color-text, 60%) !important; // for ovewritings on .disabled class // TODO remove if not necessary
+    }
+}
+
+
+/* ------------------------------------ *\
+   #DARK BUTTON
+\* ------------------------------------ */
+
+.pnd-btn-dark {
+    color: @color-button-cta-text !important; // Fixes CSS conflicts TODO Create variable
+    background-color: rgba(0,0,0,.8) !important; // TODO Create variable
+    border: 0;
+    .text-dark-emboss();
+
+    /* Hover state */
+    &:hover,
+    &:focus,
+    &.focus {
+        color: @color-button-cta-text !important; // Fixes CSS conflicts
+        background-color: rgba(0,0,0,.95) !important; // TODO Create variable
+        border: 0;
+    }
+
+    /* Active state */
+    // TODO
+
+    /* Disabled state */
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        color: @color-button-cta-text-disabled !important; // Fixes CSS conflicts TODO Create variable
+        background-color: rgba(0,0,0,.6) !important; // TODO Create variable
+        border: 0;
+        text-shadow: none;
     }
 }
 
@@ -174,16 +212,16 @@ button[disabled] {
 
 /* Subject button */
 .pnd-btn-subject {
-    color: @color-button-cta-text;
-    background-color: @color-subject;
+    color: @color-button-cta-text !important; // Fixes CSS conflicts
+    background-color: @color-subject !important;
     border: 0;
 
     /* Hover state */
     &:hover,
     &:focus,
     &.focus {
-        color: @color-button-cta-text;
-        background-color: darken(@color-subject, 5); // TODO To be introduced as variable?
+        color: @color-button-cta-text !important; // Fixes CSS conflicts
+        background-color: darken(@color-subject, 5) !important; // TODO To be introduced as variable?
     }
 
     /* Active state */
@@ -193,24 +231,24 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: @color-button-cta-text-disabled;
-        background-color: lighten(@color-subject, 20);
+        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class TODO To be introduced as variable?
+        background-color: lighten(@color-subject, 20) !important;
         text-shadow: none;
     }
 }
 
 /* Predicate button */
 .pnd-btn-predicate {
-    color: @color-button-cta-text;
-    background-color: @color-predicate;
+    color: @color-button-cta-text !important; // Fixes CSS conflicts
+    background-color: @color-predicate !important;
     border: 0;
 
     /* Hover state */
     &:hover,
     &:focus,
     &.focus {
-        color: @color-button-cta-text;
-        background-color: darken(@color-predicate, 5); // TODO To be introduced as variable?
+        color: @color-button-cta-text !important; // Fixes CSS conflicts
+        background-color: darken(@color-predicate, 5) !important; // TODO To be introduced as variable?
     }
 
     /* Active state */
@@ -220,24 +258,24 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: @color-button-cta-text-disabled;
-        background-color: lighten(@color-predicate, 20);
+        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class TODO To be introduced as variable?
+        background-color: lighten(@color-predicate, 20) !important;
         text-shadow: none;
     }
 }
 
 /* Object button */
 .pnd-btn-object {
-    color: @color-button-cta-text;
-    background-color: @color-object;
+    color: @color-button-cta-text !important; // Fixes CSS conflicts
+    background-color: @color-object !important;
     border: 0;
 
     /* Hover state */
     &:hover,
     &:focus,
     &.focus {
-        color: @color-button-cta-text;
-        background-color: darken(@color-object, 5); // TODO To be introduced as variable?
+        color: @color-button-cta-text !important; // Fixes CSS conflicts
+        background-color: darken(@color-object, 5) !important; // TODO To be introduced as variable?
     }
 
     /* Active state */
@@ -247,8 +285,8 @@ button[disabled] {
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        color: @color-button-cta-text-disabled;
-        background-color: lighten(@color-object, 20);
+        color: fade(@color-button-cta-text, 60%) !important; // for ovewritings on .disabled class TODO To be introduced as variable?
+        background-color: lighten(@color-object, 20) !important;
         text-shadow: none;
     }
 }

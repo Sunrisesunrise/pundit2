@@ -60,6 +60,22 @@ angular.module('Pundit2.Annomatic')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#Annomatic.sourceLang
+     *
+     * @description
+     * `string`
+     *
+     * Set the lang for DataTXT
+     * TODO: the default conf can't be read in DataTXT service, but can be overwritten by an external conf
+     *
+     * Default value:
+     * <pre> sourceLang: undefined </pre>
+     */
+    sourceLang: undefined,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#Annomatic.sourceURL
      *
      * @description
@@ -116,7 +132,22 @@ angular.module('Pundit2.Annomatic')
      * Default value:
      * <pre> partialSelection: false </pre>
      */
-    partialSelection: false
+    partialSelection: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Annomatic.targetsToSkip
+     *
+     * @description
+     * `array`
+     *
+     * Targets to skip in area selection
+     *
+     * Default value:
+     * <pre> targetsToSkip: [] </pre>
+     */
+    targetsToSkip: ['a', 'b', 'i', 'strong', 'td', 'tr']
 })
 
 /**
@@ -131,13 +162,17 @@ angular.module('Pundit2.Annomatic')
     DataTXTResource, XpointersHelper, ItemsExchange, TextFragmentHandler, ImageHandler, TypesHelper,
     Toolbar, DBPediaSpotlightResource, Item, AnnotationsCommunication, NameEntityRecognitionResource,
     $rootScope, $timeout, $document, $window, $q, Consolidation, ContextualMenu, TextFragmentAnnotator,
-    ModelHelper, MyPundit) {
+    AnnotationsExchange, ModelHelper, MyPundit, $compile) {
 
     var annomatic = new BaseComponent('Annomatic', ANNOMATICDEFAULTS);
 
     var state = {
         isRunning: false
     };
+
+    var scanBtn = null,
+        lastUsedTarget = null;
+
     EventDispatcher.sendEvent('Annomatic.isRunning', state.isRunning);
 
     annomatic.ann = {
@@ -166,8 +201,9 @@ angular.module('Pundit2.Annomatic')
     };
 
     annomatic.area = null;
-
     annomatic.annotationNumber = 0;
+    annomatic.userAnnotations = [];
+    annomatic.scanBtnStyle = {};
 
     if (annomatic.options.partialSelection) {
         ContextualMenu.addAction({
@@ -191,6 +227,12 @@ angular.module('Pundit2.Annomatic')
             }
         });
     }
+
+    var addButton = function() {
+        var button = angular.element('<scan-btn></scan-btn>');
+        angular.element('.pnd-wrp').append(button);
+        $compile(button)($rootScope);
+    };
 
     // Tries to find the given array of DataTXT annotations in the child nodes of the
     // given node. Finding them might be a very delicate and fun dance!
@@ -617,7 +659,8 @@ angular.module('Pundit2.Annomatic')
                 var item,
                     allValidAnnotations = findAnnotations(element, data.annotations),
                     validAnnotations = [],
-                    oldAnnotationNumber = annomatic.annotationNumber;
+                    oldAnnotationNumber = annomatic.annotationNumber,
+                    skippedNum = 0;
 
                 // validAnnotations = allValidAnnotations;
                 // TODO: improve confidence management
@@ -631,8 +674,34 @@ angular.module('Pundit2.Annomatic')
                 annomatic.currAnn = 0;
 
                 for (var l = validAnnotations.length, i = 0; i < l; i++) {
-                    var currentIndex = oldAnnotationNumber + i;
+                    var currentIndex = oldAnnotationNumber + i - skippedNum,
+                        stillAccepted = false;
+
                     item = TextFragmentHandler.createItemFromRange(validAnnotations[i].range);
+
+                    // TODO: optimize it with a graph map
+                    for (a in annomatic.userAnnotations) {
+                        var currentAnnotation = annomatic.userAnnotations[a],
+                            currentGraph = currentAnnotation.graph[item.uri],
+                            annotationObjectUri = validAnnotations[i].annotation.uri;
+
+                        if (typeof currentGraph !== 'undefined') {
+                            if (typeof currentGraph[annomatic.options.property] !== 'undefined') {
+                                if (typeof currentGraph[annomatic.options.property][0] !== 'undefined') {
+                                    if (currentGraph[annomatic.options.property][0].value === annotationObjectUri)  {
+                                        stillAccepted = true;
+                                        annomatic.log('User annotation still present');
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (stillAccepted) {
+                        annomatic.annotationNumber--;
+                        skippedNum++;
+                        continue;
+                    }
 
                     annomatic.ann.byNum[currentIndex] = validAnnotations[i].annotation;
                     annomatic.ann.numToUriMap[currentIndex] = item.uri;
@@ -662,16 +731,17 @@ angular.module('Pundit2.Annomatic')
 
         values.uri = ann.uri;
 
-        if (typeof(ann.types) === "undefined") {
+        if (typeof ann.types === 'undefined') {
             values.type = ['http://dbpedia.org/ontology/Thing'];
         } else if (ann.types.length === 0) {
             values.type = ['http://dbpedia.org/ontology/Thing'];
         } else {
             values.type = angular.copy(ann.types);
         }
-        values.description = ann.abstract;
 
+        values.description = ann.abstract;
         values.label = ann.label;
+
         if (values.label.length > TextFragmentHandler.options.labelMaxLength) {
             values.label = values.label.substr(0, TextFragmentHandler.options.labelMaxLength) + ' ..';
         }
@@ -864,7 +934,6 @@ angular.module('Pundit2.Annomatic')
     annomatic.log('Component up and running');
 
 
-
     // TODO: new code to be integrated
 
     /**
@@ -908,10 +977,11 @@ angular.module('Pundit2.Annomatic')
      * Start annomatic
      *
      */
-    annomatic.run = function() {
+    annomatic.run = function(userAnnotations) {
         state.isRunning = true;
         TextFragmentHandler.turnOff();
         ImageHandler.turnOff();
+
         if (Toolbar.isActiveTemplateMode()) {
             Toolbar.toggleTemplateMode();
         }
@@ -919,6 +989,14 @@ angular.module('Pundit2.Annomatic')
         if (annomatic.options.partialSelection) {
             angular.element('body').on('mousedown', mouseDownHandler);
         }
+
+        if (typeof userAnnotations !== 'undefined') {
+            annomatic.userAnnotations = userAnnotations;
+        }
+
+        angular.element('*').on('mouseenter', mouseEnterHandler);
+
+        addButton();
 
         EventDispatcher.sendEvent('Annomatic.isRunning', state.isRunning);
         $rootScope.$emit('annomatic-run');
@@ -937,7 +1015,8 @@ angular.module('Pundit2.Annomatic')
     annomatic.stop = function() {
         annomatic.closeAll();
         annomatic.hardReset();
-        // ItemsExchange.wipeContainer(annomatic.options.container);
+        annomatic.userAnnotations = [];
+
         state.isRunning = false;
         TextFragmentHandler.turnOn();
         ImageHandler.turnOn();
@@ -947,107 +1026,19 @@ angular.module('Pundit2.Annomatic')
             angular.element('body').off('mouseup', mouseUpHandler);
         }
 
+        angular.element('*').off('mouseenter', mouseEnterHandler);
+        angular.element('.selecting-ancestor').off('click', areaClick);
+        angular.element('.pnd-annomatic-scan-btn').remove();
+
+        angular.element('.selected-area-results')
+            .removeClass('selected-area-results');
+
+        scanBtn = null;
+        lastUsedTarget = null;
+
         EventDispatcher.sendEvent('Annomatic.isRunning', state.isRunning);
         $rootScope.$emit('annomatic-stop');
     };
-
-    // var buildTargets = function(subUri, predUri, objUri) {
-
-    //     var sub = ItemsExchange.getItemByUri(subUri),
-    //         pred = ItemsExchange.getItemByUri(predUri),
-    //         obj = ItemsExchange.getItemByUri(objUri),
-    //         res = [];
-
-    //     if (typeof(sub) === 'undefined' || typeof(pred) === 'undefined' || typeof(obj) === 'undefined') {
-    //         return;
-    //     }
-
-    //     if (sub.isTextFragment() || sub.isImage() || sub.isImageFragment()) {
-    //         if (res.indexOf(sub.uri) === -1) {
-    //             res.push(sub.uri);
-    //         }
-    //     }
-    //     if (pred.isTextFragment() || pred.isImage() || pred.isImageFragment()) {
-    //         if (res.indexOf(pred.uri) === -1) {
-    //             res.push(pred.uri);
-    //         }
-    //     }
-    //     if (obj.isTextFragment() || obj.isImage() || obj.isImageFragment()) {
-    //         if (res.indexOf(obj.uri) === -1) {
-    //             res.push(obj.uri);
-    //         }
-    //     }
-
-    //     return res;
-    // };
-
-    // var buildGraph = function(subUri, predUri, objUri) {
-
-    //     var sub = ItemsExchange.getItemByUri(subUri),
-    //         pred = ItemsExchange.getItemByUri(predUri),
-    //         obj = ItemsExchange.getItemByUri(objUri),
-    //         res = {};
-
-    //     if (typeof(sub) === 'undefined' || typeof(pred) === 'undefined' || typeof(obj) === 'undefined') {
-    //         return;
-    //     }
-
-    //     res[sub.uri] = {};
-    //     res[sub.uri][pred.uri] = [{
-    //         type: 'uri',
-    //         value: obj.uri
-    //     }];
-
-    //     return res;
-    // };
-
-    // var buildRDFItems = function(subUri, predUri, objUri) {
-
-    //     var sub = ItemsExchange.getItemByUri(subUri),
-    //         pred = ItemsExchange.getItemByUri(predUri),
-    //         obj = ItemsExchange.getItemByUri(objUri),
-    //         res = {};
-
-    //     if (typeof(sub) === 'undefined' || typeof(pred) === 'undefined' || typeof(obj) === 'undefined') {
-    //         return;
-    //     }
-
-    //     // add item and its rdf properties
-    //     res[sub.uri] = sub.toRdf();
-    //     res[pred.uri] = pred.toRdf();
-    //     res[obj.uri] = obj.toRdf();
-
-    //     // add object types and its label
-    //     obj.type.forEach(function(e, i) {
-    //         var type = obj.type[i];
-    //         res[type] = {};
-    //         res[type][NameSpace.rdfs.label] = [{
-    //             type: 'literal',
-    //             value: TypesHelper.getLabel(e)
-    //         }];
-    //     });
-    //     // add subject types and its label
-    //     sub.type.forEach(function(e, i) {
-    //         var type = sub.type[i];
-    //         res[type] = {};
-    //         res[type][NameSpace.rdfs.label] = [{
-    //             type: 'literal',
-    //             value: TypesHelper.getLabel(e)
-    //         }];
-    //     });
-    //     // add predicate types and its label
-    //     pred.type.forEach(function(e, i) {
-    //         var type = pred.type[i];
-    //         res[type] = {};
-    //         res[type][NameSpace.rdfs.label] = [{
-    //             type: 'literal',
-    //             value: TypesHelper.getLabel(e)
-    //         }];
-    //     });
-
-    //     return res;
-
-    // };
 
     /**
      * @ngdoc method
@@ -1101,6 +1092,8 @@ angular.module('Pundit2.Annomatic')
             annomatic.ann.savedByNum.push(num);
             annomatic.setState(num, 'accepted');
             annomatic.reviewNext(num + 1);
+
+            annomatic.userAnnotations[annId] = AnnotationsExchange.getAnnotationById(annId);
         });
     };
 
@@ -1108,7 +1101,7 @@ angular.module('Pundit2.Annomatic')
     //     // save all accepted annotation
     //     for (var i=0; i<annomatic.ann.byState.accepted.length; i++) {
     //         var index = annomatic.ann.byState.accepted[i];
-    //         annomatic.save(index);    
+    //         annomatic.save(index);
     //     }
     // };
 
@@ -1297,7 +1290,7 @@ angular.module('Pundit2.Annomatic')
                     });
 
                     if (typeof(ann.entities) === 'undefined') {
-                        // create item from resource 
+                        // create item from resource
                         ItemsExchange.addItemToContainer(createItemFromNERAnnotation(ann), annomatic.options.container);
                     } else {
                         for (var ent in ann.entities) {
@@ -1355,7 +1348,7 @@ angular.module('Pundit2.Annomatic')
     var ancestor;
     var mouseCheck = false;
 
-    var mouseDownHandler = function() {
+    function mouseDownHandler() {
         angular.element('body').on('mousemove', function() {
             var r = getSelectedRange();
 
@@ -1373,9 +1366,9 @@ angular.module('Pundit2.Annomatic')
             mouseCheck = false;
         });
         angular.element('body').on('mouseup', mouseUpHandler);
-    };
+    }
 
-    var mouseUpHandler = function(upEvt) {
+    function mouseUpHandler(upEvt) {
         angular.element('body').off('mouseup', mouseUpHandler);
         angular.element('body').off('mousemove');
 
@@ -1395,6 +1388,125 @@ angular.module('Pundit2.Annomatic')
             ContextualMenu.show(upEvt.pageX, upEvt.pageY, annotationsRootNode, annomatic.options.cMenuType);
             // $rootScope.$apply();
         }
+    }
+
+    function mouseEnterHandler(event) {
+        var currentTarget = event.currentTarget,
+            targetsToSkip = annomatic.options.targetsToSkip,
+            rects = {},
+            currentHeight, currentWidth, currentTop, currentLeft;
+
+        var stopHandler = function() {
+            lastUsedTarget = null;
+
+            scanBtn.scanBtnStyle = {};
+            $rootScope.$$phase || $rootScope.$digest();
+            event.stopImmediatePropagation();
+        };
+
+        angular.element('.selecting-ancestor')
+            .off('click', areaClick)
+            .removeClass('selecting-ancestor');
+
+        if (TextFragmentHandler.isToBeIgnored(currentTarget) ||
+            currentTarget.nodeName === 'IMG') {
+            stopHandler();
+            return;
+        }
+
+        if (currentTarget.className.indexOf('pnd-wrp') !== -1 &&
+            lastUsedTarget !== null) {
+            currentTarget = lastUsedTarget;
+        }
+
+        while (targetsToSkip.indexOf(currentTarget.nodeName.toLowerCase()) !== -1 ||
+            angular.element(currentTarget).text().replace(' ', '').length < 90 &&
+            currentTarget.parentNode.nodeName.toLowerCase() !== 'body') {
+            currentTarget = currentTarget.parentNode;
+        }
+
+        if (currentTarget.className.indexOf('selected-area-results') !== -1 ||
+            angular.element(currentTarget).text().replace(' ', '').length > 3200) {
+            stopHandler();
+            return;
+        }
+
+        if (angular.element('.pnd-annomatic-scan-btn').length === 0) {
+            addButton();
+        }
+
+        if (scanBtn !== null && lastUsedTarget !== currentTarget) {
+            rects = currentTarget.getBoundingClientRect();
+
+            currentHeight = Math.max(0, rects.top > 0 ?
+                Math.min(rects.height, window.innerHeight - rects.top) :
+                (rects.bottom < window.innerHeight ? rects.bottom : window.innerHeight));
+
+            currentWidth = rects.width < window.innerWidth ?
+                rects.width : window.innerWidth;
+                
+            currentTop = rects.top > 0 ? rects.top : 0;
+            currentLeft = rects.left > 0 ? rects.left : 0;
+
+            scanBtn.scanBtnStyle = {
+                top: currentTop + (currentHeight / 2) + window.scrollY - 16,
+                left: currentLeft + (currentWidth / 2) + window.scrollX - 29
+            };
+
+            $rootScope.$$phase || $rootScope.$digest();
+        }
+
+        lastUsedTarget = currentTarget;
+
+        angular.element(currentTarget)
+            .addClass('selecting-ancestor')
+            .on('click', areaClick);
+        event.stopImmediatePropagation();
+    }
+
+    function areaClick() {
+        if (lastUsedTarget === null) {
+            return;
+        }
+
+        var annotationsRootNode = angular.element(lastUsedTarget);
+
+        var isToBeSkipped = function(node) {
+            var classToSkip = 'selected-area-results';
+
+            while (node.nodeName.toLowerCase() !== 'body') {
+                if (angular.element(node).hasClass(classToSkip)) {
+                    return true;
+                }
+
+                if (node.parentNode === null) {
+                    return false;
+                }
+                node = node.parentNode;
+            }
+            return false;
+        };
+
+        if (isToBeSkipped(lastUsedTarget)) {
+            return;
+        }
+
+        if (lastUsedTarget !== null) {
+            annotationsRootNode
+                .removeClass('selecting-ancestor');
+            angular.element('.pnd-annomatic-scan-btn')
+                .remove();
+            angular.element('.selected-area-results')
+                .removeClass('selected-area-results');
+
+            annomatic.area = annotationsRootNode;
+            annomatic.getAnnotationByArea();
+        }
+    }
+
+    annomatic.addScanBtnRef = function(scope) {
+        scanBtn = scope;
+        scanBtn.scanCurrentArea = areaClick;
     };
 
     /**
@@ -1418,6 +1530,8 @@ angular.module('Pundit2.Annomatic')
         annomatic.getAnnotations(annotationsRootNode).then(function() {
             // AnnotationSidebar.toggleLoading();
             EventDispatcher.sendEvent('Annomatic.loading', false);
+            angular.element(annotationsRootNode)
+                .addClass('selected-area-results');
             Consolidation.consolidate(ItemsExchange.getItemsByContainer(annomatic.options.container));
             setTimeout(function() {
                 TextFragmentAnnotator.showAll();

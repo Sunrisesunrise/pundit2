@@ -153,7 +153,7 @@ angular.module('Pundit2.Core')
     debug: false
 })
 
-.service('Analytics', function(BaseComponent, EventDispatcher, Utils, $window, $document, $interval, $timeout, ANALYTICSDEFAULTS) {
+.service('Analytics', function(BaseComponent, EventDispatcher, Utils, $window, $document, $interval, $timeout, Config, ANALYTICSDEFAULTS) {
 
     var analytics = new BaseComponent('Analytics', ANALYTICSDEFAULTS);
 
@@ -309,7 +309,7 @@ angular.module('Pundit2.Core')
         if (analytics.options.doMixpanel === false) {
             return;
         }
-        if (event.eventAction !== 'click') {
+        if (event.eventCategory !== 'main-events') {
             return;
         }
         if (analytics.options.chromeExtMode) {
@@ -319,7 +319,8 @@ angular.module('Pundit2.Core')
                     type: 'mixpanel',
                     properties: event,
                     url: window.location.href,
-                    canonical: Utils.getCanonicalUrl()
+                    canonical: Utils.getCanonicalUrl(),
+                    clientMode: Config.clientMode
                 }
             });
         } else {

@@ -10,7 +10,6 @@ angular.module('Pundit2.Client')
         return $delegate;
     });
 })
-
 .run(function($injector, Config) {
     if (Config.isValid()) {
         if (Config.isModuleActive('Client')) {
@@ -20,7 +19,7 @@ angular.module('Pundit2.Client')
     }
 })
 
-.service('Client', function(Config, $injector) {
+.service('Client', function(Config, $injector, $window) {
     if (Config.clientMode === 'lite') {
         return $injector.get('ClientLite');
     } else {

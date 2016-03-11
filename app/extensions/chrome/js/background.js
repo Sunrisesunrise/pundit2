@@ -467,6 +467,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 event = data.properties;
                 event.realUrl = data.url;
                 event.canonicalUrl = data.canonical;
+                event.clientMode = data.clientMode;
 
                 mixpanel.track(event.eventLabel, event);
             }

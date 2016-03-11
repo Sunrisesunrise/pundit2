@@ -82,7 +82,9 @@ angular.module('Pundit2.AnnotationSidebar')
 
             scope.replyAnnotation = function(event) {
                 var scopeRef = AnnotationDetails.getScopeReference(scope.id);
-                var screen = angular.element(window);
+                    screen = angular.element(window),
+                    iconReference = angular.element(event.target);
+
                 scope.data.replyDialog = !scope.data.replyDialog;
 
 
@@ -91,10 +93,10 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
 
                 if (!MyPundit.isUserLogged()) {
-                    angular.element(event.target).addClass('pnd-range-pos-icon');
+                    iconReference.addClass('pnd-range-pos-icon');
                     scope.data.repliesLoaded = true;
                     scope.data.replyDialog = false;
-                    AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert');
+                    AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert', iconReference);
                     EventDispatcher.sendEvent('openContextualMenu');
                     return;
                 }
@@ -187,11 +189,12 @@ angular.module('Pundit2.AnnotationSidebar')
                         report: 'endorse'
                     },
                     promise = {},
-                    operation = '';
+                    operation = '',
+                    iconReference = angular.element(event.target);
 
                 if (!MyPundit.isUserLogged()) {
-                    angular.element(event.target).addClass('pnd-range-pos-icon');
-                    AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert');
+                    iconReference.addClass('pnd-range-pos-icon');
+                    AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert', iconReference);
                     EventDispatcher.sendEvent('openContextualMenu');
                     return;
                 }

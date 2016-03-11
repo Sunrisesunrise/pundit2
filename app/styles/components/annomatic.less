@@ -13,6 +13,12 @@ annomatic-panel.fixed > header {
     right: 0;
 }
 
+body .pnd-wrp .pnd-annomatic-scan-btn {
+    position: absolute;
+    top: -10000px;
+    z-index: 1000000000;
+}
+
 
 /* ------------------------------------ *\
    #ANNOMATIC-IN-ANNOTATIONS-SIDEBAR
@@ -31,7 +37,7 @@ annomatic-panel.fixed > header {
         p {
             padding: 5px 10px;
             color: @color-text;
-            font-size: 13px;
+            font-size: 12px; // Switch back to 13px when the bug of the right font not being loaded wll be fixed
         }
 
         .value {
@@ -50,6 +56,25 @@ annomatic-panel.fixed > header {
             margin-top: 45px;
             z-index: 3;
             text-align: center;
+        }
+
+        /* Contains text... vertical center */
+        .pnd-annomatic-content-text {
+            position: fixed;
+            top: 50%; /* Is the height of the buttons above */
+            margin-top: -14px;
+            width: @annotation-sidebar-exp-width;
+            z-index: 3;
+            text-align: center;
+            h1, p {
+                margin: 0 10px;
+                text-align: center;
+            }
+
+            h1 {
+                font-size: 22px;
+                color: @color-text-light;
+            }
         }
     }
 }
@@ -164,8 +189,8 @@ body .pnd-annomatic-popover {
         .pnd-annomatic-popover-details {
             height: @annomatic-popover-height - 120px; // 120 height of header, footer, confidence
             padding: 15px;
-            overflow-y: auto;
-            overflow-x: hidden;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
         }
 
         .pnd-preview-item-types {

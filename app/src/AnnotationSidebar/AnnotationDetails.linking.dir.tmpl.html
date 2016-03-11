@@ -9,6 +9,7 @@
 
         <div class="pnd-annotation-collapsed-subject"
              ng-class="{'pnd-annotation-annotated-fragment': (annotation.mainItem.typeLabel == 'Text fragment'),
+                        'pnd-annotation-annotated-fragment-external': (annotation.mainItem.isExternal),
                         'pnd-annotation-annotated-resource': (annotation.mainItem.typeLabel == 'resource'),
                         'pnd-annotation-page': (annotation.mainItem.typeLabel == 'WebPage')}">
             <span>{{ annotation.mainItem.label }}</span> <!-- TODO For images instead of "label" we should use the ALT attribute if present -->
@@ -104,7 +105,8 @@
                             item.subject.typeLabel != 'resource' &&
                             item.subject.typeLabel != 'Image' &&
                             item.subject.typeLabel != 'Image fragment'"
-                     ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment'}">
+                     ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment',
+                     'pnd-annotation-annotated-fragment-external': item.subject.isExternal}">
                     <span>
                         {{ item.subject.description }}
                     </span>
@@ -198,6 +200,7 @@
                 <!-- Object -->
                 <!-- Text fragment || resource -->
                 <div class="pnd-annotation-details-object pnd-annotation-annotated-fragment pnd-annotation-entity-details"
+                     ng-class="{'pnd-annotation-annotated-fragment-external': item.objects[0].isExternal}"
                      ng-if="item.objects[0].typeLabel == 'Text fragment'">
                     <span>
                         <!-- {{ item.objects[0].description | limitTo:200 }} -->
@@ -205,8 +208,8 @@
                     </span>
 
                     <div class="pnd-annotation-original-page"
-                         ng-if="item.subject.isExternal">
-                        <a href="{{item.subject.pageContext}}">Open in original page</a>
+                         ng-if="item.objects[0].isExternal">
+                        <a href="{{item.objects[0].pageContext}}" target="_blank">Open in original page</a>
                     </div>
                 </div>
 

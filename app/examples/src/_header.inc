@@ -28,6 +28,6 @@
     
 </head>
 <body>
-    <header class="examples pnd-wrp">
+    <header class="examples">
         <h2>Pundit 2 examples</h2>
     </header>

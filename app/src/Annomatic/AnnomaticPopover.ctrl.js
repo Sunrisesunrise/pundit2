@@ -1,6 +1,6 @@
 angular.module('Pundit2.Annomatic')
 
-.controller('AnnomaticPopoverCtrl', function($rootScope, $scope, Annomatic, EventDispatcher, MyPundit) {
+.controller('AnnomaticPopoverCtrl', function($rootScope, $scope, Annomatic, EventDispatcher, MyPundit, PndPopover) {
 
     // Using popover's content variable to pass the number of the 
     // annotation
@@ -29,6 +29,9 @@ angular.module('Pundit2.Annomatic')
         Annomatic.setLastState($scope.num);
         event.stopPropagation();
         event.preventDefault();
+
+        // TODO: temporary fix: use AnnotationPopover and check why this function is not used
+        PndPopover.hide();
     };
 
     $scope.setOk = function(event) {
@@ -48,7 +51,7 @@ angular.module('Pundit2.Annomatic')
 
             }
         });
-        
+
         event.stopPropagation();
         event.preventDefault();
     };
@@ -61,36 +64,17 @@ angular.module('Pundit2.Annomatic')
 
     $scope.goNext = function(event) {
         $scope.$hide();
-      //  angular.element('.pnd-range-pos-icon').removeClass("pnd-range-pos-icon");
+        //  angular.element('.pnd-range-pos-icon').removeClass("pnd-range-pos-icon");
         Annomatic.setLastState($scope.num);
         Annomatic.reviewNext($scope.num + 1);
         event.stopPropagation();
         event.preventDefault();
     };
 
-    // $scope.goPrev = function() {
-    //     $scope.$hide();
-    //     Annomatic.setLastState($scope.num);
-    //     Annomatic.reviewNext($scope.num - 1);  
-    // };
-
-    // $scope.acceptAll = function() {
-    //     // TODO move this in service
-    //     var id = $scope.ann.byNum[$scope.num].id,
-    //         similar = $scope.ann.byId[id];
-
-    //     for (var i=similar.length; i--;) {
-    //         if($scope.ann.savedByNum.indexOf(similar[i]) === -1){
-    //             Annomatic.save(similar[i]);
-    //         } else{
-    //             Annomatic.setState($scope.num, 'accepted');
-    //         }
-    //         // Annomatic.setState(similar[i], 'accepted');
-    //     }
-
-    //     $scope.$hide();
-    //     // Annomatic.reviewNext($scope.num + 1);
-    // };
+    $scope.popoverClick = function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+    };
 
     $scope.toggleSimilar = function() {
         var ann = $scope.ann.byNum[$scope.num],

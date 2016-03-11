@@ -399,7 +399,6 @@ angular.module('Pundit2.Core')
                         loginPromise.resolve(true);
                         $interval.cancel(stopTime);
                         $timeout.cancel(loginPollTimer);
-                        Analytics.track('main-events', 'user--login');
                         loginpopup.close();
                     }
                 },
@@ -455,7 +454,7 @@ angular.module('Pundit2.Core')
             EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
             userData = {};
             logoutPromise.resolve(true);
-            Analytics.track('main-events', 'user--logout');
+            Analytics.track('main-events', 'generic', 'user-logout');
             EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
                 event: 'Pundit.userProfileUpdated',
                 data: null
@@ -590,6 +589,7 @@ angular.module('Pundit2.Core')
                         }
                         else {
                             if (params.data === 'userLoggedIn') {
+                                Analytics.track('main-events', 'generic', 'user-login');
                                 popoverState.popover.$scope.postLoginPreCheck = true;
                                 myPundit.checkLoggedIn().then(function (status) {
                                     popoverState.popover.$scope.isLoading = false;

@@ -205,6 +205,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.isSuggestionsPanelActive = function() {
         return AnnotationSidebar.isSuggestionsPanelActive();
     };
+
     $scope.activateSuggestionsPanel = function() {
         AnnotationSidebar.activateSuggestionsPanel();
     };
@@ -212,12 +213,14 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.isAnnotationsPanelActive = function() {
         return AnnotationSidebar.isAnnotationsPanelActive();
     };
+
     $scope.activateAnnotationsPanel = function() {
         AnnotationSidebar.activateAnnotationsPanel();
     };
 
     $scope.updateSearch = function(freeText) {
         AnnotationSidebar.filters.freeText.expression = freeText;
+        Analytics.track('main-events', 'generic', 'use-filter', 'freeText:' + freeText);
     };
 
     $scope.updateDate = function(date, fromTo) {
@@ -282,9 +285,11 @@ angular.module('Pundit2.AnnotationSidebar')
         if (indexFilter === -1) {
             AnnotationSidebar.filters[currentFilter].expression.push(currentUri);
             AnnotationSidebar.toggleActiveFilter(currentFilter, currentUri);
+            Analytics.track('main-events', 'generic', 'use-filter', currentFilter + ':' + currentUri);
         } else {
             AnnotationSidebar.filters[currentFilter].expression.splice(indexFilter, 1);
             AnnotationSidebar.toggleActiveFilter(currentFilter, currentUri);
+            Analytics.track('main-events', 'generic', 'reset-filter', currentFilter + ':' + currentUri);
         }
     };
 

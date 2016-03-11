@@ -2,9 +2,14 @@ var punditConfig = {
     annotationServerBaseURL: 'https://staging.punditbrain.netseven.it:8443/annotationserver/',
     // annotationServerBaseURL: 'https://server.thepund.it/annotationserver/',
     annotationServerVersion: 'v2',
+    // clientMode: 'lite',
     modules: {
         'Client': {
             active: true
+        },
+        'Annomatic': {
+            active: true,
+            sourceLang: 'fr' // test
         },
         'Analytics': {
             doTracking: true,

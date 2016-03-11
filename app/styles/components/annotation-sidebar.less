@@ -70,8 +70,9 @@
     width: 100%;
     height: 30px;
     padding: 0 10px;
-    background-color: #FFF;
+    background-color: #FFF !important;
     border-bottom: 1px solid @color-border-normal;
+    color: @color-text !important;
     line-height: 26px;
 }
 
@@ -90,6 +91,10 @@
         position: relative;
         text-align: left;
         font-size: 13px;
+
+        &:hover {
+            background-color: #FFF !important; // Fix CSS conflicts
+        }
 
         span {
             position: absolute;

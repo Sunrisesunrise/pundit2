@@ -112,7 +112,7 @@ angular.module('Pundit2.Annotators')
                     fragmentId = ContextualMenu.getLastRef(),
                     resourceElem = angular.element("[about='" + item.uri + "']");
                 resourceElem.addClass('pnd-range-pos-icon');
-                AnnotationPopover.show(coordinates.x, coordinates.y, item, '', fragmentId, 'comment');
+                AnnotationPopover.show(coordinates.x, coordinates.y, item, '', fragmentId, 'comment', resourceElem);
             }
         });
 
