@@ -78,6 +78,7 @@ angular.module('Pundit2.Client')
 
     $document.on('Pundit.hide', Client.hideClient);
     $document.on('Pundit.show', Client.showClient);
+    $document.on('Pundit.showBootstrap', Client.showClientBoot);
     $document.on('Pundit.requestAnnotationsNumber', requestAnnotationsNumber);
     $document.on('Pundit.requestUserProfileUpdate', userStatusUpdate);
     $document.on('Pundit.requestUserLoggedStatus', userStatusUpdate);

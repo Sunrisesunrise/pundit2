@@ -355,7 +355,21 @@ angular.module('Pundit2.Client')
         "suggestedObjectTypes": ["http://www.w3.org/2001/XMLSchema#dateTime"],
         "vocabulary": "Basic Relation",
         "uri": "http://purl.org/dc/terms/date"
-    }]
+    }],
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ClientPro.hiddenBootstrap
+     *
+     * @description
+     * `bool`
+     *
+     * hide pundit on bootstrap
+     *
+     * Default value:
+     * <pre> hiddenBootstrap: false </pre>
+     */
+    hiddenBootstrap: false
 })
 
 // ImageAnnotator service MUST be injected before TextFragmentAnnotator
@@ -374,6 +388,7 @@ angular.module('Pundit2.Client')
         root;
 
     var body = angular.element('body');
+    body.addClass(client.options.bodyClass);
 
     // Verifies that the root node has the wrap class
     var fixRootNode = function() {
@@ -590,6 +605,11 @@ angular.module('Pundit2.Client')
         $rootScope.$$phase || $rootScope.$digest();
     };
 
+    client.showClientBoot = function() {
+        Status.setState('Pundit', 'canBeShowedAfterHidden', true);
+        client.showClient();
+    };
+
     // Reads the conf and initializes the active components, bootstrap what needs to be
     // bootstrapped (gets annotations, check if the user is logged in, etc)
     client.boot = function() {
@@ -673,9 +693,17 @@ angular.module('Pundit2.Client')
         client.log('Boot is completed, emitting pundit-boot-done event');
         EventDispatcher.sendEvent('Client.boot');
 
+
         setTimeout(function() {
             Analytics.track('main-events', 'generic', 'client-bootstrap');
         }, 200);
+
+        if (client.options.hiddenBootstrap) {
+            client.hideClient();
+        }
+
+        Analytics.track('main-events', 'client--endBootstrap');
+
 
         // TODO:
         // * Lists (My, page?, vocabs?, selectors?)
@@ -687,7 +715,7 @@ angular.module('Pundit2.Client')
 
     };
 
-    // TODO: find a better place for this check? 
+    // TODO: find a better place for this check?
     client.OS = '';
     if (navigator.appVersion.indexOf("Win") !== -1) {
         client.OS = "Windows";
