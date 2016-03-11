@@ -20,9 +20,6 @@ angular.module('Pundit2.Client')
 })
 
 .service('Client', function(Config, $injector, $window) {
-
-    $window.bootstrap = 'undefined';
-
     if (Config.clientMode === 'lite') {
         return $injector.get('ClientLite');
     } else {

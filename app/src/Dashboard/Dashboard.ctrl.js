@@ -1,12 +1,14 @@
 angular.module('Pundit2.Dashboard')
 
-.controller('DashboardCtrl', function($document, $window, $rootScope, $scope, $compile, Dashboard) {
+.controller('DashboardCtrl', function($document, $window, $rootScope, $scope, $compile, Dashboard, Config, Status) {
 
     var jqElement = {
         container: angular.element('.pnd-dashboard-container'),
         footer: angular.element('.pnd-dashboard-footer'),
         body: angular.element('body')
     };
+
+    var punditStatus = Status.getState('Pundit');
 
     // set footer height
     jqElement.footer.css({
@@ -54,7 +56,7 @@ angular.module('Pundit2.Dashboard')
     $scope.$watch(function() {
         return Dashboard.getContainerHeight();
     }, function(newHeight) {
-        if (typeof window.bootstrap === 'undefined' || (typeof window.bootstrap !== 'undefined' && window.bootstrap)) {
+        if (Config.modules.Client.hiddenBootstrap === false || punditStatus.canBeShowedAfterHidden) {
             jqElement.container.css({
                 'height': newHeight
             });
@@ -82,7 +84,7 @@ angular.module('Pundit2.Dashboard')
     }, function(newVis, oldVis) {
         $scope.isDashboardVisible = newVis;
 
-        if (typeof window.bootstrap === 'undefined' || (typeof window.bootstrap !== 'undefined' && window.bootstrap)) {
+        if (Config.modules.Client.hiddenBootstrap === false || punditStatus.canBeShowedAfterHidden) {
             // If we are really toggling, set the new top: toolbar height if we
             // are collapsed, else add our height too
             if (typeof(newVis) !== "undefined" && typeof(oldVis) !== "undefined") {

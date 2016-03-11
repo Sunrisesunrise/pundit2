@@ -15,6 +15,7 @@ angular.module('Pundit2.Core')
         Toolbar: {},
         Pundit: {
             clientBoot: false,
+            canBeShowedAfterHidden: false,
             userLogged: false,
             loading: false,
             templateMode: false,
@@ -114,6 +115,14 @@ angular.module('Pundit2.Core')
     EventDispatcher.addListener('Pundit.alert', function(e) {
         alertLog.push(e.args);
     });
+
+    status.setState = function(component, property, value) {
+        if (typeof state[component] === 'undefined') {
+            return;
+        }
+        
+        state[component][property] = value;
+    };
 
     status.getState = function(component) {
         return state[component];

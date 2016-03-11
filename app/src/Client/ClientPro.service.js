@@ -387,13 +387,8 @@ angular.module('Pundit2.Client')
         // Node which will contain every other component
         root;
 
-    if(Config.modules.Client.hiddenBootstrap){
-        window.bootstrap = false;
-    }
-
     var body = angular.element('body');
     body.addClass(client.options.bodyClass);
-
 
     // Verifies that the root node has the wrap class
     var fixRootNode = function() {
@@ -611,8 +606,7 @@ angular.module('Pundit2.Client')
     };
 
     client.showClientBoot = function() {
-        //Config.modules.Client.hiddenBootstrap = false;
-        $window.bootstrap = true;
+        Status.setState('Pundit', 'canBeShowedAfterHidden', true);
         client.showClient();
     };
 
