@@ -81,7 +81,7 @@ angular.module('Pundit2.AnnotationSidebar')
             };
 
             scope.replyAnnotation = function(event) {
-                var scopeRef = AnnotationDetails.getScopeReference(scope.id);
+                var scopeRef = AnnotationDetails.getScopeReference(scope.id),
                     screen = angular.element(window),
                     iconReference = angular.element(event.target);
 

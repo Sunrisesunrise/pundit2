@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationPopover')
 
-.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout) {
+.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout, EventDispatcher) {
     var annotationPopover = new BaseComponent('AnnotationPopover');
 
     var changePopoverPlacement = function(state, placement) {
@@ -261,6 +261,10 @@ angular.module('Pundit2.AnnotationPopover')
                     var elem = angular.element('.pnd-range-pos-icon');
                     elem.removeClass('pnd-range-pos-icon');
                     angular.element($window).off('resize', resizeCallback);
+
+                    if(typeof mode !== 'undefined' && mode === 'alert'){
+                        EventDispatcher.sendEvent('closeContextualMenu');
+                    }
                 }
             };
 
