@@ -363,7 +363,7 @@ angular.module('Pundit2.AnnotationSidebar')
             label: 'Edit',
             priority: 97,
             action: function(scope) {
-                var event = {};
+                var event = document.createEvent('Event');
                 EventDispatcher.sendEvent('openContextualMenu');
                 scope.editComment(event);
             }
