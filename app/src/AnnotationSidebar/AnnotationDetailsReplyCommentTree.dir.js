@@ -33,11 +33,11 @@ angular.module('Pundit2.AnnotationSidebar')
 
             // @peppe: OPEN SLACK (!)
 
-            if(scope.data.thumbnail == '' || (typeof scope.data.thumbnail === 'undefined')){
+            if (scope.data.thumbnail == '' || (typeof scope.data.thumbnail === 'undefined')) {
                 scope.data.defaultThumb = true;
             }
 
-            if(scope.data.creatorName == '' || (typeof scope.data.creatorName === 'undefined')){
+            if (scope.data.creatorName == '' || (typeof scope.data.creatorName === 'undefined')) {
                 scope.data.creatorName = scope.userData.fullName;
             }
             // console.log("inside directive "+AnnotationsExchange.getAnnotationById(scope.id).item);
@@ -55,6 +55,17 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.menuEdit = function(evt) {
                 AnnotationDetails.menuEdit(evt.toElement, scope);
                 console.log("inside menu");
+            };
+
+            scope.saveEdit = function(event) {
+
+                var promise = AnnotationDetails.socialEvent(scope.data.id, scope.data.parentId, 'editComment', 'add', scope.data.content);
+
+                promise.then(function() {
+                    scope.editMode = false;
+                }, function() {});
+
+                stopEvent(event);
             };
 
             scope.editComment = function(event) {

@@ -204,7 +204,7 @@ angular.module('Pundit2.Communication')
                 removedItems = AnnotationsExchange.updateAnnotationStructureInfo(annID, oldItems);
                 updateAnnotationItems(currentAnnotation, removedItems);
 
-                switch(currentAnnotation.motivatedBy) {
+                switch (currentAnnotation.motivatedBy) {
                     case 'linking':
                     case undefined:
                         Analytics.track('main-events', 'generic', 'edit-semantic');
@@ -257,6 +257,9 @@ angular.module('Pundit2.Communication')
                 },
                 comment: {
                     add: 'asReply'
+                },
+                editComment: {
+                    add: 'asUpdateReply'
                 }
             };
         if (typeof operation === 'undefined') {
@@ -267,30 +270,50 @@ angular.module('Pundit2.Communication')
         url = NameSpace.get(route[type][operation], {
             id: id
         });
+        if (type === 'editComment') {
+            $http({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                method: 'PUT',
+                url: url,
+                withCredentials: true,
+                data: comment
+            }).success(function(e) {
+                annotationsCommunication.log('Update success', e);
+                promise.resolve(e);
+            }).error(function() {
+                annotationsCommunication.log('Update ERROR');
+                promise.reject(false);
+            });
+        } else {
+            $http({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                method: 'POST',
+                url: url,
+                withCredentials: true,
+                params: {
+                    topmostAncestor: ancestor,
+                    context: angular.toJson({
+                        pageContext: XpointersHelper.getSafePageContext(),
+                        pageTitle: $document[0].title || 'No title'
+                    })
+                },
+                data: comment
+            }).success(function(e) {
+                annotationsCommunication.log('Post save success', e);
+                promise.resolve(e);
+            }).error(function() {
+                annotationsCommunication.log('Post save ERROR');
+                promise.reject(false);
+            });
+        }
 
-        $http({
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            method: 'POST',
-            url: url,
-            withCredentials: true,
-            params: {
-                topmostAncestor: ancestor,
-                context: angular.toJson({
-                    pageContext: XpointersHelper.getSafePageContext(),
-                    pageTitle: $document[0].title || 'No title'
-                })
-            },
-            data: comment
-        }).success(function(e) {
-            annotationsCommunication.log('Post save success', e);
-            promise.resolve(e);
-        }).error(function() {
-            annotationsCommunication.log('Post save ERROR');
-            promise.reject(false);
-        });
+
 
         return promise.promise;
     };
@@ -490,7 +513,7 @@ angular.module('Pundit2.Communication')
 
                 var annotation = AnnotationsExchange.getAnnotationById(annID);
 
-                switch(annotation.motivatedBy) {
+                switch (annotation.motivatedBy) {
                     case 'linking':
                     case undefined:
                         Analytics.track('main-events', 'generic', 'delete-semantic');
@@ -620,6 +643,7 @@ angular.module('Pundit2.Communication')
     // TODO:
     // annotationsCommunication.saveReply
     // annotationsCommunication.deleteReply
+
 
     annotationsCommunication.saveReply = function(content, motivation) {
         var promise = $q.defer();
@@ -792,7 +816,7 @@ angular.module('Pundit2.Communication')
             }).success(function(data) {
                 EventDispatcher.sendEvent('AnnotationsCommunication.annotationSaved', data.AnnotationID);
 
-                switch(motivation) {
+                switch (motivation) {
                     case 'linking':
                     case undefined:
                         Analytics.track('main-events', 'generic', 'new-semantic');

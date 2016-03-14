@@ -354,6 +354,20 @@ angular.module('Pundit2.AnnotationSidebar')
                 scope.deleteAnnotationLeaf(document.createEvent('Event'));
             }
         });
+        ContextualMenu.addAction({
+            name: 'Update reply',
+            type: [annotationDetails.options.cMenuTypeLeaf],
+            showIf: function() {
+                return true;
+            },
+            label: 'Edit',
+            priority: 97,
+            action: function(scope) {
+                var event = {};
+                EventDispatcher.sendEvent('openContextualMenu');
+                scope.editComment(event);
+            }
+        });
     };
     initContextualMenu();
 
