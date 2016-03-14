@@ -291,6 +291,7 @@ angular.module('Pundit2.AnnotationSidebar')
         enableToggle: true,
         openAnnotation: false,
         userData: {},
+        editReply: false
     };
 
     var forceSkip = '';
@@ -341,19 +342,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 scope.deleteAnnotation(document.createEvent('Event'));
             }
         });
-
-        ContextualMenu.addAction({
-            name: 'Delete reply',
-            type: [annotationDetails.options.cMenuTypeLeaf],
-            showIf: function() {
-                return true;
-            },
-            label: 'Delete',
-            priority: 97,
-            action: function(scope) {
-                scope.deleteAnnotationLeaf(document.createEvent('Event'));
-            }
-        });
         ContextualMenu.addAction({
             name: 'Update reply',
             type: [annotationDetails.options.cMenuTypeLeaf],
@@ -361,11 +349,23 @@ angular.module('Pundit2.AnnotationSidebar')
                 return true;
             },
             label: 'Edit',
-            priority: 97,
+            priority: 96,
             action: function(scope) {
                 var event = document.createEvent('Event');
-                EventDispatcher.sendEvent('openContextualMenu');
+                state.editReply = true
                 scope.editComment(event);
+            }
+        });
+        ContextualMenu.addAction({
+            name: 'Delete reply',
+            type: [annotationDetails.options.cMenuTypeLeaf],
+            showIf: function() {
+                return true;
+            },
+            label: 'Delete',
+            priority: 95,
+            action: function(scope) {
+                scope.deleteAnnotationLeaf(document.createEvent('Event'));
             }
         });
     };
@@ -829,6 +829,10 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
+    annotationDetails.closeEditReply = function(){
+        state.editReply = false;
+    };
+
     annotationDetails.closeAnnotationView = function(currentId) {
         if (typeof(state.annotations[currentId]) !== 'undefined') {
             state.annotations[currentId].expanded = false;
@@ -838,7 +842,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationDetails.toggleAnnotationView = function(currentId, forceTo) {
-        if (!state.contextualMenuOpened && state.enableToggle) {
+        if (!state.contextualMenuOpened && state.enableToggle && !state.editReply) {
             annotationDetails.closeAllAnnotationView(currentId);
             state.annotations[currentId].expanded = typeof forceTo !== 'undefined' ? forceTo : !state.annotations[currentId].expanded;
         }

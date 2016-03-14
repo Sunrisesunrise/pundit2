@@ -57,20 +57,28 @@ angular.module('Pundit2.AnnotationSidebar')
                 console.log("inside menu");
             };
 
+            scope.cancelEdit = function(event) {
+                scope.editMode = false;
+                stopEvent(event);
+            };
+
+
             scope.saveEdit = function(event) {
 
                 var promise = AnnotationDetails.socialEvent(scope.data.id, scope.data.parentId, 'editComment', 'add', scope.data.content);
 
                 promise.then(function() {
                     scope.editMode = false;
+                    AnnotationDetails.closeEditReply();
                 }, function() {});
 
                 stopEvent(event);
             };
 
             scope.editComment = function(event) {
-                scope.editMode = !scope.editMode;
+                scope.editMode = true;
                 scope.editCommentValue = scope.data.content;
+                scope.replyDialog = true;
 
                 stopEvent(event);
             };
