@@ -65,10 +65,10 @@ angular.module('Pundit2.Annotators')
             //    return;
             //}
             ann = AnnotationsExchange.getAnnotationById(e.args);
-            if (e.name === 'AnnotationsCommunication.saveAnnotation'){
+            if (e.name === 'AnnotationsCommunication.saveAnnotation' && typeof scopeMap[ann.entities[0]] !== 'undefined'){
                 scopeMap[ann.entities[0]].addAnnotationNumber();
             }
-            if(e.name === 'AnnotationsCommunication.deleteAnnotation'){
+            if(e.name === 'AnnotationsCommunication.deleteAnnotation' && typeof scopeMap[uri] !== 'undefined'){
                 scopeMap[uri].subAnnotationNumber();
             }
             if(e.name === 'AnnotationDetails.deleteAnnotation'){
