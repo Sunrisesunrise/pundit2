@@ -15,7 +15,7 @@ angular.module('Pundit2.Annotators')
             scope.element = element;
             scope.item = null;
             scope.selected = false;
-
+            scope.number = 0;
             var createItemFromResource = function(resourceElem) {
                 var values = {};
 
@@ -28,6 +28,24 @@ angular.module('Pundit2.Annotators')
                 values.elem = resourceElem;
 
                 return new Item(values.uri, values);
+            };
+
+            scope.setAnnotationNumber = function(uri) {
+                var annotations = AnnotationsExchange.getAnnotations();
+                scope.number = 0;
+                for(ann in annotations){
+                    if(annotations[ann].entities[0] === uri){
+                        scope.number ++;
+                    }
+                }
+            };
+
+            scope.addAnnotationNumber = function(){
+                scope.number ++;
+            };
+
+            scope.subAnnotationNumber = function(){
+                scope.number --;
             };
 
             scope.isSelected = function() {

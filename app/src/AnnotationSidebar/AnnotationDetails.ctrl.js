@@ -264,6 +264,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.deleteAnnotation = function(event) {
         AnnotationDetails.openConfirmModal(currentElement, currentId);
         Analytics.track('buttons', 'click', 'annotation--details--delete');
+        EventDispatcher.sendEvent('AnnotationDetails.deleteAnnotation', currentId);
 
         stopEvent(event);
     };
