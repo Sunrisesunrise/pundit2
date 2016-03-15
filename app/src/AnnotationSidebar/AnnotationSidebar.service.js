@@ -406,7 +406,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
-    if (Config.modules.AnnotationDetails.social == true) {
+    if (Config.modules.AnnotationDetails.social === true) {
         annotationSidebar.options.annotationHeight = annotationSidebar.options.annotationHeight * 2;
     }
 
