@@ -30,7 +30,7 @@ angular.module('Pundit2.Annotators')
 .service('ResourceAnnotator', function(BaseComponent, EventDispatcher, ItemsExchange, AnnotationsExchange, RESOURCEANNOTATIONRDEFAULTS) {
     var resourceAnnotator = new BaseComponent('ResourceAnnotator', RESOURCEANNOTATIONRDEFAULTS);
     var scopeMap = {};
-    var idMap = {};
+    var uri = '';
 
     resourceAnnotator.addReference = function(uri, currentResource) {
         scopeMap[uri] = currentResource;
@@ -54,12 +54,12 @@ angular.module('Pundit2.Annotators')
         });
     EventDispatcher.addListeners(
         [
+            'AnnotationsCommunication.deleteAnnotation',
             'AnnotationDetails.deleteAnnotation',
             'AnnotationsCommunication.saveAnnotation'
         ],
         function(e) {
             var ann = {};
-            var uri = '';
 
             //if (e.args.length === 0) {
             //    return;
@@ -67,10 +67,13 @@ angular.module('Pundit2.Annotators')
             ann = AnnotationsExchange.getAnnotationById(e.args);
             if (e.name === 'AnnotationsCommunication.saveAnnotation'){
                 scopeMap[ann.entities[0]].addAnnotationNumber();
-                idMap[ann.id] = ann.entities[0];
-            }else{
-                uri = idMap[ann.id];
+            }
+            if(e.name === 'AnnotationsCommunication.deleteAnnotation'){
                 scopeMap[uri].subAnnotationNumber();
+            }
+            if(e.name === 'AnnotationDetails.deleteAnnotation'){
+                ann = AnnotationsExchange.getAnnotationById(e.args);
+                uri = ann.entities[0];
             }
 
             if (typeof scopeMap[e.args[0].uri] !== 'undefined') {
