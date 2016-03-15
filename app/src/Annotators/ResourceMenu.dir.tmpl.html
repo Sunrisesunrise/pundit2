@@ -1,9 +1,9 @@
 <div
         ng-click="clickHandler($event)"
-        ng-class="{'pnd-resource-selected': isSelected() }">
+        ng-class="{'pnd-resource-selected': isSelected(), 'pnd-resource-has-label': annotationButton }">
 
        <span class="label" ng-show="annotationButton">Annotate</span>
-       <span class="pnd-icon-pundit-logo" ng-hide="annotationButton"></span>
+       <span class="pnd-icon-pundit-logo"></span>
 
        <span class="badge">{{number}}</span>
 </div>

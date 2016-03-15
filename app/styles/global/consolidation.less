@@ -172,52 +172,61 @@ sup {
    #RESOURCE
 \* ------------------------------------ */
 
-/* Icon used to annotate resource, CHO, Europeana entity... */
-
+/* Button used to annotate resource, CHO, Europeana entity... */
 .pnd-resource {
     display: inline-block;
     position: relative;
-    // width: @resource-inline-icon-width;
     height: @resource-inline-icon-height;
+    margin: 0;
+    padding: 0;
     background-color: @color-background-light;
     border: 1px solid @color-border-normal;
     border-radius: 3px;
-    margin: 0;
-    padding: 0 0 0 5px;
     color: #8A8A8A;
-    // font-size: 0.8em;
     line-height: @resource-inline-icon-height;
     text-align: center;
     cursor: pointer;
     transition-property: color;
     transition-duration: .3s;
 
+    /* Label displaying text "Annotate" */
     .label {
+        display: inline-block;
+        height: @resource-inline-icon-height;
         margin: 0;
-        padding: 0;
+        padding: 0 0 0 6px;
         font-family: @font-family-base;
-        font-size: .8em;
+        font-size: 12px;
         font-weight: 400;
+        line-height: @resource-inline-icon-height + 2px;
         text-transform: uppercase;
+        vertical-align: top;
+        text-shadow: 0 1px 0 #fff;
     }
 
+    /* Pundit icon */
     span[class^="pnd-icon"] {
+        display: inline-block;
+        height: @resource-inline-icon-height;
         margin: 0;
-        padding: 5px;
-        border-left: 1px solid @color-border-normal;
-        font-size: .8em;
-        background-color: gold;
+        padding: 0 5px;
+        font-size: 14px;
+        line-height: @resource-inline-icon-height + 2px;
+        vertical-align: top;
+        text-shadow: 0 1px 0 #fff;
     }
 
     &:hover {
-
         .label, span[class^="pnd-icon"] {
             color: @color-brand;
         }
     }
 
+    /* If there are already annotations... */
     &.pnd-resource-selected {
-        // background-color: @color-highlight;
+        span[class^="pnd-icon"] {
+            background-color: @color-highlight;
+        }
     }
 
     .badge {
@@ -226,14 +235,21 @@ sup {
         top: -12px;
         right: -7px;
         background-color: @color-brand;
-        border-radius: 6px;
+        border-radius: 4px;
         color: #FFF;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: normal;
-        padding: 3px 5px 2px 5px;
+        padding: 2px 4px 3px 4px;
         line-height: 1;
         font-family: @font-family-base;
         text-shadow: 0 -1px 0 rgba(0,0,0,.2);
         box-shadow: 0 1px 1px rgba(0,0,0,.2);
+    }
+
+    /* If has the label, add a border to the left of the icon */
+    &.pnd-resource-has-label {
+        span[class^="pnd-icon"] {
+            border-left: 1px solid @color-border-normal;
+        }
     }
 }
