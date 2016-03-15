@@ -352,7 +352,8 @@ angular.module('Pundit2.AnnotationSidebar')
             priority: 96,
             action: function(scope) {
                 var event = document.createEvent('Event');
-                state.editReply = true
+
+                state.editReply = true;
                 scope.editComment(event);
             }
         });
@@ -664,25 +665,41 @@ angular.module('Pundit2.AnnotationSidebar')
         return scopeReference[id];
     };
 
-    annotationDetails.addRepliesReference = function(id, value) {
-        repliesReference[id] = value;
+    annotationDetails.addRepliesReference = function(parentId, value) {
+        var idTemp = null;
+        if (typeof repliesReference[parentId] === 'undefined') {
+            repliesReference[parentId] = {};
+        }
+        for (var i = 0; i < value.length; i++) {
+            idTemp = value[i].id;
+            repliesReference[parentId][idTemp] = value[i];
+        }
+        return repliesReference[parentId];
+    };
+
+    annotationDetails.addReplyReference = function(parentId, id, value) {
+        if (typeof repliesReference[parentId] === 'undefined') {
+            repliesReference[parentId] = {};
+        }
+        repliesReference[parentId][id] = value;
+        return repliesReference[parentId];
     };
 
     annotationDetails.getRepliesReference = function(id) {
         return repliesReference[id];
     };
 
-    annotationDetails.checkCreatorRepliesReference = function(creator) {
-        for (var i = 0, len = repliesReference.length; i < len; i++) {
-            if (repliesReference[i].annotation.creator === creator) {
+    annotationDetails.checkCreatorRepliesReference = function(parentId, creator) {
+        for (var id in repliesReference[parentId]) {
+            if (repliesReference[parentId][id].creator === creator) {
                 return true;
             }
         }
         return false;
     };
 
-    annotationDetails.removeRepliesReference = function(id) {
-        delete repliesReference[id];
+    annotationDetails.removeRepliesReference = function(parentId, id) {
+        delete repliesReference[parentId][id];
     };
     annotationDetails.openConfirmModal = function(currentElement, currentId) {
         // promise is needed to open modal when template is ready
@@ -829,7 +846,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
-    annotationDetails.closeEditReply = function(){
+    annotationDetails.closeEditReply = function() {
         state.editReply = false;
     };
 
@@ -1070,9 +1087,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationDetails.getRepliesByAnnotationId = function(annotationId) {
-        annotationDetails.addRepliesReference(annotationId, AnnotationsCommunication.getRepliesByAnnotationId(annotationId));
-
-        return annotationDetails.getRepliesReference(annotationId);
+        return AnnotationsCommunication.getRepliesByAnnotationId(annotationId);
     };
 
     annotationDetails.socialEvent = function(annotationId, ancestor, type, operation, comment) {

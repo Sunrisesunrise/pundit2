@@ -54,7 +54,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.annotation.replyCommentValue = '';
     $scope.annotation.defaultThumb = false;
 
-    if($scope.annotation.thumbnail == ''){
+    if($scope.annotation.thumbnail === ''){
         $scope.annotation.defaultThumb = true;
     }
 
@@ -124,7 +124,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.checkLoaded = function() {
 
         if ($scope.annotation.repliesLoaded === false && $scope.social === true) {
-            return true
+            return true;
         }
         return false;
     };
@@ -132,7 +132,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.checkSaving = function() {
 
         if ($scope.annotation.repliesLoaded === false && $scope.social === true) {
-            return true
+            return true;
         }
         return false;
     };
@@ -184,11 +184,9 @@ angular.module('Pundit2.AnnotationSidebar')
 
                     if (typeof data !== 'undefined') {
                         data.annotation = $scope.annotation;
-                        $scope.replyTree = data;
                         $scope.optionsReplyes.replyTreeArray = data;
                         $scope.annotation.repliesLoaded = true;
-                        AnnotationDetails.addRepliesReference($scope.id, data);
-
+                        $scope.replyTree = AnnotationDetails.addRepliesReference($scope.annotation.parentId, data);
                     }
 
                     console.log("data: " + data);
@@ -276,7 +274,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.isEmpty = function() {
 
-        if ($scope.annotation.replyCommentValue == '' && $scope.annotation.replyDialog === true) {
+        if ($scope.annotation.replyCommentValue === '' && $scope.annotation.replyDialog === true) {
             EventDispatcher.sendEvent('disableToggle');
             return true;
         } else {
@@ -319,13 +317,12 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if (type === 'comment') {
             $scope.annotation.replyDialog = false;
-            $scope.isSaving = true
+            $scope.isSaving = true;
 
             promise = AnnotationDetails.socialEvent(currentId, $scope.annotation.parentId, type, 'add', $scope.annotation.replyCommentValue);
 
             promise.then(function(data) {
 
-                $scope.isSaving = false;
                 $scope.replyTreeActivate = true;
                 $scope.isUserLogged = MyPundit.isUserLogged();
                 $scope.userData = AnnotationDetails.userData();
@@ -360,8 +357,9 @@ angular.module('Pundit2.AnnotationSidebar')
                 $scope.annotation.social.counting.comment = $scope.annotation.social.counting.comment + 1;
                 $scope.annotation.social.status.comment = true;
                 $scope.annotation.replyCommentValue = '';
-                $scope.replyTree.push(reply);
-                AnnotationDetails.addRepliesReference(data.AnnotationID, reply);
+                $scope.replyTree = AnnotationDetails.addReplyReference($scope.annotation.parentId, data.AnnotationID, reply);
+                $scope.isSaving = false;
+
             });
         } else {
 

@@ -31,13 +31,11 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.social = scope.data.social;
             scope.data.defaultThumb = false;
 
-            // @peppe: OPEN SLACK (!)
-
-            if (scope.data.thumbnail == '' || (typeof scope.data.thumbnail === 'undefined')) {
+            if (scope.data.thumbnail === '' || (typeof scope.data.thumbnail === 'undefined')) {
                 scope.data.defaultThumb = true;
             }
 
-            if (scope.data.creatorName == '' || (typeof scope.data.creatorName === 'undefined')) {
+            if (scope.data.creatorName === '' || (typeof scope.data.creatorName === 'undefined')) {
                 scope.data.creatorName = scope.userData.fullName;
             }
             // console.log("inside directive "+AnnotationsExchange.getAnnotationById(scope.id).item);
@@ -85,12 +83,12 @@ angular.module('Pundit2.AnnotationSidebar')
 
             var hideReply = function() {
                 var scopeRef = AnnotationDetails.getScopeReference(scope.options.parentAnnotation.id);
-                AnnotationDetails.removeRepliesReference(scope.id);
-                scopeRef.replyTree = AnnotationDetails.getRepliesReference(scope.id);
 
+                AnnotationDetails.removeRepliesReference(scope.options.parentAnnotation.id, scope.id);
+                scopeRef.replyTree = AnnotationDetails.getRepliesReference(scope.options.parentAnnotation.id);
 
                 scopeRef.annotation.social.counting.comment = scopeRef.annotation.social.counting.comment - 1;
-                scopeRef.annotation.social.status.comment = AnnotationDetails.checkCreatorRepliesReference(scope.userData.uri);
+                scopeRef.annotation.social.status.comment = AnnotationDetails.checkCreatorRepliesReference(scope.options.parentAnnotation.id, scope.userData.uri);
             };
 
 
