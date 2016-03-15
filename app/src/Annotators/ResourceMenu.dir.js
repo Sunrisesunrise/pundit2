@@ -3,7 +3,7 @@ angular.module('Pundit2.Annotators')
 .directive('resourceMenu', function($rootScope, NameSpace, ContextualMenu,
     Toolbar, ImageHandler, ImageAnnotator, ItemsExchange, TemplatesExchange,
     TripleComposer, EventDispatcher, Item, XpointersHelper, AnnotationsExchange,
-    ResourceAnnotator) {
+    ResourceAnnotator, Config) {
 
     return {
         restrict: 'C',
@@ -16,6 +16,8 @@ angular.module('Pundit2.Annotators')
             scope.item = null;
             scope.selected = false;
             scope.number = 0;
+            scope.annotationButton = ResourceAnnotator.options.annotationButton;
+
             var createItemFromResource = function(resourceElem) {
                 var values = {};
 

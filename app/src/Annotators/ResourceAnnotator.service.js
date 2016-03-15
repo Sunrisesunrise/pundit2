@@ -1,7 +1,34 @@
 angular.module('Pundit2.Annotators')
 
-.service('ResourceAnnotator', function(BaseComponent, EventDispatcher, ItemsExchange, AnnotationsExchange) {
-    var resourceAnnotator = new BaseComponent('ResourceAnnotator');
+.constant('RESOURCEANNOTATIONRDEFAULTS', {
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ResourceAnnotator
+     *
+     * @description
+     * `object`
+     *
+     * Configuration object for ResourceAnnotator module.
+     */
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ResourceAnnotator.annotationButton
+     *
+     * @description
+     * `boolean`
+     *
+     * Initial state of thposition:relative
+     * <pre> defaultExpanded: false </pre>
+     */
+    annotationButton: true
+
+    })
+
+.service('ResourceAnnotator', function(BaseComponent, EventDispatcher, ItemsExchange, AnnotationsExchange, RESOURCEANNOTATIONRDEFAULTS) {
+    var resourceAnnotator = new BaseComponent('ResourceAnnotator', RESOURCEANNOTATIONRDEFAULTS);
     var scopeMap = {};
     var idMap = {};
 
