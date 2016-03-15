@@ -23,7 +23,7 @@ angular.module('Pundit2.Annotators')
      * Initial state of thposition:relative
      * <pre> defaultExpanded: false </pre>
      */
-    annotationButton: true
+    annotationButton: false
 
     })
 
