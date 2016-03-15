@@ -105,14 +105,6 @@
             </p>
         </div>
 
-        <!-- Displayed while saving replies -->
-        <div ng-show = "isSaving"
-             class="pnd-annotation-loading-replies">
-            <p class="pnd-pulse">
-                Saving Replies
-            </p>
-        </div>
-
         <!-- List of replyes to comment -->
         <annotation-details-reply-comment-tree
                 class="pnd-annotation-details "
@@ -125,6 +117,14 @@
                 ng-show="social"
                 ng-class="{'pnd-no-social': !social}">
         </annotation-details-reply-comment-tree>
+
+        <!-- Displayed while saving replies -->
+        <div ng-show = "isSaving"
+             class="pnd-annotation-loading-replies">
+            <p class="pnd-pulse">
+                Saving Replies
+            </p>
+        </div>
 
         <!-- Metadata social comment box -->
         <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
