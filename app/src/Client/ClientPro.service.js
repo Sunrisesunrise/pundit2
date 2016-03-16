@@ -607,7 +607,8 @@ angular.module('Pundit2.Client')
 
     client.showClientBoot = function() {
         Status.setState('Pundit', 'canBeShowedAfterHidden', true);
-        AnnotationSidebar.toggle();
+   //TODO handling activation Sidebar in the configuration
+   //     AnnotationSidebar.toggle();
         client.showClient();
     };
 
