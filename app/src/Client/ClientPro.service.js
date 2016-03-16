@@ -607,6 +607,7 @@ angular.module('Pundit2.Client')
 
     client.showClientBoot = function() {
         Status.setState('Pundit', 'canBeShowedAfterHidden', true);
+        AnnotationSidebar.toggle();
         client.showClient();
     };
 
