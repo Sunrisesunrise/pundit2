@@ -76,9 +76,6 @@ angular.module('Pundit2.Annotators')
                 uri = ann.entities[0];
             }
 
-            if (typeof scopeMap[e.args[0].uri] !== 'undefined') {
-                scopeMap[e.args[0].uri].selected = !scopeMap[e.args[0].uri].selected;
-            }
             return;
         });
 
