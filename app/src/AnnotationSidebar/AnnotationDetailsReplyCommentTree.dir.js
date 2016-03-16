@@ -30,6 +30,11 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.replyDialog = true;
             scope.social = scope.data.social;
             scope.data.defaultThumb = false;
+            scope.data.edited = false;
+
+            if(scope.data.modified != '' && typeof scope.data.modified !='undefined'){
+                scope.data.edited = true;
+            }
 
             if (scope.data.thumbnail === '' || (typeof scope.data.thumbnail === 'undefined')) {
                 scope.data.defaultThumb = true;
@@ -67,6 +72,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
                 promise.then(function() {
                     scope.editMode = false;
+                    scope.data.edited = true;
+                    scope.data.modified = moment().format('HH:mm DD MMM YYYY');
                     AnnotationDetails.closeEditReply();
                 }, function() {});
 

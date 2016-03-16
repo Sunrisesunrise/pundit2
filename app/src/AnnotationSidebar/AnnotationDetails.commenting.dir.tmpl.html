@@ -17,8 +17,6 @@
         <div class="pnd-annotation-collapsed-caret"></div>
 
         <div class="pnd-annotation-collapsed-object">
-            <span>{{ annotation.modified }}</span>
-
             <span>{{ annotation.comment }}</span>
         </div>
 
@@ -88,6 +86,7 @@
                         ng-click="openNotebook($event, annotation.notebookId)">
                     {{annotation.notebookName}}
                 </a>
+                <span class="pnd-annotation-metadata" ng-show="annotation.edited">edited {{ annotation.modified | date : 'hh:hh d MMM y'}}</span>
             </span>
 
         </div>

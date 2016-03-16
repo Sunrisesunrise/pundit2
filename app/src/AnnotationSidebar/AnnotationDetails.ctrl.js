@@ -53,11 +53,15 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.annotation.editCommentValue = '';
     $scope.annotation.replyCommentValue = '';
     $scope.annotation.defaultThumb = false;
+    $scope.annotation.edited = false;
 
     if($scope.annotation.thumbnail === ''){
         $scope.annotation.defaultThumb = true;
     }
 
+    if($scope.annotation.modified != ''){
+        $scope.annotation.edited = true;
+    }
 
     $scope.replyTreeActivate = false;
     $scope.replyTree = [];
@@ -403,7 +407,10 @@ angular.module('Pundit2.AnnotationSidebar')
         var promise = AnnotationDetails.saveEditedComment(currentId, $scope.annotation.itemsArray[0], $scope.annotation.comment);
 
         promise.then(function() {
+            var dateFormat = 'hh:mm:ss yyyy MM dd';
             $scope.editMode = false;
+            $scope.annotation.edited = true;
+            $scope.annotation.modified = moment().format('HH:mm DD MMM YYYY');
         }, function() {});
 
         stopEvent(event);
