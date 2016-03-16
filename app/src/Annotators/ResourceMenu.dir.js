@@ -23,7 +23,7 @@ angular.module('Pundit2.Annotators')
 
                 values.uri = resourceElem.attr('about');
                 values.cMenuType = "resourceHandlerItem";
-                values.label = resourceElem.parent().text().trim();
+                values.label = resourceElem.parent().text().trim().split('\n')[0];
                 values.type = values.type = [NameSpace.types.resource]; // TODO to be defined
                 values.pageContext = XpointersHelper.getSafePageContext();
                 values.icon = true;
