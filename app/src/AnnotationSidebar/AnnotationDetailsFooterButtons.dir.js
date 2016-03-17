@@ -168,6 +168,10 @@ angular.module('Pundit2.AnnotationSidebar')
                     }, 800);
                 }
 
+                setTimeout(function() {
+                    angular.element('div[class*="pnd-annotation-reply-textarea"]>textarea')[0].focus();
+                }, 10);
+
                 stopEvent(event);
             };
 
