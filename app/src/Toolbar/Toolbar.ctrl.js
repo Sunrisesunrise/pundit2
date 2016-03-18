@@ -82,17 +82,11 @@ angular.module('Pundit2.Toolbar')
 
     $scope.login = function(trackingLoginName) {
         ResourcePanel.hide();
-        MyPundit.login();
+        setTimeout(function() { // to fix the login popover show
+            MyPundit.login();
+        });
         Analytics.track('buttons', 'click', trackingLoginName);
         return;
-
-
-        //ResourcePanel.hide();
-        //MyPundit.login();
-        //if (trackingLoginName === undefined) {
-        //    trackingLoginName = 'toolbar--otherLogin';
-        //}
-
     };
 
     var logout = function() {
