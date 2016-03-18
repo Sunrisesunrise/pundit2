@@ -14,7 +14,7 @@ angular.module('Pundit2.Annomatic')
         };
 
     if (typeof Config.modules.Annomatic.sourceLang !== 'undefined') {
-        params.lang = Config.modules.Annomatic.sourceLang
+        params.lang = Config.modules.Annomatic.sourceLang;
     }
 
     return $resource(baseURL, {}, {
