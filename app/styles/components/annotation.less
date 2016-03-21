@@ -252,12 +252,6 @@
         max-height: @annotation-text-max-height;
     }
 
-    /* Editing of the comment */
-    .pnd-annotation-comment-text-edit {
-        max-height: 200px;
-        padding: 10px;
-    }
-
     /* The triangle caret between fragment and comment */
     /* Arrow triangle between subject and object, code inspired by Bootstrap css */
     .pnd-annotation-comment-caret
@@ -448,7 +442,7 @@
         text-overflow: ellipsis;
     }
 
-    .pnd-annotation-metadata {
+    .pnd-annotation-metadata, .pnd-annotation-edited {
         display: block;
         overflow: hidden;
         color: @color-text-light;
@@ -456,6 +450,10 @@
         line-height: 1.3;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+    .pnd-annotation-edited {
+        color: @color-dark-gray;
     }
 
     /* Toggles edit dropdown */
@@ -549,8 +547,8 @@
 }
 
 /* Text area and buttons for replying */
-.pnd-annotation-reply-textarea {
-    max-height: 200px;
+.pnd-annotation-reply-textarea, .pnd-annotation-reply-text-edit {
+    max-height: @annotation-text-max-height;
     padding: 10px;
     border-top: 1px solid @color-border-normal;
 }
@@ -573,6 +571,19 @@
     p {
         margin-top: 24px;
         text-align: center;
+    }
+}
+
+/* When was a reply edited */
+.pnd-annotation-reply-edited {
+    clear: both;
+    margin-top: 8px;
+    margin-bottom: -4px;
+    padding-top: 5px;
+    border-top: 1px solid @color-border-light;
+
+    span {
+        color: @color-dark-gray;
     }
 }
 

@@ -1,5 +1,7 @@
 <!-- Reply read mode -->
-<div class="pnd-annotation-reply" ng-show="data.showReply">
+<div class="pnd-annotation-reply"
+     ng-show="data.showReply"
+     ng-if="!editMode">
 
     <!-- Default user's thumb -->
     <div class="pnd-annotation-user-thumb-default"
@@ -23,16 +25,15 @@
     <!-- Reply content -->
     <div class="pnd-annotation-reply-content">
 
+        <!-- Username + reply text -->
         <div class="pnd-annotation-reply-text">
             <span class="pnd-annotation-user">{{::data.creatorName}}</span> <span ng-bind-html="data.content | linky:'_blank'"></span>
-            <!--TODO set css for modified-->
-            <span class="pnd-annotation-metadata" ng-show="data.edited">edited {{ data.modified | date : 'hh:hh d MMM y'}}</span>
-
         </div>
 
+        <!-- Creation data and social buttons -->
         <div class="pnd-annotation-reply-footer">
             <div class="pnd-annotation-reply-date">
-                {{::data.created | date : 'hh:hh d MMM y'}}
+                {{::data.created | date : 'HH:mm d MMM y'}}
             </div>
              <div class="annotation-details-footer-buttons pnd-annotation-social-buttons"
                  id="{{::annotation.id}}"
@@ -41,13 +42,20 @@
             </div>
         </div>
 
+        <!-- Details about edit date... only if edited -->
+        <div class="pnd-annotation-reply-edited"
+             ng-show="data.edited">
+            <span>Edited {{ data.modified | date : 'HH:mm d MMM y'}}</span>
+        </div>
+
+
     </div>
 
 </div>
 <!-- END // Reply read mode -->
 
 <!-- Reply edit mode -->
-<div class="pnd-annotation-comment-text-edit"
+<div class="pnd-annotation-reply-text-edit"
      ng-if="editMode">
 
     <textarea
@@ -58,9 +66,9 @@
     </textarea>
 
 </div>
-<!-- Save or cancel of comment in Edit mode -->
+<!-- Save or cancel of reply in Edit mode -->
 <div
-        class="pnd-annotation-comment-text-edit-buttons"
+        class="pnd-annotation-reply-buttons"
         ng-show="isUserToolShowed()"
         ng-if="editMode">
     <button
