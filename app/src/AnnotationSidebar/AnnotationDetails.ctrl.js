@@ -144,10 +144,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.toggleAnnotation = function() {
         $scope.editMode = false;
 
-
-        if (!$scope.annotation.expanded) {
-            EventDispatcher.sendEvent('enableToggle');
-        }
+        EventDispatcher.sendEvent('enableToggle');
 
         if (typeof $scope.annotation.repliesLoaded === 'undefined') {
             $scope.annotation.repliesLoaded = false;
