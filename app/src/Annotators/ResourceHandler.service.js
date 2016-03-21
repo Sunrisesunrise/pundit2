@@ -204,9 +204,19 @@ angular.module('Pundit2.Annotators')
         }
     };
 
-    // add directive attribute
+    resourceHandler.forceCompileButton = function(){
+        var resourceElem = angular.element('.pnd-resource'); //find pnd-resource
+        // add directive attribute
+        promise = $q.defer();
+        resourceElem.addClass('resource-menu');
+        $compile(resourceElem)($rootScope);
+        promise.resolve();
+
+    };
+
+
+        // add directive attribute
     resourceElem.addClass('resource-menu');
-    // resourceElem.addClass('pnd-range-pos-icon');
 
     //compile the DOM
     $compile(resourceElem)($rootScope);
