@@ -214,7 +214,8 @@ angular.module('Pundit2.Annotators')
 
         setTimeout(function() {
             EventDispatcher.sendEvent('Pundit.forceCompileButton');
-        }, 900);
+            $rootScope.$$phase || $rootScope.$digest();
+        }, 10);
 
     };
 
