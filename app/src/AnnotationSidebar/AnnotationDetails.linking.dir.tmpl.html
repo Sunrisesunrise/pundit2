@@ -87,6 +87,7 @@
                         ng-click="openNotebook($event, annotation.notebookId)">
                         {{annotation.notebookName}}
                     </a>
+                    <span class="pnd-annotation-edited" ng-show="annotation.edited">Edited {{ annotation.modified | date : 'HH:mm d MMM y'}}</span>
                 </span>
             </span>
 
