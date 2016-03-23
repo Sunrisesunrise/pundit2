@@ -38,7 +38,8 @@ angular.module('Pundit2.Annotators')
 
     EventDispatcher.addListeners(
         [
-            'Consolidation.consolidate'
+            'Consolidation.consolidate',
+            'Pundit.forceCompileButton'
         ],
         function() {
             var item;

@@ -82,7 +82,7 @@ angular.module('Pundit2.Client')
     $document.on('Pundit.requestAnnotationsNumber', requestAnnotationsNumber);
     $document.on('Pundit.requestUserProfileUpdate', userStatusUpdate);
     $document.on('Pundit.requestUserLoggedStatus', userStatusUpdate);
-    $document.on('Pundit.forceCompileButton', ResourceHandler.forceCompileButton());
+    $document.on('Pundit.forceCompileButton', ResourceHandler.forceCompileButton);
     // TODO: use a different bind? 
     document.addEventListener('Pundit.requestAnnotationsNumberRaw', requestAnnotationsNumber);
 

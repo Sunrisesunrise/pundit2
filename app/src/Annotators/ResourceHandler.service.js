@@ -212,11 +212,15 @@ angular.module('Pundit2.Annotators')
         $compile(resourceElem)($rootScope);
         promise.resolve();
 
+        setTimeout(function() {
+            EventDispatcher.sendEvent('Pundit.forceCompileButton');
+        }, 900);
+
     };
 
 
         // add directive attribute
-    resourceElem.addClass('resource-menu');
+  //  resourceElem.addClass('resource-menu');
 
     //compile the DOM
     $compile(resourceElem)($rootScope);
