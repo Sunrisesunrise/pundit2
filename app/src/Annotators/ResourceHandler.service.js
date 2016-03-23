@@ -220,8 +220,7 @@ angular.module('Pundit2.Annotators')
 
 
         // add directive attribute
-  //  resourceElem.addClass('resource-menu');
-
+    resourceElem.addClass('resource-menu');
     //compile the DOM
     $compile(resourceElem)($rootScope);
     promise.resolve();
