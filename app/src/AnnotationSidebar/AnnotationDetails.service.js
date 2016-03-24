@@ -840,7 +840,7 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             annotationDetails.closeAllAnnotationView(currentId);
             state.annotations[currentId].expanded = true;
-            if (Config.modules.AnnotationDetails.social) {
+            if (Config.modules.AnnotationDetails.social && typeof state.annotations[currentId].scopeReference.annotation.repliesLoaded === 'undefined') {
                 state.annotations[currentId].scopeReference.annotation.repliesLoaded = false;
 
                 annotationDetails.getRepliesByAnnotationId(currentId).then(function(data) {
