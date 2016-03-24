@@ -329,6 +329,8 @@ angular.module('Pundit2.AnnotationSidebar')
         isFiltersExpanded: annotationSidebar.options.isFiltersShowed,
         isLoading: false,
         allAnnotations: {},
+        allSuggestions: {},
+        suggestions: [],
         filteredAnnotations: {},
         isAnnotationsPanelActive: annotationSidebar.options.annotationsPanelActive,
         isSuggestionsPanelActive: annotationSidebar.options.suggestionsPanelActive
@@ -364,8 +366,6 @@ angular.module('Pundit2.AnnotationSidebar')
         defaultStartPosition = isPro && Config.isModuleActive('Annomatic') ? startTop + 24 : startTop,
         startPosition = defaultStartPosition,
         toolbarHeight = clientMode === 'pro' ? $injector.get('Toolbar').options.toolbarHeight : 0;
-
-   console.log(defaultStartPosition);
 
     // Contains the values ​​of active filters
     annotationSidebar.filters = {
@@ -448,14 +448,14 @@ angular.module('Pundit2.AnnotationSidebar')
         return !isNaN(Date.parse(date));
     };
 
-    var findFirstConsolidateItem = function(currentAnnotation) {
+    var findFirstConsolidateItem = function(currentAnnotation, notConsolidated) {
         var currentItem,
             targetList = clientMode === 'v2' ? currentAnnotation.hasTarget : currentAnnotation.entities;
 
         for (var t in targetList) {
             currentItem = ItemsExchange.getItemByUri(targetList[t]);
             if (typeof currentItem !== 'undefined' &&
-                Consolidation.isConsolidated(currentItem)) {
+                (typeof notConsolidated !== 'undefined' || Consolidation.isConsolidated(currentItem))) {
                 return currentItem;
             }
         }
@@ -499,12 +499,16 @@ angular.module('Pundit2.AnnotationSidebar')
             firstValid,
             currentItem;
 
-        var top, imgRef, fragRefs, fragRef, xpathTemp;
+        var top, imgRef, fragRefs, fragRef, xpathTemp, currentFragment;
 
         firstValid = annotation.firstConsolidableItem;
         annotationHeight = annotationSidebar.options.annotationHeight;
 
-        if (typeof(firstValid) === 'undefined') {
+        if (state.isSuggestionsPanelActive) {
+            firstValid = findFirstConsolidateItem(annotation, true);
+            currentFragment = TextFragmentAnnotator.getFragmentIdByUri(firstValid.uri);
+            top = angular.element('.' + currentFragment).offset().top - toolbarHeight - dashboardHeight;
+        } else if (typeof firstValid === 'undefined') {
             if (optCheck && optId === annotation.id) {
                 annotationHeight = optHeight;
             }
@@ -520,9 +524,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
                 if (typeof(fragRef) !== 'undefined' && typeof(fragRef.offset()) !== 'undefined') {
                     top = fragRef.offset().top - toolbarHeight - dashboardHeight;
-                    // annotationSidebar.log("curr fr "+currentFragment + " alt "+ angular.element('.'+currentFragment).offset().top );
                 } else {
-                    annotationSidebar.log("Something wrong with the fragments of this annotation: ", annotation);
+                    annotationSidebar.log('Something wrong with the fragments of this annotation: ', annotation);
                 }
             } else if (currentItem.isImage()) {
                 // TODO: add icon during the consolidation and get the top of the specific image
@@ -612,6 +615,10 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var setBrokenInfo = function(annotation) {
+        if (state.isSuggestionsPanelActive) {
+            return;
+        }
+
         var isBroken = annotation.isBroken(),
             isBrokenYet = annotation.isBrokenYet;
 
@@ -772,7 +779,7 @@ angular.module('Pundit2.AnnotationSidebar')
         var notebookId = annotation.isIncludedIn;
         var notebookUri = annotation.isIncludedInUri;
         if (typeof(annotationsFilters.notebooks[notebookUri]) === 'undefined') {
-            var notebookName = "Downloading in progress";
+            var notebookName = 'Downloading in progress';
             var cancelWatchNotebookName = $rootScope.$watch(function() {
                 return NotebookExchange.getNotebookById(notebookId);
             }, function(nb) {
@@ -1253,6 +1260,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
         state.isAnnotationsPanelActive = true;
         state.isSuggestionsPanelActive = false;
+        state.allSuggestions = {};
+        state.suggestions = [];
     };
 
     annotationSidebar.isSuggestionsPanelActive = function() {
@@ -1289,6 +1298,10 @@ angular.module('Pundit2.AnnotationSidebar')
 
         state.isSuggestionsPanelActive = true;
         state.isAnnotationsPanelActive = false;
+        state.allSuggestions = {};
+        state.suggestions = [];
+        state.allAnnotations = {};
+
     };
 
     annotationSidebar.getAllAnnotations = function() {
@@ -1431,6 +1444,30 @@ angular.module('Pundit2.AnnotationSidebar')
         angular.element('annotation-details[id="' + annId + '"] .pnd-annotation-details-header').trigger('click');
     };
 
+    annotationSidebar.getAnnotationTopById = function(annId) {
+        if (typeof state.allAnnotations[annId] !== 'undefined') {
+            return state.allAnnotations[annId].realTop;
+        }
+    };
+
+    EventDispatcher.addListener('Annomatic.annotationSaved', function(e) {
+        var annotation = e.args,
+            annotations, annotationsList;
+        
+        state.allSuggestions[annotation.id] = annotation;
+        state.suggestions.push(annotation);
+
+        annotations = state.suggestions;
+        annotationsList = state.allSuggestions;
+
+        annotationsByPosition = angular.extend([], annotations);
+        annotationsByDate = angular.extend([], annotations);
+        annotationsByDate = sortByKey(annotationsByDate, 'created');
+        state.allAnnotations = angular.extend({}, annotationsList);
+
+        initializeFiltersAndPositions();
+    });
+
     EventDispatcher.addListeners(
         [
             'Consolidation.consolidateAll',
@@ -1443,10 +1480,15 @@ angular.module('Pundit2.AnnotationSidebar')
                 annotationSidebar.log('Waiting for consolidation');
                 return;
             }
+
+            if (state.isSuggestionsPanelActive) {
+                return;
+            }
+
             annotationSidebar.log('Update annotations in sidebar');
 
-            var annotations = AnnotationsExchange.getAnnotations();
-            var annotationsList = AnnotationsExchange.getAnnotationsHash();
+            var annotations = AnnotationsExchange.getAnnotations(),
+                annotationsList = AnnotationsExchange.getAnnotationsHash();
 
             annotationsByPosition = angular.extend([], annotations);
             annotationsByDate = angular.extend([], annotations);

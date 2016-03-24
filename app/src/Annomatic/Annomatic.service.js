@@ -1111,6 +1111,8 @@ angular.module('Pundit2.Annomatic')
             annomatic.reviewNext(num + 1);
 
             annomatic.userAnnotations[annId] = AnnotationsExchange.getAnnotationById(annId);
+
+            EventDispatcher.sendEvent('Annomatic.annotationSaved', annomatic.userAnnotations[annId]);
         });
     };
 
