@@ -1482,6 +1482,9 @@ angular.module('Pundit2.AnnotationSidebar')
 
     EventDispatcher.addListener('Client.show', function() {
         var expClass = state.isSidebarExpanded ? annotationSidebar.options.bodyExpandedClass : annotationSidebar.options.bodyCollapsedClass;
+        angular.element('html')
+            .addClass(expClass)
+            .addClass(annotationSidebar.options.bodyClass);
         angular.element('body')
             .addClass(expClass)
             .addClass(annotationSidebar.options.bodyClass);
@@ -1491,6 +1494,10 @@ angular.module('Pundit2.AnnotationSidebar')
         if (state.isSidebarExpanded) {
             annotationSidebar.toggle();
         }
+        angular.element('html')
+            .removeClass(annotationSidebar.options.bodyCollapsedClass)
+            .removeClass(annotationSidebar.options.bodyExpandedClass)
+            .removeClass(annotationSidebar.options.bodyClass);
         angular.element('body')
             .removeClass(annotationSidebar.options.bodyCollapsedClass)
             .removeClass(annotationSidebar.options.bodyExpandedClass)
