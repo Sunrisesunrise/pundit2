@@ -32,7 +32,7 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.data.defaultThumb = false;
             scope.data.edited = false;
 
-            if(scope.data.modified != '' && typeof scope.data.modified !='undefined'){
+            if (scope.data.modified != '' && typeof scope.data.modified != 'undefined') {
                 scope.data.edited = true;
             }
 

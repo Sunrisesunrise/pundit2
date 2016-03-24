@@ -840,6 +840,25 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             annotationDetails.closeAllAnnotationView(currentId);
             state.annotations[currentId].expanded = true;
+            if (Config.modules.AnnotationDetails.social) {
+                state.annotations[currentId].scopeReference.annotation.repliesLoaded = false;
+
+                annotationDetails.getRepliesByAnnotationId(currentId).then(function(data) {
+
+                    if (typeof data !== 'undefined') {
+                        data.annotation = state.annotations[currentId].scopeReference.annotation;
+                        state.annotations[currentId].scopeReference.optionsReplyes.replyTreeArray = data;
+                        state.annotations[currentId].scopeReference.annotation.repliesLoaded = true;
+                        state.annotations[currentId].scopeReference.replyTree = annotationDetails.addRepliesReference(state.annotations[currentId].scopeReference.annotation.parentId, data);
+                    }
+
+                    console.log("data: " + data);
+
+                });
+
+            } else {
+                state.annotations[currentId].scopeReference.annotation.repliesLoaded = true;
+            }
 
         } else {
             annotationDetails.log("Cannot find this annotation: id -> " + currentId);
