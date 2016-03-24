@@ -179,7 +179,7 @@ angular.module('Pundit2.Annotators')
                         showIf: function() {
                             return true;
                         },
-                        priority: 96,
+                        priority: 94,
                         action: (function(idx) {
                             return function(item) {
                                 var triple = templateConfig.list[idx].triples[0],
