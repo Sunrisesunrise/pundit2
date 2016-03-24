@@ -237,9 +237,9 @@ angular.module('Pundit2.AnnotationSidebar')
      * First top position of annotations in the sidebar
      *
      * Default value:
-     * <pre> startTop: 55 </pre>
+     * <pre> startTop: 50 </pre>
      */
-    startTop: 55,
+    startTop: 50,
 
     /**
      * @module punditConfig
@@ -356,11 +356,16 @@ angular.module('Pundit2.AnnotationSidebar')
 
     var clientMode = Config.clientMode,
         Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined,
-        Annomatic = clientMode === 'pro' ? $injector.get('Annomatic') : undefined;
+        Annomatic = clientMode === 'pro' ? $injector.get('Annomatic') : undefined,
+        isPro = clientMode === 'pro' ? true : false;
 
     // TODO: take startPosition from element in sidebar
-    var startPosition = annotationSidebar.options.startTop,
+    var startTop = annotationSidebar.options.startTop,
+        defaultStartPosition = isPro && Config.isModuleActive('Annomatic') ? startTop + 24 : startTop,
+        startPosition = defaultStartPosition,
         toolbarHeight = clientMode === 'pro' ? $injector.get('Toolbar').options.toolbarHeight : 0;
+
+   console.log(defaultStartPosition);
 
     // Contains the values ​​of active filters
     annotationSidebar.filters = {
@@ -460,7 +465,7 @@ angular.module('Pundit2.AnnotationSidebar')
         var annotations = (annotationSidebar.needToFilter() ? state.filteredAnnotations : state.allAnnotations);
         var currentTop;
 
-        startPosition = annotationSidebar.options.startTop;
+        startPosition = defaultStartPosition;
 
         if (typeof(optId) !== 'undefined' && typeof(optHeight) === 'number') {
             if (typeof state.allAnnotations[optId] !== 'undefined') {
@@ -575,7 +580,7 @@ angular.module('Pundit2.AnnotationSidebar')
             return;
         }
 
-        startPosition = annotationSidebar.options.startTop;
+        startPosition = defaultStartPosition;
 
         angular.forEach(annotationsByPosition, function(annotation) {
             // Skip annotations not included in the current view
@@ -819,7 +824,7 @@ angular.module('Pundit2.AnnotationSidebar')
         };
         BrokenHelper.resetQueques();
 
-        startPosition = annotationSidebar.options.startTop;
+        startPosition = defaultStartPosition;
 
         angular.forEach(state.allAnnotations, function(annotation) {
             var isMotivationAccepted = annotation.motivatedBy in NameSpace.motivation;
@@ -1219,7 +1224,7 @@ angular.module('Pundit2.AnnotationSidebar')
         EventDispatcher.sendEvent('AnnotationSidebar.toggleFiltersContent', state.isFiltersExpanded);
         Analytics.track('buttons', 'click', 'sidebar--' + (state.isFiltersExpanded ? 'showFilters' : 'filters--hide'));
     };
-    
+
     // Check if the sidebar is expanded
     annotationSidebar.isAnnotationSidebarExpanded = function() {
         return state.isSidebarExpanded;
@@ -1273,7 +1278,7 @@ angular.module('Pundit2.AnnotationSidebar')
             if (state.isFiltersExpanded) {
                 state.isFiltersExpanded = false;
             }
-            
+
             userAnnotations = getFilteredAnnotations(userFilter, annotationsFilters);
 
             Consolidation.wipe();
