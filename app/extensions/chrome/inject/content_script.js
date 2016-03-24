@@ -76,6 +76,7 @@ var switchPundit = function(on) {
         bodyStyle.position = 'static';
 
         div.setAttribute('data-ng-app', 'Pundit2');
+        div.setAttribute('onClick', 'if(event.stopPropagation){event.stopPropagation();}');
         div.setAttribute('id', 'pundit2');
         div.setAttribute('class', 'pnd-wrp');
         div.setAttribute('data-cid', chrome.runtime.id);
