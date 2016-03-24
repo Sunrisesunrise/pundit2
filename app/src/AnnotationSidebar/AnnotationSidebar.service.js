@@ -499,7 +499,7 @@ angular.module('Pundit2.AnnotationSidebar')
             firstValid,
             currentItem;
 
-        var top, imgRef, fragRefs, fragRef, xpathTemp, currentFragment;
+        var top, imgRef, fragRefs, fragRef, xpathTemp, currentFragment, currentFragmentElement;
 
         firstValid = annotation.firstConsolidableItem;
         annotationHeight = annotationSidebar.options.annotationHeight;
@@ -507,7 +507,8 @@ angular.module('Pundit2.AnnotationSidebar')
         if (state.isSuggestionsPanelActive) {
             firstValid = findFirstConsolidateItem(annotation, true);
             currentFragment = TextFragmentAnnotator.getFragmentIdByUri(firstValid.uri);
-            top = angular.element('.' + currentFragment).offset().top - toolbarHeight - dashboardHeight;
+            currentFragmentElement = angular.element('.' + currentFragment);
+            top = currentFragmentElement.offset() ? (currentFragmentElement.offset().top - toolbarHeight - dashboardHeight) : -1;
         } else if (typeof firstValid === 'undefined') {
             if (optCheck && optId === annotation.id) {
                 annotationHeight = optHeight;
