@@ -92,8 +92,9 @@ angular.module('Pundit2.AnnotationSidebar')
                     scope.data.repliesLoaded = false;
                 }
 
+
                 if (!MyPundit.isUserLogged()) {
-                    iconReference.addClass('pnd-range-pos-icon');
+                    iconReference.classList +=" pnd-range-pos-icon";
                     scope.data.repliesLoaded = true;
                     scope.data.replyDialog = false;
                     AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert', iconReference);
