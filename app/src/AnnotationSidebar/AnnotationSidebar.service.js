@@ -304,6 +304,21 @@ angular.module('Pundit2.AnnotationSidebar')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#AnnotationSidebar.social
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social feature
+     *
+     * Default value:
+     * <pre> social: false </pre>
+     */
+    social: true, // TODO: use this parameter in AnnotationDetails insead of his own value 
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#AnnotationSidebar.debug
      *
      * @description
@@ -406,7 +421,8 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
-    if (Config.modules.AnnotationDetails.social === true) {
+    if (annotationSidebar.options.social === true) {
+        // TODO: avoid defaults modification 
         annotationSidebar.options.annotationHeight = annotationSidebar.options.annotationHeight * 2;
     }
 
