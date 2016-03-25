@@ -85,6 +85,9 @@ angular.module('Pundit2.AnnotationSidebar')
                     screen = angular.element(window),
                     iconReference = angular.element(event.target);
 
+                if(event.target.className === "pnd-icon-comment"){
+                iconReference = angular.element(event.target.parentElement)
+                }
                 scope.data.replyDialog = !scope.data.replyDialog;
 
 
