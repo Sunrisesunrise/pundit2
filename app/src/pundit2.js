@@ -29,5 +29,6 @@ angular.module('Pundit2', [
     'KorboEE',
     'Pundit2.SimplifiedClient',
     'Pundit2.PredicatesContainer',
-    'Pundit2.Breadcrumbs'
+    'Pundit2.Breadcrumbs',
+    'yaru22.angular-timeago'
 ]);
