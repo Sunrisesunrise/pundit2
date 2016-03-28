@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.directive('annotationDetailsFooterButtons', function(AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher, $window) {
+.directive('annotationDetailsFooterButtons', function(AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher, $window, PndPopover) {
     return {
         restrict: 'C',
         scope: {
@@ -85,8 +85,8 @@ angular.module('Pundit2.AnnotationSidebar')
                     screen = angular.element(window),
                     iconReference = angular.element(event.target);
 
-                if(event.target.className === "pnd-icon-comment"){
-                iconReference = angular.element(event.target.parentElement)
+                if (event.target.className === "pnd-icon-comment") {
+                    iconReference = angular.element(event.target.parentElement)
                 }
                 scope.data.replyDialog = !scope.data.replyDialog;
 
@@ -97,7 +97,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
 
                 if (!MyPundit.isUserLogged()) {
-                    iconReference.classList +=" pnd-range-pos-icon";
+                    iconReference.classList += " pnd-range-pos-icon";
                     scope.data.repliesLoaded = true;
                     scope.data.replyDialog = false;
                     AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert', iconReference);
@@ -187,6 +187,35 @@ angular.module('Pundit2.AnnotationSidebar')
                 }, function() {});
 
                 stopEvent(event);
+            };
+
+            scope.tooltip = function(event, type) {
+                var iconReference = angular.element(event.target);
+
+                if (!MyPundit.isUserLogged()) {
+                    return;
+                }
+
+                scope.data.social = checkSocial(scope.data.social);
+                iconReference.addClass('pnd-range-pos-icon');
+
+                if (scope.data.social.status[type]) {
+                    type = "Undo " + type;
+                }
+
+                AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), {
+                    placement: 'top'
+                }, undefined, type, iconReference);
+
+            };
+
+            scope.tooltipLeave = function() {
+
+                if (!MyPundit.isUserLogged()) {
+                    return;
+                }
+
+                PndPopover.hide();
             };
 
             scope.socialEvent = function(event, type) {

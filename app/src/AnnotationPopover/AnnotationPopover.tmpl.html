@@ -17,6 +17,12 @@
         <a href="javascript:void(0)" ng-click="login()">{{message}}</a>
     </div>
 
+    <!-- tooltip mode -->
+    <div class="popover-content"
+         ng-if="tooltip">
+        <a href="javascript:void(0)">{{message}}</a>
+    </div>
+
     <!-- Annotation type selection -->
     <div class="popover-content" ng-if="currentMode === '' && isUserLogged">
         <a ng-click="setMode('comment')">Comment</a><span class="pnd-annotation-popover-separator">
@@ -42,7 +48,7 @@
 
         <!-- Notebook selector -->
         <div 
-            class="popover-notebooks">
+            class="popover-notebooks" ng-hide = tooltip>
             <span class="popover-notebooks-copy">Save {{currentMode}} in</span>
             <pnd-select
                     options="availableNotebooks"
@@ -53,7 +59,7 @@
         </div>
 
         <!-- Footer with buttons -->
-        <div class="popover-footer">
+        <div class="popover-footer" ng-hide = tooltip>
             <button
                     class="pnd-btn pnd-btn-small"
                     ng-click="cancel()">

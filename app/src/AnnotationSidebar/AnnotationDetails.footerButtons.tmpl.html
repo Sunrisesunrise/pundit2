@@ -21,6 +21,8 @@
             type="button"
             class="pnd-like"
             ng-show="options.like"
+            ng-mouseover="tooltip($event, 'like')"
+            ng-mouseleave="tooltipLeave()"
             ng-click="socialEvent($event, 'like')"
             ng-class="{'pnd-annotation-details-social-activate': data.social.status.like, 'pnd-annotation-details-social-zero': data.social.counting.like==0 }">
         <span class="pnd-icon-thumb-o-up"></span>
@@ -37,6 +39,8 @@
             type="button"
             class="pnd-dislike"
             ng-show="options.dislike"
+            ng-mouseover="tooltip($event, 'dislike')"
+            ng-mouseleave="tooltipLeave()"
             ng-click="socialEvent($event, 'dislike')"
             ng-class="{'pnd-annotation-details-social-activate': data.social.status.dislike, 'pnd-annotation-details-social-zero': data.social.counting.dislike==0 }">
         <span class="pnd-icon-thumb-o-down"></span>
@@ -53,6 +57,8 @@
             type="button"
             class="pnd-endorse"
             ng-show="options.endorse"
+            ng-mouseover="tooltip($event, 'endorse')"
+            ng-mouseleave="tooltipLeave()"
             ng-click="socialEvent($event, 'endorse')"
             ng-class="{'pnd-annotation-details-social-activate': data.social.status.endorse, 'pnd-annotation-details-social-zero': data.social.counting.endorse==0 }">
         <span class="pnd-icon-check"></span>
@@ -69,6 +75,8 @@
             type="button"
             class="pnd-report"
             ng-if="options.report"
+            ng-mouseover="tooltip($event, 'report')"
+            ng-mouseleave="tooltipLeave()"
             ng-click="socialEvent($event, 'report')"
             ng-class="{'pnd-annotation-details-social-activate': data.social.status.report, 'pnd-annotation-details-social-zero': data.social.counting.report==0 }">
         <span class="pnd-icon-exclamation"></span>
