@@ -11,7 +11,7 @@ angular.module('Pundit2.AnnotationSidebar')
         templateUrl: 'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html',
         link: function(scope) {
 
-            console.log('inside AnnotationDetails.footerButtons.dir');
+            // console.log('inside AnnotationDetails.footerButtons.dir');
 
             var stopEvent = function(event) {
                 event.stopPropagation();
@@ -193,9 +193,9 @@ angular.module('Pundit2.AnnotationSidebar')
                 var iconReferene;
 
                 //check target: iconReference is a button
-                if(event.target.type !== 'button'){
+                if (event.target.type !== 'button') {
                     iconReference = angular.element(event.target.parentElement);
-                }else{
+                } else {
                     iconReference = angular.element(event.target);
                 }
 

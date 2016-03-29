@@ -28,7 +28,7 @@ angular.module('Pundit2.AnnotationSidebar')
         initialHeight = AnnotationSidebar.options.annotationHeight,
         currentHeight = initialHeight - 1;
 
-    var oneDay = 60*60*24;
+    var oneDay = 60 * 60 * 24;
     timeAgo.settings.fullDateAfterSeconds = oneDay;
 
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
@@ -58,11 +58,11 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.annotation.defaultThumb = false;
     $scope.annotation.edited = false;
 
-    if($scope.annotation.thumbnail === ''){
+    if ($scope.annotation.thumbnail === '') {
         $scope.annotation.defaultThumb = true;
     }
 
-    if($scope.annotation.modified != ''){
+    if ($scope.annotation.modified != '') {
         $scope.annotation.edited = true;
     }
 
@@ -193,7 +193,7 @@ angular.module('Pundit2.AnnotationSidebar')
                         $scope.replyTree = AnnotationDetails.addRepliesReference($scope.annotation.parentId, data);
                     }
 
-                    console.log("data: " + data);
+                    // console.log("data: " + data);
 
                 });
 
@@ -452,7 +452,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.menuEdit = function(evt) {
         AnnotationDetails.menuEdit(evt.toElement, $scope, 'left');
-        console.log("inside menu");
+        // console.log("inside menu");
     };
 
     $scope.$watch(function() {

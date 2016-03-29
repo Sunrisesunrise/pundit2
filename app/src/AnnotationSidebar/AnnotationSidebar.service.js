@@ -1474,7 +1474,7 @@ angular.module('Pundit2.AnnotationSidebar')
     EventDispatcher.addListener('Annomatic.annotationSaved', function(e) {
         var annotation = e.args,
             annotations, annotationsList;
-        
+
         state.allSuggestions[annotation.id] = annotation;
         state.suggestions.push(annotation);
 

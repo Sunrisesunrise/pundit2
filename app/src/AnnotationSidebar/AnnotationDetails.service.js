@@ -299,6 +299,23 @@ angular.module('Pundit2.AnnotationSidebar')
     var scopeReference = {},
         repliesReference = {};
 
+    var scrollToAnnotation = function(annotationId) {
+        $timeout(function() {
+            var currentElement = angular.element('#' + annotationId),
+                currentElementRect = currentElement[0].getClientRects()[0],
+                dashboardHeight = clientMode === 'pro' ? Dashboard.getContainerHeight() : 0;
+
+            if (currentElementRect.top >= 0 &&
+                currentElementRect.bottom <= $window.innerHeight) {
+                return;
+            }
+            if (currentElement.length > 0) {
+                angular.element('body').animate({
+                    scrollTop: currentElement.offset().top - dashboardHeight - 60
+                }, 'slow');
+            }
+        }, 100);
+    }
 
     var initContextualMenu = function() {
 
@@ -317,10 +334,10 @@ angular.module('Pundit2.AnnotationSidebar')
                 if (scope.motivation === 'commenting') {
                     scope.editComment(event);
                 } else {
+                    // TODO: gosh .. 
                     event = document.createEvent('Event');
                     scope.editAnnotation(event);
                 }
-                console.log('dentro edit');
             }
         });
 
@@ -840,6 +857,7 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             annotationDetails.closeAllAnnotationView(currentId);
             state.annotations[currentId].expanded = true;
+            scrollToAnnotation(currentId);
             if (Config.modules.AnnotationDetails.social && typeof state.annotations[currentId].scopeReference.annotation.repliesLoaded === 'undefined') {
                 state.annotations[currentId].scopeReference.annotation.repliesLoaded = false;
 
@@ -852,8 +870,7 @@ angular.module('Pundit2.AnnotationSidebar')
                         state.annotations[currentId].scopeReference.replyTree = annotationDetails.addRepliesReference(state.annotations[currentId].scopeReference.annotation.parentId, data);
                     }
 
-                    console.log("data: " + data);
-
+                    // console.log("data: " + data);
                 });
 
             } else {
@@ -923,7 +940,7 @@ angular.module('Pundit2.AnnotationSidebar')
         //}else{
         //    scope.thumbDefault = false;
         //}
-        console.log(currentAnnotation.creatorName + ' ' + currentAnnotation.thumbnail + ' ' + currentAnnotation.id);
+        // console.log(currentAnnotation.creatorName + ' ' + currentAnnotation.thumbnail + ' ' + currentAnnotation.id);
 
 
         var buildSemantic = function() {
@@ -1168,21 +1185,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 return;
             }
 
-            $timeout(function() {
-                var currentElement = angular.element('#' + annotationId),
-                    currentElementRect = currentElement[0].getClientRects()[0],
-                    dashboardHeight = clientMode === 'pro' ? Dashboard.getContainerHeight() : 0;
-
-                if (currentElementRect.top >= 0 &&
-                    currentElementRect.bottom <= $window.innerHeight) {
-                    return;
-                }
-                if (currentElement.length > 0) {
-                    angular.element('body').animate({
-                        scrollTop: currentElement.offset().top - dashboardHeight - 60
-                    }, 'slow');
-                }
-            }, 100);
+            scrollToAnnotation(annotationId);
         }
     });
 
