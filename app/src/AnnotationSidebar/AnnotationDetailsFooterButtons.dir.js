@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.directive('annotationDetailsFooterButtons', function(AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher, $window, PndPopover) {
+.directive('annotationDetailsFooterButtons', function(AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher, $window, PndPopover, $timeout) {
     return {
         restrict: 'C',
         scope: {
@@ -12,6 +12,7 @@ angular.module('Pundit2.AnnotationSidebar')
         link: function(scope) {
 
             // console.log('inside AnnotationDetails.footerButtons.dir');
+            var mouseEventsTimeout;
 
             var stopEvent = function(event) {
                 event.stopPropagation();
@@ -85,7 +86,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     screen = angular.element(window),
                     iconReference = angular.element(event.target);
 
-                if (event.target.className === "pnd-icon-comment") {
+                if (event.target.className === 'pnd-icon-comment') {
                     iconReference = angular.element(event.target.parentElement)
                 }
                 scope.data.replyDialog = !scope.data.replyDialog;
@@ -97,7 +98,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
 
                 if (!MyPundit.isUserLogged()) {
-                    iconReference.classList += " pnd-range-pos-icon";
+                    iconReference.classList += ' pnd-range-pos-icon';
                     scope.data.repliesLoaded = true;
                     scope.data.replyDialog = false;
                     AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert', iconReference);
@@ -108,9 +109,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 if (!scope.data.expanded) {
                     AnnotationDetails.openAnnotationView(scope.id);
                     scope.data.replyDialog = true;
-
                 }
-
 
                 if (typeof scopeRef.replyTree === 'undefined') {
                     scopeRef.replyTree = [];
@@ -118,14 +117,12 @@ angular.module('Pundit2.AnnotationSidebar')
 
                 if (scopeRef.replyTree.length === 0) {
                     AnnotationDetails.getRepliesByAnnotationId(scope.id).then(function(data) {
-
                         scopeRef.replyTree = AnnotationDetails.addRepliesReference(scope.data.parentId, data);
                         AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded = true;
                         if (scope.data.replyDialog === true) {
-
                             setTimeout(function() {
-                                var element = angular.element(".pnd-annotation-reply-textarea")[0].getBoundingClientRect();
-                                var parentElement = angular.element(".pnd-annotation-expanded")[0];
+                                var element = angular.element('.pnd-annotation-reply-textarea')[0].getBoundingClientRect();
+                                var parentElement = angular.element('.pnd-annotation-expanded')[0];
                                 var parentElementOffset = parentElement.getBoundingClientRect();
 
                                 if (element.height + element.top + 90 > screen.height()) {
@@ -143,16 +140,14 @@ angular.module('Pundit2.AnnotationSidebar')
                                     }
                                 }
                             }, 800);
-
                         }
-
                     });
-
                 }
+
                 if (scope.data.replyDialog === true && scope.data.repliesLoaded) {
                     setTimeout(function() {
-                        var element = angular.element(".pnd-annotation-reply-textarea")[0].getBoundingClientRect();
-                        var parentElement = angular.element(".pnd-annotation-expanded")[0];
+                        var element = angular.element('.pnd-annotation-reply-textarea')[0].getBoundingClientRect();
+                        var parentElement = angular.element('.pnd-annotation-expanded')[0];
                         var parentElementOffset = parentElement.getBoundingClientRect();
 
                         if (element.height + element.top + 90 > screen.height()) {
@@ -189,15 +184,34 @@ angular.module('Pundit2.AnnotationSidebar')
                 stopEvent(event);
             };
 
-            scope.tooltip = function(event, type) {
-                var iconReferene;
 
-                //check target: iconReference is a button
-                if (event.target.type !== 'button') {
-                    iconReference = angular.element(event.target.parentElement);
-                } else {
-                    iconReference = angular.element(event.target);
-                }
+            // // to be used in this way: ng-mouseenter="changeMouseState(true)" ng-mouseleave="changeMouseState(false)" 
+            // var timeoutStarted = false,
+            //     pendingMouseState = false;
+
+            // $scope.changeMouseState = function (newMouseState) {
+            //     if (pendingMouseState == newMouseState) {
+            //         return;
+            //     }
+
+            //     pendingMouseState = newMouseState;
+
+
+            //     if (timeoutStarted) {
+            //         return;
+            //     }
+
+
+            //     $timeout(function () {
+            //         timeoutStarted = false;
+            //         $scope.mouseOver = pendingMouseState;
+
+            //         console.log('make stuff');
+            //     }, 10, true);
+            // };
+
+            scope.onMouseEnterTooltip = function(event, type) {
+                var iconReference = angular.element(event.target);
 
                 if (!MyPundit.isUserLogged()) {
                     return;
@@ -207,7 +221,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 iconReference.addClass('pnd-range-pos-icon');
 
                 if (scope.data.social.status[type]) {
-                    type = "Undo " + type;
+                    type = 'Undo ' + type;
                 }
 
                 AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), {
@@ -216,8 +230,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
             };
 
-            scope.tooltipLeave = function() {
-
+            scope.onMouseLeaveTooltip = function() {
                 if (!MyPundit.isUserLogged()) {
                     return;
                 }
@@ -256,8 +269,6 @@ angular.module('Pundit2.AnnotationSidebar')
                             scope.data.social.counting[type] = parseInt(scope.data.social.counting[type]) - 1;
                             scope.data.social.status[type] = false;
                             operation = 'remove';
-
-
                         } else if (!scope.data.social.status[type] && !scope.data.social.status[contrary[type]]) {
                             scope.data.social.counting[type] = parseInt(scope.data.social.counting[type]) + 1;
                             scope.data.social.status[type] = true;
@@ -269,7 +280,6 @@ angular.module('Pundit2.AnnotationSidebar')
                             scope.data.social.status[type] = true;
                             operation = 'add';
                         }
-
 
                         promise = AnnotationDetails.socialEvent(scope.data.id, scope.data.parentId, type, operation);
 
@@ -288,16 +298,15 @@ angular.module('Pundit2.AnnotationSidebar')
                                     ]
                                 });
 
-                            } else {
-                                console.log('socialEvent:OK');
-
-                            }
+                            } 
+                            // else {
+                            //     console.log('socialEvent:OK');
+                            // }
                             scope.disabled[type] = false;
                         });
                     }
 
                 }
-
 
                 stopEvent(event);
             };

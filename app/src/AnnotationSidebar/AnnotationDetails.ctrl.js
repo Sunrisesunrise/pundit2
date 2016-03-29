@@ -201,8 +201,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 $scope.annotation.repliesLoaded = true;
             }
 
-
-
         }
 
         Analytics.track('buttons', 'click', 'annotation--details--' + ($scope.annotation.expanded ? 'expand' : 'collapse'));
