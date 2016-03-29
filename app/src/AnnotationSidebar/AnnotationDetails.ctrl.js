@@ -2,7 +2,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
 .controller('AnnotationDetailsCtrl', function($scope, $rootScope, $element, $timeout, $window,
     AnnotationSidebar, AnnotationDetails, AnnotationsExchange, TripleComposer, Dashboard, EventDispatcher,
-    Config, MyPundit, Analytics, Item, AnnotationPopover) {
+    Config, MyPundit, Analytics, Item, AnnotationPopover, timeAgo) {
 
     var isDefined = function(a) {
         if (a === '' || typeof a === 'undefined') {
@@ -27,6 +27,9 @@ angular.module('Pundit2.AnnotationSidebar')
         currentElement = $element,
         initialHeight = AnnotationSidebar.options.annotationHeight,
         currentHeight = initialHeight - 1;
+
+    var oneDay = 60*60*24;
+    timeAgo.settings.fullDateAfterSeconds = oneDay;
 
     $scope.annotation = AnnotationDetails.getAnnotationDetails(currentId);
 
