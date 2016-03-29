@@ -159,9 +159,11 @@ angular.module('Pundit2.AnnotationPopover')
     };
 
     $scope.focusOn = function(elementId) {
-        setTimeout(function() {
-            angular.element('.pnd-annotation-popover #' + elementId)[0].focus();
-        }, 10);
+        if($scope.currentMode === 'comment' || $scope.currentMode === 'highlight'){
+            setTimeout(function() {
+                angular.element('.pnd-annotation-popover #' + elementId)[0].focus();
+            }, 10);
+        }
     };
 
     if ($scope.currentMode !== '') {
