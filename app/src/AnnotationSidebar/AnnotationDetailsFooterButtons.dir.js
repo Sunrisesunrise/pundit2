@@ -190,7 +190,14 @@ angular.module('Pundit2.AnnotationSidebar')
             };
 
             scope.tooltip = function(event, type) {
-                var iconReference = angular.element(event.target);
+                var iconReferene;
+
+                //check target: iconReference is a button
+                if(event.target.type !== 'button'){
+                    iconReference = angular.element(event.target.parentElement);
+                }else{
+                    iconReference = angular.element(event.target);
+                }
 
                 if (!MyPundit.isUserLogged()) {
                     return;
