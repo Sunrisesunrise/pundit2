@@ -448,7 +448,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.menuEdit = function(evt) {
-        AnnotationDetails.menuEdit(evt.toElement, $scope);
+        AnnotationDetails.menuEdit(evt.toElement, $scope, 'left');
         console.log("inside menu");
     };
 

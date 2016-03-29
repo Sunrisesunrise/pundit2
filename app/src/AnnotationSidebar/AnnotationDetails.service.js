@@ -1113,7 +1113,7 @@ angular.module('Pundit2.AnnotationSidebar')
         return AnnotationsCommunication.socialEvent(annotationId, ancestor, type, operation, comment);
     };
 
-    annotationDetails.menuEdit = function(elem, scope) {
+    annotationDetails.menuEdit = function(elem, scope, placement) {
         var pos = elem.getBoundingClientRect();
         var left = pos.left + pos.width * 2 / 3 + angular.element($window).scrollLeft();
         var top = pos.top + pos.height * 2 / 3 + angular.element($window).scrollTop();
@@ -1132,7 +1132,7 @@ angular.module('Pundit2.AnnotationSidebar')
             } else {
                 type = annotationDetails.options.cMenuTypeNoEdit;
             }
-            ContextualMenu.show(left, top, scope, type);
+            ContextualMenu.show(left, top, scope, type, '', placement);
             state.contextualMenuOpened = true;
         } else {
             ContextualMenu.hide();

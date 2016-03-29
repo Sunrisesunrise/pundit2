@@ -83,12 +83,14 @@ angular.module('Pundit2.ContextualMenu')
         options.scope.content = state.content;
         if (typeof(placement) !== 'undefined') {
             options.placement = placement;
+            state.init = false;
         } else {
             options.placement = contextualMenu.options.position;
+            state.init = true;
         }
         options.templateUrl = 'src/ContextualMenu/dropdown.tmpl.html';
 
-        state.init = true;
+
 
         return $dropdown(state.anchor, options);
 
@@ -216,7 +218,7 @@ angular.module('Pundit2.ContextualMenu')
      * @param {Object} resource
      * @param {String} type
      */
-    contextualMenu.show = function(x, y, resource, type, ref) {
+    contextualMenu.show = function(x, y, resource, type, ref, placement) {
         x += contextualMenu.options.offsetX;
         y += contextualMenu.options.offsetY;
 
@@ -268,7 +270,7 @@ angular.module('Pundit2.ContextualMenu')
         state.lastRef = ref;
 
         if (!state.init) {
-            state.mockMenu = init(mockOptions);
+            state.mockMenu = init(mockOptions, placement);
             state.mockMenu.$promise.then(state.mockMenu.show);
         } else {
             state.mockMenu.show();
