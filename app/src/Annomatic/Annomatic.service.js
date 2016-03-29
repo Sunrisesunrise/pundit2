@@ -147,7 +147,22 @@ angular.module('Pundit2.Annomatic')
      * Default value:
      * <pre> targetsToSkip: [] </pre>
      */
-    targetsToSkip: ['a', 'b', 'i', 'strong', 'td', 'tr']
+    targetsToSkip: ['a', 'b', 'i', 'strong', 'td', 'tr'],
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Annomatic.skipTrim
+     *
+     * @description
+     * `boolean`
+     *
+     * Skip trip for text sended to DataTXT
+     *
+     * Default value:
+     * <pre> skipTrim: false </pre>
+     */
+    skipTrim: false
 })
 
 /**
@@ -640,9 +655,11 @@ angular.module('Pundit2.Annomatic')
         // will to the magic rest ;)
         // content = element.html();
 
-        // If we're not passing the HTML but just the text, we strip out extra spaces at beginning
-        // and end, and multiple spaces in the middle of the text
-        content = trim(content);
+        if (annomatic.options.skipTrim === false) {
+            // If we're not passing the HTML but just the text, we strip out extra spaces at beginning
+            // and end, and multiple spaces in the middle of the text
+            content = trim(content);
+        }
 
         annomatic.log('Querying DataTXT for annotations on content: ', content);
 
@@ -1094,6 +1111,8 @@ angular.module('Pundit2.Annomatic')
             annomatic.reviewNext(num + 1);
 
             annomatic.userAnnotations[annId] = AnnotationsExchange.getAnnotationById(annId);
+
+            EventDispatcher.sendEvent('Annomatic.annotationSaved', annomatic.userAnnotations[annId]);
         });
     };
 

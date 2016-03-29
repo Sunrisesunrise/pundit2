@@ -7,6 +7,10 @@ angular.module('Pundit2.Annomatic')
     $scope.targets = Consolidation.getAvailableTargets(true);
     $scope.gotAnnotations = false;
 
+    $scope.getTopById = function(id) {
+        return AnnotationSidebar.getAnnotationTopById(id);
+    };
+
     $scope.getSuggestions = function() {
         MyPundit.login().then(function(logged) {
             if (logged) {

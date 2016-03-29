@@ -7,13 +7,13 @@ angular.module('Pundit2.AnnotationSidebar')
     var clientMode = Config.clientMode,
         Dashboard = clientMode === 'pro' ? $injector.get('Dashboard') : undefined;
 
-    var bodyClasses = AnnotationSidebar.options.bodyExpandedClass + ' ' + AnnotationSidebar.options.bodyCollapsedClass;
-    var sidebarClasses = AnnotationSidebar.options.sidebarExpandedClass + ' ' + AnnotationSidebar.options.sidebarCollapsedClass;
+    var bodyClasses = AnnotationSidebar.options.bodyExpandedClass + ' ' + AnnotationSidebar.options.bodyCollapsedClass,
+        sidebarClasses = AnnotationSidebar.options.sidebarExpandedClass + ' ' + AnnotationSidebar.options.sidebarCollapsedClass;
 
-    // var html = angular.element('html');
-    var body = angular.element('body');
-    var container = angular.element('.pnd-annotation-sidebar-container');
-    var header = angular.element('.pnd-annotation-sidebar-header');
+    var html = angular.element('html');
+        body = angular.element('body'),
+        container = angular.element('.pnd-annotation-sidebar-container'),
+        header = angular.element('.pnd-annotation-sidebar-header');
     // var content = angular.element('.pnd-annotation-sidebar-content');
 
     var toolbarHeight = clientMode === 'pro' ? parseInt(angular.element('toolbar nav').css('height'), 10) : 0;
@@ -71,9 +71,11 @@ angular.module('Pundit2.AnnotationSidebar')
 
     // Start reading the default
     if (AnnotationSidebar.options.isAnnotationSidebarExpanded) {
+        html.addClass(AnnotationSidebar.options.bodyExpandedClass);
         body.addClass(AnnotationSidebar.options.bodyExpandedClass);
         container.addClass(AnnotationSidebar.options.sidebarExpandedClass);
     } else {
+        html.addClass(AnnotationSidebar.options.bodyCollapsedClass);
         body.addClass(AnnotationSidebar.options.bodyCollapsedClass);
         container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
     }
@@ -518,6 +520,7 @@ angular.module('Pundit2.AnnotationSidebar')
     EventDispatcher.addListener('AnnotationSidebar.toggle', function(e) {
         var currentState = e.args;
         if (currentState !== $scope.isAnnotationSidebarExpanded) {
+            html.toggleClass(bodyClasses);
             body.toggleClass(bodyClasses);
             container.toggleClass(sidebarClasses);
             AnnotationSidebar.setAnnotationsPosition();

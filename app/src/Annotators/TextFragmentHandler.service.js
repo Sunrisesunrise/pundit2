@@ -109,13 +109,27 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> labelMaxLength: 40 </pre>
      */
-    labelMaxLength: 40
+    labelMaxLength: 40,
 
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#TextFragmentHandler.loginRequired
+     *
+     * @description
+     * `boolean`
+     *
+     * Activate listeners for temporary selections
+     *
+     * Default value:
+     * <pre> loginRequired: false </pre>
+     */
+    loginRequired: false
 })
 
 // TODO: remove toolbar and triplecomposer dependency 
 .service('TextFragmentHandler', function($rootScope, TEXTFRAGMENTHANDLERDEFAULTS, NameSpace, BaseComponent, TextFragmentAnnotator,
-    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, Consolidation, EventDispatcher, $document, $window, $injector, Config) {
+    XpointersHelper, Item, ItemsExchange, Toolbar, TripleComposer, Consolidation, EventDispatcher, $document, $window, $injector, Config, Status) {
 
     var textFragmentHandler = new BaseComponent('TextFragmentHandler', TEXTFRAGMENTHANDLERDEFAULTS);
     var clientHidden = false;
@@ -125,6 +139,8 @@ angular.module('Pundit2.Annotators')
 
     var menuType = Config.clientMode === 'pro' ? 'ContextualMenu' : 'AnnotationPopover',
         handlerMenu = $injector.get(menuType);
+
+    var isUserLogged = Status.getState('Pundit').userLogged;
 
     // TODO: cambiare nome perche a raffaele da noia.
     var checkTemporaryConsolidated = function(forceWipe) {
@@ -623,6 +639,10 @@ angular.module('Pundit2.Annotators')
         });
     }
 
+    EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
+        isUserLogged = e.args;
+    });
+
     EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
         clientHidden = true;
     });
@@ -635,7 +655,7 @@ angular.module('Pundit2.Annotators')
 
     function mouseUpHandler(upEvt) {
         lastTemporaryConsolidable = undefined;
-        if (clientHidden) {
+        if (clientHidden || (textFragmentHandler.options.loginRequired && !isUserLogged)) {
             return;
         }
 
@@ -721,7 +741,7 @@ angular.module('Pundit2.Annotators')
     }
 
     function mouseDownHandler(downEvt) {
-        if (clientHidden) {
+        if (clientHidden || (textFragmentHandler.options.loginRequired && !isUserLogged)) {
             return;
         }
 

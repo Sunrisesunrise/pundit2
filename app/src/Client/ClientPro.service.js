@@ -401,8 +401,8 @@ angular.module('Pundit2.Client')
         // Node which will contain every other component
         root;
 
-    var body = angular.element('body');
-    body.addClass(client.options.bodyClass);
+    var html = angular.element('html'),
+        body = angular.element('body');
 
     // Verifies that the root node has the wrap class
     var fixRootNode = function() {
@@ -607,14 +607,20 @@ angular.module('Pundit2.Client')
         angular.element('body').css({
             'marginTop': 0
         });
+
+        html.removeClass(client.options.bodyClass);
         body.removeClass(client.options.bodyClass);
+
         root.css('display', 'none');
         $rootScope.$$phase || $rootScope.$digest();
     };
 
     client.showClient = function() {
         EventDispatcher.sendEvent('Client.show');
+
+        html.addClass(client.options.bodyClass);
         body.addClass(client.options.bodyClass);
+
         root.css('display', 'inherit');
         $rootScope.$$phase || $rootScope.$digest();
     };
@@ -630,8 +636,9 @@ angular.module('Pundit2.Client')
     // Reads the conf and initializes the active components, bootstrap what needs to be
     // bootstrapped (gets annotations, check if the user is logged in, etc)
     client.boot = function() {
-
+        html.addClass(client.options.bodyClass);
         body.addClass(client.options.bodyClass);
+
         fixRootNode();
         addComponents();
 

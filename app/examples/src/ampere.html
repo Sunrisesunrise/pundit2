@@ -1,0 +1,2869 @@
+<!-- buildexamples:section header --><!-- /buildexamples -->
+
+<style>
+    .row {
+        margin-top: 20px;
+    }
+
+</style>
+
+<style type="text/css">
+@charset "UTF-8";
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak,
+.ng-hide:not(.ng-hide-animate) {
+    display: none !important;
+}
+
+ng\:form {
+    display: block;
+}
+
+.ng-animate-shim {
+    visibility: hidden;
+}
+
+.ng-anchor {
+    position: absolute;
+}
+</style>
+<script src="https://use.typekit.net/ytb3str.js"></script>
+<style type="text/css">
+.tk-futura-pt-condensed {
+    font-family: "futura-pt-condensed", sans-serif;
+}
+</style>
+<link rel="stylesheet" href="https://use.typekit.net/c/2142ab/1w;futura-pt-condensed,7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191,WGz:W:n5,WH1:W:n7/l?3bb2a6e53c9684ffdc9a9bf2195b2a62ec19c67c2541de178ac90e2c9f82982afa8d93626d12ff2d4b0d2c0192e2b27cc4c28a8bc69c583b9fc8b1adeb3c1263e3a5e22c7727901cd092724b2d50a4d45245f5e8a63cf3961a80baf335f5cfca9cd726e0681730c43d2e4a08ad3f9b438fedf1efecf9aec26285777f0f5df4e4409916f6831f1bebe9c017891df4f9" media="all">
+<script>
+try {
+    Typekit.load({
+        async: true
+    });
+} catch (e) {}
+</script>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="http://ampere.dev.huma-num.fr/static/CSS/normalize.css">
+
+<!-- Plugin Stuff -->
+<!-- Mathjax -->
+<script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({ "HTML-CSS": { linebreaks: { automatic: true, width: "70%container" } }, SVG: { linebreaks: { automatic: true, width: "70%container" } } });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<style type="text/css">
+
+/*! HTML5 Boilerplate v5.0 | MIT License | http://h5bp.com/ */
+
+html {
+    color: #000000;
+    height: 100%;
+    position: relative;
+}
+/* Pour impression sous Firefox */
+html:not([lang*=""]) * {
+       overflow: visible !important;
+}
+
+body {
+    font: 14px/26px Arial;
+    height: 100%;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* @group Override Pundit CSS */
+.pnd-wrp a
+{
+    text-transform: uppercase!important;
+}
+.navbar, .pnd-toolbar-navbar, .container-fluid, .pnd-toolbar-navbar-container, pnd-toolbar-navbar{
+    height: 20px!important;
+    line-height: 11px!important;
+}
+.pnd-wrp .navbar-inverse
+{
+    background-color: #ddd!important;
+    border-bottom: none;
+}
+.pnd-wrp .navbar-inverse .navbar-nav > li > a
+{
+    color: #998d8d;!important;
+    border-right: none!important;
+}
+.pnd-wrp .pnd-toolbar-navbar .navbar-right li a{
+    border-left: none!important;
+}
+.pnd-wrp .pnd-toolbar-navbar .navbar-right li a:hover,
+.pnd-wrp .pnd-toolbar-navbar .navbar-right li a:focus
+{
+  color: #fff!important;
+}
+.pnd-wrp .pnd-toolbar-navbar .navbar-nav li.pnd-calltoaction-btn a
+{
+  background-color: #bbb;
+  color: #fff;
+  border-right:none;
+}
+
+.pnd-wrp .pnd-toolbar-navbar .navbar-nav li.pnd-calltoaction-btn a:focus,
+.pnd-wrp .pnd-toolbar-navbar .navbar-nav li.pnd-calltoaction-btn a:hover{
+  background-color: #ccc!important;
+  color: #fff;
+  border-right:none;
+}
+/* @end */
+
+
+a {
+  color: #00839b;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+  color: #5DB0BF;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid white;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+sup {
+    padding-left: 2px;
+}
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+ul, ol {
+    padding:  0px 0px 0px 15px;
+}
+ul li, ol li{
+    padding-bottom: 5px;
+}
+blockquote{
+    margin: 0;
+    display: inline;
+    clear: none;
+}
+
+/* @group Classes Corps du texte */
+
+.left{
+    text-align: left;
+}
+.right{
+    text-align: right;
+}
+.center{
+    text-align: center;
+}
+.smallcaps{
+    font-variant: small-caps;
+}
+.center{
+    text-align: center;
+    display:block;
+}
+.table{
+     width:100%;  
+     margin-bottom:10px;
+     margin-top:10px;
+     border-collapse: collapse;
+}
+.table tr:nth-child(2n+1){
+    background:#E8F0F2;
+}
+.table tr:nth-child(2n+2){
+    background:#eeeeee ;
+}
+.table tr td{
+    padding:5px 10px 5px 10px;  
+    border-bottom: 1px solid #9fced9;
+}
+/* @end */
+
+
+
+/* @group Header */
+
+header {
+    height: 110px;
+    display: block;
+    margin: 0;
+    padding:0;
+    position: relative;
+}
+nav ul li {
+   display: inline;
+ }
+ nav ul ul {
+     display: none;
+ }
+ nav ul li:hover > ul {
+         display: block;
+ }
+#mainnav{
+  z-index: 10;
+  width: 100%;
+  padding-left: 0px;
+  font-family: "futura-pt-condensed",sans-serif;
+}
+#mainnav h1 {
+  margin: 0;
+  padding:0;
+  background: none;
+}
+#mainnav h1 a {
+  text-indent: -5000px;
+  background:  url("http://ampere.dev.huma-num.fr/static/img/ampere.jpg") no-repeat left top;
+  height: 65px;
+  width: 250px;
+  margin: 0;
+  padding:10px;
+  float: left;
+  position: relative;
+  z-index: 10000;
+}
+
+#mainnav ul {
+    list-style-type: none;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    float: left;
+    padding: 0;
+    margin: 0;  
+    height: 110px;
+    width: 100%;
+}
+#mainnav > ul > li{
+    position: relative;
+    color:white;
+    float: left;
+    text-transform: uppercase;
+    width: 148px;
+    height: 19px;
+    display: block;
+    text-align: center;
+    padding-top: 90px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-right: 4px;
+}
+#mainnav ul li a:hover, #mainnav ul li a.active{
+    background-color:#231F20!important;
+}
+#mainnav > ul > li#index a:hover{
+    background-color: silver!important;
+}
+#mainnav > ul > li#index > ul > li a:hover{
+    background-color: #9fced9!important;
+}
+
+
+#mainnav > ul > li > a  {
+    color:white;
+    width: 100%;
+    display: block;
+    height: 19px;
+    padding: 0;
+    margin: 0;
+    font-size:1.3em;
+    line-height: 1.1em;
+} 
+
+/* Lien Recherche */
+#mainnav li#recherche{
+    font-family: arial;
+    text-align: left;
+    margin-left: 25px;
+    font-size: 0.8em;
+    padding-top: 0px;
+    top: 95px;
+}
+#mainnav li#recherche:hover{
+    background: none;
+}
+#mainnav li#recherche a{
+    color: black;
+    text-transform: none;
+    background-color: white!important;
+}
+#mainnav li#recherche a:hover, #mainnav li#recherche a:hover:before{
+    color: #9fced9;
+}
+#mainnav li#recherche a:before{
+    content: ">";
+    color: black;
+    padding-right: 8px;
+    
+}
+/* Menu Index */
+#mainnav li#index{
+    background-color: #9fced9;
+    width: 66px;
+    margin-left: 10px;
+    margin-right: 6px;
+    padding-top: 0px;
+    top: 90px;
+}
+/*  Menus Principaux avec vignettes*/
+    #mainnav li#une-vie{
+    background: #00839b url('http://ampere.dev.huma-num.fr/static/img/une_vie.jpg') no-repeat center top;
+}
+    #mainnav li#publications{
+    background: #00839b url('http://ampere.dev.huma-num.fr/static/img/publications.jpg') no-repeat center top;
+}
+    #mainnav li#correspondance{
+    background: #00839b url('http://ampere.dev.huma-num.fr/static/img/correspondance.jpg') no-repeat center top;
+}
+    #mainnav li#archives{
+    background: #00839b url('http://ampere.dev.huma-num.fr/static/img/archives.jpg') no-repeat center top;
+}
+    #mainnav li#documents-études{
+    background: #00839b url('http://ampere.dev.huma-num.fr/static/img/doc_etudes.jpg') no-repeat center top;
+}
+/* Lien Histoire de l'électricité */
+#mainnav li#histoire-électricité {
+    padding-top: 0px!important;
+    height: 115px;
+    margin-top: 0px;
+}
+#mainnav ul li#histoire-électricité a{
+    text-indent: -5000px;
+    background:  white url("http://ampere.dev.huma-num.fr/static/img/histoire_elec.png") no-repeat 20px 15px;
+    width: 220px;    
+    height: 105px;
+    cursor: pointer;
+    position: absolute;
+    left: 0px;
+    display: block;
+    opacity: 0.5;
+    z-index: 10000;
+}
+
+#mainnav ul li#histoire-électricité a:hover{
+    opacity: 1!important;
+    background-color: white!important;
+}
+#mainnav li#histoire-électricité a:before{
+    content: "<";
+    text-indent: -5000px;
+    background:   url("http://ampere.dev.huma-num.fr/static/img/fleche_histoire.png") no-repeat 7px 31px!important;
+    width: 30px;    
+    height: 95px;
+    cursor: pointer;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+/* Submenu */
+#mainnav ul > li:hover > ul {
+    z-index:1;
+    opacity:1;
+    display:block;
+    z-index: 10000;
+}
+#mainnav ul > li > ul {
+    width:100%;
+    position: absolute;
+    top:100%;
+    left:0px;
+    z-index:-1;
+    border-top: 3px solid white;
+}
+
+#mainnav ul  ul > li a{
+    display: block;
+    background:#00839b;
+    text-transform: none;
+    font-size: 0.9em;
+    line-height: 1.1em;
+    color: white;
+    font-family: arial;
+    border-bottom: 1px solid #9fced9;
+    padding-top: 6px;
+    padding-bottom:6px;
+    width: 100%;
+}
+/*#mainnav ul li#index ul > li a{
+    height: auto!important;
+    line-height: normal!important;
+}*/
+#mainnav ul > li > ul > li:last-child
+{
+  border-bottom: none;
+}
+/* @end */
+
+
+
+/* @group Fil d'ariane */
+#breadcrumb ul{
+    width: 100%;
+    margin: 5px  0px 5px 192px;
+    padding: 0;
+    
+}
+#breadcrumb ul li{
+    display: inline;
+    
+}
+#breadcrumb ul li:before{
+    content: ">";
+    padding-left: 5px;
+    padding-right: 5px;
+}
+#breadcrumb ul li:first-child:before{
+    content: none;
+    padding-right: 0px;
+}
+#breadcrumb a{
+    z-index: 1000;
+    position: relative;
+    color: black;
+}
+#breadcrumb a:hover{
+    color: #9fced9;
+}
+/* @end */
+
+/* @group Titres */
+h1{
+    padding: 0px 0px 0px 0px;
+    text-align: center;
+    font-size: 1.2em;
+    line-height: 1.25em;
+    text-transform: uppercase;
+    width: 100%;
+    height: 22px;
+    display: block;
+    background: #231F20;
+    color: white;
+    margin: 0;
+    font-weight: bold;
+}
+.main_column h2, .presentation h2{
+    padding: 20px 0px 0px 0px;
+    text-align: left;
+    font-size: 1.3em;
+    line-height: 1.7em;
+    text-transform: uppercase;
+    color: #00839b;
+    margin: 0;
+    font-weight: bold;
+}
+.item h2{
+    padding: 0;
+    margin: 0;
+    font-size: 1.3em;
+    text-transform: none;
+    color: black;
+    font-weight: normal;
+    line-height: 1.2em;
+}
+h3{
+    padding: 15px 0px 0px 0px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+h4{
+    padding: 10px 0px 0px 0px;
+    text-align: left;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+/* @end */
+
+
+/* @group Main Container */
+.container{
+    display: table;
+    padding-left: 0px;
+    padding-bottom: 0px;
+    border-collapse: collapse;
+    border-left: 15px solid #00839b;
+    border-top: 1px solid #00839b;
+    border-bottom: 1px solid #00839b;
+    border-right: 1px solid #00839b;
+    position: relative;
+    min-height: 600px;
+    height: 100%;
+}
+.main_column{
+    position: relative;
+    padding:0;
+    min-height: 600px;
+    height: 100%;
+}
+.left_column, .main_column{
+    display: table-cell;
+    vertical-align:top;
+}
+.left_column{
+    width : 244px;
+    border-right: #00839b 1px solid;
+}
+.content{
+    padding: 20px 30px 30px 30px;
+    position: relative;
+}
+
+
+
+
+
+/* Boutons de navigation colonne droite et gauche : "Accès à..." / "Retour aux..." */
+#navigation  a{
+    display: block;
+    color: white;
+    font-size: 0.9em;
+    line-height: 1.9em;
+    height: 22px;
+    text-transform: uppercase;
+}
+#navigation a.left{
+    float: right;
+    width: 192px;
+    text-align: left;
+    padding-left: 30px;
+    background: #00839b url('http://ampere.dev.huma-num.fr/static/img/arrow-white-left.png') no-repeat 12px 3px;
+}
+#navigation a.right{
+    top: 1px;
+    position: absolute;
+    text-align: left;
+    padding-left: 30px;
+    right: 1px;
+    width:200px;
+    background: #00839b url('http://ampere.dev.huma-num.fr/static/img/arrow-white-right.png') no-repeat 10px 3px;
+}
+#navigation a:hover{
+    background-color: #9fced9;
+}
+
+/* Back to Top */
+#top{
+    position: absolute;
+    top: -30px;/* Supprime le margin de Pundit */
+}
+a.top
+{
+    display: block;
+    text-indent:5000px;
+    width: 17px;
+    height: 17px;
+    position: fixed;
+    bottom:10px; 
+    left: 1250px;
+    cursor: pointer;
+    background: url('http://ampere.dev.huma-num.fr/static/img/top.png') no-repeat bottom right;
+}
+a.top:hover
+{
+    background: url('http://ampere.dev.huma-num.fr/static/img/top_hover.png') no-repeat bottom right;
+
+}
+/* @end */
+
+/* @group Footer */
+footer{
+    height: 20px;
+}
+#footernav{
+    text-align: center;    
+}
+#footernav a{
+    color: #6f6f6e;
+    font-size: 1.2em;
+    font-family: "futura-pt-condensed",sans-serif;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#footernav #histoire{
+    display: none;
+}
+#footernav #histoire a{
+    color: #874487;
+}
+#footernav a:hover{
+    color: #9fced9;
+}
+#logos img{
+    padding-left: 20px;
+    padding-right: 20px;
+    vertical-align: middle;
+}
+#logos #anr {
+    padding-top: 10px;
+}
+/* @end */
+
+
+/* @group Bloc de recherche colonne de gauche */
+#search-container{
+    position: absolute;
+    background: #00839b;
+    color: white;
+    margin-top: 20px;
+    font-size: 1em;
+    width: 180px;
+    padding: 20px 0px 20px 0px;
+    font-weight: bold;
+}
+#search-container .options th.narrow {
+    width: 150px;
+}
+#search-container .columnSelectorWrapper {
+    position: relative;
+}
+#search-container .columnSelectorButton, 
+#search-container .print,
+#search-container .reset
+{
+    background: black;
+    padding: 2px 5px 2px 5px;
+    cursor: pointer;
+    color: white;
+    height: 14px;
+    font-size: 12px;
+    margin-right: 15px;
+    line-height: 14px;
+    cursor: pointer;
+    font-weight: normal;
+    text-align: center;
+    width: 64px;
+}
+#search-container .columnSelectorButton, 
+#search-container .print{
+    display: inline;
+    float: left;
+}
+#search-container .reset{
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    margin-left: 93px;
+}    
+#search-container .print{
+     float: right;
+}
+#search-container .print:hover,
+#search-container .reset:hover,
+#search-container .columnSelectorButton:hover,
+#search-container .ok:hover{
+    background: #9fced9;
+}
+
+#search-container input.search{
+    color: black;
+    font-size: 12px;
+    width: 160px;
+}    
+#search-container label input{
+    margin-right: 3px;
+}
+#search-container .columnSelector, .hidden {
+        display: none;
+        color: black;
+}
+#search-container #colSelect1:checked + label {
+        color: #fff;
+        background: #9fced9;
+        font-weight: bold;
+}
+#search-container #colSelect1:checked ~ #columnSelector {
+        display: block;
+}
+#search-container .columnSelector{
+        width: 176px;
+        position: absolute;
+        top: 18px;
+        padding: 2px;
+        background: #9fced9;
+        color: white;
+        font-size: 12px;
+        line-height: 14px;
+        padding-top: 5px;
+}
+#search-container .columnSelector label {
+        display: block;
+        text-align: left;
+        margin-bottom: 8px;
+        font-weight: normal;
+}
+#search-container .columnSelector .disabled {
+        color: #eee;
+}
+/* Bouton OK sur la page Résultats de recherche */
+#search-container .ok{
+    float: right;
+    background: black;
+    padding: 1px 3px 1px 3px;
+    cursor: pointer;
+    color: white;
+    height: 20px;
+    line-height: 20px;
+    margin-right: 13px;
+    margin-top: 5px;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+}
+/* @end */
+
+/* @group Page Items : oeuvre, lettre, chemise */
+.item .row{
+    display:table-row;
+    border-bottom: 1px solid #00839b;
+}
+.item .row.head {
+    border-bottom: none!important;
+}
+
+.item .row:last-of-type
+{
+    border-bottom: none!important;
+    padding-bottom: 15px;
+}
+.item .left_column{
+    width: 396px;    
+}
+.item .main_column{
+    border-right: #00839b 1px solid;
+    width: 605px;
+}
+
+/* Numéros de page/image  */
+.item .left_column .pb{
+    float: right;
+    background: #00839b;
+    z-index: 10000;
+    color: #fff;
+    height: 16px;
+    font-size: 0.8em;
+    width: auto;
+    line-height: 1.4em;
+    padding: 1px 4px 1px 4px;
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+}
+.item .main_column .nav-page {
+    position: relative;
+    float: right;
+    width: 53px;
+    background: #00839b;
+    z-index: 10000;
+    color: #fff;
+    height: 16px;
+    font-size: 0.8em;
+    line-height: 1.4em;
+    padding: 1px 8px 1px 4px;
+    text-align: left;
+    text-transform: uppercase;
+}
+.item  .main_column  ul.pb {
+    display: inline-block;    
+    display: none;
+    color: white;
+    position: absolute;
+    background: #00839b;
+    top: 100%;
+    padding: 0;
+    left: 0;
+    margin:0;
+    width: 65px;
+    text-align: center;
+    list-style-type: none;
+}
+.item  .main_column ul.pb .caret {
+      float: right;
+}
+.item  .main_column .caret:before {
+        content: '';
+      position: absolute;
+      left: 46px;
+      top: 5px;
+        border-top: 7px solid #ffffff;
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+}
+.item  .main_column ul.pb  li a{
+    display: block;
+    width: 65px;    
+}
+.item  .main_column .pb  li a{
+    color: #fff;
+    text-align: center;
+}
+.item  .main_column .nav-page:hover ul.pb{
+    display: block!important;
+}
+.item  .main_column ul.pb li:hover{
+    background-color: #9fced9; 
+    display:inline-block;
+    color: #fff;
+}
+
+/* Bouton version diplomatique/normalisée */
+.item .main_column ul.mode{
+    list-style-type: none;
+    position: fixed;
+    text-align:right;
+    left: 985px;
+    margin-top: 30px;
+    z-index: 10000;
+}
+.item .main_column ul.mode li {
+    display:block;
+}
+.item .main_column ul.mode li a{
+    width: 16px;
+    display: block;
+    height: 18px;
+    line-height: 18px;
+    color: white;
+    text-align: center;
+    background: #9fced9;
+    font-size: 1.4em;
+    border: 1px solid #00839b;
+    border-right: none;
+      font-family: "futura-pt-condensed",sans-serif;
+}
+.item .main_column ul.mode li a:hover, 
+.item .main_column ul.mode li a.active{
+    background: #00839b;
+}
+
+/* Reference en haut d'une lettre ou d'une oeuvre*/
+.item  .author, .item  .title{
+    font-size: 1.5em;
+    line-height: 1.2em;
+    padding-bottom: 12px;
+    text-transform: none;
+    color: black;
+    position: relative;
+    display: block;
+}
+.item  .author{
+    color: #00839b;
+}
+.item  .date{
+    font-weight: bold;
+    font-size: 1em;
+}
+.item  .edition{
+    font-size: 0.9em;
+    line-height: 1.2em;
+}
+.item  .edition p{
+    font-size: 0.9em;
+    line-height: 1.2em;
+    padding-top: 0px;
+    margin-top: 0px;
+}
+
+.item .edition ul{
+    margin-top: 0px;
+    padding-top: 0px;
+}
+/* 1ère page d'une lettre/oeuvre*/
+.item .front{
+    text-align: center;
+}
+.item .front em{
+    display: inline-block;
+    position: relative;
+    clear: both;
+    padding-bottom: 20px;
+}
+
+/* Page d'une chemise : liste des documents en en-tête */
+.item .chemise h2{
+    text-align: center;
+    font-size: 1.5em;
+    padding-bottom: 20px;
+}
+.item .chemise .front  ul{
+    list-style-type: none;
+    text-align: center;
+    font-size:0.9em;
+}
+.item .chemise .front .content ul li{
+    padding-bottom: 5px;
+    display: list-item;
+    padding-top: 2px;
+}
+.item .chemise .front .content ul li:after{
+    content: "";
+   display: block;
+   height: 1px;
+   width: 70%;
+   margin:auto;
+   margin-top: 7px;
+   margin-bottom: 4px;
+   background: #00839b;
+   text-align: center;
+}
+.item .chemise .front .content ul li a{
+    line-height: normal;
+}
+.item .row .image{
+    border-top: 1px solid black;
+    display: block;
+    clear: both;
+}
+.item .row .image:first-of-type{
+    border-top: none!important;
+}
+/* Empêche les retour à la ligne des div note-float et persname-float */
+.item .content h2, .item .content h3, .item .content h4{
+    position: relative;
+}
+.item .content h2{
+    padding-bottom: 20px;
+}
+/* Liens externes : TEI, pdf... */
+.item .external_link{
+    position: absolute;
+    left: 1025px;
+    top: 5px;
+    width: 227px;
+    font-weight: bold;
+    font-size: 0.9em;
+    display: block!important;
+    vertical-align: top;
+    line-height: 1.8em;
+}
+.item .external_link a{
+    padding-right: 12px;
+}
+/* texte sous le titre de l'ouvrage */
+.item .note-float .biblio_notes{
+    clear: both;
+    display: block;
+    padding-top: 10px;
+}
+.item .note-float .handshift i, .item .note-float .ref_ouvrage i{
+    padding-right: 5px;
+    display: inline-block;
+}
+/* @group Exergues dans le texte */
+/* Liens dans le texte avec affichage dans la colonne de droite  au survol  */
+.item .persname-float, .item .note-float{
+    width:18.6em;
+    font-size: 11px;
+    color: #333333;
+    line-height: 14px;
+    list-style:none;
+    padding-top:0px;
+    text-align:left;
+    position: absolute;
+    margin-top:-15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #BCd2d6;
+}
+/* Pour les ancres directement dans le div content */
+.item .content .persname-float, .item .content  .note-float{
+    left: 618px;
+}
+.item .content h2 .persname-float, .item .content h2 .note-float{
+    left: 590px;
+}
+.item .content .pundit-content .persname-float, .item .content .pundit-content .note-float{
+    left: 590px;
+}
+.item .opened{
+    display:block;
+}
+.item .anchor a{
+    margin-left: 1px;
+    margin-right: 4px;
+    color:#e2007a;
+    text-decoration: none;
+    position: relative;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: Trebuchet MS, Helvetica, sans-serif;
+}
+.item .anchor a:hover, .item .notenum:hover{
+    color:#e2007a;
+}
+.item .notenum, .item a.notenum {
+    color:#e2007a;
+    text-decoration: none;
+    padding-right: 2px;
+}
+/* Nom de personne dans le texte : Persname */
+.item a.persname {
+    margin-left: 1px;
+    margin-right: 4px;
+    padding-bottom: 5px;
+    text-decoration: none;
+    position: relative;
+    display: block;
+}
+.item .persname a:hover{    
+    color:#9fced9;
+}
+.item .anchor a:hover, .item .notenum:hover{
+    color:#e2007a;
+}
+/* Ouvrage mentionné dans le texte : ref_ouvrage et Changement de main : handshift*/
+.item .handshift, .item .ref_ouvrage {
+    font-size: 14px;
+    cursor: pointer;
+    position: relative;
+}
+.item .linebreak{
+    display: block;
+    clear: both;
+}
+.item mark{
+    background:gray;
+    padding: 0px 2px 0px 3px;
+    line-height: 16px;
+    text-align: center;
+    display: inline-block;
+
+    color: white;
+}
+.item mark a.infoAbbr{
+    background: gray;
+    padding-left:  1px;
+    padding-right: 1px;
+    color: white;
+}
+.item mark a.infoAbbr:hover {
+    background: gray;
+    color: #fff!important;
+}
+.item .folio {
+    background: #9fced9;
+    display: inline-block;
+    margin-left: 2px;
+    margin-right: 2px;
+    min-width: 12px;
+    line-height: normal;
+    text-align: center;
+    padding-left: 1px;
+    padding-right: 1px;
+    cursor: help!important;
+    color: white;
+}
+/* Abbr et corr*/
+.item a.infoAbbr, .item a.infoCorr {
+    position:relative;
+    z-index:24;
+    color: gray;
+    text-decoration:none
+}
+.item a.infoAbbr span, .item a.infoCorr span{
+    display: none;
+}
+.item a.infoAbbr:hover, .item a.infoCorr:hover{
+    z-index:25;
+    background-color:#FFF
+}
+.item a.infoAbbr:hover span,.item a.infoCorr:hover span{
+    display:block;
+    position:absolute;
+    top:2em; left:2em; width:15em;
+    border:1px solid #000;
+    background-color: #fff;
+    text-align: justify;
+    padding:5px;
+    color: black;
+    border: 1px solid #874487;
+}
+.item .lacune{
+    color: #5EC1AC;
+}
+.item .supplied{
+  color: gray;
+  padding-right: 3px;
+}
+/* @end */
+/* @end */
+
+
+
+
+/* @group Archives et Publications : Plugin Tablesorter */
+table.tablesorter tr td .toggle{
+    padding-left: 30px;
+    margin-left: -30px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    display: inline-block;
+    text-indent: -9999px;
+} 
+.publications table.tablesorter tr td .toggle{
+    background:  url('http://ampere.dev.huma-num.fr/static/img/icon_filles.jpg') no-repeat 0px 0px;
+}
+.archives table.tablesorter tr td .toggle{
+    background:  url('http://ampere.dev.huma-num.fr/static/img/icon_chem.jpg') no-repeat 0px 0px;
+}
+/*Archives*/
+.archives table.tablesorter .tablesorter-childRow td{
+    padding-left: 20px!important;
+    padding-bottom: 15px;
+}
+.archives table.tablesorter .tablesorter-childRow td div:first-of-type{
+    padding-left: 0px!important;
+    padding-bottom:0px!important;
+    font-style: italic;
+    margin-left: 0px!important;
+}
+.archives table.tablesorter .tablesorter-childRow td div{
+    border-bottom: 1px solid #00839b;
+    padding:5px 15px 5px 5px;
+    margin-left: 20px;
+    font-size: 1em;
+    line-height: 1.4em;
+}
+.archives table.tablesorter .tablesorter-childRow td div:first-of-type,
+.archives table.tablesorter .tablesorter-childRow td div:last-of-type{
+    border-bottom: none!important;
+}
+/* Publications */ 
+.publications table.tablesorter tr td:last-of-type {
+    min-width: 180px;
+    max-width: 260px;
+}
+table .biblio_notes{
+    font-size: 11px;
+    line-height: 14px;
+}
+/* @end */
+
+
+
+
+
+
+
+/* @group Présentation, Documents, Études, Bibliographie, Une vie */
+/* Colonne principale */
+.presentation article, .documents article, .une_vie article, .bibliographie article, .ampere_home article{
+    margin-left: 245px;
+    width: 755px;
+    border-left: 1px solid #00839b;
+    border-right: 1px solid #00839b;
+    min-height: 600px;
+    padding-bottom: 40px;
+}
+/* @group Présentation */
+.presentation .intro{
+    color: #00839b;
+    font-variant: small-caps;
+    font-size: 1.2em;
+    letter-spacing: 0.01em;
+    line-height: 1.4em;
+}
+.presentation  p, .document p{
+    text-align: justify;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 19px;
+}
+.presentation  p:first-child{
+    padding-top: 0px;
+}
+.presentation .image{
+    position: absolute;
+    left: -246px;
+    margin-top: 10px;
+}
+/* @end */
+
+
+/* @group Bibliographie sélective */
+.bibliographie article{
+    background-color: rgba(179, 179, 179, 0.1);
+}
+.bibliographie .content
+{
+    padding-right: 0px;
+    padding-left: 0px;
+}
+.bibliographie .theme h2{
+    color: black;
+    font-size: 1.1em;
+    padding: 30px 0px 0px 15px;
+    margin: 0;
+    text-align: left;
+    line-height: 1.7em;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: 1px solid #00839b;
+}
+.bibliographie .theme .publication{
+    margin-bottom: 0px;
+    border-bottom: 1px solid #00839b;
+    padding: 5px 25px 5px 35px;
+    line-height: 18px;
+}
+.bibliographie .publication:hover{
+    background-color: #9fced9;
+}
+.bibliographie .publ_link{
+    position: absolute;
+    left: 780px;
+    width: 227px;
+    font-weight: bold;
+    font-size: 0.9em;
+    display: block!important;
+    vertical-align: top;
+    line-height: 1.8em;
+}
+/* @end */
+
+/* @group Documents et études */
+.documents{
+    margin-bottom: 10px;
+    border-bottom: 1px solid #00839b;
+    pa-left: 25px;
+    margin-right: 25px;
+}
+.documents h2{
+    font-weight: normal;
+    color: black;
+    font-size: 1.2em;
+    text-transform: none;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #333;
+    display: inline-block;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+.documents .title{
+        text-align: center;
+        width: 100%;
+}
+.document{
+    margin-bottom: 10px;
+    border-bottom: 1px solid #00839b;
+    line-height: 18px;
+    padding-bottom: 10px;
+}
+.document .doc_link{
+    position: absolute;
+    left: 770px;
+    width: 227px;
+    font-weight: bold;
+    font-size: 0.9em;
+    display: block!important;
+    vertical-align: top;
+    line-height: 1.8em;
+}
+/* @end */
+
+/* @group Résultats de recherche */
+/* Mot recherché */
+.recherche h2{
+    padding-top: 10px;
+    text-align: center;
+    border-bottom: none;
+    font-size: 1.1em;
+}
+.nb-results{
+    text-align: right;
+    display: block;
+    padding-right: 10px;
+    margin-bottom: 5px;
+}
+/* @end */
+
+
+/* @group Une vie  */
+.une_vie h2{
+    color: black;
+    font-size: 1.1em;
+    line-height: 1.3em;
+    border-bottom: 2px solid #00839b;
+    padding-bottom: 0px;
+    text-transform: uppercase;
+}
+.une_vie p{
+    line-height: 1.35em;
+}
+.une_vie .image_slide{
+    width: 100%;
+    text-align: center;
+    clear: both;
+}
+.une_vie img{
+    border: 1px solid #333;
+    max-width: 695px;
+    padding: 0;
+    display: block;
+    margin-bottom: 40px;
+    clear: both;
+}
+/* Une Vie en quelques dates */
+.une_vie table{
+    text-align: left;
+    font-size: 12px;
+    line-height: 16px;
+    width: 100%;
+}
+.une_vie table td {
+    border-bottom: #00839b 1px solid;
+    line-height: 16px;
+    font-size: 12px;
+    padding: 10px 0px 10px 0px;
+    text-align: justify;
+    vertical-align: top;
+}
+.une_vie table td img{
+    clear: both;
+    margin-top: 10px;
+    border: 1px solid #00839b;
+    max-width: inherit;
+    width: 100%;
+    
+}
+.une_vie  p {
+    line-height: 16px;
+    font-size: 12px;
+    margin-top: 40px;
+}
+.une_vie .date{
+    padding-right: 10px;
+    width: 110px;
+}
+/* @end */
+
+/* @end */
+
+
+
+
+
+/* @group Liens externes (PDF, TEI, Gallica...) */
+.gallica_link, .google_link, .tei_link, .pdf_link, .cnum_link, .bhl_link, .numdam_link, .numix_link, .archiveorg_link, .gottinger_link{
+        height: 22px;
+        text-indent: -5000px;
+        display: inline-block;
+}
+.gallica_link{
+    background:  url('http://ampere.dev.huma-num.fr/static/img/gallica_link.png') no-repeat 3px 1px;
+    width: 35px;
+}
+.google_link{
+    background:  url('http://ampere.dev.huma-num.fr/static/img/google_link.png') no-repeat 2px 1px;
+    width: 28px;
+}
+.tei_link{
+    background:  url('http://ampere.dev.huma-num.fr/static/img/tei_link.png') no-repeat 3px 1px;
+    width: 20px;
+}
+.pdf_link{
+    background:  url('http://ampere.dev.huma-num.fr/static/img/pdf_link.png') no-repeat 2px 0px ;
+    width: 22px;
+}
+.cnum_link{
+    background:  url('http://ampere.dev.huma-num.fr/static/img/cnum_link.png') no-repeat 2px 2px ;
+    width: 32px;
+}
+.bhl_link{
+    background:  url('http://ampere.dev.huma-num.fr/static/img/bhl_link.png') no-repeat 3px 1px ;
+    width: 25px;
+}
+.numdam_link{
+    background:  url('http://ampere.dev.huma-num.fr/static/img/numdam_link.png') no-repeat 2px 3px ;
+    width: 40px;
+}
+.numix_link{
+    background:  url('http://ampere.dev.huma-num.fr/static/img/numix_link.png') no-repeat 4px 3px ;
+    width: 40px;
+}
+.archiveorg_link{
+    background:  url('http://ampere.dev.huma-num.fr/static/img/archiveorg_link.png') no-repeat 2px 5px ;
+    width: 25px;
+}
+.gottinger_link{
+    background:  url('http://ampere.dev.huma-num.fr/static/img/gottinger_link.png') no-repeat 2px 4px ;
+    width: 40px;
+}
+/* @end */
+
+
+
+
+
+/* @group Page d'accueil principale*/
+body.home{
+  margin: 0; 
+}
+body.home {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 750px;
+}
+body.home .home_container{
+    display: table;
+    width: 100%;
+    border-spacing: 4px;
+}
+.home h1 {
+  text-indent: -9999px;
+  background: none;
+}
+.home p {
+    font-size: 17px;
+    padding-top: 20px;
+    margin-top: 0px;
+    margin-bottom: 35px;
+    text-align: justify;
+    line-height: 1.25em;
+      position: relative;
+      clear: both;
+}
+.home .intro .title {
+  font-family: futura-pt-condensed ;
+  font-weight: 700;
+  font-size: 24px;
+  font-variant: small-caps;
+}
+.home .ampere_intro{
+    color: #00839b;
+    margin-bottom: 50px;
+}
+.home .histoire_intro{
+    color: #874487;
+    margin-bottom: 30px;
+}
+.home .info{
+    margin-bottom: 80px;
+}
+/* sur le & du menu "Sources & Bibliographies" */
+.home small{
+    font-size: 12px;
+    padding-left: 1px;
+    padding-right: 1px;
+}
+.home  .cell{
+    font-family: "futura-pt-condensed", sans-serif;
+    color:white;
+    font-variant: small-caps;
+    height: 75px;
+    width: 120px;
+    text-align: center;
+    display:table-cell;
+}
+.home .cell a  {
+    color: white;
+    display: block;
+    position: relative;
+    top: 85px;
+    margin: 0;
+    font-size:18px;
+    height: 17px;
+    line-height: 16px;
+} 
+.home #ampere_menu .cell a  {
+    background: #00839b;
+}
+.home #histoire_menu .cell a  {
+    background: #874487;
+}
+.home .cell a:hover, .home .cell a.active{
+    background-color:#231F20!important;
+}
+.home #histoire_menu .cell#histoire-home a,
+.home #ampere_menu .cell#ampere-home a,
+.home #histoire_menu .cell#histoire-home a:hover,
+.home #ampere_menu .cell#ampere-home a:hover
+  {
+    background: transparent!important;
+    top: 0px!important;
+    display:block;
+    height: 100px;
+}
+.home #ampere_menu .cell#ampere-home h2,
+.home #histoire_menu .cell#histoire-home h2
+  {
+    padding-top: 0px;
+    margin-top: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+
+/* Menu logo Ampère et logo Histoire */
+.home #ampere-home, .home  #histoire-home{
+    text-indent: -9999px;
+    padding-top: 0px!important;
+    z-index: 10000;
+    width: 250px;
+}
+.home #ampere-home{
+    background:  url('../img/ampere_home.png') no-repeat 0px 20px;
+}
+.home  #histoire-home   {
+    background:  url("../img/histoire_home.png") no-repeat 0px 21px transparent;
+}
+/*  Menus  Ampère*/
+    .home #une-vie{
+    background: #00839b url('http://ampere.dev.huma-num.fr/static/img/une_vie.jpg') no-repeat center top;
+}
+    .home #publications{
+    background: #00839b url('http://ampere.dev.huma-num.fr/static/img/publications.jpg') no-repeat center top;
+}
+    .home #correspondance{
+    background: #00839b url('http://ampere.dev.huma-num.fr/static/img/correspondance.jpg') no-repeat center top;
+}
+    .home #archives{
+    background: #00839b url('http://ampere.dev.huma-num.fr/static/img/archives.jpg') no-repeat center top;
+}
+    .home  #documents-etudes{
+    background: #00839b url('http://ampere.dev.huma-num.fr/static/img/doc_etudes.jpg') no-repeat center top;
+}
+
+/*  Menus  Histoire de l'électricité*/
+
+    .home #parcours-historique{
+    background: #874487 url('http://ampere.dev.huma-num.fr/static/img/parcours_historique.jpg') no-repeat center top;
+}
+    .home #laboratoire-historique{
+    background: #874487 url('http://ampere.dev.huma-num.fr/static/img/laboratoire_historique.jpg') no-repeat center top;
+}
+    .home #sources{
+    background: #874487 url('http://ampere.dev.huma-num.fr/static/img/sources_bibliographie.jpg') no-repeat center top;
+}
+    .home #chronologies{
+    background: #874487 url('http://ampere.dev.huma-num.fr/static/img/chronologies.jpg') no-repeat center top;
+}
+    .home  #liens{
+    background: #874487 url('http://ampere.dev.huma-num.fr/static/img/liens.jpg') no-repeat center top;
+}
+
+.home  .link_menu, .ampere_home  .link_menu{
+    font-weight: bold;
+    font-size: 16px;
+    color: #00839b;
+}
+.home  a.link_menu:hover, .ampere_home a.link_menu:hover{
+    color:gray!important;
+}
+.home #footer{
+    padding-top: 40px;
+}
+/* @end */
+
+
+/* @group Page d'accueil partie Ampère */
+.ampere_home {
+    margin-top: 25px;
+}
+
+.ampere_home .label_blue a, .ampere_home .label_purple a{
+    color: white;
+    padding: 1px 3px 0px 3px;
+      font-family: "futura-pt-condensed",sans-serif;
+      font-weight: 500;
+      font-size: 22px;
+      line-height: 17px!important;
+      height: 20px;
+      display: inline-block;
+      font-variant: small-caps;
+}
+.ampere_home .label_blue a{
+    background: #00839b;
+}
+.ampere_home .label_purple a{
+    background: #874487;
+}
+.ampere_home .label_blue a:hover{
+    background: #9fced9;
+}
+.ampere_home .label_purple a:hover{
+    background: #cdb8d2;
+}
+.ampere_home .label_blue.etudes a{
+    height: 19px;
+}
+.ampere_home .title_purple a{
+    color: #874487;
+    font-variant: small-caps;
+    font-family: "futura-pt-condensed",sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+}
+/* @end */
+
+
+
+
+header{
+    width: 1240px;      
+}
+.container {
+    max-width: 1240px;
+    width: 100%;
+}
+
+
+
+/* ==========================================================================
+   Media Queries
+   ========================================================================== */
+
+
+
+@media only screen and (max-width: 1239px) {
+    /* On déplace le lien vers la parte Histoire dans le pied de page */
+    #mainnav li#histoire-électricité {
+        display: none!important;
+    }
+    #footernav #histoire{
+        display: inline-block!important;
+    }
+    #navigation a.right{
+        text-align: left;
+        padding-left: 15px;
+        top: 30px;
+        left:15px;
+        width:175px;
+        background: #00839b url('http://ampere.dev.huma-num.fr/static/img/arrow-white-right.png') no-repeat 0px 3px;
+    }
+    .document .doc_link{
+        position: relative;
+        left: 0px;
+        width: auto;
+        display: inline-block;
+    }
+    .container {
+        max-width: 1009px;
+    }
+    .item .main_column{
+        border-right: none!important;
+        width: 100%!important;
+    }
+    .bibliographie .publ_link{
+        left: -150px;
+    }
+    article{
+        border-right: none!important;
+    }
+    .item .external_link{
+        left: 20px;
+        top: 25px;
+    }
+    .presentation .image{
+        position: relative;
+        float: left;
+        left: 0px;
+        margin: 30px 20px 20px 0px!important;
+    }
+}
+
+@media only screen and (max-width: 1023px) {
+    header{
+        max-width: 1000px;      
+    }
+    .container {
+        max-width: 1000px;
+    }
+    #mainnav h1 a {
+      background:  url("../../static/img/ampere_small.png") no-repeat left center;
+      height: 61px;
+      width: 213px;
+    }
+    #mainnav > ul > li{
+        width:auto;
+        min-width: 105px;
+    }
+    #ampère-nav #index, #ampère-nav #une-vie{
+        min-width: 75px;
+    }
+    #ampère-nav #documents-études{
+        min-width: 135px;
+    }
+
+    #breadcrumb ul{
+        width: 100%;
+        margin-left: 25px ;
+    }
+    .presentation article, .documents article, .une_vie article, .bibliographie article, .ampere_home article{
+        margin-left:0px;
+        width: 100%;
+        border-left: none;
+        border-right: 1px solid #00839b;
+        min-height: 600px;
+        padding-bottom: 40px;
+    }
+    .bibliographie .publ_link{
+        left: 0px!important;
+        position: relative!important;    
+        width: auto!important;
+        display: inline-block!important;    
+    }
+    .une_vie img{
+        width: 100%;
+        max-width: 450px;
+    }
+    .item .left_column {
+        width: 120px!important;    
+        display: block!important;
+    }
+    .item .left_column img{
+        width: 120px!important;    
+    }
+}
+
+
+@media only screen and (min-width: 769px) and (max-width: 1239px) {
+    .item .main_column .content{
+        padding-right: 22%!important;
+        padding-left:2%!important;
+    }
+    .item .persname-float, .item .note-float{
+        left: inherit!important;
+        width: 130px;
+    }
+    .item .content .persname-float, .item .content  .note-float{
+        right: 1%!important;
+    }
+    .item .content h2 .persname-float, .item .content h2 .note-float{
+        right: -27%!important;
+    }
+    .item .content .pundit-content .persname-float, .item .content .pundit-content .note-float{
+        right: -27%!important;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .left_column, #search-container{
+        display: none;
+    }
+    .recherche .left_column{
+        position: relative;
+        display: block!important;
+        clear: both!important;
+        width: 100%!important;
+    }
+    .recherche #search-container{
+        display: block;
+        position: relative;
+        width: 100%;
+        background: none;
+        padding: 0;
+        margin: 0;
+        clear: both;
+    }
+    .recherche #search-container .ok, .recherche #search-container input{
+        display: inline!important;
+        float: none!important;
+    }
+    article{
+        position: relative!important;
+        display: block;
+        clear: both;
+    }
+    .item .persname-float, .item .note-float{
+        display: none!important;
+    }
+    #navigation a.left{
+        display: none;
+    }
+    .presentation .image img{
+    width: 200px;
+    }
+    table.tablesorter tr td .toggle{
+        margin-left: 0px!important;
+        position: relative!important;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+
+    .une_vie .date{
+        padding-right: 10px;
+        text-align: left;
+        width: 80px;
+    }
+    .container
+    {
+        border-left-width:1px!important
+    }
+    .content{
+        padding-left: 5px!important;
+        padding-right: 5px!important;
+    }
+
+    .archives table.tablesorter tr td .toggle{
+        display: none!important;
+        margin-left: 0px!important;
+    }
+    .item .left_column {
+        width: 80px!important;    
+        display: block!important;
+    }
+    .item .left_column img{
+        width: 80px!important;    
+    }
+    .presentation .image {
+        display: none;
+    }
+    .presentation .intro {
+        text-align: left;
+        font-variant: normal;
+        line-height: normal;
+    }
+    h1 {
+        text-transform: none;
+        font-size: 16px;
+    }
+    #navigation a.right{
+        left: 0px;    
+    }
+    #navigation {
+        padding-left: 5px;    
+    }
+
+    /* @group Page d'accueil */
+    
+    .home .intro{
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .home #ampere-home, .home #histoire-home{
+        text-indent: 0px;
+        width: 100%;
+    }
+    .home #ampere-home{
+        background: #00839b!important;
+        height: 30px;
+        padding-top: 8px!important;
+    }
+    .home #histoire-home{
+        background: #874487!important;
+        height: 45px;
+        padding-top: 8px!important;
+    }
+    .home #ampere-home a,.home #histoire-home a {
+        font-size: 26px;
+    }
+    .home #histoire-home a{
+        line-height: 18px;
+    }
+    .home .cell{
+        background: none!important;
+        width: 100%;
+        display: block!important;
+        height: auto;            
+        margin-bottom: 2px;
+        padding: 0;
+    }
+    .home .cell a{
+        font-size: 20px;
+        font-weight: normal;
+        font-variant: normal;
+        height: 20px!important;
+        top: 0px;
+    }
+    .home p{
+        text-align: left;
+        margin: 0;
+        padding: 0;
+    }
+    /* @end */
+}
+
+
+/* ===============
+    Maximal Width
+   =============== */
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+.MathJax_Hover_Frame {
+    border-radius: .25em;
+    -webkit-border-radius: .25em;
+    -moz-border-radius: .25em;
+    -khtml-border-radius: .25em;
+    box-shadow: 0px 0px 15px #83A;
+    -webkit-box-shadow: 0px 0px 15px #83A;
+    -moz-box-shadow: 0px 0px 15px #83A;
+    -khtml-box-shadow: 0px 0px 15px #83A;
+    border: 1px solid #A6D ! important;
+    display: inline-block;
+    position: absolute
+}
+
+.MathJax_Menu_Button .MathJax_Hover_Arrow {
+    position: absolute;
+    cursor: pointer;
+    display: inline-block;
+    border: 2px solid #AAA;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    font-family: 'Courier New', Courier;
+    font-size: 9px;
+    color: #F0F0F0
+}
+
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {
+    display: block;
+    background-color: #AAA;
+    border: 1px solid;
+    border-radius: 3px;
+    line-height: 0;
+    padding: 4px
+}
+
+.MathJax_Hover_Arrow:hover {
+    color: white!important;
+    border: 2px solid #CCC!important
+}
+
+.MathJax_Hover_Arrow:hover span {
+    background-color: #CCC!important
+}
+</style>
+<style type="text/css">
+#MathJax_About {
+    position: fixed;
+    left: 50%;
+    width: auto;
+    text-align: center;
+    border: 3px outset;
+    padding: 1em 2em;
+    background-color: #DDDDDD;
+    color: black;
+    cursor: default;
+    font-family: message-box;
+    font-size: 120%;
+    font-style: normal;
+    text-indent: 0;
+    text-transform: none;
+    line-height: normal;
+    letter-spacing: normal;
+    word-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    float: none;
+    z-index: 201;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -khtml-border-radius: 15px;
+    box-shadow: 0px 10px 20px #808080;
+    -webkit-box-shadow: 0px 10px 20px #808080;
+    -moz-box-shadow: 0px 10px 20px #808080;
+    -khtml-box-shadow: 0px 10px 20px #808080;
+    filter: progid: DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')
+}
+
+#MathJax_About.MathJax_MousePost {
+    outline: none
+}
+
+.MathJax_Menu {
+    position: absolute;
+    background-color: white;
+    color: black;
+    width: auto;
+    padding: 5px 0px;
+    border: 1px solid #CCCCCC;
+    margin: 0;
+    cursor: default;
+    font: menu;
+    text-align: left;
+    text-indent: 0;
+    text-transform: none;
+    line-height: normal;
+    letter-spacing: normal;
+    word-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    float: none;
+    z-index: 201;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    box-shadow: 0px 10px 20px #808080;
+    -webkit-box-shadow: 0px 10px 20px #808080;
+    -moz-box-shadow: 0px 10px 20px #808080;
+    -khtml-box-shadow: 0px 10px 20px #808080;
+    filter: progid: DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')
+}
+
+.MathJax_MenuItem {
+    padding: 1px 2em;
+    background: transparent
+}
+
+.MathJax_MenuArrow {
+    position: absolute;
+    right: .5em;
+    padding-top: .25em;
+    color: #666666;
+    font-size: .75em
+}
+
+.MathJax_MenuActive .MathJax_MenuArrow {
+    color: white
+}
+
+.MathJax_MenuArrow.RTL {
+    left: .5em;
+    right: auto
+}
+
+.MathJax_MenuCheck {
+    position: absolute;
+    left: .7em
+}
+
+.MathJax_MenuCheck.RTL {
+    right: .7em;
+    left: auto
+}
+
+.MathJax_MenuRadioCheck {
+    position: absolute;
+    left: .7em
+}
+
+.MathJax_MenuRadioCheck.RTL {
+    right: .7em;
+    left: auto
+}
+
+.MathJax_MenuLabel {
+    padding: 1px 2em 3px 1.33em;
+    font-style: italic
+}
+
+.MathJax_MenuRule {
+    border-top: 1px solid #DDDDDD;
+    margin: 4px 3px
+}
+
+.MathJax_MenuDisabled {
+    color: GrayText
+}
+
+.MathJax_MenuActive {
+    background-color: #606872;
+    color: white
+}
+
+.MathJax_MenuDisabled:focus,
+.MathJax_MenuLabel:focus {
+    background-color: #E8E8E8
+}
+
+.MathJax_ContextMenu:focus {
+    outline: none
+}
+
+.MathJax_ContextMenu .MathJax_MenuItem:focus {
+    outline: none
+}
+
+#MathJax_AboutClose {
+    top: .2em;
+    right: .2em
+}
+
+.MathJax_Menu .MathJax_MenuClose {
+    top: -10px;
+    left: -10px
+}
+
+.MathJax_MenuClose {
+    position: absolute;
+    cursor: pointer;
+    display: inline-block;
+    border: 2px solid #AAA;
+    border-radius: 18px;
+    -webkit-border-radius: 18px;
+    -moz-border-radius: 18px;
+    -khtml-border-radius: 18px;
+    font-family: 'Courier New', Courier;
+    font-size: 24px;
+    color: #F0F0F0
+}
+
+.MathJax_MenuClose span {
+    display: block;
+    background-color: #AAA;
+    border: 1.5px solid;
+    border-radius: 18px;
+    -webkit-border-radius: 18px;
+    -moz-border-radius: 18px;
+    -khtml-border-radius: 18px;
+    line-height: 0;
+    padding: 8px 0 6px
+}
+
+.MathJax_MenuClose:hover {
+    color: white!important;
+    border: 2px solid #CCC!important
+}
+
+.MathJax_MenuClose:hover span {
+    background-color: #CCC!important
+}
+
+.MathJax_MenuClose:hover:focus {
+    outline: none
+}
+</style>
+<style type="text/css">
+.MathJax_Preview .MJXf-math {
+    color: inherit!important
+}
+</style>
+<style type="text/css">
+.MJX_Assistive_MathML {
+    position: absolute!important;
+    top: 0;
+    left: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 1px 0 0 0!important;
+    border: 0!important;
+    height: 1px!important;
+    width: 1px!important;
+    overflow: hidden!important;
+    display: block!important;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {
+    width: 100%!important
+}
+</style>
+<style type="text/css">
+#MathJax_Zoom {
+    position: absolute;
+    background-color: #F0F0F0;
+    overflow: auto;
+    display: block;
+    z-index: 301;
+    padding: .5em;
+    border: 1px solid black;
+    margin: 0;
+    font-weight: normal;
+    font-style: normal;
+    text-align: left;
+    text-indent: 0;
+    text-transform: none;
+    line-height: normal;
+    letter-spacing: normal;
+    word-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    float: none;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    box-shadow: 5px 5px 15px #AAAAAA;
+    -webkit-box-shadow: 5px 5px 15px #AAAAAA;
+    -moz-box-shadow: 5px 5px 15px #AAAAAA;
+    -khtml-box-shadow: 5px 5px 15px #AAAAAA;
+    filter: progid: DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')
+}
+
+#MathJax_ZoomOverlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 300;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    background-color: white;
+    opacity: 0;
+    filter: alpha(opacity=0)
+}
+
+#MathJax_ZoomFrame {
+    position: relative;
+    display: inline-block;
+    height: 0;
+    width: 0
+}
+
+#MathJax_ZoomEventTrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 302;
+    display: inline-block;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    background-color: white;
+    opacity: 0;
+    filter: alpha(opacity=0)
+}
+</style>
+<style type="text/css">
+.MathJax_Preview {
+    color: #888
+}
+
+#MathJax_Message {
+    position: fixed;
+    left: 1em;
+    bottom: 1.5em;
+    background-color: #E6E6E6;
+    border: 1px solid #959595;
+    margin: 0px;
+    padding: 2px 8px;
+    z-index: 102;
+    color: black;
+    font-size: 80%;
+    width: auto;
+    white-space: nowrap
+}
+
+#MathJax_MSIE_Frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0px;
+    z-index: 101;
+    border: 0px;
+    margin: 0px;
+    padding: 0px
+}
+
+.MathJax_Error {
+    color: #CC0000;
+    font-style: italic
+}
+</style>
+<style type="text/css">
+.MJXp-script {
+    font-size: .8em
+}
+
+.MJXp-right {
+    -webkit-transform-origin: right;
+    -moz-transform-origin: right;
+    -ms-transform-origin: right;
+    -o-transform-origin: right;
+    transform-origin: right
+}
+
+.MJXp-bold {
+    font-weight: bold
+}
+
+.MJXp-italic {
+    font-style: italic
+}
+
+.MJXp-scr {
+    font-family: MathJax_Script, 'Times New Roman', Times, STIXGeneral, serif
+}
+
+.MJXp-frak {
+    font-family: MathJax_Fraktur, 'Times New Roman', Times, STIXGeneral, serif
+}
+
+.MJXp-sf {
+    font-family: MathJax_SansSerif, 'Times New Roman', Times, STIXGeneral, serif
+}
+
+.MJXp-cal {
+    font-family: MathJax_Caligraphic, 'Times New Roman', Times, STIXGeneral, serif
+}
+
+.MJXp-mono {
+    font-family: MathJax_Typewriter, 'Times New Roman', Times, STIXGeneral, serif
+}
+
+.MJXp-largeop {
+    font-size: 150%
+}
+
+.MJXp-largeop.MJXp-int {
+    vertical-align: -.2em
+}
+
+.MJXp-math {
+    display: inline-block;
+    line-height: 1.2;
+    text-indent: 0;
+    font-family: 'Times New Roman', Times, STIXGeneral, serif;
+    white-space: nowrap;
+    border-collapse: collapse
+}
+
+.MJXp-display {
+    display: block;
+    text-align: center;
+    margin: 1em 0
+}
+
+.MJXp-math span {
+    display: inline-block
+}
+
+.MJXp-box {
+    display: block!important;
+    text-align: center
+}
+
+.MJXp-box:after {
+    content: " "
+}
+
+.MJXp-rule {
+    display: block!important;
+    margin-top: .1em
+}
+
+.MJXp-char {
+    display: block!important
+}
+
+.MJXp-mo {
+    margin: 0 .15em
+}
+
+.MJXp-mfrac {
+    margin: 0 .125em;
+    vertical-align: .25em
+}
+
+.MJXp-denom {
+    display: inline-table!important;
+    width: 100%
+}
+
+.MJXp-denom > * {
+    display: table-row!important
+}
+
+.MJXp-surd {
+    vertical-align: top
+}
+
+.MJXp-surd > * {
+    display: block!important
+}
+
+.MJXp-script-box > * {
+    display: table!important;
+    height: 50%
+}
+
+.MJXp-script-box > * > * {
+    display: table-cell!important;
+    vertical-align: top
+}
+
+.MJXp-script-box > *:last-child > * {
+    vertical-align: bottom
+}
+
+.MJXp-script-box > * > * > * {
+    display: block!important
+}
+
+.MJXp-mphantom {
+    visibility: hidden
+}
+
+.MJXp-munderover {
+    display: inline-table!important
+}
+
+.MJXp-over {
+    display: inline-block!important;
+    text-align: center
+}
+
+.MJXp-over > * {
+    display: block!important
+}
+
+.MJXp-munderover > * {
+    display: table-row!important
+}
+
+.MJXp-mtable {
+    vertical-align: .25em;
+    margin: 0 .125em
+}
+
+.MJXp-mtable > * {
+    display: inline-table!important;
+    vertical-align: middle
+}
+
+.MJXp-mtr {
+    display: table-row!important
+}
+
+.MJXp-mtd {
+    display: table-cell!important;
+    text-align: center;
+    padding: .5em 0 0 .5em
+}
+
+.MJXp-mtr > .MJXp-mtd:first-child {
+    padding-left: 0
+}
+
+.MJXp-mtr:first-child > .MJXp-mtd {
+    padding-top: 0
+}
+
+.MJXp-mlabeledtr {
+    display: table-row!important
+}
+
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {
+    padding-left: 0
+}
+
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {
+    padding-top: 0
+}
+
+.MJXp-merror {
+    background-color: #FFFF88;
+    color: #CC0000;
+    border: 1px solid #CC0000;
+    padding: 1px 3px;
+    font-style: normal;
+    font-size: 90%
+}
+
+.MJXp-scale0 {
+    -webkit-transform: scaleX(.0);
+    -moz-transform: scaleX(.0);
+    -ms-transform: scaleX(.0);
+    -o-transform: scaleX(.0);
+    transform: scaleX(.0)
+}
+
+.MJXp-scale1 {
+    -webkit-transform: scaleX(.1);
+    -moz-transform: scaleX(.1);
+    -ms-transform: scaleX(.1);
+    -o-transform: scaleX(.1);
+    transform: scaleX(.1)
+}
+
+.MJXp-scale2 {
+    -webkit-transform: scaleX(.2);
+    -moz-transform: scaleX(.2);
+    -ms-transform: scaleX(.2);
+    -o-transform: scaleX(.2);
+    transform: scaleX(.2)
+}
+
+.MJXp-scale3 {
+    -webkit-transform: scaleX(.3);
+    -moz-transform: scaleX(.3);
+    -ms-transform: scaleX(.3);
+    -o-transform: scaleX(.3);
+    transform: scaleX(.3)
+}
+
+.MJXp-scale4 {
+    -webkit-transform: scaleX(.4);
+    -moz-transform: scaleX(.4);
+    -ms-transform: scaleX(.4);
+    -o-transform: scaleX(.4);
+    transform: scaleX(.4)
+}
+
+.MJXp-scale5 {
+    -webkit-transform: scaleX(.5);
+    -moz-transform: scaleX(.5);
+    -ms-transform: scaleX(.5);
+    -o-transform: scaleX(.5);
+    transform: scaleX(.5)
+}
+
+.MJXp-scale6 {
+    -webkit-transform: scaleX(.6);
+    -moz-transform: scaleX(.6);
+    -ms-transform: scaleX(.6);
+    -o-transform: scaleX(.6);
+    transform: scaleX(.6)
+}
+
+.MJXp-scale7 {
+    -webkit-transform: scaleX(.7);
+    -moz-transform: scaleX(.7);
+    -ms-transform: scaleX(.7);
+    -o-transform: scaleX(.7);
+    transform: scaleX(.7)
+}
+
+.MJXp-scale8 {
+    -webkit-transform: scaleX(.8);
+    -moz-transform: scaleX(.8);
+    -ms-transform: scaleX(.8);
+    -o-transform: scaleX(.8);
+    transform: scaleX(.8)
+}
+
+.MJXp-scale9 {
+    -webkit-transform: scaleX(.9);
+    -moz-transform: scaleX(.9);
+    -ms-transform: scaleX(.9);
+    -o-transform: scaleX(.9);
+    transform: scaleX(.9)
+}
+
+.MathJax_PHTML .noError {
+    vertical-align: ;
+    font-size: 90%;
+    text-align: left;
+    color: black;
+    padding: 1px 3px;
+    border: 1px solid
+}
+</style>
+<script type="text/javascript" src="chrome-extension://aadgmnobpdmgmigaicncghmmoeflnamj/ng-inspector.js"></script>
+<style id="style-1-cropbar-clipper">
+/* Copyright 2014 Evernote Corporation. All rights reserved. */
+
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255, 255, 255, .38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style>
+
+<script>
+    angular.element('body').css('height', '4200px');
+
+    var punditConfig = {
+        //annotationServerBaseURL: " http://localhost:8080/annotationserver/",
+        annotationServerBaseURL: " https://staging.punditbrain.netseven.it:8443/annotationserver/",
+
+        // annotationServerBaseURL: "https://server.thepund.it/annotationserver/",
+        // annotationServerBaseURL: "http://staging.punditbrain.netseven.it:8182/annotationserver/",
+        // annotationServerBaseURL: "http://172.20.0.79:8081/annotationserver/",
+
+        annotationServerVersion: 'v2',
+        
+        // vocabularies: ['http://manager.korbo.org/91'],
+        // useBasicRelations: false,
+        useTemplates: false,
+        // useOnlyTemplateMode: true,
+        imageFragmentAnnotator: {
+            active: true
+        },
+
+        limitToSuggestedTypes: true,
+
+        modules: {
+
+            'Client': {
+                debug: false,
+                active: true
+            },
+            'Annomatic': {
+                active: true,
+                skipTrim: true
+            },
+            'DbpediaSelector': {
+                active: true
+            },
+            'FreebaseSelector': {
+                active: true
+            },
+            'AnnotationDetails': {
+                moreInfo: true
+            },
+            'TextFragmentAnnotator': {
+                debug: false
+            },
+            'Dashboard': {
+                debug: false
+            },
+            'Keyboard': {
+                active: true,
+                debug: false
+            },
+            'AnnotationsCommunication': {
+                loadMultipleAnnotations: true
+            },
+            'PageItemsContainer': {
+                active: true
+            },
+            'VocabulariesContainer': {
+                active: true
+            }
+        }
+    }
+</script>
+
+<div data-ng-app="Pundit2"></div>
+
+
+<header>
+    <nav id="mainnav">
+        <h1>
+          <a href="/ampere/home">Ampère</a>
+        </h1>
+        <!-- Insérer l'image de la signature d'Ampère -->
+        <ul id="ampère-nav">
+            <li id="recherche">
+                <a href="/ampere/recherche">Recherche</a>
+            </li>
+            <li id="index">
+                <a href="/ampere/index">Index</a>
+                <ul>
+                    <li id="index-personnes">
+                        <a href="/ampere/index-personnes">Personnes</a>
+                    </li>
+                </ul>
+            </li>
+            <li id="une-vie">
+                <a href="#">Une vie...</a>
+                <ul>
+                    <li id="en-images">
+                        <a href="/ampere/une-vie-en-images">En images</a>
+                    </li>
+                    <li id="en-quelques-dates">
+                        <a href="/ampere/une-vie-en-quelques-dates">En quelques dates</a>
+                    </li>
+                </ul>
+            </li>
+            <li id="publications">
+                <a>Publications</a>
+                <ul>
+                    <li id="publications-présentation">
+                        <a href="/ampere/publications/presentation">Présentation</a>
+                    </li>
+                    <li id="bibliographie-sélective">
+                        <a href="/ampere/bibliographie-selective">Bibliographie sélective</a>
+                    </li>
+                    <li id="publications-ampère">
+                        <a href="/ampere/publications">Publications</a>
+                    </li>
+                </ul>
+            </li>
+            <li id="correspondance">
+                <a class="active">Correspondance</a>
+                <ul>
+                    <li id="correspondance-présentation">
+                        <a href="/ampere/correspondance/presentation">Présentation</a>
+                    </li>
+                    <li id="lettres">
+                        <a href="/ampere/correspondance">Correspondance</a>
+                    </li>
+                </ul>
+            </li>
+            <li id="archives">
+                <a>Archives</a>
+                <ul>
+                    <li id="archives-présentation">
+                        <a href="/ampere/archives/presentation">Présentation</a>
+                    </li>
+                    <li id="archives-liste">
+                        <a href="/ampere/archives">Archives</a>
+                    </li>
+                </ul>
+            </li>
+            <li id="documents-études">
+                <a href="/ampere/documents-et-etudes">Documents et études</a>
+            </li>
+            <li id="histoire-électricité">
+                <a href="http://www.ampere.cnrs.fr/histoire/">Histoire de l'électricité et du magnétisme</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<nav id="breadcrumb">
+    <ul>
+        <li>
+            <a href="/ampere/home">Ampère</a>
+        </li>
+        <li>
+            <a href="/ampere/correspondance">Correspondance</a>
+        </li>
+        <li>
+            <a href="L1812-03-13-a">L1812-03-13-a</a>
+        </li>
+    </ul>
+</nav>
+<section class="container item">
+    <section class="correspondance">
+        <article class="main">
+            <div>
+                <div>
+                    <div class="external_link">
+                        <span>
+                  <a class="tei_link" target="_blank" href="/static/TEI/correspondance/ampere_corr_L1086.xml" download="ampere_corr_L1812-03-13-a.xml" title="Télécharger la source TEI">logo TEI</a>
+                </span>
+                    </div>
+                    <div class="row head">
+                        <div class="left_column">
+                            <nav id="navigation">
+                                <a class="left" href="/ampere/correspondance">Retour à la liste</a>
+                            </nav>
+                        </div>
+                        <div class="main_column">
+                            <h1>Lettre  L1812-03-13-a</h1>
+                        </div>
+                    </div>
+                    <div class="row correspDesc">
+                        <div class="left_column"></div>
+                        <div class="main_column">
+                            <ul class="mode">
+                                <li>
+                                    <a href="/ampere/correspondance/L1812-03-13-a?edition=diplomatique" title="Afficher la version diplomatique">D</a>
+                                </li>
+                                <li>
+                                    <a href="/ampere/correspondance/L1812-03-13-a" class="active" title="Afficher la version normalisée">N</a>
+                                </li>
+                            </ul>
+                            <div class="content">
+                                <div class="title">Lettre de Clément, Nicolas à Ampère, André-Marie</div>
+                                <div class="date">
+                                    <date xmlns="http://www.tei-c.org/ns/1.0" when-iso="1812-03-13">13 mars 1812</date>
+                                </div>
+                                <div class="edition">
+                                    <h4>Source de l'édition numérique  (original manuscrit)</h4>
+                                    <p class="">
+                                        <country xmlns="http://www.tei-c.org/ns/1.0">France</country>,
+                                        <settlement xmlns="http://www.tei-c.org/ns/1.0">Paris</settlement>,
+                                        <institution xmlns="http://www.tei-c.org/ns/1.0">Archives de l'Académie des sciences</institution>,
+                                        <repository xmlns="http://www.tei-c.org/ns/1.0">Fonds André-Marie Ampère</repository>,
+                                        <a onclick="ScrollTo('http://ampere.dev.huma-num.fr/ampere/archives/chem332');return false;" href="#">
+                                            <idno xmlns="http://www.tei-c.org/ns/1.0">chemise 332</idno>
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="L1812-03-13-a" class="row">
+                        <div class="left_column">
+                            <div class="image selecting-ancestor">
+                                <div class="pb" id="p-355" title="Saut de page">Image 355</div>
+                                <a href="/static/Manuscrits/ch_332/ACAS_CRHST_AMP_24_332_0355_r.jpg">
+                                    <img class="displayed" src="/static/Manuscrits/ch_332/vig/ACAS_CRHST_AMP_24_332_0355_r.jpg">
+                                </a>
+                            </div>
+                            <div class="image">
+                                <div class="pb" id="p-356" title="Saut de page">Image 356</div>
+                                <a href="/static/Manuscrits/ch_332/ACAS_CRHST_AMP_24_332_0356_v.jpg">
+                                    <img class="displayed" src="/static/Manuscrits/ch_332/vig/ACAS_CRHST_AMP_24_332_0356_v.jpg">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="main_column">
+                            <div class="nav-page">
+                                Image<span class="caret"></span>
+                                <ul class="pb">
+                                    <li>
+                                        <a onclick="ScrollTo('#p-355');return false;" href="#p-355">355</a>
+                                    </li>
+                                    <li>
+                                        <a onclick="ScrollTo('#p-356');return false;" href="#p-356">356</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="content">
+                                <div class="pundit-content selected-area-results" about="http://ampere.dev.huma-num.fr/ampere/correspondance/L1812-03-13-a/div1">
+                                    <p>
+                                        <span class="lacune">[illisible]</span> 13 mars 1812
+                                    </p>
+                                    <p class="">
+                                        Je vous félicite, mon cher Ampère, sur la justesse de votre esprit&nbsp;; vous avez évalué à peu près comme moi la chute de M. Dufrayer. En réfléchissant à cette question, il a dû vous revenir en tête la démonstration du maximum de vitesse d'un liquide qui s'écoule à son orifice&nbsp;; je voudrais bien savoir celle que s'en donnent les géomètres&nbsp;; vous m'obligeriez beaucoup de me l'envoyer et de me la traduire en français si vous ne l'avez qu'en langage mathématique. J'en suis très pressé et il faudrait que vous eussiez la complaisance de me l'écrire de suite, sans paresser comme à votre ordinaire.</p>
+                                    <p class="">Supposez que vous avez à démontrer le théorème en question à un homme du temps de Galilée et qui sait à peine la géométrie de cet auteur là. Je voudrais non pas une démonstration de vous mais celle que l'on enseigne, celle que Poisson doit donner.</p>
+                                    <p class="">Pourquoi donc ne travaillez vous pas sur l'hydraulique, il y a tant de belles choses à faire. Portez-vous aussi bien que nous et croyez à mon attachement. Je voudrais bien avoir votre réponse avant 4 jours parce que je me mettrai en voyage.
+                                    </p>
+                                    <p>
+                                        Clément
+                                    </p>
+                                    <p class="">
+                                        A monsieur Ampère, professeur à l’École polytechnique, cour du commerce près la rue des Fossés-Monsieur-le-Prince, Paris
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+    <a class="top" href="#top">Haut</a>
+</section>
+<!-- Pied de page -->
+<footer>
+    <nav id="footernav">
+        <ul id="meta-info">
+            <li id="contact">
+                <a href="/ampere/contact">Contact</a>
+            </li>
+            <li id="aide">
+                <a href="/ampere/aide">Aide</a>
+            </li>
+            <li id="crédits">
+                <a href="/ampere/crédits">Crédits</a>
+            </li>
+            <li id="mentions-légales">
+                <a href="/ampere/mentions-légales">Mentions
+                        légales</a>
+            </li>
+        </ul>
+    </nav>
+</footer>
