@@ -43,7 +43,11 @@
         <!-- Details about edit date... only if edited -->
         <div class="pnd-annotation-reply-edited"
              ng-show="data.edited">
-            <span>Edited {{ data.modified | date : 'HH:mm d MMM y'}}</span>
+
+            <span>
+                Edited
+                <time-ago class="pnd-annotation-reply-date" from-time='{{ data.modified }}' format='HH:mm dd MMM yyyy'></time-ago>
+            </span>
         </div>
 
 

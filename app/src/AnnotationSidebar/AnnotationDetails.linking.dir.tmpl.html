@@ -88,7 +88,10 @@
                         {{annotation.notebookName}}
                     </a>
                     <br>
-                    <span class="pnd-annotation-edited" ng-show="annotation.edited">Edited {{ annotation.modified | date : 'HH:mm d MMM y'}}</span>
+                    <span class="pnd-annotation-edited" ng-show="annotation.edited">
+                        Edited
+                        <time-ago from-time='{{ annotation.modified }}' format='HH:mm dd MMM yyyy'></time-ago>
+                    </span>
                 </span>
             </span>
 

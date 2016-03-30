@@ -75,7 +75,7 @@
                 {{::annotation.creatorName}}
             </span>
             <span class="pnd-annotation-metadata">
-                <time-ago from-time='{{ annotation.created }}' format='dd MMM yyyy'></time-ago> · in
+                <time-ago from-time='{{ annotation.created }}' format='HH:mm dd MMM yyyy'></time-ago> · in
                 <span
                     ng-if="!isUserToolShowed() || !homePundit">
                     {{annotation.notebookName}}
@@ -87,7 +87,9 @@
                     {{annotation.notebookName}}
                 </a>
                 <br>
-                <span class="pnd-annotation-edited" ng-show="annotation.edited">Edited {{ annotation.modified | date : 'HH:mm dd MMM yyyy'}}</span>
+                <span class="pnd-annotation-edited" ng-show="annotation.edited">
+                    Edited  <time-ago from-time='{{ annotation.modified }}' format='HH:mm dd MMM yyyy'></time-ago>
+                </span>
             </span>
 
         </div>
