@@ -63,7 +63,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 return AnnotationDetails.isUserToolShowed(scope.data.creator);
             };
             scope.menuEdit = function(evt) {
-                AnnotationDetails.menuEdit(evt.toElement, scope);
+                AnnotationDetails.menuEdit(evt.toElement, scope, 'left');
                 console.log("inside menu");
             };
 
