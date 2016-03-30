@@ -277,7 +277,6 @@ angular.module('Pundit2.AnnotationPopover')
         });
 
         var state = PndPopover.getState();
-
         annotationPopover.mode = typeof mode === 'undefined' ? '' : mode;
 
         if (promise !== false) {
