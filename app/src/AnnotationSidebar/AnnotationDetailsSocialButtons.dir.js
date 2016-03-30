@@ -11,55 +11,9 @@ angular.module('Pundit2.AnnotationSidebar')
         templateUrl: 'src/AnnotationSidebar/AnnotationDetailsSocialButtons.tmpl.html',
         link: function(scope) {
 
-            // console.log('inside AnnotationDetails.footerButtons.dir');
-            var mouseEventsTimeout;
-
             var stopEvent = function(event) {
                 event.stopPropagation();
                 event.preventDefault();
-            };
-
-            var checkSocial = function(social) {
-                if ((typeof social.counting === 'undefined') || social.counting.comment === '') {
-                    social.counting.comment = 0;
-                    social.counting.like = 0;
-                    social.counting.dislike = 0;
-                    social.counting.report = 0;
-                    social.counting.endorse = 0;
-                    social.status.like = false;
-                    social.status.dislike = false;
-                    social.status.comment = false;
-                    social.status.endorse = false;
-                    social.status.report = false;
-                    return social;
-                }
-                if (typeof scope.data.social.counting.comment === 'undefined') {
-                    social.counting.comment = scope.data.social.counting[0].comment;
-                    social.counting.like = scope.data.social.counting[0].like;
-                    social.counting.dislike = scope.data.social.counting[0].dislike;
-                    social.counting.report = scope.data.social.counting[0].report;
-                    social.counting.endorse = scope.data.social.counting[0].endorse;
-                    social.status.like = scope.data.social.status[0].like;
-                    social.status.dislike = scope.data.social.status[0].dislike;
-                    social.status.comment = scope.data.social.status[0].comment;
-                    social.status.endorse = scope.data.social.status[0].endorse;
-                    social.status.report = scope.data.social.status[0].report;
-                    return social;
-                }
-                if (typeof social.status.like !== 'boolean') {
-                    social.status.like = social.status.like === 'true';
-                    social.status.dislike = social.status.dislike === 'true';
-                    social.status.comment = social.status.comment === 'true';
-                    social.status.endorse = social.status.endorse === 'true';
-                    social.status.report = social.status.report === 'true';
-                }
-                social.counting.like = parseInt(social.counting.like);
-                social.counting.dislike = parseInt(social.counting.dislike);
-                social.counting.comment = parseInt(social.counting.comment);
-                social.counting.endorse = parseInt(social.counting.endorse);
-                social.counting.report = parseInt(social.counting.report);
-
-                return social;
             };
 
             var createItemFromResource = function(event) {
@@ -71,7 +25,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 return new Item(values.uri, values);
             };
 
-            scope.data.social = checkSocial(scope.data.social);
 
             scope.disabled = {
                 'like': false,
@@ -91,11 +44,9 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
                 scope.data.replyDialog = !scope.data.replyDialog;
 
-
                 if (typeof scope.data.repliesLoaded === 'undefined') {
                     scope.data.repliesLoaded = false;
                 }
-
 
                 if (!MyPundit.isUserLogged()) {
                     iconReference.classList += ' pnd-range-pos-icon';
@@ -182,60 +133,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 }, function() {});
 
                 stopEvent(event);
-            };
-
-
-            // // to be used in this way: ng-mouseenter="changeMouseState(true)" ng-mouseleave="changeMouseState(false)" 
-            // var timeoutStarted = false,
-            //     pendingMouseState = false;
-
-            // $scope.changeMouseState = function (newMouseState) {
-            //     if (pendingMouseState == newMouseState) {
-            //         return;
-            //     }
-
-            //     pendingMouseState = newMouseState;
-
-
-            //     if (timeoutStarted) {
-            //         return;
-            //     }
-
-
-            //     $timeout(function () {
-            //         timeoutStarted = false;
-            //         $scope.mouseOver = pendingMouseState;
-
-            //         console.log('make stuff');
-            //     }, 10, true);
-            // };
-
-            scope.onMouseEnterTooltip = function(event, type) {
-                var iconReference = angular.element(event.target);
-
-                if (!MyPundit.isUserLogged()) {
-                    return;
-                }
-
-                scope.data.social = checkSocial(scope.data.social);
-                iconReference.addClass('pnd-range-pos-icon');
-
-                if (scope.data.social.status[type]) {
-                    type = 'Undo ' + type;
-                }
-
-                AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), {
-                    placement: 'top'
-                }, undefined, type, iconReference);
-
-            };
-
-            scope.onMouseLeaveTooltip = function() {
-                if (!MyPundit.isUserLogged()) {
-                    return;
-                }
-
-                PndPopover.hide();
             };
 
             scope.socialEvent = function(event, type) {
