@@ -17,6 +17,11 @@ angular.module('Pundit2.Annotators')
             scope.selected = false;
             scope.number = 0;
             scope.annotationButton = ResourceAnnotator.options.annotationButton;
+            scope.resourceLabel = '';
+
+            if(scope.annotationButton){
+                scope.resourceLabel =ResourceAnnotator.options.annotationButtonLabel ;
+            }
 
             var createItemFromResource = function(resourceElem) {
                 var values = {};

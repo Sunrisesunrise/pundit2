@@ -20,10 +20,22 @@ angular.module('Pundit2.Annotators')
      * @description
      * `boolean`
      *
-     * Initial state of thposition:relative
-     * <pre> defaultExpanded: false </pre>
+     * activate annotation button
+     * <pre> annotationButton: false </pre>
      */
-    annotationButton: false
+    annotationButton: false,
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ResourceAnnotator.annotationButtonLabel
+     *
+     * @description
+     * `string`
+     *
+     * label of annotation button
+     * <pre> annotationButtonLabel: Annotate </pre>
+     */
+    annotationButtonLabel: "annotate"
 
     })
 
