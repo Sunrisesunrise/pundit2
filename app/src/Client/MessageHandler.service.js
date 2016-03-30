@@ -39,7 +39,7 @@ angular.module('Pundit2.Client')
 })
 
 .service('MessageHandler', function(MESSAGEHANDLERDEFAULTS, $document, BaseComponent, Config, Analytics,
-    EventDispatcher, Client, Status, MyPundit, AnnotationsExchange, ResourceHandler) {
+    EventDispatcher, Client, Status, MyPundit, AnnotationsExchange, ResourceHandler, AnnotationsCommunication) {
 
     var messageHandler = new BaseComponent('MessageHandler', MESSAGEHANDLERDEFAULTS);
 
@@ -78,6 +78,7 @@ angular.module('Pundit2.Client')
 
     $document.on('Pundit.hide', Client.hideClient);
     $document.on('Pundit.show', Client.showClient);
+    $document.on('Pundit.loadAnnotations', AnnotationsCommunication.getAnnotations);
     $document.on('Pundit.showBootstrap', Client.showClientBoot);
     $document.on('Pundit.requestAnnotationsNumber', requestAnnotationsNumber);
     $document.on('Pundit.requestUserProfileUpdate', userStatusUpdate);
