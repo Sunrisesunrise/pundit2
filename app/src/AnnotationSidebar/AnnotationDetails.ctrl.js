@@ -58,6 +58,10 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.annotation.defaultThumb = false;
     $scope.annotation.edited = false;
 
+    if($scope.annotation.social.counting.comment == 0){
+        $scope.annotation.repliesLoaded = true;
+    }
+
     if ($scope.annotation.thumbnail === '') {
         $scope.annotation.defaultThumb = true;
     }
