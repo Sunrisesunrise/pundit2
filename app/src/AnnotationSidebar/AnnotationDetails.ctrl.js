@@ -302,25 +302,6 @@ angular.module('Pundit2.AnnotationSidebar')
             return new Item(values.uri, values);
         };
 
-        var contrary = {
-                like: 'dislike',
-                dislike: 'like',
-                endorse: 'report',
-                report: 'endorse'
-            },
-            promise = {},
-            operation = '';
-
-        if (!MyPundit.isUserLogged()) {
-            angular.element(event.target).addClass('pnd-range-pos-icon');
-
-            AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert');
-            return;
-        }
-
-        if (typeof type === 'undefined') {
-            return;
-        }
 
         if (type === 'comment') {
             $scope.annotation.replyDialog = false;
@@ -361,7 +342,7 @@ angular.module('Pundit2.AnnotationSidebar')
                         }
                     }
                 };
-                $scope.annotation.social.counting.comment = $scope.annotation.social.counting.comment + 1;
+                $scope.annotation.social.counting.comment = parseInt($scope.annotation.social.counting.comment) + 1;
                 $scope.annotation.social.status.comment = true;
                 $scope.annotation.replyCommentValue = '';
                 $scope.replyTree = AnnotationDetails.addReplyReference($scope.annotation.parentId, data.AnnotationID, reply);
