@@ -8,7 +8,7 @@ angular.module('Pundit2.AnnotationSidebar')
             data: '=',
             options: '='
         },
-        templateUrl: 'src/AnnotationSidebar/AnnotationDetails.socialButtons.tmpl.html',
+        templateUrl: 'src/AnnotationSidebar/AnnotationDetailsSocialButtons.tmpl.html',
         link: function(scope) {
 
             // console.log('inside AnnotationDetails.footerButtons.dir');
