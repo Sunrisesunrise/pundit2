@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.directive('annotationDetailsSocialButtons', function(AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher, $window, PndPopover, $timeout) {
+.directive('annotationDetailsSocialButtons', function(AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher, $window) {
     return {
         restrict: 'C',
         scope: {
@@ -40,7 +40,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     iconReference = angular.element(event.target);
 
                 if (event.target.className === 'pnd-icon-comment') {
-                    iconReference = angular.element(event.target.parentElement)
+                    iconReference = angular.element(event.target.parentElement);
                 }
                 scope.data.replyDialog = !scope.data.replyDialog;
 

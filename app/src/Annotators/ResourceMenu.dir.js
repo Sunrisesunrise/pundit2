@@ -3,7 +3,7 @@ angular.module('Pundit2.Annotators')
 .directive('resourceMenu', function($rootScope, NameSpace, ContextualMenu,
     Toolbar, ImageHandler, ImageAnnotator, ItemsExchange, TemplatesExchange,
     TripleComposer, EventDispatcher, Item, XpointersHelper, AnnotationsExchange,
-    ResourceAnnotator, Config) {
+    ResourceAnnotator) {
 
     return {
         restrict: 'C',
@@ -35,7 +35,7 @@ angular.module('Pundit2.Annotators')
             scope.setAnnotationNumber = function(uri) {
                 var annotations = AnnotationsExchange.getAnnotations();
                 scope.number = 0;
-                for(ann in annotations){
+                for(var ann in annotations){
                     if(annotations[ann].entities[0] === uri){
                         scope.number ++;
                     }

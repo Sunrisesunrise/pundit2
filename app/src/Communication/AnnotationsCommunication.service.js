@@ -323,10 +323,10 @@ angular.module('Pundit2.Communication')
         var apiCall = 'asAnnReplies';
 
         if(!MyPundit.isUserLogged()){
-            apiCall = 'asAnnRepliesOpen'
+            apiCall = 'asAnnRepliesOpen';
         }
 
-        url = NameSpace.get(apiCall, {
+        var url = NameSpace.get(apiCall, {
                 id: id
         });
 

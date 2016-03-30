@@ -58,7 +58,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.annotation.defaultThumb = false;
     $scope.annotation.edited = false;
 
-    if($scope.annotation.social.counting.comment == 0){
+    if($scope.annotation.social.counting.comment === 0){
         $scope.annotation.repliesLoaded = true;
     }
 
@@ -66,7 +66,7 @@ angular.module('Pundit2.AnnotationSidebar')
         $scope.annotation.defaultThumb = true;
     }
 
-    if ($scope.annotation.modified != '') {
+    if ($scope.annotation.modified !== '') {
         $scope.annotation.edited = true;
     }
 
@@ -291,17 +291,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.socialEvent = function(event, type) {
-
-        var createItemFromResource = function(event) {
-            var values = {};
-
-            values.uri = '';
-            values.icon = true;
-            values.elem = event.currentTarget;
-
-            return new Item(values.uri, values);
-        };
-
+        var  promise = {};
 
         if (type === 'comment') {
             $scope.annotation.replyDialog = false;
@@ -349,39 +339,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 $scope.isSaving = false;
 
             });
-        } else {
-
-            if (!$scope.social.status[type]) {
-                operation = 'add';
-            } else {
-                operation = 'remove';
-            }
-
-            promise = AnnotationDetails.socialEvent(currentId, $scope.annotation.ancestor, type, operation);
-
-            promise.then(function(status) {
-
-                if (status) {
-
-                    if ($scope.social.status[type] && !$scope.social.status[contrary[type]]) {
-                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) - 1;
-                    }
-
-                    if (!$scope.social.status[type] && !$scope.social.status[contrary[type]]) {
-                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) + 1;
-                    }
-
-                    if (!$scope.social.status[type] && $scope.social.status[contrary[type]]) {
-                        $scope.social.status[contrary[type]] = !$scope.social.status[contrary[type]];
-                        $scope.social.counting[type] = parseInt($scope.social.counting[type]) + 1;
-                        $scope.social.counting[contrary[type]] = parseInt($scope.social.counting[contrary[type]]) - 1;
-                    }
-
-                    $scope.social.status[type] = !$scope.social.status[type];
-                }
-            });
         }
-
 
         stopEvent(event);
     };
@@ -390,7 +348,6 @@ angular.module('Pundit2.AnnotationSidebar')
         var promise = AnnotationDetails.saveEditedComment(currentId, $scope.annotation.itemsArray[0], $scope.annotation.comment);
 
         promise.then(function() {
-            var dateFormat = 'hh:mm:ss yyyy MM dd';
             $scope.editMode = false;
             $scope.annotation.edited = true;
             $scope.annotation.modified = moment().format('HH:mm DD MMM YYYY');

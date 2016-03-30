@@ -315,7 +315,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 }, 'slow');
             }
         }, 100);
-    }
+    };
 
     var initContextualMenu = function() {
 
