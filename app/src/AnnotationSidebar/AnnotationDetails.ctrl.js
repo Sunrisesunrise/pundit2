@@ -291,7 +291,7 @@ angular.module('Pundit2.AnnotationSidebar')
         var createItemFromResource = function(event) {
             var values = {};
 
-            values.uri = 'lool';
+            values.uri = '';
             values.icon = true;
             values.elem = event.currentTarget;
 
@@ -337,7 +337,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     id: data.AnnotationID,
                     content: $scope.annotation.replyCommentValue,
                     creatorName: currentUser.fullName,
-                    created: Date(),
+                    created: moment().format(),
                     creator: $scope.userData.uri,
                     thumbnail: currentUser.thumbnail,
                     social: {

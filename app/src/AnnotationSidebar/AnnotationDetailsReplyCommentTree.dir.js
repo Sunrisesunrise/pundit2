@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.directive('annotationDetailsReplyCommentTree', function(AnnotationDetails, Analytics) {
+.directive('annotationDetailsReplyCommentTree', function(AnnotationDetails, Analytics, timeAgo) {
     return {
         restrict: 'E',
         scope: {
@@ -9,7 +9,6 @@ angular.module('Pundit2.AnnotationSidebar')
             options: '='
         },
         templateUrl: 'src/AnnotationSidebar/AnnotationDetails.replyCommentTree.dir.tmpl.html',
-        // require: '^annotationSidebar',
         link: function(scope, element) {
             scope.leaf = true;
             scope.reply = false;
@@ -21,6 +20,14 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.data.showReply = true;
             scope.userData = AnnotationDetails.userData();
             //angular.extend(scope.annotation, scope.data.annotation);
+
+            var oneDay = 60 * 60 * 24;
+            timeAgo.settings.fullDateAfterSeconds = oneDay;
+
+            if(typeof scope.data.created === 'undefined'){
+                scope.data.created = Date();
+            }
+
 
             var stopEvent = function(event) {
                 event.stopPropagation();
