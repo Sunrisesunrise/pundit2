@@ -319,10 +319,16 @@ angular.module('Pundit2.Communication')
     };
 
     annotationsCommunication.getRepliesByAnnotationId = function(id) {
-        var promise = $q.defer(),
-            url = NameSpace.get('asAnnReplies', {
+        var promise = $q.defer();
+        var apiCall = 'asAnnReplies';
+
+        if(!MyPundit.isUserLogged()){
+            apiCall = 'asAnnRepliesOpen'
+        }
+
+        url = NameSpace.get(apiCall, {
                 id: id
-            });
+        });
 
         $http({
             headers: {

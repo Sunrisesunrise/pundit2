@@ -219,7 +219,8 @@ angular.module('Pundit2.Core')
 
     ns.asReply = ns.as + 'api/annotations/{{id}}/reply';
     ns.asUpdateReply = ns.as + 'api/annotations/{{id}}/updateReply';
-    ns.asAnnReplies = ns.as + 'api/open/annotations/{{id}}/replies';
+    ns.asAnnRepliesOpen = ns.as + 'api/open/annotations/{{id}}/replies';
+    ns.asAnnReplies = ns.as + 'api/annotations/{{id}}/replies';
     ns.asLike = ns.as + 'api/annotations/{{id}}/like';
     ns.asUnLike = ns.as + 'api/annotations/{{id}}/unLike';
     ns.asDislike = ns.as + 'api/annotations/{{id}}/dislike';
