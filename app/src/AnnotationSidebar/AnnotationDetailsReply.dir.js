@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.directive('annotationDetailsReplyCommentTree', function(AnnotationDetails, Analytics, timeAgo) {
+.directive('annotationDetailsReply', function(AnnotationDetails, Analytics, timeAgo) {
     return {
         restrict: 'E',
         scope: {
@@ -8,7 +8,7 @@ angular.module('Pundit2.AnnotationSidebar')
             data: '=',
             options: '='
         },
-        templateUrl: 'src/AnnotationSidebar/AnnotationDetails.replyCommentTree.dir.tmpl.html',
+        templateUrl: 'src/AnnotationSidebar/AnnotationDetails.reply.dir.tmpl.html',
         link: function(scope, element) {
             scope.leaf = true;
             scope.reply = false;

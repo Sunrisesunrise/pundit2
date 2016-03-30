@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.directive('annotationDetailsFooterButtons', function(AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher, $window, PndPopover, $timeout) {
+.directive('annotationDetailsSocialButtons', function(AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher, $window, PndPopover, $timeout) {
     return {
         restrict: 'C',
         scope: {
@@ -8,7 +8,7 @@ angular.module('Pundit2.AnnotationSidebar')
             data: '=',
             options: '='
         },
-        templateUrl: 'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html',
+        templateUrl: 'src/AnnotationSidebar/AnnotationDetails.socialButtons.tmpl.html',
         link: function(scope) {
 
             // console.log('inside AnnotationDetails.footerButtons.dir');

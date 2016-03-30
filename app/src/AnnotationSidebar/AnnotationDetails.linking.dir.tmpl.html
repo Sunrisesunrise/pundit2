@@ -25,7 +25,7 @@
              <!--ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"-->
              <!--replace="true">-->
         <!--</div>-->
-        <div class="annotation-details-footer-buttons pnd-annotation-collapsed-social-footer pnd-annotation-social-buttons"
+        <div class="annotation-details-social-buttons pnd-annotation-collapsed-social-footer pnd-annotation-social-buttons"
              id="{{::annotation.id}}"
              data="annotation"
              options="options"
@@ -315,7 +315,7 @@
         </div>
 
         <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
-        <div class="annotation-details-footer-buttons  pnd-annotation-social-buttons"
+        <div class="annotation-details-social-buttons  pnd-annotation-social-buttons"
              id="{{::annotation.id}}"
              data="annotation"
              options="options"
@@ -332,7 +332,7 @@
         </div>
 
         <!-- List of replies to comment -->
-        <annotation-details-reply-comment-tree
+        <annotation-details-reply
                 class="pnd-annotation-details "
                 id="{{::annotation.id}}"
                 data="annotation"
@@ -342,7 +342,7 @@
                 ng-if="reply"
                 ng-show="social"
                 ng-class="{'pnd-no-social': !social}">
-        </annotation-details-reply-comment-tree>
+        </annotation-details-reply>
 
         <!-- Displayed while saving replies -->
         <div ng-show = "isSaving"
@@ -353,7 +353,7 @@
         </div>
 
         <!-- Metadata social comment box -->
-        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyComment.tmpl.html'"
+        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyTextArea.tmpl.html'"
              replace="true">
         </div>
 

@@ -111,8 +111,8 @@
     <script src="../src/AnnotationSidebar/AnnotationSidebar.service.js"></script>
     <script src="../src/AnnotationSidebar/AnnotationDetails.dir.js"></script>
     <script src="../src/AnnotationSidebar/AnnotationDetails.ctrl.js"></script>
-    <script src="../src/AnnotationSidebar/AnnotationDetailsReplyCommentTree.dir.js"></script>
-    <script src="../src/AnnotationSidebar/AnnotationDetailsFooterButtons.dir.js"></script>
+    <script src="../src/AnnotationSidebar/AnnotationDetailsReply.dir.js"></script>
+    <script src="../src/AnnotationSidebar/AnnotationDetailsSocialButtons.dir.js"></script>
     <script src="../src/AnnotationSidebar/AnnotationDetails.service.js"></script>
 
     <script src="../src/Dashboard/Dashboard.js"></script>
