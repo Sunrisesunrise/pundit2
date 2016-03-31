@@ -76,15 +76,14 @@ angular.module('Pundit2.Client')
     // we need to do it here due to a instance order time 
     dispatchDocumentEvent('Pundit.analyticsSettings', Analytics.options);
 
-    $document.on('Pundit.hide', Client.hideClient);
-    $document.on('Pundit.show', Client.showClient);
-    $document.on('Pundit.loadAnnotations', AnnotationsCommunication.getAnnotations);
-    $document.on('Pundit.showBootstrap', Client.showClientBoot);
-    $document.on('Pundit.requestAnnotationsNumber', requestAnnotationsNumber);
-    $document.on('Pundit.requestUserProfileUpdate', userStatusUpdate);
-    $document.on('Pundit.requestUserLoggedStatus', userStatusUpdate);
-    $document.on('Pundit.forceCompileButton', ResourceHandler.forceCompileButton);
-    // TODO: use a different bind? 
+    document.addEventListener('Pundit.hide', Client.hideClient);
+    document.addEventListener('Pundit.show', Client.showClient);
+    document.addEventListener('Pundit.loadAnnotations', AnnotationsCommunication.getAnnotations);
+    document.addEventListener('Pundit.showBootstrap', Client.showClientBoot);
+    document.addEventListener('Pundit.requestAnnotationsNumber', requestAnnotationsNumber);
+    document.addEventListener('Pundit.requestUserProfileUpdate', userStatusUpdate);
+    document.addEventListener('Pundit.requestUserLoggedStatus', userStatusUpdate);
+    document.addEventListener('Pundit.forceCompileButton', ResourceHandler.forceCompileButton);
     document.addEventListener('Pundit.requestAnnotationsNumberRaw', requestAnnotationsNumber);
 
     EventDispatcher.addListener('Pundit.dispatchDocumentEvent', function(data) {
