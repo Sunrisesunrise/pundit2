@@ -39,7 +39,8 @@ angular.module('Pundit2.Client')
 })
 
 .service('MessageHandler', function(MESSAGEHANDLERDEFAULTS, $document, BaseComponent, Config, Analytics,
-    EventDispatcher, Client, Status, MyPundit, AnnotationsExchange, ResourceHandler, AnnotationsCommunication) {
+    EventDispatcher, Client, Status, MyPundit, AnnotationsExchange, ResourceHandler, AnnotationsCommunication,
+    TextFragmentHandler, ItemsExchange) {
 
     var messageHandler = new BaseComponent('MessageHandler', MESSAGEHANDLERDEFAULTS);
 
@@ -73,17 +74,38 @@ angular.module('Pundit2.Client')
         MyPundit.checkLoggedIn(true, false);
     };
 
+    var loadAnnotations = function() {
+        Status.resetProgress();
+
+        ItemsExchange.wipe();
+        AnnotationsExchange.wipe();
+        TextFragmentHandler.wipeTemporarySelection();
+
+        AnnotationsCommunication.getAnnotations();
+
+        requestAnnotationsNumber();
+    };
+
+    // TODO: all ..
+    var wipeAll = function() {
+        // Status.resetProgress();
+        // ItemsExchange.wipe();
+        // AnnotationsExchange.wipe();
+        // TextFragmentHandler.wipeTemporarySelection();
+    };
+
     // we need to do it here due to a instance order time 
     dispatchDocumentEvent('Pundit.analyticsSettings', Analytics.options);
 
     document.addEventListener('Pundit.hide', Client.hideClient);
     document.addEventListener('Pundit.show', Client.showClient);
-    document.addEventListener('Pundit.loadAnnotations', AnnotationsCommunication.getAnnotations);
+    document.addEventListener('Pundit.loadAnnotations', loadAnnotations);
     document.addEventListener('Pundit.showBootstrap', Client.showClientBoot);
     document.addEventListener('Pundit.requestAnnotationsNumber', requestAnnotationsNumber);
     document.addEventListener('Pundit.requestUserProfileUpdate', userStatusUpdate);
     document.addEventListener('Pundit.requestUserLoggedStatus', userStatusUpdate);
     document.addEventListener('Pundit.forceCompileButton', ResourceHandler.forceCompileButton);
+    document.addEventListener('Pundit.wipe', wipeAll);
     document.addEventListener('Pundit.requestAnnotationsNumberRaw', requestAnnotationsNumber);
 
     EventDispatcher.addListener('Pundit.dispatchDocumentEvent', function(data) {
