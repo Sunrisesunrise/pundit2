@@ -58,7 +58,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.annotation.defaultThumb = false;
     $scope.annotation.edited = false;
 
-    if($scope.annotation.social.counting.comment === 0){
+    if ($scope.annotation.social.counting.comment === 0) {
         $scope.annotation.repliesLoaded = true;
     }
 
@@ -291,7 +291,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.socialEvent = function(event, type) {
-        var  promise = {};
+        var promise = {};
 
         if (type === 'comment') {
             $scope.annotation.replyDialog = false;
@@ -312,7 +312,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     id: data.AnnotationID,
                     content: $scope.annotation.replyCommentValue,
                     creatorName: currentUser.fullName,
-                    created: moment().format(),
+                    created: Date(),
                     creator: $scope.userData.uri,
                     thumbnail: currentUser.thumbnail,
                     social: {
@@ -349,8 +349,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
         promise.then(function() {
             $scope.editMode = false;
+            $scope.annotation.modified = Date();
             $scope.annotation.edited = true;
-            $scope.annotation.modified = moment().format('HH:mm DD MMM YYYY');
         }, function() {});
 
         stopEvent(event);

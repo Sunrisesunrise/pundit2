@@ -79,8 +79,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
                 promise.then(function() {
                     scope.editMode = false;
+                    scope.data.modified = Date();
                     scope.data.edited = true;
-                    scope.data.modified = moment(Date()).format('HH:mm DD MMM YYYY');
                     AnnotationDetails.closeEditReply();
                 }, function() {});
 
