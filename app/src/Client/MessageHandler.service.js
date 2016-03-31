@@ -96,5 +96,7 @@ angular.module('Pundit2.Client')
         dispatchDocumentEvent(eventName, currentState);
     });
 
+    window.dispatchDocumentEvent = dispatchDocumentEvent;
+
     return messageHandler;
 });
