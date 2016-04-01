@@ -314,7 +314,22 @@ angular.module('Pundit2.AnnotationSidebar')
      * Default value:
      * <pre> social: false </pre>
      */
-    social: true, // TODO: use this parameter in AnnotationDetails insead of his own value 
+    social: true, // TODO: use this parameter in AnnotationDetails insead of his own value     
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationSidebar.closeSidebarOnWipe
+     *
+     * @description
+     * `boolean`
+     *
+     * Close sidebar when is wiped
+     *
+     * Default value:
+     * <pre> closeSidebarOnWipe: false </pre>
+     */
+    closeSidebarOnWipe: false,
 
     /**
      * @module punditConfig
@@ -1246,9 +1261,14 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     // Show / hide the list of the filters in the sidebar
-    annotationSidebar.toggleFiltersContent = function() {
+    annotationSidebar.toggleFiltersContent = function(skipTrack) {
         state.isFiltersExpanded = !state.isFiltersExpanded;
         EventDispatcher.sendEvent('AnnotationSidebar.toggleFiltersContent', state.isFiltersExpanded);
+
+        if (skipTrack) {
+            return;
+        }
+
         Analytics.track('buttons', 'click', 'sidebar--' + (state.isFiltersExpanded ? 'showFilters' : 'filters--hide'));
     };
 
@@ -1324,14 +1344,23 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationSidebar.wipe = function() {
-        state.isSidebarExpanded = false;
-        state.isFiltersExpanded = false;
+        if (annotationSidebar.options.closeSidebarOnWipe &&
+            state.isSidebarExpanded) {
+            annotationSidebar.toggle();
+        }
+
+        if (state.isFiltersExpanded) {
+            annotationsSidebar.toggleFiltersContent();
+        }
+
         state.allAnnotations = {};
         state.allSuggestions = {};
         state.suggestions = [];
         state.filteredAnnotations = {};
         state.annotationsByDate = [];
         state.annotationsByPosition = [];
+
+        $rootScope.$$phase || $rootScope.$digest();
     };
 
     annotationSidebar.getAllAnnotations = function() {
