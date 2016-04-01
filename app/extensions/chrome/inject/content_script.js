@@ -125,8 +125,13 @@ var dispatchDocumentEvent = function(eventName, details) {
 };
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log(request);
-    console.log(sender);
+    // console.log(request);
+    // console.log(sender);
+    
+    if (typeof request === 'undefined') {
+        return;
+    }
+
     switch (request.action) {
         case 'checkPundit':
             var elems = document.getElementsByClassName('pnd-wrp'),
@@ -194,7 +199,8 @@ document.addEventListener('Pundit.loading', function(evt) {
         action: 'setLoading',
         loading: evt.detail
     }, function(response) {
-        if (response.action === 'updateAnnotationsNumber') {
+        if (typeof resonse !== 'undefined' && 
+            response.action === 'updateAnnotationsNumber') {
             dispatchDocumentEvent('Pundit.requestAnnotationsNumber');
         }
     });
