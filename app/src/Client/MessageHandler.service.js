@@ -40,7 +40,7 @@ angular.module('Pundit2.Client')
 
 .service('MessageHandler', function(MESSAGEHANDLERDEFAULTS, $document, BaseComponent, Config, Analytics,
     EventDispatcher, Client, Status, MyPundit, AnnotationsExchange, ResourceHandler, AnnotationsCommunication,
-    TextFragmentHandler, ItemsExchange) {
+    TextFragmentHandler, ItemsExchange, AnnotationSidebar) {
 
     var messageHandler = new BaseComponent('MessageHandler', MESSAGEHANDLERDEFAULTS);
 
@@ -86,6 +86,13 @@ angular.module('Pundit2.Client')
         requestAnnotationsNumber();
     };
 
+    var delayedLoadAnnotations = function() {
+        AnnotationSidebar.wipe();
+        setTimeout(function() {
+            loadAnnotations();
+        }, 550);
+    };
+
     // TODO: all ..
     var wipeAll = function() {
         // Status.resetProgress();
@@ -100,12 +107,13 @@ angular.module('Pundit2.Client')
     document.addEventListener('Pundit.hide', Client.hideClient);
     document.addEventListener('Pundit.show', Client.showClient);
     document.addEventListener('Pundit.loadAnnotations', loadAnnotations);
+    document.addEventListener('Pundit.delayedLoadAnnotations', delayedLoadAnnotations);
     document.addEventListener('Pundit.showBootstrap', Client.showClientBoot);
     document.addEventListener('Pundit.requestAnnotationsNumber', requestAnnotationsNumber);
     document.addEventListener('Pundit.requestUserProfileUpdate', userStatusUpdate);
     document.addEventListener('Pundit.requestUserLoggedStatus', userStatusUpdate);
     document.addEventListener('Pundit.forceCompileButton', ResourceHandler.forceCompileButton);
-    document.addEventListener('Pundit.wipe', wipeAll);
+    document.addEventListener('Pundit.sidebarWipe', AnnotationSidebar.wipe);
     document.addEventListener('Pundit.requestAnnotationsNumberRaw', requestAnnotationsNumber);
 
     EventDispatcher.addListener('Pundit.dispatchDocumentEvent', function(data) {

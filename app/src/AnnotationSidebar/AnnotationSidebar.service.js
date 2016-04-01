@@ -347,12 +347,11 @@ angular.module('Pundit2.AnnotationSidebar')
         allSuggestions: {},
         suggestions: [],
         filteredAnnotations: {},
+        annotationsByDate: [],
+        annotationsByPosition: [],
         isAnnotationsPanelActive: annotationSidebar.options.annotationsPanelActive,
         isSuggestionsPanelActive: annotationSidebar.options.suggestionsPanelActive
     };
-
-    var annotationsByDate = [],
-        annotationsByPosition = [];
 
     var tempBrokenList = {};
     // var firstSendBrokenAlert = true;
@@ -492,12 +491,12 @@ angular.module('Pundit2.AnnotationSidebar')
                 state.allAnnotations[optId].height = optHeight;
             }
         } else {
-            annotationsByPosition.sort(function(a, b) {
+            state.annotationsByPosition.sort(function(a, b) {
                 return a.top - b.top;
             });
         }
 
-        angular.forEach(annotationsByPosition, function(annotation) {
+        angular.forEach(state.annotationsByPosition, function(annotation) {
             if (typeof annotations[annotation.id] !== 'undefined') {
                 currentTop = annotation.top;
 
@@ -606,7 +605,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         startPosition = defaultStartPosition;
 
-        angular.forEach(annotationsByPosition, function(annotation) {
+        angular.forEach(state.annotationsByPosition, function(annotation) {
             // Skip annotations not included in the current view
             if (typeof annotations[annotation.id] !== 'undefined') {
                 // Set position
@@ -1002,7 +1001,7 @@ angular.module('Pundit2.AnnotationSidebar')
         var annStartIndex,
             annEndIndex;
 
-        if (annotationsByDate.length === 0) {
+        if (state.annotationsByDate.length === 0) {
             return results;
         }
 
@@ -1011,13 +1010,13 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         if (!isValidFrom) {
-            dateFrom = annotationsByDate[0].created;
+            dateFrom = state.annotationsByDate[0].created;
         } else {
             dateFrom = dateFrom + 'T00:00:00';
         }
 
         if (!isValidTo) {
-            dateTo = annotationsByDate[annotationsByDate.length - 1].created;
+            dateTo = state.annotationsByDate[state.annotationsByDate.length - 1].created;
         } else {
             dateTo = dateTo + 'T23:59:59';
         }
@@ -1026,12 +1025,12 @@ angular.module('Pundit2.AnnotationSidebar')
             return results;
         }
 
-        annStartIndex = findDateFromIndex(dateFrom, 0, annotationsByDate.length - 1, annotationsByDate);
-        annEndIndex = findDateToIndex(dateTo, annStartIndex, annotationsByDate.length - 1, annotationsByDate);
+        annStartIndex = findDateFromIndex(dateFrom, 0, state.annotationsByDate.length - 1, state.annotationsByDate);
+        annEndIndex = findDateToIndex(dateTo, annStartIndex, state.annotationsByDate.length - 1, state.annotationsByDate);
 
         for (var i = annStartIndex; i <= annEndIndex; i++) {
-            if (typeof annotationsByDate[i] !== 'undefined') {
-                results[annotationsByDate[i].id] = annotationsByDate[i];
+            if (typeof state.annotationsByDate[i] !== 'undefined') {
+                results[state.annotationsByDate[i].id] = state.annotationsByDate[i];
             }
         }
 
@@ -1322,7 +1321,17 @@ angular.module('Pundit2.AnnotationSidebar')
         state.allSuggestions = {};
         state.suggestions = [];
         state.allAnnotations = {};
+    };
 
+    annotationSidebar.wipe = function() {
+        state.isSidebarExpanded = false;
+        state.isFiltersExpanded = false;
+        state.allAnnotations = {};
+        state.allSuggestions = {};
+        state.suggestions = [];
+        state.filteredAnnotations = {};
+        state.annotationsByDate = [];
+        state.annotationsByPosition = [];
     };
 
     annotationSidebar.getAllAnnotations = function() {
@@ -1330,7 +1339,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationSidebar.getAllAnnotationsPositioned = function() {
-        return annotationsByPosition;
+        return state.annotationsByPosition;
     };
 
     // Get the object of filtered annotations
@@ -1348,7 +1357,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationSidebar.getMinDate = function() {
-        var firstAnnotation = annotationsByDate[0],
+        var firstAnnotation = state.annotationsByDate[0],
             minDate;
 
         if (typeof firstAnnotation !== 'undefined') {
@@ -1359,7 +1368,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationSidebar.getMaxDate = function() {
-        var lastAnnotation = annotationsByDate[annotationsByDate.length - 1],
+        var lastAnnotation = state.annotationsByDate[state.annotationsByDate.length - 1],
             maxDate;
 
         if (typeof lastAnnotation !== 'undefined') {
@@ -1481,9 +1490,9 @@ angular.module('Pundit2.AnnotationSidebar')
         annotations = state.suggestions;
         annotationsList = state.allSuggestions;
 
-        annotationsByPosition = angular.extend([], annotations);
-        annotationsByDate = angular.extend([], annotations);
-        annotationsByDate = sortByKey(annotationsByDate, 'created');
+        state.annotationsByPosition = angular.extend([], annotations);
+        state.annotationsByDate = angular.extend([], annotations);
+        state.annotationsByDate = sortByKey(state.annotationsByDate, 'created');
         state.allAnnotations = angular.extend({}, annotationsList);
 
         initializeFiltersAndPositions();
@@ -1511,9 +1520,9 @@ angular.module('Pundit2.AnnotationSidebar')
             var annotations = AnnotationsExchange.getAnnotations(),
                 annotationsList = AnnotationsExchange.getAnnotationsHash();
 
-            annotationsByPosition = angular.extend([], annotations);
-            annotationsByDate = angular.extend([], annotations);
-            annotationsByDate = sortByKey(annotationsByDate, 'created');
+            state.annotationsByPosition = angular.extend([], annotations);
+            state.annotationsByDate = angular.extend([], annotations);
+            state.annotationsByDate = sortByKey(state.annotationsByDate, 'created');
             state.allAnnotations = angular.extend({}, annotationsList);
             // TODO: inizialize as first operation
             initializeFiltersAndPositions();
