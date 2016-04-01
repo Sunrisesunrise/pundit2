@@ -74,15 +74,16 @@ angular.module('Pundit2.Client')
         MyPundit.checkLoggedIn(true, false);
     };
 
-    var loadAnnotations = function() {
+    var wipeAll = function() {
         Status.resetProgress();
-
         ItemsExchange.wipe();
         AnnotationsExchange.wipe();
         TextFragmentHandler.wipeTemporarySelection();
+    };
 
+    var loadAnnotations = function() {
+        wipeAll();
         AnnotationsCommunication.getAnnotations();
-
         requestAnnotationsNumber();
     };
 
@@ -91,14 +92,6 @@ angular.module('Pundit2.Client')
         setTimeout(function() {
             loadAnnotations();
         }, 550);
-    };
-
-    // TODO: all ..
-    var wipeAll = function() {
-        // Status.resetProgress();
-        // ItemsExchange.wipe();
-        // AnnotationsExchange.wipe();
-        // TextFragmentHandler.wipeTemporarySelection();
     };
 
     // we need to do it here due to a instance order time 
