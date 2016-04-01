@@ -334,7 +334,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 if (scope.motivation === 'commenting') {
                     scope.editComment(event);
                 } else {
-                    // TODO: gosh .. 
+                    // TODO: gosh ..
                     event = document.createEvent('Event');
                     scope.editAnnotation(event);
                 }
@@ -850,14 +850,16 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
-    annotationDetails.openAnnotationView = function(currentId) {
+    annotationDetails.openAnnotationView = function(currentId, skipScroll) {
         if (typeof(state.annotations[currentId]) !== 'undefined') {
             if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
                 AnnotationSidebar.toggle();
             }
             annotationDetails.closeAllAnnotationView(currentId);
             state.annotations[currentId].expanded = true;
-            scrollToAnnotation(currentId);
+            if (typeof skipScroll === 'undefined' || !skipScroll) {
+                scrollToAnnotation(currentId);
+            }
             if (Config.modules.AnnotationDetails.social && typeof state.annotations[currentId].scopeReference.annotation.repliesLoaded === 'undefined') {
                 state.annotations[currentId].scopeReference.annotation.repliesLoaded = false;
 

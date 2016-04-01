@@ -179,6 +179,29 @@ angular.module('Pundit2.AnnotationSidebar')
             AnnotationSidebar.setAllPosition(currentId, initialHeight);
             $scope.annotation.replyDialog = false;
             $scope.annotation.replyCommentValue = '';
+        } else {
+            var screen = angular.element(window);
+            setTimeout(function() {
+                var element = angular.element('.pnd-annotation-expanded')[0].getBoundingClientRect();
+                var parentElement = angular.element('.pnd-annotation-expanded')[0];
+                var parentElementOffset = parentElement.getBoundingClientRect();
+
+                if (element.height + element.top + 90 > screen.height()) {
+                    if (parentElementOffset.height < screen.height()) {
+                        angular.element('html,body').animate({
+                                scrollTop: $window.scrollY + parentElementOffset.top - 65
+                            },
+                            'slow');
+                    } else {
+
+                        angular.element('html,body').animate({
+                                //scrollTop: $window.scrollY + element.top - element.height * 2 + 23
+                                scrollTop: $window.scrollY + parentElementOffset.top - 65
+                            },
+                            'slow');
+                    }
+                }
+            }, 800);
         }
 
         //if (!MyPundit.isUserLogged()){
