@@ -392,9 +392,10 @@ angular.module('Pundit2.AnnotationSidebar')
 
     // TODO: take startPosition from element in sidebar
     var startTop = annotationSidebar.options.startTop,
-        defaultStartPosition = isPro && Config.isModuleActive('Annomatic') ? startTop + 24 : startTop,
-        startPosition = defaultStartPosition,
-        toolbarHeight = clientMode === 'pro' ? $injector.get('Toolbar').options.toolbarHeight : 0;
+        toolbarHeight = clientMode === 'pro' ? $injector.get('Toolbar').options.toolbarHeight : 0,
+        defaultStartPosition, startPosition;
+
+    var forceActiveAnnomatic = false;
 
     // Contains the values ​​of active filters
     annotationSidebar.filters = {
@@ -455,6 +456,13 @@ angular.module('Pundit2.AnnotationSidebar')
     }
 
     annotationSidebar.minHeightRequired = startPosition;
+
+    var setStartPosition = function(annomaticIsActive) {
+        defaultStartPosition = isPro && annomaticIsActive ? startTop + 24 : startTop;
+        startPosition = defaultStartPosition;
+    };
+
+    setStartPosition(Config.isModuleActive('Annomatic'));
 
     // TODO add single filter add to annotationsFilters
     var resetPartialsAndAnnotationsList = function() {
@@ -1509,6 +1517,10 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
+    annotationSidebar.isAnnomaticActive = function() {
+        return Config.isModuleActive('Annomatic') || forceActiveAnnomatic;
+    };
+
     EventDispatcher.addListener('Annomatic.annotationSaved', function(e) {
         var annotation = e.args,
             annotations, annotationsList;
@@ -1581,8 +1593,16 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if (isUserLogged) {
             userData = MyPundit.getUserData();
+            if (userData.userType === 2) {
+                setStartPosition(true);
+                forceActiveAnnomatic = true;
+            }
         } else {
             userData = {};
+            if (!Config.isModuleActive('Annomatic')) {
+                setStartPosition(false);
+                forceActiveAnnomatic = false;
+            }
         }
     });
 
