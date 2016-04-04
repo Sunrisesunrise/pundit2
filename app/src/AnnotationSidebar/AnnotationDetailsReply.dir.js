@@ -1,4 +1,3 @@
-/*global moment*/
 angular.module('Pundit2.AnnotationSidebar')
 
 .directive('annotationDetailsReply', function(AnnotationDetails, Analytics, timeAgo) {
@@ -75,7 +74,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
                 promise.then(function() {
                     scope.editMode = false;
-                    scope.data.modified =  moment();
+                    scope.data.modified =  new Date();
                     scope.data.edited = true;
                     AnnotationDetails.closeEditReply();
                 }, function() {});
