@@ -74,7 +74,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
                 promise.then(function() {
                     scope.editMode = false;
-                    scope.data.modified =  new Date();
+                    scope.data.modified = new Date();
                     scope.data.edited = true;
                     AnnotationDetails.closeEditReply();
                 }, function() {});
@@ -100,7 +100,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 scopeRef.annotation.social.status.comment = AnnotationDetails.checkCreatorRepliesReference(scope.options.parentAnnotation.id, scope.userData.uri);
             };
 
-
             scope.deleteAnnotationLeaf = function(event) {
                 AnnotationDetails.openConfirmModalReply(element, scope.id, hideReply);
                 Analytics.track('buttons', 'click', 'annotation--details--delete');
@@ -113,7 +112,6 @@ angular.module('Pundit2.AnnotationSidebar')
             //
             //    stopEvent(event);
             //};
-
         }
     };
 });

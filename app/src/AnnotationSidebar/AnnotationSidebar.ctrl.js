@@ -500,7 +500,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     }
 
-    EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
+    EventDispatcher.addListener('MyPundit.isUserLogged', function() {
         $scope.isAnnomaticActive = AnnotationSidebar.isAnnomaticActive();
     });
 
