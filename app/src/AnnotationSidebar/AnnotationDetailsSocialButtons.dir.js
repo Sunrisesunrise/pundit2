@@ -66,12 +66,13 @@ angular.module('Pundit2.AnnotationSidebar')
                     scopeRef.replyTree = [];
                 }
 
-                //if (scopeRef.replyTree.length === 0) {
-                //    AnnotationDetails.getRepliesByAnnotationId(scope.id).then(function(data) {
-                //        scopeRef.replyTree = AnnotationDetails.addRepliesReference(scope.data.parentId, data);
-                //        AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded = true;
-                //    });
-                //}
+                if (scopeRef.replyTree.length === 0) {
+                    AnnotationDetails.getRepliesByAnnotationId(scope.id).then(function(data) {
+                        scopeRef.replyTree = AnnotationDetails.addRepliesReference(scope.data.parentId, data);
+                        AnnotationDetails.getScopeReference(scope.id).annotation.social.counting.comment = data.length;
+                        AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded = true;
+                    });
+                }
 
                 if (scope.data.replyDialog === true ) {
                     setTimeout(function() {
