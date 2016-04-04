@@ -278,6 +278,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
                 Analytics.track('buttons', 'click', 'annotation--details--edit');
             }, 1);
+            $scope.annotation.modified = new Date();
+            $scope.annotation.edited = true;
         };
 
         if (TripleComposer.isSaving()) {
