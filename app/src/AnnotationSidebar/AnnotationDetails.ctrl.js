@@ -215,6 +215,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
                     if (typeof data !== 'undefined') {
                         data.annotation = $scope.annotation;
+                        data.annotation.social.counting.comment = data.length;
                         $scope.optionsReplyes.replyTreeArray = data;
                         $scope.annotation.repliesLoaded = true;
                         $scope.replyTree = AnnotationDetails.addRepliesReference($scope.annotation.parentId, data);
