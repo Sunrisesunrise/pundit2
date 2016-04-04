@@ -1,3 +1,4 @@
+/*global moment*/
 angular.module('Pundit2.AnnotationSidebar')
 
 .controller('AnnotationDetailsCtrl', function($scope, $rootScope, $element, $timeout, $window,
@@ -335,7 +336,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     id: data.AnnotationID,
                     content: $scope.annotation.replyCommentValue,
                     creatorName: currentUser.fullName,
-                    created: Date(),
+                    created: moment(),
                     creator: $scope.userData.uri,
                     thumbnail: currentUser.thumbnail,
                     social: {
@@ -372,7 +373,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         promise.then(function() {
             $scope.editMode = false;
-            $scope.annotation.modified = Date();
+            $scope.annotation.modified = moment();
             $scope.annotation.edited = true;
         }, function() {});
 

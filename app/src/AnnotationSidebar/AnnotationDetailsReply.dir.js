@@ -1,3 +1,4 @@
+/*global moment*/
 angular.module('Pundit2.AnnotationSidebar')
 
 .directive('annotationDetailsReply', function(AnnotationDetails, Analytics, timeAgo) {
@@ -23,11 +24,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
             var oneDay = 60 * 60 * 24;
             timeAgo.settings.fullDateAfterSeconds = oneDay;
-
-            if(typeof scope.data.created === 'undefined'){
-                scope.data.created = Date();
-            }
-
 
             var stopEvent = function(event) {
                 event.stopPropagation();
@@ -79,7 +75,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
                 promise.then(function() {
                     scope.editMode = false;
-                    scope.data.modified = Date();
+                    scope.data.modified =  moment();
                     scope.data.edited = true;
                     AnnotationDetails.closeEditReply();
                 }, function() {});

@@ -1350,7 +1350,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
 
         if (state.isFiltersExpanded) {
-            annotationsSidebar.toggleFiltersContent();
+            annotationSidebar.toggleFiltersContent();
         }
 
         state.allAnnotations = {};
