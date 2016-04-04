@@ -8,7 +8,7 @@ angular.module('Pundit2.AnnotationSidebar')
             data: '=',
             options: '='
         },
-        templateUrl: 'src/AnnotationSidebar/AnnotationDetailsSocialButtons.tmpl.html',
+        templateUrl: 'src/AnnotationSidebar/AnnotationDetails.socialButtons.tmpl.html',
         link: function(scope) {
 
             var stopEvent = function(event) {

@@ -8,7 +8,7 @@ angular.module('Pundit2.AnnotationSidebar')
             data: '=',
             options: '='
         },
-        templateUrl: 'src/AnnotationSidebar/AnnotationDetailsReply.dir.tmpl.html',
+        templateUrl: 'src/AnnotationSidebar/AnnotationDetails.reply.dir.tmpl.html',
         link: function(scope, element) {
             scope.leaf = true;
             scope.reply = false;
