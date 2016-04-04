@@ -65,7 +65,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 if (typeof scopeRef.replyTree === 'undefined') {
                     scopeRef.replyTree = [];
                 }
-
+                //TODO miss check comment.status in data
                 if (scopeRef.replyTree.length === 0) {
                     AnnotationDetails.getRepliesByAnnotationId(scope.id).then(function(data) {
                         scopeRef.replyTree = AnnotationDetails.addRepliesReference(scope.data.parentId, data);

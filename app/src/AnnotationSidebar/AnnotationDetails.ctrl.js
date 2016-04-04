@@ -212,7 +212,7 @@ angular.module('Pundit2.AnnotationSidebar')
             if (Config.modules.AnnotationDetails.social) {
 
                 AnnotationDetails.getRepliesByAnnotationId(currentId).then(function(data) {
-
+                    //TODO miss check comment.status in data
                     if (typeof data !== 'undefined') {
                         data.annotation = $scope.annotation;
                         data.annotation.social.counting.comment = data.length;
