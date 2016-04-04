@@ -47,7 +47,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.annotationSidebar = AnnotationSidebar;
     $scope.filters = AnnotationSidebar.getAnnotationsFilters();
-    $scope.isAnnomaticActive = Config.isModuleActive('Annomatic');
+    $scope.isAnnomaticActive = AnnotationSidebar.isAnnomaticActive();
     $scope.isAnnotationSidebarExpanded = AnnotationSidebar.options.isAnnotationSidebarExpanded;
     $scope.isLoadingData = false;
     $scope.isLoading = false;
@@ -499,6 +499,10 @@ angular.module('Pundit2.AnnotationSidebar')
             maxDateWatch = undefined;
         }
     }
+
+    EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
+        $scope.isAnnomaticActive = AnnotationSidebar.isAnnomaticActive();
+    });
 
     EventDispatcher.addListener('Pundit.loading', function(e) {
         var currentState = e.args;
