@@ -37,6 +37,7 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.replyAnnotation = function(event) {
 
                 var moveOnTextArea = function(){
+                    var screen = angular.element(window);
                     setTimeout(function() {
                         var element = angular.element('.pnd-annotation-reply-textarea')[0].getBoundingClientRect();
                         var parentElement = angular.element('.pnd-annotation-expanded')[0];
@@ -68,7 +69,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 };
 
                 var scopeRef = AnnotationDetails.getScopeReference(scope.id),
-                    screen = angular.element(window),
                     iconReference = angular.element(event.target);
 
                 if (event.target.className === 'pnd-icon-comment') {
@@ -109,7 +109,6 @@ angular.module('Pundit2.AnnotationSidebar')
                         AnnotationDetails.getScopeReference(scope.id).annotation.social.counting.comment = data.length;
                         AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded = true;
                         scope.data.replyDialog = true;
-                        moveOnTextArea();
                     });
                 }
 
