@@ -336,6 +336,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
                 var reply = {
                     id: data.AnnotationID,
+                    parentId: $scope.id,
                     content: $scope.annotation.replyCommentValue,
                     creatorName: currentUser.fullName,
                     created: new Date(),
