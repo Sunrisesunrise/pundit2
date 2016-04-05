@@ -35,50 +35,13 @@ angular.module('Pundit2.AnnotationSidebar')
             };
 
             scope.replyAnnotation = function(event) {
-                var scopeRef = AnnotationDetails.getScopeReference(scope.id),
-                    screen = angular.element(window),
-                    iconReference = angular.element(event.target);
 
-                if (event.target.className === 'pnd-icon-comment') {
-                    iconReference = angular.element(event.target.parentElement);
-                }
-                scope.data.replyDialog = !scope.data.replyDialog;
-
-                if (typeof scope.data.repliesLoaded === 'undefined') {
-                    scope.data.repliesLoaded = false;
-                }
-
-                if (!MyPundit.isUserLogged()) {
-                    iconReference.classList += ' pnd-range-pos-icon';
-                    scope.data.repliesLoaded = true;
-                    scope.data.replyDialog = false;
-                    AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert', iconReference);
-                    EventDispatcher.sendEvent('openContextualMenu');
-                    return;
-                }
-
-                if (!scope.data.expanded) {
-                    AnnotationDetails.openAnnotationView(scope.id, true);
-                    scope.data.replyDialog = true;
-                }
-
-                if (typeof scopeRef.replyTree === 'undefined') {
-                    scopeRef.replyTree = [];
-                }
-                //TODO miss check comment.status in data
-                if (scopeRef.replyTree.length === 0) {
-                    AnnotationDetails.getRepliesByAnnotationId(scope.id).then(function(data) {
-                        scopeRef.replyTree = AnnotationDetails.addRepliesReference(scope.data.parentId, data);
-                        AnnotationDetails.getScopeReference(scope.id).annotation.social.counting.comment = data.length;
-                        AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded = true;
-                    });
-                }
-
-                if (scope.data.replyDialog === true ) {
+                var moveOnTextArea = function(){
                     setTimeout(function() {
                         var element = angular.element('.pnd-annotation-reply-textarea')[0].getBoundingClientRect();
                         var parentElement = angular.element('.pnd-annotation-expanded')[0];
                         var parentElementOffset = parentElement.getBoundingClientRect();
+                        var timer = 500;
 
                         if (element.height + element.top  > screen.height()) {
                             if (parentElementOffset.height < screen.height()) {
@@ -94,12 +57,64 @@ angular.module('Pundit2.AnnotationSidebar')
                                     },
                                     'slow');
                             }
+                        } else {
+                            timer = 0;
                         }
                         setTimeout(function() {
                             angular.element('div[class*="pnd-annotation-reply-textarea"]>textarea')[0].focus();
-                        }, 700);
+                        }, timer);
 
-                    }, 800);
+                    }, 500);
+                };
+
+                var scopeRef = AnnotationDetails.getScopeReference(scope.id),
+                    screen = angular.element(window),
+                    iconReference = angular.element(event.target);
+
+                if (event.target.className === 'pnd-icon-comment') {
+                    iconReference = angular.element(event.target.parentElement);
+                }
+
+                if (!scope.data.expanded) {
+                    scope.data.replyDialog = false;
+                }
+
+                if (typeof scope.data.repliesLoaded === 'undefined') {
+                    scope.data.repliesLoaded = false;
+                }
+
+                scope.data.replyDialog = !scope.data.replyDialog;
+
+                if (!MyPundit.isUserLogged()) {
+                    iconReference.classList += ' pnd-range-pos-icon';
+                    scope.data.repliesLoaded = true;
+                    scope.data.replyDialog = false;
+                    AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert', iconReference);
+                    EventDispatcher.sendEvent('openContextualMenu');
+                    return;
+                }
+
+                if (!scope.data.expanded) {
+                    AnnotationDetails.openAnnotationView(scope.id, true);
+                }
+
+                if (typeof scopeRef.replyTree === 'undefined') {
+                    scopeRef.replyTree = [];
+                }
+                //TODO miss check comment.status in data
+                if (scopeRef.replyTree.length === 0) {
+                    scope.data.replyDialog = false;
+                    AnnotationDetails.getRepliesByAnnotationId(scope.id).then(function(data) {
+                        scopeRef.replyTree = AnnotationDetails.addRepliesReference(scope.data.parentId, data);
+                        AnnotationDetails.getScopeReference(scope.id).annotation.social.counting.comment = data.length;
+                        AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded = true;
+                        scope.data.replyDialog = true;
+                        moveOnTextArea();
+                    });
+                }
+
+                if (AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded) {
+                    moveOnTextArea();
                 }
                 stopEvent(event);
             };
