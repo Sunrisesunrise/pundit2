@@ -135,6 +135,11 @@ angular.module('Pundit2.AnnotationSidebar')
                 if (typeof type === 'undefined') {
                     return;
                 }
+
+                if (typeof scope.data.parentId === 'undefined'){
+                    scope.data.parentId = scope.options.parentAnnotation.id;
+                }
+
                 if (type === 'comment') {
                     promise = AnnotationDetails.socialEvent(scope.data.id, scope.data.parentId, type, 'add', scope.data.replyCommentValue);
                 } else {
