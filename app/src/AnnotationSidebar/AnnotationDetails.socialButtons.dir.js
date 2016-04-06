@@ -43,6 +43,7 @@ angular.module('Pundit2.AnnotationSidebar')
                         var parentElement = angular.element('.pnd-annotation-expanded')[0];
                         var parentElementOffset = parentElement.getBoundingClientRect();
                         var timer = 500;
+                        var scroll = 0;
 
                         if (element.height + element.top  > screen.height()) {
                             if (parentElementOffset.height < screen.height()) {
@@ -51,10 +52,14 @@ angular.module('Pundit2.AnnotationSidebar')
                                     },
                                     'slow');
                             } else {
-
+                                if (parentElementOffset.height > screen.height()*2){
+                                    scroll = ($window.scrollY + parentElementOffset.top - 65) + parentElementOffset.height - (screen.height() -  (element.height % screen.height())) - 60;
+                                } else {
+                                    scroll = $window.scrollY + (element.top % screen.height()) + element.height + 40;
+                                }
                                 angular.element('html,body').animate({
                                         //scrollTop: $window.scrollY + element.top - element.height * 2 + 23
-                                        scrollTop: $window.scrollY + (element.top % screen.height()) + element.height + 40
+                                        scrollTop: scroll
                                     },
                                     'slow');
                             }
@@ -109,10 +114,11 @@ angular.module('Pundit2.AnnotationSidebar')
                         AnnotationDetails.getScopeReference(scope.id).annotation.social.counting.comment = data.length;
                         AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded = true;
                         scope.data.replyDialog = true;
+                        moveOnTextArea();
                     });
                 }
 
-                if (AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded) {
+                if (AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded  && scopeRef.replyTree.length !== 0) {
                     moveOnTextArea();
                 }
                 stopEvent(event);
