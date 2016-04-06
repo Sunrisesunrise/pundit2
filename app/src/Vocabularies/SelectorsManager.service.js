@@ -1,6 +1,6 @@
 angular.module('Pundit2.Vocabularies')
 
-.service('SelectorsManager', function(BaseComponent, ItemsExchange, $injector, $q) {
+.service('SelectorsManager', function(BaseComponent, ItemsExchange, $injector, $q, MyPundit) {
 
     var selectorsManager = new BaseComponent('SelectorsManager');
 
@@ -109,7 +109,14 @@ angular.module('Pundit2.Vocabularies')
     // to start the initialization process
     selectorsManager.addSelector = function(selector) {
         selectors[selector.name] = selector;
-        selectorsManager.log("Add selector ", selector.name);
+        selectorsManager.log('Add selector ', selector.name);
+    };
+
+    selectorsManager.removeSelector = function(selectorName) {
+        if (typeof selectors[selectorName] !== 'undefined') {
+            delete selectors[selectorName];
+            selectorsManager.log('Delete selector ', selectorName);
+        }
     };
 
     // return all active selectors instances
@@ -118,5 +125,4 @@ angular.module('Pundit2.Vocabularies')
     };
 
     return selectorsManager;
-
 });

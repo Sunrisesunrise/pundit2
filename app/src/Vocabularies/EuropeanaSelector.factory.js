@@ -122,11 +122,10 @@ angular.module('Pundit2.Vocabularies')
 })
 
 .factory('EuropeanaSelector', function(BaseComponent, EUROPEANADEFAULTS, Item, ItemsExchange, SelectorsManager,
-    $http, $q) {
+    $http, $q, MyPundit, EventDispatcher) {
 
     var europeanaSelector = new BaseComponent('EuropeanaSelector', EUROPEANADEFAULTS);
     europeanaSelector.name = 'EuropeanaSelector';
-
 
     // add this selector to selector manager
     // then the configured instances are read an instantiated
@@ -214,6 +213,25 @@ angular.module('Pundit2.Vocabularies')
     EuropeanaFactory.prototype.push = function(config) {
         europeanaSelector.options.instances.push(config);
     };
+
+    EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
+        var isUserLogged = e.args,
+            userData;
+
+        if (europeanaSelector.options.active === false) {
+            if (isUserLogged) {
+                userData = MyPundit.getUserData();
+                if (userData.userType === 2) {
+                    SelectorsManager.addSelector(europeanaSelector);
+                    SelectorsManager.init();
+                    europeanaSelector.extraActive = true;
+                }
+            } else if (europeanaSelector.extraActive) {
+                SelectorsManager.removeSelector(europeanaSelector.name);
+                SelectorsManager.init();
+            }
+        }
+    });
 
     europeanaSelector.log('Factory init');
 
