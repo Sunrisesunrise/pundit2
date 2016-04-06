@@ -65,6 +65,16 @@ angular.module('Pundit2.AnnotationSidebar')
                             }
                         } else {
                             timer = 0;
+                            if (parentElementOffset.height + element.height + Math.abs(element.top)> screen.height()*2){
+                                scroll = ($window.scrollY + parentElementOffset.top - 65) + parentElementOffset.height - (screen.height() -  (element.height % screen.height())) - 60;
+                            } else {
+                                scroll = ($window.scrollY + parentElementOffset.top - 65)
+                            }
+                            angular.element('html,body').animate({
+                                    scrollTop: scroll
+                                },
+                                'slow');
+
                         }
                         setTimeout(function() {
                             angular.element('div[class*="pnd-annotation-reply-textarea"]>textarea')[0].focus();
