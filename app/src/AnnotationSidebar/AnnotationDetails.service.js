@@ -58,6 +58,7 @@ angular.module('Pundit2.AnnotationSidebar')
      * <pre> debug: false </pre>
      */
     debug: false,
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -69,9 +70,10 @@ angular.module('Pundit2.AnnotationSidebar')
      * Active social event
      *
      * Default value:
-     * <pre> social: true </pre>
+     * <pre> social: false </pre>
      */
-    social: true,
+    social: false,
+    
     /**
      * @module punditConfig
      * @ngdoc property
@@ -83,23 +85,9 @@ angular.module('Pundit2.AnnotationSidebar')
      * Active social reply
      *
      * Default value:
-     * <pre> reply: true </pre>
+     * <pre> reply: false </pre>
      */
-    reply: true,
-    /**
-     * @module punditConfig
-     * @ngdoc property
-     * @name modules#AnnotationDetails.replyTree
-     *
-     * @description
-     * `boolean`
-     *
-     * Active social replyTree
-     *
-     * Default value:
-     * <pre> replyTree: true </pre>
-     */
-    replyTree: false,
+    reply: false,
 
     /**
      * @module punditConfig
@@ -112,9 +100,10 @@ angular.module('Pundit2.AnnotationSidebar')
      * Active social like
      *
      * Default value:
-     * <pre> like: true </pre>
+     * <pre> like: false </pre>
      */
-    like: true,
+    like: false,
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -126,9 +115,10 @@ angular.module('Pundit2.AnnotationSidebar')
      * Active social dislike
      *
      * Default value:
-     * <pre> dislike: true </pre>
+     * <pre> dislike: false </pre>
      */
-    dislike: true,
+    dislike: false,
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -140,9 +130,9 @@ angular.module('Pundit2.AnnotationSidebar')
      * Active social endorse
      *
      * Default value:
-     * <pre> endorse: true </pre>
+     * <pre> endorse: false </pre>
      */
-    endorse: true,
+    endorse: false,
 
     /**
      * @module punditConfig
@@ -155,9 +145,9 @@ angular.module('Pundit2.AnnotationSidebar')
      * Active social report
      *
      * Default value:
-     * <pre> report: true </pre>
+     * <pre> report: false </pre>
      */
-    report: true,
+    report: false,
 
     /**
      * @module punditConfig
@@ -170,9 +160,10 @@ angular.module('Pundit2.AnnotationSidebar')
      * Active social reply like
      *
      * Default value:
-     * <pre> replyLike: true </pre>
+     * <pre> replyLike: false </pre>
      */
-    replyLike: true,
+    replyLike: false,
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -184,9 +175,10 @@ angular.module('Pundit2.AnnotationSidebar')
      * Active social dislike
      *
      * Default value:
-     * <pre> replyDislike: true </pre>
+     * <pre> replyDislike: false </pre>
      */
-    replyDislike: true,
+    replyDislike: false,
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -198,9 +190,9 @@ angular.module('Pundit2.AnnotationSidebar')
      * Active social endorse
      *
      * Default value:
-     * <pre> replyEndorse: true </pre>
+     * <pre> replyEndorse: false </pre>
      */
-    replyEndorse: true,
+    replyEndorse: false,
 
     /**
      * @module punditConfig
@@ -213,9 +205,9 @@ angular.module('Pundit2.AnnotationSidebar')
      * Active social report
      *
      * Default value:
-     * <pre> replyReport: true </pre>
+     * <pre> replyReport: false </pre>
      */
-    replyReport: true,
+    replyReport: false,
 
     /**
      * @module punditConfig
@@ -230,8 +222,8 @@ angular.module('Pundit2.AnnotationSidebar')
      * Default value:
      * <pre> cMenuType: 'annotationDetailsEditable' </pre>
      */
-
     cMenuTypeEdit: 'annotationDetailsEditable',
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -245,7 +237,6 @@ angular.module('Pundit2.AnnotationSidebar')
      * Default value:
      * <pre> cMenuType: 'annotationDetailsNoEditable' </pre>
      */
-
     cMenuTypeNoEdit: 'annotationDetailsNoEditable',
 
     /**
@@ -261,7 +252,6 @@ angular.module('Pundit2.AnnotationSidebar')
      * Default value:
      * <pre> cMenuType: 'annotationDetailsLeaf' </pre>
      */
-
     cMenuTypeLeaf: 'annotationDetailsLeaf',
 })
 

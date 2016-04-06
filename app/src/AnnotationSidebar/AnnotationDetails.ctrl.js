@@ -182,6 +182,7 @@ angular.module('Pundit2.AnnotationSidebar')
         } else {
             var screen = angular.element(window);
             setTimeout(function() {
+                // TODO: add check for angular.element('.pnd-annotation-expanded')[0] 
                 var element = angular.element('.pnd-annotation-expanded')[0].getBoundingClientRect();
                 var parentElement = angular.element('.pnd-annotation-expanded')[0];
                 var parentElementOffset = parentElement.getBoundingClientRect();

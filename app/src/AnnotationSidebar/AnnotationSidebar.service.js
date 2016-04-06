@@ -314,7 +314,7 @@ angular.module('Pundit2.AnnotationSidebar')
      * Default value:
      * <pre> social: false </pre>
      */
-    social: true, // TODO: use this parameter in AnnotationDetails insead of his own value     
+    social: false, // TODO: use this parameter in AnnotationDetails insead of his own value     
 
     /**
      * @module punditConfig
