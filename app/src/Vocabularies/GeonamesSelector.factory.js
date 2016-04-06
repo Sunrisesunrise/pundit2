@@ -122,7 +122,7 @@ angular.module('Pundit2.Vocabularies')
 })
 
 .factory('GeonamesSelector', function(BaseComponent, GEONAMESDEFAULTS, Item, ItemsExchange, SelectorsManager,
-    $http, $q) {
+    $http, $q, MyPundit, EventDispatcher) {
 
     var geonamesSelector = new BaseComponent('GeonamesSelector', GEONAMESDEFAULTS);
     geonamesSelector.name = 'GeonamesSelector';
@@ -214,6 +214,25 @@ angular.module('Pundit2.Vocabularies')
     GeonamesFactory.prototype.push = function(config) {
         geonamesSelector.options.instances.push(config);
     };
+
+    EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
+        var isUserLogged = e.args,
+            userData;
+
+        if (geonamesSelector.options.active === false) {
+            if (isUserLogged) {
+                userData = MyPundit.getUserData();
+                if (userData.userType === 2) {
+                    SelectorsManager.addSelector(geonamesSelector);
+                    SelectorsManager.init();
+                    geonamesSelector.extraActive = true;
+                }
+            } else if (geonamesSelector.extraActive) {
+                SelectorsManager.removeSelector(geonamesSelector.name);
+                SelectorsManager.init();
+            }
+        }
+    });
 
     geonamesSelector.log('Factory init');
 
