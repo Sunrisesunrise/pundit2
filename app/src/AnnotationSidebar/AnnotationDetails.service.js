@@ -172,7 +172,7 @@ angular.module('Pundit2.AnnotationSidebar')
      * @description
      * `boolean`
      *
-     * Active social dislike
+     * Active social reply dislike
      *
      * Default value:
      * <pre> replyDislike: false </pre>
@@ -187,7 +187,7 @@ angular.module('Pundit2.AnnotationSidebar')
      * @description
      * `boolean`
      *
-     * Active social endorse
+     * Active social reply endorse
      *
      * Default value:
      * <pre> replyEndorse: false </pre>
@@ -202,12 +202,27 @@ angular.module('Pundit2.AnnotationSidebar')
      * @description
      * `boolean`
      *
-     * Active social report
+     * Active social reply report
      *
      * Default value:
      * <pre> replyReport: false </pre>
      */
     replyReport: false,
+    //TODO reply of replies not implemented
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.replyReply
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social reply reply
+     *
+     * Default value:
+     * <pre> replyRepply: false </pre>
+     */
+    replyReply: false,
 
     /**
      * @module punditConfig
