@@ -7,10 +7,10 @@ var punditConfig = {
         'Client': {
             active: true
         },
-        'Annomatic': {
-            active: true,
-            sourceLang: 'fr' // test
-        },
+        // 'Annomatic': {
+        //     active: true,
+        //     sourceLang: 'fr' // test
+        // },
         'Analytics': {
             doTracking: true,
             doMixpanel: true,

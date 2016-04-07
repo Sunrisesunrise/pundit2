@@ -221,7 +221,7 @@ angular.module('Pundit2.Vocabularies')
         if (europeanaSelector.options.active === false) {
             if (isUserLogged) {
                 userData = MyPundit.getUserData();
-                if (userData.userType === 2) {
+                if (parseInt(userData.userType) === 2) {
                     SelectorsManager.addSelector(europeanaSelector);
                     SelectorsManager.init();
                     europeanaSelector.extraActive = true;

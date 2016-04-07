@@ -222,7 +222,7 @@ angular.module('Pundit2.Vocabularies')
         if (geonamesSelector.options.active === false) {
             if (isUserLogged) {
                 userData = MyPundit.getUserData();
-                if (userData.userType === 2) {
+                if (parseInt(userData.userType) === 2) {
                     SelectorsManager.addSelector(geonamesSelector);
                     SelectorsManager.init();
                     geonamesSelector.extraActive = true;
