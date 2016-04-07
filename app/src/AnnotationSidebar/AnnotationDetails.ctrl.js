@@ -183,11 +183,14 @@ angular.module('Pundit2.AnnotationSidebar')
             var screen = angular.element(window);
             setTimeout(function() {
                 // TODO: add check for angular.element('.pnd-annotation-expanded')[0] 
-                var element = angular.element('.pnd-annotation-expanded')[0].getBoundingClientRect();
+                var el = angular.element('.pnd-annotation-expanded');
+                var element = {};
 
-                if (typeof element === 'undefined') {
+                if (typeof el[0] === 'undefined') {
                     element.height = 100;
                     element.top = 0;
+                } else {
+                    element = el[0].getBoundingClientRect();
                 }
 
                 if ((element.height + element.top + 90 > screen.height()) || (element.top < 0)) {
