@@ -46,6 +46,7 @@ angular.module('Pundit2.AnnotationSidebar')
                         var scroll = 0;
 
                         if (element.height + element.top  > screen.height()) {
+
                             if (parentElementOffset.height < screen.height()) {
                                 angular.element('html,body').animate({
                                         scrollTop: ($window.scrollY + (element.top % screen.height()) + element.height + 40) % screen.height()
@@ -58,7 +59,6 @@ angular.module('Pundit2.AnnotationSidebar')
                                     scroll = $window.scrollY + (element.top % screen.height()) + element.height + 40;
                                 }
                                 angular.element('html,body').animate({
-                                        //scrollTop: $window.scrollY + element.top - element.height * 2 + 23
                                         scrollTop: scroll
                                     },
                                     'slow');
