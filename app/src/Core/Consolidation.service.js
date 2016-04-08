@@ -54,8 +54,38 @@ angular.module('Pundit2.Core')
      *
      * Default value:
      * <pre> bufferDelay: undefined </pre>
-*/
-    preventDelay: undefined
+     */
+    preventDelay: undefined,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Consolidation.skipUrlTarget
+     *
+     * @description
+     * `boolean`
+     *
+     * true / false
+     *
+     * Default value:
+     * <pre> skipUrlTarget: false </pre>
+     */
+    skipUrlTarget: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#Consolidation.skipCanonicalUrlTarget
+     *
+     * @description
+     * `boolean`
+     *
+     * true / false
+     *
+     * Default value:
+     * <pre> skipCanonicalUrlTarget: false </pre>
+     */
+    skipCanonicalUrlTarget: false
 })
 
 .service('Consolidation', function($rootScope, $location, $q, $timeout, $window, CONSOLIDATIONDEFAULTS, BaseComponent, EventDispatcher, NameSpace, Config,
@@ -405,7 +435,9 @@ angular.module('Pundit2.Core')
             canonical = XpointersHelper.getSafeCanoicalUrl();
 
         // The page URL is for xpointers out of named contents
-        if (typeof(onlyNamedContents) === 'undefined' || onlyNamedContents !== true) {
+        if (consolidation.options.skipUrlTarget === false && 
+            (typeof onlyNamedContents === 'undefined' || 
+            onlyNamedContents !== true)) {
             var safeUrl = XpointersHelper.getSafePageContext();
             ret.push(safeUrl);
         }
@@ -427,8 +459,8 @@ angular.module('Pundit2.Core')
             }
         }
 
-
-        if (typeof canonical !== 'undefined') {
+        if (consolidation.options.skipUrlTarget === false && 
+            typeof canonical !== 'undefined') {
             ret.push(canonical);
         }
 
