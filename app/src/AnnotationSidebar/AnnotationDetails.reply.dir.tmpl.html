@@ -6,7 +6,6 @@
     <!-- Default user's thumb -->
     <div class="pnd-annotation-user-thumb-default"
             ng-show="data.defaultThumb">
-
     </div>
 
     <!-- User's thumb -->
@@ -18,7 +17,6 @@
     <!-- Edit Menu -->
     <div class="pnd-icon-angle-down pnd-annotation-edit-toggle"
          ng-click="menuEdit($event);"
-         style="float:right"
          ng-if="isUserToolShowed()">
     </div>
 
@@ -44,12 +42,10 @@
         <div 
             class="pnd-annotation-reply-edited"
             ng-if="data.edited">
-            Edited 
             <span>
-                <time-ago class="pnd-annotation-reply-date" from-time='{{ data.modified }}' format='HH:mm dd MMM yyyy'></time-ago>
+                Edited <time-ago from-time='{{ data.modified }}' format='HH:mm dd MMM yyyy'></time-ago>
             </span>
         </div>
-
 
     </div>
 
@@ -68,6 +64,7 @@
     </textarea>
 
 </div>
+
 <!-- Save or cancel of reply in Edit mode -->
 <div
         class="pnd-annotation-reply-buttons"

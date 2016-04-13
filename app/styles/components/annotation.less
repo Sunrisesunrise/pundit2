@@ -455,18 +455,9 @@
     .pnd-annotation-edited {
         color: @color-dark-gray;
         clear: both;
-        margin-top: 8px;
-        padding-top: 5px;
-        border-top: 1px solid @color-border-light;
-    }
-
-    /* Toggles edit dropdown */
-    .pnd-annotation-edit-toggle {
-        position: absolute;
-        right: 10px;
-        width: 20px;
-        height: 20px;
-        text-align: center;
+        // margin-top: 8px;
+        // padding-top: 5px;
+        // border-top: 1px solid @color-border-light;
     }
 }
 
@@ -510,8 +501,9 @@
    #REPLIES
 \* ------------------------------------ */
 .pnd-annotation-reply {
-    border-top: 1px solid @color-border-normal;
+    position: relative;
     padding: 10px 10px 10px 15px;
+    border-top: 1px solid @color-border-normal;
 
     .pnd-annotation-user {
         font-weight: @font-weight-bold;
@@ -533,7 +525,8 @@
         max-width: 48%;
         overflow: hidden;
         float: left;
-        color: @color-dark-gray;
+        // color: @color-dark-gray;
+        color: @color-text-light;
         font-size: 12px;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -581,10 +574,10 @@
 /* When was a reply edited */
 .pnd-annotation-reply-edited {
     clear: both;
-    margin-top: 8px;
     margin-bottom: -4px;
-    padding-top: 5px;
-    border-top: 1px solid @color-border-light;
+    // margin-top: 8px;
+    // padding-top: 5px;
+    // border-top: 1px solid @color-border-light;
 
     span {
         color: @color-dark-gray;
@@ -597,6 +590,11 @@
 \* ------------------------------------ */
 /* Toggles the dropdown for editing annotations and replies */
 .pnd-annotation-edit-toggle {
+    position: absolute;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
     color: @color-dark-gray;
 
     &:hover {
@@ -712,6 +710,4 @@ only screen and (min-resolution: 192dpi) {
         height: 20px;
         background-size: 20px 20px;
     }
-
-
 }
