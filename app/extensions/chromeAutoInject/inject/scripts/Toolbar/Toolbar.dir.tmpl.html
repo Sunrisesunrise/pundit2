@@ -1,0 +1,154 @@
+<nav class="pnd-toolbar-navbar pnd-ignore" role="navigation" ng-controller="ToolbarCtrl">
+    <div 
+        class="pnd-toolbar-navbar-container"
+        ng-click="toolbarClik($event)">
+    
+        <div class="pnd-toolbar-navbar-collapse">
+            <ul class="pnd-inner-nav pnd-toolbar-inner-nav pnd-toolbar-navbar-left">
+                
+                <!-- Error button -->
+                <!--
+                <li ng-show="showStatusButtonError()" class="pnd-toolbar-error-button pnd-toolbar-first-button">
+                    <a 
+                        href="javascript:void(0)" 
+                        template-url="{{dropdownTemplate}}" 
+                        bs-dropdown="errorMessageDropdown"
+                        ng-click="infoClickHandler()">
+                        <span class="pnd-icon pnd-icon-exclamation"></span>
+                    </a>
+                </li>
+                -->
+                
+                <!-- OK button -->
+                <li ng-show="showStatusButtonOk()" class="pnd-toolbar-status-button-ok pnd-toolbar-first-button">
+                    <a 
+                        href="javascript:void(0)" 
+                        template-url="{{dropdownTemplate}}" 
+                        bs-dropdown="infoDropdown"
+                        ng-click="infoClickHandler()">
+                        <span class="pnd-icon pnd-icon-pundit-logo"></span>
+                    </a>
+                </li>
+
+                <!-- Loading button -->
+                <li ng-show="showStatusButtonLoading()" class="pnd-toolbar-status-button-ok pnd-toolbar-first-button">
+                    <a 
+                        href="javascript:void(0)" 
+                        template-url="{{dropdownTemplate}}" 
+                        bs-dropdown="infoDropdown"
+                        ng-click="infoClickHandler()">
+                        <!-- <span></span> -->
+                        <span class="pnd-icon pnd-icon-pundit-logo pnd-pulse"></span>
+                    </a>
+                </li>
+
+                <!-- Login button -->
+                <li ng-show="showLogin()" class="pnd-toolbar-login-button pnd-login-button pnd-toolbar-button-active pnd-calltoaction-btn">
+                    <!-- <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="userNotLoggedDropdown"><span>Login</span></a> -->
+                    <a href="javascript:void(0)" ng-click="loginButtonClick($event)">
+                        <span>Log in</span>
+                    </a>
+                </li>
+
+                <!-- User button -->
+                <li ng-show="showUserButton()" class="pnd-toolbar-user-button pnd-user-button pnd-toolbar-button-active">
+                    <a href="javascript:void(0)" bs-dropdown="userLoggedInDropdown" template-url="{{dropdownTemplate}}" ng-click="closePopover($event)">
+                        <span>{{userData.fullName}}</span>
+                        <span class="pnd-icon pnd-icon-angle-down"></span>
+                    </a>
+                </li>
+
+                <!-- Dashboard button -->
+                <li class="pnd-toolbar-dashboard-toogle-button pnd-toolbar-toggle-button"
+                    ng-if="dashboard"
+                    ng-class="{'pnd-not-clickable':isAnnomaticRunning, 'pnd-toolbar-button-active': isDashboardVisible}">
+                    <a href="javascript:void(0)" ng-click="dashboardClickHandler()">
+                        <span class="pnd-toolbar-active-element">
+                            Dashboard
+                            <span class="pnd-icon pnd-icon-dashboard-toggle"></span>
+                        </span>
+                    </a>
+                </li>
+
+            </ul> <!-- pnd-navbar-left -->
+
+            <ul class="pnd-inner-nav pnd-toolbar-inner-nav pnd-toolbar-navbar-right">
+                <!-- Annotate page button -->
+
+                <!--
+                <li class="pnd-toolbar-annotate-page-button"
+                    ng-click="annotateWebPage()"
+                    ng-class="{'pnd-not-clickable':!canUsePageAsSubject, 'disabled':!canUsePageAsSubject}">
+                    <a href="javascript:void(0)">
+                        <span>Annotate web page</span>
+                    </a>
+                </li>
+                -->
+
+                <!-- Template mode button -->
+                <li class="pnd-toolbar-template-mode-button" ng-class="{'pnd-not-clickable':isAnnomaticRunning}" ng-show="useTemplates" ng-click="toggleTemplateMode()">
+                    <a href="javascript:void(0)">
+                        <span class="pnd-icon pnd-icon-pencil"></span>
+                    </a>
+                </li>
+                
+                <!-- Template menu -->
+                <li class="pnd-toolbar-template-menu-button" ng-click="onClickTemplateDropdown()" ng-class="{'pnd-not-clickable':isAnnomaticRunning}" ng-show="useTemplates">
+                    <a href="javascript:void(0)" template-url="{{dropdownTemplateTemplates}}" bs-dropdown="userTemplateDropdown">
+                        <span>{{currentTemplateLabel}}</span>
+                        <span class="pnd-icon pnd-icon-circle" style="color: {{currentTemplateColor}};"></span>
+                    </a>
+                </li>
+                
+                <!-- Notebooks menu -->
+                <li class="pnd-toolbar-notebook-menu-button" ng-if="myNotebooks" ng-click="onClickNotebookDropdown()">
+                    <a ng-show="isUserLogged" href="javascript:void(0)" placement="bottom-right" template-url="{{dropdownTemplateMyNotebook}}" bs-dropdown="userNotebooksDropdown">
+                        <span class="pnd-icon pnd-icon-book"> </span> <span class="pnd-toolbar-active-element">{{currentNotebookLabel}}</span>
+                    </a>
+                    <a ng-show="!isUserLogged" href="javascript:void(0)" placement="bottom-right" template-url="{{dropdownTemplate}}" bs-dropdown="userNotLoggedDropdown" class="disabled">
+                        <span class="pnd-toolbar-not-active-element">Log in to select a notebook</span>
+                    </a>
+                </li>
+
+                <!-- Custom menu -->
+                <li class="pnd-toolbar-custom-menu-button" ng-if="menuCustom && menuCustomDropdown.length > 0">
+                    <a href="javascript:void(0)" template-url="{{dropdownTemplate}}" bs-dropdown="menuCustomDropdown">
+                        <span class="pnd-toolbar-active-element">Advanced menu</span>
+                    </a>
+                </li>
+
+                <!-- Sidebar -->
+                <li class="pnd-toolbar-annotations-button pnd-toolbar-toggle-button" ng-if="sidebar" ng-class="{'pnd-toolbar-button-active': isAnnotationSidebarExpanded}">
+                    <a href="javascript:void(0)" ng-click="annotationsClickHandler()">
+                        <span class="pnd-toolbar-active-element">
+                            Sidebar 
+                            <!--
+                            <span
+                                class="pnd-icon pnd-icon-filter"
+                                ng-class="{'pnd-filter-active': isAnnotationFiltersActive}">
+                            </span>
+                            -->
+                            <span class="pnd-icon pnd-icon-sidebar-toggle"></span>
+                        </span>
+                    </a>
+                </li>
+
+                <!-- Active filters -->
+                <li class="" ng-if="isAnnotationFiltersActive">
+                    <span class="pnd-icon pnd-icon-filter pnd-filter-active">
+                    </span>
+                </li>
+
+            </ul> <!-- pnd-toolbar-navbar-right -->
+    
+        </div><!-- pnd-toolbar-navbar-collapse -->
+    </div><!-- pnd-toolbar-navbar-container -->
+    <div class="pnd-progress-bar"
+         ng-show="needsProgressBar"
+         ng-style="{width: progress}">
+    </div>
+</nav>
+
+
+
+              

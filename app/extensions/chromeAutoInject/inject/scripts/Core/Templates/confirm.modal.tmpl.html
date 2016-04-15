@@ -1,0 +1,31 @@
+<div class="pnd-modal modal pnd-confirm-modal-container pnd-ignore" tabindex="-1" role="dialog">
+
+    <div class="pnd-modal-dialog modal-dialog">
+
+        <!-- Modal content-->
+        <div class="pnd-modal-content modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title"> {{titleMessage}} </h4>
+            </div>
+
+            <div class="modal-body pnd-confirm-modal-body">
+                {{notifyMessage}}
+            </div>
+
+            <!-- Modal-footer -->
+            <div class="pnd-modal-footer pnd-confirm-modal-footer">
+                <button type="button" class="pnd-btn pnd-btn-small pnd-confirm-modal-cancel" ng-click="cancel()">
+                    Cancel
+                </button><button type="button" class="pnd-btn pnd-btn-small pnd-btn-calltoaction pnd-confirm-modal-confirm" ng-click="confirm()">
+                    Confirm
+                </button>
+            </div>
+            <!-- END // modal-footer -->
+
+        </div>
+        <!-- END // Modal content-->
+
+    </div> <!-- end modal dialog-->
+
+</div> <!-- end modal -->

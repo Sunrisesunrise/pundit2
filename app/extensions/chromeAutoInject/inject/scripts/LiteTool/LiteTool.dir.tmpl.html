@@ -1,0 +1,52 @@
+<div class="pnd-lite-tool pnd-ignore"
+     ng-class="{'pnd-lite-tool-open': (isAnnotationSidebarExpanded || isContextualMenuOpen || isUserPopoupOpen)}">
+
+    <!-- Pundit icon or user thumb -->
+    <div
+            class="pnd-icon pnd-icon-pundit-logo"
+            ng-class="{
+            'pnd-lite-tool-user-not-logged': !isUserLogged,
+            'pnd-lite-tool-user-logged': isUserLogged}"
+            ng-click="annotationsClickHandler()">
+    </div>
+    <!-- END // Pundit icon or user thumb -->
+
+    <div class="pnd-lite-tool-wrap">
+        <div class="pnd-lite-tool-content">
+
+            <!-- User name or 'login' button -->
+            <div class="pnd-lite-tool-user">
+                <div 
+                    class="pnd-lite-tool-user-logged pnd-user-button" 
+                    ng-show="isUserLogged" 
+                    ng-click="closePopover($event)" bs-dropdown="userLoggedInDropdown" data-container=".pnd-lite-tool" template-url="{{dropdownTemplate}}">
+                    {{userData.fullName}}
+                </div>
+                <div 
+                    class="pnd-lite-tool-user-not-logged pnd-login-button" 
+                    ng-if="!isUserLogged" 
+                    ng-click="login()">
+                    Login
+                </div>
+            </div>
+
+            <!-- Sidebar toggle -->
+            <div 
+                class="pnd-lite-tool-sidebar-toggle" 
+                ng-click="annotationsClickHandler()">
+                <div 
+                    class="pnd-lite-tool-sidebar-toggle-open" 
+                    ng-if="!isAnnotationSidebarExpanded">
+                    <span class="pnd-icon pnd-icon-angle-left"></span>
+                    Open sidebar
+                </div>
+                <div 
+                    class="pnd-lite-tool-sidebar-toggle-close" 
+                    ng-if="isAnnotationSidebarExpanded">
+                    Close sidebar 
+                    <span class="pnd-icon pnd-icon-angle-right"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="tabbable tabs-left"> <!-- tabs left -->
+
+    <ul class="pnd-vertical-tabs">
+        <li ng-repeat="pane in contentTabs" ng-class="{active: $index == active}">
+            <a data-toggle="tab" ng-click="setActive($index, $event)" data-index="{{$index}}" >
+                <span class="badge pull-right" ng-show="!pane.isLoading && pane.items.length>0 && elemToSearch!==''">{{pane.items.length}}</span>
+                <span class="pnd-icon pnd-icon-refresh pnd-icon-spin pull-right" ng-show="pane.isLoading"></span>
+                {{pane.title}}
+            </a>
+        </li>
+    </ul>
+    <div>
+        <div class="pnd-vertical-tab-content">
+        	<div ng-repeat="pane in contentTabs" class="tab-pane pnd-vertical-tab-list-content" ng-class="[$index == active ? 'active' : '']">
+		        <div class="kee-server-messages" ng-if="!contentTabs[$index].serverError">
+		        	<!-- messages 1 -->
+		        	<div ng-show="!contentTabs[$index].isLoading && contentTabs[$index].items.length === 0 && elemToSearch !== ''">No results found</div>
+		        	<!-- / end messages 1 -->
+		        	<!-- messages 2 -->
+		        	<div class="kee-server-searching" ng-show="contentTabs[$index].isLoading && elemToSearch !== ''"><span class="pnd-icon pnd-icon-refresh pnd-icon-spin "></span></div>
+		        	<!-- / end messages 2 -->
+		        	<!-- messages 3 -->
+		        	<div ng-show="!contentTabs[$index].isLoading && contentTabs[$index].items.length === 0 && elemToSearch === ''">Type a label to search...</div>
+		        	<!-- / end messages 3 -->
+		        </div>
+		        <!-- messages 4 -->
+		        <div class="kee-server-messages" ng-if="contentTabs[$index].serverError">
+		            <div ng-show="contentTabs[$index].serverError">Server error</div>
+		        </div>
+		        <!-- / end messages 4 -->
+                <ul class="list-group pnd-inner-scrollable">
+                    <li class="list-group-item" ng-repeat="mi in contentTabs[$index].items | orderBy:getOrderProperty" >
+                        <item uri="{{mi.uri}}" hide-options="true" hide-sticky-button="true" ng-click="select(mi)" is-selected="{{isSelected(mi)}}" ng-mouseover="getItem(mi)"></item>
+                    </li>
+                </ul>
+           </div>
+        </div>
+    </div>
+
+
+</div> <!-- / tabs left -->

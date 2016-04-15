@@ -1,0 +1,106 @@
+// - CONFIGURATION - //
+
+// Global
+$min-unit: em-calc(1) !default;
+$inmedia: false !default;
+$query-direction: (min-width, max-width) !default;
+$query-start: nth($query-direction, 1);
+$query-end: nth($query-direction, 2);
+
+// Var declaration
+$cur-bp: false !default;
+$next-bp: false !default;
+
+// Initializing $map-position variable
+$map-position: 0;
+
+// - MEDIAQUERIES SETTINGS
+// Screens
+$screen: 'only screen' !default;
+$landscape: "#{$screen} and (orientation: landscape)" !default;
+$portrait: "#{$screen} and (orientation: portrait)" !default;
+
+// - MEDIAQUERY MIXINS - //
+
+// - Generate Media Query
+@mixin media-query($query: xxsmall, $until: false, $eq-grid: $eq-grid) {
+
+  $only: ($until == true or $until == only);
+
+  //inmedia variable, tell us if we are in a mediaquery.
+  //useful to generate warning, debug and testing.
+  $inmedia: true !global;
+  @if $eq-grid {
+    @if $only {
+      [data-eq-state$="#{$query}"] & {
+        @content;
+      }
+    } @else if $until {
+
+      @if map-has-key($breakpoints, $until) {
+        $map-position: index(map-keys($breakpoints), $until);
+        @if $map-position == length($breakpoints) {
+          [data-eq-state~="#{$query}"] & {
+            @content;
+          }
+        } @else {
+          $next-bp: nth(map-keys($breakpoints), $map-position + 1);
+
+          [data-eq-state~="#{$query}"]:not([data-eq-state~="#{$next-bp}"]) & {
+            @content;
+          }
+        }
+      }
+
+    } @else {
+      [data-eq-state~="#{$query}"] & {
+        @content;
+      }
+
+      // FOLLOWING CODE IS USELESS WITH EQJS MULTIQUOTE STATES
+      // IS HERE FOR REGRESSION TESTING
+      // @each $name, $value in $breakpoints
+      //   $keys: map-keys($breakpoints)
+      //   @if index($keys, $query) < index($keys, $name)
+      //     @at-root
+      //       [data-eq-state~="#{$current-name}"]
+      //         @extend [data-eq-state~="#{$query}"] &
+
+    }
+
+  // STANDARD MEDIA QUERY
+  } @else {
+    $cur-bp: map-get($breakpoints, $query);
+
+    @if $only {
+      $map-position: index(map-keys($breakpoints), $query);
+    } @else {
+      $map-position: index(map-keys($breakpoints), $until);
+    }
+
+    @if $until {
+      @if $map-position == length($breakpoints) {
+        @if $query-start == min-width {
+          $next-bp: 99999999em;
+        } @else {
+          $next-bp: 0em;
+        }
+      } @else {
+        @if $query-start == min-width {
+          $next-bp: nth(map-values($breakpoints), $map-position + 1) - $min-unit;
+        } @else {
+          $next-bp: nth(map-values($breakpoints), $map-position + 1) + $min-unit;
+        }
+      }
+
+      @media #{$screen} and (#{$query-start}: #{$cur-bp}) and (#{$query-end}: #{$next-bp}) {
+        @content;
+      }
+    } @else {
+      @media #{$screen} and (#{$query-start}: #{$cur-bp}) {
+        @content;
+      }
+    }
+  }
+  $inmedia: false !global;
+}

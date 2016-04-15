@@ -1,0 +1,46 @@
+<div class="pnd-modal modal pnd-send-modal-container pnd-ignore" tabindex="-1" role="dialog">
+
+    <div class="pnd-modal-dialog modal-dialog">
+
+        <!-- Modal content-->
+        <div class="pnd-modal-content modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title"> {{titleMessage}} </h4>
+            </div>
+
+            <div class="modal-body pnd-send-modal-body">
+                <p>
+                    Send us your comments, suggestions or report a bug you encountered.
+                    <br />
+                    Thank you for your support.
+                </p>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Subject<span class="pnd-mandatory-field">*</span></label>
+                    <input placeholder="Enter the subject here" ng-model="text.subject" class="form-control" id="exampleInputEmail1">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Description</label>
+                    <textarea ng-model="text.msg" class="form-control" rows="5" id="exampleInputPassword1" placeholder="Enter the full description here">
+                    </textarea>
+                </div>
+            </div>
+
+            <!-- Modal-footer -->
+            <div class="pnd-modal-footer pnd-send-modal-footer">
+                <button type="button" class="pnd-btn pnd-btn-small pnd-send-modal-close" ng-click="cancel()">
+                    Cancel
+                </button><button type="button" class="pnd-btn pnd-btn-small pnd-btn-calltoaction disabled pnd-send-modal-send"
+                        ng-click="send()">
+                    Send
+                </button>
+            </div>
+            <!-- END // modal-footer -->
+
+        </div>
+        <!-- END // Modal content-->
+
+    </div>
+    <!-- end modal dialog-->
+
+</div> <!-- end modal -->

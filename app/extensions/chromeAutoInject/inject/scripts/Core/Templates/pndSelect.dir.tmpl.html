@@ -1,0 +1,69 @@
+<div class="pnd-select">
+
+    <div ng-show="!actionInProgress">
+
+        <!-- Label of selected element -->
+        <div class="pnd-select-label-selected"
+             title="{{optionSelected.title}}"
+             data-value="{{optionSelected.value}}"
+             ng-click="toggleExpand()">
+            {{optionSelected.label}}
+        </div>
+
+        <!-- Toggle for opening the select -->
+        <div class="pnd-select-open-options"
+             ng-click="toggleExpand()">
+            <span class="pnd-icon pnd-icon-caret-down"></span>
+        </div>
+
+        <!-- List with elements to select from -->
+        <div class="pnd-select-option-container"
+             ng-class="{'expanded':expanded, 'move-top': moveTop}">
+            <div class="option"
+                 title="{{option.title}}"
+                 data-value="{{option.value}}"
+                 ng-repeat="option in optionList"
+                 ng-click="selectOption(option)"
+                 ng-class="{'selected': isOptionSelected(option), 'custom-action': option.isAction}">
+                {{option.label}}
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="option custom-action"
+                 ng-if="optionAction"
+                 data-value="{{optionAction.value}}"
+                 ng-click="showAction()">
+                {{optionAction.label}}
+            </div>
+        </div>
+    </div>
+
+    <!-- New element creation -->
+    <div ng-show="actionInProgress">
+
+        <div class="pnd-select-item-creation"
+             ng-show="!savingInProgress">
+            <input type="text"
+                   class="creation-input form-control"
+                   ng-model="inputAction"
+                   placeholder="{{placeholderAction}}"/>
+            <div class="pnd-select-item-creation-button">
+                <button class="pnd-btn pnd-btn-small" ng-click="abortAction()">
+                    Cancel
+                </button><button class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
+                                 ng-class="{disabled: inputAction == ''}"
+                                 ng-click="runAction(inputAction)">
+                    Save new notebook
+                </button>
+            </div>
+        </div>
+
+        <!-- Displayed while saving -->
+        <div ng-show="savingInProgress"
+             class="pnd-select-item-saving pnd-pulse">
+            ..hold on...saving your notebook
+        </div>
+
+    </div>
+</div>

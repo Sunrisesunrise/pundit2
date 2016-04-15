@@ -1,0 +1,10 @@
+<ul class="pnd-dropdown-contextual-menu dropdown-menu pnd-ignore" role="menu">
+    <li role="presentation" ng-class="{'current-notebook active': item.currentNotebook, divider: item.divider, 'disabled': item.disable, 'dropdown-submenu': item.submenu, active: item.isActive, 'dropdown-header': item.header}" ng-repeat="item in content">
+        <span ng-if="item.header" ng-bind="item.text">dksad</span>
+        <a role="menuitem" tabindex="-1" href="javascript:void(0)" ng-if="!item.divider && item.click" ng-click="$eval(item.click);$hide()">
+        <span ng-if="item.visibility == 'private'" class="pnd-icon pnd-icon-lock"></span>
+        <span ng-if="item.visibility == 'public'" class="pnd-icon pnd-icon-group"></span>
+        <span ng-if="item.currentNotebook" class="pnd-icon pnd-icon-pencil"></span>
+        {{item.text}}</a>
+    </li>
+</ul>

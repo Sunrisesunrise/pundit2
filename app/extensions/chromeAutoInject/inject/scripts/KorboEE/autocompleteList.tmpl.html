@@ -1,0 +1,24 @@
+<ul tabindex="-1" class="typeahead dropdown-menu kee-autocomplete-list list-group" ng-show="$isVisible() && !serverNotRunning" role="select">
+  <li role="presentation" ng-repeat="match in $matches"  class="list-group-item">
+    <item uri="{{match.value.uri}}" ng-click="$select($index, $event);selectEntity(match)" ng-if="match.label !== 'no found'"></item>
+    <span class="kee-not-found" role="menuitem" tabindex="-1" disabled ng-bind="noFound" ng-show="match.value.noResult === true"></span>
+  </li>
+    <li ng-show="showNewButton() || showSearchButton()"></li>
+    <li>
+    <!-- footer -->
+    <div class="kee-footer-autocomplete">
+        <span class="kee-elem-to-search" ng-show="showNewButton() || showSearchButton()">"{{elemToSearch}}"</span>
+        <!-- <div class="kee-footer-btn"> -->
+        <button class="kee-btn-new pnd-btn pnd-btn-xsmall" ng-show="showNewButton()" ng-click="openKeeModal();$event.preventDefault();$event.stopPropagation();">
+            <i class="pnd-icon pnd-icon-plus"></i>
+            Create new
+        </button>
+        <button class="kee-btn-search pnd-btn pnd-btn-xsmall" ng-show="showSearchButton()" ng-click="searchOnLOD();$event.preventDefault();$event.stopPropagation();">
+            <i class="pnd-icon pnd-icon-search"></i>
+            Search in LOD
+        </button>
+        <!-- </div> -->
+    </div>
+    <!-- End footer -->
+    </li>
+</ul>

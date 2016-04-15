@@ -1,0 +1,29 @@
+<div class="popover pnd-popover pnd-popover-literal">
+    <div class="arrow" ng-style="{'margin-left': arrowLeft}"></div>
+
+    <div class="popover-content">
+        <!-- TODO Remove this DIV -->
+        <!-- <div class="form-group"> -->
+        <textarea
+            class="form-control pnd-popover-literal-textarea"
+            rows="6"
+            ng-model="literalText"
+            ></textarea>
+        <!-- </div> -->
+    </div>
+
+    <div class="popover-footer">
+        <button
+                class="pnd-btn pnd-btn-small"
+                ng-click="cancel()">
+            Cancel
+        </button>
+        <button
+            class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
+            ng-class="{disabled: literalText == ''}"
+            ng-show="showSaveButton(this)"
+            ng-click="save()">
+            Save
+        </button>
+    </div>
+</div>

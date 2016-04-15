@@ -1,0 +1,37 @@
+<div class="pnd-modal modal pnd-info-modal-container pnd-ignore" tabindex="-1" role="dialog">
+
+    <div class="pnd-modal-dialog modal-dialog">
+
+        <!-- Modal content-->
+        <div class="pnd-modal-content modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title"> {{titleMessage}} </h4>
+            </div>
+
+            <div class="modal-body pnd-info-modal-body">
+                <table class="table table-condensed pnd-table pnd-table-about">
+                    <tr ng-repeat="field in info">
+                        <td class="modal-field-label">{{field.label}}</td>
+                        <td class="modal-field-value">{{field.value}}</td>
+                    </tr>
+                    <tr ng-repeat="link in links">
+                        <td class="modal-field-label">{{link.label}}</td>
+                        <td class="modal-field-value"><a target="_blank" href="{{link.ref}}">{{link.linkLabel}}</a></td>
+                    </tr>
+                </table>                
+            </div>
+
+            <!-- Modal-footer -->
+            <div class="pnd-modal-footer pnd-info-modal-footer">
+                <button type="button" class="pnd-btn pnd-btn-small pnd-info-modal-close" ng-click="close()">Cancel</button>
+                <!-- <button type="button" class="btn btn-default pnd-info-modal-tell" ng-click="send()">Found a bug? tell us!</button> -->
+            </div>
+            <!-- END // modal-footer -->
+
+        </div>
+        <!-- END // Modal content-->
+
+    </div> <!-- end modal dialog-->
+
+</div> <!-- end modal -->

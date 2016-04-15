@@ -1,0 +1,58 @@
+<div class="pnd-popover pnd-annomatic-popover pnd-ignore popover"
+     ng-controller="AnnomaticPopoverCtrl"
+     ng-click="popoverClick($event)">
+
+    <div class="arrow"></div>
+
+    <!-- Title -->
+    <h4 class="popover-title">
+        {{ann.byNum[num].label}}
+        <span class="pull-right pnd-icon pnd-icon-close" ng-click="hide($event)"></span>
+    </h4>
+
+    <!-- Content -->
+    <div class="popover-content">
+
+        <div ng-if="isMultiEntites" class="pnd-annomatic-popover-multi-entities text-center">
+            <div class="pnd-preview pnd-annomatic-popover-details clearfix">
+                <item-preview uri="{{ann.byNum[num].entities[currentEntity].uri}}" sticking="false"></item-preview>
+            </div>
+            <button ng-if="multiLength > 0" ng-click="changeEntity()">Change selected entity</button>
+        </div>
+
+        <div ng-if="!isMultiEntites">
+            <div ng-show="showDetails" class="pnd-preview pnd-annomatic-popover-details clearfix">
+                <item-preview uri="{{ann.byNum[num].uri}}" sticking="false"></item-preview>
+            </div>
+        </div>
+
+        <div class="pnd-annomatic-confidence">
+                <span class="label">
+                    Confidence:
+                </span>
+                <span class="value">
+                    {{ann.byNum[num].confidence}}
+                </span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="pnd-annomatic-btn-group pnd-panel-tab-content-footer">
+        <button class="pnd-btn pnd-btn-small pnd-btn-transparent"
+                ng-click="hide($event)">
+            Cancel
+        </button><!--
+            -->
+        <button class="pnd-btn pnd-btn-small"
+                ng-click="goNext($event)">
+            Next
+        </button><!--
+            -->
+        <button class="pnd-btn pnd-btn-small pnd-btn-calltoaction pnd-use"
+                ng-click="setOk($event)"
+                ng-disabled="ann.savedByNum.indexOf(num) != -1">
+            Create annotation
+        </button>
+    </div>
+
+</div>

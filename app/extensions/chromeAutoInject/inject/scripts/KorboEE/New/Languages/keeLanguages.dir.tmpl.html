@@ -1,0 +1,44 @@
+<div class="tabbable tabs-left"> <!-- tabs left -->
+
+    <ul class="pnd-vertical-tabs">
+        <li ng-repeat="pane in panes" ng-class="{active: $index == active, 'kee-error' : panes[$index].hasError}" ng-show="pane.isVisible">
+            <a ng-show="!panes[$index].hasError" data-toggle="tab" ng-click="setActive($index, $event)" data-index="{{$index}}" ng-bind-html="pane.title"></a>
+            <a ng-show="panes[$index].hasError" data-toggle="tab" ng-click="setActive($index, $event)" data-index="{{$index}}" >
+                <span class="kee-error" bs-tooltip data-title="{{tabs[$index].tooltipMessageErrorTab}}" >{{pane.title}}</span>
+            </a>
+        </li>
+        <li class="pull-right show-tabs" ng-class="{active: hiddenTabIsActive}" placement="bottom-right" template-url="{{hiddenTabsDropdownTemplate}}" bs-dropdown="hiddenTabs" ng-show="hiddenTabsToShow()">
+            <a><span class="pnd-icon pnd-icon-dots"></span></a>
+        </li>
+    </ul>
+    <!-- tab content-->
+    <div>
+        <div class="pnd-vertical-tab-content pnd-tab-content">
+            <div ng-repeat="pane in tabs" class="tab-pane pnd-vertical-tab-list-content" ng-class="[$index == active ? 'active' : '']">
+                <!-- entity title -->
+                <div class="kee-title">
+	                <div class="form-group">
+	                <label ng-class="{'kee-error' : tabs[$index].hasError}">Title
+	                    <span class="kee-error" ng-class="{'kee-error' : tabs[$index].hasError}"> * </span>
+	                    <span ng-show="!tabs[$index].hasError" class="pnd-icon pnd-icon-info-circle" data-title="{{tabs[$index].tooltipMessageTitle}}" bs-tooltip></span>
+	                    <span ng-show="tabs[$index].hasError" class="kee-error pnd-icon pnd-icon-info-circle" data-title="{{tabs[$index].tooltipMessageError}}" bs-tooltip></span>
+	                </label>
+	                <input type="text" ng-model="tabs[$index].label" ng-change = updateTitleField($index) class="form-control">
+	                </div>
+                </div>
+                <!-- end entity title -->
+
+                <!-- entity description -->
+                <div class="form-group">
+	                <div class="kee-description">
+    	                <label>Description <span class="pnd-icon pnd-icon-info-circle" data-title="{{tabs[$index].tooltipMessageDescription}}" bs-tooltip></span></label>
+    	                <textarea class="form-control" rows="3" ng-model="tabs[$index].description" class="form-control"></textarea>
+	                </div>
+                </div>
+                <!-- end entity description -->
+            </div>
+
+        </div>
+    </div>
+
+</div> <!-- / tabs left -->

@@ -1,0 +1,22 @@
+<div class="pnd-breadcrumbs-container"
+     ng-show="isVisible()">
+    <div class="placeholder" ng-if="isPlaceholderVisible()">
+        {{emptyPlaceholder}}
+    </div>
+    <ol class="breadcrumb" ng-if="!isPlaceholderVisible()">
+        <li ng-repeat="item in getItems()">
+            <i ng-if="$index == 0">
+                {{getFirstItemPrefix()}}
+            </i>
+            <span ng-if="$last">
+                {{item.label}}
+            </span>
+            <span ng-if="!$last">
+                <a href="#"
+                   ng-click="itemSelect($index, $event)">
+                    {{item.label}}
+                </a>
+            </span>
+        </li>
+    </ol>
+</div>

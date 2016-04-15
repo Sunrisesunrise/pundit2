@@ -1,0 +1,106 @@
+<div ng-controller="AnnomaticPanelCtrl" class="pnd-annomatic-container pnd-ignore">
+
+    <!-- Area on top displaying text -->
+    <div class="pnd-annomatic-content-top"
+         ng-show="Annomatic.annotationNumber > 0">
+
+        <!--
+        <p ng-show="Annomatic.annotationNumber == 0">
+            Click on the <strong>blue button</strong> to scan items in the selected area
+        </p>
+        -->
+
+        <p >
+            <span class="label">Suggested annotations: </span>
+            <span class="value">{{Annomatic.annotationNumber}}</span>,
+            <span class="label">Saved annotations: </span>
+            <span class="value">{{Annomatic.ann.savedByNum.length}}</span>
+            <!-- - Rejected: {{Annomatic.ann.byState['removed'].length}} -->
+        </p>
+
+    </div>
+
+    <div class="pnd-annomatic-content">
+
+        <!-- Area with buttons -->
+        <div class="pnd-annomatic-content-buttons"
+             ng-show="!gotAnnotations || Annomatic.annotationNumber == 0">
+            <!-- <button 
+                class="pnd-btn pnd-btn-calltoaction"
+                ng-click="getSuggestions()"
+                ng-disabled="targets.length == 0">
+                    <span class="pnd-icon pnd-icon-file"></span> Scan whole page
+            </button> -->
+
+            <!-- <button
+                class="btn btn-link pnd-button-suggestion"
+                ng-click="getSuggestionsArea()"
+                ng-show="Annomatic.area != null"
+                ng-disabled="targets.length == 0">
+                    <span class="pnd-icon pnd-icon-file-text"></span> Scan Area
+            </button> -->
+        </div>
+
+        <!-- <button class="btn btn-success pnd-button-select-area" ng-click="selectAreaMode()">
+            Select area <span class="pnd-icon pnd-icon-edit"></span>
+        </button> -->
+
+        <div class="pnd-annomatic-content-text"
+             ng-show="Annomatic.annotationNumber == 0">
+            <h1>Welcome to Ann-o-matic!</h1>
+            <p>
+                Hover with the mouse cursor on the text area you wish to scan for automatic annotations.
+                <br />
+                Click on the <strong>Discover</strong> button.
+            </p>
+        </div>
+
+        <div class="pnd-annomatic-content-buttons"
+             ng-show="Annomatic.annotationNumber > 0">
+
+            <button
+                class="pnd-btn pnd-btn-calltoaction"
+                ng-click="startReview()"
+                ng-hide="Annomatic.ann.savedByNum.length > 0">
+                Start review <!-- ({{Annomatic.currAnn}}/{{Annomatic.annotationNumber}}) -->
+            </button>
+
+            <!-- TODO: fix filter -->
+            <!-- <button
+                class="btn btn-default pnd-button-filter-suggestion"
+                ng-model="filteredTypes"
+                placeholder="Filter by suggestion type"
+                data-html="1"
+                data-multiple="1"
+                data-animation="am-flip-x"
+                ng-options="type.value as type.label for type in Annomatic.ann.typesOptions"
+                bs-select
+                ng-show="Annomatic.ann.typesOptions.length > 0">
+            </button> -->
+
+            <!-- <button class="btn btn-success pnd-button-save-review" ng-click="saveReview()">
+                Save
+            </button> -->
+
+        </div>
+
+        <div ng-repeat="ann in filtered = (annotations)" style="color: black">
+            <annotation-details 
+                id="{{ann}}" 
+                style="position: absolute;"
+                ng-style="{'top': getTopById(ann)}"></annotation-details>
+        </div>
+
+        <!-- <div class="pnd-annomatic-info" ng-show="gotAnnotations && Annomatic.annotationNumber > 0">
+            <div>
+                Accepted: {{Annomatic.ann.byState['accepted'].join(', ')}}
+            </div>
+            <div>
+                Removed: {{Annomatic.ann.byState['removed'].join(', ')}}
+            </div>
+            <div>
+                filteredTypes: {{Annomatic.filteredTypes}}
+            </div>
+        </div> -->
+    </div>
+</div>

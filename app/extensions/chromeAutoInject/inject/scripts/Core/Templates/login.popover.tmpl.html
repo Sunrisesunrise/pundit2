@@ -1,0 +1,58 @@
+<div class="popover pnd-popover pnd-login-popover-container pnd-ignore" tabindex="-1">
+
+    <div class="arrow arrow-top"></div>
+
+    <!-- iFrame -->
+    <div class="iframe-container">
+    </div>
+    <!-- END // iFrame -->
+
+    <!-- Displayed while loading -->
+    <div class="popover-login-pane popover-loading"
+         ng-show="isLoading">
+        <div class="popover-login-pane-content">
+            <h1>Hold on</h1>
+            <small ng-show="!postLoginPreCheck">Pundit is loading the log in form</small>
+            <small ng-show="postLoginPreCheck">Pundit is completing log in procedure</small>
+            <span class="pnd-icon pnd-icon-refresh pnd-icon-spin"></span>
+        </div>
+    </div>
+    <!-- END // Displayed while loading -->
+
+    <!-- Error message -->
+    <div class="popover-login-pane popover-login-error"
+         ng-show="loginSomeError">
+        <div class="popover-login-pane-content">
+            <span class="pnd-icon pnd-icon-exclamation"></span>
+            <h1>Ops, something went wrong</h1>
+            <p>Unfortunately there was an error while trying to process your request... please try again later</p>
+            <small>Click <a href="#" ng-click="loginRetry()">here</a> to try again</small>
+        </div>
+    </div>
+    <!-- END // Error message -->
+
+    <!-- Success message -->
+    <div class="popover-login-pane popover-login-success"
+         ng-show="loginSuccess">
+        <div class="popover-login-pane-content">
+            <span class="pnd-icon pnd-icon-hand-peace-o"></span>
+
+            <h1>Welcome to Pundit!</h1>
+
+            <p>Now you can start browsing and creating annotations</p>
+            <!-- (autoclose in {{autoCloseIn}}) -->
+            <small><a href="#" ng-click="closePopover()">Close this window</a></small>
+        </div>
+    </div>
+    <!-- END // Success message -->
+
+    <!--
+    <div class="popover-footer pnd-login-popover-footer">
+        <button type="button" class="btn btn-default pnd-login-popover-close" ng-click="closePopover()">Close</button>
+    </div>
+    -->
+
+    <!-- end modal-footer -->
+</div> <!-- end popover -->
+
+

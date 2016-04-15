@@ -1,0 +1,44 @@
+<div class="popover pnd-popover popover-datepicker pnd-popover-calendar">
+    <div class="arrow" ng-style="{'margin-left': arrowLeft}"></div>
+    <!--
+    <h3 class="popover-title">
+        Calendar
+    </h3>
+    -->
+    <div class="popover-content">
+        <!-- <div class="form-group">
+            <label class="control-label"><i class="fa fa-calendar"></i> Date </label>
+            <input  type="text" 
+                    class="form-control"
+                    data-date-format="dd/MM/yyyy" 
+                    ng-model="selectedDate"
+                    ng-keyup="escapeEvent($event)"
+                    calendar-date-format>
+            <input  type="text" 
+                    ng-model="selectedDate"
+                    ng-show="false"
+                    class="form-control pnd-input-calendar"
+                    trigger="click" 
+                    data-date-format="dd/MM/yyyy" 
+                    template="src/ResourcePanel/datepicker.tmpl.html" 
+                    bs-datepicker>
+        </div> -->
+
+        <resource-calendar date="modelDate"></resource-calendar>
+    </div>
+
+    <div class="popover-footer">
+        <button
+            class="pnd-btn pnd-btn-small"
+            ng-click="cancel()">
+            Cancel
+        </button>
+        <button
+                class="pnd-btn pnd-btn-small pnd-btn-calltoaction"
+                ng-click="save()"
+                ng-show="showSaveButton(this)"
+                ng-disabled="!modelDate.valid">
+            Save date
+        </button>
+    </div>
+</div>

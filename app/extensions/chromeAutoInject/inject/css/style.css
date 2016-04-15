@@ -1,0 +1,276 @@
+@font-face {
+    font-family: 'pundit-icon-font';
+    src:    url('chrome-extension://__MSG_@@extension_id__/inject/css/fonts/pundit-icon-font.eot?otcz1p');
+    src:    url('chrome-extension://__MSG_@@extension_id__/inject/css/fonts/pundit-icon-font.eot?otcz1p#iefix') format('embedded-opentype'),
+        url('chrome-extension://__MSG_@@extension_id__/inject/css/fonts/pundit-icon-font.ttf?otcz1p') format('truetype'),
+        url('chrome-extension://__MSG_@@extension_id__/inject/css/fonts/pundit-icon-font.woff?otcz1p') format('woff'),
+        url('chrome-extension://__MSG_@@extension_id__/inject/css/fonts/pundit-icon-font.svg?otcz1p#pundit-icon-font') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="pnd-icon-"], [class*=" pnd-icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'pundit-icon-font' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.pnd-icon-magic:before {
+    content: "\f0d0";
+}
+.pnd-icon-external-link:before {
+    content: "\f045";
+}
+.pnd-icon-angle-double-left:before {
+    content: "\f100";
+}
+.pnd-icon-angle-double-right:before {
+    content: "\f101";
+}
+.pnd-icon-notebook:before {
+    content: "\e918";
+}
+.pnd-icon-home:before {
+    content: "\e919";
+}
+.pnd-icon-pundit-logo-full:before {
+    content: "\e917";
+}
+.pnd-icon-pundit:before {
+    content: "\e916";
+}
+.pnd-icon-check-2:before {
+    content: "\e116";
+}
+.pnd-icon-close:before {
+    content: "\e117";
+}
+.pnd-icon-angle-left:before {
+    content: "\f106";
+}
+.pnd-icon-angle-right:before {
+    content: "\f107";
+}
+.pnd-icon-angle-up:before {
+    content: "\f108";
+}
+.pnd-icon-angle-down:before {
+    content: "\f109";
+}
+.pnd-icon-pencil:before {
+    content: "\e900";
+}
+.pnd-icon-pin:before {
+    content: "\e901";
+}
+.pnd-icon-group:before {
+    content: "\e902";
+}
+.pnd-icon-spinner-12:before {
+    content: "\e903";
+}
+.pnd-icon-spinner-2:before {
+    content: "\e904";
+}
+.pnd-icon-spinner-3:before {
+    content: "\e905";
+}
+.pnd-icon-spinner-4:before {
+    content: "\e906";
+}
+.pnd-icon-spinner-5:before {
+    content: "\e907";
+}
+.pnd-icon-spinner-6:before {
+    content: "\e908";
+}
+.pnd-icon-spinner-7:before {
+    content: "\e909";
+}
+.pnd-icon-spinner-8:before {
+    content: "\e90a";
+}
+.pnd-icon-spinner-9:before {
+    content: "\e90b";
+}
+.pnd-icon-spinner-10:before {
+    content: "\e90c";
+}
+.pnd-icon-spinner-11:before {
+    content: "\e90d";
+}
+.pnd-icon-search:before {
+    content: "\e90e";
+}
+.pnd-icon-expand:before {
+    content: "\e90f";
+}
+.pnd-icon-shrink:before {
+    content: "\e910";
+}
+.pnd-icon-gear:before {
+    content: "\e911";
+}
+.pnd-icon-link:before {
+    content: "\e912";
+}
+.pnd-icon-star-empty:before {
+    content: "\e914";
+}
+.pnd-icon-star:before {
+    content: "\e915";
+}
+.pnd-icon-check:before {
+    content: "\e913";
+}
+.pnd-icon-sidebar-toggle:before {
+    content: "\e800";
+}
+.pnd-icon-dashboard-toggle:before {
+    content: "\e801";
+}
+.pnd-icon-pundit-logo:before {
+    content: "\e802";
+}
+.pnd-icon-thumb-o-up:before {
+    content: "\f087";
+}
+.pnd-icon-thumb-o-down:before {
+    content: "\f088";
+}
+.pnd-icon-hand-peace-o:before {
+    content: "\f25b";
+}
+.pnd-icon-lock:before {
+    content: "\f023";
+}
+.pnd-icon-unlock:before {
+    content: "\f09c";
+}
+.pnd-icon-calendar:before {
+    content: "\e608";
+}
+.pnd-icon-picture-alt:before {
+    content: "\e609";
+}
+.pnd-icon-fragment-icon:before {
+    content: "\e60a";
+}
+.pnd-icon-dots:before {
+    content: "\e603";
+}
+.pnd-icon-comment:before {
+    content: "\e604";
+}
+.pnd-icon-typing:before {
+    content: "\e607";
+}
+.pnd-icon-user:before {
+    content: "\f007";
+}
+.pnd-icon-trash:before {
+    content: "\f014";
+}
+.pnd-icon-file:before {
+    content: "\f016";
+}
+.pnd-icon-refresh:before {
+    content: "\f021";
+}
+.pnd-icon-tag:before {
+    content: "\f02b";
+}
+.pnd-icon-notebook-old:before {
+    content: "\f02d";
+}
+.pnd-icon-bookmark:before {
+    content: "\f02e";
+}
+.pnd-icon-camera:before {
+    content: "\f030";
+}
+.pnd-icon-picture:before {
+    content: "\f03e";
+}
+.pnd-icon-plus:before {
+    content: "\f067";
+}
+.pnd-icon-minus:before {
+    content: "\f068";
+}
+.pnd-icon-exclamation:before {
+    content: "\f06a";
+}
+.pnd-icon-eye:before {
+    content: "\f06e";
+}
+.pnd-icon-comment-alt:before {
+    content: "\f075";
+}
+.pnd-icon-folder:before {
+    content: "\f07b";
+}
+.pnd-icon-folder-open:before {
+    content: "\f07c";
+}
+.pnd-icon-certificate:before {
+    content: "\f0a3";
+}
+.pnd-icon-filter:before {
+    content: "\f0b0";
+}
+.pnd-icon-caret-down:before {
+    content: "\f0d7";
+}
+.pnd-icon-caret-up:before {
+    content: "\f0d8";
+}
+.pnd-icon-spinner:before {
+    content: "\f110";
+}
+.pnd-icon-sort-amount-asc:before {
+    content: "\f160";
+}
+.pnd-icon-sort-amount-desc:before {
+    content: "\f161";
+}
+.pnd-icon-archive:before {
+    content: "\f187";
+}
+.pnd-icon-question:before {
+    content: "\f059";
+}
+.pnd-icon-info:before {
+    content: "\f05a";
+}
+.pnd-icon-circle:before {
+    content: "\f111";
+}
+.pnd-icon-sort-alpha-desc:before {
+    content: "\f15e";
+}
+.pnd-icon-sort-numeric-asc:before {
+    content: "\f162";
+}
+.pnd-icon-sort-numeric-desc:before {
+    content: "\f163";
+}
+.pnd-icon-bug:before {
+    content: "\f188";
+}
+.pnd-icon-img-fragment:before {
+    content: "\e600";
+}
+.pnd-icon-txt-fragment:before {
+    content: "\e601";
+}
+

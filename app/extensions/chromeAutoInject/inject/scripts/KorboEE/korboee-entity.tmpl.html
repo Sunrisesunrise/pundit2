@@ -1,0 +1,50 @@
+<div 
+      class="container kee-wrp" 
+      id="korbo-ee-container" 
+      ng-show="renderElement()">
+      
+      <div class="left-inner-icon">
+            <span 
+                  class="pnd-icon pnd-icon-refresh pnd-icon-spin" 
+                  ng-show="isLoading() && !serverNotRunning">
+            </span>
+            <input type="text"
+                   class="kee-input-elem-to-search kee-input-ok form-control"
+                   name="{{conf.tafonyName}}"
+                   id="{{conf.tafonyId}}"
+                   ng-model="elemToSearch"
+                   placeholder="Type at least {{conf.labelMinLength}} characters..."
+                   template-url="{{autocompleteListTemplate}}"
+                   data-limit="{{korboSearchLimit}}"
+                   data-min-length="{{korboMinLength}}"
+                   bs-options="e.label for e in autoCompleteSearch($viewValue)"
+                   bs-typeahead
+                   ng-disabled="serverNotRunning"
+                   ng-show = "!serverNotRunning"
+                   autocomplete="off"
+                    >
+
+            <input 
+                  ng-disabled="true" 
+                  class="kee-input-elem-to-search kee-input-error-server form-control" placeholder="Sorry! The service is not working" 
+                  ng-show = "serverNotRunning"/>
+
+      </div> 
+      <!-- // End div ee-input-container -->
+
+
+      <!-- input hidden -->
+      <input 
+            type="hidden" 
+            name="{{conf.nameInputHiddenUri}}" 
+            value="{{location}}" 
+            class="ee-uri-hidden" />
+      <input 
+            type="hidden" 
+            name="{{conf.nameInputHiddenLabel}}" 
+            value="{{label}}" 
+            class="ee-label-hidden" />
+      <!-- // End input hidden -->
+
+</div> 
+<!-- // End div container -->
