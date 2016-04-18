@@ -224,7 +224,7 @@ angular.module('Pundit2.AnnotationSidebar')
      * Default value:
      * <pre> annotationHeight: 28 </pre>
      */
-    annotationHeight: 28,
+    annotationHeight: 34,
 
     /**
      * @module punditConfig

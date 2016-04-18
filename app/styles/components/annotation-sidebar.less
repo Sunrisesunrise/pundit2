@@ -366,8 +366,6 @@
         }
 
         &:hover {
-            // background-color: @color-highlight-hover;
-
             &:after {
                 background: @color-highlight-hover;
             }
@@ -386,5 +384,19 @@
                 background-color: darken(@annotation-bg-color, 5%);
             }
         }*/
+    }
+
+    /* Has social */
+    /* Height of collapsed annotation with social features */
+    .pnd-annotation-has-social {
+        .pnd-annotation-details-header {
+            // height: @annotation-collapsed-header-height + @annotation-social-buttons-height + 2px; // 2px = borders // @annotation-collapsed-height;
+            height: 32px;
+
+            &:after {
+                content: '';
+                height: 28px;
+            }
+        }
     }
 }
