@@ -229,6 +229,21 @@ angular.module('Pundit2.AnnotationSidebar')
     /**
      * @module punditConfig
      * @ngdoc property
+     * @name modules#AnnotationSidebar.annotationSocialHeight
+     *
+     * @description
+     * `number`
+     *
+     * The height of the annotations in the sidebar for positioning
+     *
+     * Default value:
+     * <pre> annotationSocialHeight: 58 </pre>
+     */
+    annotationSocialHeight: 58,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
      * @name modules#AnnotationSidebar.startTop
      *
      * @description
@@ -443,7 +458,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
     if (annotationSidebar.options.social === true) {
         // TODO: avoid defaults modification 
-        annotationSidebar.options.annotationHeight = annotationSidebar.options.annotationHeight * 2;
+        annotationSidebar.options.annotationHeight = annotationSidebar.options.annotationSocialHeight;
     }
 
     if (isEntitiesActive) {
