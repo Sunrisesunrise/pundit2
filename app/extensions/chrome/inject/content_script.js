@@ -52,7 +52,8 @@ var switchPundit = function(on) {
             preloadDiv = document.createElement('div');
 
         var toolbarHeight = 30,
-            isClientInLiteMode = false;
+            isClientInLiteMode = false,
+            isClientInAutoInjectMode = false;
 
         var innerHtml = '';
         innerHtml += '<div class="navbar navbar-inverse navbar-fixed-top pnd-toolbar-navbar pnd-ignore">';
@@ -72,6 +73,10 @@ var switchPundit = function(on) {
                 punditConfig.modules.Toolbar) {
                 toolbarHeight = punditConfig.modules.Toolbar.toolbarHeight || toolbarHeight;
             }
+
+            if (punditConfig.autoInjectMode) {
+                isClientInAutoInjectMode = true;
+            }
         }
 
         bodyStyle.position = 'static';
@@ -83,13 +88,13 @@ var switchPundit = function(on) {
         div.setAttribute('data-cid', chrome.runtime.id);
         b.appendChild(div);
 
-        if (isClientInLiteMode === false) {
-            bodyStyle[cssTransform] = 'translateY(' + toolbarHeight + ')';
-            bodyStyle.marginTop = toolbarHeight + 'px';
-
-            preloadDiv.setAttribute('id', 'pundit2_preload');
-            div.appendChild(preloadDiv);
-            preloadDiv.innerHTML = innerHtml;
+        if (isClientInLiteMode === false && isClientInAutoInjectMode === false) {
+           bodyStyle[cssTransform] = 'translateY(' + toolbarHeight + ')';
+           bodyStyle.marginTop = toolbarHeight + 'px';
+        
+           preloadDiv.setAttribute('id', 'pundit2_preload');
+           div.appendChild(preloadDiv);
+           preloadDiv.innerHTML = innerHtml;
         }
 
         // Boot angular app.

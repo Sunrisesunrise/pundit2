@@ -1,4 +1,5 @@
 var developMode = true,
+    autoInject = false,
     useLivereload = false,
     useServerFile = false,
     serverUrl = 'http://localhost:9000/';

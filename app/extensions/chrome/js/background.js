@@ -160,6 +160,10 @@ var setBadgeText = function(tabId, text, backgroundColor) {
     if (typeof backgroundColor === 'undefined') {
         backgroundColor = defaultBadgeBackgroundColor;
     }
+
+    if (autoInject) {
+        return;
+    }
     chrome.browserAction.setBadgeBackgroundColor({
         tabId: tabId,
         color: backgroundColor
@@ -295,7 +299,22 @@ chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
             return;
         }
 
-        onUpdate(tabId);
+        if (autoInject) {
+            // TODO: read from configuration
+            if (tab.url.indexOf('europeana.eu/portal/record/') < 0) {
+                return;
+            } else {
+                //remove tab
+                window.clearInterval(state.loading[tabId]);
+                delete state.loading[tabId];
+                delete state.injections[tabId];
+                delete state.stopLoading[tabId];
+                delete state.tabs[tabId];
+                delete state.tabsOnOff[tabId];
+            }
+        } else {
+            onUpdate(tabId);
+        }
     }
 });
 
@@ -323,6 +342,13 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     var tabId;
     switch (request.action) {
+        case 'switchOnExt':
+            if (autoInject) {
+                chrome.browserAction.disable(sender.tab.id);
+                switchOn(sender.tab.id);
+            }
+            break;
+
         case 'updateAnnotationsNumber':
             if (isLoading(sender.tab.id)) {
                 if (typeof state.stopLoading[sender.tab.id] !== 'undefined' && state.stopLoading[sender.tab.id]) {
