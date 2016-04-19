@@ -16,7 +16,7 @@ title: Annotation Server installation
 
 ## 2. Annotation server installation
 
-1. Download the <a href="https://net7.codebasehq.com/upload/68f95571-ebde-8988-679d-863f7efb7ea9/show/original">Annotation Server Zip</a> and unzip it.
+1. Download the <a href="https://slack-files.com/T02SH8KFM-F0DGG6VJQ-33e37d2334">Annotation Server Zip</a> and unzip it.
 1. Copy `./web/WEB-INF/web-example.xml` in `./web/WEB-INF/web.xml`.
 2. Substitute *{hostname}:{port}* with your hostname and port (tomcat service) in `./web/WEB-INF/web.xml`.
 3. Install and check check RDBMS connection in **DATABASE Repository Configurations**:
