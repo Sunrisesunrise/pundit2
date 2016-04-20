@@ -29,7 +29,8 @@
             height: @resource-panel-height;
             margin-bottom: 30px;
             padding: 0;
-            overflow-y: auto;
+            overflow-y: auto !important;  // Css conflicts
+            overflow-x: hidden !important;  // Css conflicts
         }
     }
 }

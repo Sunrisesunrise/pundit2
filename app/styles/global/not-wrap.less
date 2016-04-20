@@ -6,6 +6,7 @@
  */
 
 html.pnd-annotation-sidebar-collapsed {
+    position: static; // Heavy!
     margin-right: @annotation-sidebar-coll-width;
 }
 
@@ -18,6 +19,7 @@ html body.pnd-annotation-sidebar-collapsed {
 */
 
 html.pnd-annotation-sidebar-expanded {
+    position: static; // Heavy!
     margin-right: @annotation-sidebar-exp-width;
     width: auto;
 }
@@ -31,6 +33,11 @@ html body.pnd-annotation-sidebar-expanded {
     width: auto;
 }
 */
+
+
+html body {
+    overflow-x: hidden !important; // Heavy
+}
 
 html body.pnd-contextual-menu-scroll .pnd-inner {
     .pnd-tab-content {

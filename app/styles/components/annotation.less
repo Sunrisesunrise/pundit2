@@ -67,7 +67,7 @@
         margin-top: 6px; // Needed for correct vertical alignment
         max-width: 95%;
         line-height: @annotation-collapsed-header-height/2;
-        overflow: hidden;
+        overflow: hidden !important; // Css conflicts
         white-space: nowrap;
         text-overflow: ellipsis;
     }
@@ -98,7 +98,7 @@
         height: @annotation-collapsed-header-height;
         padding: 1px 4px 0 (@annotation-collapsed-header-height/2);
         background-color: @color-ultra-light;
-        overflow: hidden;
+        overflow: hidden !important; // Css conflicts
         white-space: nowrap;
         border-left: 1px solid @annotation-border-color;
         text-overflow: ellipsis;
@@ -227,7 +227,7 @@
         display: block;
         padding: 10px;
         max-height: @annotation-text-max-height;
-        overflow: auto;
+        overflow: auto !important;
         font-style: italic;
         word-wrap: break-word;
 
@@ -241,7 +241,7 @@
     .pnd-annotation-comment-text, .pnd-annotation-comment-text-edit {
         padding: 10px;
         max-height: @annotation-text-max-height;
-        overflow: auto;
+        overflow: auto !important; // Css conficts
         display: block;
         background-color: @color-ultra-light;
         border-top: @annotation-border-size solid @annotation-border-color;
@@ -383,7 +383,7 @@
             margin-bottom: 5px;
             color: @annotation-text-color;
             white-space: nowrap;
-            overflow: hidden;
+            overflow: hidden !important; // Css conflicts
             text-overflow: ellipsis;
 
             a {
