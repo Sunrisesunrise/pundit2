@@ -347,9 +347,6 @@
         display: none;
     }
 
-    .pnd-annotation-details-wrap {
-    }
-
     .pnd-annotation-details-header {
         width: 10px;
         height: 22px;
@@ -369,8 +366,6 @@
         }
 
         &:hover {
-            // background-color: @color-highlight-hover;
-
             &:after {
                 background: @color-highlight-hover;
             }
@@ -391,35 +386,17 @@
         }*/
     }
 
-    /* Color BG used for Templates */
-    /*.pnd-annotation-icon-color {
-        width: 10px;
-        padding: 0;
-        margin: 0;
+    /* Has social */
+    /* Height of collapsed annotation with social features */
+    .pnd-annotation-has-social {
+        .pnd-annotation-details-header {
+            // height: @annotation-collapsed-header-height + @annotation-social-buttons-height + 2px; // 2px = borders // @annotation-collapsed-height;
+            height: 32px;
 
-        .pnd-icon {
-            display: none;
+            &:after {
+                content: '';
+                height: 28px;
+            }
         }
-    }*/
-
-    /*.pnd-annotation-details-broken {
-        width: 10px;
-        padding: 0;
-        margin: 0;
-
-        .pnd-icon {
-            display: none;
-        }
-    }*/
+    }
 }
-
-/* Color BG used for Templates */
-/*
-.pnd-annotation-icon-color {
-    height: 24px;
-    width: 26px;
-    display: inline-block;
-    text-align: center;
-}
-*/
-

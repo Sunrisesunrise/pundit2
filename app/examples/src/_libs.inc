@@ -21,4 +21,5 @@
     <script src="../../bower_components/angular-sanitize/angular-sanitize.js" type="text/javascript" charset="utf-8"></script>
     <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="../../bower_components/ng-resize/ngresize.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../bower_components/angular-timeago/dist/angular-timeago.js" type="text/javascript" charset="utf-8"></script>
     <!-- endbuild -->

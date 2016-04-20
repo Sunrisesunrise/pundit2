@@ -80,7 +80,21 @@ angular.module('Pundit2.Client')
      * Default value:
      * <pre> hiddenBootstrap: false </pre>
      */
-    hiddenBootstrap: false
+    hiddenBootstrap: false,
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ClientPro.openSidebarBootstrap
+     *
+     * @description
+     * `bool`
+     *
+     * open sidebar after pundit bootstrap
+     *
+     * Default value:
+     * <pre> openSidebarBootstrap: false </pre>
+     */
+    openSidebarBootstrap: false
 })
 
 .service('ClientLite', function(CLIENTLITEDEFAULTS, BaseComponent, Config, EventDispatcher, Analytics, MyPundit, LiteTool,
@@ -213,6 +227,9 @@ angular.module('Pundit2.Client')
 
     client.showClientBoot = function() {
         Status.setState('Pundit', 'canBeShowedAfterHidden', true);
+        if(client.options.openSidebarBootstrap){
+            AnnotationSidebar.toggle();
+        }
         client.showClient();
     };
 

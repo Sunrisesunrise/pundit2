@@ -165,7 +165,12 @@ angular.module('Pundit2.Core')
             this.isImage() ||
             this.isImageFragment() ||
             this.isWebPage() ||
-            this.isResource();
+            this.isResource() ||
+            this.isAnnotation();
+    };
+
+    ItemFactory.prototype.isAnnotation = function() {
+        return this.type.indexOf(NameSpace.types.annotation) !== -1;
     };
 
     ItemFactory.prototype.isProperty = function() {
@@ -200,7 +205,8 @@ angular.module('Pundit2.Core')
             !this.isImage() &&
             !this.isImageFragment() &&
             !this.isWebPage() &&
-            !this.isResource();
+            !this.isResource() &&
+            !this.isAnnotation();
     };
 
     ItemFactory.prototype.fromAnnotationRdf = function(annotationRDF) {

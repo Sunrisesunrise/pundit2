@@ -350,6 +350,9 @@ angular.module('Pundit2.Communication')
                 ann[property] = annData[propertyURI][0].type === 'uri' ? annData[propertyURI][0].value : annData[propertyURI][1].value;
             }
         }
+        if(typeof annData.social !== 'undefined'){
+            ann.social = annData.social;
+        }
 
         // In v2 version creator and date are saved with a different uri
         ann.created = ann.annotatedAt;

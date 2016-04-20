@@ -10,7 +10,7 @@ angular.module('Pundit2.AnnotationSidebar')
     var bodyClasses = AnnotationSidebar.options.bodyExpandedClass + ' ' + AnnotationSidebar.options.bodyCollapsedClass,
         sidebarClasses = AnnotationSidebar.options.sidebarExpandedClass + ' ' + AnnotationSidebar.options.sidebarCollapsedClass;
 
-    var html = angular.element('html');
+    var html = angular.element('html'),
         body = angular.element('body'),
         container = angular.element('.pnd-annotation-sidebar-container'),
         header = angular.element('.pnd-annotation-sidebar-header');
@@ -500,7 +500,7 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     }
 
-    EventDispatcher.addListener('MyPundit.isUserLogged', function(e) {
+    EventDispatcher.addListener('MyPundit.isUserLogged', function() {
         $scope.isAnnomaticActive = AnnotationSidebar.isAnnomaticActive();
     });
 

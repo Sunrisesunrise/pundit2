@@ -5,7 +5,8 @@
      'pnd-annotation-popover-comment': isCommentMode,
      'pnd-annotation-popover-highlight': isHighlightMode,
      'pnd-annotation-popover-saving':savingAnnotation,
-     'pnd-annotation-popover-error':!savingAnnotation && errorSaving}"
+     'pnd-annotation-popover-error':!savingAnnotation && errorSaving,
+     'pnd-tooltip': tooltip}"
      ng-style="{'opacity': opacity}"
         >
 
@@ -14,7 +15,13 @@
     <!-- Login: user must login -->
     <div class="popover-content"
          ng-if="!isUserLogged">
-        <a href="javascript:void(0)" ng-click="login()">Login to Pundit to create new annotations!</a>
+        <a href="javascript:void(0)" ng-click="login()">{{message}}</a>
+    </div>
+
+    <!-- tooltip mode -->
+    <div class="popover-content"
+         ng-if="tooltip">
+        <a href="javascript:void(0)">{{message}}</a>
     </div>
 
     <!-- Annotation type selection -->
@@ -42,18 +49,19 @@
 
         <!-- Notebook selector -->
         <div 
-            class="popover-notebooks">
+            class="popover-notebooks" ng-hide = tooltip>
             <span class="popover-notebooks-copy">Save {{currentMode}} in</span>
             <pnd-select
                     options="availableNotebooks"
                     selected-value="$parent.selectedNotebookId"
                     deferred-action="doCreateNewNotebook"
                     label-action="'Create new notebook'"
-                    placeholder-action="'Type new notebook name here'"></pnd-select>
+                    placeholder-action="'Type new notebook name here'"
+                    expanded="false"></pnd-select>
         </div>
 
         <!-- Footer with buttons -->
-        <div class="popover-footer">
+        <div class="popover-footer" ng-hide = tooltip>
             <button
                     class="pnd-btn pnd-btn-small"
                     ng-click="cancel()">

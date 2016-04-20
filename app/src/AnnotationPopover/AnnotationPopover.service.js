@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationPopover')
 
-.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout) {
+.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout, EventDispatcher) {
     var annotationPopover = new BaseComponent('AnnotationPopover');
 
     var changePopoverPlacement = function(state, placement) {
@@ -77,14 +77,14 @@ angular.module('Pundit2.AnnotationPopover')
                     parentTS[0].normalize();
                 }
                 resizeData.removeTimeout = null;
-            } 
+            }
 
             annotationPopover.log('Remove temporary element');
         }, 300);
     };
 
     var changePopoverPosition = function(mouseX, mouseY, iconReference) {
-        // TODO: how many time this function is called? why? 
+        // TODO: how many time this function is called? why?
 
         var state = PndPopover.getState(),
             posArrow = {},
@@ -149,13 +149,13 @@ angular.module('Pundit2.AnnotationPopover')
 
             posArrow = iconReference[0].getBoundingClientRect();
 
-            if
-            (placementArrow === 'right'){
+            if (placementArrow === 'right') {
                 posArrowTop = $window.scrollY + posArrow.top + posArrow.height / 2;
                 posArrowLeft = $window.scrollX + posArrow.left + posArrow.width;
-            }else{
-                posArrowTop = $window.scrollY + posArrow.top + posArrow.height;
-                posArrowLeft = $window.scrollX  +posArrow.left + posArrow.width / 2;
+            } else {
+                //placementArrow == 'top'
+                posArrowTop = $window.scrollY + posArrow.top;
+                posArrowLeft = $window.scrollX + posArrow.left + posArrow.width / 2;
             }
 
             // set first anchor and lastSelectionUsed for maintain consistency with textfragment mode
@@ -261,6 +261,10 @@ angular.module('Pundit2.AnnotationPopover')
                     var elem = angular.element('.pnd-range-pos-icon');
                     elem.removeClass('pnd-range-pos-icon');
                     angular.element($window).off('resize', resizeCallback);
+
+                    if (typeof mode !== 'undefined' && mode === 'alert') {
+                        EventDispatcher.sendEvent('closeContextualMenu');
+                    }
                 }
             };
 
@@ -273,7 +277,6 @@ angular.module('Pundit2.AnnotationPopover')
         });
 
         var state = PndPopover.getState();
-
         annotationPopover.mode = typeof mode === 'undefined' ? '' : mode;
 
         if (promise !== false) {

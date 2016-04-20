@@ -1220,5 +1220,18 @@ angular.module('Pundit2.ResourcePanel')
         resourcePanel.setSelector(restoreSelector);
     });
 
+    EventDispatcher.addListener('MyPundit.isUserLogged', function() {
+        // TODO: ... gosh 
+        setTimeout(function() {
+            var selectors = SelectorsManager.getActiveSelectors();
+            var restoreSelector = [];
+            // initialize selectors list
+            angular.forEach(selectors, function(sel) {
+                restoreSelector.push(sel.config.container);
+            });
+            resourcePanel.setSelector(restoreSelector);
+        }, 1000);
+    });
+
     return resourcePanel;
 });

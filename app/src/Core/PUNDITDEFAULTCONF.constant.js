@@ -21,6 +21,22 @@ angular.module('Pundit2.Core')
     /**
      * @module punditConfig
      * @ngdoc object
+     * @name autoInjectMode
+     * @description
+     * `string`
+     *
+     * Determines the client auto inject mode
+     *
+     * Default:
+     * <pre>
+     * autoInjectMode: false
+     * </pre>
+     */
+    autoInjectMode: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc object
      * @name korbo
      * @description
      * `object`

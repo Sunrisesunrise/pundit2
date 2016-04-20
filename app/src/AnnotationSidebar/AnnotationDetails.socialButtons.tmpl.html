@@ -1,0 +1,67 @@
+<!-- TODO: add global wrapper? -->
+
+<button type="button"
+        class="pnd-reply"
+        ng-if="options.reply"
+        ng-click="replyAnnotation($event)"
+        ng-class="{'pnd-annotation-details-social-activate': data.social.status.comment, 'pnd-annotation-details-social-zero': data.social.counting.comment==0 }"
+        bs-tooltip
+        placement="left"
+        data-title="Reply">
+    <span class="pnd-icon-comment"></span>
+    {{data.social.counting.comment }}
+</button>
+
+<!-- TODO: avoid use of mouseenter/mouseleave -->
+
+<button
+        type="button"
+        class="pnd-like"
+        ng-show="options.like"
+        ng-click="socialEvent($event, 'like')"
+        ng-class="{'pnd-annotation-details-social-activate': data.social.status.like, 'pnd-annotation-details-social-zero': data.social.counting.like==0 }"
+        bs-tooltip
+        placement="left"
+        data-title="{{data.social.status.like ? 'Undo like' : 'Like'}}">
+    <span class="pnd-icon-thumb-o-up"></span>
+    {{data.social.counting.like}}
+</button>
+
+<button
+        type="button"
+        class="pnd-dislike"
+        ng-show="options.dislike"
+        ng-click="socialEvent($event, 'dislike')"
+        ng-class="{'pnd-annotation-details-social-activate': data.social.status.dislike, 'pnd-annotation-details-social-zero': data.social.counting.dislike==0 }"
+        bs-tooltip
+        placement="left"
+        data-title="{{data.social.status.dislike ? 'Undo dislike' : 'Dislike'}}">
+    <span class="pnd-icon-thumb-o-down"></span>
+    {{data.social.counting.dislike}}
+</button>
+
+<button
+        type="button"
+        class="pnd-endorse"
+        ng-show="options.endorse"
+        ng-click="socialEvent($event, 'endorse')"
+        ng-class="{'pnd-annotation-details-social-activate': data.social.status.endorse, 'pnd-annotation-details-social-zero': data.social.counting.endorse==0 }"
+        bs-tooltip
+        placement="left"
+        data-title="{{data.social.status.endorse ? 'Undo endorse' : 'Endorse'}}">
+    <span class="pnd-icon-check"></span>
+    {{data.social.counting.endorse}}
+</button>
+
+<button
+        type="button"
+        class="pnd-report"
+        ng-if="options.report"
+        ng-click="socialEvent($event, 'report')"
+        ng-class="{'pnd-annotation-details-social-activate': data.social.status.report, 'pnd-annotation-details-social-zero': data.social.counting.report==0 }"
+        bs-tooltip
+        placement="left"
+        data-title="{{data.social.status.report ? 'Undo report' : 'Report'}}">
+    <span class="pnd-icon-exclamation"></span>
+    {{data.social.counting.report}}
+</button>

@@ -39,7 +39,8 @@ angular.module('Pundit2.Client')
 })
 
 .service('MessageHandler', function(MESSAGEHANDLERDEFAULTS, $document, BaseComponent, Config, Analytics,
-    EventDispatcher, Client, Status, MyPundit, AnnotationsExchange) {
+    EventDispatcher, Client, Status, MyPundit, AnnotationsExchange, ResourceHandler, AnnotationsCommunication,
+    TextFragmentHandler, ItemsExchange, AnnotationSidebar) {
 
     var messageHandler = new BaseComponent('MessageHandler', MESSAGEHANDLERDEFAULTS);
 
@@ -73,17 +74,39 @@ angular.module('Pundit2.Client')
         MyPundit.checkLoggedIn(true, false);
     };
 
+    var wipeAll = function() {
+        Status.resetProgress();
+        ItemsExchange.wipe();
+        AnnotationsExchange.wipe();
+        TextFragmentHandler.wipeTemporarySelection();
+    };
+
+    var loadAnnotations = function() {
+        wipeAll();
+        AnnotationsCommunication.getAnnotations();
+        requestAnnotationsNumber();
+    };
+
+    var delayedLoadAnnotations = function() {
+        AnnotationSidebar.wipe();
+        setTimeout(function() {
+            loadAnnotations();
+        }, 550);
+    };
+
     // we need to do it here due to a instance order time 
     dispatchDocumentEvent('Pundit.analyticsSettings', Analytics.options);
 
-    $document.on('Pundit.hide', Client.hideClient);
-    $document.on('Pundit.show', Client.showClient);
-    $document.on('Pundit.showBootstrap', Client.showClientBoot);
-    $document.on('Pundit.requestAnnotationsNumber', requestAnnotationsNumber);
-    $document.on('Pundit.requestUserProfileUpdate', userStatusUpdate);
-    $document.on('Pundit.requestUserLoggedStatus', userStatusUpdate);
-
-    // TODO: use a different bind? 
+    document.addEventListener('Pundit.hide', Client.hideClient);
+    document.addEventListener('Pundit.show', Client.showClient);
+    document.addEventListener('Pundit.loadAnnotations', loadAnnotations);
+    document.addEventListener('Pundit.delayedLoadAnnotations', delayedLoadAnnotations);
+    document.addEventListener('Pundit.showBootstrap', Client.showClientBoot);
+    document.addEventListener('Pundit.requestAnnotationsNumber', requestAnnotationsNumber);
+    document.addEventListener('Pundit.requestUserProfileUpdate', userStatusUpdate);
+    document.addEventListener('Pundit.requestUserLoggedStatus', userStatusUpdate);
+    document.addEventListener('Pundit.forceCompileButton', ResourceHandler.forceCompileButton);
+    document.addEventListener('Pundit.sidebarWipe', AnnotationSidebar.wipe);
     document.addEventListener('Pundit.requestAnnotationsNumberRaw', requestAnnotationsNumber);
 
     EventDispatcher.addListener('Pundit.dispatchDocumentEvent', function(data) {
@@ -95,6 +118,8 @@ angular.module('Pundit2.Client')
             currentState = e.args;
         dispatchDocumentEvent(eventName, currentState);
     });
+
+    window.dispatchDocumentEvent = dispatchDocumentEvent;
 
     return messageHandler;
 });

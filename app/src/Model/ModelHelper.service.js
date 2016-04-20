@@ -195,7 +195,7 @@ angular.module('Pundit2.Model')
                 return;
             }
             if (statementPart.isTarget()) {
-                if (statementPart.isWebPage() || statementPart.isResource()) {
+                if (statementPart.isWebPage() || statementPart.isResource() || statementPart.isAnnotation()) {
                     uris = {
                         target: statementPart.uri
                     };
@@ -211,7 +211,7 @@ angular.module('Pundit2.Model')
                         canonical = XpointersHelper.getSafeCanoicalUrl();
 
                     // Building target info.
-                    if (!statementPart.isWebPage() && !statementPart.isResource()) {
+                    if (!statementPart.isWebPage() && !statementPart.isResource() && !statementPart.isAnnotation()) {
                         // isPartOf.
                         if (statementPart.hasOwnProperty('isPartOf')) {
                             isPartOfArray.push({
@@ -252,6 +252,13 @@ angular.module('Pundit2.Model')
                                 'type': 'uri'
                             });
                         }
+
+                        if (statementPart.isAnnotation()) {
+                            target[NameSpace.rdf.type] = ({
+                                'value': NameSpace.target.annotation,
+                                'type': 'uri'
+                            });
+                        }
                     }
 
                     if (typeof canonical !== 'undefined') {
@@ -284,7 +291,7 @@ angular.module('Pundit2.Model')
 
                     addTypeElem(statementPart.type, types);
 
-                    if (!statementPart.isWebPage() && !statementPart.isResource()) {
+                    if (!statementPart.isWebPage() && !statementPart.isResource() && !statementPart.isAnnotation()) {
                         // Building selector info.
                         // conformsTo.
                         selector[NameSpace.target.conformsTo] = [{
@@ -501,6 +508,11 @@ angular.module('Pundit2.Model')
         for (var metadataURI in data.metadata) {
             // Get metadata object
             var metadata = data.metadata[metadataURI];
+
+            if (annotationServerVersion === 'v2') {
+                // add social status
+                metadata.social = data.social[metadataURI];
+            }
 
             // Get Annotation ID.
             var metadataURIParts = metadataURI.split('/');

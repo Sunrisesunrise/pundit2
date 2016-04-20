@@ -15,6 +15,9 @@
 //        annotationServerBaseURL: "  http://danilo.is-lost.org:8080/annotationserver/",//local server
         annotationServerVersion: 'v2',
         modules: {
+            'ResourceAnnotator': {
+                annotationButton: true
+            },
             'AnnotationsCommunication': {
                 loadMultipleAnnotations: true
             },
@@ -56,7 +59,7 @@
                     "uri": "http://www.w3.org/2004/02/skos/core#related"
                 }],
                 hiddenBootstrap: true,
-                fava:5
+                openSidebarBootstrap: true
             },
             'Toolbar': {
                 askThePundit: false
@@ -171,6 +174,6 @@
 <div data-ng-app="Pundit2"></div>
 
 <span about="http://data.europeana.eu/item/2021603/teylers_col28_dat7931_TEY0010002277"
-    class="pnd-icon-pundit-logo pnd-resource"
-    onclick="angular.element(document).trigger('Pundit.showBootstrap')">
+    class="pnd-resource"
+    onclick="dispatchDocumentEvent('Pundit.showBootstrap')"></span>
 

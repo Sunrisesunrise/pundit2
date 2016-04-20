@@ -13,10 +13,30 @@
     var punditConfig = {
      //   confURL: "http://conf.thepund.it/V2/clients/eus/eus.js",
         annotationServerBaseURL: " https://staging.punditbrain.netseven.it:8443/annotationserver/",
+//        annotationServerBaseURL: "  http://danilo.is-lost.org:8080/annotationserver/",//local server
         annotationServerVersion: 'v2',
         modules: {
             'AnnotationsCommunication': {
                 loadMultipleAnnotations: true
+            },
+            'AnnotationSidebar': {
+                social: true
+            },
+            'AnnotationDetails': {
+                social: true,
+                reply: true,
+                like: true,
+                dislike: true,
+                report: true,
+                endorse: true,
+                replyLike: true,
+                replyDislike: true,
+                replyReport: true,
+                replyEndorse: true
+            },
+            'Consolidation': {
+                skipUrlTarget: true,
+                skipCanonicalUrlTarget: true
             },
             'Client': {
                 active: true,
@@ -100,6 +120,7 @@
         disableImageAnnotation: true,
         template: {
             active: true,
+            activeOnTextFragment: true,
             list: [{
                 label: 'MIMO Tag',
                 types: ['', 'resource'],
@@ -280,7 +301,7 @@
                         <div class="subsection-content">
                             <h2 class="object-title">
                                 Adolf Muschg and Michael Schmidt, in conversation
-                                    <span about="http://data.europeana.eu/item/2021613/tracks_47946392"  class="pnd-icon-pundit-logo pnd-resource">
+                                    <span about="http://data.europeana.eu/item/2021613/tracks_47946392"  class="pnd-resource">
 
                                     </span>
                             </h2>
@@ -293,7 +314,7 @@
                         <div class="subsection-content">
                             <ul class="data-group">
                                 <li>
-                                    <section><h4 class="data-header">Contributor:                <span about="http://data.europeana.eu/item/2021613/tracks_479463942"  class="pnd-icon-pundit-logo pnd-resource">
+                                    <section><h4 class="data-header">Contributor:                <span about="http://data.europeana.eu/item/2021613/tracks_479463942"  class="pnd-resource">
 
                                     </span></h4>
                                         <ul class="comma-list data-group">

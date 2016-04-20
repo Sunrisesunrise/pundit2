@@ -1,10 +1,11 @@
-<div class="pnd-annotation-details-wrap pnd-annotation-semantic pnd-ignore">
+<div class="pnd-annotation-details-wrap pnd-annotation-semantic pnd-ignore"
+     ng-class="{'pnd-annotation-has-social': social}">
 
     <!-- Collapsed view of the annotation -->
     <div class="pnd-annotation-collapsed pnd-annotation-details-header pnd-annotation-details-top"
-        ng-click="toggleAnnotation()"
-        ng-if="!annotation.expanded"
-        ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
+         ng-click="toggleAnnotation()"
+         ng-if="!annotation.expanded"
+         ng-class="{'pnd-annotation-details-broken': annotation.broken, 'pnd-annotation-details-ghosted': annotation.ghosted}">
 
         <div class="pnd-annotation-collapsed-subject"
              ng-class="{'pnd-annotation-annotated-fragment': (annotation.mainItem.typeLabel == 'Text fragment'),
@@ -14,13 +15,34 @@
             <span>{{ annotation.mainItem.label }}</span> <!-- TODO For images instead of "label" we should use the ALT attribute if present -->
         </div>
 
-
         <div class="pnd-annotation-collapsed-caret"></div>
 
         <div class="pnd-annotation-collapsed-object">
             <span>{{ annotation.itemsArray[0].objects[0].label }}</span>
         </div>
+
+        <!--<div class="pnd-annotation-collapsed-social-footer pnd-annotation-social-buttons"-->
+             <!--ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"-->
+             <!--replace="true">-->
+        <!--</div>-->
+        <div class="annotation-details-social-buttons pnd-annotation-collapsed-social-footer pnd-annotation-social-buttons"
+             id="{{::annotation.id}}"
+             data="annotation"
+             options="options"
+             ng-show="social"
+             ng-class="{'pnd-no-social': !social}">
+        </div>
     </div>
+
+    <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
+    <!--
+    <div class="pnd-annotation-collapsed pnd-annotation-details-buttons"
+         ng-if="!annotation.expanded">
+        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.footerButtons.tmpl.html'"
+             replace="true">
+        </div>
+    </div>
+    -->
     <!-- END // Collapsed view of the annotation -->
 
     <!-- Expanded view of the annotation -->
@@ -30,22 +52,30 @@
 
         <!-- Metadata -->
         <div class="pnd-annotation-details-meta"
+             ng-class="{ 'pnd-annotation-details-meta-edit':( isUserToolShowed() ) }"
              ng-init="meta = false">
 
+            <!-- Default user's thumb -->
+            <div class="pnd-annotation-user-thumb-default"
+                 ng-show="annotation.defaultThumb"></div>
+
             <!-- User's thumb -->
-            <!-- Currently not displayed... to show with real thumb -->
             <img class="pnd-annotation-user-thumb"
-                 src="" width="30" height="30"
+                 ng-src="{{annotation.thumbnail}}" width="30" height="30"
+                 ng-hide="annotation.defaultThumb"
                  alt="{{::annotation.creatorName}}"/>
 
-            <!-- Default user's thumb -->
-            <div class="pnd-annotation-user-thumb-default"></div>
+            <!-- Edit Menu -->
+            <div class="pnd-icon-angle-down pnd-annotation-edit-toggle"
+                 ng-click="menuEdit($event);"
+                 ng-if="isUserToolShowed()">
+            </div>
 
             <span class="pnd-annotation-user-name">
                 {{ ::annotation.creatorName }}
             </span>
             <span class="pnd-annotation-metadata">
-                {{::annotation.created | date : 'd MMM y'}} · in 
+                <time-ago from-time='{{ annotation.created }}' format='d MMM y'></time-ago> · in
                 <span class="pnd-annotation-notebook-name">
                     <span 
                         ng-if="!isUserToolShowed() || !homePundit">
@@ -57,6 +87,13 @@
                         ng-click="openNotebook($event, annotation.notebookId)">
                         {{annotation.notebookName}}
                     </a>
+                    <br>
+                    <span class="pnd-annotation-edited" ng-if="annotation.edited">
+                        Edited
+                        <span>
+                            <time-ago class="pnd-annotation-reply-date" from-time='{{ annotation.modified }}' format='HH:mm dd MMM yyyy'></time-ago>
+                        </span>
+                    </span>
                 </span>
             </span>
 
@@ -283,27 +320,49 @@
         </div>
 
         <!-- Annotation functions buttons (Edit, Cancel, Share, Reply, Like...) -->
-        <div 
-            class="pnd-annotation-details-buttons"
-            ng-show="isUserToolShowed()">
-            <div class="pnd-annotation-details-footer">
-                <button
-                    type="button"
-                    class="pnd-edit"
-                    ng-show="isEditBtnShowed()"
-                    ng-click="editAnnotation($event)">
-                    <span class="pnd-icon-pencil"></span>
-                    Edit
-                </button> · <button
-                    type="button"
-                    class="pnd-delete"
-                    ng-click="deleteAnnotation($event)">
-                    <span class="pnd-icon-trash"></span>
-                    Delete
-                </button>
-            </div>
+        <div class="annotation-details-social-buttons  pnd-annotation-social-buttons"
+             id="{{::annotation.id}}"
+             data="annotation"
+             options="options"
+             ng-show="social"
+             ng-class="{'pnd-no-social': !social}">
+        </div>
+
+        <!-- Displayed while loading replies -->
+        <div ng-show = "checkLoaded()"
+             class="pnd-annotation-loading-replies">
+            <p class="pnd-pulse">
+                Loading Replies
+            </p>
+        </div>
+
+        <!-- List of replies to comment -->
+        <annotation-details-reply
+                class="pnd-annotation-details "
+                id="{{::annotation.id}}"
+                data="annotation"
+                options="optionsReplyes"
+                ng-repeat="annotation in replyTree track by annotation.id"
+                style="position:relative"
+                ng-if="reply"
+                ng-show="social"
+                ng-class="{'pnd-no-social': !social}">
+        </annotation-details-reply>
+
+        <!-- Displayed while saving replies -->
+        <div ng-show = "isSaving"
+             class="pnd-annotation-loading-replies">
+            <p class="pnd-pulse">
+                Saving Replies
+            </p>
+        </div>
+
+        <!-- Metadata social comment box -->
+        <div ng-include="'src/AnnotationSidebar/AnnotationDetails.replyTextArea.tmpl.html'"
+             replace="true">
         </div>
 
     </div>
+    <!-- END // Expanded view of the annotation -->
 
 </div>

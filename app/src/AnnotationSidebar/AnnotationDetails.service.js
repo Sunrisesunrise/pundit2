@@ -24,9 +24,7 @@ angular.module('Pundit2.AnnotationSidebar')
      * @description
      * `boolean`
      *
-     * Initial state of the single annotation, expanded or collapsed
-     *
-     * Default value:
+     * Initial state of thposition:relative
      * <pre> defaultExpanded: false </pre>
      */
     defaultExpanded: false,
@@ -59,7 +57,217 @@ angular.module('Pundit2.AnnotationSidebar')
      * Default value:
      * <pre> debug: false </pre>
      */
-    debug: false
+    debug: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.social
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social event
+     *
+     * Default value:
+     * <pre> social: false </pre>
+     */
+    social: false,
+    
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.reply
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social reply
+     *
+     * Default value:
+     * <pre> reply: false </pre>
+     */
+    reply: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.like
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social like
+     *
+     * Default value:
+     * <pre> like: false </pre>
+     */
+    like: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.dislike
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social dislike
+     *
+     * Default value:
+     * <pre> dislike: false </pre>
+     */
+    dislike: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.endorse
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social endorse
+     *
+     * Default value:
+     * <pre> endorse: false </pre>
+     */
+    endorse: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.report
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social report
+     *
+     * Default value:
+     * <pre> report: false </pre>
+     */
+    report: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.replyLike
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social reply like
+     *
+     * Default value:
+     * <pre> replyLike: false </pre>
+     */
+    replyLike: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.replyDislike
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social reply dislike
+     *
+     * Default value:
+     * <pre> replyDislike: false </pre>
+     */
+    replyDislike: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.replyEndorse
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social reply endorse
+     *
+     * Default value:
+     * <pre> replyEndorse: false </pre>
+     */
+    replyEndorse: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.replyReport
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social reply report
+     *
+     * Default value:
+     * <pre> replyReport: false </pre>
+     */
+    replyReport: false,
+    //TODO reply of replies not implemented
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.replyReply
+     *
+     * @description
+     * `boolean`
+     *
+     * Active social reply reply
+     *
+     * Default value:
+     * <pre> replyRepply: false </pre>
+     */
+    replyReply: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.cMenuType
+     *
+     * @description
+     * `string`
+     *
+     * Contextual menu type showed in edit Mode
+     *
+     * Default value:
+     * <pre> cMenuType: 'annotationDetailsEditable' </pre>
+     */
+    cMenuTypeEdit: 'annotationDetailsEditable',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.cMenuType
+     *
+     * @description
+     * `string`
+     *
+     * Contextual menu type showed in no edit Mode
+     *
+     * Default value:
+     * <pre> cMenuType: 'annotationDetailsNoEditable' </pre>
+     */
+    cMenuTypeNoEdit: 'annotationDetailsNoEditable',
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#AnnotationDetails.cMenuTypeLeaf
+     *
+     * @description
+     * `string`
+     *
+     * Contextual menu type showed in no edit Mode
+     *
+     * Default value:
+     * <pre> cMenuType: 'annotationDetailsLeaf' </pre>
+     */
+    cMenuTypeLeaf: 'annotationDetailsLeaf',
 })
 
 .service('AnnotationDetails', function(ANNOTATIONDETAILSDEFAULTS, $rootScope, $filter, $timeout, $document, $window, $modal, $injector, $q,
@@ -75,13 +283,116 @@ angular.module('Pundit2.AnnotationSidebar')
     var state = {
         annotations: [],
         defaultExpanded: annotationDetails.options.defaultExpanded,
+        social: annotationDetails.options.social,
+        reply: annotationDetails.options.reply,
+        like: annotationDetails.options.like,
+        dislike: annotationDetails.options.dislike,
+        endorse: annotationDetails.options.endorse,
+        report: annotationDetails.options.report,
         isUserLogged: false,
         isSidebarExpanded: false,
         isGhostedActive: false,
-        userData: {}
+        contextualMenuOpened: false,
+        enableToggle: true,
+        openAnnotation: false,
+        userData: {},
+        editReply: false
     };
 
     var forceSkip = '';
+
+    var scopeReference = {},
+        repliesReference = {};
+
+    var scrollToAnnotation = function(annotationId) {
+        $timeout(function() {
+            var currentElement = angular.element('#' + annotationId),
+                currentElementRect = currentElement[0].getClientRects()[0],
+                dashboardHeight = clientMode === 'pro' ? Dashboard.getContainerHeight() : 0;
+
+            if (currentElementRect.top >= 0 &&
+                currentElementRect.bottom <= $window.innerHeight) {
+                return;
+            }
+            if (currentElement.length > 0) {
+                angular.element('body').animate({
+                    scrollTop: currentElement.offset().top - dashboardHeight - 60
+                }, 'slow');
+            }
+        }, 100);
+    };
+
+    var initContextualMenu = function() {
+
+
+        ContextualMenu.addAction({
+            name: 'Edit',
+            type: annotationDetails.options.cMenuTypeEdit,
+            label: 'Edit',
+            showIf: function() {
+                return true;
+            },
+            priority: 99,
+            action: function(scope) {
+                var event = {};
+
+                if (scope.motivation === 'commenting') {
+                    scope.editComment(event);
+                } else {
+                    // TODO: gosh ..
+                    event = document.createEvent('Event');
+                    scope.editAnnotation(event);
+                }
+            }
+        });
+
+        ContextualMenu.addDivider({
+            priority: 98,
+            type: annotationDetails.options.cMenuTypeEdit
+        });
+
+
+        ContextualMenu.addAction({
+            name: 'Delete',
+            type: [annotationDetails.options.cMenuTypeEdit, annotationDetails.options.cMenuTypeNoEdit],
+            showIf: function() {
+                return true;
+            },
+            label: 'Delete',
+            priority: 97,
+            action: function(scope) {
+                scope.deleteAnnotation(document.createEvent('Event'));
+            }
+        });
+        ContextualMenu.addAction({
+            name: 'Update reply',
+            type: [annotationDetails.options.cMenuTypeLeaf],
+            showIf: function() {
+                return true;
+            },
+            label: 'Edit',
+            priority: 96,
+            action: function(scope) {
+                var event = document.createEvent('Event');
+
+                state.editReply = true;
+                scope.editComment(event);
+            }
+        });
+        ContextualMenu.addAction({
+            name: 'Delete reply',
+            type: [annotationDetails.options.cMenuTypeLeaf],
+            showIf: function() {
+                return true;
+            },
+            label: 'Delete',
+            priority: 95,
+            action: function(scope) {
+                scope.deleteAnnotationLeaf(document.createEvent('Event'));
+            }
+        });
+    };
+    initContextualMenu();
 
     var mouseoutHandlerPromise,
         overActiveId = '',
@@ -127,7 +438,7 @@ angular.module('Pundit2.AnnotationSidebar')
     //                     state.annotations[annotation].ghosted = false;
     //                     continue;
     //                 }
-    //             }
+    //          init   }
     //         }
 
     //         state.isGhostedActive = true;
@@ -157,10 +468,24 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if (MyPundit.isUserLogged()) {
             currentElement.addClass('pnd-annotation-details-delete-in-progress');
-            AnnotationsCommunication.deleteAnnotation(currentId).finally(function() {
-                confirmModal.hide();
-                currentElement.removeClass('pnd-annotation-details-delete-in-progress');
-            });
+            if (confirmModal.isReply) {
+                AnnotationsCommunication.deleteReply(currentId).finally(function() {
+                    confirmModal.hide();
+                    currentElement.removeClass('pnd-annotation-details-delete-in-progress');
+                    modalScope.hideReply();
+                    //EventDispatcher.addListeners(['deleteReply'], function(e) {
+                    //    var element = document.getElementById(e.args);
+                    //    element.hide();
+                    //});
+                    EventDispatcher.sendEvent('deleteReply', state.id);
+                });
+            } else {
+                AnnotationsCommunication.deleteAnnotation(currentId).finally(function() {
+                    confirmModal.hide();
+                    currentElement.removeClass('pnd-annotation-details-delete-in-progress');
+                });
+            }
+
         }
 
         Analytics.track('buttons', 'click', 'annotation--details--delete--confirm');
@@ -354,16 +679,74 @@ angular.module('Pundit2.AnnotationSidebar')
         return serverdate;
     };
 
-    annotationDetails.openConfirmModal = function(currentElement, currentId)  {
+    annotationDetails.addScopeReference = function(id, value) {
+        scopeReference[id] = value;
+    };
+
+    annotationDetails.getScopeReference = function(id) {
+        return scopeReference[id];
+    };
+
+    annotationDetails.addRepliesReference = function(parentId, value) {
+        var idTemp = null;
+        if (typeof repliesReference[parentId] === 'undefined') {
+            repliesReference[parentId] = {};
+        }
+        for (var i = 0; i < value.length; i++) {
+            idTemp = value[i].id;
+            repliesReference[parentId][idTemp] = value[i];
+        }
+        return repliesReference[parentId];
+    };
+
+    annotationDetails.addReplyReference = function(parentId, id, value) {
+        if (typeof repliesReference[parentId] === 'undefined') {
+            repliesReference[parentId] = {};
+        }
+        repliesReference[parentId][id] = value;
+        return repliesReference[parentId];
+    };
+
+    annotationDetails.getRepliesReference = function(id) {
+        return repliesReference[id];
+    };
+
+    annotationDetails.checkCreatorRepliesReference = function(parentId, creator) {
+        for (var id in repliesReference[parentId]) {
+            if (repliesReference[parentId][id].creator === creator) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    annotationDetails.removeRepliesReference = function(parentId, id) {
+        delete repliesReference[parentId][id];
+    };
+    annotationDetails.openConfirmModal = function(currentElement, currentId) {
         // promise is needed to open modal when template is ready
+        modalScope.titleMessage = 'Delete Annotation';
         modalScope.notifyMessage = 'Are you sure you want to delete this annotation? Please be aware that deleted annotations cannot be recovered.';
         modalScope.elementReference = currentElement;
         modalScope.annotationId = currentId;
+        confirmModal.isReply = false;
+        confirmModal.$promise.then(confirmModal.show);
+    };
+
+    annotationDetails.openConfirmModalReply = function(currentElement, currentId, hideReply) {
+        // promise is needed to open modal when template is ready
+        modalScope.titleMessage = 'Delete reply';
+        modalScope.notifyMessage = 'Are you sure you want to delete this reply? Please be aware that deleted replies cannot be recovered.';
+        modalScope.elementReference = currentElement;
+        modalScope.annotationId = currentId;
+        modalScope.hideReply = hideReply;
+        confirmModal.isReply = true;
+
         confirmModal.$promise.then(confirmModal.show);
     };
 
     annotationDetails.saveEditedComment = function(annID, item, comment) {
-        var currentTarget = ItemsExchange.getItemByUri(item.uri),
+        var currentTarget = item,
             currentStatement = {
                 scope: {
                     get: function() {
@@ -384,11 +767,45 @@ angular.module('Pundit2.AnnotationSidebar')
             modelData.items,
             modelData.flatTargets,
             modelData.target,
+
             modelData.type,
             'commenting'
         );
 
         return editPromise;
+    };
+    annotationDetails.setEditable = function(bool) {
+        state.isEditable = bool;
+    };
+
+    annotationDetails.saveReply = function(item, reply) {
+        var currentTarget = item,
+            currentStatement = {
+                scope: {
+                    get: function() {
+                        return {
+                            subject: currentTarget,
+                            predicate: '',
+                            object: reply
+                        };
+                    }
+                }
+            };
+
+        var modelData = ModelHelper.buildCommentData(currentStatement);
+
+        var replyPromise = AnnotationsCommunication.saveAnnotation(
+            modelData.graph,
+            modelData.items,
+            modelData.flatTargets,
+            undefined,
+            '',
+            modelData.target,
+            modelData.type,
+            'commenting' //TODO support on server side for motivation: "replying"
+        );
+
+        return replyPromise;
     };
 
     annotationDetails.getAnnotationDetails = function(currentId) {
@@ -438,16 +855,42 @@ angular.module('Pundit2.AnnotationSidebar')
         }
     };
 
-    annotationDetails.openAnnotationView = function(currentId) {
+    annotationDetails.openAnnotationView = function(currentId, skipScroll) {
         if (typeof(state.annotations[currentId]) !== 'undefined') {
             if (!AnnotationSidebar.isAnnotationSidebarExpanded()) {
                 AnnotationSidebar.toggle();
             }
             annotationDetails.closeAllAnnotationView(currentId);
             state.annotations[currentId].expanded = true;
+            if (typeof skipScroll === 'undefined' || !skipScroll) {
+                scrollToAnnotation(currentId);
+            }
+            if (Config.modules.AnnotationDetails.social && typeof state.annotations[currentId].scopeReference.annotation.repliesLoaded === 'undefined') {
+                state.annotations[currentId].scopeReference.annotation.repliesLoaded = false;
+
+                annotationDetails.getRepliesByAnnotationId(currentId).then(function(data) {
+
+                    if (typeof data !== 'undefined') {
+                        data.annotation = state.annotations[currentId].scopeReference.annotation;
+                        state.annotations[currentId].scopeReference.optionsReplyes.replyTreeArray = data;
+                        state.annotations[currentId].scopeReference.annotation.repliesLoaded = true;
+                        state.annotations[currentId].scopeReference.replyTree = annotationDetails.addRepliesReference(state.annotations[currentId].scopeReference.annotation.parentId, data);
+                    }
+
+                    // console.log("data: " + data);
+                });
+
+            } else {
+                state.annotations[currentId].scopeReference.annotation.repliesLoaded = true;
+            }
+
         } else {
             annotationDetails.log("Cannot find this annotation: id -> " + currentId);
         }
+    };
+
+    annotationDetails.closeEditReply = function() {
+        state.editReply = false;
     };
 
     annotationDetails.closeAnnotationView = function(currentId) {
@@ -459,8 +902,10 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationDetails.toggleAnnotationView = function(currentId, forceTo) {
-        annotationDetails.closeAllAnnotationView(currentId);
-        state.annotations[currentId].expanded = typeof forceTo !== 'undefined' ? forceTo : !state.annotations[currentId].expanded;
+        if (!state.contextualMenuOpened && state.enableToggle && !state.editReply) {
+            annotationDetails.closeAllAnnotationView(currentId);
+            state.annotations[currentId].expanded = typeof forceTo !== 'undefined' ? forceTo : !state.annotations[currentId].expanded;
+        }
     };
 
     annotationDetails.isAnnotationGhosted = function(currentId) {
@@ -472,7 +917,19 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationDetails.isUserToolShowed = function(creator) {
-        return state.isUserLogged === true && creator === state.userData.uri;
+        var forceEdit = false;
+        if (typeof(Config.forceEditAndDelete) !== 'undefined' && Config.forceEditAndDelete) {
+            forceEdit = true;
+        }
+        return ((state.isUserLogged === true && creator === state.userData.uri) || (forceEdit && MyPundit.isUserLogged())) && AnnotationSidebar.isAnnotationsPanelActive();
+    };
+
+    annotationDetails.isEditBtnShowed = function(motivation) {
+        return Config.clientMode === 'pro' && (motivation === 'linking' || motivation === 'commenting');
+    };
+
+    annotationDetails.userData = function() {
+        return MyPundit.getUserData();
     };
 
     annotationDetails.addAnnotationReference = function(scope, force) {
@@ -483,6 +940,15 @@ angular.module('Pundit2.AnnotationSidebar')
         var expandedState;
         var template;
         var currentColor;
+
+        ////check thumbnail if null set default
+        //if (currentAnnotation.thumbnail === '') {
+        //    scope.thumbDefault = true;
+        //}else{
+        //    scope.thumbDefault = false;
+        //}
+        // console.log(currentAnnotation.creatorName + ' ' + currentAnnotation.thumbnail + ' ' + currentAnnotation.id);
+
 
         var buildSemantic = function() {
             template = TemplatesExchange.getTemplateById(currentAnnotation.hasTemplate);
@@ -495,9 +961,11 @@ angular.module('Pundit2.AnnotationSidebar')
             if (typeof(state.annotations[currentId]) === 'undefined') {
                 state.annotations[currentId] = {
                     id: currentId,
+                    uri: currentAnnotation.uri,
                     creator: currentAnnotation.creator,
                     creatorName: currentAnnotation.creatorName,
                     created: convertTime(currentAnnotation.created),
+                    thumbnail: currentAnnotation.thumbnail,
                     notebookId: currentAnnotation.isIncludedIn,
                     notebookName: notebookName,
                     scopeReference: scope,
@@ -508,7 +976,16 @@ angular.module('Pundit2.AnnotationSidebar')
                     expanded: expandedState,
                     ghosted: false,
                     color: currentColor,
-                    hasTemplate: template
+                    hasTemplate: template,
+                    likes: currentAnnotation.likes,
+                    dislikes: currentAnnotation.dislike,
+                    replies: currentAnnotation.replies,
+                    disagrees: currentAnnotation.disagrees,
+                    endorses: currentAnnotation.endorses,
+                    reports: currentAnnotation.reports,
+                    social: currentAnnotation.social,
+                    modified: currentAnnotation.modified,
+
                 };
 
                 var cancelWatchNotebookName = $rootScope.$watch(function() {
@@ -546,18 +1023,28 @@ angular.module('Pundit2.AnnotationSidebar')
             if (typeof(state.annotations[currentId]) === 'undefined') {
                 state.annotations[currentId] = {
                     id: currentId,
+                    uri: currentAnnotation.uri,
                     creator: currentAnnotation.creator,
                     creatorName: currentAnnotation.creatorName,
                     created: convertTime(currentAnnotation.created),
                     notebookId: currentAnnotation.isIncludedIn,
                     notebookName: notebookName,
+                    thumbnail: currentAnnotation.thumbnail,
                     scopeReference: scope,
                     mainItem: buildItemDetails(firstTargetUri),
                     itemsArray: [firstItem],
                     itemsUriArray: [firstTargetUri],
                     broken: isBroken,
                     expanded: expandedState,
-                    ghosted: false
+                    ghosted: false,
+                    likes: currentAnnotation.likes,
+                    dislikes: currentAnnotation.dislikes,
+                    replies: currentAnnotation.replies,
+                    disagrees: currentAnnotation.disagrees,
+                    endorses: currentAnnotation.endorses,
+                    reports: currentAnnotation.reports,
+                    social: currentAnnotation.social,
+                    modified: currentAnnotation.modified
                 };
 
                 if (motivation === 'commenting') {
@@ -587,7 +1074,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
                 if (typeof(force) !== 'undefined' && force) {
                     state.annotations[currentId].created = currentAnnotation.created;
-                    state.annotations[currentId].created = currentAnnotation.created;
                     state.annotations[currentId].notebookId = currentAnnotation.isIncludedIn;
                     state.annotations[currentId].scopeReference = scope;
                     state.annotations[currentId].mainItem = buildItemDetails(firstTargetUri);
@@ -609,7 +1095,8 @@ angular.module('Pundit2.AnnotationSidebar')
         expandedState = (force ? true : state.defaultExpanded);
 
         if (currentAnnotation.motivatedBy === 'commenting' ||
-            currentAnnotation.motivatedBy === 'highlighting') {
+            currentAnnotation.motivatedBy === 'highlighting' ||
+            currentAnnotation.motivatedBy === 'replying') {
             buildCommentOrHighlight(currentAnnotation.motivatedBy);
         } else {
             buildSemantic();
@@ -642,6 +1129,40 @@ angular.module('Pundit2.AnnotationSidebar')
         }, 100);
     };
 
+    annotationDetails.getRepliesByAnnotationId = function(annotationId) {
+        return AnnotationsCommunication.getRepliesByAnnotationId(annotationId);
+    };
+
+    annotationDetails.socialEvent = function(annotationId, ancestor, type, operation, comment) {
+        return AnnotationsCommunication.socialEvent(annotationId, ancestor, type, operation, comment);
+    };
+
+    annotationDetails.menuEdit = function(elem, scope, placement) {
+        var pos = elem.getBoundingClientRect();
+        var left = pos.left + pos.width * 2 / 3 + angular.element($window).scrollLeft();
+        var top = pos.top + pos.height * 2 / 3 + angular.element($window).scrollTop();
+        var type = '';
+
+        if (typeof scope.motivation === 'undefined') {
+            scope.motivation = scope.data.motivation;
+        }
+
+        if (typeof angular.element('.pnd-dropdown-contextual-menu')[0] === 'undefined') {
+
+            if (annotationDetails.isEditBtnShowed(scope.motivation)) {
+                type = annotationDetails.options.cMenuTypeEdit;
+            } else if (typeof scope.leaf !== 'undefined') {
+                type = annotationDetails.options.cMenuTypeLeaf;
+            } else {
+                type = annotationDetails.options.cMenuTypeNoEdit;
+            }
+            ContextualMenu.show(left, top, scope, type, '', placement);
+            state.contextualMenuOpened = true;
+        } else {
+            ContextualMenu.hide();
+        }
+    };
+
     EventDispatcher.addListeners(['AnnotationSidebar.updateAnnotation'], function(e) {
         annotationDetails.log('Update annotation ' + e.args);
 
@@ -671,21 +1192,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 return;
             }
 
-            $timeout(function() {
-                var currentElement = angular.element('#' + annotationId),
-                    currentElementRect = currentElement[0].getClientRects()[0],
-                    dashboardHeight = clientMode === 'pro' ? Dashboard.getContainerHeight() : 0;
-
-                if (currentElementRect.top >= 0 &&
-                    currentElementRect.bottom <= $window.innerHeight) {
-                    return;
-                }
-                if (currentElement.length > 0) {
-                    angular.element('body').animate({
-                        scrollTop: currentElement.offset().top - dashboardHeight - 60
-                    }, 'slow');
-                }
-            }, 100);
+            scrollToAnnotation(annotationId);
         }
     });
 
@@ -710,6 +1217,8 @@ angular.module('Pundit2.AnnotationSidebar')
     });
 
     EventDispatcher.addListener('ResizeManager.resize', function() {
+        state.contextualMenuOpened = false;
+        ContextualMenu.hide();
         annotationDetails.closeAllAnnotationView();
     });
 
@@ -726,7 +1235,18 @@ angular.module('Pundit2.AnnotationSidebar')
     EventDispatcher.addListener('Client.show', function( /*e*/ ) {
         $document.on('mousedown', mouseDownHandler);
     });
-
+    EventDispatcher.addListener('closeContextualMenu', function( /*e*/ ) {
+        state.contextualMenuOpened = false;
+    });
+    EventDispatcher.addListener('openContextualMenu', function( /*e*/ ) {
+        state.contextualMenuOpened = true;
+    });
+    EventDispatcher.addListener('disableToggle', function( /*e*/ ) {
+        state.enableToggle = false;
+    });
+    EventDispatcher.addListener('enableToggle', function( /*e*/ ) {
+        state.enableToggle = true;
+    });
     $document.on('mousedown', mouseDownHandler);
 
     function mouseDownHandler(downEvt) {

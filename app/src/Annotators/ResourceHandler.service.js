@@ -98,10 +98,11 @@ angular.module('Pundit2.Annotators')
 
     var initContextualMenu = function() {
         var templateConfig = Config.template;
+        var cMenuTypes = [resourceHandler.options.cMenuType];
 
         ContextualMenu.addAction({
             name: 'resComment',
-            type: [resourceHandler.options.cMenuType],
+            type: cMenuTypes,
             label: 'Comment',
             showIf: function() {
                 return true;
@@ -112,20 +113,20 @@ angular.module('Pundit2.Annotators')
                     fragmentId = ContextualMenu.getLastRef(),
                     resourceElem = angular.element("[about='" + item.uri + "']");
                 resourceElem.addClass('pnd-range-pos-icon');
-                AnnotationPopover.show(coordinates.x, coordinates.y, item, '', fragmentId, 'comment');
+                AnnotationPopover.show(coordinates.x, coordinates.y, item, '', fragmentId, 'comment', resourceElem);
             }
         });
 
         ContextualMenu.addDivider({
             priority: 98,
-            type: [resourceHandler.options.cMenuType]
+            type: cMenuTypes
         });
 
         // TODO: move this in TripleComposer
         if (resourceHandler.options.useAsSubject) {
             ContextualMenu.addAction({
                 name: 'resUseAsSubject',
-                type: [resourceHandler.options.cMenuType],
+                type: cMenuTypes,
                 label: 'Use as subject',
                 showIf: function() {
                     return true;
@@ -141,7 +142,7 @@ angular.module('Pundit2.Annotators')
         if (resourceHandler.options.useAsObject) {
             ContextualMenu.addAction({
                 name: 'resUseAsObject',
-                type: [resourceHandler.options.cMenuType],
+                type: cMenuTypes,
                 label: 'Use as Object',
                 showIf: function() {
                     return true;
@@ -156,23 +157,29 @@ angular.module('Pundit2.Annotators')
         if (resourceHandler.options.useAsObject || resourceHandler.options.useAsObject) {
             ContextualMenu.addDivider({
                 priority: 95,
-                type: [resourceHandler.options.cMenuType]
+                type: cMenuTypes
             });
         }
         if (templateConfig.active) {
-            var prior = 90;
+            if (typeof templateConfig.activeOnTextFragment !== 'undefined' && templateConfig.activeOnTextFragment === true) {
+                cMenuTypes.push(Config.modules.TextFragmentHandler.cMenuType);
+                ContextualMenu.addDivider({
+                    priority: 95,
+                    type: Config.modules.TextFragmentHandler.cMenuType
+                });
 
+            }
             for (var i = 0; i < templateConfig.list.length; i++) {
                 if (templateConfig.list[i].types.indexOf('resource')) {
                     ContextualMenu.addAction({
                         name: templateConfig.list[i].label.replace(/\s/g, ''),
-                        type: [resourceHandler.options.cMenuType],
+                        type: cMenuTypes,
                         label: templateConfig.list[i].label,
 
                         showIf: function() {
                             return true;
                         },
-                        priority: prior--,
+                        priority: 94,
                         action: (function(idx) {
                             return function(item) {
                                 var triple = templateConfig.list[idx].triples[0],
@@ -204,10 +211,24 @@ angular.module('Pundit2.Annotators')
         }
     };
 
-    // add directive attribute
-    resourceElem.addClass('resource-menu');
-    // resourceElem.addClass('pnd-range-pos-icon');
+    resourceHandler.forceCompileButton = function(){
+        var resourceElem = angular.element('.pnd-resource'); //find pnd-resource
+        // add directive attribute
+        promise = $q.defer();
+        resourceElem.addClass('resource-menu');
+        $compile(resourceElem)($rootScope);
+        promise.resolve();
 
+        setTimeout(function() {
+            EventDispatcher.sendEvent('Pundit.forceCompileButton');
+            $rootScope.$$phase || $rootScope.$digest();
+        }, 10);
+
+    };
+
+
+        // add directive attribute
+    resourceElem.addClass('resource-menu');
     //compile the DOM
     $compile(resourceElem)($rootScope);
     promise.resolve();

@@ -15,19 +15,44 @@ angular.module('Pundit2.Annotators')
             scope.element = element;
             scope.item = null;
             scope.selected = false;
+            scope.number = 0;
+            scope.annotationButton = ResourceAnnotator.options.annotationButton;
+            scope.resourceLabel = '';
+
+            if(scope.annotationButton){
+                scope.resourceLabel =ResourceAnnotator.options.annotationButtonLabel ;
+            }
 
             var createItemFromResource = function(resourceElem) {
                 var values = {};
 
                 values.uri = resourceElem.attr('about');
                 values.cMenuType = "resourceHandlerItem";
-                values.label = resourceElem.parent().text().trim();
+                values.label = resourceElem.parent().text().trim().split('\n')[0];
                 values.type = values.type = [NameSpace.types.resource]; // TODO to be defined
                 values.pageContext = XpointersHelper.getSafePageContext();
                 values.icon = true;
                 values.elem = resourceElem;
 
                 return new Item(values.uri, values);
+            };
+
+            scope.setAnnotationNumber = function(uri) {
+                var annotations = AnnotationsExchange.getAnnotations();
+                scope.number = 0;
+                for(var ann in annotations){
+                    if(annotations[ann].entities[0] === uri){
+                        scope.number ++;
+                    }
+                }
+            };
+
+            scope.addAnnotationNumber = function(){
+                scope.number ++;
+            };
+
+            scope.subAnnotationNumber = function(){
+                scope.number --;
             };
 
             scope.isSelected = function() {

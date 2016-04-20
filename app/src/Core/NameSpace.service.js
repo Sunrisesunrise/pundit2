@@ -9,6 +9,7 @@ angular.module('Pundit2.Core')
         _pnd = 'http://purl.org/pundit/ont/ao#',
         _skos = 'http://www.w3.org/2004/02/skos/core#',
         _oa = 'http://www.openannotation.org/ns/',
+        _img = 'http://xmlns.com/foaf/0.1/',
         _xsd = 'http://www.w3.org/2001/XMLSchema#';
 
     $window.PUNDIT.ns = ns;
@@ -50,9 +51,9 @@ angular.module('Pundit2.Core')
         hasScope: _oa + 'hasScope',
         hasSource: _oa + 'hasSource',
         hasSelector: _oa + 'hasSelector',
-            /* ns.rdf.type */
-            /* ns.rdf.value */
-            /* ns.rdfs.label */
+        /* ns.rdf.type */
+        /* ns.rdf.value */
+        /* ns.rdfs.label */
     };
 
     ns.string = _xsd + 'string';
@@ -69,7 +70,7 @@ angular.module('Pundit2.Core')
         description: _dce + 'description',
 
         // Image contained in the text fragment, or associated with the item
-        image: 'http://xmlns.com/foaf/0.1/depiction',
+        image: _img + 'depiction',
 
         // TODO: the items have an rdfType field which contains the types, call
         //       this rdfTypes as well?
@@ -113,7 +114,7 @@ angular.module('Pundit2.Core')
     };
 
     // Notebook properties override for annotationServerVersion V2
-    ns.notebookV2 =  {
+    ns.notebookV2 = {
         visibility: _pnd + 'isPublic'
     };
 
@@ -122,6 +123,7 @@ angular.module('Pundit2.Core')
         creatorName: _dce + 'creator',
         created: _dct + 'created',
         creator: _dct + 'creator',
+        thumbnail:  _img + 'thumbnail',
         modified: _dct + 'modified',
         pageContext: _pnd + 'hasPageContext',
         hasTarget: _oa + 'hasTarget',
@@ -131,13 +133,22 @@ angular.module('Pundit2.Core')
         hasTemplate: _pnd + 'hasTemplate',
         annotatedBy: _oa + 'annotatedBy',
         annotatedAt: _oa + 'annotatedAt',
-        isBrokenYet: _pnd + 'isBroken'
+        isBrokenYet: _pnd + 'isBroken',
+        likes: _pnd + 'likes',
+        unLikes: _pnd + 'unLikes',
+        dislikes: _pnd + 'dislikes',
+        unDislikes: _pnd + 'unDislikes',
+        replies: _pnd + 'replies',
+        disagrees: _pnd + 'disagrees',
+        endorses: _pnd + 'endorses',
+        reports: _pnd + 'reports',
     };
 
     ns.motivation = {
         linking: _oa + 'linking',
         commenting: _oa + 'commenting',
-        highlighting: _oa + 'highlighting'
+        highlighting: _oa + 'highlighting',
+        // replying: _oa + 'replying'
         // tagging: _oa + 'tagging'
     };
 
@@ -152,10 +163,11 @@ angular.module('Pundit2.Core')
     // TODO: do we need more? Other components might want to add&read stuff here?
     ns.types = {
         page: 'http://schema.org/WebPage',
-        image: 'http://xmlns.com/foaf/0.1/Image',
+        image: _img + 'Image',
         named: _pnd + 'named-content',
         embeddedContent: _oa + 'EmbeddedContent',
-        resource: _pnd + 'resource' // TODO to be defined
+        resource: _pnd + 'resource', // TODO to be defined
+        annotation: _pnd + 'annotation'
     };
 
     // Our types labels, will be read by the TypesHelper
@@ -166,6 +178,7 @@ angular.module('Pundit2.Core')
     ns.typesLabels[ns.types.image] = 'Image';
     ns.typesLabels[ns.types.image] = 'Resource'; // TODO to be defined
     ns.typesLabels[ns.types.named] = 'Named content';
+    ns.typesLabels[ns.types.annotation] = 'Annotation';
 
     ns.selectors = {
         baseURI: 'http://purl.org/pundit/selector/',
@@ -204,11 +217,24 @@ angular.module('Pundit2.Core')
     ns.asAnnItems = ns.as + 'api/annotations/{{id}}/items';
     ns.asAnnBroken = ns.as + 'api/annotations/broken';
 
+    ns.asReply = ns.as + 'api/annotations/{{id}}/reply';
+    ns.asUpdateReply = ns.as + 'api/annotations/{{id}}/updateReply';
+    ns.asAnnRepliesOpen = ns.as + 'api/open/annotations/{{id}}/replies';
+    ns.asAnnReplies = ns.as + 'api/annotations/{{id}}/replies';
+    ns.asLike = ns.as + 'api/annotations/{{id}}/like';
+    ns.asUnLike = ns.as + 'api/annotations/{{id}}/unLike';
+    ns.asDislike = ns.as + 'api/annotations/{{id}}/dislike';
+    ns.asUnDislike = ns.as + 'api/annotations/{{id}}/unDislike';
+    ns.asEndorse = ns.as + 'api/annotations/{{id}}/endorse';
+    ns.asUnEndorse = ns.as + 'api/annotations/{{id}}/unEndorse';
+    ns.asReport = ns.as + 'api/annotations/{{id}}/report';
+    ns.asUnReport = ns.as + 'api/annotations/{{id}}/unReport';
+
     ns.asPref = ns.as + 'api/services/preferences/{{key}}';
     ns.asUrlPrefix = ns.as + 'api/open/urlprefix';
 
 
-    // Gets a key of the namespace, interpolating variables if needed
+    // Gets a key of thelike namespace, interpolating variables if needed
     ns.get = function(key, context) {
 
         // If it's not a string, it's nothing we can return (this

@@ -60,7 +60,7 @@ angular.module('Pundit2.Communication')
         setLoading(true);
         Consolidation.requestConsolidateAll();
 
-        // TODO: update structure in V1? 
+        // TODO: update structure in V1?
 
         $http({
             headers: {
@@ -204,7 +204,7 @@ angular.module('Pundit2.Communication')
                 removedItems = AnnotationsExchange.updateAnnotationStructureInfo(annID, oldItems);
                 updateAnnotationItems(currentAnnotation, removedItems);
 
-                switch(currentAnnotation.motivatedBy) {
+                switch (currentAnnotation.motivatedBy) {
                     case 'linking':
                     case undefined:
                         Analytics.track('main-events', 'generic', 'edit-semantic');
@@ -233,6 +233,118 @@ angular.module('Pundit2.Communication')
             // Consolidation.rejectConsolidateAll();
             promise.reject();
         });
+    };
+
+    annotationsCommunication.socialEvent = function(id, ancestor, type, operation, comment) {
+        var promise = {},
+            url = '',
+            route = {
+                like: {
+                    add: 'asLike',
+                    remove: 'asUnLike'
+                },
+                dislike: {
+                    add: 'asDislike',
+                    remove: 'asUnDislike'
+                },
+                endorse: {
+                    add: 'asEndorse',
+                    remove: 'asUnEndorse'
+                },
+                report: {
+                    add: 'asReport',
+                    remove: 'asUnReport'
+                },
+                comment: {
+                    add: 'asReply'
+                },
+                editComment: {
+                    add: 'asUpdateReply'
+                }
+            };
+        if (typeof operation === 'undefined') {
+            operation = 'add';
+        }
+
+        promise = $q.defer();
+        url = NameSpace.get(route[type][operation], {
+            id: id
+        });
+        if (type === 'editComment') {
+            $http({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                method: 'PUT',
+                url: url,
+                withCredentials: true,
+                data: comment
+            }).success(function(e) {
+                annotationsCommunication.log('Update success', e);
+                promise.resolve(e);
+            }).error(function() {
+                annotationsCommunication.log('Update ERROR');
+                promise.reject(false);
+            });
+        } else {
+            $http({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                method: 'POST',
+                url: url,
+                withCredentials: true,
+                params: {
+                    topmostAncestor: ancestor,
+                    context: angular.toJson({
+                        pageContext: XpointersHelper.getSafePageContext(),
+                        pageTitle: $document[0].title || 'No title'
+                    })
+                },
+                data: comment
+            }).success(function(e) {
+                annotationsCommunication.log('Post save success', e);
+                promise.resolve(e);
+            }).error(function() {
+                annotationsCommunication.log('Post save ERROR');
+                promise.reject(false);
+            });
+        }
+
+
+
+        return promise.promise;
+    };
+
+    annotationsCommunication.getRepliesByAnnotationId = function(id) {
+        var promise = $q.defer();
+        var apiCall = 'asAnnReplies';
+
+        if(!MyPundit.isUserLogged()){
+            apiCall = 'asAnnRepliesOpen';
+        }
+
+        var url = NameSpace.get(apiCall, {
+                id: id
+        });
+
+        $http({
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+            url: url,
+            withCredentials: true
+        }).success(function(data) {
+            promise.resolve(data);
+        }).error(function() {
+            promise.reject(false);
+        });
+
+        return promise.promise;
     };
 
     // get all annotations of the page from the server
@@ -407,7 +519,7 @@ angular.module('Pundit2.Communication')
 
                 var annotation = AnnotationsExchange.getAnnotationById(annID);
 
-                switch(annotation.motivatedBy) {
+                switch (annotation.motivatedBy) {
                     case 'linking':
                     case undefined:
                         Analytics.track('main-events', 'generic', 'delete-semantic');
@@ -430,8 +542,8 @@ angular.module('Pundit2.Communication')
                 }
 
                 AnnotationsExchange.removeAnnotation(annotation.id);
-                updateAnnotationItems(annotation, annotation.items);
 
+                updateAnnotationItems(annotation, annotation.items);
                 EventDispatcher.sendEvent('Pundit.alert', {
                     title: 'Annotation deleted',
                     id: 'SUCCESS',
@@ -468,6 +580,159 @@ angular.module('Pundit2.Communication')
                 message: 'Please log in to Pundit to delete an annotation.'
             });
             promise.reject('Error impossible to delete annotation: ' + annID + ' you are not logged');
+        }
+
+        return promise.promise;
+    };
+
+    // delete specified annotation from server
+    // TODO optimize (we must reload all annotation from server? i think that is not necessary)
+    annotationsCommunication.deleteReply = function(annID) {
+
+        var promise = $q.defer();
+
+        EventDispatcher.sendEvent('Pundit.preventDelay', true);
+
+        if (MyPundit.isUserLogged()) {
+            setLoading(true);
+            $http({
+                method: 'DELETE',
+                url: NameSpace.get('asAnn', {
+                    id: annID
+                }),
+                withCredentials: true
+            }).success(function() {
+                annotationsCommunication.log('Success reply: ' + annID + ' correctly deleted');
+
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'reply deleted',
+                    id: 'SUCCESS',
+                    timeout: 3000,
+                    message: 'Your reply has been correctly deleted.'
+                });
+                //EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                //    event: 'Pundit.updateAnnotationsNumber',
+                //    data: AnnotationsExchange.getAnnotations().length
+                //});
+                //// Used in annotationSidebar, add annotation to delete queue.
+                // EventDispatcher.sendEvent('AnnotationsCommunication.deleteAnnotation', annID);
+                //EventDispatcher.sendEvent('ResizeManager.resize');
+                //EventDispatcher.sendEvent('deleteReply',annID);
+
+                setLoading(false);
+                promise.resolve(annID);
+            }).error(function() {
+                setLoading(false);
+                annotationsCommunication.log('Error impossible to delete reply: ' + annID + ' please retry.');
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'Oops! Something went wrong',
+                    id: 'WARNING',
+                    timeout: 3000,
+                    message: 'Pundit couldn\'t delete your reply, please try again in 5 minutes'
+                });
+                promise.reject('Error impossible to delete reply: ' + annID);
+            });
+        } else {
+            annotationsCommunication.log('Error impossible to delete reply: ' + annID + ' you are not logged');
+            EventDispatcher.sendEvent('Pundit.alert', {
+                title: 'Please log in',
+                id: 'WARNING',
+                timeout: 3000,
+                message: 'Please log in to Pundit to delete an reply.'
+            });
+            promise.reject('Error impossible to delete reply: ' + annID + ' you are not logged');
+        }
+
+        return promise.promise;
+    };
+
+    // TODO:
+    // annotationsCommunication.saveReply
+    // annotationsCommunication.deleteReply
+
+
+    annotationsCommunication.saveReply = function(content, motivation) {
+        var promise = $q.defer();
+
+        var postSaveSend = function(url, annotationId) {
+            $http({
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                url: url,
+                params: {},
+                data: {
+                    annotationID: annotationId
+                }
+            }).success(function() {
+                annotationsCommunication.log('Post save success');
+            }).error(function(error) {
+                annotationsCommunication.log('Post save error ', error);
+            });
+        };
+
+        if (MyPundit.isUserLogged()) {
+
+            var url = NameSpace.get('asReply');
+            var params = {
+                context: angular.toJson({
+                    pageContext: XpointersHelper.getSafePageContext(),
+                    pageTitle: $document[0].title || 'No title'
+                })
+            };
+
+            if (typeof motivation !== 'undefined') {
+                params.motivatedBy = motivation;
+            }
+
+            $http({
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                url: url,
+                params: params,
+                withCredentials: true,
+                data: content
+            }).success(function(data) {
+                // EventDispatcher.sendEvent('AnnotationsCommunication.annotationSaved', data.AnnotationID);
+
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'Comment saved',
+                    id: 'SUCCESS',
+                    timeout: 3000,
+                    message: 'Congratulations, your new comment has been correctly saved.'
+                });
+
+                promise.resolve(data.id);
+
+                // Call post save
+                if (typeof(Config.postSave) !== 'undefined' && Config.postSave.active) {
+                    var callbacks = Config.postSave.callbacks;
+                    angular.isArray(callbacks) && angular.forEach(callbacks, function(callback) {
+                        postSaveSend(callback, data.id);
+                    });
+                }
+            }).error(function(msg) {
+                annotationsCommunication.log('Error: impossible to save reply', msg);
+                EventDispatcher.sendEvent('Pundit.alert', {
+                    title: 'Oops! Something went wrong',
+                    id: 'ERROR',
+                    timeout: null,
+                    message: 'Pundit couldn\'t save your comment, please try again in 5 minutes.'
+                });
+                promise.reject();
+            });
+        } else {
+            annotationsCommunication.log('Error impossible to save comment you are not logged');
+            EventDispatcher.sendEvent('Pundit.alert', {
+                title: 'Please log in',
+                id: 'WARNING',
+                timeout: 3000,
+                message: 'Please log in to Pundit to add comment.'
+            });
+            promise.reject('Error impossible to save annotation you are not logged');
         }
 
         return promise.promise;
@@ -534,7 +799,7 @@ angular.module('Pundit2.Communication')
             if (typeof motivation !== 'undefined') {
                 params.motivatedBy = motivation;
             }
-            
+
             if (motivation === 'tagging') {
                 params.motivatedBy = 'linking';
             }
@@ -557,7 +822,7 @@ angular.module('Pundit2.Communication')
             }).success(function(data) {
                 EventDispatcher.sendEvent('AnnotationsCommunication.annotationSaved', data.AnnotationID);
 
-                switch(motivation) {
+                switch (motivation) {
                     case 'linking':
                     case undefined:
                         Analytics.track('main-events', 'generic', 'new-semantic');
@@ -653,7 +918,6 @@ angular.module('Pundit2.Communication')
         }
 
         return promise.promise;
-
     };
 
 

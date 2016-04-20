@@ -92,7 +92,7 @@ angular.module("Pundit2.MyItemsContainer")
         }
 
         ContextualMenu.addDivider({
-            priority: 97,
+            priority: 1,
             type: cMenuTypes
         });
 
@@ -100,7 +100,7 @@ angular.module("Pundit2.MyItemsContainer")
             name: 'addToMyItems',
             type: cMenuTypes,
             label: "Add to Favourites",
-            priority: 99,
+            priority: 0,
             showIf: function(item) {
                 return MyPundit.isUserLogged() &&
                     !ItemsExchange.isItemInContainer(item, myItems.options.container);

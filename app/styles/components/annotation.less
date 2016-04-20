@@ -5,7 +5,6 @@
  * For style of the whole annotation sidebar please refer to annotation-sidebar.less
  */
 
-
 /* ------------------------------------ *\
    #SINGLE-ANNOTATIONS-DETAILS
 \* ------------------------------------ */
@@ -23,36 +22,32 @@
 \* ------------------------------------ */
 
 .pnd-annotation-collapsed {
-    height: @annotation-collapsed-height;
-    margin: 5px;
+    height: @annotation-collapsed-header-height + 2px;
+    margin: 0 5px; // 5px;
     overflow: hidden;
-
     background-color: @annotation-bg-color;
     border: @annotation-border-size solid @annotation-border-color;
     box-shadow: @annotation-box-shadow;
     border-radius: @annotation-border-radius;
-
     font-size: 13px;
     cursor: pointer;
+}
+
+/* Height of collapsed annotation with social features */
+.pnd-annotation-has-social {
+    .pnd-annotation-collapsed {
+        height: @annotation-collapsed-header-height + @annotation-social-buttons-height + 2px; // 2px = borders // @annotation-collapsed-height;
+    }
 }
 
 /* Target */
 .pnd-annotation-collapsed-subject {
     float: left;
     width: 100%;
-    height: @annotation-collapsed-height;
+    height: @annotation-collapsed-header-height;
+    line-height: @annotation-collapsed-header-height;
     max-width: 100%;
-    overflow: hidden;
-    padding: 2px 4px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
-    /*
-    &:not(.pnd-annotation-page) span {
-        background-color: @color-highlight;
-        font-style: italic;
-    }
-    */
+    padding: 1px 9px 0 6px;
 
     &.pnd-annotation-annotated-fragment {
         span {
@@ -61,27 +56,25 @@
         }
     }
 
-    &.pnd-annotation-page {
+    &.pnd-annotation-page, &.pnd-annotation-annotated-resource {
         span {
             font-weight: @font-weight-bold;
         }
     }
 
-    &.pnd-annotation-annotated-resource {
-        span {
-            font-weight: @font-weight-bold;
-        }
+    span {
+        display: inline-block;
+        margin-top: 6px; // Needed for correct vertical alignment
+        max-width: 95%;
+        line-height: @annotation-collapsed-header-height/2;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 }
 
 /* Hover effect */
 .pnd-annotation-collapsed:hover {
-
-    /*
-    .pnd-annotation-collapsed-subject:not(.pnd-annotation-page) span {
-        background-color: @color-highlight-hover;
-    }
-    */
 
     .pnd-annotation-collapsed-subject.pnd-annotation-annotated-fragment:not(.pnd-annotation-annotated-fragment-external) span {
         background-color: @color-highlight-hover;
@@ -90,43 +83,48 @@
 
 /* Style for semantic and commenting annotations */
 .pnd-annotation-semantic, .pnd-annotation-comment {
+
     /* Subject */
     .pnd-annotation-collapsed-subject {
-        width: 48%;
-        max-width: 48%;
+        width: 50%;
+        max-width: 50%;
     }
 
     /* Object */
     .pnd-annotation-collapsed-object {
         float: left;
-        width: 52%;
-        height: @annotation-collapsed-height;
-        max-width: 52%;
-        padding: 1px 4px 1px (@annotation-collapsed-height/2);
+        width: 50%;
+        max-width: 50%;
+        height: @annotation-collapsed-header-height;
+        padding: 1px 4px 0 (@annotation-collapsed-header-height/2);
         background-color: @color-ultra-light;
         overflow: hidden;
         white-space: nowrap;
         border-left: 1px solid @annotation-border-color;
         text-overflow: ellipsis;
+
+        span {
+            line-height: @annotation-collapsed-header-height;
+        }
     }
 }
 
-/* Arrow triangle between subject and object, code inspired by Bootstrap css */
-.pnd-annotation-collapsed-caret
+/* Arrow between subject and object for comments */
+.pnd-annotation-comment .pnd-annotation-collapsed-caret
 {
     position: absolute;
     display: block;
     width: 0;
     height: 0;
-    top: 50%;
-    left: 48%;
-    margin-top: -(@annotation-collapsed-height/2);
+    top: 1px; // 50%;
+    left: 136px;
+    margin-top: 0; // -(@annotation-collapsed-header-height/2);
 
     border-color: transparent;
     border-style: solid;
-    border-left-color: @color-light-gray;
-    border-right-width: 0;
-    border-width: (@annotation-collapsed-height/2);
+    border-right-color: @color-border-normal;
+    border-left-width: 0;
+    border-width: (@annotation-collapsed-header-height/2);
 
 
     &:after {
@@ -136,27 +134,84 @@
         display: block;
         width: 0;
         height: 0;
-        right: 1px;
-        bottom: -(@annotation-collapsed-height/2)+1;
+        right: -(@annotation-collapsed-header-height/2);
+        bottom: -(@annotation-collapsed-header-height/2)+1;
 
         border-color: transparent;
         border-style: solid;
-        border-width: (@annotation-collapsed-height/2) - 1;
-        border-left-color: #FFF;
-        border-right-width: 0;
+        border-width: (@annotation-collapsed-header-height/2) - 1;
+        border-right-color: @color-ultra-light;
+        border-left-width: 0;
     }
 }
+
+/* Arrow between subject and object for semantic annotations */
+.pnd-annotation-semantic .pnd-annotation-collapsed-caret {
+
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    top: 1px; // 50%;
+    left: 136px;
+    margin-top: 0; // -(@annotation-collapsed-header-height/2);
+
+    border-color: transparent;
+    border-style: solid;
+    border-right-color: @color-border-normal;
+    border-left-width: 0;
+    border-width: (@annotation-collapsed-header-height/2);
+
+
+    &:after {
+        content: " ";
+
+        position: absolute;
+        display: block;
+        width: 0;
+        height: 0;
+        right: -(@annotation-collapsed-header-height/2);
+        bottom: -(@annotation-collapsed-header-height/2)+1;
+
+        border-color: transparent;
+        border-style: solid;
+        border-width: (@annotation-collapsed-header-height/2) - 1;
+        border-right-color: @color-ultra-light;
+        border-left-width: 0;
+    }
+
+    /*position: absolute;
+    display: block;
+    left: 156px;
+    top: 1px;
+    width: 0;
+    height: 0;
+    border: 7px solid transparent;
+    border-bottom-color: @color-predicate;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: -7px;
+        top: 7px;
+        width: 0;
+        height: 0;
+        border: 7px solid transparent;
+        border-top-color: @color-predicate;
+    }*/
+}
+
 
 /* ------------------------------------ *\
    #EXPANDED-ANNOTATION
 \* ------------------------------------ */
 
 .pnd-annotation-expanded {
-    margin: 5px;
+    margin: 0 5px 4px 5px;
     overflow: hidden;
 
     background-color: @annotation-bg-color;
-    border: @annotation-border-size solid @annotation-expanded-border-color;
+    border: @annotation-border-size solid darken(@color-border-normal, 5%);
     box-shadow: @annotation-box-shadow;
     border-radius: @annotation-border-radius;
 
@@ -164,56 +219,10 @@
     cursor: pointer;
 }
 
-/* Metadata showed on top of the annotation */
-.pnd-annotation-details-meta {
-    margin: 10px 0 0 10px;
-    padding: 0 10px 10px 0;
-    border-bottom: @annotation-border-size solid @annotation-border-color;
-
-    /* User's real thumb (HTML img)
-     Currently hidden */
-    .pnd-annotation-user-thumb {
-        display: none;
-        float: left;
-        margin-right: 10px;
-        border-radius: 5px;
-    }
-
-    /* User's default thumb */
-    .pnd-annotation-user-thumb-default {
-        float: left;
-        width: 30px;
-        height: 30px;
-        margin-right: 10px;
-        /* Replaced by media query for retina */
-        background: transparent url('img/user-thumb-default.png') center center no-repeat;
-        border-radius: 5px;
-    }
-
-    .pnd-annotation-user-name {
-        display: block;
-        font-size: 12px;
-        font-weight: @font-weight-bold;
-        line-height: 1.3;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-
-    .pnd-annotation-metadata {
-        display: block;
-        font-size: 12px;
-        line-height: 1.3;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-}
-
 /* Annotation content */
 .pnd-annotation-details-data {
+
     /* The annotated fragment shown in the annotation details */
-    // .pnd-annotation-annotated-fragment, .pnd-annotation-annotated-literal {
     .pnd-annotation-annotated-fragment {
         display: block;
         padding: 10px;
@@ -223,12 +232,11 @@
         word-wrap: break-word;
 
         span {
-            background-color: @color-highlight; // @color-highlight-hover; // @color-highlight;
+            background-color: @color-highlight; // @color-highlight-hover;
         }
     }
 
     /* Comment annotations */
-
     /* The comment shown in the annotation details */
     .pnd-annotation-comment-text, .pnd-annotation-comment-text-edit {
         padding: 10px;
@@ -242,15 +250,6 @@
 
     .pnd-annotation-comment-text {
         max-height: @annotation-text-max-height;
-    }
-
-    .pnd-annotation-comment-text-edit {
-        max-height: 200px;
-    }
-
-    /* Editing of the comment */
-    .pnd-annotation-comment-text-edit {
-        padding: 10px;
     }
 
     /* The triangle caret between fragment and comment */
@@ -356,7 +355,8 @@
 
         /* The thumb */
         .pnd-annotation-entity-image {
-            display: block;
+            display: flex;
+            // align-items: center;
             float: left;
             margin: 0 6px 0 0;
             width: 40px; // TODO Create variable
@@ -371,6 +371,7 @@
             img {
                 max-width:100%;
                 max-height:100%;
+                margin: auto;
             }
         }
 
@@ -406,36 +407,272 @@
     }
 }
 
-/* Buttons at the bottom of the annotation */
-.pnd-annotation-details-buttons {
-    padding: 0 5px;
-    border-top: @annotation-border-size solid @annotation-border-color;
+/* Buttons to save or cancel comment edit */
+.pnd-annotation-comment-text-edit-buttons {
+    text-align: right;
+    height: 33px;
+    background-color: @color-background-light;
 
-    .pnd-annotation-details-footer {
-        text-align: right;
+    .pnd-btn {
+        margin-right: 7px;
+    }
+}
+
+
+/* ------------------------------------ *\
+   #METADATA
+\* ------------------------------------ */
+/* Metadata showed on top of the annotation */
+.pnd-annotation-details-meta {
+    margin: 10px 0 0 10px;
+    padding: 0 10px 10px 0;
+    border-bottom: @annotation-border-size solid @annotation-border-color;
+
+    /* There's the edit caret on the right.... more space needed */
+    &.pnd-annotation-details-meta-edit {
+        padding-right: 30px;
     }
 
-    button {
-        padding: 4px 5px 3px 5px;
-        background-color: transparent !important;
-        color: @color-dark-gray !important;
+    .pnd-annotation-user-name {
+        display: block;
+        overflow: hidden;
+        color: @color-text;
         font-size: 12px;
+        font-weight: @font-weight-bold;
+        line-height: 1.3;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 
-        &:hover {
-            background-color: transparent !important;
-            color: @color-brand;
+    .pnd-annotation-metadata, .pnd-annotation-edited {
+        display: block;
+        overflow: hidden;
+        color: @color-text-light;
+        font-size: 12px;
+        line-height: 1.3;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .pnd-annotation-edited {
+        color: @color-dark-gray;
+        clear: both;
+        // margin-top: 8px;
+        // padding-top: 5px;
+        // border-top: 1px solid @color-border-light;
+    }
+}
+
+
+/* ------------------------------------ *\
+   #USER-THUMB
+\* ------------------------------------ */
+/* User's real thumb (HTML img) */
+.pnd-annotation-user-thumb {
+    float: left;
+    margin-right: 10px;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+}
+
+/* User's default thumb */
+.pnd-annotation-user-thumb-default {
+    float: left;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    /* Replaced by media query for retina */
+    background: transparent url('img/user-thumb-default.png') center center no-repeat;
+    border-radius: 5px;
+}
+
+.pnd-annotation-reply .pnd-annotation-user-thumb {
+    width: 20px;
+    height: 20px;
+}
+
+.pnd-annotation-reply .pnd-annotation-user-thumb-default {
+    width: 20px;
+    height: 20px;
+    background-size: 20px 20px;
+}
+
+
+/* ------------------------------------ *\
+   #REPLIES
+\* ------------------------------------ */
+.pnd-annotation-reply {
+    position: relative;
+    padding: 10px 10px 10px 15px;
+    border-top: 1px solid @color-border-normal;
+
+    .pnd-annotation-user {
+        font-weight: @font-weight-bold;
+    }
+
+    .pnd-annotation-reply-content {
+        margin-left: 30px;
+        font-size: 12px;
+    }
+
+    .pnd-annotation-reply-footer {
+        height: 20px;
+        margin-top: 6px;
+        padding-top: 4px;
+        border-top: 1px solid @color-border-light;
+    }
+
+    .pnd-annotation-reply-date {
+        max-width: 48%;
+        overflow: hidden;
+        float: left;
+        // color: @color-dark-gray;
+        color: @color-text-light;
+        font-size: 12px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .pnd-annotation-social-buttons {
+        float: right;
+        clear: none;
+        height: 20px;
+        margin-top: -3px;
+        padding: 0;
+        border: 0;
+        line-height: 17px;
+    }
+}
+
+/* Text area and buttons for replying */
+.pnd-annotation-reply-textarea, .pnd-annotation-reply-text-edit {
+    max-height: @annotation-text-max-height;
+    padding: 10px;
+    border-top: 1px solid @color-border-normal;
+}
+
+/* Buttons to save or cancel comment edit */
+.pnd-annotation-reply-buttons {
+    text-align: right;
+    height: 33px;
+
+    .pnd-btn {
+        margin-right: 7px;
+    }
+}
+
+/* Displayed while loading replies */
+.pnd-annotation-loading-replies {
+    height: 70px;
+    border-top: 1px solid @color-border-normal;
+
+    p {
+        margin-top: 24px;
+        text-align: center;
+    }
+}
+
+/* When was a reply edited */
+.pnd-annotation-reply-edited {
+    clear: both;
+    margin-bottom: -4px;
+    // margin-top: 8px;
+    // padding-top: 5px;
+    // border-top: 1px solid @color-border-light;
+
+    span {
+        color: @color-dark-gray;
+    }
+}
+
+
+/* ------------------------------------ *\
+   #EDIT-TOGGLE
+\* ------------------------------------ */
+/* Toggles the dropdown for editing annotations and replies */
+.pnd-annotation-edit-toggle {
+    position: absolute;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    color: @color-dark-gray;
+
+    &:hover {
+        color: @color-text-link;
+    }
+}
+
+
+/* ------------------------------------ *\
+   #SOCIAL-BUTTONS
+\* ------------------------------------ */
+
+/* Generic style for social buttons in the annotation */
+.pnd-annotation-social-buttons {
+    clear: both;
+    height: @annotation-social-buttons-height;
+    padding-right: 8px;
+    // background-color: @color-background-medium;
+    border-top: 1px solid @color-border-normal;
+    color: @color-text-light;
+    font-size: 11px;
+    text-align: right;
+    line-height: @annotation-social-buttons-height;
+
+    button {
+        height: @annotation-social-buttons-height;
+        margin-left: 1px;
+        line-height: @annotation-social-buttons-height;
+
+        /* Middot */
+        &:not(:first-child):before {
+            content: '\b7';
+            margin-right: 1px;
+            color: fade(@color-text-light, 50%);
+            font-weight: @font-weight-normal;
+        }
+
+        &.pnd-annotation-details-social-activate {
+            font-weight: @font-weight-bold;
+
+            &.pnd-reply, &.pnd-like {
+                color: @color-text-link;
+            }
+
+            &.pnd-report, &.pnd-dislike {
+                color: @color-error;
+            }
+
+            &.pnd-endorse {
+                color: @color-green;
+            }
+        }
+
+        &:hover:not(.pnd-annotation-details-social-activate) {
+            color: @color-text-link;
+        }
+
+        span {
+            height: @annotation-social-buttons-height;
+            line-height: @annotation-social-buttons-height;
+            vertical-align: middle;
         }
     }
 }
 
-/* Buttons to save or cancel comment edit */
-.pnd-annotation-comment-text-edit-buttons {
-    text-align: right;
-    height: 40px; // TODO Create a variable!
-    padding-top: 7px;
+.pnd-annotation-collapsed .pnd-annotation-social-buttons {
+    button.pnd-annotation-details-social-zero {
+        color: fade(@color-text-light, 50%);
+        transition-property: color;
+        transition-duration: .3s;
+    }
+}
 
-    .pnd-btn {
-        margin-right: 7px;
+.pnd-annotation-collapsed:hover {
+    button.pnd-annotation-details-social-zero {
+        color: @color-text-light;
     }
 }
 
@@ -464,14 +701,15 @@ in the expanded annotation */
 @media only screen and (min-device-pixel-ratio: 2),
 only screen and (min-resolution: 192dpi) {
 
-    /* Metadata showed on top of the annotation */
-    .pnd-annotation-details-meta {
-
-        /* User's default thumb */
-        .pnd-annotation-user-thumb-default {
-            background: transparent url('img/user-thumb-default@2x.png') center center no-repeat;
-            background-size: 30px 30px;
-        }
+    /* User's default thumb */
+    .pnd-annotation-user-thumb-default {
+        background: transparent url('img/user-thumb-default@2x.png') center center no-repeat;
+        background-size: 30px 30px;
     }
 
+    .pnd-annotation-reply .pnd-annotation-user-thumb-default {
+        width: 20px;
+        height: 20px;
+        background-size: 20px 20px;
+    }
 }

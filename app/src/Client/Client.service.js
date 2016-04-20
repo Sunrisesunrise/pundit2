@@ -19,7 +19,7 @@ angular.module('Pundit2.Client')
     }
 })
 
-.service('Client', function(Config, $injector, $window) {
+.service('Client', function(Config, $injector) {
     if (Config.clientMode === 'lite') {
         return $injector.get('ClientLite');
     } else {
