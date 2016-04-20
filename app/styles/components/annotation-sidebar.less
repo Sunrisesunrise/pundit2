@@ -349,7 +349,7 @@
 
     .pnd-annotation-details-header {
         width: 10px;
-        height: 22px;
+        height: @annotation-collapsed-header-height; // 22px;
         margin-left: 2px;
         background-color: #FFF; // @annotation-bg-color;
         border: 1px solid @annotation-border-color;
@@ -359,7 +359,7 @@
         &:after {
             content: '';
             width: 6px;
-            height: 18px;
+            height: @annotation-collapsed-header-height - 4; // 18px;
             background: @color-highlight;
             display: block;
             margin: 1px;
