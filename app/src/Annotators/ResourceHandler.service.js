@@ -163,11 +163,11 @@ angular.module('Pundit2.Annotators')
         if (templateConfig.active) {
             if (typeof templateConfig.activeOnTextFragment !== 'undefined' && templateConfig.activeOnTextFragment === true) {
                 cMenuTypes.push(Config.modules.TextFragmentHandler.cMenuType);
-                ContextualMenu.addDivider({
-                    priority: 95,
-                    type: Config.modules.TextFragmentHandler.cMenuType
-                });
-
+                // TODO: fix priority order
+                // ContextualMenu.addDivider({
+                //     priority: 94,
+                //     type: Config.modules.TextFragmentHandler.cMenuType
+                // });
             }
             for (var i = 0; i < templateConfig.list.length; i++) {
                 if (templateConfig.list[i].types.indexOf('resource')) {
