@@ -203,6 +203,10 @@ angular.module('Pundit2.Annotators')
                                     predicateItem = ItemsExchange.getItemByUri(triple.predicate.uri);
                                     TripleComposer.addToPredicate(predicateItem);
                                 }
+
+                                if (item.type.indexOf(NameSpace.fragments.text) !== -1) {
+                                    EventDispatcher.sendEvent('ResounceHandler.addItemFromRapidAction', item);
+                                }
                             };
                         })(i)
                     });

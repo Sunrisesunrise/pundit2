@@ -606,7 +606,8 @@ angular.module('Pundit2.Annotators')
         EventDispatcher.addListeners([
             'PndPopover.addTemporarySelection',
             'TripleComposer.useAsObject',
-            'TripleComposer.useAsSubject'
+            'TripleComposer.useAsSubject',
+            'ResounceHandler.addItemFromRapidAction'
         ], function() {
             addTemporarySelection();
         });
