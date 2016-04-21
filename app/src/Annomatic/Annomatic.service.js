@@ -1454,6 +1454,11 @@ angular.module('Pundit2.Annomatic')
             addButton();
         }
 
+        // TODO: strange condition, but it seems it works: check it
+        if (scanBtn.$$nextSibling !== null) {
+            stopHandler();
+        }
+
         if (scanBtn !== null && lastUsedTarget !== currentTarget) {
             rects = currentTarget.getBoundingClientRect();
 
