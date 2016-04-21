@@ -1488,7 +1488,7 @@ angular.module('Pundit2.Annomatic')
         event.stopImmediatePropagation();
     }
 
-    function areaClick() {
+    function areaClick(force) {
         if (lastUsedTarget === null) {
             return;
         }
@@ -1511,7 +1511,7 @@ angular.module('Pundit2.Annomatic')
             return false;
         };
 
-        if (isToBeSkipped(lastUsedTarget)) {
+        if (isToBeSkipped(lastUsedTarget) && typeof force === 'undefined') {
             return;
         }
 
