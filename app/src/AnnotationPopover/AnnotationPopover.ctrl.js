@@ -3,12 +3,14 @@ angular.module('Pundit2.AnnotationPopover')
 // TODO: manage opening during loading
 .controller('AnnotationPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange, XpointersHelper, Item,
     NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, NameSpace, $timeout, $q) {
+    
+    var resourceItem = undefined;
 
     $scope.literalText = '';
     $scope.opacity = 1;
 
     $scope.selectedNotebookId = undefined;
-    $scope.selectedResourceId = 'undefined';
+    $scope.selectedResourceId = undefined;
     $scope.savingAnnotation = false;
     $scope.errorSaving = false;
     $scope.availableNotebooks = [];
@@ -24,23 +26,32 @@ angular.module('Pundit2.AnnotationPopover')
 
     $scope.showAutoComplete = false;
 
-    window.showAutoComplete = function() {
-        console.log($scope.selectedResourceId)
+    $scope.companiesData = AnnotationPopover.companiesData;
+    $scope.companiesSearchText = 'ciao';
+    $scope.handleCompaniesSearchTextChange = function(newValue) {
+        console.log('new value', newValue);
+    };
+
+    if (typeof $scope.companiesData.companies[0].value !== 'undefined') {
+        $scope.companiesData.companies.unshift({label: ' ', value: undefined});
     }
+
+    $scope.selectedResourceId = $scope.companiesData.companies[0].value;
 
     var lastSelectedNotebookId;
 
     var createResourceItemFromEntity = function(entity) {
+        console.log(entity)
         var values = {};
 
-        values.uri = 'http://entity.uri';
-        values.description = 'entity.description';
-        values.label = 'entity.uri';
+        values.uri = 'https://atoka.io/azienda/-/' + entity.id;
+        values.description = entity.web.description;
+        values.label = entity.name;
         values.type = values.type = [NameSpace.types.resource]; // TODO to be defined
         values.pageContext = XpointersHelper.getSafePageContext();
-        values.image = 'entity.imageUrl(?)';
-        // values.icon = true;
-        // values.elem = resourceElem;
+        values.image = entity.web.logo;
+        values[NameSpace.atoka.hasFullAddress] = entity.base.registeredAddress.fullAddress;
+        values[NameSpace.atoka.hasAteco] = entity.base.ateco[0].code + ': ' + entity.base.ateco[0].description;
 
         return new Item(values.uri, values);
     };
@@ -136,14 +147,13 @@ angular.module('Pundit2.AnnotationPopover')
                 scope: {
                     get: function() {
                         return {
-                            subject: azienda,
+                            subject: resourceItem,
                             predicate: '',
                             object: objectContent
                         };
                     }
                 }
             };
-
 
         var modelData = isComment ? ModelHelper.buildCommentData([currentStatement, entityStatement]) : ModelHelper.buildHigthLightData([currentStatement, entityStatement]),
             motivation = isComment ? 'commenting' : 'highlighting';
@@ -194,27 +204,10 @@ angular.module('Pundit2.AnnotationPopover')
     };
 
 
-    $scope.doAcceptResource = function(notebookName) {
-        console.log('ora');
-        // var deferred = $q.defer();
-
-        // NotebookCommunication.createNotebook(notebookName).then(function(notebookID) {
-        //     if (typeof notebookID !== 'undefined') {
-        //         lastSelectedNotebookId = notebookID;
-        //         updateAvailableNotebooks();
-        //         $scope.selectedNotebookId = lastSelectedNotebookId;
-        //         deferred.resolve({
-        //             label: notebookName,
-        //             title: notebookName,
-        //             value: notebookID
-        //         });
-        //     }
-        // }, function() {
-        //     // TODO: handle errors during noteebook save, maybe Alert System is enough ?
-        //     deferred.reject();
-        // });
-
-        // return deferred.promise;
+    $scope.doAcceptResource = function(resourceId) {
+        let resource = $scope.companiesData.companyData[resourceId].item;
+        resourceItem = createResourceItemFromEntity(resource);
+        console.log(createResourceItemFromEntity(resource));
     };
 
     $scope.focusOn = function(elementId) {
@@ -228,12 +221,6 @@ angular.module('Pundit2.AnnotationPopover')
     if ($scope.currentMode !== '') {
         $scope.setMode($scope.currentMode);
     }
-
-    $scope.companiesData = AnnotationPopover.companiesData;
-    $scope.companiesSearchText = '';
-    $scope.handleCompaniesSearchTextChange = function(newValue) {
-        console.log('new value', newValue);
-    };
 
     updateCurrentNotebook();
     updateAvailableNotebooks();
