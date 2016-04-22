@@ -1,4 +1,4 @@
-<div class="popover pnd-popover pnd-annotation-popover"
+<div class="popover pnd-popover pnd-annotation-popover pnd-annotation-popover-atoka"
      ng-class="{
      'pnd-annotation-popover-login': !isUserLogged,
      'pnd-annotation-popover-annotate': isSwitchMode,
@@ -35,6 +35,15 @@
          ng-show="!savingAnnotation && !errorSaving"
          ng-if="currentMode !== '' && isUserLogged">
 
+        <!-- Guidelines for the user -->
+        <p class="pnd-annotation-popover-guidelines"
+           ng-show="currentMode === 'comment'">
+            You are commenting the <strong>Atoka</strong> company:
+        </p>
+        <p class="pnd-annotation-popover-guidelines"
+           ng-show="currentMode != 'comment'">You are highlighting the <strong>Atoka</strong> company:
+        </p>
+
         <div class="company-selector">
 
             <label ng-show="companiesData.isLoading == true">
@@ -59,6 +68,30 @@
                 ng-change="handleCompaniesSearchTextChange(companiesSearchText)"
             />
         </div>
+
+        <!-- Company preview -->
+        <div class="company-preview">
+            <div class="company-main-info">
+                <div class="company-thumb">
+                    <img src="https://unsplash.it/70/50/?random" alt="">
+                </div>
+                <h1 class="company-name">
+                    <a href="http://https://u.atoka.io/azienda/eni-spa/0c7a7e7663ed/">
+                        Enogn Biotecnologie Articoli Attrezzature E Macchine Per Enologia Di Nanni G...
+                    </a>
+                </h1>
+            </div>
+
+            <div class="company-meta">
+                <span class="company-ateco"><span class="label">ATECO: </span>[46.11.01] Agenti e rappresentanti di materie prime agricole</span>
+                <span class="company-sede"><span class="label">Sede legale: </span>Contrada Feudo 36, 66011 Bucchianico (Chieti)</span>
+                <span class="company-link">
+                    <a href="http://https://u.atoka.io/azienda/eni-spa/0c7a7e7663ed/" target="_blank">View company in Atoka</a> ·
+                    <span>Select another company</span>
+                </span>
+            </div>
+        </div>
+        <!-- END // Company preview -->
 
         <div class="popover-content"
              ng-show="currentMode === 'comment'">
