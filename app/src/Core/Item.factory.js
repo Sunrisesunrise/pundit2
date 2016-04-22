@@ -440,7 +440,11 @@ angular.module('Pundit2.Core')
                 values.label = target[NameSpace.rdfs.label][0].value;
                 values.description = values.label;
 
-                // TODO: aggiungere ciclo
+                for (var key in NameSpace.atoka) {
+                    if (typeof target[NameSpace.atoka[key]] !== 'undefined') {
+                        values[key] = target[NameSpace.atoka[key]][0].value;
+                    }
+                }
                 break;
             case 'target':
                 if (typeof target[NameSpace.target.hasSelector] === 'undefined' ||

@@ -97,38 +97,6 @@
 
         </div>
 
-        <!-- Atoka company info -->
-        <div class="company-preview-wrapper">
-            <p>
-                This comment is related to the <strong>Atoka</strong> company:
-            </p>
-
-            <!-- Company preview -->
-            <div class="company-preview">
-                <div class="company-main-info">
-                    <div class="company-thumb">
-                        <img src="https://unsplash.it/70/50/?random" alt="">
-                    </div>
-                    <h1 class="company-name">
-                        <a href="http://https://u.atoka.io/azienda/eni-spa/0c7a7e7663ed/">
-                            Enogn Biotecnologie Articoli Attrezzature E Macchine Per Enologia Di Nanni G...
-                        </a>
-                    </h1>
-                </div>
-
-                <div class="company-meta">
-                    <span class="company-ateco"><span class="label">ATECO: </span>[46.11.01] Agenti e rappresentanti di materie prime agricole</span>
-                    <span class="company-sede"><span class="label">Sede legale: </span>Contrada Feudo 36, 66011 Bucchianico (Chieti)</span>
-                <span class="company-link">
-                    <a href="http://https://u.atoka.io/azienda/eni-spa/0c7a7e7663ed/" target="_blank">View company in Atoka</a> ·
-                    <span>Select another company</span>
-                </span>
-                </div>
-            </div>
-            <!-- END // Company preview -->
-        </div>
-        <!-- END // Atoka company info -->
-
         <!-- Annotation data -->
         <div class="pnd-annotation-details-data">
 
@@ -137,6 +105,44 @@
                         annotation.mainItem.typeLabel != 'resource'"
                  ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment'}">
                 <span>{{annotation.mainItem.description}}</span>
+            </div>
+
+            <!-- Atoka company info -->
+            <div class="company-preview-wrapper">
+                <p>
+                    This comment is related to the <strong>Atoka</strong> company:
+                </p>
+
+                <!-- Company preview -->
+                <div class="company-preview">
+                    <div class="company-main-info">
+                        <div class="company-thumb">
+                            <img src="https://unsplash.it/70/50/?random" alt="">
+                        </div>
+                        <h1 class="company-name">
+                            <a href="{{ annotation.mainItem.uri }}">
+                                {{ annotation.mainItem.description }}
+                            </a>
+                        </h1>
+                    </div>
+
+                    <div class="company-meta">
+                        <span class="company-ateco"><span class="label">ATECO: </span> {{ annotation.mainItem.hasAteco }}</span>
+                        <span class="company-sede"><span class="label">Sede legale: </span>{{ annotation.mainItem.hasFullAddress }}</span>
+                    <span class="company-link">
+                        <a href="{{ annotation.mainItem.uri }}" target="_blank">View company in Atoka</a> ·
+                        <!-- <span>Select another company</span> -->
+                    </span>
+                    </div>
+                </div>
+                <!-- END // Company preview -->
+            </div>
+            <!-- END // Atoka company info -->
+
+            <!-- Text ent -->
+            <div ng-if="annotation.textItem"
+                 class="pnd-annotation-annotated-fragment">
+                <span>{{annotation.textItem.description}}</span>
             </div>
 
             <!-- Annotated web page -->
@@ -153,17 +159,15 @@
             </div>
 
             <!-- Annotated resource (i.e. Europeana Sounds CHO) -->
-            <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
+            <!-- <div class="pnd-annotation-details-subject pnd-annotation-entity-details"
                  ng-if="annotation.mainItem.typeLabel == 'resource'">
-                <!-- Label -->
                 <span class="pnd-annotation-entity-label">
                     {{ annotation.mainItem.description }}
                 </span>
-                <!-- Type -->
                 <span class="pnd-annotation-entity-type pnd-type">
                     {{ annotation.mainItem.typeLabel }}
                 </span>
-            </div>
+            </div> -->
 
             <div class="pnd-annotation-comment-caret"></div>
 
