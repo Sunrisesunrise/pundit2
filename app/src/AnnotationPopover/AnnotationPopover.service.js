@@ -269,6 +269,10 @@ angular.module('Pundit2.AnnotationPopover')
                 return false;
             });
 
+        if (companies.length === 0) {
+            return [];
+        }
+
         companies.sort(function(a, b) {
             return a.id - b.id;
         });
