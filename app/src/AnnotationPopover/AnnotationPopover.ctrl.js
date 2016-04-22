@@ -215,6 +215,17 @@ angular.module('Pundit2.AnnotationPopover')
         return deferred.promise;
     };
 
+    
+    $scope.getDetailsForItem = function(item) {
+        $.ajax({
+            type: 'GET',
+            url: 'https://api-u.spaziodati.eu/v2/companies/' + item.id + '?token=h-936813c74be545cf9072d8ce078affff&packages=base,web',
+        }).then(function(companyData) {
+            console.log('company detail .. TODO', companyData);
+            AnnotationPopover.companiesData.companyData[companyData.item.id] = companyData;
+            resourceItem = createResourceItemFromEntity(companyData.item)
+        });
+    };
 
     $scope.doAcceptResource = function(resourceId) {
         var resource = $scope.companiesData.companyData[resourceId].item;

@@ -72,9 +72,9 @@
                     ng-model-options="{debounce: 1000}"
                     ng-change="handleCompaniesSearchTextChange(companiesSearchText)"/>
 
-                <div  class="company-selector-autocomplete" ng-if="autoCompleteItems.length > 0">
+                <div class="company-selector-autocomplete" ng-if="autoCompleteItems.length > 0">
                     <ul>
-                        <li ng-repeat="item in autoCompleteItems" ng-click="doAcceptResource()">
+                        <li ng-repeat="item in autoCompleteItems" ng-click="getDetailsForItem(item)">
                             {{item.name}}
                         </li>
                     </ul>
