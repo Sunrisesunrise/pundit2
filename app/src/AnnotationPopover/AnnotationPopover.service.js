@@ -257,7 +257,7 @@ angular.module('Pundit2.AnnotationPopover')
     };
 
     function getCompaniesFromAnnotations(annotations) {
-        return annotations
+        var companies = annotations
             .filter(function(item) {
                 if (item.sameAs != null) {
                     if (item.sameAs.atokaUri != null) {
@@ -266,6 +266,21 @@ angular.module('Pundit2.AnnotationPopover')
                 }
                 return false;
             });
+
+        companies.sort(function(a, b) {
+            return a.id - b.id;
+        });
+
+        var ret = [companies[0]],
+            last = companies[0];
+        for (var len=companies.length, i=1; i<len; i++) {
+            if (companies[i].id !== last.id) {
+                ret.push(companies[i]);
+                last = companies[i];
+            }
+        }
+
+        return ret;
     }
 
     function getAtokaIdFromCompany(company) {
