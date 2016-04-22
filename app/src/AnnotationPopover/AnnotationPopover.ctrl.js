@@ -217,7 +217,7 @@ angular.module('Pundit2.AnnotationPopover')
 
 
     $scope.doAcceptResource = function(resourceId) {
-        let resource = $scope.companiesData.companyData[resourceId].item;
+        var resource = $scope.companiesData.companyData[resourceId].item;
         resourceItem = createResourceItemFromEntity(resource);
         console.log(createResourceItemFromEntity(resource));
     };
