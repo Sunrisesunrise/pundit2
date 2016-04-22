@@ -85,6 +85,33 @@
     }
 }
 
+/* Autocomplete */
+.company-selector-autocomplete {
+    position: absolute;
+    max-height: 190px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    background: #FFF;
+    border: 1px solid @color-border-normal;
+    width: 297px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, .1);
+
+    ul {
+        li {
+            padding: 2px 4px;
+            border-bottom: 1px solid @color-border-light;
+            text-transform: capitalize;
+            cursor: pointer;
+
+            &:hover {
+                background-color: @color-dropdown-bg-hover;;
+            }
+        }
+    }
+}
+
 
 /* ------------------------------------ *\
   #ANNOTATIONS-SIDEBAR

@@ -51,7 +51,8 @@
             </label>
 
             <label ng-show="companiesData.isLoading == false">
-                Select a company:
+
+                <p class="label">Select a company:</p>
                 <pnd-select
                     options="companiesData.companies"
                     ng-if="!showAutoComplete"
@@ -63,13 +64,15 @@
                     expanded="false"></pnd-select>
 
                 <input
+                    class="form-control"
+                    placeholder="Search any Company in Atoka"
                     type="text"
                     ng-if="showAutoComplete"
                     ng-model="companiesSearchText"
                     ng-model-options="{debounce: 1000}"
                     ng-change="handleCompaniesSearchTextChange(companiesSearchText)"/>
 
-                <div ng-if="autoCompleteItems.length > 0">
+                <div  class="company-selector-autocomplete" ng-if="autoCompleteItems.length > 0">
                     <ul>
                         <li ng-repeat="item in autoCompleteItems" ng-click="doAcceptResource()">
                             {{item.name}}
