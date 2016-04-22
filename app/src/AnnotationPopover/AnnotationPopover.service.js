@@ -304,7 +304,7 @@ angular.module('Pundit2.AnnotationPopover')
             console.log('ask about', atokaIds[i]);
             $.ajax({
                 type: 'GET',
-                url: 'https://api-u.spaziodati.eu/v2/companies/' + atokaIds[i] + '?token=h-936813c74be545cf9072d8ce078affff&packages=base',
+                url: 'https://api-u.spaziodati.eu/v2/companies/' + atokaIds[i] + '?token=h-936813c74be545cf9072d8ce078affff&packages=base,web',
             }).then(function(companyData) {
                 console.log('company detail', companyData);
                 annotationPopover.companiesData.companyData[companyData.item.id] = companyData;
