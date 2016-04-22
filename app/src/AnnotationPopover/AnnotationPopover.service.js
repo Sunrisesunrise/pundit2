@@ -271,7 +271,7 @@ angular.module('Pundit2.AnnotationPopover')
     function getLabelsFromCompanies(companies) {
         return companies
             .map(function(company) {
-                return {label: company.title};
+                return {label: company.title, value: company.id};
             });
     }
 

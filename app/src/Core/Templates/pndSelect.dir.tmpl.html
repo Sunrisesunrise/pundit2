@@ -31,7 +31,7 @@
             <div class="divider"></div>
 
             <div class="option custom-action"
-                 ng-if="optionAction"
+                 ng-if="optionAction || showForToggle"
                  data-value="{{optionAction.value}}"
                  ng-click="showAction()">
                 {{optionAction.label}}

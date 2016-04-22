@@ -12,7 +12,8 @@ angular.module('Pundit2.Core')
             deferredAction: '=deferredAction',
             labelAction: '=labelAction',
             titleAction: '=titleAction',
-            placeholderAction: '=placeholderAction'
+            placeholderAction: '=placeholderAction',
+            actionToggleBind: '=actionToggleBind'
         },
         templateUrl: 'src/Core/Templates/pndSelect.dir.tmpl.html',
         link: function(scope, element) {
@@ -23,6 +24,8 @@ angular.module('Pundit2.Core')
 
             scope.optionAction = false;
             scope.moveTop = false;
+
+            scope.showForToggle = typeof scope.actionToggleBind !== 'undefined';
 
             //if (typeof scope.optionsVisible === 'undefined') {
             //    scope.optionsVisible = 4;
@@ -37,9 +40,10 @@ angular.module('Pundit2.Core')
                 return;
             }
 
-            if (typeof scope.deferredAction === 'function') {
+            if (typeof scope.deferredAction === 'function' || scope.showForToggle) {
                 var label = scope.labelAction ? scope.labelAction : 'Default action',
                     title = scope.titleAction ? scope.titleAction : 'Default title';
+                    
                 scope.optionAction = {
                     label: label,
                     title: title,
@@ -136,6 +140,12 @@ angular.module('Pundit2.Core')
             };
 
             scope.showAction = function() {
+                if (typeof scope.actionToggleBind !== 'undefined') {
+                    scope.actionToggleBind = true;
+                    scope.expanded = false;
+                    return;
+                }
+
                 scope.expanded = false;
 
                 // Reset optionsContainer status

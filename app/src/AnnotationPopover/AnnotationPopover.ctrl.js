@@ -1,13 +1,14 @@
 angular.module('Pundit2.AnnotationPopover')
 
 // TODO: manage opening during loading
-.controller('AnnotationPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange,
-    NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, $timeout, $q) {
+.controller('AnnotationPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange, XpointersHelper, Item,
+    NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, NameSpace, $timeout, $q) {
 
     $scope.literalText = '';
     $scope.opacity = 1;
 
     $scope.selectedNotebookId = undefined;
+    $scope.selectedResourceId = 'undefined';
     $scope.savingAnnotation = false;
     $scope.errorSaving = false;
     $scope.availableNotebooks = [];
@@ -21,7 +22,29 @@ angular.module('Pundit2.AnnotationPopover')
     $scope.message = 'Login to Pundit to create new annotations!';
     $scope.tooltip = false;
 
+    $scope.showAutoComplete = false;
+
+    window.showAutoComplete = function() {
+        console.log($scope.selectedResourceId)
+    }
+
     var lastSelectedNotebookId;
+
+    var createResourceItemFromEntity = function(entity) {
+        var values = {};
+
+        values.uri = 'http://entity.uri';
+        values.description = 'entity.description';
+        values.label = 'entity.uri';
+        values.type = values.type = [NameSpace.types.resource]; // TODO to be defined
+        values.pageContext = XpointersHelper.getSafePageContext();
+        values.image = 'entity.imageUrl(?)';
+        // values.icon = true;
+        // values.elem = resourceElem;
+
+        return new Item(values.uri, values);
+    };
+
 
     var updateAvailableNotebooks = function() {
         $scope.availableNotebooks = [];
@@ -64,8 +87,8 @@ angular.module('Pundit2.AnnotationPopover')
                 $scope.isCommentMode = $scope.isUserLogged;
                 $scope.message = 'Login to Pundit to use social events';
                 break;
-            //if (mode!== 'comment' && mode!=='highlight' && mode!= 'alert')
-            //mode = type of social in tooltip mode
+                //if (mode!== 'comment' && mode!=='highlight' && mode!= 'alert')
+                //mode = type of social in tooltip mode
             default:
                 $scope.isCommentMode = false;
                 $scope.isSwitchMode = false;
@@ -108,9 +131,21 @@ angular.module('Pundit2.AnnotationPopover')
                         };
                     }
                 }
+            },
+            entityStatement = {
+                scope: {
+                    get: function() {
+                        return {
+                            subject: azienda,
+                            predicate: '',
+                            object: objectContent
+                        };
+                    }
+                }
             };
 
-        var modelData = isComment ? ModelHelper.buildCommentData(currentStatement) : ModelHelper.buildHigthLightData(currentStatement),
+
+        var modelData = isComment ? ModelHelper.buildCommentData([currentStatement, entityStatement]) : ModelHelper.buildHigthLightData([currentStatement, entityStatement]),
             motivation = isComment ? 'commenting' : 'highlighting';
 
         var httpPromise = AnnotationsCommunication.saveAnnotation(
@@ -158,8 +193,32 @@ angular.module('Pundit2.AnnotationPopover')
         return deferred.promise;
     };
 
+
+    $scope.doAcceptResource = function(notebookName) {
+        console.log('ora');
+        // var deferred = $q.defer();
+
+        // NotebookCommunication.createNotebook(notebookName).then(function(notebookID) {
+        //     if (typeof notebookID !== 'undefined') {
+        //         lastSelectedNotebookId = notebookID;
+        //         updateAvailableNotebooks();
+        //         $scope.selectedNotebookId = lastSelectedNotebookId;
+        //         deferred.resolve({
+        //             label: notebookName,
+        //             title: notebookName,
+        //             value: notebookID
+        //         });
+        //     }
+        // }, function() {
+        //     // TODO: handle errors during noteebook save, maybe Alert System is enough ?
+        //     deferred.reject();
+        // });
+
+        // return deferred.promise;
+    };
+
     $scope.focusOn = function(elementId) {
-        if($scope.currentMode === 'comment' || $scope.currentMode === 'highlight'){
+        if ($scope.currentMode === 'comment' || $scope.currentMode === 'highlight') {
             setTimeout(function() {
                 angular.element('.pnd-annotation-popover #' + elementId)[0].focus();
             }, 10);
@@ -169,15 +228,12 @@ angular.module('Pundit2.AnnotationPopover')
     if ($scope.currentMode !== '') {
         $scope.setMode($scope.currentMode);
     }
-    
+
     $scope.companiesData = AnnotationPopover.companiesData;
     $scope.companiesSearchText = 'ciao';
     $scope.handleCompaniesSearchTextChange = function(newValue) {
         console.log('new value', newValue);
     };
-    
-    
-    
 
     updateCurrentNotebook();
     updateAvailableNotebooks();

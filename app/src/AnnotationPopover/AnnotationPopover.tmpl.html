@@ -54,19 +54,22 @@
                 Select a company:
                 <pnd-select
                     options="companiesData.companies"
-                    selected-value="companiesData.companies[0]"
-                    deferred-action="doCreateNewNotebook"
-                    label-action="'Select something'"
+                    ng-if="!showAutoComplete"
+                    selected-value="$parent.selectedResourceId"
+                    action-toggle-bind="$parent.showAutoComplete"
+                    label-action="'Search more'"
                     placeholder-action="'Type something'"
                     expanded="false"></pnd-select>
-            </label>
 
-            <input
-                type="text"
-                ng-model="companiesSearchText"
-                ng-model-options="{debounce: 1000}"
-                ng-change="handleCompaniesSearchTextChange(companiesSearchText)"
-            />
+                <input
+                    type="text"
+                    ng-if="showAutoComplete"
+                    ng-model="companiesSearchText"
+                    ng-model-options="{debounce: 1000}"
+                    ng-change="handleCompaniesSearchTextChange(companiesSearchText)"/>
+
+                <button ng-if="showAutoComplete" ng-click="$parent.showAutoComplete = false">reset</button>
+            </label>
         </div>
 
         <!-- Company preview -->
