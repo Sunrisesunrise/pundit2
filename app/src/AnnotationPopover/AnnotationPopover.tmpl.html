@@ -35,6 +35,37 @@
          ng-show="!savingAnnotation && !errorSaving"
          ng-if="currentMode !== '' && isUserLogged">
 
+        <!-- Company selector -->
+        <div class="company-selector">
+
+            <label ng-show="companiesData.isLoading == true">
+                Loading suggested companies
+            </label>
+
+            <label ng-show="companiesData.isLoading == false">
+                <p class="label">Select a company from <strong>Atoka</strong>:</p>
+                <pnd-select
+                    options="companiesData.companies"
+                    ng-if="!showAutoComplete"
+                    selected-value="$parent.$parent.selectedResourceId"
+                    action-toggle-bind="$parent.$parent.showAutoComplete"
+                    label-action="'Search more'"
+                    placeholder-action="'Type something'"
+                    expanded="false"></pnd-select>
+
+                <input class="form-control"
+                    type="text"
+                    placeholder="Search among all Atoka companies"
+                    ng-if="showAutoComplete"
+                    ng-model="companiesSearchText"
+                    ng-model-options="{debounce: 1000}"
+                    ng-change="handleCompaniesSearchTextChange(companiesSearchText)"/>
+
+                <button class="pnd-btn pnd-btn-transparent" ng-if="showAutoComplete" ng-click="$parent.$parent.showAutoComplete = false">Reset</button>
+            </label>
+        </div>
+        <!-- END // Company selector -->
+
         <!-- Guidelines for the user -->
         <p class="pnd-annotation-popover-guidelines"
            ng-show="currentMode === 'comment'">
@@ -43,34 +74,6 @@
         <p class="pnd-annotation-popover-guidelines"
            ng-show="currentMode != 'comment'">You are highlighting the <strong>Atoka</strong> company:
         </p>
-
-        <div class="company-selector">
-
-            <label ng-show="companiesData.isLoading == true">
-                Loading suggested companies
-            </label>
-
-            <label ng-show="companiesData.isLoading == false">
-                Select a company:
-                <pnd-select
-                    options="companiesData.companies"
-                    ng-if="!showAutoComplete"
-                    selected-value="$parent.selectedResourceId"
-                    action-toggle-bind="$parent.showAutoComplete"
-                    label-action="'Search more'"
-                    placeholder-action="'Type something'"
-                    expanded="false"></pnd-select>
-
-                <input
-                    type="text"
-                    ng-if="showAutoComplete"
-                    ng-model="companiesSearchText"
-                    ng-model-options="{debounce: 1000}"
-                    ng-change="handleCompaniesSearchTextChange(companiesSearchText)"/>
-
-                <button ng-if="showAutoComplete" ng-click="$parent.showAutoComplete = false">reset</button>
-            </label>
-        </div>
 
         <!-- Company preview -->
         <div class="company-preview">

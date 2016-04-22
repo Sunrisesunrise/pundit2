@@ -230,7 +230,7 @@ angular.module('Pundit2.AnnotationPopover')
     }
 
     $scope.companiesData = AnnotationPopover.companiesData;
-    $scope.companiesSearchText = 'ciao';
+    $scope.companiesSearchText = '';
     $scope.handleCompaniesSearchTextChange = function(newValue) {
         console.log('new value', newValue);
     };
