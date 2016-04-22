@@ -439,6 +439,8 @@ angular.module('Pundit2.Core')
             case NameSpace.types.resource: //Resource.
                 values.label = target[NameSpace.rdfs.label][0].value;
                 values.description = values.label;
+
+                // TODO: aggiungere ciclo
                 break;
             case 'target':
                 if (typeof target[NameSpace.target.hasSelector] === 'undefined' ||

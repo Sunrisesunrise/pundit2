@@ -22,6 +22,7 @@
             <div class="option"
                  title="{{option.title}}"
                  data-value="{{option.value}}"
+                 ng-if="option.value"
                  ng-repeat="option in optionList"
                  ng-click="selectOption(option)"
                  ng-class="{'selected': isOptionSelected(option), 'custom-action': option.isAction}">

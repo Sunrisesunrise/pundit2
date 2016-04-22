@@ -9,6 +9,7 @@ angular.module('Pundit2.Core')
             optionSelectedValue: '=selectedValue',
             optionsVisible: '=optionsVisible',
             expanded: '=expanded',
+            action: '=action',
             deferredAction: '=deferredAction',
             labelAction: '=labelAction',
             titleAction: '=titleAction',
@@ -43,7 +44,7 @@ angular.module('Pundit2.Core')
             if (typeof scope.deferredAction === 'function' || scope.showForToggle) {
                 var label = scope.labelAction ? scope.labelAction : 'Default action',
                     title = scope.titleAction ? scope.titleAction : 'Default title';
-                    
+
                 scope.optionAction = {
                     label: label,
                     title: title,
@@ -111,7 +112,7 @@ angular.module('Pundit2.Core')
                 }
 
                 var optionsHeight = optionsContainer.height();
-                var pageVisibleBottom = $window.scrollY +  $window.innerHeight;
+                var pageVisibleBottom = $window.scrollY + $window.innerHeight;
                 var optionsY = optionsContainer.offset().top;
                 scope.moveTop = (optionsY + optionsHeight) > pageVisibleBottom;
 
@@ -133,8 +134,7 @@ angular.module('Pundit2.Core')
             scope.toggleExpand = function() {
                 if (scope.expanded) {
                     scope.collapse();
-                }
-                else {
+                } else {
                     scope.expand();
                 }
             };
@@ -163,6 +163,10 @@ angular.module('Pundit2.Core')
             scope.selectOption = function(option) {
                 scope.optionSelected = option;
                 scope.optionSelectedValue = option.value;
+
+                if (typeof scope.action === 'function') {
+                    scope.action(option.value);
+                }
 
                 if (scope.expanded) {
                     scope.collapse();

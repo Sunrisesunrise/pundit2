@@ -25,7 +25,8 @@ angular.module('Pundit2.Core')
 
     ns.atoka = {};
     ns.atoka.hasOffice = _atoka + 'office';
-    ns.atoka.hasImage = _atoka + 'image';
+    ns.atoka.hasFullAddress = _atoka + 'fullAddress';
+    ns.atoka.hasFullAddress = _atoka + 'fullAddress';
 
     // RDF namespace uris
     ns.rdf = {};
