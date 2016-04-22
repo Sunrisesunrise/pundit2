@@ -111,7 +111,8 @@
 \* ------------------------------------ */
 
 .pnd-inner-scrollable {
-    overflow-y: auto;
+    overflow-y: auto !important; // CSS conflicts
+    overflow-x: hidden !important; // CSS conflicts
 
     &.pnd-inner-no-tabs {
         margin: 0;
