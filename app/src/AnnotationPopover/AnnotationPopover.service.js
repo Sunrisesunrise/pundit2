@@ -261,7 +261,9 @@ angular.module('Pundit2.AnnotationPopover')
             .filter(function(item) {
                 if (item.sameAs != null) {
                     if (item.sameAs.atokaUri != null) {
-                        return true;
+                        if (item.sameAs.atokaUri.match(/people$/) === null) {
+                            return true;
+                        }
                     }
                 }
                 return false;
@@ -312,7 +314,7 @@ angular.module('Pundit2.AnnotationPopover')
         type: 'POST',
         data: {
             include: 'image,types,categories,abstract,sameAs',
-            text: angular.element('body').text()
+            url: window.location.href
         }
     }).then(function(data) {
         var companies = getCompaniesFromAnnotations(data.annotations);
