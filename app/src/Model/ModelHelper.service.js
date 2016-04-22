@@ -91,11 +91,11 @@ angular.module('Pundit2.Model')
             'datatype': 'http://www.w3.org/2001/XMLSchema#string',
             'value': 'text/plain'
         }];
-         //blanknode[NameSpace.dce.language] = [{
-         //    'type': 'literal',
-         //    'datatype': 'http://www.w3.org/2001/XMLSchema#string',
-         //    'value': 'it'
-         //}];
+        //blanknode[NameSpace.dce.language] = [{
+        //    'type': 'literal',
+        //    'datatype': 'http://www.w3.org/2001/XMLSchema#string',
+        //    'value': 'it'
+        //}];
         blanknode[NameSpace.rdf.value] = [{
             'type': 'literal',
             'datatype': 'http://www.w3.org/2001/XMLSchema#string',
@@ -199,7 +199,7 @@ angular.module('Pundit2.Model')
                     uris = {
                         target: statementPart.uri
                     };
-                } else{
+                } else {
                     uris = targetURIs(statementPart.getXPointer());
                 }
 
@@ -251,6 +251,15 @@ angular.module('Pundit2.Model')
                                 'value': NameSpace.target.CHO,
                                 'type': 'uri'
                             });
+
+                            for (var key in NameSpace.atoka) {
+                                if (typeof statementPart[key] !== 'undefined') {
+                                    target[NameSpace.atoka[key]] = ({
+                                        'value': statementPart[key],
+                                        'type': 'uri'
+                                    });
+                                }
+                            }
                         }
 
                         if (statementPart.isAnnotation()) {
@@ -419,10 +428,10 @@ angular.module('Pundit2.Model')
             'type': {}
         };
 
-        statements.forEach(function(el) {
-            addGraphElem(el, res.graph);
-            addItemElem(el, res.items, res.type);
-            addTargetElem(el, res.target, res.flatTargets, res.type);
+        statements.forEach(function(statement) {
+            addGraphElem(statement, res.graph);
+            addItemElem(statement, res.items, res.type);
+            addTargetElem(statement, res.target, res.flatTargets, res.type);
         });
 
         // TODO: skip completely target build if we're in v1 mode
@@ -433,9 +442,7 @@ angular.module('Pundit2.Model')
         return res;
     };
 
-    modelHelper.buildCommentData = function(statement) {
-        error = false;
-        errorMessage = '';
+    modelHelper.buildCommentData = function(statements) {
         var res = {
             'graph': {},
             'items': {},
@@ -444,15 +451,25 @@ angular.module('Pundit2.Model')
             'type': {}
         };
 
-        addBlankNode(statement, res.graph, res.type);
-        addTargetElem(statement, res.target, res.flatTargets, res.type);
+        error = false;
+        errorMessage = '';
+
+        if (!angular.isArray(statements)) {
+            statements = [statements];
+        }
+
+        // TODO: let temporary assume that the first statement is the comment
+        addBlankNode(statements[0], res.graph, res.type);
+
+        statements.forEach(function(statement) {
+            addTargetElem(statement, res.target, res.flatTargets, res.type);
+        });
+
 
         return res;
     };
 
-    modelHelper.buildHigthLightData = function(statement) {
-        error = false;
-        errorMessage = '';
+    modelHelper.buildHigthLightData = function(statements) {
         var res = {
             'graph': {},
             'items': {},
@@ -461,7 +478,16 @@ angular.module('Pundit2.Model')
             'type': {}
         };
 
-        addTargetElem(statement, res.target, res.flatTargets, res.type);
+        error = false;
+        errorMessage = '';
+
+        if (!angular.isArray(statements)) {
+            statements = [statements];
+        }
+
+        statements.forEach(function(statement) {
+            addTargetElem(statement, res.target, res.flatTargets, res.type);
+        });
 
         return res;
     };

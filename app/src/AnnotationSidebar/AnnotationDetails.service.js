@@ -1018,7 +1018,19 @@ angular.module('Pundit2.AnnotationSidebar')
         var buildCommentOrHighlight = function(motivation) {
             var firstTargetUri = currentAnnotation.hasTarget[0],
                 firstItem = currentAnnotation.items[firstTargetUri],
-                currentGraph = '';
+                currentGraph = '',
+                isMultiTarget = false,
+                textItemUri;
+
+            if (currentAnnotation.hasTarget.length > 1) {
+                if (currentAnnotation.items[firstTargetUri].type.indexOf(NameSpace.types.resource) === -1) {
+                    firstTargetUri = currentAnnotation.hasTarget[1];
+                    textItemUri = currentAnnotation.hasTarget[0];
+                } else {
+                    textItemUri = currentAnnotation.hasTarget[1];
+                }
+                isMultiTarget = true;
+            }
 
             if (typeof(state.annotations[currentId]) === 'undefined') {
                 state.annotations[currentId] = {
@@ -1032,6 +1044,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     thumbnail: currentAnnotation.thumbnail,
                     scopeReference: scope,
                     mainItem: buildItemDetails(firstTargetUri),
+                    textItem: isMultiTarget ? buildItemDetails(textItemUri) : undefined,
                     itemsArray: [firstItem],
                     itemsUriArray: [firstTargetUri],
                     broken: isBroken,
