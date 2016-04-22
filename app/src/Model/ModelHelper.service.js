@@ -253,11 +253,11 @@ angular.module('Pundit2.Model')
                             });
 
                             for (var key in NameSpace.atoka) {
-                                if (typeof statementPart[key] !== 'undefined') {
-                                    target[NameSpace.atoka[key]] = ({
-                                        'value': statementPart[key],
-                                        'type': 'uri'
-                                    });
+                                if (typeof statementPart[NameSpace.atoka[key]] !== 'undefined') {
+                                    target[NameSpace.atoka[key]] = [{
+                                        'value': statementPart[NameSpace.atoka[key]],
+                                        'type': 'literal'
+                                    }];
                                 }
                             }
                         }
