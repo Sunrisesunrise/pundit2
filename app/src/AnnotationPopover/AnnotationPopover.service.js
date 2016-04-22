@@ -297,7 +297,7 @@ angular.module('Pundit2.AnnotationPopover')
         type: 'POST',
         data: {
             include: 'image,types,categories,abstract,sameAs',
-            text: $('body').text()
+            text: angular.element('body').text()
         }
     }).then(function(data) {
         var companies = getCompaniesFromAnnotations(data.annotations);

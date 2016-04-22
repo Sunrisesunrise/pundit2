@@ -9,6 +9,8 @@ angular.module('Pundit2.AnnotationPopover')
     $scope.literalText = '';
     $scope.opacity = 1;
 
+    $scope.autoCompleteItems = [];
+
     $scope.selectedNotebookId = undefined;
     $scope.selectedResourceId = undefined;
     $scope.savingAnnotation = false;
@@ -27,9 +29,19 @@ angular.module('Pundit2.AnnotationPopover')
     $scope.showAutoComplete = false;
 
     $scope.companiesData = AnnotationPopover.companiesData;
-    $scope.companiesSearchText = 'ciao';
+    $scope.companiesSearchText = '';
     $scope.handleCompaniesSearchTextChange = function(newValue) {
-        console.log('new value', newValue);
+        $.ajax({
+            url: 'https://api-u.spaziodati.eu/v2/companies?token=h-936813c74be545cf9072d8ce078affff',
+            type: 'POST',
+            data: {
+                name: newValue,
+                packages: 'base',
+                limit: 20
+            }
+        }).then(function(data) {
+            $scope.autoCompleteItems = data.items;
+        });
     };
 
     if (typeof $scope.companiesData.companies[0].value !== 'undefined') {
