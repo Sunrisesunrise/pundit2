@@ -256,6 +256,34 @@ angular.module('Pundit2.AnnotationPopover')
         }
     };
 
+    function getCompaniesFromAnnotations(annotations) {
+        return annotations
+            .filter(function(item) {
+                if (item.sameAs != null) {
+                    if (item.sameAs.atokaUri != null) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+    }
+
+    function getLabelsFromCompanies(companies) {
+        return companies
+            .map(function(company) {
+                return {label: company.title};
+            });
+    }
+
+    function getAtokaIdsFromCompanies(companies) {
+        return companies.
+            map(function(company) {
+                var uri = company.sameAs.atokaUri,
+                    lastSlash = uri.lastIndexOf('/');
+
+                return uri.substr(lastSlash + 1, uri.length);
+            });
+    }
 
     annotationPopover.companiesData.isLoading = true;
     $.ajax({
@@ -266,25 +294,27 @@ angular.module('Pundit2.AnnotationPopover')
             text: $('.pundit-content').text()
         }
     }).then(function(data) {
-        var companies = data.annotations
-            .filter(function(item) {
-                if (item.sameAs != null) {
-                    if (item.sameAs.atokaUri != null) {
-                        return true;
-                    }
-                }
-                return false;
-            });
+        var companies = getCompaniesFromAnnotations(data.annotations);
+        var labels = getLabelsFromCompanies(companies);
+        var atokaIds = getAtokaIdsFromCompanies(companies);
 
-        var labels = companies
-            .map(function(company) {
-                return {label: company.title};
+        annotationPopover.companiesData.companyData = {};
+
+        for (var len = atokaIds.length, i=0; i<len; i++) {
+            console.log('ask about', atokaIds[i]);
+            $.ajax({
+                type: 'GET',
+                url: 'https://api-u.spaziodati.eu/v2/companies/' + atokaIds[i] + '?token=h-936813c74be545cf9072d8ce078affff&packages=base',
+            }).then(function(companyData) {
+                console.log('company detail', companyData);
+                annotationPopover.companiesData.companyData[companyData.item.id] = companyData;
             });
+        }
 
         annotationPopover.companiesData.isLoading = false;
         annotationPopover.companiesData.companies = labels;
 
-        console.log('annotations', companies, labels);
+        console.log('annotations', companies, labels, atokaIds);
     });
 
     annotationPopover.show = function(x, y, item, opt, fragmentId, mode, iconReference) {
