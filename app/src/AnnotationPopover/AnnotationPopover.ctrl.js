@@ -53,11 +53,11 @@ angular.module('Pundit2.AnnotationPopover')
     var lastSelectedNotebookId;
 
     var createResourceItemFromEntity = function(entity) {
-        console.log(entity)
+        // console.log(entity)
         var values = {};
 
         values.uri = 'https://atoka.io/azienda/-/' + entity.id;
-        values.description = entity.web.description;
+        values.description = entity.name;
         values.label = entity.name;
         values.type = values.type = [NameSpace.types.resource]; // TODO to be defined
         values.pageContext = XpointersHelper.getSafePageContext();
@@ -221,16 +221,27 @@ angular.module('Pundit2.AnnotationPopover')
             type: 'GET',
             url: 'https://api-u.spaziodati.eu/v2/companies/' + item.id + '?token=h-936813c74be545cf9072d8ce078affff&packages=base,web',
         }).then(function(companyData) {
-            console.log('company detail .. TODO', companyData);
-            AnnotationPopover.companiesData.companyData[companyData.item.id] = companyData;
-            resourceItem = createResourceItemFromEntity(companyData.item)
+            // console.log('company detail .. TODO', companyData);
+            ok(companyData)            
         });
+
+        function ok(companyData) {
+            AnnotationPopover.companiesData.companyData[companyData.item.id] = companyData;
+            resourceItem = createResourceItemFromEntity(companyData.item);
+            $scope.selectedResourceId = companyData.item.id;
+            // $scope.companiesData.companies.push(companyData.item);
+            $scope.companiesData.companies[0].label = item.name;
+
+            $scope.autoCompleteItems = [];
+            $scope.showAutoComplete = false;
+        }
+
     };
 
     $scope.doAcceptResource = function(resourceId) {
         var resource = $scope.companiesData.companyData[resourceId].item;
         resourceItem = createResourceItemFromEntity(resource);
-        console.log(createResourceItemFromEntity(resource));
+        // console.log(createResourceItemFromEntity(resource));
     };
 
     $scope.focusOn = function(elementId) {

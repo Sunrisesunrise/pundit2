@@ -573,8 +573,8 @@ angular.module('Pundit2.AnnotationSidebar')
                 // typeLabel: TypesHelper.getLabel(currentItem.type[0]),
                 typeClass: 'uri',
                 pageContext: currentItem.pageContext,
-                hasAteco: currentItem.hasAteco,
-                hasFullAddress: currentItem.hasFullAddress
+                hasAteco: currentItem.hasAteco || currentItem[NameSpace.atoka.hasAteco],
+                hasFullAddress: currentItem.hasFullAddress || currentItem[NameSpace.atoka.hasFullAddress]
             };
 
             if (result.typeLabel === 'Text fragment' &&
