@@ -169,6 +169,15 @@ angular.module('Pundit2.AnnotationPopover')
     if ($scope.currentMode !== '') {
         $scope.setMode($scope.currentMode);
     }
+    
+    $scope.companiesData = AnnotationPopover.companiesData;
+    $scope.companiesSearchText = 'ciao';
+    $scope.handleCompaniesSearchTextChange = function(newValue) {
+        console.log('new value', newValue);
+    };
+    
+    
+    
 
     updateCurrentNotebook();
     updateAvailableNotebooks();

@@ -247,6 +247,15 @@ angular.module('Pundit2.AnnotationPopover')
         annotationPopover.log('Annotation popover hide');
     };
 
+
+    annotationPopover.companiesData = {
+        isLoading: false,
+        insertedText: '',
+        handleChange: function() {
+            console.log('changed input value', arguments);
+        }
+    };
+
     annotationPopover.show = function(x, y, item, opt, fragmentId, mode, iconReference) {
         var options,
             optionsDefault = {
@@ -269,6 +278,39 @@ angular.module('Pundit2.AnnotationPopover')
             };
 
         options = angular.extend(optionsDefault, opt);
+
+        // $.ajax({
+        //     url: 'http://hetzy1.spaziodati.eu:8083/api/annotate',
+        //     type: "POST",
+        //     data: JSON.stringify({
+        //         url: window.location.href,
+        //         encoding: document.characterSet
+        //     }),
+        //     contentType:"application/json; charset=utf-8",
+        //     dataType:"json",
+        //     success: function(data){
+        //         // todo
+        //     },
+        //     error: function(xhr, error, response) {
+        //         // todo
+        //     }
+        // });
+
+
+        annotationPopover.companiesData.isLoading = true;
+        // TODO: start this ajax call as soon as possible, onLoad
+        setTimeout(function() {
+            console.log('setting to false');
+            annotationPopover.companiesData.isLoading = false;
+
+            annotationPopover.companiesData.companies = [
+                { label: 'Eni' },
+                { label: 'Agip' },
+                { label: 'Shell' },
+            ];
+            
+        }, 1000);
+
 
         var promise = PndPopover.show(x, y, options, {
             item: item,

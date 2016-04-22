@@ -35,6 +35,31 @@
          ng-show="!savingAnnotation && !errorSaving"
          ng-if="currentMode !== '' && isUserLogged">
 
+        <div class="company-selector">
+
+            <label ng-show="companiesData.isLoading == true">
+                Loading suggested companies
+            </label>
+
+            <label ng-show="companiesData.isLoading == false">
+                Select a company:
+                <pnd-select
+                    options="companiesData.companies"
+                    selected-value="companiesData.companies[0]"
+                    deferred-action="doCreateNewNotebook"
+                    label-action="'Select something'"
+                    placeholder-action="'Type something'"
+                    expanded="false"></pnd-select>
+            </label>
+
+            <input
+                type="text"
+                ng-model="companiesSearchText"
+                ng-model-options="{debounce: 1000}"
+                ng-change="handleCompaniesSearchTextChange(companiesSearchText)"
+            />
+        </div>
+
         <div class="popover-content"
              ng-show="currentMode === 'comment'">
             <div class="form-group">
