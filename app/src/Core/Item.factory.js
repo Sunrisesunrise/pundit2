@@ -166,6 +166,7 @@ angular.module('Pundit2.Core')
             this.isImageFragment() ||
             this.isWebPage() ||
             this.isResource() ||
+            this.isAkotaEntity() ||
             this.isAnnotation();
     };
 
@@ -197,6 +198,10 @@ angular.module('Pundit2.Core')
         return this.type.indexOf(NameSpace.types.page) !== -1;
     };
 
+    ItemFactory.prototype.isAkotaEntity = function() {
+        return this.type.indexOf(NameSpace.types.atoka) !== -1;
+    };
+
     // It's an entity if it's not an image, a property, a text fragment, a reource or a webpage
     ItemFactory.prototype.isEntity = function() {
         return !this.isImage() &&
@@ -206,6 +211,7 @@ angular.module('Pundit2.Core')
             !this.isImageFragment() &&
             !this.isWebPage() &&
             !this.isResource() &&
+            // !this.isAkotaEntity() && (?)
             !this.isAnnotation();
     };
 
@@ -425,6 +431,9 @@ angular.module('Pundit2.Core')
             if (target[NameSpace.rdf.type][i].value === NameSpace.types.resource) {
                 itemBaseType = NameSpace.types.resource;
             }
+            if (target[NameSpace.rdf.type][i].value === NameSpace.types.atoka) {
+                itemBaseType = NameSpace.types.atoka;
+            }
             if (target[NameSpace.rdf.type][i].value === NameSpace.target.fragmentSelector) {
                 itemBaseType = NameSpace.target.fragmentSelector;
                 // No need to create item if it's a fragment Selector.
@@ -437,6 +446,16 @@ angular.module('Pundit2.Core')
                 values.label = target[NameSpace.rdfs.label][0].value;
                 break;
             case NameSpace.types.resource: //Resource.
+                values.label = target[NameSpace.rdfs.label][0].value;
+                values.description = values.label;
+
+                for (var key in NameSpace.atoka) {
+                    if (typeof target[NameSpace.atoka[key]] !== 'undefined') {
+                        values[key] = target[NameSpace.atoka[key]][0].value;
+                    }
+                }
+                break;
+            case NameSpace.types.atoka: //Atoka entity.
                 values.label = target[NameSpace.rdfs.label][0].value;
                 values.description = values.label;
 

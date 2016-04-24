@@ -172,6 +172,7 @@ angular.module('Pundit2.Core')
         named: _pnd + 'named-content',
         embeddedContent: _oa + 'EmbeddedContent',
         resource: _pnd + 'resource', // TODO to be defined
+        atoka: _pnd + 'atoka',
         annotation: _pnd + 'annotation'
     };
 
