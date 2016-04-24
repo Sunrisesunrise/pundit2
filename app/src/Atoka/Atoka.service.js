@@ -90,7 +90,6 @@ angular.module('Pundit2.Atoka')
     };
 
     var getLabelsFromCompanies = function(companies) {
-        // console.log(companies)
         return companies
             .map(function(company) {
                 return {
@@ -119,12 +118,12 @@ angular.module('Pundit2.Atoka')
         // annotationPopover.companiesData.companyData = {};
 
         for (var len = atokaIds.length, i = 0; i < len; i++) {
-            // console.log('ask about', atokaIds[i]);
+            atoka.log('ask about', atokaIds[i]);
             $http({
                 type: 'GET',
                 url: atoka.options.apiBaseUrl + 'companies/' + atokaIds[i] + '?token=h-' + atoka.options.token + '&packages=base,web',
             }).then(function(companyData) {
-                // console.log('company detail', companyData);
+                atoka.log('company detail', companyData);
                 // annotationPopover.companiesData.companyData[companyData.item.id] = companyData;
             });
         }
@@ -132,7 +131,7 @@ angular.module('Pundit2.Atoka')
         // annotationPopover.companiesData.isLoading = false;
         // annotationPopover.companiesData.companies = labels;
 
-        // console.log('annotations', companies, labels, atokaIds);
+        atoka.log('annotations', companies, labels, atokaIds);
     });
 
     atoka.createItemFromEntity = function(entity) {
