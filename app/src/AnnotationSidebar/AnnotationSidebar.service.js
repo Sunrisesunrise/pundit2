@@ -1608,7 +1608,7 @@ angular.module('Pundit2.AnnotationSidebar')
 
         if (isUserLogged) {
             userData = MyPundit.getUserData();
-            if (parseInt(userData.userType) === 2) {
+            if (parseInt(userData.userType) === 2 && clientMode === 'pro') {
                 setStartPosition(true);
                 forceActiveAnnomatic = true;
             }
