@@ -100,15 +100,8 @@
         <!-- Annotation data -->
         <div class="pnd-annotation-details-data">
 
-            <!-- Annotated text fragment || Resource -->
-            <div ng-if="annotation.mainItem.typeLabel != 'WebPage' &&
-                        annotation.mainItem.typeLabel != 'resource'"
-                 ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment'}">
-                <span>{{annotation.mainItem.description}}</span>
-            </div>
-
             <!-- Atoka company info -->
-            <div class="company-preview-wrapper">
+            <div class="company-preview-wrapper" ng-if="annotation.atokaItem">
                 <p>
                     This comment is related to the <strong>Atoka</strong> company:
                 </p>
@@ -121,16 +114,16 @@
                         </div>
                         <h1 class="company-name">
                             <a href="{{ annotation.mainItem.uri }}">
-                                {{ annotation.mainItem.description }}
+                                {{ annotation.atokaItem.description }}
                             </a>
                         </h1>
                     </div>
 
                     <div class="company-meta">
-                        <span class="company-ateco"><span class="label">ATECO: </span> {{ annotation.mainItem.hasAteco }}</span>
-                        <span class="company-sede"><span class="label">Sede legale: </span>{{ annotation.mainItem.hasFullAddress }}</span>
+                        <span class="company-ateco"><span class="label">ATECO: </span> {{ annotation.atokaItem.hasAteco }}</span>
+                        <span class="company-sede"><span class="label">Sede legale: </span>{{ annotation.atokaItem.hasFullAddress }}</span>
                     <span class="company-link">
-                        <a href="{{ annotation.mainItem.uri }}" target="_blank">View company in Atoka</a> ·
+                        <a href="{{ annotation.atokaItem.uri }}" target="_blank">View company in Atoka</a> ·
                         <!-- <span>Select another company</span> -->
                     </span>
                     </div>
@@ -139,10 +132,11 @@
             </div>
             <!-- END // Atoka company info -->
 
-            <!-- Text ent -->
-            <div ng-if="annotation.textItem"
-                 class="pnd-annotation-annotated-fragment">
-                <span>{{annotation.textItem.description}}</span>
+            <!-- Annotated text fragment || Resource -->
+            <div ng-if="annotation.mainItem.typeLabel != 'WebPage' &&
+                        annotation.mainItem.typeLabel != 'resource'"
+                 ng-class="{'pnd-annotation-annotated-fragment': annotation.mainItem.typeLabel == 'Text fragment'}">
+                <span>{{annotation.mainItem.description}}</span>
             </div>
 
             <!-- Annotated web page -->

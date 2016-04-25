@@ -1019,17 +1019,15 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var buildCommentOrHighlight = function(motivation) {
             var firstTargetUri = currentAnnotation.hasTarget[0],
+                atokaItemUri = currentAnnotation.hasTarget[1],
                 firstItem = currentAnnotation.items[firstTargetUri],
                 currentGraph = '',
-                isMultiTarget = false,
-                textItemUri;
+                isMultiTarget = false;
 
             if (currentAnnotation.hasTarget.length > 1) {
-                if (currentAnnotation.items[firstTargetUri].type.indexOf(NameSpace.types.resource) === -1) {
+                if (currentAnnotation.items[firstTargetUri].type.indexOf(NameSpace.types.atoka) !== -1) {
                     firstTargetUri = currentAnnotation.hasTarget[1];
-                    textItemUri = currentAnnotation.hasTarget[0];
-                } else {
-                    textItemUri = currentAnnotation.hasTarget[1];
+                    atokaItemUri = currentAnnotation.hasTarget[0];
                 }
                 isMultiTarget = true;
             }
@@ -1046,7 +1044,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     thumbnail: currentAnnotation.thumbnail,
                     scopeReference: scope,
                     mainItem: buildItemDetails(firstTargetUri),
-                    textItem: isMultiTarget ? buildItemDetails(textItemUri) : undefined,
+                    atokaItem: isMultiTarget ? buildItemDetails(atokaItemUri) : undefined,
                     itemsArray: [firstItem],
                     itemsUriArray: [firstTargetUri],
                     broken: isBroken,

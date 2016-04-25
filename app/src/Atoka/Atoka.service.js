@@ -49,18 +49,23 @@ angular.module('Pundit2.Atoka')
 .service('Atoka', function($q, BaseComponent, Item, XpointersHelper, NameSpace, $http, ATOKADEFAULTS) {
     var atoka = new BaseComponent('Atoka', ATOKADEFAULTS);
 
+    var state = {
+        companies: [],
+        details: {}
+    };
+
     var getCompaniesFromAnnotations = function(annotations) {
-        var companies = annotations
-            .filter(function(item) {
-                if (item.sameAs !== null) {
-                    if (item.sameAs.atokaUri !== null) {
-                        if (item.sameAs.atokaUri.match(/people$/) === null) {
-                            return true;
-                        }
+        var companies = annotations.filter(function(item) {
+            if (item.sameAs !== null) {
+                if (typeof item.sameAs.atokaUri !== 'undefined' && 
+                    item.sameAs.atokaUri !== null) {
+                    if (item.sameAs.atokaUri.match(/people$/) === null) {
+                        return true;
                     }
                 }
-                return false;
-            });
+            }
+            return false;
+        });
 
         if (companies.length === 0) {
             return [];
@@ -72,6 +77,7 @@ angular.module('Pundit2.Atoka')
 
         var ret = [companies[0]],
             last = companies[0];
+
         for (var len = companies.length, i = 1; i < len; i++) {
             if (companies[i].id !== last.id) {
                 ret.push(companies[i]);
@@ -89,66 +95,97 @@ angular.module('Pundit2.Atoka')
         return uri.substr(lastSlash + 1, uri.length);
     };
 
-    var getLabelsFromCompanies = function(companies) {
-        return companies
-            .map(function(company) {
-                return {
-                    label: company.title,
-                    value: getAtokaIdFromCompany(company)
-                };
-            });
+    var getSelectListFromCompanies = function(companies) {
+        return companies.map(function(company) {
+            return {
+                label: company.title,
+                value: getAtokaIdFromCompany(company)
+            };
+        });
     };
 
     var getAtokaIdsFromCompanies = function(companies) {
         return companies.map(getAtokaIdFromCompany);
     };
 
-    $http({
-        url: atoka.options.apiBaseUrl + 'companies/annotate?token=h-' + atoka.options.token,
-        type: 'POST',
-        data: {
-            include: 'image,types,categories,abstract,sameAs',
-            url: window.location.href
+    var init = function() {
+        $.ajax({
+            url: atoka.options.apiBaseUrl + 'companies/annotate?token=h-' + atoka.options.token,
+            type: 'POST',
+            data: {
+                include: 'image,types,categories,abstract,sameAs',
+                url: window.location.href.indexOf('localhost:9000') === -1 ? window.location.href : 'http://www.ilsole24ore.com/art/SoleOnLine4/Tecnologia%20e%20Business/2006/12/DGT_MEMORIES_ALLLIFELONG01120FAZZINO.shtml' // TODO: temp
+            }
+        }).then(function(data) {
+            if (typeof data !== 'undefined' &&
+                typeof data.annotations !== 'undefined') {
+                var companies = state.companies = getCompaniesFromAnnotations(data.annotations),
+                    atokaIds = getAtokaIdsFromCompanies(companies);
+
+                for (var len = atokaIds.length, i = 0; i < len; i++) {
+                    atoka.log('ask about', atokaIds[i]);
+                    $.ajax({
+                        type: 'GET',
+                        url: atoka.options.apiBaseUrl + 'companies/' + atokaIds[i] + '?token=h-' + atoka.options.token + '&packages=base,web',
+                    }).then(function(companyData) {
+                        atoka.log('company detail', companyData);
+
+                        state.details[companyData.item.id] = companyData;
+                        // annotationPopover.companiesData.companyData[companyData.item.id] = companyData;
+                    });
+                }
+
+                // annotationPopover.companiesData.isLoading = false;
+                // annotationPopover.companiesData.companies = labels;
+
+                atoka.log('annotations', companies, atokaIds);
+            }
+        });
+    };
+
+    atoka.getSelectList = function() {
+        if (state.companies.length > 0) {
+            return getSelectListFromCompanies(state.companies);
         }
-    }).then(function(data) {
-        var companies = getCompaniesFromAnnotations(data.annotations),
-            labels = getLabelsFromCompanies(companies),
-            atokaIds = getAtokaIdsFromCompanies(companies);
+    }
 
-        // annotationPopover.companiesData.companyData = {};
+    atoka.getCompanies = function() {
+        return state.companies;
+    };
 
-        for (var len = atokaIds.length, i = 0; i < len; i++) {
-            atoka.log('ask about', atokaIds[i]);
-            $http({
-                type: 'GET',
-                url: atoka.options.apiBaseUrl + 'companies/' + atokaIds[i] + '?token=h-' + atoka.options.token + '&packages=base,web',
-            }).then(function(companyData) {
-                atoka.log('company detail', companyData);
-                // annotationPopover.companiesData.companyData[companyData.item.id] = companyData;
-            });
+    atoka.getDetails = function() {
+        return stata.details;
+    };
+
+    atoka.getDetailsById = function(id) {
+        if (typeof stata.details[id] !== 'undefined') {
+            return state.details[id];
         }
+    };
 
-        // annotationPopover.companiesData.isLoading = false;
-        // annotationPopover.companiesData.companies = labels;
-
-        atoka.log('annotations', companies, labels, atokaIds);
-    });
-
-    atoka.createItemFromEntity = function(entity) {
+    atoka.createItemFromCompanyDetails = function(details) {
         // console.log(entity)
         var values = {};
 
-        values.uri = atoka.options.baseUri + entity.id;
-        values.description = entity.name;
-        values.label = entity.name;
-        values.type = values.type = [NameSpace.types.resource];
+        values.uri = atoka.options.baseUri + details.id;
+        values.description = details.name;
+        values.label = details.name;
+        values.type = values.type = [NameSpace.types.atoka];
         values.pageContext = XpointersHelper.getSafePageContext();
-        values.image = entity.web.logo;
-        values[NameSpace.atoka.hasFullAddress] = entity.base.registeredAddress.fullAddress;
-        values[NameSpace.atoka.hasAteco] = entity.base.ateco[0].code + ': ' + entity.base.ateco[0].description;
+
+        if (typeof details.web.logo !== 'undefined') {
+            values.image = details.web.logo;
+        }
+
+        values[NameSpace.atoka.hasFullAddress] = details.base.registeredAddress.fullAddress;
+        values[NameSpace.atoka.hasAteco] = details.base.ateco[0].code + ': ' + details.base.ateco[0].description;
 
         return new Item(values.uri, values);
     };
+
+    if (atoka.options.active) {
+        init();
+    }
 
     return atoka;
 });

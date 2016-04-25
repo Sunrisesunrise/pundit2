@@ -19,10 +19,16 @@
         clientMode: 'lite',
 
         modules: {
-
+            'Atoka': {
+                active: true
+            },
             'Client': {
                 debug: false,
                 active: true
+            },
+            'Consolidation': {
+                skipUrlTarget: true,
+                skipCanonicalUrlTarget: true
             },
             // "Consolidation": { debug: true },
             'Analytics': {
