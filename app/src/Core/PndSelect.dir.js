@@ -14,7 +14,8 @@ angular.module('Pundit2.Core')
             labelAction: '=labelAction',
             titleAction: '=titleAction',
             placeholderAction: '=placeholderAction',
-            actionToggleBind: '=actionToggleBind'
+            actionToggleBind: '=actionToggleBind',
+            notebookMode: '=notebookMode'
         },
         templateUrl: 'src/Core/Templates/pndSelect.dir.tmpl.html',
         link: function(scope, element) {

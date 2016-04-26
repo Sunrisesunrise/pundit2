@@ -2,14 +2,14 @@ angular.module('Pundit2.AnnotationPopover')
 
 // TODO: manage opening during loading
 .controller('AnnotationPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange, XpointersHelper, Item,
-    NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, NameSpace, $timeout, $q) {
+    NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, NameSpace, $timeout, $q, Atoka) {
     
     var resourceItem = undefined;
 
     $scope.literalText = '';
     $scope.opacity = 1;
 
-    $scope.autoCompleteItems = [];
+    console.log(Atoka.getSelectList());
 
     $scope.selectedNotebookId = undefined;
     $scope.selectedResourceId = undefined;
@@ -26,48 +26,34 @@ angular.module('Pundit2.AnnotationPopover')
     $scope.message = 'Login to Pundit to create new annotations!';
     $scope.tooltip = false;
 
-    $scope.showAutoComplete = false;
 
-    $scope.companiesData = AnnotationPopover.companiesData;
-    $scope.companiesSearchText = '';
-    $scope.handleCompaniesSearchTextChange = function(newValue) {
-        $.ajax({
-            url: 'https://api-u.spaziodati.eu/v2/companies?token=h-936813c74be545cf9072d8ce078affff',
-            type: 'POST',
-            data: {
-                name: newValue,
-                packages: 'base',
-                limit: 20
-            }
-        }).then(function(data) {
-            $scope.autoCompleteItems = data.items;
-        });
-    };
+    // TODO: remove it
+    // $scope.autoCompleteItems = [];
+    // $scope.showAutoComplete = false;
 
-    if (typeof $scope.companiesData.companies[0].value !== 'undefined') {
-        $scope.companiesData.companies.unshift({label: ' ', value: undefined});
-    }
+    // $scope.companiesData = AnnotationPopover.companiesData;
+    // $scope.companiesSearchText = '';
+    // $scope.handleCompaniesSearchTextChange = function(newValue) {
+    //     $.ajax({
+    //         url: 'https://api-u.spaziodati.eu/v2/companies?token=h-936813c74be545cf9072d8ce078affff',
+    //         type: 'POST',
+    //         data: {
+    //             name: newValue,
+    //             packages: 'base',
+    //             limit: 20
+    //         }
+    //     }).then(function(data) {
+    //         $scope.autoCompleteItems = data.items;
+    //     });
+    // };
 
-    $scope.selectedResourceId = $scope.companiesData.companies[0].value;
+    // if (typeof $scope.companiesData.companies[0].value !== 'undefined') {
+    //     $scope.companiesData.companies.unshift({label: ' ', value: undefined});
+    // }
+
+    // $scope.selectedResourceId = $scope.companiesData.companies[0].value;
 
     var lastSelectedNotebookId;
-
-    var createResourceItemFromEntity = function(entity) {
-        // console.log(entity)
-        var values = {};
-
-        values.uri = 'https://atoka.io/azienda/-/' + entity.id;
-        values.description = entity.name;
-        values.label = entity.name;
-        values.type = values.type = [NameSpace.types.resource]; // TODO to be defined
-        values.pageContext = XpointersHelper.getSafePageContext();
-        values.image = entity.web.logo;
-        values[NameSpace.atoka.hasFullAddress] = entity.base.registeredAddress.fullAddress;
-        values[NameSpace.atoka.hasAteco] = entity.base.ateco[0].code + ': ' + entity.base.ateco[0].description;
-
-        return new Item(values.uri, values);
-    };
-
 
     var updateAvailableNotebooks = function() {
         $scope.availableNotebooks = [];
@@ -155,7 +141,7 @@ angular.module('Pundit2.AnnotationPopover')
                     }
                 }
             },
-            entityStatement = {
+            entityStatement = resourceItem ? {
                 scope: {
                     get: function() {
                         return {
@@ -165,9 +151,16 @@ angular.module('Pundit2.AnnotationPopover')
                         };
                     }
                 }
-            };
+            } : undefined,
+            statementsArray = [];
 
-        var modelData = isComment ? ModelHelper.buildCommentData([currentStatement, entityStatement]) : ModelHelper.buildHigthLightData([currentStatement, entityStatement]),
+        statementsArray.push(currentStatement);
+        
+        if (resourceItem) {
+            statementsArray.push(entityStatement);
+        }
+
+        var modelData = isComment ? ModelHelper.buildCommentData(statementsArray) : ModelHelper.buildHigthLightData(statementsArray),
             motivation = isComment ? 'commenting' : 'highlighting';
 
         var httpPromise = AnnotationsCommunication.saveAnnotation(
@@ -215,34 +208,33 @@ angular.module('Pundit2.AnnotationPopover')
         return deferred.promise;
     };
 
-    
-    $scope.getDetailsForItem = function(item) {
-        $.ajax({
-            type: 'GET',
-            url: 'https://api-u.spaziodati.eu/v2/companies/' + item.id + '?token=h-936813c74be545cf9072d8ce078affff&packages=base,web',
-        }).then(function(companyData) {
-            // console.log('company detail .. TODO', companyData);
-            ok(companyData)            
-        });
+    // TODO: move it 
+    // $scope.getDetailsForItem = function(item) {
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'https://api-u.spaziodati.eu/v2/companies/' + item.id + '?token=h-936813c74be545cf9072d8ce078affff&packages=base,web',
+    //     }).then(function(companyData) {
+    //         // console.log('company detail .. TODO', companyData);
+    //         ok(companyData)            
+    //     });
 
-        function ok(companyData) {
-            AnnotationPopover.companiesData.companyData[companyData.item.id] = companyData;
-            resourceItem = createResourceItemFromEntity(companyData.item);
-            $scope.selectedResourceId = companyData.item.id;
-            // $scope.companiesData.companies.push(companyData.item);
-            $scope.companiesData.companies[0].label = item.name;
+    //     function ok(companyData) {
+    //         AnnotationPopover.companiesData.companyData[companyData.item.id] = companyData;
+    //         resourceItem = createResourceItemFromEntity(companyData.item);
+    //         $scope.selectedResourceId = companyData.item.id;
+    //         // $scope.companiesData.companies.push(companyData.item);
+    //         $scope.companiesData.companies[0].label = item.name;
 
-            $scope.autoCompleteItems = [];
-            $scope.showAutoComplete = false;
-        }
+    //         $scope.autoCompleteItems = [];
+    //         $scope.showAutoComplete = false;
+    //     }
+    // };
 
-    };
-
-    $scope.doAcceptResource = function(resourceId) {
-        var resource = $scope.companiesData.companyData[resourceId].item;
-        resourceItem = createResourceItemFromEntity(resource);
-        // console.log(createResourceItemFromEntity(resource));
-    };
+    // $scope.doAcceptResource = function(resourceId) {
+    //     var resource = $scope.companiesData.companyData[resourceId].item;
+    //     resourceItem = createResourceItemFromEntity(resource);
+    //     // console.log(createResourceItemFromEntity(resource));
+    // };
 
     $scope.focusOn = function(elementId) {
         if ($scope.currentMode === 'comment' || $scope.currentMode === 'highlight') {

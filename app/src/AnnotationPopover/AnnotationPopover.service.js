@@ -1,7 +1,9 @@
 angular.module('Pundit2.AnnotationPopover')
 
-.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout, EventDispatcher) {
+.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout, EventDispatcher, Atoka) {
     var annotationPopover = new BaseComponent('AnnotationPopover');
+
+    console.log(Atoka.options.active)
 
     var changePopoverPlacement = function(state, placement) {
         state.popover.$options.placement = placement;
@@ -67,7 +69,6 @@ angular.module('Pundit2.AnnotationPopover')
         }
 
         resizeData.removeTimeout = $timeout(function() {
-
             if (resizeData.temporaryElement !== null) {
                 parentTS = resizeData.temporaryElement.parent();
                 resizeData.temporaryElement.remove();
@@ -247,102 +248,16 @@ angular.module('Pundit2.AnnotationPopover')
         annotationPopover.log('Annotation popover hide');
     };
 
-
-    annotationPopover.companiesData = {
-        isLoading: false,
-        insertedText: '',
-        handleChange: function() {
-            // console.log('changed input value', arguments);
-        }
-    };
-
-    function getCompaniesFromAnnotations(annotations) {
-        var companies = annotations
-            .filter(function(item) {
-                if (item.sameAs != null) {
-                    if (item.sameAs.atokaUri != null) {
-                        if (item.sameAs.atokaUri.match(/people$/) === null) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            });
-
-        if (companies.length === 0) {
-            return [];
-        }
-
-        companies.sort(function(a, b) {
-            return a.id - b.id;
-        });
-
-        var ret = [companies[0]],
-            last = companies[0];
-        for (var len=companies.length, i=1; i<len; i++) {
-            if (companies[i].id !== last.id) {
-                ret.push(companies[i]);
-                last = companies[i];
-            }
-        }
-
-        return ret;
-    }
-
-    function getAtokaIdFromCompany(company) {
-        var uri = company.sameAs.atokaUri,
-            lastSlash = uri.lastIndexOf('/');
-
-        return uri.substr(lastSlash + 1, uri.length);
-    }
-
-    function getLabelsFromCompanies(companies) {
-        // console.log(companies)
-        return companies
-            .map(function(company) {
-                return {
-                    label: company.title,
-                    value: getAtokaIdFromCompany(company)
-                };
-            });
-    }
-
-    function getAtokaIdsFromCompanies(companies) {
-        return companies.
-        map(getAtokaIdFromCompany);
-    }
-
-    annotationPopover.companiesData.isLoading = true;
-    $.ajax({
-        url: 'https://api-u.spaziodati.eu/v2/companies/annotate?token=h-936813c74be545cf9072d8ce078affff',
-        type: 'POST',
-        data: {
-            include: 'image,types,categories,abstract,sameAs',
-            url: window.location.href
-        }
-    }).then(function(data) {
-        var companies = getCompaniesFromAnnotations(data.annotations);
-        var labels = getLabelsFromCompanies(companies);
-        var atokaIds = getAtokaIdsFromCompanies(companies);
-
-        annotationPopover.companiesData.companyData = {};
-
-        for (var len = atokaIds.length, i = 0; i < len; i++) {
-            // console.log('ask about', atokaIds[i]);
-            $.ajax({
-                type: 'GET',
-                url: 'https://api-u.spaziodati.eu/v2/companies/' + atokaIds[i] + '?token=h-936813c74be545cf9072d8ce078affff&packages=base,web',
-            }).then(function(companyData) {
-                // console.log('company detail', companyData);
-                annotationPopover.companiesData.companyData[companyData.item.id] = companyData;
-            });
-        }
-
-        annotationPopover.companiesData.isLoading = false;
-        annotationPopover.companiesData.companies = labels;
-
-        // console.log('annotations', companies, labels, atokaIds);
-    });
+    // TODO: remove it
+    // annotationPopover.companiesData = {
+    //     isLoading: false,
+    //     insertedText: '',
+    //     handleChange: function() {
+    //         // console.log('changed input value', arguments);
+    //     }
+    // };
+    
+    // annotationPopover.companiesData.isLoading = true;
 
     annotationPopover.show = function(x, y, item, opt, fragmentId, mode, iconReference) {
         var options,
