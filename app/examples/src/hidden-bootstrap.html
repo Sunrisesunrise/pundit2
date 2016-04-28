@@ -15,6 +15,9 @@
 //        annotationServerBaseURL: "  http://danilo.is-lost.org:8080/annotationserver/",//local server
         annotationServerVersion: 'v2',
         modules: {
+            'AnnotationSidebar': {
+                isAnnotationSidebarExpanded: true
+            },
             'ResourceAnnotator': {
                 annotationButton: true
             },
@@ -59,7 +62,6 @@
                     "uri": "http://www.w3.org/2004/02/skos/core#related"
                 }],
                 hiddenBootstrap: true,
-                openSidebarBootstrap: true
             },
             'Toolbar': {
                 askThePundit: false
