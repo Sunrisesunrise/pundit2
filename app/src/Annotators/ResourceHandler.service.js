@@ -226,6 +226,7 @@ angular.module('Pundit2.Annotators')
         setTimeout(function() {
             EventDispatcher.sendEvent('Pundit.forceCompileButton');
             $rootScope.$$phase || $rootScope.$digest();
+            initContextualMenu();
         }, 10);
 
     };
@@ -237,7 +238,7 @@ angular.module('Pundit2.Annotators')
     $compile(resourceElem)($rootScope);
     promise.resolve();
 
-    initContextualMenu();
+    //initContextualMenu();
 
     return resourceHandler;
 });
