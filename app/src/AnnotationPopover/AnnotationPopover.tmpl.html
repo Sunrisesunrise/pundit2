@@ -38,13 +38,12 @@
         <div ng-show="isAtokaActive">
             
             <!-- Guidelines for the user -->
-            <p class="pnd-annotation-popover-guidelines"
-               ng-show="currentMode === 'comment'">
-                You are commenting the <strong>Atoka</strong> company:
+            <p class="pnd-annotation-popover-guidelines">
+                You can connect an <strong>Atoka</strong> company profile
             </p>
-            <p class="pnd-annotation-popover-guidelines"
+            <!-- <p class="pnd-annotation-popover-guidelines"
                ng-show="currentMode != 'comment'">You are highlighting the <strong>Atoka</strong> company:
-            </p>
+            </p> -->
 
             <div class="company-selector">
 
@@ -82,7 +81,7 @@
                         </ul>
                     </div>
 
-                    <button ng-if="showAutoComplete" ng-click="$parent.$parent.showAutoComplete = false">reset</button>
+                    <button ng-if="showAutoComplete && companiesData.length > 0" ng-click="$parent.$parent.showAutoComplete = false">reset</button>
                 </label>
             </div>
 
