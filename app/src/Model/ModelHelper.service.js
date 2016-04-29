@@ -184,7 +184,9 @@ angular.module('Pundit2.Model')
             return;
         }
         // TODO: move the predicate type management in a better place
-        if (typeof triple.predicate.type !== 'undefined' && !triple.subject.isResource()) {
+        if (typeof triple.predicate.type !== 'undefined' && 
+            !triple.subject.isResource() && 
+            !triple.subject.isAkotaEntity()) {
             addTypeElem([NameSpace.target.specificResource].concat(triple.predicate.type), types);
         }
 
@@ -195,7 +197,10 @@ angular.module('Pundit2.Model')
                 return;
             }
             if (statementPart.isTarget()) {
-                if (statementPart.isWebPage() || statementPart.isResource() || statementPart.isAnnotation()) {
+                if (statementPart.isWebPage() || 
+                    statementPart.isResource() || 
+                    statementPart.isAkotaEntity() || 
+                    statementPart.isAnnotation()) {
                     uris = {
                         target: statementPart.uri
                     };
@@ -211,7 +216,10 @@ angular.module('Pundit2.Model')
                         canonical = XpointersHelper.getSafeCanoicalUrl();
 
                     // Building target info.
-                    if (!statementPart.isWebPage() && !statementPart.isResource() && !statementPart.isAnnotation()) {
+                    if (!statementPart.isWebPage() && 
+                        !statementPart.isResource() && 
+                        !statementPart.isAkotaEntity() && 
+                        !statementPart.isAnnotation()) {
                         // isPartOf.
                         if (statementPart.hasOwnProperty('isPartOf')) {
                             isPartOfArray.push({
@@ -246,16 +254,16 @@ angular.module('Pundit2.Model')
                         }
                     } else {
 
-                        if (statementPart.isResource()) {
-                            target[NameSpace.rdf.type] = ({
-                                'value': NameSpace.target.CHO,
-                                'type': 'uri'
-                            });
+                        if (statementPart.isAkotaEntity()) {
+                            // target[NameSpace.rdf.type] = ({
+                            //     'value': NameSpace.types.atoka,
+                            //     'type': 'uri'
+                            // });
 
                             for (var key in NameSpace.atoka) {
-                                if (typeof statementPart[NameSpace.atoka[key]] !== 'undefined') {
+                                if (typeof statementPart[key] !== 'undefined') {
                                     target[NameSpace.atoka[key]] = [{
-                                        'value': statementPart[NameSpace.atoka[key]],
+                                        'value': statementPart[key],
                                         'type': 'literal'
                                     }];
                                 }
@@ -300,7 +308,7 @@ angular.module('Pundit2.Model')
 
                     addTypeElem(statementPart.type, types);
 
-                    if (!statementPart.isWebPage() && !statementPart.isResource() && !statementPart.isAnnotation()) {
+                    if (!statementPart.isWebPage() && !statementPart.isResource() && !statementPart.isAkotaEntity() && !statementPart.isAnnotation()) {
                         // Building selector info.
                         // conformsTo.
                         selector[NameSpace.target.conformsTo] = [{

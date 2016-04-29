@@ -211,7 +211,7 @@ angular.module('Pundit2.Core')
             !this.isImageFragment() &&
             !this.isWebPage() &&
             !this.isResource() &&
-            // !this.isAkotaEntity() && (?)
+            !this.isAkotaEntity() &&
             !this.isAnnotation();
     };
 
@@ -442,15 +442,15 @@ angular.module('Pundit2.Core')
         }
 
         switch (itemBaseType) {
-            case NameSpace.types.page: //WebPage.
+            case NameSpace.types.page: // WebPage.
                 values.label = target[NameSpace.rdfs.label][0].value;
                 break;
-            case NameSpace.types.resource: //Resource.
+            case NameSpace.types.resource: // Resource.
                 values.label = target[NameSpace.rdfs.label][0].value;
                 values.description = values.label;
 
                 break;
-            case NameSpace.types.atoka: //Atoka entity.
+            case NameSpace.types.atoka: // Atoka entity.
                 values.label = target[NameSpace.rdfs.label][0].value;
                 values.description = values.label;
 
@@ -469,7 +469,7 @@ angular.module('Pundit2.Core')
                 }
 
                 var selector = targets[target[NameSpace.target.hasSelector][0].value];
-                
+
                 if (typeof target[NameSpace.item.isPartOf] !== 'undefined') {
                     values.isPartOf = target[NameSpace.item.isPartOf][0].value;
                 }

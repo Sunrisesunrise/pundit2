@@ -1,4 +1,4 @@
-<div class="popover pnd-popover pnd-annotation-popover pnd-annotation-popover-atoka"
+<div class="popover pnd-popover pnd-annotation-popover"
      ng-class="{
      'pnd-annotation-popover-login': !isUserLogged,
      'pnd-annotation-popover-annotate': isSwitchMode,
@@ -6,9 +6,9 @@
      'pnd-annotation-popover-highlight': isHighlightMode,
      'pnd-annotation-popover-saving':savingAnnotation,
      'pnd-annotation-popover-error':!savingAnnotation && errorSaving,
-     'pnd-tooltip': tooltip}"
-     ng-style="{'opacity': opacity}"
-        >
+     'pnd-tooltip': tooltip,
+     'pnd-annotation-popover-atoka': isAtokaActive}"
+     ng-style="{'opacity': opacity}">
 
     <div class="arrow"></div>
 
@@ -35,80 +35,83 @@
          ng-show="!savingAnnotation && !errorSaving"
          ng-if="currentMode !== '' && isUserLogged">
 
-        <!-- Guidelines for the user -->
-        <p class="pnd-annotation-popover-guidelines"
-           ng-show="currentMode === 'comment'">
-            You are commenting the <strong>Atoka</strong> company:
-        </p>
-        <p class="pnd-annotation-popover-guidelines"
-           ng-show="currentMode != 'comment'">You are highlighting the <strong>Atoka</strong> company:
-        </p>
+        <div ng-show="isAtokaActive">
+            
+            <!-- Guidelines for the user -->
+            <p class="pnd-annotation-popover-guidelines"
+               ng-show="currentMode === 'comment'">
+                You are commenting the <strong>Atoka</strong> company:
+            </p>
+            <p class="pnd-annotation-popover-guidelines"
+               ng-show="currentMode != 'comment'">You are highlighting the <strong>Atoka</strong> company:
+            </p>
 
-        <div class="company-selector">
+            <div class="company-selector">
 
-            <label ng-show="companiesData.isLoading == true">
-                Loading suggested companies
-            </label>
+                <label>
 
-            <label ng-show="companiesData.isLoading == false">
+                    <p class="label">
+                        Select a company:
+                        <span ng-show="autoCompleteLoading" class="pnd-pulse">(Loading companies .. )</span>
+                    </p>
 
-                <p class="label">Select a company:</p>
-                <pnd-select
-                    options="companiesData.companies"
-                    ng-if="!showAutoComplete"
-                    selected-value="$parent.$parent.selectedResourceId"
-                    action="doAcceptResource"
-                    action-toggle-bind="$parent.$parent.showAutoComplete"
-                    label-action="'Search more'"
-                    placeholder-action="'Type something'"
-                    expanded="false"></pnd-select>
+                    <pnd-select
+                        options="companiesData"
+                        ng-if="!showAutoComplete"
+                        selected-value="$parent.$parent.selectedResourceId"
+                        action="doAcceptResource"
+                        action-toggle-bind="$parent.$parent.showAutoComplete"
+                        label-action="'Search more'"
+                        placeholder-action="'Type something'"
+                        expanded="false"></pnd-select>
 
-                <input
-                    class="form-control"
-                    placeholder="Search any Company in Atoka"
-                    type="text"
-                    ng-if="showAutoComplete"
-                    ng-model="companiesSearchText"
-                    ng-model-options="{debounce: 1000}"
-                    ng-change="handleCompaniesSearchTextChange(companiesSearchText)"/>
+                    <input
+                        class="form-control"
+                        placeholder="Search any Company in Atoka"
+                        type="text"
+                        ng-if="showAutoComplete"
+                        ng-model="companiesSearchText"
+                        ng-model-options="{debounce: 1000}"
+                        ng-change="handleCompaniesSearchTextChange(companiesSearchText, $parent.autoCompleteItems)"/>
 
-                <div class="company-selector-autocomplete" ng-if="autoCompleteItems.length > 0">
-                    <ul>
-                        <li ng-repeat="item in autoCompleteItems" ng-click="getDetailsForItem(item)">
-                            {{item.name}}
-                        </li>
-                    </ul>
-                </div>
+                    <div class="company-selector-autocomplete" ng-if="autoCompleteItems.length > 0">
+                        <ul>
+                            <li ng-repeat="item in autoCompleteItems" ng-click="acceptAutoCompleteItem(item)">
+                                {{item.name}}
+                            </li>
+                        </ul>
+                    </div>
 
-                <button ng-if="showAutoComplete" ng-click="$parent.$parent.showAutoComplete = false">reset</button>
-            </label>
-        </div>
-
-        <!-- Company preview -->
-        <!--
-        <div class="company-preview">
-            <div class="company-main-info">
-                <div class="company-thumb">
-                    <img src="https://unsplash.it/70/50/?random" alt="">
-                </div>
-                <h1 class="company-name">
-                    <a href="http://https://u.atoka.io/azienda/eni-spa/0c7a7e7663ed/">
-                        Enogn Biotecnologie Articoli Attrezzature E Macchine Per Enologia Di Nanni G...
-                    </a>
-                </h1>
+                    <button ng-if="showAutoComplete" ng-click="$parent.$parent.showAutoComplete = false">reset</button>
+                </label>
             </div>
 
-            <div class="company-meta">
-                <span class="company-ateco"><span class="label">ATECO: </span>[46.11.01] Agenti e rappresentanti di materie prime agricole</span>
-                <span class="company-sede"><span class="label">Sede legale: </span>Contrada Feudo 36, 66011 Bucchianico (Chieti)</span>
-                <span class="company-link">
-                    <a href="http://https://u.atoka.io/azienda/eni-spa/0c7a7e7663ed/" target="_blank">View company in Atoka</a> ·
-                    <span>Select another company</span>
-                </span>
+            <!-- Company preview -->
+            <!--
+            <div class="company-preview">
+                <div class="company-main-info">
+                    <div class="company-thumb">
+                        <img src="https://unsplash.it/70/50/?random" alt="">
+                    </div>
+                    <h1 class="company-name">
+                        <a href="http://https://u.atoka.io/azienda/eni-spa/0c7a7e7663ed/">
+                            Enogn Biotecnologie Articoli Attrezzature E Macchine Per Enologia Di Nanni G...
+                        </a>
+                    </h1>
+                </div>
+
+                <div class="company-meta">
+                    <span class="company-ateco"><span class="label">ATECO: </span>[46.11.01] Agenti e rappresentanti di materie prime agricole</span>
+                    <span class="company-sede"><span class="label">Sede legale: </span>Contrada Feudo 36, 66011 Bucchianico (Chieti)</span>
+                    <span class="company-link">
+                        <a href="http://https://u.atoka.io/azienda/eni-spa/0c7a7e7663ed/" target="_blank">View company in Atoka</a> ·
+                        <span>Select another company</span>
+                    </span>
+                </div>
             </div>
+            -->
+            <!-- END // Company preview -->
         </div>
-        -->
-        <!-- END // Company preview -->
 
         <div class="popover-content"
              ng-show="currentMode === 'comment'">

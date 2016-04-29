@@ -1,9 +1,7 @@
 angular.module('Pundit2.AnnotationPopover')
 
-.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout, EventDispatcher, Atoka) {
+.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout, EventDispatcher) {
     var annotationPopover = new BaseComponent('AnnotationPopover');
-
-    console.log(Atoka.options.active)
 
     var changePopoverPlacement = function(state, placement) {
         state.popover.$options.placement = placement;
@@ -247,17 +245,6 @@ angular.module('Pundit2.AnnotationPopover')
 
         annotationPopover.log('Annotation popover hide');
     };
-
-    // TODO: remove it
-    // annotationPopover.companiesData = {
-    //     isLoading: false,
-    //     insertedText: '',
-    //     handleChange: function() {
-    //         // console.log('changed input value', arguments);
-    //     }
-    // };
-    
-    // annotationPopover.companiesData.isLoading = true;
 
     annotationPopover.show = function(x, y, item, opt, fragmentId, mode, iconReference) {
         var options,
