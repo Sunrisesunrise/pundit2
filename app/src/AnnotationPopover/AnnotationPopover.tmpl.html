@@ -38,25 +38,24 @@
         <div ng-show="isAtokaActive">
             
             <!-- Guidelines for the user -->
-            <p class="pnd-annotation-popover-guidelines">
-                You can connect an <strong>Atoka</strong> company profile
+            <p class="pnd-annotation-popover-guidelines" ng-show="!selectedResourceId">
+                You can connect an <strong>Atoka</strong> company profile 
+                <span ng-show="autoCompleteLoading" class="pnd-pulse"> (Loading..)</span>
             </p>
             <!-- <p class="pnd-annotation-popover-guidelines"
                ng-show="currentMode != 'comment'">You are highlighting the <strong>Atoka</strong> company:
             </p> -->
 
-            <div class="company-selector">
+            <div class="company-selector" ng-show="!selectedResourceId">
 
                 <label>
 
-                    <p class="label">
-                        Select a company:
-                        <span ng-show="autoCompleteLoading" class="pnd-pulse">(Loading companies .. )</span>
-                    </p>
+                    <!-- <p class="label">Select a company:</p> -->
 
                     <pnd-select
                         options="companiesData"
-                        ng-if="!showAutoComplete"
+                        ng-if="!selectedResourceId"
+                        ng-show="!showAutoComplete"
                         selected-value="$parent.$parent.selectedResourceId"
                         action="doAcceptResource"
                         action-toggle-bind="$parent.$parent.showAutoComplete"
@@ -86,29 +85,27 @@
             </div>
 
             <!-- Company preview -->
-            <!--
-            <div class="company-preview">
+            <div class="company-preview" ng-if="selectedResourceId">
                 <div class="company-main-info">
-                    <div class="company-thumb">
+                    <!-- <div class="company-thumb">
                         <img src="https://unsplash.it/70/50/?random" alt="">
-                    </div>
+                    </div> -->
                     <h1 class="company-name">
-                        <a href="http://https://u.atoka.io/azienda/eni-spa/0c7a7e7663ed/">
-                            Enogn Biotecnologie Articoli Attrezzature E Macchine Per Enologia Di Nanni G...
+                        <a href="{{ atokaEntity.uri }}" target="_blank">
+                            {{atokaEntity.title}}
                         </a>
                     </h1>
                 </div>
 
                 <div class="company-meta">
-                    <span class="company-ateco"><span class="label">ATECO: </span>[46.11.01] Agenti e rappresentanti di materie prime agricole</span>
-                    <span class="company-sede"><span class="label">Sede legale: </span>Contrada Feudo 36, 66011 Bucchianico (Chieti)</span>
+                    <span class="company-ateco"><span class="label">ATECO: </span>{{ atokaEntity.hasAteco }}</span>
+                    <span class="company-sede"><span class="label">Sede legale: </span>{{ atokaEntity.hasFullAddress }}</span>
                     <span class="company-link">
-                        <a href="http://https://u.atoka.io/azienda/eni-spa/0c7a7e7663ed/" target="_blank">View company in Atoka</a> ·
-                        <span>Select another company</span>
+                        <a href="{{ atokaEntity.uri }}" target="_blank">View company in Atoka</a> ·
+                        <span ng-click="resetResource()">Select another company</span>
                     </span>
                 </div>
             </div>
-            -->
             <!-- END // Company preview -->
         </div>
 

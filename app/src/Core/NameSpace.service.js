@@ -11,7 +11,7 @@ angular.module('Pundit2.Core')
         _oa = 'http://www.openannotation.org/ns/',
         _img = 'http://xmlns.com/foaf/0.1/',
         _xsd = 'http://www.w3.org/2001/XMLSchema#',
-        _atoka = 'http://atoka.io/ns#'
+        _atoka = 'http://atoka.io/ns#';
 
     $window.PUNDIT.ns = ns;
 

@@ -4,12 +4,13 @@ angular.module('Pundit2.AnnotationPopover')
 .controller('AnnotationPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange, XpointersHelper, Item,
     NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, NameSpace, $timeout, $q, Atoka) {
 
-    var resourceItem = undefined;
+    var resourceItem;
 
     $scope.literalText = '';
     $scope.opacity = 1;
 
     $scope.isAtokaActive = Atoka.options.active;
+    $scope.atokaEntity = {};
 
     $scope.selectedNotebookId = undefined;
     $scope.selectedResourceId = undefined;
@@ -33,7 +34,7 @@ angular.module('Pundit2.AnnotationPopover')
         $scope.companiesData = Atoka.getSelectList();
         if ($scope.companiesData && $scope.companiesData.length > 0) {
             $scope.companiesData.unshift({
-                label: ' ',
+                label: 'Select a company',
                 value: undefined
             });
         } else {
@@ -214,6 +215,15 @@ angular.module('Pundit2.AnnotationPopover')
         return deferred.promise;
     };
 
+    $scope.buildEntity = function(item) {
+        $scope.atokaEntity = {
+            uri: Atoka.options.baseUri + item.id,
+            title: item.name,
+            hasFullAddress: item.base && item.base.registeredAddress ? item.base.registeredAddress.fullAddress : null,
+            hasAteco: item.base && item.base.ateco[0] ? item.base.ateco[0].code + ': ' + item.base.ateco[0].description : null,
+        };
+    };
+
     $scope.acceptAutoCompleteItem = function(item) {
         $scope.companiesData.push({label: item.name, value: item.id});
         $scope.selectedResourceId = item.id;
@@ -222,10 +232,17 @@ angular.module('Pundit2.AnnotationPopover')
         $scope.showAutoComplete = false;
 
         Atoka.setAtokaItemDetails(item.id);
+        $scope.buildEntity(item);
     };
 
     $scope.doAcceptResource = function(itemId) {
+        $scope.buildEntity(Atoka.getDetailsById(itemId));
         $scope.selectedResourceId = itemId;
+    };
+
+    $scope.resetResource = function() {
+        // $scope.companiesData = [];
+        $scope.selectedResourceId = undefined;
     };
 
     $scope.focusOn = function(elementId) {

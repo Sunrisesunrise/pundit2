@@ -109,7 +109,7 @@ angular.module('Pundit2.Atoka')
     };
 
     var setAtokaItemDetails = function(itemId) {
-        $.ajax({
+        $.ajax({ // jshint ignore:line
             type: 'GET',
             url: atoka.options.apiBaseUrl + 'companies/' + itemId + '?token=h-' + atoka.options.token + '&packages=base,web',
         }).then(function(companyData) {
@@ -119,7 +119,7 @@ angular.module('Pundit2.Atoka')
     };
 
     var init = function() {
-        $.ajax({
+        $.ajax({ // jshint ignore:line
             url: atoka.options.apiBaseUrl + 'companies/annotate?token=h-' + atoka.options.token,
             type: 'POST',
             data: {
@@ -151,7 +151,7 @@ angular.module('Pundit2.Atoka')
     atoka.autocomplete = function(value) {
         var defer = $q.defer();
 
-        $.ajax({
+        $.ajax({ // jshint ignore:line
             url: atoka.options.apiBaseUrl + 'companies?token=h-' + atoka.options.token,
             type: 'POST',
             data: {
@@ -170,18 +170,18 @@ angular.module('Pundit2.Atoka')
         if (state.companies.length > 0) {
             return getSelectListFromCompanies(state.companies);
         }
-    }
+    };
 
     atoka.getCompanies = function() {
         return state.companies;
     };
 
     atoka.getDetails = function() {
-        return stata.details;
+        return state.details;
     };
 
     atoka.getDetailsById = function(id) {
-        if (typeof stata.details[id] !== 'undefined') {
+        if (typeof state.details[id] !== 'undefined') {
             return state.details[id];
         }
     };
