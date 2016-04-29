@@ -76,7 +76,7 @@ angular.module('Pundit2.Client')
 
     var wipeAll = function() {
         Status.resetProgress();
-        ItemsExchange.wipe();
+        //ItemsExchange.wipe();
         AnnotationsExchange.wipe();
         TextFragmentHandler.wipeTemporarySelection();
     };
