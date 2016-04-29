@@ -100,37 +100,11 @@
         <!-- Annotation data -->
         <div class="pnd-annotation-details-data">
 
-            <!-- Atoka company info -->
-            <div class="company-preview-wrapper" ng-if="annotation.atokaItem">
-                <p>
-                    This comment is related to the <strong>Atoka</strong> company:
-                </p>
-
-                <!-- Company preview -->
-                <div class="company-preview">
-                    <div class="company-main-info">
-                        <div class="company-thumb">
-                            <img src="https://unsplash.it/70/50/?random" alt="">
-                        </div>
-                        <h1 class="company-name">
-                            <a href="{{ annotation.mainItem.uri }}">
-                                {{ annotation.atokaItem.description }}
-                            </a>
-                        </h1>
-                    </div>
-
-                    <div class="company-meta">
-                        <span class="company-ateco"><span class="label">ATECO: </span> {{ annotation.atokaItem.hasAteco }}</span>
-                        <span class="company-sede"><span class="label">Sede legale: </span>{{ annotation.atokaItem.hasFullAddress }}</span>
-                    <span class="company-link">
-                        <a href="{{ annotation.atokaItem.uri }}" target="_blank">View company in Atoka</a> ·
-                        <!-- <span>Select another company</span> -->
-                    </span>
-                    </div>
-                </div>
-                <!-- END // Company preview -->
+            <div
+                ng-if="annotation.atokaItem" 
+                ng-include="'src/AnnotationSidebar/AnnotationDetails.atokaInfo.tmpl.html'"
+                replace="true">
             </div>
-            <!-- END // Atoka company info -->
 
             <!-- Annotated text fragment || Resource -->
             <div ng-if="annotation.mainItem.typeLabel != 'WebPage' &&

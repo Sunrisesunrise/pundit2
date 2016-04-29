@@ -561,6 +561,7 @@ angular.module('Pundit2.AnnotationSidebar')
     var buildItemDetails = function(currentUri) {
         var currentItem = ItemsExchange.getItemByUri(currentUri);
         var result;
+
         if (typeof(currentItem) !== 'undefined') {
             result = {
                 uri: currentUri,
@@ -573,8 +574,9 @@ angular.module('Pundit2.AnnotationSidebar')
                 // typeLabel: TypesHelper.getLabel(currentItem.type[0]),
                 typeClass: 'uri',
                 pageContext: currentItem.pageContext,
-                hasAteco: currentItem.hasAteco || currentItem[NameSpace.atoka.hasAteco],
-                hasFullAddress: currentItem.hasFullAddress || currentItem[NameSpace.atoka.hasFullAddress]
+                hasAteco: currentItem.hasAteco,
+                hasFullAddress: currentItem.hasFullAddress,
+                hasLogo: currentItem.hasLogo
             };
 
             if (result.typeLabel === 'Text fragment' &&
