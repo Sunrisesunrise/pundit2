@@ -57,7 +57,7 @@ angular.module('Pundit2.Atoka')
     var getCompaniesFromAnnotations = function(annotations) {
         var companies = annotations.filter(function(item) {
             if (item.sameAs !== null) {
-                if (typeof item.sameAs.atokaUri !== 'undefined' && 
+                if (typeof item.sameAs.atokaUri !== 'undefined' &&
                     item.sameAs.atokaUri !== null) {
                     if (item.sameAs.atokaUri.match(/people$/) === null) {
                         return true;
@@ -108,6 +108,16 @@ angular.module('Pundit2.Atoka')
         return companies.map(getAtokaIdFromCompany);
     };
 
+    var setAtokaItemDetails = function(itemId) {
+        $.ajax({
+            type: 'GET',
+            url: atoka.options.apiBaseUrl + 'companies/' + itemId + '?token=h-' + atoka.options.token + '&packages=base,web',
+        }).then(function(companyData) {
+            state.details[companyData.item.id] = companyData.item;
+            atoka.log('company detail', companyData);
+        });
+    };
+
     var init = function() {
         $.ajax({
             url: atoka.options.apiBaseUrl + 'companies/annotate?token=h-' + atoka.options.token,
@@ -124,23 +134,36 @@ angular.module('Pundit2.Atoka')
 
                 for (var len = atokaIds.length, i = 0; i < len; i++) {
                     atoka.log('ask about', atokaIds[i]);
-                    $.ajax({
-                        type: 'GET',
-                        url: atoka.options.apiBaseUrl + 'companies/' + atokaIds[i] + '?token=h-' + atoka.options.token + '&packages=base,web',
-                    }).then(function(companyData) {
-                        atoka.log('company detail', companyData);
-
-                        state.details[companyData.item.id] = companyData;
-                        // annotationPopover.companiesData.companyData[companyData.item.id] = companyData;
-                    });
+                    setAtokaItemDetails(atokaIds[i]);
                 }
-
-                // annotationPopover.companiesData.isLoading = false;
-                // annotationPopover.companiesData.companies = labels;
 
                 atoka.log('annotations', companies, atokaIds);
             }
         });
+    };
+
+    atoka.setAtokaItemDetails = function(itemId) {
+        if (typeof itemId !== 'undefined') {
+            setAtokaItemDetails(itemId);
+        }
+    };
+
+    atoka.autocomplete = function(value) {
+        var defer = $q.defer();
+
+        $.ajax({
+            url: atoka.options.apiBaseUrl + 'companies?token=h-' + atoka.options.token,
+            type: 'POST',
+            data: {
+                name: value,
+                packages: 'base',
+                limit: 20
+            }
+        }).then(function(data) {
+            defer.resolve(data.items);
+        });
+
+        return defer.promise;
     };
 
     atoka.getSelectList = function() {
@@ -163,24 +186,27 @@ angular.module('Pundit2.Atoka')
         }
     };
 
-    atoka.createItemFromCompanyDetails = function(details) {
+    atoka.createItemFromCompanyId = function(id) {
         // console.log(entity)
-        var values = {};
+        var values = {},
+            details = state.details[id];
 
-        values.uri = atoka.options.baseUri + details.id;
-        values.description = details.name;
-        values.label = details.name;
-        values.type = values.type = [NameSpace.types.atoka];
-        values.pageContext = XpointersHelper.getSafePageContext();
+        if (details) {
+            values.uri = atoka.options.baseUri + details.id;
+            values.description = details.name;
+            values.label = details.name;
+            values.type = values.type = [NameSpace.types.atoka];
+            values.pageContext = XpointersHelper.getSafePageContext();
 
-        if (typeof details.web.logo !== 'undefined') {
-            values.image = details.web.logo;
+            if (typeof details.web.logo !== 'undefined') {
+                values.hasLogo = details.web.logo;
+            }
+
+            values.hasFullAddress = details.base.registeredAddress.fullAddress;
+            values.hasAteco = details.base.ateco[0].code + ': ' + details.base.ateco[0].description;
+
+            return new Item(values.uri, values);
         }
-
-        values[NameSpace.atoka.hasFullAddress] = details.base.registeredAddress.fullAddress;
-        values[NameSpace.atoka.hasAteco] = details.base.ateco[0].code + ': ' + details.base.ateco[0].description;
-
-        return new Item(values.uri, values);
     };
 
     if (atoka.options.active) {
