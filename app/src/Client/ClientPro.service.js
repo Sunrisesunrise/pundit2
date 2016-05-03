@@ -626,10 +626,13 @@ angular.module('Pundit2.Client')
     };
 
     client.showClientBoot = function() {
+        var container = angular.element('.pnd-annotation-sidebar-container');
+
+        html.addClass(AnnotationSidebar.options.bodyExpandedClass);
+        body.addClass(AnnotationSidebar.options.bodyExpandedClass);
+        container.addClass(AnnotationSidebar.options.sidebarExpandedClass);
+
         Status.setState('Pundit', 'canBeShowedAfterHidden', true);
-       if(client.options.openSidebarBootstrap){
-           AnnotationSidebar.toggle();
-       }
         client.showClient();
     };
 

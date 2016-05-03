@@ -70,15 +70,18 @@ angular.module('Pundit2.AnnotationSidebar')
     header.css('top', state.newMarginTopSidebar + 'px');
 
     // Start reading the default
-    if (AnnotationSidebar.options.isAnnotationSidebarExpanded) {
-        html.addClass(AnnotationSidebar.options.bodyExpandedClass);
-        body.addClass(AnnotationSidebar.options.bodyExpandedClass);
-        container.addClass(AnnotationSidebar.options.sidebarExpandedClass);
-    } else {
-        html.addClass(AnnotationSidebar.options.bodyCollapsedClass);
-        body.addClass(AnnotationSidebar.options.bodyCollapsedClass);
-        container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
+    if(!Config.modules.Client.hiddenBootstrap){
+        if (AnnotationSidebar.options.isAnnotationSidebarExpanded) {
+            html.addClass(AnnotationSidebar.options.bodyExpandedClass);
+            body.addClass(AnnotationSidebar.options.bodyExpandedClass);
+            container.addClass(AnnotationSidebar.options.sidebarExpandedClass);
+        } else {
+            html.addClass(AnnotationSidebar.options.bodyCollapsedClass);
+            body.addClass(AnnotationSidebar.options.bodyCollapsedClass);
+            container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
+        }
     }
+
 
     var activateFragments = function(items) {
         angular.forEach(items, function(item) {
