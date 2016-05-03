@@ -106,6 +106,8 @@ angular.module('Pundit2.Client')
         // Node which will contain every other component
         root;
 
+        var first = true;
+
     var html = angular.element('html'),
         body = angular.element('body');
 
@@ -226,17 +228,33 @@ angular.module('Pundit2.Client')
     };
 
     client.showClientBoot = function() {
-        var container = angular.element('.pnd-annotation-sidebar-container');
+            var container = {};
 
-        html.addClass(AnnotationSidebar.options.bodyExpandedClass);
-        body.addClass(AnnotationSidebar.options.bodyExpandedClass);
-        container.addClass(AnnotationSidebar.options.sidebarExpandedClass);
+            if(first){
+                container = angular.element('.pnd-annotation-sidebar-container');
+                html.removeClass(AnnotationSidebar.options.bodyCollapsedClass);
+                body.removeClass(AnnotationSidebar.options.bodyCollapsedClass);
+                container.removeClass(AnnotationSidebar.options.sidebarCollapsedClass);
 
-        Status.setState('Pundit', 'canBeShowedAfterHidden', true);
-        client.showClient();
-    };
+                if (AnnotationSidebar.options.isAnnotationSidebarExpanded) {
+                    html.addClass(AnnotationSidebar.options.bodyExpandedClass);
+                    body.addClass(AnnotationSidebar.options.bodyExpandedClass);
+                    container.addClass(AnnotationSidebar.options.sidebarExpandedClass);
+                } else {
+                    html.addClass(AnnotationSidebar.options.bodyCollapsedClass);
+                    body.addClass(AnnotationSidebar.options.bodyCollapsedClass);
+                    container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
+                }
 
-    // Reads the conf and initializes the active components, bootstrap what needs to be
+
+                Status.setState('Pundit', 'canBeShowedAfterHidden', true);
+                client.showClient();
+
+                first = false;
+            }
+        };
+
+        // Reads the conf and initializes the active components, bootstrap what needs to be
     // bootstrapped (gets annotations, check if the user is logged in, etc)
     client.boot = function() {
         html.addClass(client.options.bodyClass);
