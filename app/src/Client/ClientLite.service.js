@@ -227,10 +227,11 @@ angular.module('Pundit2.Client')
         $rootScope.$$phase || $rootScope.$digest();
     };
 
-    client.showClientBoot = function() {
+        client.showClientBoot = function() {
             var container = {};
-
-            if(first){
+            if(typeof first === 'undefined'){
+                EventDispatcher.sendEvent('showClientBoot.changeButton','annotate');
+                first = false;
                 container = angular.element('.pnd-annotation-sidebar-container');
                 html.removeClass(AnnotationSidebar.options.bodyCollapsedClass);
                 body.removeClass(AnnotationSidebar.options.bodyCollapsedClass);
@@ -245,12 +246,13 @@ angular.module('Pundit2.Client')
                     body.addClass(AnnotationSidebar.options.bodyCollapsedClass);
                     container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
                 }
-
-
-                Status.setState('Pundit', 'canBeShowedAfterHidden', true);
                 client.showClient();
+                Status.setState('Pundit', 'canBeShowedAfterHidden', true);
+                $rootScope.$$phase || $rootScope.$digest();
+            }else if(!first){
+                EventDispatcher.sendEvent('showClientBoot.setEnabled');
 
-                first = false;
+                first = true;
             }
         };
 

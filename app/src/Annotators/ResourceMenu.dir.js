@@ -18,6 +18,7 @@ angular.module('Pundit2.Annotators')
             scope.number = 0;
             scope.annotationButton = ResourceAnnotator.options.annotationButton;
             scope.resourceLabel = '';
+            scope.enabled = false;
 
             if(scope.annotationButton){
                 scope.resourceLabel =ResourceAnnotator.options.annotationButtonLabel ;
@@ -35,6 +36,15 @@ angular.module('Pundit2.Annotators')
                 values.elem = resourceElem;
 
                 return new Item(values.uri, values);
+            };
+
+            scope.changeButtonLabel = function(label){
+                scope.resourceLabel = label;
+                $rootScope.$$phase || $rootScope.$digest();
+            };
+
+            scope.setEnabled = function(){
+                scope.enabled = true;
             };
 
             scope.setAnnotationNumber = function(uri) {
@@ -64,6 +74,9 @@ angular.module('Pundit2.Annotators')
             };
             
             scope.clickHandler = function(evt) {
+                if (scope.enabled) {
+
+
                 if (scope.item === null) {
                     // create item only once
                     scope.item = createItemFromResource(scope.element);
@@ -91,7 +104,7 @@ angular.module('Pundit2.Annotators')
                     [
                         'AnnotationsCommunication.deleteItems'
                     ],
-                    function(e) {
+                    function (e) {
                         if (e.args.length === 0) {
                             return;
                         }
@@ -105,12 +118,13 @@ angular.module('Pundit2.Annotators')
                     [
                         'AnnotationsCommunication.saveAnnotation'
                     ],
-                    function(e) {
+                    function (e) {
                         if (typeof AnnotationsExchange.getAnnotationById(e.args).items[scope.item.uri] !== "undefined") {
                             scope.selected = true;
                         }
                         EventDispatcher.removeListener(listenerSave);
                     });
+            }
             };
 
             //scope.url = attributes.pndResource;

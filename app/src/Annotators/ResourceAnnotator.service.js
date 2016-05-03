@@ -35,7 +35,7 @@ angular.module('Pundit2.Annotators')
      * label of annotation button
      * <pre> annotationButtonLabel: Annotate </pre>
      */
-    annotationButtonLabel: "annotate"
+    annotationButtonLabel: "launch Pundit"
 
     })
 
@@ -69,7 +69,9 @@ angular.module('Pundit2.Annotators')
         [
             'AnnotationsCommunication.deleteAnnotation',
             'AnnotationDetails.deleteAnnotation',
-            'AnnotationsCommunication.saveAnnotation'
+            'AnnotationsCommunication.saveAnnotation',
+            'showClientBoot.changeButton',
+            'showClientBoot.setEnabled'
         ],
         function(e) {
             var ann = {};
@@ -87,6 +89,18 @@ angular.module('Pundit2.Annotators')
             if(e.name === 'AnnotationDetails.deleteAnnotation'){
                 ann = AnnotationsExchange.getAnnotationById(e.args);
                 uri = ann.entities[0];
+            }
+            if(e.name === 'showClientBoot.changeButton'){
+                for (var uri in scopeMap) {
+                    scopeMap[uri].changeButtonLabel(e.args);
+                }
+
+            }
+            if(e.name === 'showClientBoot.setEnabled'){
+                for (var uri in scopeMap) {
+                    scopeMap[uri].setEnabled();
+                }
+
             }
 
             return;
