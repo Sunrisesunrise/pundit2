@@ -88,7 +88,6 @@ angular.module('Pundit2.Annotators')
                     var annotationsKeys = Object.keys(annotations),
                         linkKeys = Object.keys(link);
                     if (annotationsKeys.length > 1 || linkKeys.length > 0) {
-                        console.log($window.screen.availWidth - evt.pageX);
                         FragmentPopover.show(evt.pageX, y, data);
 
                         $rootScope.$$phase || $rootScope.$digest();
