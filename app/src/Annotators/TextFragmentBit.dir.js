@@ -1,6 +1,6 @@
 angular.module('Pundit2.Annotators')
 
-.directive('textFragmentBit', function(TextFragmentAnnotator, $injector, Config, $rootScope, $document, $window) {
+.directive('textFragmentBit', function(TextFragmentAnnotator, $injector, AnnotationSidebar,  Config, $rootScope, $document, $window) {
     return {
         restrict: 'A',
         scope: {
@@ -44,7 +44,9 @@ angular.module('Pundit2.Annotators')
                 element.on('click', function(evt) {
                     // console.log(evt);
                     var fragments = element.attr('fragments'),
-                        annotations = {};
+                        annotations = {},
+                        arrow = {},
+                        box;
                     if (typeof fragments !== 'undefined') {
                         fragments = fragments.split(',');
                         for (var fi in fragments) {
@@ -86,7 +88,20 @@ angular.module('Pundit2.Annotators')
                     var annotationsKeys = Object.keys(annotations),
                         linkKeys = Object.keys(link);
                     if (annotationsKeys.length > 1 || linkKeys.length > 0) {
+                        console.log($window.screen.availWidth - evt.pageX);
                         FragmentPopover.show(evt.pageX, y, data);
+
+                        $rootScope.$$phase || $rootScope.$digest();
+                        //TODO use conf value for 501 and 150
+                        //501 is sidebar width + box width
+                        if(($window.screen.availWidth - evt.pageX)<501 && AnnotationSidebar.isAnnotationSidebarExpanded()){
+                            arrow = angular.element('.arrow')[0];
+                            box = angular.element('.popover')[0];
+                            //150 is sidebar width
+                            box.style.left = evt.pageX - 150 + 'px';
+                            arrow.style.left  = '50%';
+                        }
+
                     } else {
                         AnnotationDetails.openAnnotationView(annotationsKeys[0]);
                         $rootScope.$$phase || $rootScope.$digest();                        
