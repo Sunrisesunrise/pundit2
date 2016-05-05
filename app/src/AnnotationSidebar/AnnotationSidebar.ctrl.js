@@ -65,7 +65,9 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.proMode = clientMode === 'pro';
 
     body.css('position', 'static');
-    container.css('height', body.innerHeight() + 'px');
+    //    set height by document for avoid the problem of a div highest of body
+    //container.css('height', body.innerHeight() + 'px');
+    container.css('height', angular.element(document).height() + 'px');
     container.css('margin-top', state.newMarginTopSidebar + 'px');
     header.css('top', state.newMarginTopSidebar + 'px');
 
