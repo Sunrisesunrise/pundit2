@@ -1,13 +1,19 @@
 angular.module('Pundit2.AnnotationPopover')
 
 // TODO: manage opening during loading
-.controller('AnnotationPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange,
-    NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, $timeout, $q) {
+.controller('AnnotationPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange, XpointersHelper, Item,
+    NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, NameSpace, $timeout, $q, Atoka) {
+
+    var resourceItem;
 
     $scope.literalText = '';
     $scope.opacity = 1;
 
+    $scope.isAtokaActive = Atoka.options.active;
+    $scope.atokaEntity = {};
+
     $scope.selectedNotebookId = undefined;
+    $scope.selectedResourceId = undefined;
     $scope.savingAnnotation = false;
     $scope.errorSaving = false;
     $scope.availableNotebooks = [];
@@ -20,6 +26,35 @@ angular.module('Pundit2.AnnotationPopover')
     $scope.isHighlightMode = false;
     $scope.message = 'Login to Pundit to create new annotations!';
     $scope.tooltip = false;
+
+    $scope.autoCompleteItems = [];
+    $scope.showAutoComplete = false;
+
+    if ($scope.isAtokaActive) {
+        $scope.companiesData = Atoka.getSelectList();
+        if ($scope.companiesData && $scope.companiesData.length > 0) {
+            $scope.companiesData.unshift({
+                label: 'Select a company',
+                value: undefined
+            });
+        } else {
+            $scope.companiesData = [];
+            $scope.showAutoComplete = true;
+        }
+
+        $scope.handleCompaniesSearchTextChange = function(searchLabel) {
+            if (searchLabel.length > 0) {
+                $scope.autoCompleteLoading = true;
+                Atoka.autocomplete(searchLabel).then(function(items) {
+                    $scope.autoCompleteItems = items;
+                    $scope.autoCompleteLoading = false;
+                });
+            } else {
+                $scope.autoCompleteLoading = false;
+                $scope.autoCompleteItems = [];
+            }
+        };
+    }
 
     var lastSelectedNotebookId;
 
@@ -64,8 +99,8 @@ angular.module('Pundit2.AnnotationPopover')
                 $scope.isCommentMode = $scope.isUserLogged;
                 $scope.message = 'Login to Pundit to use social events';
                 break;
-            //if (mode!== 'comment' && mode!=='highlight' && mode!= 'alert')
-            //mode = type of social in tooltip mode
+                //if (mode!== 'comment' && mode!=='highlight' && mode!= 'alert')
+                //mode = type of social in tooltip mode
             default:
                 $scope.isCommentMode = false;
                 $scope.isSwitchMode = false;
@@ -94,6 +129,10 @@ angular.module('Pundit2.AnnotationPopover')
     $scope.save = function() {
         $scope.savingAnnotation = true;
 
+        if ($scope.isAtokaActive) {
+            resourceItem = Atoka.createItemFromCompanyId($scope.selectedResourceId);
+        }
+
         var isComment = $scope.currentMode === 'comment',
             objectContent = isComment ? $scope.literalText : '';
 
@@ -108,9 +147,27 @@ angular.module('Pundit2.AnnotationPopover')
                         };
                     }
                 }
-            };
+            },
+            entityStatement = resourceItem ? {
+                scope: {
+                    get: function() {
+                        return {
+                            subject: resourceItem,
+                            predicate: '',
+                            object: objectContent
+                        };
+                    }
+                }
+            } : undefined,
+            statementsArray = [];
 
-        var modelData = isComment ? ModelHelper.buildCommentData(currentStatement) : ModelHelper.buildHigthLightData(currentStatement),
+        statementsArray.push(currentStatement);
+
+        if (resourceItem) {
+            statementsArray.push(entityStatement);
+        }
+
+        var modelData = isComment ? ModelHelper.buildCommentData(statementsArray) : ModelHelper.buildHigthLightData(statementsArray),
             motivation = isComment ? 'commenting' : 'highlighting';
 
         var httpPromise = AnnotationsCommunication.saveAnnotation(
@@ -158,8 +215,38 @@ angular.module('Pundit2.AnnotationPopover')
         return deferred.promise;
     };
 
+    $scope.buildEntity = function(item) {
+        $scope.atokaEntity = {
+            uri: Atoka.options.baseUri + item.id,
+            title: item.name,
+            hasFullAddress: item.base && item.base.registeredAddress ? item.base.registeredAddress.fullAddress : null,
+            hasAteco: item.base && item.base.ateco[0] ? item.base.ateco[0].code + ': ' + item.base.ateco[0].description : null,
+        };
+    };
+
+    $scope.acceptAutoCompleteItem = function(item) {
+        $scope.companiesData.push({label: item.name, value: item.id});
+        $scope.selectedResourceId = item.id;
+
+        $scope.autoCompleteItems = [];
+        $scope.showAutoComplete = false;
+
+        Atoka.setAtokaItemDetails(item.id);
+        $scope.buildEntity(item);
+    };
+
+    $scope.doAcceptResource = function(itemId) {
+        $scope.buildEntity(Atoka.getDetailsById(itemId));
+        $scope.selectedResourceId = itemId;
+    };
+
+    $scope.resetResource = function() {
+        // $scope.companiesData = [];
+        $scope.selectedResourceId = undefined;
+    };
+
     $scope.focusOn = function(elementId) {
-        if($scope.currentMode === 'comment' || $scope.currentMode === 'highlight'){
+        if ($scope.currentMode === 'comment' || $scope.currentMode === 'highlight') {
             setTimeout(function() {
                 angular.element('.pnd-annotation-popover #' + elementId)[0].focus();
             }, 10);

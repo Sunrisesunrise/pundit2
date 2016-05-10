@@ -22,6 +22,7 @@
             <div class="option"
                  title="{{option.title}}"
                  data-value="{{option.value}}"
+                 ng-if="option.value"
                  ng-repeat="option in optionList"
                  ng-click="selectOption(option)"
                  ng-class="{'selected': isOptionSelected(option), 'custom-action': option.isAction}">
@@ -31,7 +32,7 @@
             <div class="divider"></div>
 
             <div class="option custom-action"
-                 ng-if="optionAction"
+                 ng-if="optionAction || showForToggle"
                  data-value="{{optionAction.value}}"
                  ng-click="showAction()">
                 {{optionAction.label}}
@@ -40,7 +41,7 @@
     </div>
 
     <!-- New element creation -->
-    <div ng-show="actionInProgress">
+    <div ng-show="actionInProgress" ng-if="notebookMode">
 
         <div class="pnd-select-item-creation"
              ng-show="!savingInProgress">

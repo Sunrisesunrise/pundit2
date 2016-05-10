@@ -2,6 +2,7 @@ angular.module('Pundit2', [
     'ngResource', 'ngSanitize', 'ngAnimate', 'ngResize','ngCookies',
     'mgcrea.ngStrap', 'templates-main', 'angular-md5', 'angularMoment', 'datePicker',
     'Pundit2.Core',
+    'Pundit2.Atoka',
     'Pundit2.Annomatic',
     'Pundit2.AnnotationSidebar',
     'Pundit2.AlertSystem',

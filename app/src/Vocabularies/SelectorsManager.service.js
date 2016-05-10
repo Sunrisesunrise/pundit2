@@ -1,6 +1,6 @@
 angular.module('Pundit2.Vocabularies')
 
-.service('SelectorsManager', function(BaseComponent, ItemsExchange, $injector, $q, MyPundit) {
+.service('SelectorsManager', function(BaseComponent, ItemsExchange, $injector, $q) {
 
     var selectorsManager = new BaseComponent('SelectorsManager');
 

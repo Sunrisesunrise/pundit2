@@ -76,6 +76,12 @@
         <!-- Annotation data -->
         <div class="pnd-annotation-details-data">
 
+            <div
+                ng-if="annotation.atokaItem" 
+                ng-include="'src/AnnotationSidebar/AnnotationDetails.atokaInfo.tmpl.html'"
+                replace="true">
+            </div>
+
             <!-- Annotated text fragment -->
             <div class="pnd-annotation-annotated-fragment">
                 <span>{{annotation.mainItem.description}}</span>

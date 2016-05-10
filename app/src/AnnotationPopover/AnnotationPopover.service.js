@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationPopover')
 
-.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout, EventDispatcher) {
+.service('AnnotationPopover', function(BaseComponent, PndPopover, $window, $timeout, EventDispatcher, Atoka) {
     var annotationPopover = new BaseComponent('AnnotationPopover');
 
     var changePopoverPlacement = function(state, placement) {
@@ -18,6 +18,7 @@ angular.module('Pundit2.AnnotationPopover')
     };
 
     annotationPopover.mode = '';
+    annotationPopover.atokaMode = Atoka.options.active;
 
     annotationPopover.doResize = function() {
         resizeCallback();
@@ -67,7 +68,6 @@ angular.module('Pundit2.AnnotationPopover')
         }
 
         resizeData.removeTimeout = $timeout(function() {
-
             if (resizeData.temporaryElement !== null) {
                 parentTS = resizeData.temporaryElement.parent();
                 resizeData.temporaryElement.remove();

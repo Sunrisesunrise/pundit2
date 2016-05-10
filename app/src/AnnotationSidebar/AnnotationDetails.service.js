@@ -561,6 +561,7 @@ angular.module('Pundit2.AnnotationSidebar')
     var buildItemDetails = function(currentUri) {
         var currentItem = ItemsExchange.getItemByUri(currentUri);
         var result;
+
         if (typeof(currentItem) !== 'undefined') {
             result = {
                 uri: currentUri,
@@ -572,7 +573,10 @@ angular.module('Pundit2.AnnotationSidebar')
                 typeLabel: (typeof currentItem.type[0] !== 'undefined' ? TypesHelper.getLabel(currentItem.type[0]) : null),
                 // typeLabel: TypesHelper.getLabel(currentItem.type[0]),
                 typeClass: 'uri',
-                pageContext: currentItem.pageContext
+                pageContext: currentItem.pageContext,
+                hasAteco: currentItem.hasAteco,
+                hasFullAddress: currentItem.hasFullAddress,
+                hasLogo: currentItem.hasLogo
             };
 
             if (result.typeLabel === 'Text fragment' &&
@@ -1017,8 +1021,18 @@ angular.module('Pundit2.AnnotationSidebar')
 
         var buildCommentOrHighlight = function(motivation) {
             var firstTargetUri = currentAnnotation.hasTarget[0],
+                atokaItemUri = currentAnnotation.hasTarget[1],
                 firstItem = currentAnnotation.items[firstTargetUri],
-                currentGraph = '';
+                currentGraph = '',
+                isMultiTarget = false;
+
+            if (currentAnnotation.hasTarget.length > 1) {
+                if (currentAnnotation.items[firstTargetUri].type.indexOf(NameSpace.types.atoka) !== -1) {
+                    firstTargetUri = currentAnnotation.hasTarget[1];
+                    atokaItemUri = currentAnnotation.hasTarget[0];
+                }
+                isMultiTarget = true;
+            }
 
             if (typeof(state.annotations[currentId]) === 'undefined') {
                 state.annotations[currentId] = {
@@ -1032,6 +1046,7 @@ angular.module('Pundit2.AnnotationSidebar')
                     thumbnail: currentAnnotation.thumbnail,
                     scopeReference: scope,
                     mainItem: buildItemDetails(firstTargetUri),
+                    atokaItem: isMultiTarget ? buildItemDetails(atokaItemUri) : undefined,
                     itemsArray: [firstItem],
                     itemsUriArray: [firstTargetUri],
                     broken: isBroken,

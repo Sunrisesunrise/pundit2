@@ -1,0 +1,229 @@
+/**
+ * ATOKA
+ *
+ * Special styles for atoka Hackathon
+ */
+
+
+/* ------------------------------------ *\
+  #ANNOTATION-POPOVER
+\* ------------------------------------ */
+
+/* Setting custom height for Atoka popover */
+.popover.pnd-annotation-popover {
+    &.pnd-annotation-popover-comment {
+        &.pnd-annotation-popover-atoka {
+            height: 355px;
+            min-height: 355px;
+        }
+    }
+}
+
+.popover.pnd-annotation-popover {
+    &.pnd-annotation-popover-highlight {
+        &.pnd-annotation-popover-atoka {
+            height: 203px;
+            min-height: 203px;
+        }
+    }
+}
+
+/* Border on top of Notebook selector */
+.popover.pnd-annotation-popover {
+    &.pnd-annotation-popover-highlight {
+        &.pnd-annotation-popover-atoka {
+            .popover-notebooks {
+                border-top: 1px solid @color-border-normal;
+            }
+        }
+    }
+}
+
+/* Guidelines inside the popover */
+.pnd-annotation-popover-guidelines {
+    margin: 15px 15px 5px 15px;
+    color: @color-text;
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+/* Max height for company name */
+.popover.pnd-annotation-popover {
+    .company-preview {
+        margin: 15px 15px 8px 15px;
+
+        .company-main-info {
+            height: 25px;
+        }
+    }
+}
+
+/* Text area heigh in commet popover */
+.popover.pnd-annotation-popover.pnd-annotation-popover-comment {
+    .pnd-popover-literal-textarea {
+        height: 134px;
+    }
+}
+
+/* Company selector */
+.company-selector {
+    padding: 15px 15px 5px 15px;
+    padding-top: 0;
+
+    .label {
+        display: block;
+        color: @color-text;
+        font-size: 12px;
+        vertical-align: top;
+        line-height: 27px;
+    }
+
+    input.form-control {
+        width: 297px;
+        margin: 0 6px 0 0;
+        display: inline-block;
+    }
+
+    .pnd-select {
+        width: 345px;
+        margin: 0;
+
+        .pnd-select-label-selected {
+            margin-left: 0;
+        }
+    }
+}
+
+/* Autocomplete */
+.company-selector-autocomplete {
+    position: absolute;
+    max-height: 190px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    background: #FFF;
+    border: 1px solid @color-border-normal;
+    width: 297px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, .1);
+
+    ul {
+        li {
+            padding: 2px 4px;
+            border-bottom: 1px solid @color-border-light;
+            text-transform: capitalize;
+            cursor: pointer;
+
+            &:hover {
+                background-color: @color-dropdown-bg-hover;;
+            }
+        }
+    }
+}
+
+
+/* ------------------------------------ *\
+  #ANNOTATIONS-SIDEBAR
+\* ------------------------------------ */
+.pnd-annotation-comment, .pnd-annotation-highlight {
+    .company-preview-wrapper {
+        padding: 10px;
+        border-bottom: 1px solid @color-border-normal;
+
+        p {
+            margin: 0 0 9px 0;
+            color: @color-text;
+            font-size: 12px;
+        }
+    }
+}
+
+/* ------------------------------------ *\
+  #COMPANY-PREVIEW
+\* ------------------------------------ */
+/* Box showing selected company */
+.company-preview {
+    padding: 0 10px 10px 10px;
+    border: 1px solid #dce2e6;
+    border-radius: 3px;
+    background: #f1f5f8 url('img/logo-atoka.png') center center no-repeat;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+
+    .company-main-info {
+        display: flex;
+        align-items: center;
+        // height: 45px;
+        margin-bottom: 5px;
+        overflow: hidden;
+
+        .company-thumb {
+            flex: none;
+            display: flex;
+            float: left;
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            background-color: @color-background-light;
+            border: 1px solid @color-border-light;
+            overflow: hidden;
+            border-radius: 3px;
+
+            img {
+                margin: auto;
+                max-width: 45px;
+                max-height: 45px;
+            }
+        }
+
+        .company-name {
+            display: block;
+
+            a {
+                display: inline-block;
+                color: @color-text;
+                font-size: 13px;
+                font-weight: @font-weight-bold;
+                line-height: 1.3;
+                text-decoration: none;
+
+                &:hover {
+                    color: @color-text-link;
+                }
+            }
+        }
+    }
+
+    .company-meta {
+        .company-ateco, .company-sede {
+            display: block;
+            color: @color-text;
+            margin-bottom: 2px;
+            font-size: 13px;
+            line-height: 1.3;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+            .label {
+                font-weight: @font-weight-bold;
+            }
+        }
+
+        .company-link {
+            display: block;
+            margin-top: 2px;
+            font-size: 12px;
+            line-height: 1.3;
+
+            span {
+                color: @color-text-link;
+                cursor: pointer;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+

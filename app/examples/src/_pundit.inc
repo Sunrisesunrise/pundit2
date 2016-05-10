@@ -65,9 +65,10 @@
     <script src="../src/Annotators/PageHandler.service.js"></script>
     <script src="../src/Annotators/PageAnnotator.service.js"></script>
 
-
     <script src="../src/Annotators/ImgMenu.dir.js"></script>
 
+    <script src="../src/Atoka/Atoka.js"></script>
+    <script src="../src/Atoka/Atoka.service.js"></script>
 
     <script src="../src/AlertSystem/AlertSystem.js"></script>
     <script src="../src/AlertSystem/AlertSystem.dir.js"></script>

@@ -350,7 +350,7 @@ angular.module('Pundit2.Communication')
                 ann[property] = annData[propertyURI][0].type === 'uri' ? annData[propertyURI][0].value : annData[propertyURI][1].value;
             }
         }
-        if(typeof annData.social !== 'undefined'){
+        if (typeof annData.social !== 'undefined') {
             ann.social = annData.social;
         }
 
@@ -391,13 +391,28 @@ angular.module('Pundit2.Communication')
             }
 
             if (motivationURI === ann.motivatedBy) {
-                var firstTarget = ann.hasTarget[0];
-                ann.entities.push(firstTarget);
-                item = ItemsExchange.getItemByUri(firstTarget);
-                if (typeof(item) !== 'undefined') {
-                    ann.items[firstTarget] = item;
+                var currentTarget = ann.hasTarget[0];
+
+                ann.entities.push(currentTarget);
+                item = ItemsExchange.getItemByUri(currentTarget);
+
+                if (typeof item !== 'undefined') {
+                    ann.items[currentTarget] = item;
                 }
+
                 ann.motivatedBy = m;
+
+                if (typeof ann.hasTarget[1] !== 'undefined')  {
+                    currentTarget = ann.hasTarget[1];
+
+                    ann.entities.push(currentTarget);
+                    item = ItemsExchange.getItemByUri(currentTarget);
+
+                    if (typeof item !== 'undefined') {
+                        ann.items[currentTarget] = item;
+                    }
+                }
+
                 return;
             }
         }
