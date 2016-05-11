@@ -300,8 +300,9 @@ angular.module('Pundit2.ContextualMenu')
         // Find current scroll positions
         scroll.top = angular.element($window).scrollTop();
         scroll.left = angular.element($window).scrollLeft();
+         // TODO avoid force scroll it create issue when contextual menu is near to bottom
         // Force scroll back to original positions
-        angular.element($window).on("scroll", scrollHandler);
+       // angular.element($window).on("scroll", scrollHandler);
         angular.element('body').addClass(contextualMenu.options.overflowClass);
     });
 
