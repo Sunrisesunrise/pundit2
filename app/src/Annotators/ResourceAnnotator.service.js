@@ -33,9 +33,21 @@ angular.module('Pundit2.Annotators')
      * `string`
      *
      * label of annotation button
-     * <pre> annotationButtonLabel: Annotate </pre>
+     * <pre> annotationButtonLabel: launch Pundit </pre>
      */
-    annotationButtonLabel: "launch Pundit"
+    annotationButtonLabel: "launch Pundit",
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#ResourceAnnotator.annotationButtonLabelAfterClick
+     *
+     * @description
+     * `string`
+     *
+     * label of annotation button
+     * <pre> annotationButtonLabelAfterClick: Annotate </pre>
+     */
+    annotationButtonLabelAfterClick: "Annotate"
 
     })
 
@@ -92,7 +104,7 @@ angular.module('Pundit2.Annotators')
             }
             if(e.name === 'showClientBoot.changeButton'){
                 for (var uri in scopeMap) {
-                    scopeMap[uri].changeButtonLabel(e.args);
+                    scopeMap[uri].changeButtonLabel(resourceAnnotator.options.annotationButtonLabelAfterClick);
                 }
 
             }
