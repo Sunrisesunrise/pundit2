@@ -1,4 +1,5 @@
 var punditConfig = {
+    autoInjectMode : true,
     //   confURL: "http://conf.thepund.it/V2/clients/eus/eus.js",
     annotationServerBaseURL: " https://staging.punditbrain.netseven.it:8443/annotationserver/",
     // annotationServerBaseURL: 'https://server.thepund.it/annotationserver/',
