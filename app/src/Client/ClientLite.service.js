@@ -230,7 +230,7 @@ angular.module('Pundit2.Client')
         client.showClientBoot = function() {
             var container = {};
             if(typeof first === 'undefined'){
-                EventDispatcher.sendEvent('showClientBoot.changeButton','annotate');
+                EventDispatcher.sendEvent('showClientBoot.changeButton');
                 first = false;
                 container = angular.element('.pnd-annotation-sidebar-container');
                 html.removeClass(AnnotationSidebar.options.bodyCollapsedClass);
