@@ -123,11 +123,15 @@ angular.module('Pundit2.Core')
         
         state[component][property] = value;
     };
-
+    
     status.getState = function(component) {
         return state[component];
     };
 
+    status.getCanBeShowedAfterHidden = function() {
+        return state.Pundit.canBeShowedAfterHidden;
+    };
+    
     status.getClientBoot = function() {
         return state.Pundit.clientBoot;
     };

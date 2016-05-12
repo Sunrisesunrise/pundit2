@@ -1,6 +1,6 @@
 angular.module('Pundit2.Annotators')
 
-.directive('textFragmentBit', function(TextFragmentAnnotator, $injector, AnnotationSidebar,  Config, $rootScope, $document, $window) {
+.directive('textFragmentBit', function(TextFragmentAnnotator, $injector, AnnotationSidebar,  Config, $rootScope, $document, $window, Status) {
     return {
         restrict: 'A',
         scope: {
@@ -35,6 +35,11 @@ angular.module('Pundit2.Annotators')
             };
 
             TextFragmentAnnotator.updateFragmentBit(scope, 'add');
+            element.on('click', function(){
+                if(Config.modules.Client.hiddenBootstrap && !Status.getCanBeShowedAfterHidden()){
+                    document.dispatchEvent(new CustomEvent("Pundit.showBootstrap"));
+                }
+            });
 
             if (Config.modules.AnnotationSidebar.active) {
                 var AnnotationExchange = $injector.get('AnnotationsExchange'),
@@ -42,7 +47,8 @@ angular.module('Pundit2.Annotators')
                     AnnotationDetails = $injector.get('AnnotationDetails');
 
                 element.on('click', function(evt) {
-                    // console.log(evt);
+//                    console.log(evt);
+
                     var fragments = element.attr('fragments'),
                         annotations = {},
                         arrow = {},
