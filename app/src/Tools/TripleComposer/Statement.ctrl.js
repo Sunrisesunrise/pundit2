@@ -482,7 +482,7 @@ angular.module('Pundit2.TripleComposer')
         };
         TripleComposer.isTripleErasable($scope.tripleComposerCtrl.getName());
         ResourcePanel.hide();
-        ContextualMenu.show(event.pageX, event.pageY, resource, TripleComposer.options.cMenuType, '.pnd-dashboard-container');
+        ContextualMenu.show(event.pageX, event.pageY, resource, TripleComposer.options.cMenuType, undefined, undefined, '.pnd-dashboard-panel-expanded');
         event.stopPropagation();
     };
 

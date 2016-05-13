@@ -252,7 +252,7 @@ angular.module('Pundit2.ContextualMenu')
         state.menuType = type;
         state.content = contextualMenu.buildContent();
         mockOptions.scope.content = state.content;
-        mockOptions.container = container;
+        mockOptions.container = container ? container : '.pnd-wrp';
 
         if (state.content.length === 0) {
             contextualMenu.err('Tried to show menu for type ' + type + ' without any content (buildContent fail)');
@@ -315,8 +315,6 @@ angular.module('Pundit2.ContextualMenu')
         angular.element('body').removeClass(contextualMenu.options.overflowClass);
 
         EventDispatcher.sendEvent('closeContextualMenu');
-
-
     });
 
     /**
