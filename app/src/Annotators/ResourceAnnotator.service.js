@@ -55,6 +55,7 @@ angular.module('Pundit2.Annotators')
     var resourceAnnotator = new BaseComponent('ResourceAnnotator', RESOURCEANNOTATIONRDEFAULTS);
     var scopeMap = {};
     var uri = '';
+    var UriDelete = '';
 
     resourceAnnotator.addReference = function(uri, currentResource) {
         scopeMap[uri] = currentResource;
@@ -95,12 +96,12 @@ angular.module('Pundit2.Annotators')
             if (e.name === 'AnnotationsCommunication.saveAnnotation' && typeof scopeMap[ann.entities[0]] !== 'undefined'){
                 scopeMap[ann.entities[0]].addAnnotationNumber();
             }
-            if(e.name === 'AnnotationsCommunication.deleteAnnotation' && typeof scopeMap[uri] !== 'undefined'){
-                scopeMap[uri].subAnnotationNumber();
+            if(e.name === 'AnnotationsCommunication.deleteAnnotation' && typeof scopeMap[uriDelete] !== 'undefined'){
+                scopeMap[uriDelete].subAnnotationNumber();
             }
             if(e.name === 'AnnotationDetails.deleteAnnotation'){
                 ann = AnnotationsExchange.getAnnotationById(e.args);
-                uri = ann.entities[0];
+                uriDelete = ann.entities[0];
             }
             if(e.name === 'showClientBoot.changeButton'){
                 for (var uri in scopeMap) {
