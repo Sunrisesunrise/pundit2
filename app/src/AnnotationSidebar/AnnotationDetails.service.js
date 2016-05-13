@@ -1171,7 +1171,7 @@ angular.module('Pundit2.AnnotationSidebar')
             } else {
                 type = annotationDetails.options.cMenuTypeNoEdit;
             }
-            ContextualMenu.show(left, top, scope, type, '', placement, '#' + scope.id);
+            ContextualMenu.show(left, top, scope, type, '', placement, '.pnd-annotation-sidebar-annotations');
             state.contextualMenuOpened = true;
         } else {
             ContextualMenu.hide();
