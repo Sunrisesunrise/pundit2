@@ -124,7 +124,22 @@ angular.module('Pundit2.Annotators')
      * Default value:
      * <pre> loginRequired: false </pre>
      */
-    loginRequired: false
+    loginRequired: false,
+
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#TextFragmentHandler.activateTextFragment
+     *
+     * @description
+     * `boolean`
+     *
+     * Activate contextualMenu to textFragment selection
+     *
+     * Default value:
+     * <pre> activateTextFragment: false </pre>
+     */
+    activateTextFragment: true
 })
 
 // TODO: remove toolbar and triplecomposer dependency 
@@ -722,12 +737,15 @@ angular.module('Pundit2.Annotators')
 
         // TODO: generalize item in {data}
         // es. AnnotationPopover.show( ...
-        var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType, currentFr);
-        if (typeof promise !== 'undefined' && promise !== false) {
-            promise.then(function() {
-                textFragmentHandler.log('textFragmentHandler handlerMenu.show promise resolved');
-            });
+        if(textFragmentHandler.options.activateTextFragment){
+            var promise = handlerMenu.show(upEvt.pageX, upEvt.pageY, item, textFragmentHandler.options.cMenuType, currentFr);
+            if (typeof promise !== 'undefined' && promise !== false) {
+                promise.then(function() {
+                    textFragmentHandler.log('textFragmentHandler handlerMenu.show promise resolved');
+                });
+            }
         }
+
     } // mouseUpHandler()
 
     // If we are configured to remove the selection, we cannot preventDefault() or
