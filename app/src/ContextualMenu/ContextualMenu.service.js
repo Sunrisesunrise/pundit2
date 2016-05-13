@@ -79,8 +79,9 @@ angular.module('Pundit2.ContextualMenu')
         scope: $rootScope.$new()
     };
 
-    var init = function(options, placement) {
+    var init = function(options, placement, container) {
         options.scope.content = state.content;
+
         if (typeof(placement) !== 'undefined') {
             options.placement = placement;
             state.init = false;
@@ -88,12 +89,14 @@ angular.module('Pundit2.ContextualMenu')
             options.placement = contextualMenu.options.position;
             state.init = true;
         }
+
         options.templateUrl = 'src/ContextualMenu/dropdown.tmpl.html';
 
-
+        if (typeof container !== 'undefined') {
+            options.container = container;
+        }
 
         return $dropdown(state.anchor, options);
-
     };
 
     // return the state object
@@ -218,7 +221,7 @@ angular.module('Pundit2.ContextualMenu')
      * @param {Object} resource
      * @param {String} type
      */
-    contextualMenu.show = function(x, y, resource, type, ref, placement) {
+    contextualMenu.show = function(x, y, resource, type, ref, placement, container) {
         x += contextualMenu.options.offsetX;
         y += contextualMenu.options.offsetY;
 
@@ -249,6 +252,7 @@ angular.module('Pundit2.ContextualMenu')
         state.menuType = type;
         state.content = contextualMenu.buildContent();
         mockOptions.scope.content = state.content;
+        mockOptions.container = container;
 
         if (state.content.length === 0) {
             contextualMenu.err('Tried to show menu for type ' + type + ' without any content (buildContent fail)');
@@ -270,7 +274,7 @@ angular.module('Pundit2.ContextualMenu')
         state.lastRef = ref;
 
         if (!state.init) {
-            state.mockMenu = init(mockOptions, placement);
+            state.mockMenu = init(mockOptions, placement, container);
             state.mockMenu.$promise.then(state.mockMenu.show);
         } else {
             state.mockMenu.show();
@@ -294,15 +298,15 @@ angular.module('Pundit2.ContextualMenu')
         angular.element(state.mockMenu.$element).remove();
 
         // create real menu
-        state.menu = init(realOptions, place);
+        state.menu = init(realOptions, place, mockOptions.container);
         state.menu.$promise.then(state.menu.show);
 
         // Find current scroll positions
         scroll.top = angular.element($window).scrollTop();
         scroll.left = angular.element($window).scrollLeft();
-         // TODO avoid force scroll it create issue when contextual menu is near to bottom
+        // TODO avoid force scroll it create issue when contextual menu is near to bottom
         // Force scroll back to original positions
-       // angular.element($window).on("scroll", scrollHandler);
+        // angular.element($window).on("scroll", scrollHandler);
         angular.element('body').addClass(contextualMenu.options.overflowClass);
     });
 
@@ -494,7 +498,7 @@ angular.module('Pundit2.ContextualMenu')
         return state.lastRef;
     };
 
-    EventDispatcher.addListener('Client.hide', function(/*e*/) {
+    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
         if (contextualMenu !== null) {
             contextualMenu.hide();
         }
