@@ -3,7 +3,7 @@ angular.module('Pundit2.Annotators')
 .directive('resourceMenu', function($rootScope, NameSpace, ContextualMenu,
     Toolbar, ImageHandler, ImageAnnotator, ItemsExchange, TemplatesExchange,
     TripleComposer, EventDispatcher, Item, XpointersHelper, AnnotationsExchange,
-    ResourceAnnotator) {
+    ResourceAnnotator, Config) {
 
     return {
         restrict: 'C',
@@ -74,7 +74,7 @@ angular.module('Pundit2.Annotators')
             };
             
             scope.clickHandler = function(evt) {
-                if (scope.enabled) {
+                if (scope.enabled || !Config.modules.Client.hiddenBootstrap) {
 
 
                 if (scope.item === null) {
