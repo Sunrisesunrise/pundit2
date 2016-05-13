@@ -195,9 +195,9 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
 
                 if ((element.height + element.top + 90 > screen.height()) || (element.top < 0)) {
-
+                    var dashboardHeight = Dashboard.isDashboardVisible() ? Dashboard.getContainerHeight() : 0;
                     angular.element('html,body').animate({
-                            scrollTop: $window.scrollY + element.top - 65
+                            scrollTop: $window.scrollY + element.top - dashboardHeight - 65
                         },
                         'slow');
                 }
