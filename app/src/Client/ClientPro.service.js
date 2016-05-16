@@ -645,6 +645,7 @@ angular.module('Pundit2.Client')
                 body.addClass(AnnotationSidebar.options.bodyCollapsedClass);
                 container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
             }
+            AnnotationSidebar.toggle();
             client.showClient();
             Status.setState('Pundit', 'canBeShowedAfterHidden', true);
             $rootScope.$$phase || $rootScope.$digest();
