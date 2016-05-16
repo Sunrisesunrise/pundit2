@@ -35,7 +35,7 @@ This is an example of an HTML page with Pundit:
     
     <body>
         <script src="http://your-server-url/pundit-conf.js" type="text/javascript" ></script>
-        <div data-ng-app="Pundit2" class="pnd-wrp ng-scope">
+        <div data-ng-app="Pundit2" class="pnd-wrp ng-scope"></div>
         <script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript" ></script>
         <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript" ></script>
     
