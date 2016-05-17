@@ -61,6 +61,12 @@ angular.module('Pundit2.Annotators')
         scopeMap[uri] = currentResource;
     };
 
+    resourceAnnotator.removeReference = function(uri) {
+        if (typeof scopeMap[uri] !== 'undefined') {
+            delete scopeMap[uri];
+        }
+    };
+
     EventDispatcher.addListeners(
         [
             'Consolidation.consolidate',
@@ -93,21 +99,23 @@ angular.module('Pundit2.Annotators')
 
             if (e.name === 'AnnotationsCommunication.saveAnnotation' &&
                 typeof scopeMap[ann.entities[0]] !== 'undefined') {
-                scopeMap[ann.entities[0]].addAnnotationNumber();
+                scopeMap[ann.entities[0]].increaseAnnotationNumber();
             }
 
             if (e.name === 'AnnotationsCommunication.deleteAnnotation' &&
                 typeof scopeMap[uriDelete] !== 'undefined') {
-                scopeMap[uriDelete].subAnnotationNumber();
+                scopeMap[uriDelete].decreaseAnnotationNumber();
             }
 
             if (e.name === 'AnnotationDetails.deleteAnnotation') {
                 ann = AnnotationsExchange.getAnnotationById(e.args);
                 uriDelete = ann.entities[0];
             }
-
-            return;
         });
+
+    EventDispatcher.addListener('Pundit.wipeAll', function() {
+        scopeMap = {};
+    });
 
     return resourceAnnotator;
 });

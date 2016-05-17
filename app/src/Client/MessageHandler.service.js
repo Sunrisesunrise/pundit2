@@ -79,6 +79,8 @@ angular.module('Pundit2.Client')
         //ItemsExchange.wipe();
         AnnotationsExchange.wipe();
         TextFragmentHandler.wipeTemporarySelection();
+
+        EventDispatcher.sendEvent('Client.wipeAll');
     };
 
     var loadAnnotations = function() {

@@ -11,18 +11,26 @@ angular.module('Pundit2.Annotators')
         templateUrl: 'src/Annotators/ResourceMenu.dir.tmpl.html',
         replace: true,
         link: function(scope, element) {
-            var showHandler;
+            var showHandler, hideHandler, wipeHandler;
 
-            scope.element = element;
-            scope.item = null;
-            scope.number = 0;
-            scope.annotationButton = ResourceAnnotator.options.annotationButton;
-            scope.resourceLabel = '';
-            scope.enabled = false;
+            var currentUri = element.attr('about');
 
-            if (scope.annotationButton) {
-                scope.resourceLabel = ResourceAnnotator.options.annotationButtonLabel;
-            }
+            var init = function() {
+                scope.element = element;
+                scope.item = null;
+                scope.number = 0;
+                scope.annotationButton = ResourceAnnotator.options.annotationButton;
+                scope.resourceLabel = '';
+                scope.enabled = false;
+
+                if (scope.annotationButton) {
+                    scope.resourceLabel = ResourceAnnotator.options.annotationButtonLabel;
+                }
+
+                ResourceAnnotator.removeReference(currentUri, scope);
+                currentUri = element.attr('about');
+                ResourceAnnotator.addReference(currentUri, scope);
+            };
 
             var createItemFromResource = function(resourceElem) {
                 var values = {};
@@ -55,18 +63,14 @@ angular.module('Pundit2.Annotators')
                 $rootScope.$$phase || scope.$apply();
             };
 
-            scope.addAnnotationNumber = function() {
+            scope.increaseAnnotationNumber = function() {
                 scope.number++;
                 $rootScope.$$phase || scope.$apply();
             };
 
-            scope.subAnnotationNumber = function() {
+            scope.decreaseAnnotationNumber = function() {
                 scope.number--;
                 $rootScope.$$phase || scope.$apply();
-            };
-
-            scope.myElement = function() {
-                return scope.element;
             };
 
             scope.clickHandler = function(evt) {
@@ -102,15 +106,27 @@ angular.module('Pundit2.Annotators')
                 }
             };
 
+            init();
+
             showHandler = EventDispatcher.addListener('Client.show', function() {
                 changeButtonLabel(ResourceAnnotator.options.annotationButtonLabelAfterClick);
             });
 
-            element.on('$destroy', function() {
-                EventDispatcher.removeListener(showHandler);
+            hideHandler = EventDispatcher.addListener('Client.hide', function() {
+                if (scope.annotationButton) {
+                    scope.resourceLabel = ResourceAnnotator.options.annotationButtonLabel;
+                }
             });
 
-            ResourceAnnotator.addReference(element.attr('about'), scope);
+            wipeAll = EventDispatcher.addListener('Client.wipeAll', function() {
+                init();
+            });
+
+            element.on('$destroy', function() {
+                EventDispatcher.removeListener(showHandler);
+                EventDispatcher.removeListener(hideHandler);
+                EventDispatcher.removeListener(wipeHandler);
+            });
         }
     };
 });
