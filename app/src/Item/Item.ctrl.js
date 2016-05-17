@@ -51,7 +51,7 @@ angular.module('Pundit2.Item')
     $scope.onClickMenu = function(evt) {
         // show menu on item, the action is added by MyItemsContainer or PageItemsContainer service
         // the type of menu to show is relative to pageItems or myItems
-        ContextualMenu.show(evt.pageX, evt.pageY, $scope.item, $scope.menuType);
+        ContextualMenu.show(evt.pageX, evt.pageY, $scope.item, $scope.menuType, undefined, undefined, '.pnd-dashboard-panel-expanded');
         evt.preventDefault();
         evt.stopPropagation();
         return false;
