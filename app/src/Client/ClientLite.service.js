@@ -106,7 +106,7 @@ angular.module('Pundit2.Client')
         // Node which will contain every other component
         root;
 
-        var first = true;
+    var first = false;
 
     var html = angular.element('html'),
         body = angular.element('body');
@@ -213,6 +213,8 @@ angular.module('Pundit2.Client')
         html.removeClass(client.options.bodyClass);
         body.removeClass(client.options.bodyClass);
 
+        Status.setState('Pundit', 'canBeShowedAfterHidden', false);
+
         root.css('display', 'none');
         $rootScope.$$phase || $rootScope.$digest();
     };
@@ -227,37 +229,38 @@ angular.module('Pundit2.Client')
         $rootScope.$$phase || $rootScope.$digest();
     };
 
-        client.showClientBoot = function() {
-            var container = {};
-            if(typeof first === 'undefined'){
-                EventDispatcher.sendEvent('showClientBoot.changeButton');
-                first = false;
-                container = angular.element('.pnd-annotation-sidebar-container');
-                html.removeClass(AnnotationSidebar.options.bodyCollapsedClass);
-                body.removeClass(AnnotationSidebar.options.bodyCollapsedClass);
-                container.removeClass(AnnotationSidebar.options.sidebarCollapsedClass);
+    client.showClientBoot = function() {
+        var container = {};
+        if (first === false) {
+            EventDispatcher.sendEvent('showClientBoot.changeButton');
+            container = angular.element('.pnd-annotation-sidebar-container');
+            html.removeClass(AnnotationSidebar.options.bodyCollapsedClass);
+            body.removeClass(AnnotationSidebar.options.bodyCollapsedClass);
+            container.removeClass(AnnotationSidebar.options.sidebarCollapsedClass);
 
-                if (AnnotationSidebar.options.isAnnotationSidebarExpanded) {
-                    html.addClass(AnnotationSidebar.options.bodyExpandedClass);
-                    body.addClass(AnnotationSidebar.options.bodyExpandedClass);
-                    container.addClass(AnnotationSidebar.options.sidebarExpandedClass);
-                } else {
-                    html.addClass(AnnotationSidebar.options.bodyCollapsedClass);
-                    body.addClass(AnnotationSidebar.options.bodyCollapsedClass);
-                    container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
-                }
+            if (AnnotationSidebar.options.isAnnotationSidebarExpanded) {
+                html.addClass(AnnotationSidebar.options.bodyExpandedClass);
+                body.addClass(AnnotationSidebar.options.bodyExpandedClass);
+                container.addClass(AnnotationSidebar.options.sidebarExpandedClass);
+            } else {
+                html.addClass(AnnotationSidebar.options.bodyCollapsedClass);
+                body.addClass(AnnotationSidebar.options.bodyCollapsedClass);
+                container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
+            }
+            AnnotationSidebar.toggle();
+            Status.setState('Pundit', 'canBeShowedAfterHidden', true);
+            client.showClient();
+
+            first = true;
+        } else {
+            if (!Status.getState('Pundit').canBeShowedAfterHidden) {
                 AnnotationSidebar.toggle();
                 client.showClient();
-                Status.setState('Pundit', 'canBeShowedAfterHidden', true);
-                $rootScope.$$phase || $rootScope.$digest();
-            }else if(!first){
-                EventDispatcher.sendEvent('showClientBoot.setEnabled');
-
-                first = true;
             }
-        };
+        }
+    };
 
-        // Reads the conf and initializes the active components, bootstrap what needs to be
+    // Reads the conf and initializes the active components, bootstrap what needs to be
     // bootstrapped (gets annotations, check if the user is logged in, etc)
     client.boot = function() {
         html.addClass(client.options.bodyClass);

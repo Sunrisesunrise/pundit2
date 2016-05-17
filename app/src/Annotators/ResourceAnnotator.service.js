@@ -49,7 +49,7 @@ angular.module('Pundit2.Annotators')
      */
     annotationButtonLabelAfterClick: "Annotate"
 
-    })
+})
 
 .service('ResourceAnnotator', function(BaseComponent, EventDispatcher, ItemsExchange, AnnotationsExchange, RESOURCEANNOTATIONRDEFAULTS) {
     var resourceAnnotator = new BaseComponent('ResourceAnnotator', RESOURCEANNOTATIONRDEFAULTS);
@@ -83,8 +83,7 @@ angular.module('Pundit2.Annotators')
             'AnnotationsCommunication.deleteAnnotation',
             'AnnotationDetails.deleteAnnotation',
             'AnnotationsCommunication.saveAnnotation',
-            'showClientBoot.changeButton',
-            'showClientBoot.setEnabled'
+            'showClientBoot.changeButton'
         ],
         function(e) {
             var ann = {};
@@ -93,27 +92,26 @@ angular.module('Pundit2.Annotators')
             //    return;
             //}
             ann = AnnotationsExchange.getAnnotationById(e.args);
-            if (e.name === 'AnnotationsCommunication.saveAnnotation' && typeof scopeMap[ann.entities[0]] !== 'undefined'){
+
+            if (e.name === 'AnnotationsCommunication.saveAnnotation' &&
+                typeof scopeMap[ann.entities[0]] !== 'undefined') {
                 scopeMap[ann.entities[0]].addAnnotationNumber();
             }
-            if(e.name === 'AnnotationsCommunication.deleteAnnotation' && typeof scopeMap[uriDelete] !== 'undefined'){
+
+            if (e.name === 'AnnotationsCommunication.deleteAnnotation' &&
+                typeof scopeMap[uriDelete] !== 'undefined') {
                 scopeMap[uriDelete].subAnnotationNumber();
             }
-            if(e.name === 'AnnotationDetails.deleteAnnotation'){
+
+            if (e.name === 'AnnotationDetails.deleteAnnotation') {
                 ann = AnnotationsExchange.getAnnotationById(e.args);
                 uriDelete = ann.entities[0];
             }
-            if(e.name === 'showClientBoot.changeButton'){
+
+            if (e.name === 'showClientBoot.changeButton') {
                 for (var uri in scopeMap) {
                     scopeMap[uri].changeButtonLabel(resourceAnnotator.options.annotationButtonLabelAfterClick);
                 }
-
-            }
-            if(e.name === 'showClientBoot.setEnabled'){
-                for (var uri in scopeMap) {
-                    scopeMap[uri].setEnabled();
-                }
-
             }
 
             return;

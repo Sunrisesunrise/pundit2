@@ -400,7 +400,8 @@ angular.module('Pundit2.Client')
     var client = new BaseComponent('Client', CLIENTPRODEFAULTS),
         // Node which will contain every other component
         root;
-    var first = undefined;
+
+    var first = false;
 
     var html = angular.element('html'),
         body = angular.element('body');
@@ -612,6 +613,8 @@ angular.module('Pundit2.Client')
         html.removeClass(client.options.bodyClass);
         body.removeClass(client.options.bodyClass);
 
+        Status.setState('Pundit', 'canBeShowedAfterHidden', false);
+
         root.css('display', 'none');
         $rootScope.$$phase || $rootScope.$digest();
     };
@@ -628,7 +631,7 @@ angular.module('Pundit2.Client')
 
     client.showClientBoot = function() {
         var container = {};
-        if(typeof first === 'undefined'){
+        if (first === false) {
             EventDispatcher.sendEvent('showClientBoot.changeButton');
             first = false;
             container = angular.element('.pnd-annotation-sidebar-container');
@@ -646,13 +649,16 @@ angular.module('Pundit2.Client')
                 container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
             }
             AnnotationSidebar.toggle();
-            client.showClient();
             Status.setState('Pundit', 'canBeShowedAfterHidden', true);
-            $rootScope.$$phase || $rootScope.$digest();
-        }else if(!first){
-            EventDispatcher.sendEvent('showClientBoot.setEnabled');
+            client.showClient();
 
             first = true;
+        } else {
+            if (!Status.getState('Pundit').canBeShowedAfterHidden) {
+                AnnotationSidebar.toggle();
+                Status.setState('Pundit', 'canBeShowedAfterHidden', true);
+                client.showClient();
+            }
         }
     };
 
