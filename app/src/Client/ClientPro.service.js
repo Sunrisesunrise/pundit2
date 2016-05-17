@@ -632,8 +632,6 @@ angular.module('Pundit2.Client')
     client.showClientBoot = function() {
         var container = {};
         if (first === false) {
-            EventDispatcher.sendEvent('showClientBoot.changeButton');
-            first = false;
             container = angular.element('.pnd-annotation-sidebar-container');
             html.removeClass(AnnotationSidebar.options.bodyCollapsedClass);
             body.removeClass(AnnotationSidebar.options.bodyCollapsedClass);

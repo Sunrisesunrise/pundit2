@@ -11,10 +11,10 @@ angular.module('Pundit2.Annotators')
         templateUrl: 'src/Annotators/ResourceMenu.dir.tmpl.html',
         replace: true,
         link: function(scope, element) {
+            var showHandler;
 
             scope.element = element;
             scope.item = null;
-            scope.selected = false;
             scope.number = 0;
             scope.annotationButton = ResourceAnnotator.options.annotationButton;
             scope.resourceLabel = '';
@@ -38,7 +38,7 @@ angular.module('Pundit2.Annotators')
                 return new Item(values.uri, values);
             };
 
-            scope.changeButtonLabel = function(label) {
+            var changeButtonLabel = function(label) {
                 scope.resourceLabel = label;
                 $rootScope.$$phase || $rootScope.$digest();
             };
@@ -61,10 +61,6 @@ angular.module('Pundit2.Annotators')
                 scope.number--;
             };
 
-            scope.isSelected = function() {
-                return scope.selected;
-            };
-
             scope.myElement = function() {
                 return scope.element;
             };
@@ -76,7 +72,6 @@ angular.module('Pundit2.Annotators')
                 }
 
                 if (scope.enabled || !Config.modules.Client.hiddenBootstrap) {
-
 
                     if (scope.item === null) {
                         // create item only once
@@ -100,39 +95,16 @@ angular.module('Pundit2.Annotators')
                     }
 
                     ContextualMenu.show(evt.pageX, evt.pageY, scope.item, scope.item.cMenuType);
-                    
-                    //TODO: destroy listener
-                    var listenerDelete = EventDispatcher.addListeners(
-                        [
-                            'AnnotationsCommunication.deleteItems'
-                        ],
-                        function(e) {
-                            if (e.args.length === 0) {
-                                return;
-                            }
-                            if (scope.item.uri === e.args[0].uri) {
-                                scope.selected = false;
-                            }
-                            EventDispatcher.removeListener(listenerDelete);
-
-                        });
-
-                    var listenerSave = EventDispatcher.addListeners(
-                        [
-                            'AnnotationsCommunication.saveAnnotation'
-                        ],
-                        function(e) {
-                            var currentAnnotation = AnnotationsExchange.getAnnotationById(e.args);
-                            if (currentAnnotation && 
-                                typeof currentAnnotation.items[scope.item.uri] !== 'undefined') {
-                                scope.selected = true;
-                            }
-                            EventDispatcher.removeListener(listenerSave);
-                        });
                 }
             };
 
-            //scope.url = attributes.pndResource;
+            showHandler = EventDispatcher.addListener('Client.show', function() {
+                changeButtonLabel(ResourceAnnotator.options.annotationButtonLabelAfterClick);
+            });
+
+            element.on('$destroy', function() {
+                EventDispatcher.removeListener(showHandler);
+            });
 
             ResourceAnnotator.addReference(element.attr('about'), scope);
         }

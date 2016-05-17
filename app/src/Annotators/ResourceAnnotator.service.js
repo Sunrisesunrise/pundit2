@@ -72,7 +72,6 @@ angular.module('Pundit2.Annotators')
             for (var uri in scopeMap) {
                 item = ItemsExchange.getItemByUri(uri);
                 if (typeof item !== 'undefined') {
-                    scopeMap[uri].selected = true;
                     scopeMap[uri].setAnnotationNumber(uri);
                 }
             }
@@ -82,8 +81,7 @@ angular.module('Pundit2.Annotators')
         [
             'AnnotationsCommunication.deleteAnnotation',
             'AnnotationDetails.deleteAnnotation',
-            'AnnotationsCommunication.saveAnnotation',
-            'showClientBoot.changeButton'
+            'AnnotationsCommunication.saveAnnotation'
         ],
         function(e) {
             var ann = {};
@@ -106,12 +104,6 @@ angular.module('Pundit2.Annotators')
             if (e.name === 'AnnotationDetails.deleteAnnotation') {
                 ann = AnnotationsExchange.getAnnotationById(e.args);
                 uriDelete = ann.entities[0];
-            }
-
-            if (e.name === 'showClientBoot.changeButton') {
-                for (var uri in scopeMap) {
-                    scopeMap[uri].changeButtonLabel(resourceAnnotator.options.annotationButtonLabelAfterClick);
-                }
             }
 
             return;
