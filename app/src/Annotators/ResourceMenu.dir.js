@@ -30,6 +30,8 @@ angular.module('Pundit2.Annotators')
                 ResourceAnnotator.removeReference(currentUri, scope);
                 currentUri = element.attr('about');
                 ResourceAnnotator.addReference(currentUri, scope);
+
+                $rootScope.$$phase || scope.$apply();
             };
 
             var createItemFromResource = function(resourceElem) {
