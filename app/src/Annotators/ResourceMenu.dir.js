@@ -51,14 +51,18 @@ angular.module('Pundit2.Annotators')
                         scope.number++;
                     }
                 }
+
+                $rootScope.$$phase || scope.$apply();
             };
 
             scope.addAnnotationNumber = function() {
                 scope.number++;
+                $rootScope.$$phase || scope.$apply();
             };
 
             scope.subAnnotationNumber = function() {
                 scope.number--;
+                $rootScope.$$phase || scope.$apply();
             };
 
             scope.myElement = function() {
