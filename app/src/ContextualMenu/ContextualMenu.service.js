@@ -494,14 +494,19 @@ angular.module('Pundit2.ContextualMenu')
         return state.lastRef;
     };
 
-    EventDispatcher.addListener('Client.hide', function( /*e*/ ) {
+    // TODO: temporary: find a better way
+    angular.element('.pnd-wrp').on('click', hide);
+
+    EventDispatcher.addListener('Client.hide', hide);
+
+    function hide() {
         if (contextualMenu !== null) {
             contextualMenu.hide();
         }
         if (state.mockMenu !== null) {
             state.mockMenu.hide();
         }
-    });
+    }
 
     contextualMenu.log('service run');
     return contextualMenu;
