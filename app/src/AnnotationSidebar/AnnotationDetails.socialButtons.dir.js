@@ -25,7 +25,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 return new Item(values.uri, values);
             };
 
-
             scope.disabled = {
                 'like': false,
                 'dislike': false,
@@ -105,7 +104,6 @@ angular.module('Pundit2.AnnotationSidebar')
                     scope.data.repliesLoaded = true;
                     scope.data.replyDialog = false;
                     AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert', iconReference);
-                    EventDispatcher.sendEvent('openContextualMenu');
                     return;
                 }
 
@@ -158,7 +156,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 if (!MyPundit.isUserLogged()) {
                     iconReference.addClass('pnd-range-pos-icon');
                     AnnotationPopover.show(event.clientX, event.clientY, createItemFromResource(event), '', undefined, 'alert', iconReference);
-                    EventDispatcher.sendEvent('openContextualMenu');
                     return;
                 }
 
@@ -197,18 +194,15 @@ angular.module('Pundit2.AnnotationSidebar')
                             if (status === false) {
                                 EventDispatcher.sendEvent('Pundit.alert', {
                                     title: 'Broken reply ' + type,
-                                    id: "WARNING",
+                                    id: 'WARNING',
                                     timeout: 12000,
                                     message: "It looks like some annotations on the page are broken: this can happen if the <strong>text of the page has changed in the last days</strong>.<br /><br />See if you can fix the broken annotations by editing them.<br /><br />Broken annotations are shown on the top right of the sidebar and are highlighted in red.<br /><a href=\"javascript:void(0)\" data-inner-callback=\"0\">Click here</a> to open first broken annotation",
                                     callbacks: [
 
                                     ]
                                 });
-
                             }
-                            // else {
-                            //     console.log('socialEvent:OK');
-                            // }
+
                             scope.disabled[type] = false;
                         });
                     }

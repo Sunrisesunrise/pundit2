@@ -313,8 +313,6 @@ angular.module('Pundit2.ContextualMenu')
     mockOptions.scope.$on('dropdown.hide', function() {
         angular.element($window).off("scroll", scrollHandler);
         angular.element('body').removeClass(contextualMenu.options.overflowClass);
-
-        EventDispatcher.sendEvent('closeContextualMenu');
     });
 
     /**

@@ -261,10 +261,6 @@ angular.module('Pundit2.AnnotationPopover')
                     var elem = angular.element('.pnd-range-pos-icon');
                     elem.removeClass('pnd-range-pos-icon');
                     angular.element($window).off('resize', resizeCallback);
-
-                    if (typeof mode !== 'undefined' && mode === 'alert') {
-                        EventDispatcher.sendEvent('closeContextualMenu');
-                    }
                 }
             };
 

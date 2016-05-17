@@ -47,19 +47,22 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             // console.log("inside directive "+AnnotationsExchange.getAnnotationById(scope.id).item);
 
+            scope.areaClick = function(event) {
+                stopEvent(event);
+            };
 
             scope.replyAnnotation = function(event) {
                 scope.replyDialog = !scope.replyDialog;
-
                 stopEvent(event);
             };
 
             scope.isUserToolShowed = function() {
                 return AnnotationDetails.isUserToolShowed(scope.data.creator);
             };
-            scope.menuEdit = function(evt) {
-                AnnotationDetails.menuEdit(evt.toElement, scope, 'left');
-                console.log("inside menu");
+
+            scope.menuEdit = function(event) {
+                stopEvent(event);
+                AnnotationDetails.menuEdit(event.toElement, scope, 'left');
             };
 
             scope.cancelEdit = function(event) {

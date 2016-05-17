@@ -152,7 +152,7 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.toggleAnnotation = function() {
         $scope.editMode = false;
 
-        EventDispatcher.sendEvent('enableToggle');
+        // EventDispatcher.sendEvent('enableToggle');
 
         if (typeof $scope.annotation.repliesLoaded === 'undefined') {
             $scope.annotation.repliesLoaded = false;
@@ -306,15 +306,20 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.isEmpty = function() {
-
-        if ($scope.annotation.replyCommentValue === '' && $scope.annotation.replyDialog === true) {
-            EventDispatcher.sendEvent('disableToggle');
-            return true;
-        } else {
-            EventDispatcher.sendEvent('enableToggle');
-            return false;
-        }
+        return $scope.annotation.replyCommentValue === '' && 
+            $scope.annotation.replyDialog === true;
     };
+
+    // $scope.isEmpty = function() {
+
+    //     if ($scope.annotation.replyCommentValue === '' && $scope.annotation.replyDialog === true) {
+    //         EventDispatcher.sendEvent('disableToggle');
+    //         return true;
+    //     } else {
+    //         EventDispatcher.sendEvent('enableToggle');
+    //         return false;
+    //     }
+    // };
 
     $scope.socialEvent = function(event, type) {
         var promise = {};
@@ -417,8 +422,9 @@ angular.module('Pundit2.AnnotationSidebar')
         return AnnotationDetails.isEditBtnShowed($scope.motivation);
     };
 
-    $scope.menuEdit = function(evt) {
-        AnnotationDetails.menuEdit(evt.toElement, $scope, 'left');
+    $scope.menuEdit = function(event) {
+        stopEvent(event);
+        AnnotationDetails.menuEdit(event.toElement, $scope, 'left');
         // console.log("inside menu");
     };
 

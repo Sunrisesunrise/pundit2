@@ -73,7 +73,7 @@ angular.module('Pundit2.AnnotationSidebar')
      * <pre> social: false </pre>
      */
     social: false,
-    
+
     /**
      * @module punditConfig
      * @ngdoc property
@@ -292,8 +292,6 @@ angular.module('Pundit2.AnnotationSidebar')
         isUserLogged: false,
         isSidebarExpanded: false,
         isGhostedActive: false,
-        contextualMenuOpened: false,
-        enableToggle: true,
         openAnnotation: false,
         userData: {},
         editReply: false
@@ -323,8 +321,6 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     var initContextualMenu = function() {
-
-
         ContextualMenu.addAction({
             name: 'Edit',
             type: annotationDetails.options.cMenuTypeEdit,
@@ -364,6 +360,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 scope.deleteAnnotation(document.createEvent('Event'));
             }
         });
+
         ContextualMenu.addAction({
             name: 'Update reply',
             type: [annotationDetails.options.cMenuTypeLeaf],
@@ -379,6 +376,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 scope.editComment(event);
             }
         });
+
         ContextualMenu.addAction({
             name: 'Delete reply',
             type: [annotationDetails.options.cMenuTypeLeaf],
@@ -778,9 +776,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
         return editPromise;
     };
-    annotationDetails.setEditable = function(bool) {
-        state.isEditable = bool;
-    };
 
     annotationDetails.saveReply = function(item, reply) {
         var currentTarget = item,
@@ -906,10 +901,8 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationDetails.toggleAnnotationView = function(currentId, forceTo) {
-        if (!state.contextualMenuOpened && state.enableToggle && !state.editReply) {
-            annotationDetails.closeAllAnnotationView(currentId);
-            state.annotations[currentId].expanded = typeof forceTo !== 'undefined' ? forceTo : !state.annotations[currentId].expanded;
-        }
+        annotationDetails.closeAllAnnotationView(currentId);
+        state.annotations[currentId].expanded = typeof forceTo !== 'undefined' ? forceTo : !state.annotations[currentId].expanded;
     };
 
     annotationDetails.isAnnotationGhosted = function(currentId) {
@@ -929,7 +922,7 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationDetails.isEditBtnShowed = function(motivation) {
-        return Config.clientMode === 'pro' && (motivation === 'linking' || motivation === 'commenting');
+        return Config.clientMode === 'pro' || (motivation === 'linking' || motivation === 'commenting');
     };
 
     annotationDetails.userData = function() {
@@ -937,22 +930,13 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationDetails.addAnnotationReference = function(scope, force) {
-        var currentId = scope.id;
-        var isBroken = scope.broken;
-        var notebookName = "Downloading in progress";
-        var currentAnnotation = AnnotationsExchange.getAnnotationById(currentId);
-        var expandedState;
-        var template;
-        var currentColor;
-
-        ////check thumbnail if null set default
-        //if (currentAnnotation.thumbnail === '') {
-        //    scope.thumbDefault = true;
-        //}else{
-        //    scope.thumbDefault = false;
-        //}
-        // console.log(currentAnnotation.creatorName + ' ' + currentAnnotation.thumbnail + ' ' + currentAnnotation.id);
-
+        var currentId = scope.id,
+            isBroken = scope.broken,
+            notebookName = 'Downloading in progress',
+            currentAnnotation = AnnotationsExchange.getAnnotationById(currentId),
+            expandedState,
+            template,
+            currentColor;
 
         var buildSemantic = function() {
             template = TemplatesExchange.getTemplateById(currentAnnotation.hasTemplate);
@@ -960,7 +944,6 @@ angular.module('Pundit2.AnnotationSidebar')
             if (typeof(template) !== 'undefined') {
                 currentColor = template.hasColor;
             }
-
 
             if (typeof(state.annotations[currentId]) === 'undefined') {
                 state.annotations[currentId] = {
@@ -1162,9 +1145,11 @@ angular.module('Pundit2.AnnotationSidebar')
             scope.motivation = scope.data.motivation;
         }
 
+        // TODO: nain nain nain, don't use angular element here
         if (typeof angular.element('.pnd-dropdown-contextual-menu')[0] === 'undefined') {
 
-            if (annotationDetails.isEditBtnShowed(scope.motivation)) {
+            // TODO: find a better way to detect parent and child
+            if (scope.motivation === 'commenting') {
                 type = annotationDetails.options.cMenuTypeEdit;
             } else if (typeof scope.leaf !== 'undefined') {
                 type = annotationDetails.options.cMenuTypeLeaf;
@@ -1172,7 +1157,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 type = annotationDetails.options.cMenuTypeNoEdit;
             }
             ContextualMenu.show(left, top, scope, type, '', placement, '.pnd-annotation-sidebar-annotations');
-            state.contextualMenuOpened = true;
         } else {
             ContextualMenu.hide();
         }
@@ -1232,7 +1216,6 @@ angular.module('Pundit2.AnnotationSidebar')
     });
 
     EventDispatcher.addListener('ResizeManager.resize', function() {
-        state.contextualMenuOpened = false;
         ContextualMenu.hide();
         annotationDetails.closeAllAnnotationView();
     });
@@ -1250,18 +1233,7 @@ angular.module('Pundit2.AnnotationSidebar')
     EventDispatcher.addListener('Client.show', function( /*e*/ ) {
         $document.on('mousedown', mouseDownHandler);
     });
-    EventDispatcher.addListener('closeContextualMenu', function( /*e*/ ) {
-        state.contextualMenuOpened = false;
-    });
-    EventDispatcher.addListener('openContextualMenu', function( /*e*/ ) {
-        state.contextualMenuOpened = true;
-    });
-    EventDispatcher.addListener('disableToggle', function( /*e*/ ) {
-        state.enableToggle = false;
-    });
-    EventDispatcher.addListener('enableToggle', function( /*e*/ ) {
-        state.enableToggle = true;
-    });
+
     $document.on('mousedown', mouseDownHandler);
 
     function mouseDownHandler(downEvt) {
