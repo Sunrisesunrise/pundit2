@@ -78,7 +78,10 @@ angular.module('Pundit2.Annotators')
             scope.clickHandler = function(evt) {
                 if (!scope.enabled) {
                     scope.enabled = true;
-                    return;
+
+                    if (Config.modules.Client.hiddenBootstrap) {
+                        return;
+                    }
                 }
 
                 if (scope.enabled || !Config.modules.Client.hiddenBootstrap) {
