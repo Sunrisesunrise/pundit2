@@ -177,28 +177,32 @@ sup {
     display: inline-block;
     position: relative;
     height: @resource-inline-icon-height;
-    margin: 0;
+    margin: 0 0 0 5px;
     padding: 0;
+
     background-color: @color-background-light;
     border: 1px solid @color-border-normal;
     border-radius: 3px;
     color: #8A8A8A;
+
     line-height: @resource-inline-icon-height;
     text-align: center;
     cursor: pointer;
+    vertical-align: bottom;
     transition-property: color;
     transition-duration: .3s;
 
     /* Label displaying text "Annotate" */
     .label {
         display: inline-block;
-        height: @resource-inline-icon-height;
+        height: @resource-inline-icon-height - 2;
         margin: 0;
         padding: 0 0 0 6px;
         font-family: @font-family-base;
         font-size: 12px;
         font-weight: 400;
-        line-height: @resource-inline-icon-height + 2px;
+        line-height: @resource-inline-icon-height;
+        letter-spacing: 0.0625em;
         text-transform: uppercase;
         vertical-align: top;
         text-shadow: 0 1px 0 #fff;
@@ -207,11 +211,11 @@ sup {
     /* Pundit icon */
     span[class^="pnd-icon"] {
         display: inline-block;
-        height: @resource-inline-icon-height;
+        height: @resource-inline-icon-height - 2;
         margin: 0;
         padding: 0 5px;
         font-size: 14px;
-        line-height: @resource-inline-icon-height + 2px;
+        line-height: @resource-inline-icon-height;
         vertical-align: top;
         text-shadow: 0 1px 0 #fff;
     }
