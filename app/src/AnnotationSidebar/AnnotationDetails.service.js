@@ -306,7 +306,7 @@ angular.module('Pundit2.AnnotationSidebar')
         $timeout(function() {
             var currentElement = angular.element('#' + annotationId),
                 currentElementRect = currentElement[0].getClientRects()[0],
-                dashboardHeight = clientMode === 'pro' ? Dashboard.getContainerHeight() : 0;
+                dashboardHeight = AnnotationSidebar.getDashboardHeight();
 
             if (currentElementRect.top >= 0 &&
                 currentElementRect.bottom <= $window.innerHeight) {
@@ -1136,10 +1136,11 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     annotationDetails.menuEdit = function(elem, scope, placement) {
-        var pos = elem.getBoundingClientRect();
-        var left = pos.left + pos.width * 2 / 3 + angular.element($window).scrollLeft();
-        var top = pos.top + pos.height * 2 / 3 + angular.element($window).scrollTop();
-        var type = '';
+        var pos = elem.getBoundingClientRect(),
+            currentWindow = angular.element($window),
+            left = pos.left + pos.width * 2 / 3 + currentWindow.scrollLeft(),
+            top = pos.top + pos.height * 2 / 3 + currentWindow.scrollTop(),
+            type = '';
 
         if (typeof scope.motivation === 'undefined') {
             scope.motivation = scope.data.motivation;
@@ -1148,15 +1149,16 @@ angular.module('Pundit2.AnnotationSidebar')
         // TODO: nain nain nain, don't use angular element here
         if (typeof angular.element('.pnd-dropdown-contextual-menu')[0] === 'undefined') {
 
-            // TODO: find a better way to detect parent and child
-            // TODO ASPA: enable edit for linking in pro mode
-            if (scope.motivation === 'commenting') {
+            // TODO: find a better way to detect parent and child (leaf)
+            if (scope.motivation === 'commenting' ||
+                (clientMode === 'pro' && scope.motivation === 'linking')) {
                 type = annotationDetails.options.cMenuTypeEdit;
             } else if (typeof scope.leaf !== 'undefined') {
                 type = annotationDetails.options.cMenuTypeLeaf;
             } else {
                 type = annotationDetails.options.cMenuTypeNoEdit;
             }
+
             ContextualMenu.show(left, top, scope, type, '', placement, '.pnd-annotation-sidebar-annotations');
         } else {
             ContextualMenu.hide();

@@ -50,6 +50,7 @@ angular.module('Pundit2.AnnotationSidebar')
             report: ((typeof $scope.annotation.social === 'undefined') ? false : $scope.annotation.social.report),
         }
     };
+
     $scope.annotation.parentId = $scope.id;
     $scope.annotation.repliesLoaded = undefined;
     $scope.annotation.replyDialog = false;
@@ -95,10 +96,9 @@ angular.module('Pundit2.AnnotationSidebar')
     $scope.optionsReplyes.dislike = $scope.options.replyDislike;
     $scope.optionsReplyes.report = $scope.options.replyReport;
     $scope.optionsReplyes.endorse = $scope.options.replyEndorse;
-    $scope.optionsReplyes.reply =$scope.options.replyReply;
+    $scope.optionsReplyes.reply = $scope.options.replyReply;
 
     AnnotationDetails.addScopeReference($scope.id, $scope);
-
 
     if ($scope.options.replyTree === false) {
         $scope.optionsReplyes.reply = false;
@@ -134,16 +134,16 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.checkLoaded = function() {
-
-        if ($scope.annotation.repliesLoaded === false && $scope.social === true) {
+        if ($scope.annotation.repliesLoaded === false &&
+            $scope.social === true) {
             return true;
         }
         return false;
     };
 
     $scope.checkSaving = function() {
-
-        if ($scope.annotation.repliesLoaded === false && $scope.social === true) {
+        if ($scope.annotation.repliesLoaded === false &&
+            $scope.social === true) {
             return true;
         }
         return false;
@@ -151,8 +151,6 @@ angular.module('Pundit2.AnnotationSidebar')
 
     $scope.toggleAnnotation = function() {
         $scope.editMode = false;
-
-        // EventDispatcher.sendEvent('enableToggle');
 
         if (typeof $scope.annotation.repliesLoaded === 'undefined') {
             $scope.annotation.repliesLoaded = false;
@@ -164,16 +162,13 @@ angular.module('Pundit2.AnnotationSidebar')
             }
             AnnotationSidebar.toggle();
             $timeout(function() {
-                var dashboardHeight = Dashboard.isDashboardVisible() ? Dashboard.getContainerHeight() : 0;
+                var dashboardHeight = AnnotationSidebar.getDashboardHeight();
                 angular.element('body').animate({
                     scrollTop: currentElement.offset().top - dashboardHeight - 60
                 }, 'slow');
             }, 100);
         }
-        // if(AnnotationDetails.isAnnotationGhosted(currentId)){
-        //     AnnotationDetails.closeViewAndReset();
-        // }
-        // $scope.metaInfo = false;
+
         AnnotationDetails.toggleAnnotationView(currentId);
 
         if (!$scope.annotation.expanded) {
@@ -195,7 +190,7 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
 
                 if ((element.height + element.top + 90 > screen.height()) || (element.top < 0)) {
-                    var dashboardHeight = Dashboard.isDashboardVisible() ? Dashboard.getContainerHeight() : 0;
+                    var dashboardHeight = AnnotationSidebar.getDashboardHeight();
                     angular.element('html,body').animate({
                             scrollTop: $window.scrollY + element.top - dashboardHeight - 65
                         },
@@ -203,10 +198,6 @@ angular.module('Pundit2.AnnotationSidebar')
                 }
             }, 600);
         }
-
-        //if (!MyPundit.isUserLogged()){
-        //    $scope.annotation.repliesLoaded = true;
-        //}
 
         if ($scope.annotation.expanded && !$scope.annotation.repliesLoaded) {
             if (Config.modules.AnnotationDetails.social) {
@@ -306,20 +297,9 @@ angular.module('Pundit2.AnnotationSidebar')
     };
 
     $scope.isEmpty = function() {
-        return $scope.annotation.replyCommentValue === '' && 
+        return $scope.annotation.replyCommentValue === '' &&
             $scope.annotation.replyDialog === true;
     };
-
-    // $scope.isEmpty = function() {
-
-    //     if ($scope.annotation.replyCommentValue === '' && $scope.annotation.replyDialog === true) {
-    //         EventDispatcher.sendEvent('disableToggle');
-    //         return true;
-    //     } else {
-    //         EventDispatcher.sendEvent('enableToggle');
-    //         return false;
-    //     }
-    // };
 
     $scope.socialEvent = function(event, type) {
         var promise = {};

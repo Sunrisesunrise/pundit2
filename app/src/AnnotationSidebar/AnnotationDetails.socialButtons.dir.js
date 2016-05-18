@@ -1,6 +1,6 @@
 angular.module('Pundit2.AnnotationSidebar')
 
-.directive('annotationDetailsSocialButtons', function(AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher, $window) {
+.directive('annotationDetailsSocialButtons', function(AnnotationSidebar, AnnotationDetails, Analytics, AnnotationPopover, Item, MyPundit, EventDispatcher, $window) {
     return {
         restrict: 'C',
         scope: {
@@ -34,21 +34,21 @@ angular.module('Pundit2.AnnotationSidebar')
             };
 
             scope.replyAnnotation = function(event) {
-
-                var moveOnTextArea = function(){
+                var moveOnTextArea = function() {
                     var screen = angular.element(window);
                     setTimeout(function() {
-                        var element = angular.element('.pnd-annotation-reply-textarea')[0].getBoundingClientRect();
-                        var parentElement = angular.element('.pnd-annotation-expanded')[0];
-                        var parentElementOffset = parentElement.getBoundingClientRect();
-                        var timer = 500;
-                        var scroll = 0;
+                        var element = angular.element('.pnd-annotation-reply-textarea')[0].getBoundingClientRect(),
+                            parentElement = angular.element('.pnd-annotation-expanded')[0],
+                            parentElementOffset = parentElement.getBoundingClientRect(),
+                            dashboardHeight = AnnotationSidebar.getDashboardHeight(),
+                            timer = 500,
+                            scroll = 0;
 
                         if (element.height + element.top  > screen.height()) {
 
                             if (parentElementOffset.height < screen.height()) {
                                 angular.element('html,body').animate({
-                                        scrollTop: ($window.scrollY + (element.top % screen.height()) + element.height + 40) % screen.height()
+                                        scrollTop: ($window.scrollY + (element.top % screen.height()) + element.height + 40) % screen.height() - dashboardHeight
                                     },
                                     'slow');
                             } else {
@@ -58,7 +58,7 @@ angular.module('Pundit2.AnnotationSidebar')
                                     scroll = $window.scrollY + (element.top % screen.height()) + element.height + 40;
                                 }
                                 angular.element('html,body').animate({
-                                        scrollTop: scroll
+                                        scrollTop: scroll - dashboardHeight
                                     },
                                     'slow');
                             }
@@ -70,7 +70,7 @@ angular.module('Pundit2.AnnotationSidebar')
                                 scroll = ($window.scrollY + parentElementOffset.top - 65);
                             }
                             angular.element('html,body').animate({
-                                    scrollTop: scroll
+                                    scrollTop: scroll - dashboardHeight
                                 },
                                 'slow');
 
@@ -84,6 +84,8 @@ angular.module('Pundit2.AnnotationSidebar')
 
                 var scopeRef = AnnotationDetails.getScopeReference(scope.id),
                     iconReference = angular.element(event.target);
+
+                stopEvent(event);
 
                 if (event.target.className === 'pnd-icon-comment') {
                     iconReference = angular.element(event.target.parentElement);
@@ -126,10 +128,10 @@ angular.module('Pundit2.AnnotationSidebar')
                     });
                 }
 
-                if (AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded  && scopeRef.replyTree.length !== 0) {
+                if (AnnotationDetails.getScopeReference(scope.id).annotation.repliesLoaded  && 
+                    scopeRef.replyTree.length !== 0) {
                     moveOnTextArea();
                 }
-                stopEvent(event);
             };
 
             scope.saveEdit = function(event) {
@@ -152,6 +154,8 @@ angular.module('Pundit2.AnnotationSidebar')
                     promise = {},
                     operation = '',
                     iconReference = angular.element(event.target);
+
+                stopEvent(event);
 
                 if (!MyPundit.isUserLogged()) {
                     iconReference.addClass('pnd-range-pos-icon');
@@ -208,8 +212,6 @@ angular.module('Pundit2.AnnotationSidebar')
                     }
 
                 }
-
-                stopEvent(event);
             };
         }
     };

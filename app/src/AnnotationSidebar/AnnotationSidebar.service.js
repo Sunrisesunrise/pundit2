@@ -1536,6 +1536,8 @@ angular.module('Pundit2.AnnotationSidebar')
         return Config.isModuleActive('Annomatic') || forceActiveAnnomatic;
     };
 
+    annotationSidebar.getDashboardHeight = getDashboardHeight;
+
     EventDispatcher.addListener('Annomatic.annotationSaved', function(e) {
         var annotation = e.args,
             annotations, annotationsList;
