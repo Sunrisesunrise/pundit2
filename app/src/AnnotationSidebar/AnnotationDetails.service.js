@@ -1149,6 +1149,7 @@ angular.module('Pundit2.AnnotationSidebar')
         if (typeof angular.element('.pnd-dropdown-contextual-menu')[0] === 'undefined') {
 
             // TODO: find a better way to detect parent and child
+            // TODO ASPA: enable edit for linking in pro mode
             if (scope.motivation === 'commenting') {
                 type = annotationDetails.options.cMenuTypeEdit;
             } else if (typeof scope.leaf !== 'undefined') {
