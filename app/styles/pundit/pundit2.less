@@ -65,6 +65,8 @@ body .pnd-wrp {
 body .pnd-wrp {
     font-size: 62.5%;
     -webkit-font-smoothing: subpixel-antialiased; // Could be antialiased
+    -webkit-font-feature-settings: normal !important; // CSS conflicts fix
+    font-feature-settings: normal !important; // CSS conflicts fix
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     z-index: @zindex-pnd;
 }
