@@ -26,5 +26,3 @@ is then made with an XPointer “starting” from the unique identifier and ever
 element doesn’t impact the anchoring. This is also used if we want to preserve the annotations on the same text shown
 in different pages: if we have a **“pundit-content”** unique identifier for a paragraph, this paragraph can be shown
 in two different pages (e.g. the backend and the frontend of an archive) and all annotations are correctly in the same position.
-
-On the <a href="http://thepund.it/try-pundit/" target="_blank">Pundit Try it now</a> page there are two examples Pundit working with Feed.
