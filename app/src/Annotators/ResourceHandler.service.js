@@ -131,7 +131,7 @@ angular.module('Pundit2.Annotators')
                 showIf: function() {
                     return true;
                 },
-                priority: 97,
+                priority: 105,
                 action: function(item) {
 
                     TripleComposer.addToSubject(item);
@@ -147,7 +147,7 @@ angular.module('Pundit2.Annotators')
                 showIf: function() {
                     return true;
                 },
-                priority: 96,
+                priority: 104,
                 action: function(item) {
                     TripleComposer.addToObject(item);
                 }
@@ -156,7 +156,7 @@ angular.module('Pundit2.Annotators')
         }
         if (resourceHandler.options.useAsObject || resourceHandler.options.useAsObject) {
             ContextualMenu.addDivider({
-                priority: 95,
+                priority: 100,
                 type: cMenuTypes
             });
         }
@@ -164,10 +164,10 @@ angular.module('Pundit2.Annotators')
             if (typeof templateConfig.activeOnTextFragment !== 'undefined' && templateConfig.activeOnTextFragment === true) {
                 cMenuTypes.push(Config.modules.TextFragmentHandler.cMenuType);
                 // TODO: fix priority order
-                // ContextualMenu.addDivider({
-                //     priority: 94,
-                //     type: Config.modules.TextFragmentHandler.cMenuType
-                // });
+                ContextualMenu.addDivider({
+                    priority: 89,
+                    type: Config.modules.TextFragmentHandler.cMenuType
+                });
             }
             for (var i = 0; i < templateConfig.list.length; i++) {
                 if (templateConfig.list[i].types.indexOf('resource')) {
@@ -179,7 +179,7 @@ angular.module('Pundit2.Annotators')
                         showIf: function() {
                             return true;
                         },
-                        priority: 94,
+                        priority: 84,
                         action: (function(idx) {
                             return function(item) {
                                 var triple = templateConfig.list[idx].triples[0],

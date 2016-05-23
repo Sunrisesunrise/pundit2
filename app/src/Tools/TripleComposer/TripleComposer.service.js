@@ -275,7 +275,7 @@ angular.module('Pundit2.TripleComposer')
             showIf: function() {
                 return Config.annotationServerVersion !== 'v1';
             },
-            priority: 101,
+            priority: 95,
             action: function(item) {
                 var coordinates = ContextualMenu.getLastXY(),
                     fragmentId = ContextualMenu.getLastRef();
@@ -290,7 +290,7 @@ angular.module('Pundit2.TripleComposer')
             showIf: function() {
                 return Config.annotationServerVersion !== 'v1';
             },
-            priority: 101,
+            priority: 94,
             action: function(item) {
                 var coordinates = ContextualMenu.getLastXY(),
                     fragmentId = ContextualMenu.getLastRef();
@@ -299,10 +299,10 @@ angular.module('Pundit2.TripleComposer')
             }
         });
 
-        ContextualMenu.addDivider({
-            priority: 101,
-            type: cMenuTypes
-        });
+        // ContextualMenu.addDivider({
+        //     priority: 90,
+        //     type: cMenuTypes
+        // });
 
         ContextualMenu.addAction({
             type: cMenuTypes,
@@ -311,7 +311,7 @@ angular.module('Pundit2.TripleComposer')
             showIf: function(item) {
                 return /*!Toolbar.isActiveTemplateMode() &&*/ tripleComposer.canAddItemAsSubject(item);
             },
-            priority: 101,
+            priority: 105,
             action: function(item) {
                 if (Status.getTemplateModeStatus()) {
                     tripleComposer.addToAllSubject(item);
@@ -330,14 +330,17 @@ angular.module('Pundit2.TripleComposer')
             showIf: function(item) {
                 return /*!Toolbar.isActiveTemplateMode() &&*/ tripleComposer.canAddItemAsObject(item);
             },
-            priority: 100,
+            priority: 104,
             action: function(item) {
                 tripleComposer.addToObject(item);
                 EventDispatcher.sendEvent('TripleComposer.useAsObject', item);
                 trackContextualEvent('useAsObject');
             }
         });
-
+        ContextualMenu.addDivider({
+            priority: 100,
+            type: cMenuTypes
+        });
         ContextualMenu.addAction({
             type: [
                 Config.modules.PredicatesContainer.cMenuType
@@ -352,7 +355,7 @@ angular.module('Pundit2.TripleComposer')
                 }
                 return true;
             },
-            priority: 100,
+            priority: 103,
             action: function(item) {
                 tripleComposer.addToPredicate(item);
                 EventDispatcher.sendEvent('TripleComposer.useAsPredicate', item);
