@@ -114,6 +114,10 @@ angular.module('Pundit2.Client')
     EventDispatcher.addListener('Pundit.dispatchDocumentEvent', function(data) {
         dispatchDocumentEvent(data.args.event, data.args.data);
     });
+    
+    EventDispatcher.addListener('AnnotationsCommunication.annotationSaved', function(e) {
+        dispatchDocumentEvent('Pundit.saveAnnotation', e.args);
+    });
 
     EventDispatcher.addListener('Pundit.loading', function(e) {
         var eventName = e.name,
