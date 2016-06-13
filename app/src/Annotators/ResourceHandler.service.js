@@ -182,27 +182,41 @@ angular.module('Pundit2.Annotators')
                         priority: 84,
                         action: (function(idx) {
                             return function(item) {
-                                var triple = templateConfig.list[idx].triples[0],
-                                    predicateItem = {};
+                                var triples = templateConfig.list[idx].triples;
 
-                                TripleComposer.wipeNotFixedItems();
+                                // TripleComposer.wipeNotFixedItems();
+                                TripleComposer.reset();
 
-                                if (triple.subject.selectedItem) {
-                                    TripleComposer.addToSubject(item);
+                                for (i = 1; i < triples.length; i++) {
+                                    TripleComposer.addStatement();
                                 }
 
-                                if (triple.object.forceFocus) {
-                                    ResourcePanel.setSelector(triple.object.selectors);
-                                    //TODO ASAP: handle this operation with TripleComposer.service
-                                    setTimeout(function() {
-                                        angular.element('span.pnd-statement-label[ng-click="onClickObject($event)"]').click();
-                                    }, 300);
-                                }
+                                $timeout(function() {
+                                    for (var i in triples) {
+                                        (function closure(_i) {
+                                            var triple = triples[_i],
+                                                predicateItem = {};
 
-                                if (triple.predicate.uri) {
-                                    predicateItem = ItemsExchange.getItemByUri(triple.predicate.uri);
-                                    TripleComposer.addToPredicate(predicateItem);
-                                }
+
+                                            if (triple.subject.selectedItem) {
+                                                TripleComposer.addToSubject(item);
+                                            }
+
+                                            if (triple.object.forceFocus) {
+                                                ResourcePanel.setSelector(triple.object.selectors);
+                                                //TODO ASAP: handle this operation with TripleComposer.service
+                                                setTimeout(function() {
+                                                    angular.element('span.pnd-statement-label[ng-click="onClickObject($event)"]').click();
+                                                }, 300);
+                                            }
+
+                                            if (triple.predicate.uri) {
+                                                predicateItem = ItemsExchange.getItemByUri(triple.predicate.uri);
+                                                TripleComposer.addToPredicate(predicateItem);
+                                            }
+                                        })(i);
+                                    }
+                                });
 
                                 if (item.type.indexOf(NameSpace.fragments.text) !== -1) {
                                     EventDispatcher.sendEvent('ResounceHandler.addItemFromRapidAction', item);
@@ -215,7 +229,7 @@ angular.module('Pundit2.Annotators')
         }
     };
 
-    resourceHandler.forceCompileButton = function(){
+    resourceHandler.forceCompileButton = function() {
         var resourceElem = angular.element('.pnd-resource'); //find pnd-resource
         // add directive attribute
         promise = $q.defer();
@@ -231,7 +245,7 @@ angular.module('Pundit2.Annotators')
     };
 
 
-        // add directive attribute
+    // add directive attribute
     resourceElem.addClass('resource-menu');
     //compile the DOM
     $compile(resourceElem)($rootScope);
