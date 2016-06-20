@@ -619,5 +619,29 @@ angular.module('Pundit2.Core')
     template: {
         active: false,
         list: []
+    },
+
+    /**
+     * @module punditConfig
+     * @ngdoc object
+     * @name contributions
+     * @description
+     * `object`
+     *
+     * Define if is active the contributions message
+     *
+     * Default:
+     * <pre>
+     *  contributions: {
+     *    active: false,
+     *    textLink: 'Terms for User Contributions',
+     *    link: 'http://thepund.it/license/'
+     *  }
+     * </pre>
+     */
+    contributions: {
+        active: false,
+        textLink: 'Terms for User Contributions',
+        link: 'http://thepund.it/license/'
     }
 });
