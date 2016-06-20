@@ -85,7 +85,7 @@ angular.module('Pundit2.Annotators')
                         EventDispatcher.sendEvent('Pundit.alert', {
                             title: 'Please log in',
                             id: 'INFO',
-                            timeout: Config.contributions.active ? 8000 : 3000,
+                            timeout: Config.contributions.active ? 5000 : 3000,
                             message: 'Log in or register to Pundit to save your annotations and see your private notebooks.' + contributionsMessage
                         });
                         return;
