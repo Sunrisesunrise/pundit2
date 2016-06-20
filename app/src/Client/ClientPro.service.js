@@ -689,13 +689,13 @@ angular.module('Pundit2.Client')
                 MyItems.getAllItems();
                 NotebookCommunication.getMyNotebooks();
                 NotebookCommunication.getCurrent();
-            } else {
+            } else if (!Config.modules.Client.hiddenBootstrap) {
                 var contributionsMessage = Config.contributions.active ? '<br/><br/>By logging in you agree to the <a target="_blank" href=" ' + Config.contributions.link + ' ">' + Config.contributions.textLink + '</a>.' : '';
 
                 EventDispatcher.sendEvent('Pundit.alert', {
                     title: 'Please log in',
                     id: 'INFO',
-                    timeout: Config.contributions.active ? 8000 : 3000,
+                    timeout: Config.contributions.active ? 6000 : 3000,
                     message: "<a href=\"javascript:void(0)\" data-inner-callback=\"0\">Log in or register</a> to Pundit to save your annotations and see your private notebooks." + contributionsMessage,
                     callbacks: [
                         function( /*alert*/ ) {

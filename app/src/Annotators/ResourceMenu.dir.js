@@ -80,6 +80,14 @@ angular.module('Pundit2.Annotators')
                     scope.enabled = true;
 
                     if (Config.modules.Client.hiddenBootstrap) {
+                        var contributionsMessage = Config.contributions.active ? '<br/><br/>By logging in you agree to the <a target="_blank" href=" ' + Config.contributions.link + ' ">' + Config.contributions.textLink + '</a>.' : '';
+
+                        EventDispatcher.sendEvent('Pundit.alert', {
+                            title: 'Please log in',
+                            id: 'INFO',
+                            timeout: Config.contributions.active ? 8000 : 3000,
+                            message: 'Log in or register to Pundit to save your annotations and see your private notebooks.' + contributionsMessage
+                        });
                         return;
                     }
                 }
