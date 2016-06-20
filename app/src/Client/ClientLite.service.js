@@ -215,7 +215,7 @@ angular.module('Pundit2.Client')
 
         Status.setState('Pundit', 'canBeShowedAfterHidden', false);
 
-        AlerSystem.clearAlerts();
+        AlertSystem.clearAlerts();
 
         root.css('display', 'none');
         $rootScope.$$phase || $rootScope.$digest();
