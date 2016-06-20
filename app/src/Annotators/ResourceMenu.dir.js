@@ -3,7 +3,7 @@ angular.module('Pundit2.Annotators')
 .directive('resourceMenu', function($rootScope, NameSpace, ContextualMenu,
     Toolbar, ImageHandler, ImageAnnotator, ItemsExchange, TemplatesExchange,
     TripleComposer, EventDispatcher, Item, XpointersHelper, AnnotationsExchange,
-    ResourceAnnotator, Config) {
+    ResourceAnnotator, Config, MyPundit) {
 
     return {
         restrict: 'C',
@@ -80,14 +80,16 @@ angular.module('Pundit2.Annotators')
                     scope.enabled = true;
 
                     if (Config.modules.Client.hiddenBootstrap) {
-                        var contributionsMessage = Config.contributions.active ? '<br/><br/>By logging in you agree to the <a target="_blank" href=" ' + Config.contributions.link + ' ">' + Config.contributions.textLink + '</a>.' : '';
+                        if (MyPundit.isUserLogged() === false) {
+                            var contributionsMessage = Config.contributions.active ? '<br/><br/>By logging in you agree to the <a target="_blank" href=" ' + Config.contributions.link + ' ">' + Config.contributions.textLink + '</a>.' : '';
 
-                        EventDispatcher.sendEvent('Pundit.alert', {
-                            title: 'Please log in',
-                            id: 'INFO',
-                            timeout: Config.contributions.active ? 5000 : 3000,
-                            message: 'Log in or register to Pundit to save your annotations and see your private notebooks.' + contributionsMessage
-                        });
+                            EventDispatcher.sendEvent('Pundit.alert', {
+                                title: 'Please log in',
+                                id: 'INFO',
+                                timeout: Config.contributions.active ? 5000 : 3000,
+                                message: 'Log in or register to Pundit to save your annotations and see your private notebooks.' + contributionsMessage
+                            });
+                        }
                         return;
                     }
                 }
