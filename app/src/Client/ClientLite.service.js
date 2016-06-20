@@ -100,7 +100,7 @@ angular.module('Pundit2.Client')
 .service('ClientLite', function(CLIENTLITEDEFAULTS, BaseComponent, Config, EventDispatcher, Analytics, MyPundit, LiteTool,
     TextFragmentAnnotator, AnnotationsCommunication, AnnotationsExchange, Item, ItemsExchange, Status, TextFragmentHandler,
     AnnotationSidebar, AnnotationDetails, ResizeManager, NotebookCommunication, NotebookExchange, AnnotationPopover,
-    $injector, $templateCache, $rootScope) {
+    AlertSystem, $injector, $templateCache, $rootScope) {
 
     var client = new BaseComponent('Client', CLIENTLITEDEFAULTS),
         // Node which will contain every other component
@@ -215,6 +215,8 @@ angular.module('Pundit2.Client')
 
         Status.setState('Pundit', 'canBeShowedAfterHidden', false);
 
+        AlerSystem.clearAlerts();
+
         root.css('display', 'none');
         $rootScope.$$phase || $rootScope.$digest();
     };
@@ -309,10 +311,10 @@ angular.module('Pundit2.Client')
                     return;
                 }
                 if (newStatus === true) {
-                    client.log("User just logged in");
+                    client.log('User just logged in');
                     onLogin();
                 } else {
-                    client.log("User just logged out");
+                    client.log('User just logged out');
                     onLogout();
                 }
             });

@@ -394,7 +394,7 @@ angular.module('Pundit2.Client')
     TextFragmentHandler, ImageHandler, ResourceHandler, PageAnnotator, AnnotationSidebar, AnnotationDetails, ResizeManager,
     Toolbar, Annomatic, NotebookCommunication, NotebookExchange, TemplatesExchange,
     SelectorsManager, FreebaseSelector, MurucaSelector, KorboBasketSelector, Korbo2Selector, EuropeanaSelector, DbpediaSelector, GeonamesSelector, PredicateSelector,
-    TemplatesSelector, TripleComposer, ImageFragmentAnnotatorHelper,
+    TemplatesSelector, TripleComposer, ImageFragmentAnnotatorHelper, AlerSystem,
     $injector, $templateCache, $rootScope, $compile, $window) {
 
     var client = new BaseComponent('Client', CLIENTPRODEFAULTS),
@@ -614,6 +614,8 @@ angular.module('Pundit2.Client')
         body.removeClass(client.options.bodyClass);
 
         Status.setState('Pundit', 'canBeShowedAfterHidden', false);
+
+        AlerSystem.clearAlerts();
 
         root.css('display', 'none');
         $rootScope.$$phase || $rootScope.$digest();
