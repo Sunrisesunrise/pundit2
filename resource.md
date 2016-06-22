@@ -31,11 +31,11 @@ Then Pundit will replace this snippet of code with a button that allows users to
 
 These are the configuration parameters for this feature:
 
-##### ResourceAnnotator.annotationButton
+#### ResourceAnnotator.annotationButton
 
 Allows to add a label to the button with a custom string. Requires a *boolean* value.
 
-##### ResourceAnnotator.annotationButtonLabel
+#### ResourceAnnotator.annotationButtonLabel
 
 Defines the custom string that will be added to the button. Requires a *string*.
 
