@@ -643,12 +643,12 @@ angular.module('Pundit2.Client')
                 html.addClass(AnnotationSidebar.options.bodyExpandedClass);
                 body.addClass(AnnotationSidebar.options.bodyExpandedClass);
                 container.addClass(AnnotationSidebar.options.sidebarExpandedClass);
+                AnnotationSidebar.toggle();
             } else {
                 html.addClass(AnnotationSidebar.options.bodyCollapsedClass);
                 body.addClass(AnnotationSidebar.options.bodyCollapsedClass);
                 container.addClass(AnnotationSidebar.options.sidebarCollapsedClass);
             }
-            AnnotationSidebar.toggle();
             Status.setState('Pundit', 'canBeShowedAfterHidden', true);
             client.showClient();
 
