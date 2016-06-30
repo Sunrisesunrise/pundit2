@@ -309,22 +309,22 @@ angular.module('Pundit2.Core')
         if (analytics.options.doMixpanel === false) {
             return;
         }
-        if (event.eventCategory !== 'main-events') {
-            return;
-        }
-        if (analytics.options.chromeExtMode) {
-            EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
-                event: 'Pundit.analyticsTrack',
-                data: {
-                    type: 'mixpanel',
-                    properties: event,
-                    url: window.location.href,
-                    canonical: Utils.getCanonicalUrl(),
-                    clientMode: Config.clientMode
-                }
-            });
-        } else {
-            mixpanel.track(event.eventLabel, event);
+        if (event.eventCategory === 'main-events' || 
+            event.eventCategory === 'main-clicks') {
+            if (analytics.options.chromeExtMode) {
+                EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                    event: 'Pundit.analyticsTrack',
+                    data: {
+                        type: 'mixpanel',
+                        properties: event,
+                        url: window.location.href,
+                        canonical: Utils.getCanonicalUrl(),
+                        clientMode: Config.clientMode
+                    }
+                });
+            } else {
+                mixpanel.track(event.eventLabel, event);
+            }
         }
     };
 

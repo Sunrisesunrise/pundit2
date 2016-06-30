@@ -2,7 +2,8 @@ angular.module('Pundit2.AnnotationPopover')
 
 // TODO: manage opening during loading
 .controller('AnnotationPopoverCtrl', function($scope, PndPopover, MyPundit, NotebookExchange, XpointersHelper, Item,
-    NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, NameSpace, $timeout, $q, Atoka) {
+    NotebookCommunication, AnnotationsCommunication, AnnotationPopover, ModelHelper, NameSpace, $timeout, $q, Atoka,
+    Analytics) {
 
     var resourceItem;
 
@@ -91,8 +92,10 @@ angular.module('Pundit2.AnnotationPopover')
         switch (mode) {
             case 'comment':
                 $scope.isCommentMode = $scope.isUserLogged;
+                Analytics.track('main-clicks', 'generic', 'user-click-comment');
                 break;
             case 'highlight':
+                Analytics.track('main-clicks', 'generic', 'user-click-highlight');
                 $scope.isHighlightMode = $scope.isUserLogged;
                 break;
             case 'alert':
@@ -191,6 +194,7 @@ angular.module('Pundit2.AnnotationPopover')
             // Epic FAIL.
         });
 
+        Analytics.track('main-clicks', 'generic', 'user-click-save');
     };
 
     $scope.doCreateNewNotebook = function(notebookName) {
