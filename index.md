@@ -5,13 +5,13 @@ title: Home
 
 # What is Pundit
 
-Pundit is a web application that allows users to annotate web pages.
-Compared to others annotations tool Pundit is a bit "special" since it allows to create **semantic annotations**.
+Pundit is a web application that allows users to annotate web pages highlighting and commenting text passages.
+Compared to others annotations tool Pundit is a bit "special" since it also allows to create **semantic annotations**.
 
 This is the **developers site** where we provide technical information.
 
-For more general information about the project and
-the blog please visit the <a href="http://thepund.it/" target="_blank">Pundit website</a>.
+For more general information about the project please visit the <a href="http://thepund.it/" target="_blank">Pundit website</a>
+or contact us at <a href="mailto://info@thepund.it" target="_blank">info@thepund.it</a>
 
 - - -
 
@@ -29,7 +29,7 @@ We provide two different Chrome Extensions:<br />
 
 ## 2. Embed Pundit in your project
 
-In the case of custom archives or web sites where is possible to hard code some HTML code inside the pages we can directly inject the Pundit code.
+In the case of digital archives or web sites where is possible to hard code some HTML code inside the pages we can directly inject the Pundit code.
 So Pundit will be launched as the page loads.
 In this case we can use a custom configuration there properties ontologies and entities can be used.
 This case is detailed at [this page](embed-pundit.html)
@@ -54,7 +54,7 @@ You can find more detailed info at these pages:
 
  - <a href="http://dev.thepund.it/download/client/last-beta/docs/index.html#!/api/punditConfig" target="_blank">Online documentation (External URL)</a>
  - <a href="as-installation.html">Annotation Server installation</a>
- - <a href="data-model.html">Pundit RDF annotation data model</a>
+ - <a href="https://docs.google.com/spreadsheets/d/10XXQ5KrFZbFqKxiFhuVBQrWdSxbXd85cCYYmrXE23QQ/edit?usp=sharing">Pundit RDF annotation data model</a>
  - <a href="rest-api.html">Annotation Server REST API</a>
  - <a href="css-style-guide.html">CSS Style guide</a>
  - <a href="javascript.html">JavaScript coding and naming policies</a>
