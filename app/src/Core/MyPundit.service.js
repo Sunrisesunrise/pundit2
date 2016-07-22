@@ -47,9 +47,20 @@ angular.module('Pundit2.Core')
      */
     loginModalCloseTimer: 300000, // 5 minutes
 
-    userCookieExpireTime: 1000 * 60 * 30,
-
-    popoverLoginURL: 'http://dev.thepund.it/connect/index.php'
+    /**
+     * @module punditConfig
+     * @ngdoc property
+     * @name modules#MyPundit.useCookies
+     *
+     * @description
+     * `boolean`
+     *
+     * true / false
+     *
+     * Default value:
+     * <pre> useCookies: true </pre>
+     */
+    useCookies: true
 })
 
 /**
@@ -98,8 +109,6 @@ angular.module('Pundit2.Core')
         return loginPromise.promise;
     };
 
-    myPundit.useCookies = true;
-
     /**
      * @ngdoc method
      * @name MyPundit#getLoginStatus
@@ -132,7 +141,7 @@ angular.module('Pundit2.Core')
      *
      */
     myPundit.isUserLogged = function () {
-        if (!myPundit.useCookies) {
+        if (!myPundit.options.useCookies) {
             return isUserLogged;
         }
 
@@ -182,8 +191,9 @@ angular.module('Pundit2.Core')
 
     myPundit.setInfoCookie = function (data) {
         angular.extend(infoCookie, data);
-        var expirationDate = (new Date()).getTime() + myPundit.options.userCookieExpireTime;
+        var expirationDate = (new Date()).getTime();
         expirationDate = new Date(expirationDate);
+        expirationDate.setFullYear(expirationDate.getFullYear() + 2);
         $cookies.putObject('pundit_' + annotationServerBaseURLHash + '_Info', infoCookie, {
             expires: expirationDate,
             path: '/'
@@ -212,10 +222,11 @@ angular.module('Pundit2.Core')
         if (typeof dispatchDocumentEvent === 'undefined') {
             dispatchDocumentEvent = true;
         }
-        var expirationDate = (new Date()).getTime() + myPundit.options.userCookieExpireTime;
+        var expirationDate = (new Date()).getTime();
         expirationDate = new Date(expirationDate);
+        expirationDate.setFullYear(expirationDate.getFullYear() + 2);
 
-        if (myPundit.useCookies && !forceHttpCall) {
+        if (myPundit.options.useCookies && !forceHttpCall) {
             var cookieUserdata = $cookies.getObject('pundit_' + annotationServerBaseURLHash + '_User');
             var cookieInfo = $cookies.getObject('pundit_' + annotationServerBaseURLHash + '_Info');
             angular.extend(infoCookie, cookieInfo);
