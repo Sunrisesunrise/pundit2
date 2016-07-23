@@ -11,22 +11,28 @@ You can use the **Pundit** by installing it on your webpages following these ins
 
 In the **HEAD** of your HTML page you have to link:
 
-A. The Pundit CSS file by inserting this line of code:
+**A.** The Pundit CSS file by inserting this line of code:
 
-	<link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/	pundit2.css" type="text/css">
+	<link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/pundit2.css" type="text/css">
 	
-B. Your configuration file that defines the various features of the Pundit Annotator (for more info on how to create a configuration file please check [this page](client-configuration-md) ):
+**B.** Your configuration file that defines the various features of the Pundit Annotator (for more info on how to create a configuration file please check [this page](client-configuration-md) ):
 
 	<script src="http://your-config-file.js" type="text/javascript" ></script>
 	
-C. The Pundit library files:
+**C.** The Pundit library files:
 
 	<script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript" ></script>
     <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript" ></script>
+
+**D.** This is **not mandatory**: it's a good practice to include another CSS file that you can use if you need to fix CSS conflicts between Pundit and the host pages. Sometimes we've seen the host pages CSS influencing the Pundit CSS leading to some UI minor problems. In this case is very useful to have a separate CSS file where you can fix these problems.
+
+	<link rel="stylesheet" href="http://your-server/pundit-style-fix.css" type="text/css">
+
 		
 Then in your HTML page right after the opening **BODY** tag insert this snippet of code:
 
 	<div data-ng-app="Pundit2" class="pnd-wrp ng-scope"></div>
+	
 This is where Pundit will be injected in the DOM of your page.
 
 
