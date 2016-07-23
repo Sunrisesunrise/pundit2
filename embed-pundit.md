@@ -13,30 +13,24 @@ In the **HEAD** of your HTML page you have to link:
 
 A. The Pundit CSS file by inserting this line of code:
 
-	```
 	<link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/	pundit2.css" type="text/css">
-	```
-
+	
 B. Your configuration file that defines the various features of the Pundit Annotator (for more info on how to create a configuration file please check [this page](client-configuration-md) ):
 
-	```
 	<script src="http://your-config-file.js" type="text/javascript" ></script>
-	```
-
+	
 C. The Pundit library files:
 
-	```
 	<script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript" ></script>
     <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript" ></script>
-	```
-	
+		
 Then in your HTML page right after the opening **BODY** tag insert this snippet of code:
 
 	<div data-ng-app="Pundit2" class="pnd-wrp ng-scope"></div>
 This is where Pundit will be injected in the DOM of your page.
 
 
-Here is an example of an HTML page which embeds Pundit:
+Here is a full example of an HTML page which embeds Pundit:
 
     <!DOCTYPE HTML>
     <html>
