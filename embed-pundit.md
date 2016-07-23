@@ -11,7 +11,7 @@ You can use the **Pundit** by installing it on your webpages following these ins
 
 In the **HEAD** of your HTML page you have to link:
 
-**A.** The Pundit CSS file by inserting this line of code:
+**A.** The Pundit CSS file by inserting this line of code as it is:
 
 	<link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/pundit2.css" type="text/css">
 	
@@ -19,7 +19,7 @@ In the **HEAD** of your HTML page you have to link:
 
 	<script src="http://your-config-file.js" type="text/javascript" ></script>
 	
-**C.** The Pundit library files:
+**C.** The Pundit library files as they are:
 
 	<script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript" ></script>
     <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript" ></script>
@@ -35,6 +35,7 @@ Then in your HTML page right after the opening **BODY** tag insert this snippet 
 	
 This is where Pundit will be injected in the DOM of your page.
 
+---
 
 Here is a full example of an HTML page which embeds Pundit:
 
