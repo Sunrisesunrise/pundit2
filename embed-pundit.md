@@ -15,7 +15,7 @@ In the **HEAD** of your HTML page you have to link:
 
 	<link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/pundit2.css" type="text/css">
 	
-**B.** Your configuration file that defines the various features of the Pundit Annotator (for more info on how to create a configuration file please check [this page](client-configuration) ):
+**B.** Your configuration file that defines the various features of the Pundit Annotator (for more info on how to create a configuration file please check [this page](client-configuration.html) ):
 
 	<script src="http://your-config-file.js" type="text/javascript"></script>
 	
@@ -45,9 +45,9 @@ Here is a full example of an HTML page which embeds Pundit:
     	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     	<title>Your web page</title>
     	<link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/pundit2.css" type="text/css">
-    	<script src="http://your-config-file.js" type="text/javascript" ></script>
-    	<script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript" ></script>
-        <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript" ></script>
+    	<script src="http://your-config-file.js" type="text/javascript"></script>
+    	<script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript"></script>
+        <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript"></script>
         <link rel="stylesheet" href="http://your-server/pundit-style-fix.css" type="text/css"> <!-- Not mandatory -->
     </head>
     
