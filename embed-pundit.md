@@ -15,7 +15,7 @@ In the **HEAD** of your HTML page you have to link:
 
 	<link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/pundit2.css" type="text/css">
 	
-**B.** Your configuration file that defines the various features of the Pundit Annotator (for more info on how to create a configuration file please check [this page](client-configuration.md) ):
+**B.** Your configuration file that defines the various features of the Pundit Annotator (for more info on how to create a configuration file please check [this page](client-configuration) ):
 
 	<script src="http://your-config-file.js" type="text/javascript"></script>
 	
