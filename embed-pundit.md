@@ -15,14 +15,14 @@ In the **HEAD** of your HTML page you have to link:
 
 	<link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/pundit2.css" type="text/css">
 	
-**B.** Your configuration file that defines the various features of the Pundit Annotator (for more info on how to create a configuration file please check [this page](client-configuration-md) ):
+**B.** Your configuration file that defines the various features of the Pundit Annotator (for more info on how to create a configuration file please check [this page](client-configuration.md) ):
 
-	<script src="http://your-config-file.js" type="text/javascript" ></script>
+	<script src="http://your-config-file.js" type="text/javascript"></script>
 	
 **C.** The Pundit library files as they are:
 
-	<script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript" ></script>
-    <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript" ></script>
+	<script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript"></script>
+    <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript"></script>
 
 **D.** This is **not mandatory**: it's a good practice to include another CSS file that you can use if you need to fix CSS conflicts between Pundit and the host pages. Sometimes we've seen the host pages CSS influencing the Pundit CSS leading to some UI minor problems. In this case is very useful to have a separate CSS file where you can fix these problems.
 
@@ -47,7 +47,8 @@ Here is a full example of an HTML page which embeds Pundit:
     	<link rel="stylesheet" href="http://dev.thepund.it/download/client/last-beta/pundit2.css" type="text/css">
     	<script src="http://your-config-file.js" type="text/javascript" ></script>
     	<script src="http://dev.thepund.it/download/client/last-beta/libs.js" type="text/javascript" ></script>
-    <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript" ></script>
+        <script src="http://dev.thepund.it/download/client/last-beta/pundit2.js" type="text/javascript" ></script>
+        <link rel="stylesheet" href="http://your-server/pundit-style-fix.css" type="text/css"> <!-- Not mandatory -->
     </head>
     
     <body>
