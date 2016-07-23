@@ -5,7 +5,7 @@ title: Home
 
 # What is Pundit
 
-Pundit is a web application that allows users to annotate web pages highlighting and commenting text passages.
+Pundit is a web application that allows users to annotate web pages **highlighting** and **commenting** text passages.
 Compared to others annotations tool Pundit is a bit "special" since it also allows to create **semantic annotations**.
 
 This is the **developers site** where we provide technical information.
@@ -36,12 +36,16 @@ This case is detailed at [this page](embed-pundit.html)
 
 ## 3. Feed the Pundit
 
+**IMPORTANT** The current version of **Feed the Pundit** has some known issues we're going to fix soon. <a href="mailto://info@thepund.it" target="_blank">Contact us</a> if you need to use this technology in your project.
+
 For custom archives where we don't want to embed the Pundit code we can use also **Feed**.
 Feed allows to work with Images, RDF files and HTML pages. You can find more detailed information about Feed at [this page](feed.html)
 
 - - -
 
 # Annotation Server
+
+**IMPORTANT** The new version of the Annotation Server will be released soon.
 
 You can download a full ZIP of the Annotations Server at [this URL](https://slack-files.com/T02SH8KFM-F0DGG6VJQ-33e37d2334)
 The currently available version is 1.6.2 and was released on 5th June 2015.
@@ -84,6 +88,7 @@ You can find more detailed info at these pages:
 
 # Videos
 
+  - <a href="https://www.youtube.com/channel/UCjCmeVg1nxO2ztAy2XkFfuA" target="_blank">Pundit YouTube channel</a>: showcase video, tutorials and use cases.  
   - Pundit: augment web pages with semantically structured annotations, <a href="https://www.youtube.com/watch?v=Bo4udUcnP-A" target="_blank">Watch the video here</a>
   - DM2E Pundit Introduction, <a href="https://vimeo.com/85261745" target="_blank">Watch the video here</a>
   - F. Di Donato, S. Fonda and C. Morbidoni. <strong>The Linked Data early days: how is it possible to learn what we don’t know?</strong> 5 minutes video which granted Pundit a spot in the final phase of the 2013 LODLAM Challenge, 2013, <a href="https://vimeo.com/85517504" target="_blank">Watch the video here</a>
