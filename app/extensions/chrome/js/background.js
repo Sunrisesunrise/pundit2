@@ -301,7 +301,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
 
         if (autoInject) {
             // TODO: read from configuration
-            if (tab.url.indexOf('europeana.eu/portal/record/') < 0) {
+            if (tab.url.indexOf('europeana.eu/portal/') < 0) {
                 return;
             } else {
                 //remove tab

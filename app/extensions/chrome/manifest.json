@@ -24,7 +24,7 @@
   ],
   // "content_scripts": [
   //   {
-  //     "matches": ["http://europeana.eu/portal/record/*/*", "http://www.europeana.eu/portal/record/*/*"],
+  //     "matches": ["http://europeana.eu/portal/*/record/*/*", "http://www.europeana.eu/portal/*/record/*/*"],
   //     "js": ["inject/resourceInject.js"],
   //     "run_at":    "document_start"
   //   }
