@@ -126,7 +126,7 @@ angular.module('Pundit2.Core')
     classEntity: 'pnd-item-entity'
 })
 
-.factory('Item', function(BaseComponent, Config, NameSpace, Utils, ItemsExchange, md5, ITEMDEFAULTS) {
+.factory('Item', function(BaseComponent, Config, NameSpace, Utils, ItemsExchange, md5, Status, ITEMDEFAULTS) {
     var itemComponent = new BaseComponent('Item', ITEMDEFAULTS);
 
     var annotationServerVersion = Config.annotationServerVersion;
@@ -216,10 +216,12 @@ angular.module('Pundit2.Core')
     };
 
     ItemFactory.prototype.fromAnnotationRdf = function(annotationRDF) {
-
         var ns = NameSpace.item,
             itemRDF = annotationRDF[this.uri];
 
+        var languages = Status.getLanguages(),
+            userLanguage = languages.userLanguage,
+            defaultLanguage = languages.defaultLanguage;
 
         // Cant find any rdf for this item?? Where is it?!1?
         if (typeof(itemRDF) === 'undefined') {
@@ -231,10 +233,35 @@ angular.module('Pundit2.Core')
         // one by one by using the correct URI taken from the NameSpace,
         // doing some sanity checks
         for (var property in ns) {
-            var propertyURI = ns[property];
+            var propertyURI = ns[property],
+                translatedMap = {},
+                itemTranslated;
 
             if (propertyURI in itemRDF) {
-                this[property] = itemRDF[propertyURI][0].value;
+                if ((itemRDF[propertyURI].length > 1 && 
+                        (property === 'label' || property === 'description')) ||
+                    typeof itemRDF[propertyURI][0].lang !== 'undefined') {
+                    for (var i in itemRDF[propertyURI]) {
+                        if (itemRDF[propertyURI][i].lang) {
+                            translatedMap[itemRDF[propertyURI][i].lang] = itemRDF[propertyURI][i].value;
+
+                            if (itemRDF[propertyURI][i].lang === userLanguage ||
+                                itemRDF[propertyURI][i].lang === defaultLanguage) {
+                                itemTranslated = itemRDF[propertyURI][i].value;
+                            }
+                        }
+                    }
+
+                    this['$' + property] = translatedMap;
+
+                    if (typeof itemTranslated !== 'undefined') {
+                        this[property] = itemTranslated;
+                    }
+                }
+
+                if (typeof this[property] === 'undefined') {
+                    this[property] = itemRDF[propertyURI][0].value;
+                }
             }
         }
 
@@ -290,65 +317,89 @@ angular.module('Pundit2.Core')
     ItemFactory.prototype.toRdf = function() {
         // All item properties are encoded by their uri
 
-        var i = {};
+        var rdf = {};
+
         // properties always present
-        i[NameSpace.item.label] = [{
-            type: 'literal',
-            value: this.label
-        }];
-        i[NameSpace.item.type] = [];
+        if (typeof this.$label === 'undefined') {
+            rdf[NameSpace.item.label] = [{
+                type: 'literal',
+                value: this.label
+            }];
+        } else {
+            rdf[NameSpace.item.label] = [];
+            for (var i in this.$label) {
+                rdf[NameSpace.item.label].push({
+                    type: 'literal',
+                    value: this.$label[i],
+                    lang: i
+                });
+            }
+        }
+
+        rdf[NameSpace.item.type] = [];
 
         this.type.forEach(function(typeUri) {
-            i[NameSpace.item.type].push({
+            rdf[NameSpace.item.type].push({
                 type: 'uri',
                 value: typeUri
             });
         });
 
-        if (typeof(this.altLabel) !== 'undefined') {
-            i[NameSpace.item.altLabel] = [{
+        if (typeof this.altLabel !== 'undefined') {
+            rdf[NameSpace.item.altLabel] = [{
                 type: 'literal',
                 value: this.altLabel
             }];
         }
 
-        if (typeof(this.description) !== 'undefined') {
-            i[NameSpace.item.description] = [{
-                type: 'literal',
-                value: this.description
-            }];
+        if (typeof this.description !== 'undefined') {
+            if (typeof this.$description === 'undefined') {
+                rdf[NameSpace.item.description] = [{
+                    type: 'literal',
+                    value: this.description
+                }];
+            } else {
+                rdf[NameSpace.item.description] = [];
+                for (var j in this.$description) {
+                    rdf[NameSpace.item.description].push({
+                        type: 'literal',
+                        value: this.$description[j],
+                        lang: j
+                    });
+                }
+            }
         }
 
-        if (typeof(this.image) !== 'undefined') {
-            i[NameSpace.item.image] = [{
+        if (typeof this.image !== 'undefined') {
+            rdf[NameSpace.item.image] = [{
                 type: 'uri',
                 value: this.image
             }];
         }
 
-        if (typeof(this.pageContext) !== 'undefined') {
-            i[NameSpace.item.pageContext] = [{
+        if (typeof this.pageContext !== 'undefined') {
+            rdf[NameSpace.item.pageContext] = [{
                 type: 'uri',
                 value: this.pageContext
             }];
         }
 
-        if (typeof(this.isPartOf) !== 'undefined') {
-            i[NameSpace.item.isPartOf] = [{
+        if (typeof this.isPartOf !== 'undefined') {
+            rdf[NameSpace.item.isPartOf] = [{
                 type: 'uri',
                 value: this.isPartOf
             }];
         }
 
-        if (typeof(this.parentItemXP) !== 'undefined') {
-            i[NameSpace.item.parentItemXP] = [{
+        if (typeof this.parentItemXP !== 'undefined') {
+            rdf[NameSpace.item.parentItemXP] = [{
                 type: 'uri',
                 value: this.parentItemXP
             }];
         }
 
-        if (typeof(this.polygonUri) !== 'undefined') {
-            i[NameSpace.item.selector] = [{
+        if (typeof this.polygonUri !== 'undefined') {
+            rdf[NameSpace.item.selector] = [{
                 type: 'uri',
                 value: this.polygonUri
             }];
@@ -356,7 +407,7 @@ angular.module('Pundit2.Core')
 
         // TODO make a polygon selector uri and save
 
-        return i;
+        return rdf;
     };
 
 

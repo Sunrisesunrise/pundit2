@@ -401,7 +401,8 @@ angular.module('Pundit2.Client')
         // Node which will contain every other component
         root;
 
-    var first = false;
+    var first = false,
+        currentLanguage;
 
     var html = angular.element('html'),
         body = angular.element('body');
@@ -781,6 +782,9 @@ angular.module('Pundit2.Client')
     } else if (navigator.appVersion.indexOf("Linux") !== -1) {
         client.OS = "Linux";
     }
+
+    currentLanguage = navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
+    Status.setState('Pundit', 'userLanguage', currentLanguage.substring(0, 2));
 
     client.log("Component up and running");
 

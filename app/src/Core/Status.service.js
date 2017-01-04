@@ -18,6 +18,8 @@ angular.module('Pundit2.Core')
             canBeShowedAfterHidden: false,
             userLogged: false,
             loading: false,
+            defaultLanguage: 'en',
+            userLanguage: 'en',
             templateMode: false,
             needsProgressBar: false,
             progress: 0
@@ -126,6 +128,13 @@ angular.module('Pundit2.Core')
     
     status.getState = function(component) {
         return state[component];
+    };
+
+    status.getLanguages = function() {
+        return {
+            userLanguage: state.Pundit.userLanguage,
+            defaultLanguage: state.Pundit.defaultLanguage
+        };
     };
 
     status.getCanBeShowedAfterHidden = function() {

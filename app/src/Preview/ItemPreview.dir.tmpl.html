@@ -24,6 +24,10 @@
 
     <div class="pnd-preview-item-description">
         <p>{{item.description}}</p>
+
+        <p ng-repeat="(k, v) in item.$label">
+            <strong>{{k}}:</strong> {{v}}
+        </p>
     </div>
 
     <div class="pnd-preview-item-allLables" ng-if="item.mergedLabel">

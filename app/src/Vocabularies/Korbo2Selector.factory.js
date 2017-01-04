@@ -122,7 +122,7 @@ angular.module('Pundit2.Vocabularies')
 })
 
 .factory('Korbo2Selector', function(BaseComponent, KORBO2DEFAULTS, Item, ItemsExchange, SelectorsManager,
-    $http, $q, Config) {
+    $http, $q, Config, Status) {
 
     var korbo2Selector = new BaseComponent('Korbo2Selector', KORBO2DEFAULTS);
     korbo2Selector.name = 'Korbo2Selector';
@@ -142,12 +142,18 @@ angular.module('Pundit2.Vocabularies')
         if (typeof(term) === 'undefined') {
             return;
         }
+
+        var clientLanguages = Status.getLanguages(),
+            userLanguage = clientLanguages.userLanguage,
+            defaultLanguage = clientLanguages.defaultLanguage;
+
         var self = this,
             promise = $q.defer(),
             container = self.config.container + term.split(' ').join('$');
         // TODO se basketID è null non aggiungerlo tra i parametri, altrimenti passarlo nell'oggetto params
         var provider = self.config.container;
         var resultsLimit = korbo2Selector.options.limit;
+
         if (typeof self.config.resultsLimit === 'number' && self.config.resultsLimit > 0) {
             resultsLimit = self.config.resultsLimit;
         }
@@ -163,7 +169,7 @@ angular.module('Pundit2.Vocabularies')
             params.basketId = self.config.basketID;
         }
 
-        var requestUrl = (typeof self.config.url === 'undefined' ? Config.annotationServerBaseURL + 'api/open/korbo' : self.config.url) + "/search/items";
+        var requestUrl = (typeof self.config.url === 'undefined' ? Config.annotationServerBaseURL + 'api/open/korbo' : self.config.url) + '/search/items';
         $http({
             //headers: { 'Content-Type': 'application/json' },
             method: 'GET',
@@ -207,20 +213,43 @@ angular.module('Pundit2.Vocabularies')
                 }
 
                 var item = {
-                    label: current.label,
+                    label: '',
                     uri: current.uri,
                     type: current.type
                 };
-                if (typeof current.id !== "undefined") {
+
+                if (typeof current.label === 'string') {
+                    item.label = current.label;
+                } else if (typeof current.label === 'object') {
+                    item.label = current.label[userLanguage] || current.label[defaultLanguage];
+
+                    if (typeof item.label === 'undefined') {
+                        item.label = current.label[Object.keys(current.label)[0]];
+                    }
+
+                    item.$label = current.label;
+                }
+                
+                if (typeof current.id !== 'undefined') {
                     item.id = current.id;
                 }
                 // optional propeties
-                if (current.depiction !== "") {
+                if (current.depiction !== '') {
                     item.image = current.depiction;
                 }
-                if (current.abstract !== "") {
+                if (typeof current.abstract === 'string' && 
+                    current.abstract !== '') {
                     item.description = current.abstract;
+                } else if (typeof current.abstract === 'object') {
+                    item.description = current.abstract[userLanguage] || current.abstract[defaultLanguage];
+
+                    if (typeof item.description === 'undefined') {
+                        item.description = current.abstract[Object.keys(current.abstract)[0]];
+                    }
+
+                    item.$description = current.abstract;
                 }
+
                 item.providerFrom = provider;
 
                 // add to itemsExchange

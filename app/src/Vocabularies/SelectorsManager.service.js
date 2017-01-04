@@ -90,16 +90,19 @@ angular.module('Pundit2.Vocabularies')
         selectorInstances = [];
 
         for (var key in selectors) {
+            (function closure(_key) {
+                // selector factory constructor
+                var Factory = $injector.get(selectors[_key].name);
 
-            // selector factory constructor
-            var Factory = $injector.get(selectors[key].name);
-
-            // initialize one selector instance
-            // for each element in the array
-            for (var j in selectors[key].options.instances) {
-                var sel = new Factory(selectors[key].options.instances[j]);
-                selectorInstances.push(sel);
-            }
+                // initialize one selector instance
+                // for each element in the array
+                for (var j in selectors[_key].options.instances) {
+                    (function closure(_j) {
+                        var sel = new Factory(selectors[_key].options.instances[_j]);
+                        selectorInstances.push(sel);
+                    })(j);
+                }
+            })(key);
         }
         selectorsManager.log('Init, add selectors instances', selectorInstances);
     };
