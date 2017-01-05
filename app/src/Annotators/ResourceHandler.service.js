@@ -203,7 +203,7 @@ angular.module('Pundit2.Annotators')
                                             }
 
                                             if (triple.object.forceFocus) {
-                                                ResourcePanel.setSelector(triple.object.selectors);
+                                                ResourcePanel.setSelector(triple.object.selectors, true);
                                                 //TODO ASAP: handle this operation with TripleComposer.service
                                                 setTimeout(function() {
                                                     angular.element('span.pnd-statement-label[ng-click="onClickObject($event)"]').click();

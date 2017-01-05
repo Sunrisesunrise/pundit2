@@ -119,7 +119,8 @@ angular.module('Pundit2.ResourcePanel')
 
     // TODO remove obj and sub global var
     var objTypes,
-        subTypes;
+        subTypes,
+        isRapidAction;
 
     var searchTimer;
     var state = {
@@ -595,7 +596,7 @@ angular.module('Pundit2.ResourcePanel')
                 content.pageItems = pageItems;
             }
 
-            if ((typeof rapidAction === 'undefined') && (resourcePanel.options.myItemsEnabled)) {
+            if (!rapidAction && resourcePanel.options.myItemsEnabled) {
                 var myItemsForTabs = {
                     title: 'Favourites',
                     items: myItems,
@@ -993,8 +994,9 @@ angular.module('Pundit2.ResourcePanel')
         return state.resourcePromise.promise;
     };
 
-    resourcePanel.setSelector = function(selector) {
+    resourcePanel.setSelector = function(selector, rapidAction) {
         state.popoverOptions.scope.newSelectors = selector;
+        isRapidAction = typeof rapidAction !== 'undefined';
     };
 
     /**
@@ -1073,7 +1075,8 @@ angular.module('Pundit2.ResourcePanel')
                         // all items are good
                         myItems = ItemsExchange.getItemsByContainer(myItemsContainer);
                         pageItems = ItemsExchange.getItemsByContainer(pageItemsContainer);
-                        showPopoverResourcePanel(target, pageItems, myItems, "", label, 'obj', triple, state.popoverOptions.scope.newSelectors);
+                        showPopoverResourcePanel(target, pageItems, myItems, "", label, 'obj', triple, isRapidAction);
+                        isRapidAction = undefined;
 
                         // if predicate is literal, show popover literal
                     } else if (itemPredicate.suggestedObjectTypes.length === 1 && itemPredicate.suggestedObjectTypes[0] === NameSpace.rdfs.literal) {
