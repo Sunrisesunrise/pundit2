@@ -259,7 +259,7 @@ angular.module('Pundit2.Core')
                     }
                 }
 
-                if (typeof this[property] === 'undefined') {
+                if (typeof itemTranslated === 'undefined') {
                     this[property] = itemRDF[propertyURI][0].value;
                 }
             }
