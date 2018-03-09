@@ -67,7 +67,7 @@ You can find more detailed info at these pages:
 
 # Publications
 
-  - Hugo Manguinhas, Sergiu Gordea, Antoine Isaac, Alessio Piccioli, Giulio Andreini, Francesca Di Donato, Remy Gardien, Maarten Brinkerink. <strong>Challenges on modeling annotations in the Europeana Sounds project. <em>iAnnotate 2016, Berlin</em>, 2016
+  - Hugo Manguinhas, Sergiu Gordea, Antoine Isaac, Alessio Piccioli, Giulio Andreini, Francesca Di Donato, Remy Gardien, Maarten Brinkerink. <strong>Challenges on modeling annotations in the Europeana Sounds project</strong>. <em>iAnnotate 2016, Berlin</em>, 2016
   - Marco Grassi, Christian Morbidoni, Michele Nucci, Simone Fonda and Francesco Piazza. <strong>Pundit: Augmenting Web Contents with Semantics</strong>. <em>Literary & Linguisting Computing</em>, 2013
   - Christian Morbidoni, Marco Grassi, Michele Nucci and Simone Fonda. <strong>Semantic Augmentation and Externalization in the Humanities: a Demonstrative Use Case</strong>. In <em>Proceedings of the Digital Humanities 2013, Lincoln, Nebraska, July 16-19, 2013. 201</em>, 2013
   - Francesca Di Donato, Christian Morbidoni, Simone Fonda, Alessio Piccioli, Marco Grassi and Michele Nucci. <strong>Semantic annotation with Pundit: a case study and a practical demonstration</strong>. In <em>Proceedings of DH-Case 2013, Florence, Italy, September 10, 2013</em>, 2013
