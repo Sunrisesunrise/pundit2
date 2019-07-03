@@ -1,6 +1,6 @@
 var punditConfig = {
-    annotationServerBaseURL: 'https://staging.punditbrain.netseven.it:8443/annotationserver/',
-    // annotationServerBaseURL: 'https://server.thepund.it/annotationserver/',
+    //annotationServerBaseURL: 'https://staging.punditbrain.netseven.it:8443/annotationserver/',
+    annotationServerBaseURL: 'https://thepund.it/annotationserver/',
     annotationServerVersion: 'v2',
     // clientMode: 'lite',
     modules: {

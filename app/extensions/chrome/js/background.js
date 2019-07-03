@@ -339,8 +339,14 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
     delete state.tabsOnOff[tabId];
 });
 
+
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     var tabId;
+
+    if(request.isHttpRequest)
+       return handleHttpRequest(request.httpObject, sendResponse);
+
     switch (request.action) {
         case 'switchOnExt':
             if (autoInject) {

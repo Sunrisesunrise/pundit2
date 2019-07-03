@@ -76,7 +76,7 @@ angular.module('Pundit2.Core')
  *
  */
 .service('MyPundit', function (MYPUNDITDEFAULTS, Config, $http, $q, $timeout, $modal, $window, $document, $interval,
-                               BaseComponent, EventDispatcher, NameSpace, Analytics, $popover, $rootScope, $cookies, md5) {
+                               BaseComponent, EventDispatcher, NameSpace, HttpRequestsDispatcher, Analytics, $popover, $rootScope, $cookies, md5) {
 
     var myPundit = new BaseComponent('MyPundit', MYPUNDITDEFAULTS);
 
@@ -253,62 +253,13 @@ angular.module('Pundit2.Core')
             }
         }
 
-        httpCall = $http({
-            headers: {
-                'Accept': 'application/json'
-            },
-            method: 'GET',
-            url: NameSpace.get('asUsersCurrent'),
-            withCredentials: true
 
-        }).success(function (data) {
-            loginServer = data.loginServer;
-            editProfile = data.editProfile;
-            // user is not logged in
-
-            if (data.loginStatus === 0) {
-                isUserLogged = false;
-                EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
-                $cookies.remove('pundit_' + annotationServerBaseURLHash + '_User', {
-                    path: '/'
-                });
-                $cookies.remove('pundit_' + annotationServerBaseURLHash + '_Info', {
-                    path: '/'
-                });
-                promise.resolve(false);
-            }
-            else {
-                // user is logged in
-                isUserLogged = true;
-                loginStatus = 'loggedIn';
-                userData = data;
-                $cookies.putObject('pundit_' + annotationServerBaseURLHash + '_User', data, {
-                    expires: expirationDate,
-                    path: '/'
-                });
-                EventDispatcher.sendEvent('MyPundit.userLoggedData', userData);
-                promise.resolve(true);
-            }
-            EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
-            
-            if (dispatchDocumentEvent) {
-                EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
-                    event: 'Pundit.userLoggedStatusChanged',
-                    data: null
-                });
-            }
-        }).error(function () {
-            myPundit.err('Server error');
-            EventDispatcher.sendEvent('Pundit.alert', {
-                title: 'Oops! Something went wrong.',
-                id: 'ERROR',
-                timeout: null,
-                message: 'There was an error while trying to communicate with server. Please reaload the page in few minutes'
-            });
-            promise.reject('check logged in promise error');
+        return HttpRequestsDispatcher.getAsUsersCurrent({
+                         'promise':promise,
+                         'annotationServerBaseURLHash': annotationServerBaseURLHash,
+                         'expirationDate': expirationDate,
+                         'dispatchDocumentEvent': dispatchDocumentEvent
         });
-
-        return promise.promise;
     };
 
     var loginPromise;

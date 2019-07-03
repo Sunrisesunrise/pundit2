@@ -199,7 +199,8 @@ angular.module('Pundit2.Core')
     ns.as = Config.annotationServerBaseURL;
 
     ns.asUsers = ns.as + 'api/users/';
-    ns.asUsersCurrent = ns.as + 'api/users/current';
+    ns.asUsersCurrentSuffix = 'api/users/current';
+    ns.asUsersCurrent = ns.as + ns.asUsersCurrentSuffix;
     ns.asUsersLogout = ns.as + 'api/users/logout';
 
     ns.asNB = ns.as + 'api/notebooks';

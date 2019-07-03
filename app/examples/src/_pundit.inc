@@ -29,6 +29,7 @@
     <script src="../src/Core/Utils.service.js"></script>
     <script src="../src/Core/BaseComponent.service.js"></script>
     <script src="../src/Core/EventDispatcher.service.js"></script>
+    <script src="../src/Core/HttpRequestsDispatcher.service.js"></script>
     <script src="../src/Core/Status.service.js"></script>
     <script src="../src/Core/ResizeManager.service.js"></script>
     <script src="../src/Core/NameSpace.service.js"></script>

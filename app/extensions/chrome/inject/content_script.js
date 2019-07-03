@@ -133,7 +133,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     // console.log(request);
     // console.log(sender);
     
-    if (typeof request === 'undefined') {
+    if (typeof request === 'undefined' || request.isHttpRequest) {
         return;
     }
 

@@ -166,7 +166,9 @@ angular.module('Pundit2.Core')
      * Default value:
      * <pre> homeBaseURL: "http://staging.punditbrain.netseven.it/auth/home/" </pre>
      */
-    homeBaseURL: "http://staging.punditbrain.netseven.it/auth/home/",
+    //homeBaseURL: "http://staging.punditbrain.netseven.it/auth/home/",
+     homeBaseURL: 'https://thepund.it/auth/home/',
+
 
     /**
      * @module punditConfig
