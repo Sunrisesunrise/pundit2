@@ -118,8 +118,9 @@ angular.module('Pundit2.Core')
      * annotationServerBaseURL: 'http://demo-cloud.as.thepund.it:8080/annotationserver/'
      * </pre>
      */
-    annotationServerBaseURL: 'http://demo-cloud.as.thepund.it:8080/annotationserver/',
+    //annotationServerBaseURL: 'http://demo-cloud.as.thepund.it:8080/annotationserver/',
     //annotationServerBaseURL: 'http://geolat.netseven.it:8282/annotationserver/',
+     annotationServerBaseURL: 'https://thepund.it/annotationserver/',
 
     /**
      * @module punditConfig
