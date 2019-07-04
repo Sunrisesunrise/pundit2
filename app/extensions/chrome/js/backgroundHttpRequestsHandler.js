@@ -3,8 +3,7 @@ const annotationServerBaseURL = null; // this url is replaced by grunt using the
 
 function handleHttpRequest(httpObject,sendResponse){
 
-   alert('GET /users/current from HTTP REQUESTS HANDLER!');
-
+   //alert('GET /users/current from HTTP REQUESTS HANDLER!');
 
    var url = annotationServerBaseURL + httpObject.urlSuffix ;
    fetch(url,{

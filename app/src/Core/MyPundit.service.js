@@ -153,6 +153,52 @@ angular.module('Pundit2.Core')
         return false;
     };
 
+
+    myPundit.showGenericAlertError = function () {
+          myPundit.err('Server error');
+          EventDispatcher.sendEvent('Pundit.alert', {
+               title: 'Oops! Something went wrong.',
+               id: 'ERROR',
+               timeout: null,
+               message: 'There was an error while trying to communicate with server. Please reaload the page in few minutes'
+          });
+    };
+
+
+    myPundit.handleUserIsLoggedFalse = function(){
+              isUserLogged = false;
+              EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
+              $cookies.remove('pundit_' + annotationServerBaseURLHash + '_User', {
+                 path: '/'
+              });
+              $cookies.remove('pundit_' + annotationServerBaseURLHash + '_Info', {
+                 path: '/'
+              });
+    }
+
+    myPundit.handleUserIsLoggedTrue = function(data, expirationDate){
+               data = data.args
+               isUserLogged = true;
+               loginStatus = 'loggedIn';
+               userData = data;
+               $cookies.putObject('pundit_' + annotationServerBaseURLHash + '_User', data, {
+                   expires: expirationDate,
+                   path: '/'
+               });
+               EventDispatcher.sendEvent('MyPundit.userLoggedData', userData);
+    }
+
+    myPundit.updateUserLoggedStatus = function(){
+           EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
+    
+           if (dispatchDocumentEvent) {
+              EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
+                   event: 'Pundit.userLoggedStatusChanged',
+                   data: null
+              });
+           }
+    }
+
     // used only in test
     myPundit.setIsUserLogged = function (bool) {
         isUserLogged = bool;
@@ -256,7 +302,6 @@ angular.module('Pundit2.Core')
 
         return HttpRequestsDispatcher.getAsUsersCurrent({
                          'promise':promise,
-                         'annotationServerBaseURLHash': annotationServerBaseURLHash,
                          'expirationDate': expirationDate,
                          'dispatchDocumentEvent': dispatchDocumentEvent
         });
@@ -765,6 +810,23 @@ angular.module('Pundit2.Core')
         hasDocumentClickHandler = false;
         $document.off('mouseup', documentClickHandler);
     });
+
+    EventDispatcher.addListener('MyPundit.showGenericAlertError', function() {
+        myPundit.showGenericAlertError();
+    });
+
+    EventDispatcher.addListener('MyPundit.handleUserIsLoggedFalse', function() {
+        myPundit.handleUserIsLoggedFalse();
+    });
+
+    EventDispatcher.addListener('MyPundit.handleUserIsLoggedTrue', function(data, expirationDate) {
+        myPundit.handleUserIsLoggedTrue(data, expirationDate);
+    });
+
+    EventDispatcher.addListener('MyPundit.updateUserLoggedStatus', function() {
+        myPundit.updateUserLoggedStatus();
+    });
+
 
     return myPundit;
 });

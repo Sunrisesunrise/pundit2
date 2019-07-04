@@ -40,174 +40,82 @@ angular.module('Pundit2.Core')
 
 
 
-	function embedded_getAsUsersCurrent(promise,annotationServerBaseURLHash,expirationDate,dispatchDocumentEvent){
-		//alert('GET CURRENT USER EMBEDDED VERSION');   
+    function embedded_getAsUsersCurrent(promise,annotationServerBaseURLHash,expirationDate,dispatchDocumentEvent){
+        //alert('GET CURRENT USER EMBEDDED VERSION');
 
-		httpCall = $http({
-		    headers: {
-		        'Accept': 'application/json'
-		    },
-		    method: 'GET',
-		    url: NameSpace.get('asUsersCurrent'),
-		    withCredentials: true
+        httpCall = $http({
+            headers: {
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+            url: NameSpace.get('asUsersCurrent'),
+            withCredentials: true
 
-		}).success(function (data) {
-		    loginServer = data.loginServer;
-		    editProfile = data.editProfile;
-		    // user is not logged in
+        }).success(function (data) {
 
-		    if (data.loginStatus === 0) {
-		        isUserLogged = false;
-		        EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
-		        $cookies.remove('pundit_' + annotationServerBaseURLHash + '_User', {
-		            path: '/'
-		        });
-		        $cookies.remove('pundit_' + annotationServerBaseURLHash + '_Info', {
-		            path: '/'
-		        });
-		        promise.resolve(false);
-		    }
-		    else {
-		        // user is logged in
-		        isUserLogged = true;
-		        loginStatus = 'loggedIn';
-		        userData = data;
-		        $cookies.putObject('pundit_' + annotationServerBaseURLHash + '_User', data, {
-		            expires: expirationDate,
-		            path: '/'
-		        });
-		        EventDispatcher.sendEvent('MyPundit.userLoggedData', userData);
-		        promise.resolve(true);
-		    }
-		    EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
-		    
-		    if (dispatchDocumentEvent) {
-		        EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
-		            event: 'Pundit.userLoggedStatusChanged',
-		            data: null
-		        });
-		    }
-		}).error(function () {
-		    myPundit.err('Server error');
-		    EventDispatcher.sendEvent('Pundit.alert', {
-		        title: 'Oops! Something went wrong.',
-		        id: 'ERROR',
-		        timeout: null,
-		        message: 'There was an error while trying to communicate with server. Please reaload the page in few minutes'
-		    });
-		    promise.reject('check logged in promise error');
-		});
+            // user is not logged in
+            if (data.loginStatus === 0) {
+                EventDispatcher.sendEvent('MyPundit.handleUserIsLoggedFalse');
+                promise.resolve(false);
+            }
+            else {
+                EventDispatcher.sendEvent('MyPundit.handleUserIsLoggedTrue',data, expirationDate);
+                // user is logged in
+                promise.resolve(true);
+            }
+            EventDispatcher.sendEvent('MyPundit.updateUserLoggedStatus');
 
-		return promise.promise;
-	}
+        }).error(function () {
+            EventDispatcher.sendEvent('MyPundit.showGenericAlertError');
+            promise.reject('check logged in promise error');
+        });
+
+        return promise.promise;
+    }
 
 
 
 
 
 
-	function chromeExt_getAsUsersCurrent(promise,annotationServerBaseURLHash,expirationDate,dispatchDocumentEvent){
-		//alert('GET CURRENT USER EXTENSION VERSION');   
+    function chromeExt_getAsUsersCurrent(promise,annotationServerBaseURLHash,expirationDate,dispatchDocumentEvent){
+        //alert('GET CURRENT USER EXTENSION VERSION');
 
-		var httpObject = {
-		     headers: {
-		         'Accept': 'application/json'
-		     },
-		     method: 'GET',
-		     urlSuffix: NameSpace.get('asUsersCurrentSuffix'),
-		     withCredentials: true
-		}
+        var httpObject = {
+             headers: {
+                 'Accept': 'application/json'
+             },
+             method: 'GET',
+             urlSuffix: NameSpace.get('asUsersCurrentSuffix'),
+             withCredentials: true
+        }
 
-		chrome.runtime.sendMessage({isHttpRequest: true, httpObject: httpObject}, function(response){
-		        console.log();
-		        console.log("################ HTTP GET response ----------> " + JSON.stringify(response));
-		        console.log();
-		        if(response.error==true){
-		               myPundit.err('Server error');
-		               EventDispatcher.sendEvent('Pundit.alert', {
-		                   title: 'Oops! Something went wrong.',
-		                   id: 'ERROR',
-		                   timeout: null,
-		                   message: 'There was an error while trying to communicate with server. Please reaload the page in few minutes'
-		               });
-		               promise.reject('check logged in promise error');
-		        }else{
-		              var data = response;
-		              loginServer = data.loginServer;
-		              editProfile = data.editProfile;
+        chrome.runtime.sendMessage({isHttpRequest: true, httpObject: httpObject}, function(response){
+                console.log();
+                console.log("################ HTTP GET response ----------> " + JSON.stringify(response));
+                console.log();
+                if(response.error==true){
+                        EventDispatcher.sendEvent('MyPundit.showGenericAlertError');
+                        promise.reject('check logged in promise error');
+                }else{
+                    var data = response;
 
-		              // user is not logged in
-		              if (data.loginStatus === 0) {
-		                  isUserLogged = false;
-		                  EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
-		                  $cookies.remove('pundit_' + annotationServerBaseURLHash + '_User', {
-		                      path: '/'
-		                  });
-		                  $cookies.remove('pundit_' + annotationServerBaseURLHash + '_Info', {
-		                      path: '/'
-		                  });
-		                  promise.resolve(false);
-		              } else {
-		                  // user is logged in
-		                  isUserLogged = true;
-		                  loginStatus = 'loggedIn';
-		                  userData = data;
-		                  $cookies.putObject('pundit_' + annotationServerBaseURLHash + '_User', data, {
-		                      expires: expirationDate,
-		                      path: '/'
-		                  });
-		                  EventDispatcher.sendEvent('MyPundit.userLoggedData', userData);
-		                  promise.resolve(true);
-		              }
-		              EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
+                    // user is not logged in
+                    if (data.loginStatus === 0) {
+                        EventDispatcher.sendEvent('MyPundit.handleUserIsLoggedFalse');
+                        promise.resolve(false);
+                    }
+                    else {
+                        EventDispatcher.sendEvent('MyPundit.handleUserIsLoggedTrue',data, expirationDate);
+                        // user is logged in
+                        promise.resolve(true);
+                    }
+                    EventDispatcher.sendEvent('MyPundit.updateUserLoggedStatus');
+                }
+        });
 
-		              if (dispatchDocumentEvent) {
-		                  EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
-		                      event: 'Pundit.userLoggedStatusChanged',
-		                      data: null
-		                  });
-		              }
-		        }
-		});
-
-		return promise.promise;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return promise.promise;
+    }
 
 
     return disp;

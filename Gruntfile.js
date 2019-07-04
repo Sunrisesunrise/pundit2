@@ -875,10 +875,11 @@ module.exports = function(grunt) {
         'replace:dev_chrome_conf'
     ]);
 
-    grunt.registerTask('dw: watches app files and reloads the browser automatically', [
+    grunt.registerTask('dev', 'Live dev workflow: watches app files and reloads the browser automatically', [
         'less:dev', 'copy:fonts', 'chrome_examples', 'imagemin:dev', 'html2js:main',
         'html2js:korboee', 'examples', 'connect:livereload', 'open:server', 'watch'
     ]);
+
     grunt.registerTask('dev:unit', 'Live dev UNIT tests workflow: watches for test files and runs unit tests automatically', [
         'test:unit', 'watch:unit'
     ]);
