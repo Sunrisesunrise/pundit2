@@ -40,3 +40,5 @@ var punditConfig = {
     limitToSuggestedTypes: true,
     disableImageAnnotation: true
 }
+
+try{ module.exports = punditConfig; }catch(e){}

@@ -1,5 +1,5 @@
 
-const annotationServerBaseURL = 'https://thepund.it/annotationserver/';
+const annotationServerBaseURL = null; // this url is replaced by grunt using the extension_conf.js file
 
 function handleHttpRequest(httpObject,sendResponse){
 

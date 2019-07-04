@@ -5,6 +5,9 @@ var mountFolder = function(connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
 
+// chromePunditConfig used to retrieve the chromePunditConfig.annotationServerBaseURL string
+var chromePunditConfig = require('./app/extensions/chrome/inject/extension_conf.js');
+
 module.exports = function(grunt) {
 
     require('load-grunt-tasks')(grunt);
@@ -226,6 +229,20 @@ module.exports = function(grunt) {
                     dest: '<%= conf.build %>/extensions/chrome/inject/css/'
                 }]
             },
+            chrome_conf: {
+                options: {
+                    patterns: [{
+                        match: /const annotationServerBaseURL = (.+)/g,
+                        replacement: 'const annotationServerBaseURL = "'+chromePunditConfig.annotationServerBaseURL+'";'
+                    }]
+                },
+                files: [{
+                    expand: true,
+                    flatten: true,
+                    src: ['<%= conf.build %>/extensions/chrome/js/backgroundHttpRequestsHandler.js'],
+                    dest: '<%= conf.build %>/extensions/chrome/js/'
+                }]
+            },
             dev_chrome: {
                 options: {
                     patterns: [{
@@ -246,6 +263,20 @@ module.exports = function(grunt) {
                     flatten: true,
                     src: ['<%= conf.app %>/examples/extensions/chrome/inject/css/pundit2.css'],
                     dest: '<%= conf.app %>/examples/extensions/chrome/inject/css/'
+                }]
+            },
+            dev_chrome_conf: {
+                options: {
+                    patterns: [{
+                        match: /const annotationServerBaseURL = (.+)/g,
+                        replacement: 'const annotationServerBaseURL = "'+chromePunditConfig.annotationServerBaseURL+'";'
+                    }]
+                },
+                files: [{
+                    expand: true,
+                    flatten: true,
+                    src: ['<%= conf.app %>/examples/extensions/chrome/js/backgroundHttpRequestsHandler.js'],
+                    dest: '<%= conf.app %>/examples/extensions/chrome/js/'
                 }]
             }
         },
@@ -834,15 +865,17 @@ module.exports = function(grunt) {
     grunt.registerTask('build', 'Builds a production-ready version of the application', [
         'clean:dist', 'copy:fonts', 'html2js:main', 'html2js:korboee', 'examples', 'useminPrepare',
         'less:dist', 'copy:css', 'imagemin', 'htmlmin', 'concat', 'copy:dist', 'ngAnnotate', 'cssmin',
-        'copy:chrome', 'replace:chrome', 'uglify', 'rev', 'usemin', 'htmlmin:final', 'copy:bookmarklet'
+        'copy:chrome', 'replace:chrome', 'replace:chrome_conf', 'uglify', 'rev', 'usemin', 'htmlmin:final',
+        'copy:bookmarklet'
     ]);
 
     grunt.registerTask('chrome_examples', 'Chrome extension', [
         'clean:chrome', 'copy:dev_chrome', 'copy:dev_chrome_modules', 'copy:dev_chrome_components', 
-        'copy:dev_chrome_script', 'copy:dev_chrome_templates', 'copy:dev_chrome_css', 'replace:dev_chrome'
+        'copy:dev_chrome_script', 'copy:dev_chrome_templates', 'copy:dev_chrome_css', 'replace:dev_chrome',
+        'replace:dev_chrome_conf'
     ]);
 
-    grunt.registerTask('dev', 'Live dev workflow: watches app files and reloads the browser automatically', [
+    grunt.registerTask('dw: watches app files and reloads the browser automatically', [
         'less:dev', 'copy:fonts', 'chrome_examples', 'imagemin:dev', 'html2js:main',
         'html2js:korboee', 'examples', 'connect:livereload', 'open:server', 'watch'
     ]);
