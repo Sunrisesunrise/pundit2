@@ -346,6 +346,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
     if(request.isHttpRequest)
        return handleHttpRequest(request.httpObject, sendResponse);
+       // the handleHttpRequest function is implemented in the backgorundHttpRequestsHandler.js file
 
     switch (request.action) {
         case 'switchOnExt':

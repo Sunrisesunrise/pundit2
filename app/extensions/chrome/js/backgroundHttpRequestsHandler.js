@@ -1,13 +1,10 @@
 
 const annotationServerBaseURL = 'https://thepund.it/annotationserver/';
 
-
-
-
-
 function handleHttpRequest(httpObject,sendResponse){
 
    alert('GET /users/current from HTTP REQUESTS HANDLER!');
+
 
    var url = annotationServerBaseURL + httpObject.urlSuffix ;
    fetch(url,{
@@ -26,10 +23,3 @@ function handleHttpRequest(httpObject,sendResponse){
    return true;
 }
 
-
-//chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
- //   
-//    if(request.isHttpRequest){
-//       return handleHttpRequest(request.httpObject, sendResponse);
-//
-//}
