@@ -7,7 +7,7 @@ angular.module('Pundit2.Communication')
 })
 
 .factory('Notebook', function(BaseComponent, Config, NameSpace, MyPundit, Analytics, NotebookExchange, NOTEBOOKDEFAULTS,
-    $http, $q) {
+    $http, $q, HttpRequestsDispatcher) {
 
     var notebookComponent = new BaseComponent("Notebook", NOTEBOOKDEFAULTS);
 
@@ -99,26 +99,27 @@ angular.module('Pundit2.Communication')
 
         notebookComponent.log("Loading notebook " + self.id + " metadata with cache " + useCache);
 
-        var httpPromise,
-            nsKey = MyPundit.isUserLogged() ? 'asNBMeta' : 'asOpenNBMeta';
+        var nsKey = MyPundit.isUserLogged() ? 'asNBMeta' : 'asOpenNBMeta';
+        var nsKeySuffix = MyPundit.isUserLogged() ? 'asNBMetaSuffix' : 'asOpenNBMetaSuffix';
 
-        httpPromise = $http({
-            headers: {
-                'Accept': 'application/json'
-            },
-            method: 'GET',
-            cache: useCache,
-            url: NameSpace.get(nsKey, {
-                id: self.id
-            }),
-            withCredentials: true
-        }).success(function(data) {
+        var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
+			headers: {
+				'Accept': 'application/json'
+			},
+			method: 'GET',
+			url: NameSpace.get(nsKey, {id: self.id}), // url used for normal embedded calls
+            urlSuffix: NameSpace.get(nsKeySuffix, {id: self.id}), // urlSuffix used for the chrome extension
+            // note: urlSuffix gets ignored when called by the embedded app
+			withCredentials: true
+        });
+
+		httpPromise.then(function(data) {
             readData(self, data);
             self._q.resolve(self);
             Analytics.track('api', 'get', 'notebook meta');
             notebookComponent.log("Retrieved notebook " + self.id + " metadata");
 
-        }).error(function(data, statusCode) {
+        },function(error, statusCode) {
             // TODO: 404 not found, nothing to do about it, but 403 forbidden might be
             //       recoverable by loggin in
             self._q.reject("Error from server while retrieving notebook " + self.id + ": " + statusCode);

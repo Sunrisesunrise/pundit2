@@ -8,7 +8,7 @@ angular.module('Pundit2.Communication')
 
 .service('AnnotationsCommunication', function(BaseComponent, EventDispatcher, NameSpace, Consolidation, MyPundit, ModelHelper,
     AnnotationsExchange, Annotation, NotebookExchange, Notebook, ItemsExchange, Config, XpointersHelper, ModelHandler,
-    $http, $q, $rootScope, $document, Analytics, ANNOTATIONSCOMMUNICATIONDEFAULTS) {
+    $http, $q, $rootScope, $document, Analytics, ANNOTATIONSCOMMUNICATIONDEFAULTS, HttpRequestsDispatcher) {
 
     var annotationsCommunication = new BaseComponent('AnnotationsCommunication', ANNOTATIONSCOMMUNICATIONDEFAULTS);
 
@@ -423,6 +423,7 @@ angular.module('Pundit2.Communication')
                 // Load all annotations with one call.
                 annotationsCommunication.log('Loading all annotations with one call');
                 var nsKey = (MyPundit.isUserLogged()) ? 'asAnnMult' : 'asOpenAnnMult';
+                var nsKeySuffix = (MyPundit.isUserLogged()) ? 'asAnnMultSuffix' : 'asOpenAnnMultSuffix';
                 var postData = ids.join(';');
                 var httpObject = {
                     headers: {
@@ -431,14 +432,18 @@ angular.module('Pundit2.Communication')
                     },
                     method: 'POST',
                     url: NameSpace.get(nsKey),
+                    urlSuffix: NameSpace.get(nsKeySuffix),
                     withCredentials: true,
-                    data: postData
+                    body: postData
                 };
+
+				var httpPromise = HttpRequestsDispatcher.sendHttpRequest(httpObject);
+
                 //if (annotationsCommunication.options.loadMultipleAnnotationsRequireCredentials) {
                 //    httpObject.withCredentials = true;
                 //    httpObject.url =  NameSpace.get('asAnnMult');
                 //}
-                $http(httpObject).success(function(data) {
+		        httpPromise.then(function(data) {
                     var parsedData = ModelHelper.parseAnnotations(data);
                     var num = Object.keys(parsedData).length;
 
@@ -469,7 +474,7 @@ angular.module('Pundit2.Communication')
                             }
                         });
                     }
-                }).error(function( /*data, statusCode*/ ) {
+                },function( /*error, statusCode*/ ) {
                     annotationsCommunication.err('Error during load multiple annotations.');
                     EventDispatcher.sendEvent('Pundit.alert', {
                         title: 'Sorry there was a problem',

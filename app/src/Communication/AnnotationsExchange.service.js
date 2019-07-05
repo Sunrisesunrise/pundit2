@@ -1,6 +1,7 @@
 angular.module('Pundit2.Communication')
 
-.service('AnnotationsExchange', function(BaseComponent, NameSpace, MyPundit, Analytics, $http, $q) {
+.service('AnnotationsExchange', function(BaseComponent, NameSpace, MyPundit, Analytics, $http, $q,
+                                         HttpRequestsDispatcher) {
 
     // TODO: inherit from a Store()? Annotations, items, ...
     var annotationExchange = new BaseComponent("AnnotationsExchange");
@@ -28,14 +29,17 @@ angular.module('Pundit2.Communication')
 
         var promise = $q.defer(),
             httpPromise,
-            nsKey = (MyPundit.isUserLogged()) ? 'asAnnMetaSearch' : 'asOpenAnnMetaSearch';
+            nsKey = (MyPundit.isUserLogged()) ? 'asAnnMetaSearch' : 'asOpenAnnMetaSearch',
+            nsKeySuffx = (MyPundit.isUserLogged()) ? 'asAnnMetaSearchSuffix' : 'asOpenAnnMetaSearchSuffix';
 
-        httpPromise = $http({
-            headers: {
-                'Accept': 'application/json'
-            },
-            method: 'GET',
-            url: NameSpace.get(nsKey),
+        var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
+			headers: {
+				'Accept': 'application/json'
+			},
+			method: 'GET',
+			url: NameSpace.get(nsKey), // url used for normal embedded calls
+            urlSuffix: NameSpace.get(nsKeySuffx), // urlSuffix used for the chrome extension
+            // note: urlSuffix gets ignored when called by the embedded app
             cache: false,
             params: {
                 scope: "all",
@@ -43,9 +47,10 @@ angular.module('Pundit2.Communication')
                     resources: uris
                 }
             },
-            withCredentials: true
+			withCredentials: true
+        });
 
-        }).success(function(data) {
+		httpPromise.then(function(data) {
             Analytics.track('api', 'get', 'search');
 
             // TODO: check for emptyness? More edge cases?
@@ -74,13 +79,12 @@ angular.module('Pundit2.Communication')
 
             promise.resolve(ids);
             annotationExchange.log("Retrieved annotations IDs searching by URIs");
-
-        }).error(function(data, statusCode) {
-            var err = "Error from server while searching for annotations by URIs: " + statusCode;
+        }, function(error) {
+            var err = "Error from server while searching for annotations by URIs: " + error.statusCode;
             promise.reject(err);
             annotationExchange.err(err);
-            Analytics.track('api', 'error', 'get ' + nsKey, statusCode);
-        });
+            Analytics.track('api', 'error', 'get ' + nsKey, error.statusCode);
+		});
 
         return promise.promise;
     };

@@ -345,7 +345,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     var tabId;
 
     if(request.isHttpRequest)
-       return handleHttpRequest(request.httpObject, sendResponse);
+       return handleHttpRequest(request.httpRequestObject, sendResponse);
        // the handleHttpRequest function is implemented in the backgorundHttpRequestsHandler.js file
 
     switch (request.action) {

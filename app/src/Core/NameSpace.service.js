@@ -205,20 +205,28 @@ angular.module('Pundit2.Core')
 
     ns.asNB = ns.as + 'api/notebooks';
     ns.asNBEditMeta = ns.as + 'api/notebooks/{{id}}';
-    ns.asNBOwned = ns.as + 'api/notebooks/owned';
-    ns.asNBCurrent = ns.as + 'api/notebooks/current';
+    ns.asNBOwnedSuffix = 'api/notebooks/owned';    
+    ns.asNBOwned = ns.as + ns.asNBOwnedSuffix;
+    ns.asNBCurrentSuffix = 'api/notebooks/current';
+    ns.asNBCurrent = ns.as + ns.asNBCurrentSuffix;
     ns.asNBForcedCurrent = ns.as + 'api/notebooks/{{current}}';
     ns.asNBPrivate = ns.as + 'api/notebooks/private/{{id}}';
     ns.asNBPublic = ns.as + 'api/notebooks/public/{{id}}';
-    ns.asNBMeta = ns.as + 'api/notebooks/{{id}}/metadata';
+    ns.asNBMetaSuffix = 'api/notebooks/{{id}}/metadata';
+    ns.asNBMeta = ns.as + ns.asNBMetaSuffix;
     ns.asOpen = ns.as + 'api/open/';
-    ns.asOpenNBMeta = ns.as + 'api/open/notebooks/{{id}}/metadata';
+    ns.asOpenNBMetaSuffix = 'api/open/notebooks/{{id}}/metadata';
+    ns.asOpenNBMeta = ns.as + ns.asOpenNBMetaSuffix;
     ns.asOpenNBAnnMeta = ns.as + 'api/open/notebooks/{{id}}/annotations/metadata';
 
-    ns.asAnnMetaSearch = ns.as + 'api/annotations/metadata/search';
-    ns.asOpenAnnMetaSearch = ns.as + 'api/open/metadata/search';
-    ns.asAnnMult = ns.as + 'api/annotations/multiple';
-    ns.asOpenAnnMult = ns.as + 'api/open/annotations/multiple';
+    ns.asAnnMetaSearchSuffix = 'api/annotations/metadata/search';
+    ns.asAnnMetaSearch = ns.as + ns.asAnnMetaSearchSuffix;
+    ns.asOpenAnnMetaSearchSuffix = 'api/open/metadata/search';
+    ns.asOpenAnnMetaSearch = ns.as + ns.asOpenAnnMetaSearchSuffix;
+    ns.asAnnMultSuffix = 'api/annotations/multiple';
+    ns.asAnnMult = ns.as + ns.asAnnMultSuffix;
+    ns.asOpenAnnMultSuffix = 'api/open/annotations/multiple';
+    ns.asOpenAnnMult = ns.as + ns.asOpenAnnMultSuffix;
     ns.asAnn = ns.as + 'api/annotations/{{id}}';
     ns.asOpenAnn = ns.as + 'api/open/annotations/{{id}}';
     ns.asAnnContent = ns.as + 'api/annotations/{{id}}/content';
@@ -240,7 +248,6 @@ angular.module('Pundit2.Core')
 
     ns.asPref = ns.as + 'api/services/preferences/{{key}}';
     ns.asUrlPrefix = ns.as + 'api/open/urlprefix';
-
 
     // Gets a key of thelike namespace, interpolating variables if needed
     ns.get = function(key, context) {

@@ -1,7 +1,7 @@
 angular.module('Pundit2.Communication')
 
 .service('NotebookCommunication', function(BaseComponent, NameSpace, Notebook, MyPundit, Analytics, Config,
-    $http, $q, NotebookExchange, EventDispatcher) {
+    $http, $q, NotebookExchange, EventDispatcher, HttpRequestsDispatcher) {
 
     // This serive contain the http support to read and write
     // notebooks from server
@@ -21,15 +21,18 @@ angular.module('Pundit2.Communication')
 
             setLoading(true);
 
-            $http({
-                headers: {
-                    'Accept': 'application/json'
-                },
-                method: 'GET',
-                url: NameSpace.get('asNBOwned'),
-                withCredentials: true
+		    var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
+				headers: {
+					'Accept': 'application/json'
+				},
+				method: 'GET',
+				url: NameSpace.get('asNBOwned'), // url used for normal embedded calls
+		        urlSuffix: NameSpace.get('asNBOwnedSuffix'), // urlSuffix used for the chrome extension
+		        // note: urlSuffix gets ignored when called by the embedded app
+				withCredentials: true
+		    });
 
-            }).success(function(data) {
+		    httpPromise.then(function(data) {
                 setLoading(false);
                 Analytics.track('api', 'get', 'notebook owned');
 
@@ -60,7 +63,7 @@ angular.module('Pundit2.Communication')
                     // TODO: need to login (WTF?)? error? What.
                 }
 
-            }).error(function(data, statusCode) {
+            },function(error, statusCode) {
                 setLoading(false);
                 promise.reject("Error from server while retrieving list of my notebooks: " + statusCode);
                 notebookCommunication.err("Error from server while retrieving list of my notebooks: " + statusCode);
@@ -88,14 +91,20 @@ angular.module('Pundit2.Communication')
         if (MyPundit.isUserLogged()) {
             setLoading(true);
 
-            $http({
-                headers: {
+
+		    var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
+				headers: {
+					'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                },
-                method: 'GET',
-                url: NameSpace.get('asNBCurrent'),
-                withCredentials: true
-            }).success(function(data) {
+				},
+				method: 'GET',
+				url: NameSpace.get('asNBCurrent'), // url used for normal embedded calls
+		        urlSuffix: NameSpace.get('asNBCurrentSuffix'), // urlSuffix used for the chrome extension
+		        // note: urlSuffix gets ignored when called by the embedded app
+				withCredentials: true
+	        });
+
+		    httpPromise.then(function(data) {
                 setLoading(false);
                 notebookCommunication.log(data.NotebookID + ' is the current notebook');
                 // check if exist inside notebookExchange otherwise download it and add to notebooksExchange
@@ -104,7 +113,7 @@ angular.module('Pundit2.Communication')
                 }
                 NotebookExchange.setCurrentNotebooks(data.NotebookID);
                 promise.resolve(data.NotebookID);
-            }).error(function(msg) {
+            }, function(error) {
                 setLoading(false);
                 notebookCommunication.log('Impossible to get the current notebook ');
                 promise.reject(msg);
