@@ -8,26 +8,25 @@ http://thepund.it/license/
 ## Install
 
 To install the project and be ready to develop you need a few components:
-* npm (nodejs >0.9)
+* npm (nodejs >= 8.0) <small>&nbsp;&nbsp;&nbsp; _( Suggested Versions: 8.* )_</small>
 * grunt-cli
+* git
+* make
 
-##### On ubuntu 12.04 (and maybe others) you might need to add a repository for a recent version of nodejs
+
+##### To install such components on ubuntu 18.04 LTS (and maybe others), perform the next commands :
 >     sudo apt-get update
->     sudo apt-get install -y python-software-properties python g++ make
->     sudo add-apt-repository -y ppa:chris-lea/node.js
->     sudo apt-get update
->     sudo apt-get install nodejs
+>     sudo apt-get install -y nodejs npm build-essential git node-grunt-cli
 
-#### Install npm, grunt
->     sudo apt-get install npm
->     sudo npm -g install grunt-cli grunt
+After the components have been installed the pundit application can be installed as well
+<small>_(Note: Ubuntu by default installs an older version of nodejs if you want a newer version
+you need to add the nodejs repository before installing the program, as presented in the official nodejs [documentation](
+https://github.com/nodesource/distributions/blob/master/README.md
+), alternatively you can change nodejs version at any time using the [n package](https://www.npmjs.com/package/n) )_</small>
 
-#### Install bower
->    sudo npm install -g bower
 
-#### Install pundit2
-WARNING: this step must NOT be run as root, npm will just let you down.
-
+##### Install pundit2
+_WARNING:_ This step must be executed in the pundit directory and **NOT** run as root
 >     npm install
 
 This will install the full toolchain to develop, build and deploy the application.
@@ -35,15 +34,15 @@ This will install the full toolchain to develop, build and deploy the applicatio
 
 ## Develop
 >     grunt dev
-    
-Examples are built in examples/*html from examples/src/*html. 
+
+Examples are built in examples/*html from examples/src/*html.
 
 To create a new one: add a new .html in examples/src/, include the header and footer comments
-for grunt to build them correctly. Or copy one of the existing into a new one, directly. 
+for grunt to build them correctly. Or copy one of the existing into a new one, directly.
 
 The list of examples is built and included everywhere automatically.
 
-To get a list of grunt targets: 
+To get a list of grunt targets:
 >       grunt --help
 
 ## Build
@@ -66,12 +65,12 @@ Plus the documentation in /Docs.
 * Modules: "Pundit2.ModuleName", camel case with first capitalized
 * Constants: "PUNDITDEFAULTCONF", all capitalized
 * Services/Factories/Providers: "ServiceName", camel case with first capitalized
-* Filenames: 
+* Filenames:
     - javascript: "$name.$what.js" (eg Example.dir.js)
          - $what is one of: module, service, factory, ctrl, constant, dir (directive)...
          - $name is the same name of the $what defined inside (camel case etc)
     - templates: "$name.$what.tmpl.html" (eg: Example.dir.tmpl.html)
-         - $name.$what is the same name of module this template belongs to 
+         - $name.$what is the same name of module this template belongs to
     - unit test: "$name.$what.unit.test.js" (eg: Example.service.unit.test.js)
     - e2e test: "$name.e2e.test.js" (eg: Example.e2e.test.js)
 * Directories: name of the module / component
@@ -79,7 +78,7 @@ Plus the documentation in /Docs.
     - words are separated by hyphens "-"    
     - they *all* start with "pnd-" (eg: pnd-dashboard-container)
     - they are all lowercase
-    
+
 # Used in this project
 
 * Js framework: Angular js https://docs.angularjs.org/api
