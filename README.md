@@ -22,7 +22,7 @@ After the components have been installed the pundit application can be installed
 <small>_(Note: Ubuntu by default installs an older version of nodejs if you want a newer version
 you need to add the nodejs repository before installing the program, as presented in the official nodejs [documentation](
 https://github.com/nodesource/distributions/blob/master/README.md
-), alternatively you can change nodejs version at any time using the [n package](https://www.npmjs.com/package/n) )_</small>
+), alternatively you can change nodejs version at any time using the [n package](https://www.npmjs.com/package/n))_</small>
 
 
 ##### Install pundit2
