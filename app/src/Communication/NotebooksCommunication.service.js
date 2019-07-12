@@ -263,18 +263,21 @@ angular.module('Pundit2.Communication')
             }
             setLoading(true);
 
-            $http({
+            var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json;charset=UTF-8;"
                 },
                 method: 'POST',
                 url: NameSpace.get('asNB'),
+                urlSuffix: NameSpace.get('asNBSuffix'),
                 withCredentials: true,
-                data: {
+                body: {
                     NotebookName: name
                 }
-            }).success(function(data) {
+            });
+
+            httpPromise.then(function(data) {
                 setLoading(false);
 
                 if ('NotebookID' in data) {
@@ -292,7 +295,7 @@ angular.module('Pundit2.Communication')
                     // TODO: need to login (WTF?)? error? What.
                 }
 
-            }).error(function(data, statusCode) {
+            }, function(error, statusCode) {
                 setLoading(false);
                 promise.reject("Error from server while retrieving list of my notebooks: " + statusCode);
                 notebookCommunication.err("Error from server while retrieving list of my notebooks: " + statusCode);

@@ -204,7 +204,8 @@ angular.module('Pundit2.Core')
     ns.asUsersLogoutSuffix = 'api/users/logout';
     ns.asUsersLogout = ns.as + ns.asUsersLogoutSuffix;
 
-    ns.asNB = ns.as + 'api/notebooks';
+    ns.asNBSuffix = 'api/notebooks';
+    ns.asNB = ns.as + ns.asNBSuffix;
     ns.asNBEditMeta = ns.as + 'api/notebooks/{{id}}';
     ns.asNBOwnedSuffix = 'api/notebooks/owned';
     ns.asNBOwned = ns.as + ns.asNBOwnedSuffix;

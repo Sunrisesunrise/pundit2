@@ -115,7 +115,7 @@ angular.module('Pundit2.Core')
                 promise.resolve(data);
             });
         }).catch(function(error) {
-            promise.reject();
+            promise.reject({'error':true,'status':error.status});
         });
 
       return promise.promise;
@@ -126,7 +126,7 @@ angular.module('Pundit2.Core')
         var promise = $q.defer();
         chrome.runtime.sendMessage({isHttpRequest: true, httpRequestObjectTuple: httpRequestObjectTuple}, function(response){
                 if(response.error==true){
-                    promise.reject();
+                    promise.reject({'error':true,'status':response.status});
                 }else{
                     var data = response;
                     //console.log('');console.log('');console.log('');console.log('');console.log('');
