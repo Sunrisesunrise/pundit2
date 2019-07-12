@@ -437,13 +437,13 @@ angular.module('Pundit2.Communication')
                     body: postData
                 };
 
-				var httpPromise = HttpRequestsDispatcher.sendHttpRequest(httpObject);
+                var httpPromise = HttpRequestsDispatcher.sendHttpRequest(httpObject);
 
                 //if (annotationsCommunication.options.loadMultipleAnnotationsRequireCredentials) {
                 //    httpObject.withCredentials = true;
                 //    httpObject.url =  NameSpace.get('asAnnMult');
                 //}
-		        httpPromise.then(function(data) {
+                httpPromise.then(function(data) {
                     var parsedData = ModelHelper.parseAnnotations(data);
                     var num = Object.keys(parsedData).length;
 

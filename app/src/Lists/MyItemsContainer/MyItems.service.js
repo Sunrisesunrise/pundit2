@@ -63,7 +63,7 @@ angular.module("Pundit2.MyItemsContainer")
 
 .service("MyItems", function(MYITEMSDEFAULTS, BaseComponent, EventDispatcher, NameSpace, Item, ItemsExchange,
     ContextualMenu, MyPundit, Config, Consolidation, TextFragmentAnnotator, Analytics,
-    $http, $rootScope, $q) {
+    $http, $rootScope, $q, HttpRequestsDispatcher) {
 
     var myItems = new BaseComponent("MyItems", MYITEMSDEFAULTS);
 
@@ -168,7 +168,7 @@ angular.module("Pundit2.MyItemsContainer")
         opInProgress = true;
         setLoading(true);
 
-        $http({
+        var httpObject = {
             headers: {
                 'Accept': 'application/json'
             },
@@ -176,8 +176,15 @@ angular.module("Pundit2.MyItemsContainer")
             url: NameSpace.get('asPref', {
                 key: myItems.options.apiPreferencesKey
             }),
-            withCredentials: true
-        }).success(function(data) {
+            urlSuffix: NameSpace.get('asPrefSuffix', {
+                key: myItems.options.apiPreferencesKey
+            }),
+            withCredentials: true,
+        };
+
+        var httpPromise = HttpRequestsDispatcher.sendHttpRequest(httpObject);
+
+        httpPromise.then(function(data) {
             var num = 0;
             setLoading(false);
 
@@ -224,7 +231,8 @@ angular.module("Pundit2.MyItemsContainer")
             promise.resolve();
             myItems.log('Retrieved my items from the server: ' + num + ' items');
 
-        }).error(function(msg) {
+        },function(error) {
+            var msg = error;
             setLoading(false);
             opInProgress = false;
             promise.reject();

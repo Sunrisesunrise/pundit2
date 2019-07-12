@@ -250,7 +250,8 @@ angular.module('Pundit2.Core')
     ns.asReport = ns.as + 'api/annotations/{{id}}/report';
     ns.asUnReport = ns.as + 'api/annotations/{{id}}/unReport';
 
-    ns.asPref = ns.as + 'api/services/preferences/{{key}}';
+    ns.asPrefSuffix = 'api/services/preferences/{{key}}';
+    ns.asPref = ns.as + ns.asPrefSuffix;
     ns.asUrlPrefix = ns.as + 'api/open/urlprefix';
 
     // Gets a key of thelike namespace, interpolating variables if needed
