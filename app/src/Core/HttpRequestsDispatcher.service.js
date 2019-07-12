@@ -70,7 +70,7 @@ angular.module('Pundit2.Core')
         //      urlSuffix = url.toString().substring(url.toString().indexOf(urlSuffix));
         // //   urlSuffix = url.substring(url.indexOf(urlSuffix));
 
-        var relevantFields = ['method', 'headers', 'body', 'data', 'withCredentials', 'cache'];
+        var relevantFields = ['method', 'headers', 'body', 'withCredentials', 'cache'];
         relevantFields.forEach(function(fieldName) {
           if(httpRequestObject.hasOwnProperty(fieldName)){
              if(fieldName=='cache'){
@@ -80,7 +80,8 @@ angular.module('Pundit2.Core')
                     httpRequestObject[fieldName] = 'default';
              }
 
-             if(fieldName=='body'){// && newHttpRequestObject['method'].toUpperCase()=='POST'){
+
+               if(fieldName=='body' && (  typeof(httpRequestObject[fieldName])!=='string' ) ){
                 // newHttpRequestObject.body={};
                 // Object.keys(httpRequestObject.body)
                 // .forEach(function(key){
