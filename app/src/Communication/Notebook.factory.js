@@ -7,7 +7,7 @@ angular.module('Pundit2.Communication')
 })
 
 .factory('Notebook', function(BaseComponent, Config, NameSpace, MyPundit, Analytics, NotebookExchange, NOTEBOOKDEFAULTS,
-    $http, $q, HttpRequestsDispatcher) {
+    $q, HttpRequestsDispatcher) {
 
     var notebookComponent = new BaseComponent("Notebook", NOTEBOOKDEFAULTS);
 
@@ -103,17 +103,16 @@ angular.module('Pundit2.Communication')
         var nsKeySuffix = MyPundit.isUserLogged() ? 'asNBMetaSuffix' : 'asOpenNBMetaSuffix';
 
         var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
-			headers: {
-				'Accept': 'application/json'
-			},
-			method: 'GET',
-			url: NameSpace.get(nsKey, {id: self.id}), // url used for normal embedded calls
-            urlSuffix: NameSpace.get(nsKeySuffix, {id: self.id}), // urlSuffix used for the chrome extension
-            // note: urlSuffix gets ignored when called by the embedded app
-			withCredentials: true
+            headers: {
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+            url: NameSpace.get(nsKey, {id: self.id}),
+            urlSuffix: NameSpace.get(nsKeySuffix, {id: self.id}),
+            withCredentials: true
         });
 
-		httpPromise.then(function(data) {
+        httpPromise.then(function(data) {
             readData(self, data);
             self._q.resolve(self);
             Analytics.track('api', 'get', 'notebook meta');
@@ -187,8 +186,8 @@ angular.module('Pundit2.Communication')
     }; // readData()
 
     // Returns a promise associated with a notebook. The user will
-    // get the notebook using .then(success, error). The notebook 
-    // will load its metadata as soon as possible and resolve the 
+    // get the notebook using .then(success, error). The notebook
+    // will load its metadata as soon as possible and resolve the
     // promise.
     function NotebookFactory(id, isMyNotebook) {
         var nb = new Notebook(id, isMyNotebook);

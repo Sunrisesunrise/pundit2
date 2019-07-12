@@ -1,8 +1,7 @@
 angular.module('Pundit2.Communication')
 
 .factory('Annotation', function(BaseComponent, Config, NameSpace, Utils, Item, TypesHelper, Analytics,
-    AnnotationsExchange, Consolidation, MyPundit, ItemsExchange, PageItemsContainer, ModelHandler,
-    $http, $q) {
+    AnnotationsExchange, Consolidation, MyPundit, ItemsExchange, PageItemsContainer, ModelHandler, $q, HttpRequestsDispatcher) {
 
     var annotationComponent = new BaseComponent('Annotation');
     var annotationServerVersion = Config.annotationServerVersion;
@@ -46,16 +45,17 @@ angular.module('Pundit2.Communication')
         var self = this,
             promise = $q.defer();
 
-        $http({
+        var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
             headers: {
                 'Accept': 'application/json'
             },
             method: 'GET',
-            url: NameSpace.get('asAnn', {
-                id: self.id
-            }),
+            url: NameSpace.get('asAnn', { id: self.id }),
+            urlSuffix: NameSpace.get('asAnnSuffix', { id: self.id }),
             withCredentials: true
-        }).success(function(data) {
+        });
+
+            httpPromise.then(function(data) {
 
             // update info
             if (annotationServerVersion === 'v1') {
@@ -72,7 +72,7 @@ angular.module('Pundit2.Communication')
 
             promise.resolve();
             annotationComponent.log('Retrieved annotation ' + self.id + ' metadata');
-        }).error(function(data, statusCode) {
+        },function(error, statusCode) {
             promise.reject();
             annotationComponent.err('Error getting annotation ' + self.id + '. Server answered with status code ' + statusCode);
         });
@@ -82,7 +82,8 @@ angular.module('Pundit2.Communication')
 
     Annotation.prototype.load = function(useCache) {
         var self = this,
-            nsKey = (MyPundit.isUserLogged()) ? 'asAnn' : 'asOpenAnn';
+            nsKey = (MyPundit.isUserLogged()) ? 'asAnn' : 'asOpenAnn',
+            nsKeySuffix = (MyPundit.isUserLogged()) ? 'asAnnSuffix' : 'asOpenAnnSuffix';
 
         if (typeof(useCache) === 'undefined') {
             useCache = true;
@@ -90,20 +91,18 @@ angular.module('Pundit2.Communication')
 
         annotationComponent.log('Loading annotation ' + self.id + ' with cache ' + useCache);
 
-        var httpPromise;
-        httpPromise = $http({
+        var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
             headers: {
                 'Accept': 'application/json'
             },
             method: 'GET',
             cache: useCache,
-            url: NameSpace.get(nsKey, {
-                id: self.id
-            }),
+            url: NameSpace.get(nsKey, { id: self.id }),
+            urlSuffix: NameSpace.get(nsKeySuffix, { id: self.id }),
             withCredentials: true
+        });
 
-        }).success(function(data) {
-
+        httpPromise.then(function(data) {
             if (annotationServerVersion === 'v1') {
                 readAnnotationData(self, data);
             } else {
@@ -121,7 +120,7 @@ angular.module('Pundit2.Communication')
             // @TODO: decide what to do with tracking
             //Analytics.track('api', 'get', 'annotation');
 
-        }).error(function(data, statusCode) {
+        },function(error, statusCode) {
 
             // TODO: 404 not found, nothing to do about it, but 403 forbidden might be
             // recoverable by loggin in??
@@ -276,7 +275,7 @@ angular.module('Pundit2.Communication')
                 }
 
                 if (item.isProperty()) {
-                    // Add specific flag, this properties are deleted if an other property 
+                    // Add specific flag, this properties are deleted if an other property
                     // with the same uri is added
                     item.isAnnotationProperty = true;
                 }

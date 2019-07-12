@@ -1,6 +1,6 @@
 angular.module('Pundit2.Communication')
 
-.service('AnnotationsExchange', function(BaseComponent, NameSpace, MyPundit, Analytics, $http, $q,
+.service('AnnotationsExchange', function(BaseComponent, NameSpace, MyPundit, Analytics, $q,
                                          HttpRequestsDispatcher) {
 
     // TODO: inherit from a Store()? Annotations, items, ...
@@ -154,7 +154,7 @@ angular.module('Pundit2.Communication')
                     }
                 }
             }
-            // TODO: check the previous structure of annByItemUri 
+            // TODO: check the previous structure of annByItemUri
             // to verify if the annotation was already present.
             var uris = {};
             for (var uri in ann.items) {

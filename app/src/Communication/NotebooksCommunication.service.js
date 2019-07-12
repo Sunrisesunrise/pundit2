@@ -21,18 +21,17 @@ angular.module('Pundit2.Communication')
 
             setLoading(true);
 
-		    var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
-				headers: {
-					'Accept': 'application/json'
-				},
-				method: 'GET',
-				url: NameSpace.get('asNBOwned'), // url used for normal embedded calls
-		        urlSuffix: NameSpace.get('asNBOwnedSuffix'), // urlSuffix used for the chrome extension
-		        // note: urlSuffix gets ignored when called by the embedded app
-				withCredentials: true
-		    });
+            var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
+                headers: {
+                    'Accept': 'application/json'
+                },
+                method: 'GET',
+                url: NameSpace.get('asNBOwned'),
+                urlSuffix: NameSpace.get('asNBOwnedSuffix'),
+                withCredentials: true
+            });
 
-		    httpPromise.then(function(data) {
+            httpPromise.then(function(data) {
                 setLoading(false);
                 Analytics.track('api', 'get', 'notebook owned');
 
@@ -92,19 +91,18 @@ angular.module('Pundit2.Communication')
             setLoading(true);
 
 
-		    var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
-				headers: {
-					'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-				},
-				method: 'GET',
-				url: NameSpace.get('asNBCurrent'), // url used for normal embedded calls
-		        urlSuffix: NameSpace.get('asNBCurrentSuffix'), // urlSuffix used for the chrome extension
-		        // note: urlSuffix gets ignored when called by the embedded app
-				withCredentials: true
-	        });
+            var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
+                headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                },
+                method: 'GET',
+                url: NameSpace.get('asNBCurrent'),
+                urlSuffix: NameSpace.get('asNBCurrentSuffix'),
+                withCredentials: true
+            });
 
-		    httpPromise.then(function(data) {
+            httpPromise.then(function(data) {
                 setLoading(false);
                 notebookCommunication.log(data.NotebookID + ' is the current notebook');
                 // check if exist inside notebookExchange otherwise download it and add to notebooksExchange

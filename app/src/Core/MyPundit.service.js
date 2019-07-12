@@ -83,7 +83,7 @@ angular.module('Pundit2.Core')
     var annotationServerBaseURLHash = md5.createHash(Config.annotationServerBaseURL);
 
     var isUserLogged = false;
-    var loginServer,
+    var loginServer = 'https://thepund.it/app/pundit_login/',
     editProfile,
     loginStatus,
     userData = {},
@@ -254,17 +254,17 @@ angular.module('Pundit2.Core')
         }
 
         var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
-			headers: {
-				'Accept': 'application/json'
-			},
-			method: 'GET',
-			url: NameSpace.get('asUsersCurrent'), // url used for normal embedded calls
+            headers: {
+                'Accept': 'application/json'
+            },
+            method: 'GET',
+            url: NameSpace.get('asUsersCurrent'), // url used for normal embedded calls
             urlSuffix: NameSpace.get('asUsersCurrentSuffix'), // urlSuffix used for the chrome extension
             // note: urlSuffix gets ignored when called by the embedded app
-			withCredentials: true
+            withCredentials: true
         });
 
-		httpPromise.then(function(httpresponse) {
+        httpPromise.then(function(httpresponse) {
           var data = httpresponse;
 
           if (data.loginStatus === 0) {
@@ -290,24 +290,24 @@ angular.module('Pundit2.Core')
              promise.resolve(true);
           }
            EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
-    
+
            if (dispatchDocumentEvent) {
               EventDispatcher.sendEvent('Pundit.dispatchDocumentEvent', {
                    event: 'Pundit.userLoggedStatusChanged',
                    data: null
               });
            }
-		}, function(error) {
+        }, function(error) {
             // after reject
-		    myPundit.err('Server error');
-		    EventDispatcher.sendEvent('Pundit.alert', {
-		         title: 'Oops! Something went wrong.',
-		         id: 'ERROR',
-		         timeout: null,
-		         message: 'There was an error while trying to communicate with server. Please reaload the page in few minutes'
-		    });
+            myPundit.err('Server error');
+            EventDispatcher.sendEvent('Pundit.alert', {
+                 title: 'Oops! Something went wrong.',
+                 id: 'ERROR',
+                 timeout: null,
+                 message: 'There was an error while trying to communicate with server. Please reaload the page in few minutes'
+            });
             promise.reject('check logged in promise error');
-		});
+        });
 
         return promise.promise;
     };
@@ -337,7 +337,7 @@ angular.module('Pundit2.Core')
         return loginExecute('login', popoverPlacement, true);
     };
 
-    // TODO remove it, remove the old login popup and manage popover in unit test 
+    // TODO remove it, remove the old login popup and manage popover in unit test
     myPundit.oldLogin = function () {
 
         loginPromise = $q.defer();
@@ -372,7 +372,6 @@ angular.module('Pundit2.Core')
      *
      */
     myPundit.openLoginPopUp = function () {
-
         $timeout.cancel(loginPollTimer);
         if (typeof(loginPromise) === 'undefined') {
             myPundit.err('Login promise not defined, you should call login() first');
@@ -450,18 +449,19 @@ angular.module('Pundit2.Core')
      */
     myPundit.logout = function () {
 
-        var logoutPromise = $q.defer(),
-        httpCallLogout;
+        var logoutPromise = $q.defer();
 
-        httpCallLogout = $http({
+        var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
             headers: {
                 'Accept': 'application/json'
             },
             method: 'GET',
             url: NameSpace.get('asUsersLogout'),
+            urlSuffix: NameSpace.get('asUsersLogoutSuffix'),
             withCredentials: true
+        });
 
-        }).success(function () {
+        httpPromise.then(function(httpresponse) {
             isUserLogged = false;
             EventDispatcher.sendEvent('MyPundit.isUserLogged', isUserLogged);
             userData = {};
@@ -471,7 +471,7 @@ angular.module('Pundit2.Core')
                 event: 'Pundit.userProfileUpdated',
                 data: null
             });
-        }).error(function () {
+        },function () {
             logoutPromise.reject('logout promise error');
         });
 
@@ -667,6 +667,7 @@ angular.module('Pundit2.Core')
 
     // TODO This is not really a popoverLogin but more a popover toggler
     myPundit.popoverLogin = function (where, popoverPlacement, skipClose) {
+
         if (typeof(loginPromise) === 'undefined' && where !== 'editProfile') {
             return;
             // loginPromise = $q.defer();

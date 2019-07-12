@@ -743,6 +743,7 @@ angular.module('Pundit2.Communication')
         return promise.promise;
     };
 
+
     annotationsCommunication.saveAnnotation = function(graph, items, flatTargets, templateID, forceConsolidation, postDataTargets, types, motivation, forceNotebookId) {
         // var completed = 0;
         var promise = $q.defer();
@@ -793,6 +794,7 @@ angular.module('Pundit2.Communication')
             //TODO: to test new save with notbook id in URL.
             var currentNotebook = NotebookExchange.getCurrentNotebooks();
             var url = NameSpace.get('asNBCurrent');
+            var urlSuffix = NameSpace.get('asNBCurrentSuffix');
             var params = {
                 context: angular.toJson({
                     targets: flatTargets,
@@ -814,17 +816,25 @@ angular.module('Pundit2.Communication')
                 url = NameSpace.get('asNBForcedCurrent', {
                     current: nbId
                 });
+                urlSuffix = NameSpace.get('asNBForcedCurrentSuffix', {
+                    current: nbId
+                });
             }
-            $http({
+
+            var httpPromise = HttpRequestsDispatcher.sendHttpRequest({
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 method: 'POST',
                 url: url,
-                params: params,
+                urlSuffix: urlSuffix,
                 withCredentials: true,
-                data: postData
-            }).success(function(data) {
+                params: params,
+                paramsAngularJson: true,
+                body: postData
+            });
+
+            httpPromise.then(function(data) {
                 EventDispatcher.sendEvent('AnnotationsCommunication.annotationSaved', data.AnnotationID);
 
                 switch (motivation) {
@@ -898,7 +908,8 @@ angular.module('Pundit2.Communication')
                         postSaveSend(callback, data.AnnotationID);
                     });
                 }
-            }).error(function(msg) {
+            },function(error) {
+                var msg = error;
                 setLoading(false);
                 // Consolidation.rejectConsolidateAll();
                 annotationsCommunication.log('Error: impossible to save annotation', msg);

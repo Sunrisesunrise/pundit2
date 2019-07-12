@@ -1,26 +1,22 @@
 
-const annotationServerBaseURL = null; // this url is replaced by grunt using the extension_conf.js file
+// Note: The following url is replaced by grunt using the extension_conf.js file at build time
+const annotationServerBaseURL = 'https://thepund.it/annotationserver/';
 
 
-function handleHttpRequest(httpRequestObject,sendResponse){
+function handleHttpRequest(httpRequestObjectTuple,sendResponse){
 
-   var url = new URL( httpRequestObject.url );
-   var urlSuffix = httpRequestObject.urlSuffix;
-   if( httpRequestObject.params != null )
-     Object.keys(httpRequestObject.params)
-     .forEach(function(key){ url.searchParams.append(key, JSON.stringify(httpRequestObject.params[key])) });
+   var url = annotationServerBaseURL + httpRequestObjectTuple.urlSuffix;
+   var httpRequestObject = httpRequestObjectTuple.httpRequestObject;
+   httpRequestObject.mode = 'cors';
 
-   var method = httpRequestObject.method;
-   var headers = httpRequestObject.headers;
-   var body = httpRequestObject.body;
-   var withCredentials = httpRequestObject.withCredentials;
-   httpRequestObject = { 'method': method , 'headers': headers, 'data':body, 'withCredentials':withCredentials};
-
-   fetch(url,httpRequestObject).then(function(response) {
-           response.json().then(function(data){
-            sendResponse(data);
+   //alert('sending ' + JSON.stringify(httpRequestObject) + ' to ' + url );
+   fetch(url,JSON.parse(JSON.stringify(httpRequestObject))).then(function(response) {
+           response.text().then(function(data){
+            //alert('OK! ('+url.toString()+') got response: ' + JSON.stringify(data));
+            sendResponse(JSON.parse(data));
            });
       }).catch(function(error) {
+        //alert('NO! ('+url.toString()+') got response: ' + JSON.stringify(error));
         sendResponse({'error':true,'status':error.status});
     });
 

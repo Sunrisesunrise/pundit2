@@ -201,15 +201,17 @@ angular.module('Pundit2.Core')
     ns.asUsers = ns.as + 'api/users/';
     ns.asUsersCurrentSuffix = 'api/users/current';
     ns.asUsersCurrent = ns.as + ns.asUsersCurrentSuffix;
-    ns.asUsersLogout = ns.as + 'api/users/logout';
+    ns.asUsersLogoutSuffix = 'api/users/logout';
+    ns.asUsersLogout = ns.as + ns.asUsersLogoutSuffix;
 
     ns.asNB = ns.as + 'api/notebooks';
     ns.asNBEditMeta = ns.as + 'api/notebooks/{{id}}';
-    ns.asNBOwnedSuffix = 'api/notebooks/owned';    
+    ns.asNBOwnedSuffix = 'api/notebooks/owned';
     ns.asNBOwned = ns.as + ns.asNBOwnedSuffix;
     ns.asNBCurrentSuffix = 'api/notebooks/current';
     ns.asNBCurrent = ns.as + ns.asNBCurrentSuffix;
-    ns.asNBForcedCurrent = ns.as + 'api/notebooks/{{current}}';
+    ns.asNBForcedCurrentSuffix = 'api/notebooks/{{current}}';
+    ns.asNBForcedCurrent = ns.as + ns.asNBForcedCurrentSuffix;
     ns.asNBPrivate = ns.as + 'api/notebooks/private/{{id}}';
     ns.asNBPublic = ns.as + 'api/notebooks/public/{{id}}';
     ns.asNBMetaSuffix = 'api/notebooks/{{id}}/metadata';
@@ -227,8 +229,10 @@ angular.module('Pundit2.Core')
     ns.asAnnMult = ns.as + ns.asAnnMultSuffix;
     ns.asOpenAnnMultSuffix = 'api/open/annotations/multiple';
     ns.asOpenAnnMult = ns.as + ns.asOpenAnnMultSuffix;
-    ns.asAnn = ns.as + 'api/annotations/{{id}}';
-    ns.asOpenAnn = ns.as + 'api/open/annotations/{{id}}';
+    ns.asAnnSuffix = 'api/annotations/{{id}}';
+    ns.asAnn = ns.as + ns.asAnnSuffix;
+    ns.asOpenAnnSuffix = 'api/open/annotations/{{id}}';
+    ns.asOpenAnn = ns.as + ns.asOpenAnnSuffix;
     ns.asAnnContent = ns.as + 'api/annotations/{{id}}/content';
     ns.asAnnItems = ns.as + 'api/annotations/{{id}}/items';
     ns.asAnnBroken = ns.as + 'api/annotations/broken';
