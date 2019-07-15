@@ -4,7 +4,7 @@ angular.module('Pundit2.Core')
 // http requests to the annotation server
 // Note: Some http calls in the application are simply sent using the $http module
 // the HttpRequestsDispatcher is used only when necessary to avoid CORS errors (chrome-extension)
-.service('HttpRequestsDispatcher', function(BaseComponent, $q) {
+.service('HttpRequestsDispatcher', function(BaseComponent, $q, $http) {
     var disp = new BaseComponent('HttpRequestsDispatcher');
 
     
@@ -15,11 +15,10 @@ angular.module('Pundit2.Core')
        isEmbedded = false;
     }
 
-
     // sends an http request to the annotation server changing the actual send procedure
     // based on whether the application is in the embedded or the chrome-extension version
     disp.sendHttpRequest = function(httpRequestObject){
-        if(isEmbedded) return sendHttpRequest_embedVersion(convertHttpRequestForFetch(httpRequestObject));
+        if(isEmbedded) return sendHttpRequest_embedVersion(httpRequestObject);
         else return sendHttpRequest_chromeExtensionVersion(convertHttpRequestForFetch(httpRequestObject));
     }
 
@@ -28,6 +27,8 @@ angular.module('Pundit2.Core')
     // in a tuple of three values: url for the sending of the request in embedded mode,
     // urlSuffix for the sending of the request in chome-extension mode and an http request
     // object reaqdy to be sent using the standard fetch method
+    // Note: for a POST's payload, $http uses "data" whilst fetch uses "body",
+    // this function therefore renames the "data" property into "body"
     function convertHttpRequestForFetch(httpRequestObject){
         var newHttpRequestObject = {};
         var url = httpRequestObject.url;
@@ -50,7 +51,7 @@ angular.module('Pundit2.Core')
         var urlSuffix = httpRequestObject.urlSuffix;
         urlSuffix = url.substring(url.indexOf(urlSuffix));
 
-        var relevantFields = ['method', 'headers', 'body', 'withCredentials', 'cache'];
+        var relevantFields = ['method', 'headers', 'data', 'withCredentials', 'cache'];
         relevantFields.forEach(function(fieldName){
           if(httpRequestObject.hasOwnProperty(fieldName)){
             if(fieldName=='cache'){
@@ -60,9 +61,11 @@ angular.module('Pundit2.Core')
                     httpRequestObject[fieldName] = 'default';
             }
 
-            if(fieldName=='body' && (typeof(httpRequestObject[fieldName])!=='string'))
-                newHttpRequestObject[fieldName] = JSON.stringify(httpRequestObject[fieldName]);
-            else
+            if(fieldName=='data'){
+                var bodyValue = httpRequestObject[fieldName];
+                if( typeof(bodyValue)!=='string' ) bodyValue = JSON.stringify(bodyValue);
+                newHttpRequestObject.body = bodyValue;
+            } else
                 newHttpRequestObject[fieldName] = httpRequestObject[fieldName];
           }
         });
@@ -77,18 +80,13 @@ angular.module('Pundit2.Core')
 
     // sends the http request in the embedded version of the application
     // and returns a promise
-    function sendHttpRequest_embedVersion(httpRequestObjectTuple){
+    function sendHttpRequest_embedVersion(httpRequestObject){
         var promise = $q.defer();
 
-        var httpRequestObject = httpRequestObjectTuple.httpRequestObject;
-        var url = httpRequestObjectTuple.url;
-        var urlSuffix = httpRequestObjectTuple.urlSuffix;
-
-        fetch(url,httpRequestObject).then(function(response) {
-            response.json().then(function(data){
-                promise.resolve(data);
-            });
-        }).catch(function(error) {
+        delete httpRequestObject.urlSuffix;
+        $http(httpRequestObject).success(function (data) {
+            promise.resolve(data);
+        }).error(function() {
             promise.reject({'error':true,'status':error.status});
         });
 

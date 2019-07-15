@@ -434,7 +434,7 @@ angular.module('Pundit2.Communication')
                     url: NameSpace.get(nsKey),
                     urlSuffix: NameSpace.get(nsKeySuffix),
                     withCredentials: true,
-                    body: postData
+                    data: postData
                 };
 
                 var httpPromise = HttpRequestsDispatcher.sendHttpRequest(httpObject);
@@ -831,7 +831,7 @@ angular.module('Pundit2.Communication')
                 withCredentials: true,
                 params: params,
                 paramsAngularJson: true,
-                body: postData
+                data: postData
             });
 
             httpPromise.then(function(data) {

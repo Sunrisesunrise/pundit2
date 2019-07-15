@@ -272,7 +272,7 @@ angular.module('Pundit2.Communication')
                 url: NameSpace.get('asNB'),
                 urlSuffix: NameSpace.get('asNBSuffix'),
                 withCredentials: true,
-                body: {
+                data: {
                     NotebookName: name
                 }
             });
