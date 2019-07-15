@@ -258,9 +258,8 @@ angular.module('Pundit2.Core')
                 'Accept': 'application/json'
             },
             method: 'GET',
-            url: NameSpace.get('asUsersCurrent'), // url used for normal embedded calls
-            urlSuffix: NameSpace.get('asUsersCurrentSuffix'), // urlSuffix used for the chrome extension
-            // note: urlSuffix gets ignored when called by the embedded app
+            url: NameSpace.get('asUsersCurrent'),
+            urlSuffix: NameSpace.get('asUsersCurrentSuffix'),
             withCredentials: true
         });
 
